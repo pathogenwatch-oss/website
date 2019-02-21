@@ -6,7 +6,6 @@ import { statuses, types } from '../constants';
 
 import { getOrganismName } from '../../organisms';
 import { DEFAULT } from '../../app/constants';
-import { skipLayout } from '../../clustering/actions';
 
 export const getProgress = ({ upload }) => upload.progress;
 export const getProgressView = state => getProgress(state).view;
@@ -164,12 +163,22 @@ function getAnalysisBreakdown(genomes) {
   return breakdown;
 }
 
-export const getAnalysisSummary = createSelector(
-  getNumRemainingUploads,
+export const hasReads = createSelector(
   getUploadedGenomeList,
-  (remainingUploads, genomes) => {
+  genomes => {
+    for (const genome of genomes) {
+      if (genome.type === types.READS) return true;
+    }
+    return false;
+  }
+);
+
+export const getAnalysisSummary = createSelector(
+  hasReads,
+  getUploadedGenomeList,
+  (sessionHasReads, genomes) => {
     const summary = {};
-    let pending = remainingUploads;
+    let pending = 0;
     let errored = 0;
     for (const genome of genomes) {
       const { organismId, analysis } = genome;
@@ -198,7 +207,7 @@ export const getAnalysisSummary = createSelector(
         ...getAnalysisBreakdown(organismGenomes),
       });
     }
-    if (pending) {
+    if (pending && (!sessionHasReads || result.length)) {
       result.push({
         key: 'pending',
         label: 'Pending',
@@ -227,26 +236,10 @@ function getSpeciesCode(organismName) {
   return organismName;
 }
 
-export const getChartData = createSelector(
-  getAnalysisSummary,
-  data => {
-    const organisms = {
-      label: 'Organism',
-      data: [],
-      backgroundColor: [],
-      labels: [],
-      organismIds: [],
-      shortLabels: [],
-      total: 0,
-    };
-    const stData = {
-      label: 'Sequence Type',
-      data: [],
-      backgroundColor: [],
-      labels: [],
-      parents: [],
-      total: 0,
-    };
+const getAssemblyChartData = createSelector(
+  state => state.upload.assembly,
+  () => {
+    const time = new Date();
     const assembly = {
       label: 'Assembly progress',
       data: [ 1, 2, 2, 6 ],
@@ -259,6 +252,30 @@ export const getChartData = createSelector(
       labels: [ 'Failed', 'Assembled', 'Assembling', 'Pending' ],
       parents: [],
       total: 10,
+    };
+    return assembly;
+  }
+);
+
+const getAnalysisChartData = createSelector(
+  getAnalysisSummary,
+  data => {
+    const organisms = {
+      label: 'Organism',
+      data: [],
+      backgroundColor: [],
+      labels: [],
+      organismIds: [],
+      shortLabels: [],
+      total: 0,
+    };
+    const sts = {
+      label: 'Sequence Type',
+      data: [],
+      backgroundColor: [],
+      labels: [],
+      parents: [],
+      total: 0,
     };
 
     let organismIndex = 0;
@@ -274,26 +291,47 @@ export const getChartData = createSelector(
       let sum = total;
       const { sequenceTypes = [] } = mlst;
       for (const st of sequenceTypes) {
-        stData.data.push(st.total);
-        stData.backgroundColor.push(st.colour || getLightColour(colour));
-        stData.labels.push(st.label);
-        stData.parents.push(organismIndex);
-        stData.total = total;
+        sts.data.push(st.total);
+        sts.backgroundColor.push(st.colour || getLightColour(colour));
+        sts.labels.push(st.label);
+        sts.parents.push(organismIndex);
+        sts.total = total;
         sum -= st.total;
       }
       if (sum > 0) {
-        stData.data.push(sum);
-        stData.backgroundColor.push('#fefefe');
-        stData.labels.push('Unknown ST');
-        stData.parents.push(organismIndex);
+        sts.data.push(sum);
+        sts.backgroundColor.push('#fefefe');
+        sts.labels.push('Unknown ST');
+        sts.parents.push(organismIndex);
       }
       organismIndex++;
     }
 
     return {
-      // datasets: [ assembly ],
-      // datasets: [ organisms, assembly ],
-      datasets: [ stData, organisms ],
+      organisms,
+      sts,
+    };
+  }
+);
+
+export const getChartData = createSelector(
+  getAssemblyChartData,
+  getAnalysisChartData,
+  (assembly, { organisms, sts }) => {
+    const datasets = [];
+
+    if (assembly.data.length) {
+      datasets.push(assembly);
+    }
+    if (organisms.data.length) {
+      datasets.push(organisms);
+    }
+    if (sts.data.length) {
+      datasets.push(sts);
+    }
+
+    return {
+      datasets,
     };
   }
 );
@@ -355,16 +393,6 @@ export const isAnalysisComplete = createSelector(
 export const hasErrors = createSelector(
   getOverallProgress,
   ({ errors }) => errors > 0
-);
-
-export const hasReads = createSelector(
-  getUploadedGenomeList,
-  genomes => {
-    for (const genome of genomes) {
-      if (genome.type === types.READS) return true;
-    }
-    return false;
-  }
 );
 
 const colours = {

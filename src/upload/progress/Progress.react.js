@@ -4,18 +4,12 @@ import React from 'react';
 import { connect } from 'react-redux';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 
-import Fade from '../../components/fade';
-
 import Overview from './Overview.react';
 import SpeciesBreakdown from './SpeciesBreakdown.react';
 import FileCard from '../card/Card.react';
 import AnalysisChart from './AnalysisChart.react';
-import ViewSwitcher from './ViewSwitcher.react';
-import AssemblyPipeline from './assembly-pipeline';
 
 import * as upload from './selectors';
-
-import { views } from '../constants';
 
 const Progress = ({
   inProgress,
@@ -24,12 +18,11 @@ const Progress = ({
   analysis,
   uploadedAt,
   specieationComplete,
-  view,
 }) => (
   <div className="wgsa-content-margin wgsa-upload-progress">
     <div>
       <div className="wgsa-section-divider">
-        <h2 className="wgsa-section-title">Progress</h2>
+        <h2 className="wgsa-section-title">Overview</h2>
         <ReactCSSTransitionGroup
           className="wgsa-upload-card-list"
           transitionName="wgsa-upload-card"
@@ -66,14 +59,8 @@ const Progress = ({
       )}
     </div>
     <div className="wgsa-section-divider wgsa-flex-section">
-      <ViewSwitcher view={view} />
-      <Fade className="pw-upload-progress-view">
-        {view === views.ASSEMBLY ? (
-          <AssemblyPipeline key={views.ASSEMBLY} uploadedAt={uploadedAt} />
-        ) : (
-          <AnalysisChart key={views.ANALYSIS} uploadedAt={uploadedAt} />
-        )}
-      </Fade>
+      <h2 className="wgsa-section-title">Progress</h2>
+      <AnalysisChart uploadedAt={uploadedAt} />
     </div>
   </div>
 );

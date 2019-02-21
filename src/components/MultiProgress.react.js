@@ -1,8 +1,9 @@
 import '../css/circular-progress.css';
 
 import React from 'react';
+import PropTypes from 'prop-types';
 
-export default class CircularProgress extends React.Component {
+export default class MultiProgress extends React.Component {
   constructor(props) {
     super(props);
     this.state = {};
@@ -27,16 +28,17 @@ export default class CircularProgress extends React.Component {
       percentAcc += segment.percentage;
     }
 
-    const { progress = 0 } = this.props;
+    const { progress } = this.props;
 
     return (
       <svg
         className={`CircularProgress ${
-          this.props.percentage >= 100 ? 'CircularProgress-success' : ''
+          this.props.progress >= 100 ? 'CircularProgress-success' : ''
         }`.trim()}
         width={this.props.radius * 2}
         height={this.props.radius * 2}
         viewBox={viewBox}
+        style={this.props.style}
       >
         <circle
           className="CircularProgress-Bg"
@@ -61,30 +63,39 @@ export default class CircularProgress extends React.Component {
             }}
           />
         ))}
-        <text
-          className="CircularProgress-Text"
-          x={this.props.radius}
-          y={this.props.radius}
-          dy=".4em"
-          textAnchor="middle"
-        >
-          {`${progress.toFixed(this.props.decimalPlaces)}%`}
-        </text>
+        {!isNaN(progress) && (
+          <text
+            className="CircularProgress-Text"
+            x={this.props.radius}
+            y={this.props.radius}
+            dy=".4em"
+            textAnchor="middle"
+          >
+            {`${progress.toFixed(this.props.decimalPlaces)}%`}
+          </text>
+        )}
       </svg>
     );
   }
 }
 
-CircularProgress.propTypes = {
-  decimalPlaces: React.PropTypes.number,
-  percentage: React.PropTypes.number,
-  radius: React.PropTypes.number,
-  strokeWidth: React.PropTypes.number,
+MultiProgress.propTypes = {
+  decimalPlaces: PropTypes.number,
+  progress: PropTypes.number,
+  radius: PropTypes.number,
+  segments: PropTypes.arrayOf(
+    PropTypes.shape({
+      name: PropTypes.string,
+      percentage: PropTypes.number,
+      colour: PropTypes.string,
+    })
+  ),
+  strokeWidth: PropTypes.number.isRequired,
+  // style: PropTypes.style,
 };
 
-CircularProgress.defaultProps = {
+MultiProgress.defaultProps = {
   decimalPlaces: 0,
-  percentage: 50,
   radius: 50,
   strokeWidth: 1,
 };
