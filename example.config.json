@@ -4,9 +4,7 @@
     "auth": {
       "realm": "",
       "file": "",
-      "collections": [
-        { "organismId": "", "collectionId": "" }
-      ]
+      "collections": [{ "organismId": "", "collectionId": "" }]
     }
   },
   "mongodb": {
@@ -30,6 +28,12 @@
         "consumerKey": "",
         "consumerSecret": ""
       }
+    },
+    "tokens": {
+      "secretOrKey": "",
+      "issuer": "",
+      "audience": "",
+      "algorithm": ""
     }
   },
   "pusher": {
@@ -38,7 +42,7 @@
     "secret": "",
     "encrypted": false
   },
-  "downloadFileLocation" : "/path/to/files/",
+  "downloadFileLocation": "/path/to/files/",
   "maxCollectionSize": 1000,
   "maxDownloadSize": 2500,
   "pagination": {
@@ -51,46 +55,47 @@
   "tasks": {
     "timeout": 300000,
     "speciation": {
-      "task": "speciator", "version": "t7"
+      "task": "speciator",
+      "version": "t7"
     },
     "retries": 3,
     "registry": {
-			"username": "",
-			"password": ""
-		},
+      "username": "",
+      "password": ""
+    },
     "workers": 8
   },
   "gaTrackingId": "",
   "organisms": [
-		{
-			"taxId": "90370",
-			"name": "Salmonella enterica subsp. enterica serovar Typhi",
-			"subspecies": [
-				"497977",
-				"496065",
-				"1156917",
-				"1299275",
-				"1299276",
-				"1176488",
-				"1192853",
-				"220341",
-				"497976",
-				"497975",
-				"497974",
-				"497973",
-				"496068",
-				"496064",
-				"496067",
-				"496066",
-				"1132507",
-				"596159",
-				"1176487",
-				"1443995",
-				"209261",
-				"527001",
-				"1169660",
-				"1169661"
-			]
-		}
-	]
+    {
+      "taxId": "90370",
+      "name": "Salmonella enterica subsp. enterica serovar Typhi",
+      "subspecies": [
+        "497977",
+        "496065",
+        "1156917",
+        "1299275",
+        "1299276",
+        "1176488",
+        "1192853",
+        "220341",
+        "497976",
+        "497975",
+        "497974",
+        "497973",
+        "496068",
+        "496064",
+        "496067",
+        "496066",
+        "1132507",
+        "596159",
+        "1176487",
+        "1443995",
+        "209261",
+        "527001",
+        "1169660",
+        "1169661"
+      ]
+    }
+  ]
 }
