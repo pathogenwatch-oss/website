@@ -236,22 +236,29 @@ function getSpeciesCode(organismName) {
   return organismName;
 }
 
+const fifteenMinutes = 1000 * 60 * 15;
+const started = Date.now();
+
 const getAssemblyChartData = createSelector(
-  state => state.upload.assembly,
-  () => {
-    const time = new Date();
+  state => state.upload.progress.assembly,
+  state => state.upload.progress.assemblyTick,
+  // state => ({}),
+  (status, time) => {
+    const duration = time - started;
+    const progress = (duration / fifteenMinutes) * 100;
+    const pending = 100 - progress;
     const assembly = {
       label: 'Assembly progress',
-      data: [ 1, 2, 2, 6 ],
+      data: [ 0, 0, progress, pending ],
       backgroundColor: [
         DEFAULT.DANGER_COLOUR,
         '#3c7383',
-        'blue',
+        '#AC65A6',
         'rgba(0, 0, 0, 0.14)',
       ],
       labels: [ 'Failed', 'Assembled', 'Assembling', 'Pending' ],
       parents: [],
-      total: 10,
+      total: 100,
     };
     return assembly;
   }

@@ -177,56 +177,56 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-// export default connect(
-//   mapStateToProps,
-//   mapDispatchToProps
-// )(AnalysisChart);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(AnalysisChart);
 
-import MultiProgress from '../../components/MultiProgress.react';
+// import MultiProgress from '../../components/MultiProgress.react';
 
-const MultiProgressTest = () => (
-  <div style={{ position: 'relative', width: '100%' }}>
-    <MultiProgress
-      style={{
-        position: 'absolute',
-        top: 0,
-        transform: `scale(${1 * 0.6 - 0.02})`,
-      }}
-      radius="320"
-      strokeWidth={64 / (0.8 * 0.8) + 8}
-      segments={[
-        { name: 'Assembling', percentage: 100, colour: '#48996f' },
-        // { name: 'Pending', percentage: 40, colour: '#efefef' },
-      ]}
-    />
-    <MultiProgress
-      style={{
-        position: 'absolute',
-        top: 0,
-        transform: `scale(${1 * 0.8 - 0.01})`,
-      }}
-      radius="320"
-      strokeWidth={64 / 0.8 + 1}
-      segments={[
-        { name: 'Assembling', percentage: 40, colour: '#673c90' },
-        { name: 'Pending', percentage: 60, colour: '#efefef' },
-      ]}
-    />
-    <MultiProgress
-      style={{
-        position: 'absolute',
-        top: 0,
-      }}
-      radius="320"
-      strokeWidth="64"
-      segments={[
-        { name: 'Assembling', percentage: 0.2, colour: '#673c90' },
-        { name: 'Assembling', percentage: 0.2, colour: '#673c90' },
-        { name: 'Assembling', percentage: 0.2, colour: '#673c90' },
-        { name: 'Assembling', percentage: 0.2, colour: '#673c90' },
-      ]}
-    />
-  </div>
-);
+// const MultiProgressTest = () => (
+//   <div style={{ position: 'relative', width: '100%' }}>
+//     <MultiProgress
+//       style={{
+//         position: 'absolute',
+//         top: 0,
+//         transform: `scale(${1 * 0.6 - 0.02})`,
+//       }}
+//       radius="320"
+//       strokeWidth={64 / (0.8 * 0.8) + 8}
+//       segments={[
+//         { name: 'Assembling', percentage: 100, colour: '#48996f' },
+//         // { name: 'Pending', percentage: 40, colour: '#efefef' },
+//       ]}
+//     />
+//     <MultiProgress
+//       style={{
+//         position: 'absolute',
+//         top: 0,
+//         transform: `scale(${1 * 0.8 - 0.01})`,
+//       }}
+//       radius="320"
+//       strokeWidth={64 / 0.8 + 1}
+//       segments={[
+//         { name: 'Assembling', percentage: 40, colour: '#673c90' },
+//         { name: 'Pending', percentage: 60, colour: '#efefef' },
+//       ]}
+//     />
+//     <MultiProgress
+//       style={{
+//         position: 'absolute',
+//         top: 0,
+//       }}
+//       radius="320"
+//       strokeWidth="64"
+//       segments={[
+//         { name: 'Assembling', percentage: 0.2, colour: '#673c90' },
+//         { name: 'Assembling', percentage: 0.2, colour: '#673c90' },
+//         { name: 'Assembling', percentage: 0.2, colour: '#673c90' },
+//         { name: 'Assembling', percentage: 0.2, colour: '#673c90' },
+//       ]}
+//     />
+//   </div>
+// );
 
-export default MultiProgressTest;
+// export default MultiProgressTest;

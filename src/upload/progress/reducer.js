@@ -278,6 +278,11 @@ export default function (state = initialState, { type, payload }) {
         ...state,
         assembly: payload,
       };
+    case 'ASSEMBLY_PROGRESS_TICK':
+      return {
+        ...state,
+        assemblyTick: Date.now(),
+      };
     default:
       return state;
   }
