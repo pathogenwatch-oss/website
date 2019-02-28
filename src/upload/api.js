@@ -3,7 +3,7 @@ import { fetchJson, fetchRaw } from '../utils/Api';
 import config from '../app/config';
 const { clientId, assemblerAddress } = config;
 
-export function fetchLimits(token) {
+export function fetchUsage(token) {
   return fetch(`${assemblerAddress}/api/account`, {
     headers: {
       Authorization: `Bearer ${token}`,

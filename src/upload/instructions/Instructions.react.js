@@ -3,12 +3,38 @@ import './styles.css';
 import React from 'react';
 
 import { FormattedName } from '../../organisms';
+import Fade from '../../components/fade';
+import Badge from '../../components/badge';
 
 import { ASSEMBLY_FILE_EXTENSIONS } from '../../app/constants';
 
-export default () => (
+export default ({ usage }) => (
   <section className="wgsa-page wgsa-compact-page wgsa-upload-instructions">
+    {/* <header> */}
+    <Fade className="pw-upload-assembler-usage">
+      {usage && (
+        <aside>
+          <p>
+            <strong>Processing reads is currently a trial service.</strong>
+            <br />
+            It is subject to a monthly limit per user and an overall monthly
+            limit.
+          </p>
+          <p>
+            You have <strong>{usage.remaining} assemblies</strong> remaining
+            this month.
+          </p>
+          <p>
+            <strong>
+              {usage.usage.total} of {usage.limits.total} assemblies
+            </strong>{' '}
+            have been completed this month.
+          </p>
+        </aside>
+      )}
+    </Fade>
     <h1>Drag and drop files to begin.</h1>
+    {/* </header> */}
     <div>
       <h2>Genomic Data</h2>
       <p>
@@ -18,7 +44,7 @@ export default () => (
         Metagenomic samples are not supported.
       </p>
       <h3>
-        Reads <i className="material-icons">fiber_new</i>
+        Reads <Badge color="#673c90">New</Badge>
       </h3>
       <p>
         One or more <strong>pairs of files</strong> in gzip-compressed{' '}
@@ -83,8 +109,8 @@ export default () => (
         with the extension <strong>.csv</strong>.
       </p>
       <p>
-        Files should have a <strong>filename</strong> column to match each row
-        to its respective genomic data:
+        Files should contain a <strong>filename</strong> column to match each
+        row to its respective genomic data:
       </p>
       <ul className="bulleted">
         <li>

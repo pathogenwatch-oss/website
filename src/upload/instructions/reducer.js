@@ -4,7 +4,7 @@ const initialState = {
   compression: false,
   individual: false,
   loading: false,
-  assemblyService: null,
+  assemblerUsage: null,
 };
 
 export default function (state = initialState, { type, payload }) {
@@ -15,16 +15,16 @@ export default function (state = initialState, { type, payload }) {
         [payload.setting]: payload.value,
       };
     }
-    case 'FETCH_ASSEMBLY_LIMITS::ATTEMPT':
+    case 'FETCH_ASSEMBLER_USAGE::ATTEMPT':
       return {
         ...state,
         loading: true,
       };
-    case 'FETCH_ASSEMBLY_LIMITS::SUCCESS':
+    case 'FETCH_ASSEMBLER_USAGE::SUCCESS':
       return {
         ...state,
         loading: false,
-        assemblyService: payload.result,
+        assemblerUsage: payload.result,
       };
     default:
       return state;

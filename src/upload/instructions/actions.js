@@ -46,15 +46,15 @@ export function changeUploadSetting(setting, value) {
   };
 }
 
-export const FETCH_ASSEMBLY_LIMITS = createAsyncConstants(
-  'FETCH_ASSEMBLY_LIMITS'
+export const FETCH_ASSEMBLER_USAGE = createAsyncConstants(
+  'FETCH_ASSEMBLER_USAGE'
 );
 
-export function fetchAssemblyLimits(token) {
+export function fetchAssemblerUsage(token) {
   return {
-    type: FETCH_ASSEMBLY_LIMITS,
+    type: FETCH_ASSEMBLER_USAGE,
     payload: {
-      promise: api.fetchLimits(token),
+      promise: api.fetchUsage(token),
     },
   };
 }

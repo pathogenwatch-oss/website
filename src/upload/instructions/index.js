@@ -7,15 +7,15 @@ import FileDragAndDrop from '../../drag-and-drop';
 import Instructions from './Instructions.react';
 import Summary from '../Summary.react';
 
-import { getAssemblyLimits } from './selectors';
+import { getAssemblerUsage } from './selectors';
 
-import { addFiles, fetchAssemblyLimits } from './actions';
+import { addFiles, fetchAssemblerUsage } from './actions';
 import DocumentTitle from '../../branding/DocumentTitle.react';
 
-const Component = ({ onFiles, fetchLimits, token }) => {
+const Component = ({ onFiles, fetchUsage, token, usage }) => {
   React.useEffect(() => {
     if (token) {
-      fetchLimits(token);
+      fetchUsage(token);
     }
   }, [ token ]);
   return (
@@ -23,7 +23,7 @@ const Component = ({ onFiles, fetchLimits, token }) => {
       <DocumentTitle>Upload</DocumentTitle>
       <div className="wgsa-hipster-style">
         <Summary />
-        <Instructions />
+        <Instructions usage={usage} />
       </div>
     </FileDragAndDrop>
   );
@@ -31,14 +31,14 @@ const Component = ({ onFiles, fetchLimits, token }) => {
 
 function mapStateToProps(state) {
   return {
-    limits: getAssemblyLimits(state),
+    usage: getAssemblerUsage(state),
     token: state.auth.token,
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
-    fetchLimits: token => dispatch(fetchAssemblyLimits(token)),
+    fetchUsage: token => dispatch(fetchAssemblerUsage(token)),
     onFiles: files => dispatch(addFiles(files)),
   };
 }

@@ -1,0 +1,15 @@
+.pw-badge {
+  background-color: currentColor;
+  border-radius: 4px;
+  display: inline-block;
+  font-size: 13px !important;
+  line-height: 1;
+  padding: 4px;
+  text-transform: uppercase;
+  vertical-align: top;
+}
+
+.pw-badge-text {
+  color: #fff;
+  font-weight: 500;
+}
