@@ -4,7 +4,7 @@ const { ObjectId } = require('mongoose').Types;
 const { ServiceRequestError } = require('utils/errors');
 const validateMetadata = require('pathogenwatch-front-end/universal/validateMetadata');
 
-module.exports = async function({ user, data }) {
+module.exports = async function ({ user, data }) {
   if (!user) {
     throw new ServiceRequestError('Not authenticated');
   }
