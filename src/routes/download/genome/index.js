@@ -18,15 +18,16 @@ router.get('/:id/fasta', (req, res, next) => {
 
   LOGGER.info(`Received request for fasta: ${id}`);
 
-  return services.request('genome', 'download', { user, type, id }).
-    then(({ filePath, fileName }) => {
+  return services
+    .request('genome', 'download', { user, type, id })
+    .then(({ filePath, fileName }) => {
       res.set({
         'Content-Disposition': `attachment; filename="${fileName}"`,
         'Content-type': 'text/plain',
       });
       return res.sendFile(filePath);
-    }).
-    catch(next);
+    })
+    .catch(next);
 });
 
 router.post('/fasta', (req, res, next) => {
@@ -41,19 +42,22 @@ router.post('/fasta', (req, res, next) => {
 
   LOGGER.info(`Received request for archive of ${splitIds.length} files`);
 
-  return (
-    services.request('download', 'fetch-genomes',
-        { user, ids: splitIds, projection: { name: 1, fileId: 1 } })
-      .then(genomes =>
-        services.request('download', 'create-genome-archive', { genomes }))
-      .then(stream => {
-        stream.on('error', next);
-        res.setHeader('Content-Disposition', `attachment; filename=${filename}`);
-        res.setHeader('Content-Type', 'application/zip');
-        stream.pipe(res);
-      })
-      .catch(next)
-  );
+  return services
+    .request('download', 'fetch-genomes', {
+      user,
+      ids: splitIds,
+      projection: { name: 1, fileId: 1 },
+    })
+    .then(genomes => services.request('download', 'create-genome-archive', { genomes }))
+    .then(stream => {
+      stream.on('error', next);
+      res.setHeader('Content-Disposition', `attachment; filename=${filename}`);
+      res.setHeader('Content-Type', 'application/zip');
+      stream.pipe(res);
+    })
+    .catch(next);
 });
+
+router.post('/metadata', require('../genome/metadata'));
 
 module.exports = router;

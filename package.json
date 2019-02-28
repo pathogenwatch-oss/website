@@ -1,6 +1,6 @@
 {
   "name": "pathogenwatch-middle-end",
-  "version": "7.3.9",
+  "version": "7.4.1",
   "description": "Server-side code for Pathogenwatch",
   "main": "app.js",
   "engines": {
@@ -10,7 +10,7 @@
     "body-parser": "^1.10.1",
     "boundingbox": "^0.1.0",
     "bunyan": "^1.3.2",
-    "cgps-user-accounts": "https://gitlab.com/cgps/cgps-user-accounts#v1.10.5",
+    "cgps-user-accounts": "https://gitlab.com/cgps/cgps-user-accounts#v2.0.0",
     "connect-mongo": "^1.3.2",
     "cookie-parser": "^1.4.3",
     "csv": "^1.1.1",
@@ -41,11 +41,11 @@
     "slug": "^0.9.1",
     "stream-transform": "^0.1.2",
     "pathogenwatch-fasta-store": "https://gitlab.com/cgps/pathogenwatch-fasta-store#v4.1.0",
-    "pathogenwatch-front-end": "https://gitlab.com/cgps/pathogenwatch-front-end#v7.3.7",
+    "pathogenwatch-front-end": "https://gitlab.com/cgps/pathogenwatch-front-end#v7.4.1",
     "zip-stream": "^1.2.0"
   },
   "devDependencies": {
-    "eslint-config-cgps": "github:cgps-dev/eslint-config-cgps",
+    "eslint-config-cgps": "github:cgps-dev/eslint-config-cgps#v2.0.0",
     "mocha": "^2.5.3",
     "nodemon": "^1.18.7",
     "rewire": "^2.1.4",
