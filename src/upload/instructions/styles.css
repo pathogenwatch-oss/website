@@ -91,12 +91,10 @@ ul.inline li:last-child::after {
 } */
 
 .pw-upload-assembler-usage {
-  margin-top: -30px;
-  /* margin-bottom: 20px; */
-  /* height: 128px; */
   display: flex;
-  justify-content: center;
   width: 100%;
+  margin-top: -40px;
+  justify-content: center;
 }
 
 .pw-upload-assembler-usage aside {
