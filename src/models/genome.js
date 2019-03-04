@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const { Schema } = mongoose;
 const escapeRegex = require('escape-string-regexp');
 
-const geocoding = require('geocoding');
+const geocoding = require('../utils/geocoding');
 const { summariseAnalysis } = require('../utils/analysis');
 
 const { setToObjectOptions, addPreSaveHook, getSummary, getBinExpiryDate } = require('./utils');
