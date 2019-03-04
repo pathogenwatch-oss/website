@@ -34,6 +34,11 @@ export const getUploadedGenomeList = createSelector(
   genomes => Object.keys(genomes).map(id => genomes[id])
 );
 
+export const getAnalysisList = createSelector(
+  state => getProgress(state).analysis,
+  analysis => Object.keys(analysis).map(id => analysis[id])
+);
+
 export const getBatchSize = createSelector(
   getUploadedGenomeList,
   list => list.length
@@ -121,7 +126,7 @@ export const getFileSummary = createSelector(
   }
 );
 
-function getAnalysisBreakdown(genomes) {
+function getAnalysisBreakdown(analysis) {
   const breakdown = {
     paarsnp: { active: false, label: 'AMR', total: 0, errors: 0 },
     core: { active: false, label: 'Core', total: 0, errors: 0 },
@@ -135,14 +140,15 @@ function getAnalysisBreakdown(genomes) {
   };
   const sts = {};
 
-  for (const { st, analysis } of genomes) {
-    for (const key of Object.keys(analysis)) {
+  for (const analyses of analysis) {
+    for (const key of Object.keys(analyses)) {
       if (key in breakdown) {
         breakdown[key].active = true;
         if (analysis[key] !== null) breakdown[key].total++;
         if (analysis[key] === false) breakdown[key].errors++;
       }
-      if (key === 'mlst' && analysis.mlst) {
+      if (key === 'mlst' && analyses.mlst) {
+        const { st } = analyses.mlst;
         sts[st] = (sts[st] || 0) + 1;
       }
     }
@@ -176,19 +182,19 @@ export const hasReads = createSelector(
 
 export const getAnalysisSummary = createSelector(
   hasReads,
-  getUploadedGenomeList,
-  (sessionHasReads, genomes) => {
+  getAnalysisList,
+  (sessionHasReads, analysis) => {
     const summary = {};
     let pending = 0;
     let errored = 0;
-    for (const genome of genomes) {
-      const { organismId, analysis } = genome;
-      if (!('speciator' in analysis) || analysis.speciator === null) {
+    for (const analyses of analysis) {
+      if (!('speciator' in analyses) || analyses.speciator === null) {
         pending++;
-      } else if (analysis.speciator === false) {
+      } else if (analyses.speciator === false) {
         errored++;
       } else {
-        summary[organismId] = (summary[organismId] || []).concat(genome);
+        const { organismId } = analyses.speciator;
+        summary[organismId] = (summary[organismId] || []).concat(analyses);
       }
     }
     const getColour = getColourGenerator();
@@ -236,7 +242,6 @@ function getSpeciesCode(organismName) {
   }
   return organismName;
 }
-
 
 export const isAssemblyInProgress = createSelector(
   getAssemblyProgress,
@@ -364,38 +369,37 @@ export const getChartData = createSelector(
 );
 
 export const getOverallProgress = createSelector(
-  getUploadedGenomes,
-  genomes => {
-    const assembly = { pending: 0, done: 0, total: 0 };
-    const speciation = { pending: 0, done: 0, total: 0 };
-    const analyses = { pending: 0, done: 0, total: 0 };
+  getAnalysisList,
+  (analysis) => {
+    const assemblyCount = { pending: 0, done: 0, total: 0 };
+    const speciationCount = { pending: 0, done: 0, total: 0 };
+    const analysisCount = { pending: 0, done: 0, total: 0 };
     let errors = 0;
 
-    for (const id of Object.keys(genomes)) {
-      const { analysis } = genomes[id];
-      for (const task of Object.keys(analysis)) {
-        const isPending = analysis[task] === null;
-        const isError = analysis[task] === false;
+    for (const analyses of Object.values(analysis)) {
+      for (const task of Object.keys(analyses)) {
+        const isPending = analyses[task] === null;
+        const isError = analyses[task] === false;
 
         if (isError) errors++;
 
         if (task === 'speciator') {
-          speciation.total++;
-          if (isPending) speciation.pending++;
+          speciationCount.total++;
+          if (isPending) speciationCount.pending++;
         }
-        analyses.total++;
-        if (isPending) analyses.pending++;
+        analysisCount.total++;
+        if (isPending) analysisCount.pending++;
       }
     }
 
-    assembly.done = assembly.total - assembly.pending;
-    speciation.done = speciation.total - speciation.pending;
-    analyses.done = analyses.total - analyses.pending;
+    assemblyCount.done = assemblyCount.total - assemblyCount.pending;
+    speciationCount.done = speciationCount.total - speciationCount.pending;
+    analysisCount.done = analysisCount.total - analysisCount.pending;
 
     return {
-      assembly,
-      speciation,
-      analyses,
+      assembly: assemblyCount,
+      speciation: speciationCount,
+      analyses: analysisCount,
       errors,
     };
   }

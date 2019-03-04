@@ -1,6 +1,6 @@
 import * as actions from './actions';
 
-import { statuses, types, views } from '../constants';
+import { statuses, views } from '../constants';
 
 function updateGenome(state, id, update) {
   const file = state[id];
@@ -15,7 +15,6 @@ function initialiseGenomes(state, genomes) {
   for (const genome of genomes) {
     state[genome.id] = {
       ...genome,
-      analysis: {},
       error: null,
       progress: 0,
       status: statuses.PENDING,
@@ -33,6 +32,7 @@ const initialState = {
   selectedOrganism: null,
   view: null,
   assembly: {},
+  analysis: {},
 };
 
 export default function (state = initialState, { type, payload }) {
@@ -150,26 +150,21 @@ export default function (state = initialState, { type, payload }) {
     //   };
     // }
     case actions.UPLOAD_ANALYSIS_RECEIVED: {
-      const { genomes } = state;
+      const { analysis } = state;
       const { genomeId, results } = payload;
-      const genome = genomes[genomeId] || {};
-      const nextGenome = {
-        ...genome,
-        analysis: {
-          ...(genome.analysis || {}),
-        },
-      };
+      const analyses = analysis[genomeId] || {};
+      const nextAnalyses = { ...analyses };
       for (const { task, version, result, error } of results) {
-        nextGenome.analysis[task] = error ? false : version;
+        nextAnalyses[task] = error ? false : version;
         if (result) {
-          Object.assign(nextGenome, result);
+          Object.assign(nextAnalyses, result);
         }
       }
       return {
         ...state,
-        genomes: {
-          ...genomes,
-          [genomeId]: nextGenome,
+        analysis: {
+          ...analysis,
+          [genomeId]: nextAnalyses,
         },
         lastMessageReceived: new Date(),
         position: 0,
@@ -184,6 +179,7 @@ export default function (state = initialState, { type, payload }) {
     }
     case actions.UPLOAD_FETCH_GENOMES.SUCCESS: {
       const nextGenomes = {};
+      const nextAnalysis = {};
       const { files, position } = payload.result;
       let incomplete = false;
       for (const genome of files) {
@@ -204,14 +200,11 @@ export default function (state = initialState, { type, payload }) {
         nextGenomes[genome.id] = {
           ...state.genomes[genome.id],
           ...genome,
-          status: statuses.SUCCESS,
-          speciated:
-            (genome.analysis && !!genome.analysis.speciator) ||
-            genome.errored.indexOf('speciator') !== -1,
-          analysis: {
-            ...genome.analysis,
-            ...pendingAnalysis,
-          },
+          status: incomplete ? statuses.PENDING : statuses.SUCCESS,
+        };
+        nextAnalysis[genome.id] = {
+          ...genome.analysis,
+          ...pendingAnalysis,
         };
       }
       let view;
@@ -226,6 +219,7 @@ export default function (state = initialState, { type, payload }) {
         view,
         selectedOrganism: null,
         genomes: nextGenomes,
+        analysis: nextAnalysis,
       };
     }
     case actions.UPLOAD_ORGANISM_SELECTED:
