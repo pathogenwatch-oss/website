@@ -42,13 +42,11 @@ export default function (state = initialState, { type, payload }) {
       for (const genome of payload.genomes) {
         genome.id = payload.result[genome.id];
       }
-      const [ first ] = payload.genomes;
       return {
         ...initialState,
         queue: ids,
         uploadedAt: payload.uploadedAt,
         genomes: initialiseGenomes({}, payload.genomes),
-        view: first.type === types.READS ? views.ASSEMBLY : views.ANALYSIS,
       };
     }
     case actions.UPLOAD_REQUEUE_FILES: {
@@ -187,7 +185,6 @@ export default function (state = initialState, { type, payload }) {
     case actions.UPLOAD_FETCH_GENOMES.SUCCESS: {
       const nextGenomes = {};
       const { files, position } = payload.result;
-      let hasReads = false;
       let incomplete = false;
       for (const genome of files) {
         const pendingAnalysis = {};
@@ -200,9 +197,6 @@ export default function (state = initialState, { type, payload }) {
           for (const task of genome.errored) {
             pendingAnalysis[task] = false;
           }
-        }
-        if (genome.type === types.READS) {
-          hasReads = true;
         }
         if (genome.files) {
           incomplete = true;
@@ -225,10 +219,6 @@ export default function (state = initialState, { type, payload }) {
         view = state.view;
       } else if (incomplete) {
         view = views.RECOVERY;
-      } else if (hasReads) {
-        view = views.ASSEMBLY;
-      } else {
-        view = views.ANALYSIS;
       }
       return {
         ...state,

@@ -50,13 +50,12 @@ const Overview = props => {
     position,
     progress,
     totalGenomes,
-    assemblyProgress,
   } = props;
   if (isUploading || totalGenomes === 0) return null;
 
-  const { analyses } = progress;
+  const { assembly, analyses } = progress;
 
-  const assemblyPct = hasReads ? assemblyProgress : 100;
+  const assemblyPct = hasReads ? (assembly.done / assembly.total) * 100 : 100;
   const analysisPct = (analyses.done / analyses.total) * 100;
 
   return (
@@ -88,7 +87,6 @@ function mapStateToProps(state) {
     position: upload.getQueuePosition(state),
     progress: upload.getOverallProgress(state),
     totalGenomes: upload.getUploadedGenomeList(state).length,
-    assemblyProgress: upload.getAssemblyProgress(state),
   };
 }
 

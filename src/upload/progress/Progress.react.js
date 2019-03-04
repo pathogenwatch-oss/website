@@ -26,7 +26,7 @@ const Progress = ({
     <div className="wgsa-content-margin wgsa-upload-progress">
       <div>
         <div className="wgsa-section-divider">
-          <h2 className="wgsa-section-title">Overview</h2>
+          {/* <h2 className="wgsa-section-title">Overview</h2> */}
           <ReactCSSTransitionGroup
             className="wgsa-upload-card-list"
             transitionName="wgsa-upload-card"
@@ -54,7 +54,7 @@ const Progress = ({
         )}
         {!!analysis.length && analysis[0].key !== 'pending' && (
           <div className="wgsa-section-divider">
-            <h2 className="wgsa-section-title">Organisms</h2>
+            {/* <h2 className="wgsa-section-title">Organisms</h2> */}
             <SpeciesBreakdown
               data={analysis}
               showBreakdown={specieationComplete}
@@ -63,7 +63,7 @@ const Progress = ({
         )}
       </div>
       <div className="wgsa-section-divider wgsa-flex-section">
-        <h2 className="wgsa-section-title">Progress</h2>
+        {/* <h2 className="wgsa-section-title">Progress</h2> */}
         <AnalysisChart uploadedAt={uploadedAt} />
       </div>
     </div>

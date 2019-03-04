@@ -237,19 +237,23 @@ function getSpeciesCode(organismName) {
 }
 
 const fifteenMinutes = 1000 * 60 * 15;
-const started = Date.now();
 
 const getAssemblyChartData = createSelector(
   state => state.upload.progress.assembly,
   state => state.upload.progress.assemblyTick,
-  // state => ({}),
-  (status, time) => {
-    const duration = time - started;
-    const progress = (duration / fifteenMinutes) * 100;
+  getBatchSize,
+  ({ runningSince = [], failed = 0, complete = 0 }, time, total) => {
+    let sumProgress = 0;
+    for (const timestamp of runningSince) {
+      const duration = time - timestamp;
+      sumProgress += (duration / fifteenMinutes) * 99;
+    }
+    const progress = (sumProgress / total).toFixed(1);
     const pending = 100 - progress;
-    const assembly = {
+
+    return {
       label: 'Assembly progress',
-      data: [ 0, 0, progress, pending ],
+      data: [ failed, complete, progress, pending ],
       backgroundColor: [
         DEFAULT.DANGER_COLOUR,
         '#3c7383',
@@ -257,10 +261,15 @@ const getAssemblyChartData = createSelector(
         'rgba(0, 0, 0, 0.14)',
       ],
       labels: [ 'Failed', 'Assembled', 'Assembling', 'Pending' ],
+      tooltips: [
+        `${failed} / ${total}`,
+        `${complete} / ${total}, ${((complete / total) * 100).toFixed(1)}%`,
+        `${runningSince.length} / ${total}, ${progress}%`,
+        `${total - runningSince.length - failed - complete} / ${total}`,
+      ],
       parents: [],
       total: 100,
     };
-    return assembly;
   }
 );
 
@@ -400,72 +409,4 @@ export const isAnalysisComplete = createSelector(
 export const hasErrors = createSelector(
   getOverallProgress,
   ({ errors }) => errors > 0
-);
-
-const colours = {
-  RUNNING: '#673c90',
-  COMPLETED: '#48996F',
-  FAILURE: '#d11b1b',
-};
-
-const stages = [
-  'determine_min_read_length',
-  'count_number_of_bases',
-  'qc_pre_trimming',
-  'trimming',
-  'qc_post_trimming',
-  'genome_size_estimation',
-  'read_correction',
-  // 'fastqc_multiqc',
-  'merge_reads',
-  'spades_assembly',
-  'filter_scaffolds',
-  'quast',
-  // 'quast_summary',
-];
-
-export const getAssemblyStatus = createSelector(
-  state => getProgress(state).assembly,
-  getBatchSize,
-  (rawStatus, total) => {
-    const memo = [];
-    if (typeof rawStatus !== 'object') {
-      return memo;
-    }
-    for (const stage of stages) {
-      const counts = rawStatus[stage] || {};
-      let progress = 0;
-      const statusList = [];
-      for (const [ status, count ] of Object.entries(counts)) {
-        const percentage = (count / total) * 100;
-        statusList.push({
-          name: status.toLowerCase(),
-          colour: colours[status],
-          count,
-          percentage,
-        });
-        if (status !== 'RUNNING') {
-          progress += percentage;
-        }
-      }
-      memo.push({
-        label: stage.replace(/_/g, ' '),
-        progress,
-        statuses: statusList,
-        length: stage === 'spades_assembly' ? 'long' : null,
-      });
-    }
-    return memo;
-  }
-);
-
-export const getAssemblyProgress = createSelector(
-  getAssemblyStatus,
-  status => {
-    let completed = 0;
-    for (const { progress } of status) {
-      if (progress === 100) completed++;
-    }
-    return (completed / status.length) * 100;
-  }
 );
