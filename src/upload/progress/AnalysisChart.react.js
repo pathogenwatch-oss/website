@@ -64,7 +64,6 @@ const AnalysisChart = React.createClass({
             label: ({ index, datasetIndex }, { datasets }) => {
               const dataset = datasets[datasetIndex];
               if (dataset.tooltips) {
-                console.log(dataset.tooltips);
                 return dataset.tooltips[index];
               }
               return `${dataset.data[index]} / ${dataset.total}, ${(

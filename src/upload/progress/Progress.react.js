@@ -10,18 +10,19 @@ import FileCard from '../card/Card.react';
 import AnalysisChart from './AnalysisChart.react';
 
 import * as upload from './selectors';
-import { useTicker } from './hooks';
+import { useAssemblyStatus } from './hooks';
 
 const Progress = ({
-  inProgress,
+  assemblyInProgress,
+  analysis,
   errored,
   files,
-  analysis,
-  uploadedAt,
-  specieationComplete,
   hasReads,
+  token,
+  uploadedAt,
+  uploadsInProgress,
 }) => {
-  useTicker(hasReads);
+  useAssemblyStatus(uploadedAt, hasReads, assemblyInProgress, token);
   return (
     <div className="wgsa-content-margin wgsa-upload-progress">
       <div>
@@ -33,7 +34,7 @@ const Progress = ({
             transitionEnterTimeout={280}
             transitionLeave={false}
           >
-            {inProgress.map(file => (
+            {uploadsInProgress.map(file => (
               <FileCard key={file.id} item={file} />
             ))}
           </ReactCSSTransitionGroup>
@@ -55,10 +56,7 @@ const Progress = ({
         {!!analysis.length && analysis[0].key !== 'pending' && (
           <div className="wgsa-section-divider">
             {/* <h2 className="wgsa-section-title">Organisms</h2> */}
-            <SpeciesBreakdown
-              data={analysis}
-              showBreakdown={specieationComplete}
-            />
+            <SpeciesBreakdown data={analysis} />
           </div>
         )}
       </div>
@@ -72,13 +70,14 @@ const Progress = ({
 
 function mapStateToProps(state) {
   return {
-    inProgress: upload.getGenomesInProgress(state),
+    assemblyInProgress: upload.isAssemblyInProgress(state),
+    analysis: upload.getAnalysisSummary(state),
     errored: upload.getInvalidUploads(state),
     files: upload.getFileSummary(state),
-    analysis: upload.getAnalysisSummary(state),
-    specieationComplete: upload.isSpecieationComplete(state),
-    view: upload.getProgressView(state),
     hasReads: upload.hasReads(state),
+    uploadsInProgress: upload.getGenomesInProgress(state),
+    view: upload.getProgressView(state),
+    token: state.auth.token,
   };
 }
 

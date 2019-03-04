@@ -1,6 +1,6 @@
 import React from 'react';
 
-export default ({ data, showBreakdown }) => (
+export default React.memo(({ data, showBreakdown = true }) => (
   <ul className="wgsa-upload-legend">
     {data.map(({ key, label, total, colour, ...analyses }) => (
       <li key={key}>
@@ -49,4 +49,4 @@ export default ({ data, showBreakdown }) => (
       </li>
     ))}
   </ul>
-);
+));

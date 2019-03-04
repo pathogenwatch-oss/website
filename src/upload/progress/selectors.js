@@ -27,6 +27,7 @@ export const getSelectedOrganism = state => getProgress(state).selectedOrganism;
 export const getQueuePosition = state => getProgress(state).position;
 export const getLastMessageReceived = state =>
   getProgress(state).lastMessageReceived;
+export const getAssemblyProgress = state => getProgress(state).assembly;
 
 export const getUploadedGenomeList = createSelector(
   getUploadedGenomes,
@@ -236,10 +237,16 @@ function getSpeciesCode(organismName) {
   return organismName;
 }
 
+
+export const isAssemblyInProgress = createSelector(
+  getAssemblyProgress,
+  ({ runningSince = [] }) => runningSince.length > 0
+);
+
 const fifteenMinutes = 1000 * 60 * 15;
 
 const getAssemblyChartData = createSelector(
-  state => state.upload.progress.assembly,
+  getAssemblyProgress,
   state => state.upload.progress.assemblyTick,
   getBatchSize,
   ({ runningSince = [], failed = 0, complete = 0 }, time, total) => {
