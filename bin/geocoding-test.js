@@ -1,7 +1,8 @@
 const mongoConnection = require('utils/mongoConnection');
 
 const Genome = require('models/genome');
-const geocoding = require('utils/geocoding');
+const geocoding = require('geocoding');
+// const geocoding = require('utils/geocoding');
 
 async function main() {
   await mongoConnection.connect();
@@ -16,6 +17,7 @@ async function main() {
       longitude: 1,
       country: 1,
     }
+    // { limit: 1 }
   ).lean();
 
   const total = genomes.length;
@@ -24,18 +26,28 @@ async function main() {
 
   for (const { latitude, longitude, country } of genomes) {
     const code = geocoding.getCountryCode(latitude, longitude);
+    // console.log({ code, country, latitude, longitude });
     if (code !== country) {
-      differences[country] = differences[country] || { [code]: 0 };
-      differences[country][code]++;
+      differences[country] = differences[country] || { [code]: {} };
+      differences[country][code][`${latitude},${longitude}`] =
+        differences[country][code][`${latitude},${longitude}`] || 0;
+      differences[country][code][`${latitude},${longitude}`]++;
     } else {
       matching++;
     }
-    console.log({
-      total,
-      matching,
-      differences,
-    });
   }
+  require('fs').writeFileSync(
+    'results.json',
+    JSON.stringify(
+      {
+        total,
+        matching,
+        differences,
+      },
+      null,
+      2
+    )
+  );
 }
 
 main()
