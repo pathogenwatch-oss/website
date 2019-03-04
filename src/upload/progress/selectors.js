@@ -248,12 +248,16 @@ const getAssemblyChartData = createSelector(
       const duration = time - timestamp;
       sumProgress += (duration / fifteenMinutes) * 99;
     }
-    const progress = (sumProgress / total).toFixed(1);
-    const pending = 100 - progress;
+    const progress = runningSince.length
+      ? sumProgress / runningSince.length
+      : 0;
+    const completePct = (complete / total) * 100;
+    const failedPct = (failed / total) * 100;
+    const pending = 100 - completePct - failedPct - progress;
 
     return {
       label: 'Assembly progress',
-      data: [ failed, complete, progress, pending ],
+      data: [ failedPct, completePct, progress, pending ],
       backgroundColor: [
         DEFAULT.DANGER_COLOUR,
         '#3c7383',
@@ -263,7 +267,7 @@ const getAssemblyChartData = createSelector(
       labels: [ 'Failed', 'Assembled', 'Assembling', 'Pending' ],
       tooltips: [
         `${failed} / ${total}`,
-        `${complete} / ${total}, ${((complete / total) * 100).toFixed(1)}%`,
+        `${complete} / ${total}, ${completePct.toFixed(1)}%`,
         `${runningSince.length} / ${total}, ${progress}%`,
         `${total - runningSince.length - failed - complete} / ${total}`,
       ],
