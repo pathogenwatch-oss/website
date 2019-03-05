@@ -144,8 +144,8 @@ function getAnalysisBreakdown(analysis) {
     for (const key of Object.keys(analyses)) {
       if (key in breakdown) {
         breakdown[key].active = true;
-        if (analysis[key] !== null) breakdown[key].total++;
-        if (analysis[key] === false) breakdown[key].errors++;
+        if (analyses[key] !== null) breakdown[key].total++;
+        if (analyses[key] === false) breakdown[key].errors++;
       }
       if (key === 'mlst' && analyses.mlst) {
         const { st } = analyses.mlst;
@@ -203,7 +203,7 @@ export const getAnalysisSummary = createSelector(
       const organismGenomes = summary[organismId];
       const label = getOrganismName(
         organismId,
-        organismGenomes[0].organismName
+        organismGenomes[0].speciator.organismName
       );
       const colour = getColour(label);
       result.push({
@@ -251,10 +251,17 @@ export const isAssemblyInProgress = createSelector(
 const fifteenMinutes = 1000 * 60 * 15;
 
 const getAssemblyChartData = createSelector(
+  hasReads,
   getAssemblyProgress,
   state => state.upload.progress.assemblyTick,
   getBatchSize,
-  ({ runningSince = [], failed = 0, complete = 0 }, time, total) => {
+  (
+    sessionHasReads,
+    { runningSince = [], failed = 0, complete = 0 },
+    time,
+    total
+  ) => {
+    if (!sessionHasReads) return null;
     let sumProgress = 0;
     for (const timestamp of runningSince) {
       const duration = time - timestamp;
@@ -321,13 +328,14 @@ const getAnalysisChartData = createSelector(
       organisms.total += total;
 
       let sum = total;
+      sts.total = total;
       const { sequenceTypes = [] } = mlst;
       for (const st of sequenceTypes) {
         sts.data.push(st.total);
         sts.backgroundColor.push(st.colour || getLightColour(colour));
         sts.labels.push(st.label);
         sts.parents.push(organismIndex);
-        sts.total = total;
+        // sts.total = total;
         sum -= st.total;
       }
       if (sum > 0) {
@@ -352,7 +360,7 @@ export const getChartData = createSelector(
   (assembly, { organisms, sts }) => {
     const datasets = [];
 
-    if (assembly.data.length) {
+    if (assembly) {
       datasets.push(assembly);
     }
     if (organisms.data.length) {
@@ -370,7 +378,7 @@ export const getChartData = createSelector(
 
 export const getOverallProgress = createSelector(
   getAnalysisList,
-  (analysis) => {
+  analysis => {
     const assemblyCount = { pending: 0, done: 0, total: 0 };
     const speciationCount = { pending: 0, done: 0, total: 0 };
     const analysisCount = { pending: 0, done: 0, total: 0 };

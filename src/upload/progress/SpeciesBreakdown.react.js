@@ -1,4 +1,5 @@
 import React from 'react';
+import classnames from 'classnames';
 
 export default React.memo(({ data, showBreakdown = true }) => (
   <ul className="wgsa-upload-legend">
@@ -19,7 +20,12 @@ export default React.memo(({ data, showBreakdown = true }) => (
               const analysis = analyses[analysisKey];
               if (analysis.active) {
                 return (
-                  <li key={analysisKey} className="pw-with-success-icon">
+                  <li
+                    key={analysisKey}
+                    className={classnames('pw-with-icon', {
+                      success: analysis.total === total,
+                    })}
+                  >
                     {analysis.total === total ? (
                       <React.Fragment>
                         <i className="material-icons">check_circle</i>

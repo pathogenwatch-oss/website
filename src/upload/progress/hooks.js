@@ -1,4 +1,5 @@
 import React from 'react';
+import 'eventsource/lib/eventsource-polyfill';
 
 import store from '../../app/store';
 
@@ -20,7 +21,7 @@ export const useAssemblyStatus = (
       eventSource.onmessage = e => {
         store.dispatch({
           type: 'ASSEMBLY_PIPELINE_STATUS',
-          payload: e.data,
+          payload: JSON.parse(e.data),
         });
       };
       return () => {

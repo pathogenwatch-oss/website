@@ -157,7 +157,7 @@ export default function (state = initialState, { type, payload }) {
       for (const { task, version, result, error } of results) {
         nextAnalyses[task] = error ? false : version;
         if (result) {
-          Object.assign(nextAnalyses, result);
+          nextAnalyses[task] = result;
         }
       }
       return {
@@ -180,9 +180,9 @@ export default function (state = initialState, { type, payload }) {
     case actions.UPLOAD_FETCH_GENOMES.SUCCESS: {
       const nextGenomes = {};
       const nextAnalysis = {};
-      const { files, position } = payload.result;
+      const { genomes, position } = payload.result;
       let incomplete = false;
-      for (const genome of files) {
+      for (const { analysis, ...genome } of genomes) {
         const pendingAnalysis = {};
         if (genome.pending) {
           for (const task of genome.pending) {
@@ -203,7 +203,7 @@ export default function (state = initialState, { type, payload }) {
           status: incomplete ? statuses.PENDING : statuses.SUCCESS,
         };
         nextAnalysis[genome.id] = {
-          ...genome.analysis,
+          ...analysis,
           ...pendingAnalysis,
         };
       }

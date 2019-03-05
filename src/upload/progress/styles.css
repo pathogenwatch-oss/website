@@ -122,20 +122,26 @@
   margin-left: auto;
 }
 
-.pw-with-success-icon {
+.pw-with-icon {
   align-items: center;
-  color: hsl(149, 90%, 22%);
   display: flex;
-  font-weight: 500;
   position: relative;
   padding-left: 24px;
 }
 
-.pw-with-success-icon i {
+.pw-with-icon i {
   font-size: 18px;
-  color: #48996f;
   position: absolute;
   left: 0;
+}
+
+.pw-with-icon.success {
+  font-weight: 500;
+  color: hsl(149, 90%, 22%);
+}
+
+.pw-with-icon.success i {
+  color: #48996f;
 }
 
 .wgsa-upload-progress-overview > * {

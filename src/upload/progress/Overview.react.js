@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import classnames from 'classnames';
 
 import ProgressBar from '../../components/progress-bar';
 
@@ -8,7 +9,7 @@ import * as upload from './selectors';
 const AssemblyStage = ({ percentage, totalGenomes }) => {
   if (percentage === 100) {
     return (
-      <p className="pw-with-success-icon">
+      <p className="pw-with-icon success">
         <i className="material-icons">check_circle</i>
         {totalGenomes} genome{totalGenomes === 1 ? '' : 's'} assembled
       </p>
@@ -20,7 +21,7 @@ const AssemblyStage = ({ percentage, totalGenomes }) => {
 const AnalysisStage = ({ percentage, totalAnalyses, hasErrors }) => {
   if (percentage === 100) {
     return (
-      <p className="pw-with-success-icon">
+      <p className={classnames('pw-with-icon', { success: !hasErrors })}>
         <i className="material-icons">
           {hasErrors ? 'warning' : 'check_circle'}
         </i>
@@ -60,7 +61,7 @@ const Overview = props => {
 
   return (
     <div className="wgsa-upload-progress-overview">
-      <p className="pw-with-success-icon">
+      <p className="pw-with-icon success">
         <i className="material-icons">check_circle</i>
         {totalGenomes} genome{totalGenomes === 1 ? '' : 's'} uploaded
       </p>
