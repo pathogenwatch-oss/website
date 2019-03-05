@@ -10,10 +10,9 @@ import { ASSEMBLY_FILE_EXTENSIONS } from '../../app/constants';
 import getCompressWorker from 'worker-loader?name=compress-worker.[hash].js!./compressWorker';
 
 import config from '../../app/config';
-const { flags = {} } = config;
 
 export function isReadsEligible() {
-  return 'ASSEMBLY_SERVICE_EXPERIMENT' in flags;
+  return 'assemblerAddress' in config;
 }
 
 export function parseMetadata(row) {
@@ -77,6 +76,7 @@ export function mapCSVsToGenomes(files, uploadedAt) {
   const csvFiles = [];
   const assemblies = [];
   const reads = [];
+  const readsElligible = isReadsEligible();
   for (const file of files) {
     if (CSV_FILENAME_REGEX.test(file.name)) {
       csvFiles.push(file);
@@ -84,7 +84,7 @@ export function mapCSVsToGenomes(files, uploadedAt) {
     } else if (ASSEMBLY_FILENAME_REGEX.test(file.name)) {
       assemblies.push(file);
       continue;
-    } else if (READS_FILENAME_REGEX.test(file.name)) {
+    } else if (readsElligible && READS_FILENAME_REGEX.test(file.name)) {
       reads.push(file);
       continue;
     }

@@ -4,8 +4,8 @@
   align-content: flex-start;
   justify-content: space-between;
   min-height: 540px;
-  max-width: 1000px;
-  /* position: relative; */
+  max-width: 880px;
+  position: relative;
 }
 
 .wgsa-upload-instructions h1 {
@@ -24,10 +24,6 @@
   line-height: 40px;
   margin-top: 0;
   margin-bottom: 0px;
-}
-
-.wgsa-upload-instructions h3 > .material-icons {
-  color: #673c90;
 }
 
 .pw-upload-instructions-column {
@@ -113,17 +109,17 @@ ul.inline li:last-child::after {
 /* Usage */
 
 .pw-upload-assembler-usage {
-  display: flex;
-  width: 100%;
-  margin-top: -40px;
-  justify-content: center;
+  position: absolute;
+  top: -20px;
+  right: 20px;
 }
 
 .pw-upload-assembler-usage aside {
   background: #fafafa;
-  padding: 20px;
+  padding: 10px 20px;
   border-radius: 0 3px 3px 0;
   border-left: 4px solid #a947a0;
+  margin-top: -20px;
 }
 
 .pw-upload-assembler-usage strong {

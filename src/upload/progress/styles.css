@@ -86,6 +86,7 @@
 
 .wgsa-upload-legend {
   padding-right: 8px;
+  margin-top: 0;
 }
 
 .wgsa-upload-legend li {
@@ -97,13 +98,18 @@
 
 .wgsa-upload-legend-header {
   display: flex;
-  align-items: center;
+  align-items: top;
   flex-wrap: nowrap;
   white-space: nowrap;
   overflow-x: hidden;
-  margin-left: -2px;
   font-weight: 700;
   width: 100%;
+}
+
+.wgsa-upload-legend-header > i {
+  width: 12px;
+  height: 12px;
+  margin-left: 4px;
 }
 
 .wgsa-upload-legend-organism {
@@ -115,7 +121,7 @@
 
 .wgsa-upload-legend li > ul {
   width: 100%;
-  margin-top: 8px;
+  /* margin-top: 8px; */
 }
 
 .wgsa-upload-legend-count {
@@ -142,6 +148,10 @@
 
 .pw-with-icon.success i {
   color: #48996f;
+}
+
+.wgsa-upload-progress-overview {
+  padding-right: 8px;
 }
 
 .wgsa-upload-progress-overview > * {

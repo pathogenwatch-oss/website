@@ -5,10 +5,8 @@ export default React.memo(({ data, showBreakdown = true }) => (
   <ul className="wgsa-upload-legend">
     {data.map(({ key, label, total, colour, ...analyses }) => (
       <li key={key}>
-        <span className="wgsa-upload-legend-header">
-          <i className="material-icons" style={{ color: colour }}>
-            stop
-          </i>
+        <span className="pw-with-icon wgsa-upload-legend-header">
+          <i style={{ backgroundColor: colour }} />
           <strong className="wgsa-upload-legend-organism" title={label}>
             {label}
           </strong>

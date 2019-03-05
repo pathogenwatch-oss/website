@@ -2,34 +2,46 @@ import React from 'react';
 import { connect } from 'react-redux';
 import classnames from 'classnames';
 
-import ProgressBar from '../../components/progress-bar';
-
 import * as upload from './selectors';
 
-const AssemblyStage = ({ percentage, totalGenomes }) => {
-  if (percentage === 100) {
+const AssemblyStage = ({ complete, total }) => {
+  if (complete === total) {
     return (
       <p className="pw-with-icon success">
         <i className="material-icons">check_circle</i>
-        {totalGenomes} genome{totalGenomes === 1 ? '' : 's'} assembled
+        {total} genome{total === 1 ? '' : 's'} assembled
       </p>
     );
   }
-  return <ProgressBar label="Assembly" progress={percentage} />;
+  return (
+    <p className="pw-with-icon">
+      Assembly
+      <span className="wgsa-upload-legend-count">
+        <strong>{complete}</strong> of <strong>{total}</strong>
+      </span>
+    </p>
+  );
 };
 
-const AnalysisStage = ({ percentage, totalAnalyses, hasErrors }) => {
-  if (percentage === 100) {
+const AnalysisStage = ({ complete, total, hasErrors }) => {
+  if (complete === total) {
     return (
       <p className={classnames('pw-with-icon', { success: !hasErrors })}>
         <i className="material-icons">
           {hasErrors ? 'warning' : 'check_circle'}
         </i>
-        {totalAnalyses} analyses completed{hasErrors && ', with errors'}
+        {total} analyses completed{hasErrors && ', with errors'}
       </p>
     );
   }
-  return <ProgressBar label="Analysis" progress={percentage} />;
+  return (
+    <p className="pw-with-icon">
+      Analysis
+      <span className="wgsa-upload-legend-count">
+        <strong>{complete}</strong> of <strong>{total}</strong>
+      </span>
+    </p>
+  );
 };
 
 const QueuePosition = ({ position }) => {
@@ -56,8 +68,7 @@ const Overview = props => {
 
   const { assembly, analyses } = progress;
 
-  const assemblyPct = hasReads ? (assembly.done / assembly.total) * 100 : 100;
-  const analysisPct = (analyses.done / analyses.total) * 100;
+  const assemblyComplete = hasReads ? assembly.done === assembly.total : true;
 
   return (
     <div className="wgsa-upload-progress-overview">
@@ -66,14 +77,16 @@ const Overview = props => {
         {totalGenomes} genome{totalGenomes === 1 ? '' : 's'} uploaded
       </p>
       {hasReads && (
-        <AssemblyStage percentage={assemblyPct} totalGenomes={totalGenomes} />
+        <AssemblyStage complete={assembly.done} total={totalGenomes} />
       )}
-      <AnalysisStage
-        percentage={analysisPct}
-        totalAnalyses={analyses.total}
-        hasErrors={hasErrors}
-      />
-      {assemblyPct === 100 && analysisPct < 100 && (
+      {analyses.total > 0 && (
+        <AnalysisStage
+          complete={analyses.done}
+          total={analyses.total}
+          hasErrors={hasErrors}
+        />
+      )}
+      {assemblyComplete && analyses.done < analyses.total && (
         <QueuePosition position={position} />
       )}
     </div>

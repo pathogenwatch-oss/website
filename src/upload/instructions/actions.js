@@ -4,9 +4,6 @@ import { showToast } from '../../toast';
 import { history } from '../../app/router';
 
 import { addGenomes } from '../progress/actions';
-import { createAsyncConstants } from '../../actions';
-
-import * as api from '../api';
 
 export function addFiles(newFiles) {
   const uploadedAt = new Date().toISOString();
@@ -42,19 +39,6 @@ export function changeUploadSetting(setting, value) {
     payload: {
       setting,
       value,
-    },
-  };
-}
-
-export const FETCH_ASSEMBLER_USAGE = createAsyncConstants(
-  'FETCH_ASSEMBLER_USAGE'
-);
-
-export function fetchAssemblerUsage(token) {
-  return {
-    type: FETCH_ASSEMBLER_USAGE,
-    payload: {
-      promise: api.fetchUsage(token),
     },
   };
 }

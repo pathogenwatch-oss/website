@@ -1,10 +1,6 @@
 import React from 'react';
 
-import Fade from '../../components/fade';
-
 import { FormattedName } from '../../organisms';
-
-import { ASSEMBLY_FILE_EXTENSIONS } from '../../app/constants';
 
 export default () => (
   <React.Fragment>
@@ -104,26 +100,3 @@ export default () => (
     </div>
   </React.Fragment>
 );
-
-/* <Fade className="pw-upload-assembler-usage">
-        {usage && (
-          <aside>
-            <p>
-              <strong>Processing reads is currently a trial service.</strong>
-              <br />
-              It is subject to a monthly limit per user and an overall monthly
-              limit.
-            </p>
-            <p>
-              You have <strong>{usage.remaining} assemblies</strong> remaining
-              this month.
-            </p>
-            <p>
-              <strong>
-                {usage.usage.total} of {usage.limits.total} assemblies
-              </strong>{' '}
-              have been completed this month.
-            </p>
-          </aside>
-        )}
-        </Fade> */
