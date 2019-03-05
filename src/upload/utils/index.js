@@ -9,6 +9,13 @@ import { types } from '../constants';
 import { ASSEMBLY_FILE_EXTENSIONS } from '../../app/constants';
 import getCompressWorker from 'worker-loader?name=compress-worker.[hash].js!./compressWorker';
 
+import config from '../../app/config';
+const { flags = {} } = config;
+
+export function isReadsEligible() {
+  return 'ASSEMBLY_SERVICE_EXPERIMENT' in flags;
+}
+
 export function parseMetadata(row) {
   const { displayname, id, name, filename, ...columns } = row;
 

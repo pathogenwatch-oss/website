@@ -30,7 +30,7 @@
   color: #673c90;
 }
 
-.wgsa-upload-instructions > div {
+.pw-upload-instructions-column {
   width: calc(50% - 16px);
   box-sizing: border-box;
 }
@@ -89,6 +89,28 @@ ul.inline li:last-child::after {
   background-repeat: repeat;
   background-size: 100% 20px;
 } */
+
+/* Tabs */
+
+.wgsa-upload-instructions .mdl-tabs__tab-bar {
+  justify-content: flex-start;
+  border: none;
+}
+
+.wgsa-upload-instructions .mdl-tabs__tab {
+  overflow: visible;
+}
+
+.wgsa-upload-instructions .mdl-tabs__ripple-container {
+  z-index: 0;
+}
+
+.wgsa-upload-instructions .mdl-tabs .mdl-tabs__panel.is-active {
+  display: flex;
+  justify-content: space-between;
+}
+
+/* Usage */
 
 .pw-upload-assembler-usage {
   display: flex;

@@ -119,7 +119,7 @@ const AnalysisChart = React.createClass({
         existing.total = dataset.total;
         existing.tooltips = dataset.tooltips;
       } else {
-        this.chart.data.datasets.unshift(dataset);
+        this.chart.data.datasets.push(dataset);
       }
     }
     this.chart.update();

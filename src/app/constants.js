@@ -26,10 +26,6 @@ export const ASSEMBLY_FILE_EXTENSIONS = [
   '.dna',
 ];
 
-export const SUPPORTED_FILE_EXTENSIONS = [ '.csv', '.fastq.gz' ].concat(
-  ASSEMBLY_FILE_EXTENSIONS
-);
-
 export const DEFAULT = {
   SHAPE: 'circle',
   COLOUR: '#555555',

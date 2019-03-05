@@ -3,14 +3,16 @@ import './styles.css';
 import React from 'react';
 import { connect } from 'react-redux';
 
-import FileDragAndDrop from '../../drag-and-drop';
+import FileDragAndDrop from './drag-and-drop';
 import Instructions from './Instructions.react';
 import Summary from '../Summary.react';
+import DocumentTitle from '../../branding/DocumentTitle.react';
 
 import { getAssemblerUsage } from './selectors';
 
 import { addFiles, fetchAssemblerUsage } from './actions';
-import DocumentTitle from '../../branding/DocumentTitle.react';
+
+import { isReadsEligible } from '../utils';
 
 const Component = ({ onFiles, fetchUsage, token, usage }) => {
   React.useEffect(() => {
@@ -18,12 +20,13 @@ const Component = ({ onFiles, fetchUsage, token, usage }) => {
       fetchUsage(token);
     }
   }, [ token ]);
+  const readsEligible = isReadsEligible();
   return (
-    <FileDragAndDrop onFiles={onFiles}>
+    <FileDragAndDrop onFiles={onFiles} readsEligible={readsEligible}>
       <DocumentTitle>Upload</DocumentTitle>
       <div className="wgsa-hipster-style">
         <Summary />
-        <Instructions usage={usage} />
+        <Instructions usage={usage} readsEligible />
       </div>
     </FileDragAndDrop>
   );

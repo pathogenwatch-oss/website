@@ -6,33 +6,25 @@
   right: 0;
 }
 
-/*.wgsa-drop-indicator * {
-  pointer-events: none;
-}*/
-
 .wgsa-drop-indicator__message {
   position: relative;
   background: #673c90;
   background: rgb(255, 255, 255);
   color: rgb(103, 60, 144);
   padding: 32px 64px;
-	border-radius: 16px;
-  box-shadow: 0 2px 2px 0 rgba(0,0,0,.14),0 3px 1px -2px rgba(0,0,0,.2),0 1px 5px 0 rgba(0,0,0,.12);
+  border-radius: 16px;
+  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2),
+    0 1px 5px 0 rgba(0, 0, 0, 0.12);
   pointer-events: none;
 }
 
 .wgsa-drop-indicator__icons {
-  position: absolute;
+  width: 75%;
+  margin: 0 auto;
   text-align: center;
-  top: -48px;
-  left: 0;
-  right: 0;
+  display: flex;
+  justify-content: space-around;
 }
-
-/*.wgsa-drag-and-drop.is-dragover header *,
-.wgsa-drag-and-drop.is-dragover main * {
-  pointer-events: none;
-}*/
 
 .wgsa-drag-and-drop__button {
   position: fixed;
@@ -48,6 +40,7 @@
 
 .wgsa-file-icon {
   position: relative;
+  display: block;
 }
 
 .wgsa-file-icon > .material-icons {
@@ -60,6 +53,11 @@
   left: 0;
   right: 0;
   bottom: 1.2rem;
-  font-size: 1.2rem;
+  font-size: 1rem;
+  font-weight: 500;
   text-align: center;
+}
+
+.wgsa-drop-indicator__title {
+  margin: 16px 0 0;
 }

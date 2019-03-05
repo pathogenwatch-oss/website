@@ -1,7 +1,7 @@
 import React from 'react';
 
-import { CGPS, SUPPORTED_FILE_EXTENSIONS } from '../app/constants';
-import { Name } from '../branding';
+import { CGPS } from '../../../app/constants';
+import { Name } from '../../../branding';
 
 const fileInputStyle = {
   position: 'fixed',
@@ -70,6 +70,7 @@ export default React.createClass({
   },
 
   render() {
+    const { readsEligible } = this.props;
     return (
       <div
         className={`wgsa-drag-and-drop ${
@@ -88,6 +89,17 @@ export default React.createClass({
         >
           <div className="wgsa-drop-indicator__message">
             <div className="wgsa-drop-indicator__icons">
+              {readsEligible && (
+                <span className="wgsa-file-icon">
+                  <i
+                    className="material-icons"
+                    style={{ color: CGPS.COLOURS.PURPLE }}
+                  >
+                    insert_drive_file
+                  </i>
+                  <span className="wgsa-file-icon__label">.fastq.gz</span>
+                </span>
+              )}
               <span className="wgsa-file-icon">
                 <i
                   className="material-icons"
@@ -107,9 +119,9 @@ export default React.createClass({
                 <span className="wgsa-file-icon__label">.csv</span>
               </span>
             </div>
-            <h3 className="wgsa-drop-indicator__title">
+            <p className="wgsa-drop-indicator__title h2 title-font">
               Drop to add to <Name />
-            </h3>
+            </p>
           </div>
         </div>
         {this.props.children}
@@ -125,7 +137,6 @@ export default React.createClass({
         <input
           type="file"
           multiple="multiple"
-          accept={SUPPORTED_FILE_EXTENSIONS.join(',')}
           ref="fileInput"
           style={fileInputStyle}
           onChange={this.handleFileInputChange}

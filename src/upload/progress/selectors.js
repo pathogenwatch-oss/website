@@ -361,13 +361,13 @@ export const getChartData = createSelector(
     const datasets = [];
 
     if (assembly) {
-      datasets.push(assembly);
+      datasets.unshift(assembly);
     }
     if (organisms.data.length) {
-      datasets.push(organisms);
+      datasets.unshift(organisms);
     }
     if (sts.data.length) {
-      datasets.push(sts);
+      datasets.unshift(sts);
     }
 
     return {
