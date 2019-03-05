@@ -38,7 +38,7 @@ export default () => (
         </tbody>
       </table>
       <p>
-        Files should contain <strong>DNA sequences</strong> of{' '}
+        Files should contain <strong>raw DNA sequences</strong> of{' '}
         <strong>whole genomes</strong>. Please ensure that there are{' '}
         <strong>two paired-end reads files per genome</strong> as metagenomic
         samples are not supported.
@@ -85,7 +85,7 @@ export default () => (
             href="/pathogenwatch-metadata-template-reads.csv"
             download="pathogenwatch-metadata-template-reads.csv"
           >
-            Minimal Example
+            Minimal
           </a>
         </li>
         <li>

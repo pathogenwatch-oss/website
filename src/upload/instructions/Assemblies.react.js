@@ -25,7 +25,7 @@ export default () => (
         ))}
       </ul>
       <p>
-        Files should contain <strong>DNA sequences</strong> of{' '}
+        Files should contain <strong>assembled DNA sequences</strong> of{' '}
         <strong>whole genomes</strong>. Please ensure that there is{' '}
         <strong>one file per genome</strong> as metagenomic samples are not
         supported.
@@ -71,7 +71,7 @@ export default () => (
             href="/pathogenwatch-metadata-template-assemblies.csv"
             download="pathogenwatch-metadata-template-assemblies.csv"
           >
-            Minimal example
+            Minimal
           </a>
         </li>
         <li>
