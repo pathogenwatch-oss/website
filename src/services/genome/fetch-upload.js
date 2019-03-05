@@ -26,23 +26,16 @@ module.exports = async function (props) {
   const genomes = await Genome.find(Genome.getFilterQuery(props), projection).lean();
   return genomes.map(doc => {
     const { analysis = {}, upload = { complete: true, type: Genome.uploadTypes.ASSEMBLY } } = doc;
-    const { mlst = {}, speciator = {} } = analysis;
     const genome = {
-      analysis: {},
+      analysis,
       errored: doc.errored,
       id: doc._id,
-      organismId: speciator.organismId,
-      organismName: speciator.organismName,
       pending: doc.pending,
-      st: mlst.st,
       type: upload.type,
       uploadedAt: doc.uploadedAt,
     };
     if (!upload.complete) {
       genome.files = upload.files;
-    }
-    for (const task of Object.keys(analysis)) {
-      genome.analysis[task] = analysis[task].__v;
     }
     return genome;
   });
