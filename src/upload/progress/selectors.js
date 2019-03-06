@@ -248,7 +248,7 @@ export const isAssemblyInProgress = createSelector(
   ({ runningSince = [] }) => runningSince.length > 0
 );
 
-const fifteenMinutes = 1000 * 60 * 15;
+const expectedDuration = 1000 * 60 * 15; // 15 minutes
 
 const getAssemblyChartData = createSelector(
   hasReads,
@@ -258,14 +258,15 @@ const getAssemblyChartData = createSelector(
   (
     sessionHasReads,
     { runningSince = [], failed = 0, complete = 0 },
-    time,
+    time = Date.now(),
     total
   ) => {
     if (!sessionHasReads) return null;
     let sumProgress = 0;
     for (const timestamp of runningSince) {
-      const duration = time - timestamp;
-      sumProgress += (duration / fifteenMinutes) * 99;
+      const elapsedTime = time - timestamp;
+      if (elapsedTime > expectedDuration) sumProgress += 99;
+      else sumProgress += (elapsedTime / expectedDuration) * 99;
     }
     const progress = runningSince.length
       ? sumProgress / runningSince.length
@@ -287,7 +288,7 @@ const getAssemblyChartData = createSelector(
       tooltips: [
         `${failed} / ${total}`,
         `${complete} / ${total}, ${completePct.toFixed(1)}%`,
-        `${runningSince.length} / ${total}, ${progress}%`,
+        `${runningSince.length} / ${total}, ${progress.toFixed(1)}%`,
         `${total - runningSince.length - failed - complete} / ${total}`,
       ],
       parents: [],
