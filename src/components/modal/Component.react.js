@@ -25,7 +25,7 @@ export default React.createClass({
           this.props.containerClassName
         )}
       >
-        <Overlay visible hide={this.props.onClose}>
+        <Overlay visible={this.props.isOpen} hide={this.props.onClose}>
           <aside className={classnames('wgsa-modal', this.props.className)}>
             <header onClick={e => e.stopPropagation()}>
               {this.props.title}

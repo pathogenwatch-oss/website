@@ -2,7 +2,6 @@ import React from 'react';
 import ScrollSpy from 'react-scrollspy';
 
 import Modal from '../components/modal';
-import Fade from '../components/fade';
 import RemoveButton from './RemoveButton.react';
 
 import DownloadLink from '../downloads/GenomeFileLink.react';
@@ -60,7 +59,7 @@ const Content = React.createClass({
           <ScrollSpy
             items={sections.map(_ => _.key.toLowerCase())}
             currentClassName="active"
-            rootEl=".wgsa-genome-report > .wgsa-overlay"
+            rootEl=".wgsa-genome-report > span > .wgsa-overlay"
           >
             {sections.map(({ key }) => (
               <li key={key}>
@@ -99,37 +98,29 @@ const Content = React.createClass({
 const Report = ({ name, genome, loading, close }) => {
   const isOpen = !!loading || !!genome;
   return (
-    <Fade out>
-      {isOpen && (
-        <Modal
-          title={
-            <span className="wgsa-genome-report-title">
-              Genome Report: {genome ? genome.name : name}{' '}
-              {genome && (
-                <DownloadLink
-                  key="download"
-                  id={genome.id}
-                  name={genome.name}
-                />
-              )}
-            </span>
-          }
-          isOpen={isOpen}
-          onClose={close}
-          animationKey="genome-report"
-          containerClassName="wgsa-genome-report"
-        >
-          {loading ? (
-            <div className="wgsa-genome-report-loader">
-              <Spinner />
-              <p>Loading Report</p>
-            </div>
-          ) : (
-            <Content genome={genome} />
+    <Modal
+      title={
+        <span className="wgsa-genome-report-title">
+          Genome Report: {genome ? genome.name : name}{' '}
+          {genome && (
+            <DownloadLink key="download" id={genome.id} name={genome.name} />
           )}
-        </Modal>
+        </span>
+      }
+      isOpen={isOpen}
+      onClose={close}
+      animationKey="genome-report"
+      containerClassName="wgsa-genome-report"
+    >
+      {loading ? (
+        <div className="wgsa-genome-report-loader">
+          <Spinner />
+          <p>Loading Report</p>
+        </div>
+      ) : (
+        <Content genome={genome} />
       )}
-    </Fade>
+    </Modal>
   );
 };
 
