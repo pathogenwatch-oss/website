@@ -101,7 +101,9 @@ export function processReads(genome, token, uploadedAt, dispatch) {
         })),
       })
         .then(response => {
-          if (response.status !== 201) {
+          if (response.status === 304) {
+            r.fire('complete');
+          } else if (response.status !== 201) {
             reject({ message: response.statusText });
           } else {
             r.upload();
