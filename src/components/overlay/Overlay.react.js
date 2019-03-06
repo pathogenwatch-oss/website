@@ -6,7 +6,7 @@ import Fade from '../fade';
 export default React.createClass({
   propTypes: {
     visible: React.PropTypes.bool.isRequired,
-    hide: React.PropTypes.func.isRequired,
+    hide: React.PropTypes.func,
     children: React.PropTypes.node,
   },
 

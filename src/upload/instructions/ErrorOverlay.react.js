@@ -6,7 +6,7 @@ import Overlay from '../../components/overlay';
 import { uploadValidationError } from './actions';
 
 const ErrorOverlay = ({ message, clearMessage }) => (
-  <Overlay visible={message} hide={clearMessage}>
+  <Overlay visible={!!message} hide={clearMessage}>
     {message && (
       <div className="pw-upload-message" onClick={e => e.stopPropagation()}>
         <p className="h4 title-font">Sorry, there was a problem.</p>
