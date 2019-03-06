@@ -69,7 +69,7 @@ function pairReadsFiles(files, assemblerUsage) {
       );
     }
   }
-  if (Object.keys(pairs).length > assemblerUsage.remaining) {
+  if (assemblerUsage && Object.keys(pairs).length > assemblerUsage.remaining) {
     throw new Error(
       'You do not have enough remaining assemblies to complete this upload.'
     );
