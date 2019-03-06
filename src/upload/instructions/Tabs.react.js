@@ -11,11 +11,13 @@ import { fetchAssemblerUsage } from './actions';
 const Tabs = ({ token, usage, fetchUsage }) => {
   const tabsRef = React.useRef();
   React.useEffect(() => {
-    if (tabsRef.current) {
+    if (tabsRef.current && !tabsRef.current.MaterialTabs) {
       componentHandler.upgradeElement(tabsRef.current);
     }
-    fetchUsage(token);
-  }, []);
+    if (token) {
+      fetchUsage(token);
+    }
+  }, [ token ]);
   return (
     <React.Fragment>
       <Fade className="pw-upload-assembler-usage">
