@@ -38,7 +38,13 @@
 }
 
 .pw-upload-session-status {
-  text-transform: uppercase;
   font-weight: 500;
   font-size: 13px;
+  padding: 4px 8px;
+  border-radius: 12px;
+}
+
+.pw-upload-session-status.danger {
+  color: hsl(271, 41%, 40%);
+  background-color: hsl(271, 41%, 96%);
 }
