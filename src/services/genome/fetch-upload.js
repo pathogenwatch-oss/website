@@ -1,6 +1,6 @@
 const Genome = require('models/genome');
 
-module.exports = async function (props) {
+module.exports = async function ({ user, query }) {
   const projection = {
     name: 1,
     uploadedAt: 1,
@@ -23,7 +23,7 @@ module.exports = async function (props) {
     'analysis.kleborate.__v': 1,
     'analysis.inctyper.__v': 1,
   };
-  const genomes = await Genome.find(Genome.getFilterQuery(props), projection).lean();
+  const genomes = await Genome.find({ ...query, _user: user._id }, projection).lean();
   return genomes.map(doc => {
     const { analysis = {}, upload = { complete: true, type: Genome.uploadTypes.ASSEMBLY } } = doc;
     const genome = {
