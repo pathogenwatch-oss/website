@@ -7,6 +7,8 @@ import ErrorSummary from './ErrorSummary.react';
 import * as upload from './selectors';
 import DocumentTitle from '../../branding/DocumentTitle.react';
 
+import { formatDateTime } from '../../utils/Date';
+
 const Component = React.createClass({
   getTitle() {
     const { summary } = this.props;
@@ -20,8 +22,8 @@ const Component = React.createClass({
     const { isUploading, summary, uploadedAt } = this.props;
 
     const uploadedAtDisplay = (
-      <p style={{ marginLeft: 'auto' }}>
-        Uploaded <strong>{new Date(uploadedAt).toLocaleString()}</strong>
+      <p style={{ marginLeft: 'auto', fontWeight: '500' }}>
+        {formatDateTime(uploadedAt)}
       </p>
     );
 
