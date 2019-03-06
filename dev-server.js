@@ -75,11 +75,20 @@ assemblerRouter.get('/account', (req, res) => {
           user: 30,
           total: 100,
         },
-        remaining: 0,
+        remaining: 10,
         // error: 'Usage limits exceeded: only 30 assemblies permitted per user',
       }),
     1000
   );
+});
+
+assemblerRouter.get('/chunks', (req, res) => {
+  setTimeout(() => res.sendStatus(200), 1000);
+});
+
+// 304 test
+assemblerRouter.post('/pipelines', (req, res) => {
+  setTimeout(() => res.sendStatus(304), 1000);
 });
 
 app.use('/api', apiRouter);
