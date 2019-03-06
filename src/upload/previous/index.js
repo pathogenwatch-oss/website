@@ -7,19 +7,28 @@ import { Link } from 'react-router-dom';
 import Spinner from '../../components/Spinner.react';
 import Summary from '../Summary.react';
 import Grid from '../../grid';
-
-import { fetchUploads } from './actions';
 import DocumentTitle from '../../branding/DocumentTitle.react';
 
+import { fetchUploads } from './actions';
+
+import { formatDateTime } from '../../utils/Date';
+
 const ListItem = ({ item }) => {
-  const { uploadedAt, total } = item;
+  const { uploadedAt, total, complete } = item;
   return (
     <Link
       className="wgsa-genome-list-item wgsa-genome-list-item--selectable"
       to={`/upload/${uploadedAt}`}
     >
-      <span>{new Date(uploadedAt).toLocaleString()}</span>
+      <span>{formatDateTime(uploadedAt)}</span>
       <span>{total}</span>
+      <span>
+        {total === complete ? (
+          <span />
+        ) : (
+          <span className="pw-upload-session-status danger">incomplete</span>
+        )}
+      </span>
     </Link>
   );
 };
@@ -28,6 +37,7 @@ const Header = () => (
   <header className="wgsa-genome-list-item wgsa-genome-list-header">
     <h3 className="wgsa-list-header-cell">Date Uploaded</h3>
     <h3 className="wgsa-list-header-cell">Genomes</h3>
+    <h3 className="wgsa-list-header-cell">Status</h3>
   </header>
 );
 

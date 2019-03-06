@@ -36,3 +36,9 @@
     padding-right: calc(50vw - 400px);
   }
 }
+
+.pw-upload-session-status {
+  text-transform: uppercase;
+  font-weight: 500;
+  font-size: 13px;
+}
