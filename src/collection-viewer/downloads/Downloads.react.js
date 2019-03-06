@@ -15,14 +15,14 @@ import Analysis from './Analysis.react';
 import { hasTrees } from '../tree/selectors';
 
 const DownloadsMenu = ({ menuOpen, counts = {}, closeMenu, viewHasTrees }) => (
-  <Overlay isVisible={menuOpen} hide={closeMenu}>
+  <Overlay visible={menuOpen} hide={closeMenu}>
     <div className="wgsa-downloads mdl-shadow--4dp">
       <h3 className="mdl-dialog__title">Downloads</h3>
-      { Object.keys(counts).length ? showCounts(counts) : null }
+      {Object.keys(counts).length ? showCounts(counts) : null}
       <ul className="wgsa-downloads-menu">
         <Analysis />
         <Tables />
-        { viewHasTrees && <Trees /> }
+        {viewHasTrees && <Trees />}
       </ul>
     </div>
   </Overlay>
@@ -48,4 +48,7 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(DownloadsMenu);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(DownloadsMenu);

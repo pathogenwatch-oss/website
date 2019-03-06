@@ -6,16 +6,16 @@ import Reads from './Reads.react';
 import Fade from '../../components/fade';
 import Badge from '../../components/badge';
 
-import { useAssemblerUsage } from './hooks';
+import { fetchAssemblerUsage } from './actions';
 
-const Tabs = ({ token }) => {
+const Tabs = ({ token, usage, fetchUsage }) => {
   const tabsRef = React.useRef();
   React.useEffect(() => {
     if (tabsRef.current) {
       componentHandler.upgradeElement(tabsRef.current);
     }
+    fetchUsage(token);
   }, []);
-  const usage = useAssemblerUsage(token);
   return (
     <React.Fragment>
       <Fade className="pw-upload-assembler-usage">
@@ -65,7 +65,17 @@ const Tabs = ({ token }) => {
 function mapStateToProps(state) {
   return {
     token: state.auth.token,
+    usage: state.upload.instructions.usage,
   };
 }
 
-export default connect(mapStateToProps)(Tabs);
+function mapDispatchToProps(dispatch) {
+  return {
+    fetchUsage: token => dispatch(fetchAssemblerUsage(token)),
+  };
+}
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Tabs);

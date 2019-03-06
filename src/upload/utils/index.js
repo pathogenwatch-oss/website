@@ -55,7 +55,7 @@ const ASSEMBLY_FILENAME_REGEX = new RegExp(
 );
 export const CSV_FILENAME_REGEX = /(\.csv)$/i;
 
-function pairReadsFiles(files) {
+function pairReadsFiles(files, assemblerUsage) {
   const pairs = {};
   for (const file of files) {
     const id = file.name.match(READS_FILENAME_REGEX)[1];
@@ -69,10 +69,15 @@ function pairReadsFiles(files) {
       );
     }
   }
+  if (Object.keys(pairs).length > assemblerUsage.remaining) {
+    throw new Error(
+      'You do not have enough remaining assemblies to complete this upload.'
+    );
+  }
   return pairs;
 }
 
-export function mapCSVsToGenomes(files, uploadedAt) {
+export function mapCSVsToGenomes(files, uploadedAt, assemblerUsage) {
   const csvFiles = [];
   const assemblies = [];
   const reads = [];
@@ -90,31 +95,25 @@ export function mapCSVsToGenomes(files, uploadedAt) {
     }
 
     return Promise.reject({
-      toast: {
-        message: `${
-          file.name
-        } is not a recognised file. Please remove or amend this file and try again.`,
-      },
+      message: `"${
+        file.name
+      }" is not a recognised file. Please remove this file and try again.`,
     });
   }
 
   if (assemblies.length === 0 && reads.length <= 1) {
     return Promise.reject({
-      toast: {
-        message:
-          'Could not process these files. Please ensure that your files include at least one genome with the supported file extensions.',
-      },
+      message:
+        'Please ensure that your files include at least one genome with the supported file extensions.',
     });
   }
 
   let pairedReads = {};
   try {
-    pairedReads = pairReadsFiles(reads);
+    pairedReads = pairReadsFiles(reads, assemblerUsage);
   } catch (e) {
     return Promise.reject({
-      toast: {
-        message: e.message,
-      },
+      message: e.message,
     });
   }
 

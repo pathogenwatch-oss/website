@@ -133,3 +133,22 @@ ul.inline li:last-child::after {
 .pw-upload-assembler-usage aside > :last-child {
   margin-bottom: 0;
 }
+
+/* Error message */
+
+.wgsa-upload-instructions .wgsa-overlay {
+  background: rgba(255, 255, 255, 0.666);
+}
+
+.pw-upload-message {
+  background: #fff;
+  border-radius: 4px;
+  max-width: 320px;
+  padding: 16px;
+  border: 1px solid rgba(0, 0, 0, 0.14);
+}
+
+.pw-upload-message footer {
+  display: flex;
+  justify-content: flex-end;
+}

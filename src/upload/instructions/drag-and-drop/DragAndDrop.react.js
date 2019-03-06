@@ -3,6 +3,8 @@ import React from 'react';
 import { CGPS } from '../../../app/constants';
 import { Name } from '../../../branding';
 
+import Overlay from '../../../components/overlay';
+
 const fileInputStyle = {
   position: 'fixed',
   zIndex: -1,
@@ -81,41 +83,25 @@ export default React.createClass({
         style={this.style}
         onClick={this.props.noAddButton ? this.handleClick : () => {}}
       >
-        <div
-          className={`wgsa-drop-indicator wgsa-overlay ${
-            this.state.indicatorVisible ? 'wgsa-overlay--is-visible' : ''
-          }`}
+        <Overlay
+          visible={this.state.indicatorVisible}
+          className="wgsa-drop-indicator"
           onDragLeave={this.hideDropIndicator}
         >
           <div className="wgsa-drop-indicator__message">
             <div className="wgsa-drop-indicator__icons">
               {readsEligible && (
-                <span className="wgsa-file-icon">
-                  <i
-                    className="material-icons"
-                    style={{ color: CGPS.COLOURS.PURPLE }}
-                  >
-                    insert_drive_file
-                  </i>
+                <span className="wgsa-file-icon wgsa-file-icon--purple">
+                  <i className="material-icons">insert_drive_file</i>
                   <span className="wgsa-file-icon__label">.fastq.gz</span>
                 </span>
               )}
-              <span className="wgsa-file-icon">
-                <i
-                  className="material-icons"
-                  style={{ color: CGPS.COLOURS.PURPLE }}
-                >
-                  insert_drive_file
-                </i>
+              <span className="wgsa-file-icon wgsa-file-icon--purple">
+                <i className="material-icons">insert_drive_file</i>
                 <span className="wgsa-file-icon__label">.fasta</span>
               </span>
-              <span className="wgsa-file-icon">
-                <i
-                  className="material-icons"
-                  style={{ color: CGPS.COLOURS.GREEN }}
-                >
-                  insert_drive_file
-                </i>
+              <span className="wgsa-file-icon wgsa-file-icon--green">
+                <i className="material-icons">insert_drive_file</i>
                 <span className="wgsa-file-icon__label">.csv</span>
               </span>
             </div>
@@ -123,7 +109,7 @@ export default React.createClass({
               Drop to add to <Name />
             </p>
           </div>
-        </div>
+        </Overlay>
         {this.props.children}
         {this.props.noAddButton ? null : (
           <button

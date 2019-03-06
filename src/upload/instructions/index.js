@@ -3,11 +3,12 @@ import './styles.css';
 import React from 'react';
 import { connect } from 'react-redux';
 
+import DocumentTitle from '../../branding/DocumentTitle.react';
 import FileDragAndDrop from './drag-and-drop';
 import Summary from '../Summary.react';
 import Tabs from './Tabs.react';
 import Assemblies from './Assemblies.react';
-import DocumentTitle from '../../branding/DocumentTitle.react';
+import ErrorOverlay from './ErrorOverlay.react';
 
 import { addFiles } from './actions';
 
@@ -23,6 +24,7 @@ const Component = ({ onFiles }) => {
         <section className="wgsa-page wgsa-compact-page wgsa-upload-instructions">
           <h1>Drag and drop files to begin.</h1>
           {readsEligible ? <Tabs /> : <Assemblies />}
+          <ErrorOverlay />
         </section>
       </div>
     </FileDragAndDrop>

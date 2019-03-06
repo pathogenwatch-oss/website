@@ -75,7 +75,7 @@ assemblerRouter.get('/account', (req, res) => {
           user: 30,
           total: 100,
         },
-        remaining: 10,
+        remaining: 0,
         // error: 'Usage limits exceeded: only 30 assemblies permitted per user',
       }),
     1000
