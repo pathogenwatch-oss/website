@@ -112,37 +112,43 @@ module.exports = () =>
       if ((req.path !== '/index.html' && req.path.match(/\.[a-z]{1,4}$/)) || req.xhr) {
         return next();
       }
-      const user = req.user
-        ? {
-          name: req.user.name,
-          email: req.user.email,
-          photo: req.user.photo,
-          admin: req.user.admin || undefined,
-        }
-        : undefined;
 
       let clientId = null;
+      let assemblerAddress = undefined;
+
       if (req.user) {
         const hash = crypto.createHash('sha1');
         hash.update(req.user.id);
         clientId = hash.digest('hex');
+
+        const { flags = {} } = req.user;
+        if (flags.ASSEMBLY_SERVICE_EXPERIMENT) {
+          assemblerAddress = config.assemblerAddress;
+        }
       }
 
       return res.render('index', {
         files,
         gaTrackingId: config.gaTrackingId,
         frontEndConfig: {
-          pusherKey: config.pusher.key,
+          assemblerAddress,
+          clientId,
           mapboxKey: config.mapboxKey,
           maxCollectionSize: config.maxCollectionSize,
           maxDownloadSize: config.maxDownloadSize,
           maxGenomeFileSize: config.maxGenomeFileSize,
           pagination: config.pagination,
-          wiki: config.wikiLocation,
+          pusherKey: config.pusher.key,
           strategies: Object.keys(config.passport.strategies || {}),
-          user,
+          user: req.user
+            ? {
+              name: req.user.name,
+              email: req.user.email,
+              photo: req.user.photo,
+              admin: req.user.admin || undefined,
+            }
+            : undefined,
           version,
-          clientId,
         },
       });
     });
