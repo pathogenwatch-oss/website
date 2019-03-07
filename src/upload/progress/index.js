@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 
 import Progress from './Progress.react';
 import Summary from './Summary.react';
+import Recovery from './Recovery.react';
 
 import {
   isUploadPending,
@@ -10,6 +11,7 @@ import {
   getQueuePosition,
   getLastMessageReceived,
   isAnalysisComplete,
+  getProgressView,
 } from './selectors';
 
 import {
@@ -22,12 +24,16 @@ import {
 import { subscribe, unsubscribe } from '../../utils/Notification';
 
 import config from '../../app/config';
+import { views } from '../constants';
 
 const Component = React.createClass({
-
   componentWillMount() {
     const { uploadedAt } = this.props;
-    subscribe(config.clientId, `analysis-${uploadedAt}`, this.props.receiveAnalysis);
+    subscribe(
+      config.clientId,
+      `analysis-${uploadedAt}`,
+      this.props.receiveAnalysis
+    );
     const { isUploading, startUpload, fetch } = this.props;
     if (isUploading) {
       startUpload();
@@ -37,8 +43,10 @@ const Component = React.createClass({
   },
 
   componentDidUpdate(previous) {
-    const uploadComplete = (previous.isUploading && !this.props.isUploading);
-    const specieationComplete = (previous.isSpecieationComplete === false && this.props.isSpecieationComplete);
+    const uploadComplete = previous.isUploading && !this.props.isUploading;
+    const specieationComplete =
+      previous.isSpecieationComplete === false &&
+      this.props.isSpecieationComplete;
     if (uploadComplete || specieationComplete) {
       this.props.fetch();
     }
@@ -82,11 +90,14 @@ const Component = React.createClass({
     return (
       <div className="wgsa-hipster-style">
         <Summary uploadedAt={this.props.uploadedAt} />
-        <Progress uploadedAt={this.props.uploadedAt} />
+        {this.props.view === views.RECOVERY ? (
+          <Recovery />
+        ) : (
+          <Progress uploadedAt={this.props.uploadedAt} />
+        )}
       </div>
     );
   },
-
 });
 
 function mapStateToProps(state, { match }) {
@@ -98,6 +109,7 @@ function mapStateToProps(state, { match }) {
     isAnalysisComplete: isAnalysisComplete(state),
     position: getQueuePosition(state),
     lastMessageReceived: getLastMessageReceived(state),
+    view: getProgressView(state),
   };
 }
 
@@ -111,4 +123,7 @@ function mapDispatchToProps(dispatch, { match }) {
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Component);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Component);

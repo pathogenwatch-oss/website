@@ -76,7 +76,6 @@ function mapStateToProps(state) {
     files: upload.getFileSummary(state),
     hasReads: upload.hasReads(state),
     uploadsInProgress: upload.getGenomesInProgress(state),
-    view: upload.getProgressView(state),
     token: state.auth.token,
   };
 }

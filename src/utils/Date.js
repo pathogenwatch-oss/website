@@ -67,7 +67,7 @@ export function formatDateTime(date) {
   if (isYesterday(date)) {
     return `Yesterday, ${format(date, 'HH:mm')}`;
   }
-  return `${format(date, 'D MMMM')}, ${format(date, 'HH:mm')}`;
+  return format(date, 'D MMMM, HH:mm');
 }
 
 export function formatDate(date) {
