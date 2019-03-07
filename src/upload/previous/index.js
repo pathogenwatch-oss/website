@@ -24,9 +24,11 @@ const ListItem = ({ item }) => {
       <span>{total}</span>
       <span>
         {total === complete ? (
-          <span />
+          <span className="pw-upload-session-status uploaded">Uploaded</span>
         ) : (
-          <span className="pw-upload-session-status danger">Incomplete</span>
+          <span className="pw-upload-session-status incomplete">
+            Incomplete
+          </span>
         )}
       </span>
     </Link>

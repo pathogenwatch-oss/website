@@ -6,7 +6,9 @@ export default React.memo(({ data, showBreakdown = true }) => (
     {data.map(({ key, label, total, colour, ...analyses }) => (
       <li key={key}>
         <span className="pw-with-icon wgsa-upload-legend-header">
-          <i style={{ backgroundColor: colour }} />
+          <i className="material-icons" style={{ color: colour }}>
+            lens
+          </i>
           <strong className="wgsa-upload-legend-organism" title={label}>
             {label}
           </strong>

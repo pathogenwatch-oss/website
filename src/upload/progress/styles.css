@@ -106,12 +106,6 @@
   width: 100%;
 }
 
-.wgsa-upload-legend-header > i {
-  width: 12px;
-  height: 12px;
-  margin-left: 4px;
-}
-
 .wgsa-upload-legend-organism {
   text-overflow: ellipsis;
   flex-shrink: 1;

@@ -44,7 +44,12 @@
   border-radius: 12px;
 }
 
-.pw-upload-session-status.danger {
+.pw-upload-session-status.uploaded {
+  color: hsl(149, 90%, 20%);
+  background-color: hsl(149, 45%, 48%, 0.075);
+}
+
+.pw-upload-session-status.incomplete {
   color: hsl(271, 41%, 40%);
-  background-color: hsl(271, 41%, 96%);
+  background-color: hsl(271, 41%, 48%, 0.075);
 }
