@@ -3,6 +3,16 @@
   justify-content: space-between;
 }
 
+.pw-upload-page {
+  align-self: stretch;
+  box-sizing: border-box;
+  margin: 0 auto;
+  max-width: 1000px;
+  padding-left: 64px;
+  padding-right: 64px;
+  width: 100%;
+}
+
 .wgsa-upload-progress > :first-child {
   width: 320px;
 }
@@ -172,9 +182,13 @@
   color: hsl(270, 8%, 49%);
 }
 
-.wgsa-upload-progress .CircularProgress {
-  width: 100%;
-  transition-property: transform, opacity;
-  transform: scale3d(1, 1, 1);
-  opacity: 1;
+.pw-upload-recovery-files {
+  display: grid;
+  grid-gap: 16px;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-auto-rows: auto;
+}
+
+.pw-upload-recovery-files ul {
+  font-weight: 500;
 }

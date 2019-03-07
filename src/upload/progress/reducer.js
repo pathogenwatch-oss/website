@@ -28,11 +28,13 @@ const initialState = {
   processing: new Set(),
 
   genomes: {},
+  analysis: {},
   uploadedAt: null,
   selectedOrganism: null,
   view: null,
-  assembly: {},
-  analysis: {},
+
+  session: {},
+  assemblyProgress: {},
 };
 
 export default function (state = initialState, { type, payload }) {
@@ -260,7 +262,7 @@ export default function (state = initialState, { type, payload }) {
     case 'ASSEMBLY_PIPELINE_STATUS':
       return {
         ...state,
-        assembly: payload,
+        assemblyProgress: payload,
       };
     case 'ASSEMBLY_PROGRESS_TICK':
       return {

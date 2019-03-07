@@ -7,9 +7,9 @@ import { getSettingValue } from '../instructions/selectors';
 
 import { getAuthToken } from '../../auth/actions';
 
-import { types } from '../constants';
+import { types, views } from '../constants';
 import * as utils from '../utils';
-import { processReads } from '../utils/resumable';
+import { upload } from '../utils/assembler';
 
 export const ADD_GENOMES = createAsyncConstants('ADD_GENOMES');
 
@@ -97,21 +97,27 @@ function processAssembly(dispatch, getState, genome) {
     .then(data => dispatch(uploadGenome(genome, data)));
 }
 
+function processReads(dispatch, getState, genome) {
+  const state = getState();
+  const uploadedAt = selectors.getUploadedAt(state);
+  const recovery = selectors.getProgressView(state) === views.RECOVERY;
+  const token = state.auth.token;
+  upload(genome, { token, uploadedAt, recovery }, dispatch);
+}
+
 export const PROCESS_GENOME = createAsyncConstants('PROCESS_GENOME');
 
 function processGenome(id) {
   return (dispatch, getState) => {
     const state = getState();
     const genome = selectors.getGenome(state, id);
-    const uploadedAt = selectors.getUploadedAt(state);
-    const token = state.auth.token;
     return dispatch({
       type: PROCESS_GENOME,
       payload: {
         id,
         promise:
           genome.type === types.READS
-            ? processReads(genome, token, uploadedAt, dispatch)
+            ? processReads(dispatch, getState, genome)
             : processAssembly(dispatch, getState, genome),
       },
     }).catch(error => error);

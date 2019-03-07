@@ -27,7 +27,7 @@ export const getSelectedOrganism = state => getProgress(state).selectedOrganism;
 export const getQueuePosition = state => getProgress(state).position;
 export const getLastMessageReceived = state =>
   getProgress(state).lastMessageReceived;
-export const getAssemblyProgress = state => getProgress(state).assembly;
+export const getAssemblyProgress = state => getProgress(state).assemblyProgress;
 
 export const getUploadedGenomeList = createSelector(
   getUploadedGenomes,
@@ -433,4 +433,23 @@ export const isAnalysisComplete = createSelector(
 export const hasErrors = createSelector(
   getOverallProgress,
   ({ errors }) => errors > 0
+);
+
+export const getPendingFiles = createSelector(
+  getUploadedGenomeList,
+  genomes => {
+    const pending = [];
+    for (const { status, files } of genomes) {
+      if (status === statuses.PENDING) {
+        files.sort();
+        pending.push(files);
+      }
+    }
+    return pending;
+  }
+);
+
+export const getNumSuccessfulUploads = createSelector(
+  getFileSummary,
+  ({ completed }) => completed
 );

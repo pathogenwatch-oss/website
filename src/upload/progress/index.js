@@ -87,14 +87,12 @@ const Component = React.createClass({
   interval: null,
 
   render() {
-    return (
+    return this.props.view === views.RECOVERY ? (
+      <Recovery uploadedAt={this.props.uploadedAt} />
+    ) : (
       <div className="wgsa-hipster-style">
         <Summary uploadedAt={this.props.uploadedAt} />
-        {this.props.view === views.RECOVERY ? (
-          <Recovery />
-        ) : (
-          <Progress uploadedAt={this.props.uploadedAt} />
-        )}
+        <Progress uploadedAt={this.props.uploadedAt} />
       </div>
     );
   },

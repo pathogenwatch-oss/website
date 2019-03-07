@@ -31,7 +31,7 @@ function uploadReadsProgress(stage, id, file, progress) {
   };
 }
 
-export function processReads(genome, token, uploadedAt, dispatch) {
+export function upload(genome, { token, uploadedAt, recovery }, dispatch) {
   const worker = hashWorker();
   worker.onmessage = ({ data }) => {
     if (data.progress) {
@@ -88,6 +88,11 @@ export function processReads(genome, token, uploadedAt, dispatch) {
       });
     });
     r.on('filesAdded', addedFiles => {
+      if (recovery) {
+        r.fire('complete');
+        return;
+      }
+
       send('POST', '/api/pipelines', headers, {
         session: uploadedAt,
         genomeId: genome.id,

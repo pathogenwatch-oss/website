@@ -67,7 +67,7 @@ class Previous extends React.Component {
         ) : (
           <div className="wgsa-content-margin">
             {loading && <Spinner />}
-            {error && <p>Failed to fetch previous uploads 😞</p>}
+            {error && <p>Failed to fetch previous uploads.</p>}
             {!loading && uploads.length === 0 && (
               <p>No previous uploads found.</p>
             )}

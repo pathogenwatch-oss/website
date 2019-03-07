@@ -24,7 +24,7 @@ const Progress = ({
 }) => {
   useAssemblyStatus(uploadedAt, hasReads, assemblyInProgress, token);
   return (
-    <div className="wgsa-content-margin wgsa-upload-progress">
+    <div className="wgsa-upload-progress pw-upload-page">
       <div>
         <div className="wgsa-section-divider">
           {/* <h2 className="wgsa-section-title">Overview</h2> */}
