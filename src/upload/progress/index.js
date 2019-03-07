@@ -87,6 +87,9 @@ const Component = React.createClass({
   interval: null,
 
   render() {
+    if (!this.props.view) {
+      return null;
+    }
     return this.props.view === views.RECOVERY ? (
       <Recovery uploadedAt={this.props.uploadedAt} />
     ) : (

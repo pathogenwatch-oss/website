@@ -32,6 +32,7 @@ const initialState = {
   uploadedAt: null,
   selectedOrganism: null,
   view: null,
+  filenameToGenomeId: {},
 
   session: {},
   assemblyProgress: {},
@@ -49,6 +50,7 @@ export default function (state = initialState, { type, payload }) {
         queue: ids,
         uploadedAt: payload.uploadedAt,
         genomes: initialiseGenomes({}, payload.genomes),
+        view: views.PROGRESS,
       };
     }
     case actions.UPLOAD_REQUEUE_FILES: {
@@ -182,6 +184,7 @@ export default function (state = initialState, { type, payload }) {
     case actions.UPLOAD_FETCH_GENOMES.SUCCESS: {
       const nextGenomes = {};
       const nextAnalysis = {};
+      const nextFilenameToGenomeId = {};
       const { genomes, position } = payload.result;
       let incomplete = false;
       for (const { analysis, ...genome } of genomes) {
@@ -198,6 +201,9 @@ export default function (state = initialState, { type, payload }) {
         }
         if (genome.files) {
           incomplete = true;
+          for (const filename of genome.files) {
+            nextFilenameToGenomeId[filename] = genome.id;
+          }
         }
         nextGenomes[genome.id] = {
           ...state.genomes[genome.id],
@@ -209,19 +215,14 @@ export default function (state = initialState, { type, payload }) {
           ...pendingAnalysis,
         };
       }
-      let view;
-      if (state.view !== null) {
-        view = state.view;
-      } else if (incomplete) {
-        view = views.RECOVERY;
-      }
       return {
         ...state,
         position,
-        view,
+        view: incomplete ? views.RECOVERY : views.PROGRESS,
         selectedOrganism: null,
         genomes: nextGenomes,
         analysis: nextAnalysis,
+        filenameToGenomeId: nextFilenameToGenomeId,
       };
     }
     case actions.UPLOAD_ORGANISM_SELECTED:
@@ -254,11 +255,6 @@ export default function (state = initialState, { type, payload }) {
         },
       };
     }
-    case 'SET_PROGRESS_VIEW':
-      return {
-        ...state,
-        view: payload.view,
-      };
     case 'ASSEMBLY_PIPELINE_STATUS':
       return {
         ...state,
@@ -269,6 +265,23 @@ export default function (state = initialState, { type, payload }) {
         ...state,
         assemblyTick: Date.now(),
       };
+    case 'UPLOAD_RECOVER_SESSION': {
+      const genomes = {};
+      for (const { genomeId, files } of payload.session) {
+        genomes[genomeId] = {
+          ...payload.genomes[genomeId],
+          progress: 0,
+          status: statuses.PENDING,
+          recovery: files,
+        };
+      }
+      return {
+        ...initialState,
+        genomes,
+        queue: Object.keys(genomes),
+        view: views.PROGRESS,
+      };
+    }
     default:
       return state;
   }

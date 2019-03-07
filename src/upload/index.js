@@ -11,6 +11,7 @@ import Previous from './previous';
 
 import { isUploading, getUploadedAt } from './progress/selectors';
 import { useAuthToken } from '../auth/hooks';
+import ErrorOverlay from './ErrorOverlay.react';
 
 const path = '/upload';
 
@@ -29,11 +30,14 @@ const Router = connect(mapStateToProps)(({ uploading, uploadedAt, match }) => {
   }
 
   return (
-    <Switch>
-      <Route path={`${path}/previous`} component={Previous} />
-      <Route path={`${path}/:uploadedAt`} component={Progress} />
-      <Route component={Instructions} />
-    </Switch>
+    <React.Fragment>
+      <Switch>
+        <Route path={`${path}/previous`} component={Previous} />
+        <Route path={`${path}/:uploadedAt`} component={Progress} />
+        <Route component={Instructions} />
+      </Switch>
+      <ErrorOverlay />
+    </React.Fragment>
   );
 });
 

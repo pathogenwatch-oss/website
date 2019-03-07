@@ -1,15 +1,15 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import Overlay from '../../components/overlay';
+import Overlay from '../components/overlay';
 
-import { uploadValidationError } from './actions';
+import { uploadErrorMessage } from './actions';
 
 const ErrorOverlay = ({ message, clearMessage }) => (
   <Overlay visible={!!message} hide={clearMessage}>
     {message && (
       <div className="pw-upload-message" onClick={e => e.stopPropagation()}>
-        <p className="h4 title-font">Sorry, there was a problem.</p>
+        <p className="h4 title-font">Sorry, there's a problem.</p>
         <p>{message}</p>
         <footer>
           <button
@@ -26,13 +26,13 @@ const ErrorOverlay = ({ message, clearMessage }) => (
 
 function mapStateToProps(state) {
   return {
-    message: state.upload.instructions.message,
+    message: state.upload.errorMessage,
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
-    clearMessage: () => dispatch(uploadValidationError(null)),
+    clearMessage: () => dispatch(uploadErrorMessage(null)),
   };
 }
 

@@ -1,5 +1,3 @@
-/* eslint max-params: 0 */
-
 import Resumable from 'resumablejs';
 import hashWorker from 'workerize-loader?name=hash.[hash]!./hashWorker';
 import { uploadComplete } from '../api';
@@ -31,7 +29,7 @@ function uploadReadsProgress(stage, id, file, progress) {
   };
 }
 
-export function upload(genome, { token, uploadedAt, recovery }, dispatch) {
+export function upload(genome, { token, uploadedAt }, dispatch) {
   const worker = hashWorker();
   worker.onmessage = ({ data }) => {
     if (data.progress) {
@@ -88,8 +86,23 @@ export function upload(genome, { token, uploadedAt, recovery }, dispatch) {
       });
     });
     r.on('filesAdded', addedFiles => {
-      if (recovery) {
-        r.fire('complete');
+      if (genome.recovery) {
+        for (const { fileId } of genome.recovery) {
+          let filename = null;
+          for (const file of addedFiles) {
+            if (file.uniqueIdentifier === fileId) {
+              break;
+            }
+            filename = file.fileName;
+          }
+          if (filename) {
+            reject({
+              message: `${filename} does not match the original file, please try again.`,
+            });
+            return;
+          }
+        }
+        r.upload();
         return;
       }
 
@@ -118,4 +131,20 @@ export function upload(genome, { token, uploadedAt, recovery }, dispatch) {
     });
     r.addFiles(Object.values(genome.files));
   });
+}
+
+export function fetchSession(uploadedAt, token) {
+  return new Promise((resolve, reject) =>
+    send('GET', `/api/sessions/${uploadedAt}`, {
+      Authorization: `Bearer ${token}`,
+    }).then(response => {
+      if (response.status === 200) {
+        resolve(response.json());
+      } else if (response.status === 404) {
+        reject({ type: 'NOT_FOUND' });
+      } else {
+        reject({ message: response.statusText });
+      }
+    })
+  );
 }

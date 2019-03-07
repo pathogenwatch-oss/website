@@ -2,20 +2,12 @@ import { createAsyncConstants } from '../../actions';
 
 import { showToast } from '../../toast';
 import { addGenomes } from '../progress/actions';
+import { uploadErrorMessage } from '../actions';
 
 import { history } from '../../app/router';
 
 import * as api from './api';
 import * as utils from '../utils';
-
-export const UPLOAD_VALIDATION_ERROR = 'UPLOAD_VALIDATION_ERROR';
-
-export function uploadValidationError(message) {
-  return {
-    type: UPLOAD_VALIDATION_ERROR,
-    payload: message,
-  };
-}
 
 export function addFiles(newFiles) {
   const uploadedAt = new Date().toISOString();
@@ -34,9 +26,9 @@ export function addFiles(newFiles) {
         if (error.toast) {
           dispatch(showToast(error.toast));
         } else if (error.message) {
-          dispatch(uploadValidationError(error.message));
+          dispatch(uploadErrorMessage(error.message));
         } else {
-          dispatch(uploadValidationError('Sorry, something went wrong 😞'));
+          dispatch(uploadErrorMessage('Sorry, something went wrong 😞'));
         }
       });
   };

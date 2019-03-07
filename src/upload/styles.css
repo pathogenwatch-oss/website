@@ -18,7 +18,7 @@
 }
 
 .wgsa-genome-card a {
-  color: #AC65A6;
+  color: #ac65a6;
 }
 
 .wgsa-hub-card-error {
@@ -32,4 +32,24 @@
 
 .wgsa-hub-card-error p {
   white-space: normal;
+}
+
+/* Error message */
+
+.wgsa-upload-instructions .wgsa-overlay {
+  background: rgba(255, 255, 255, 0.666);
+}
+
+.pw-upload-message {
+  color: rgba(0, 0, 0, 0.54);
+  background: #fff;
+  border-radius: 4px;
+  max-width: 320px;
+  padding: 16px;
+  border: 1px solid rgba(0, 0, 0, 0.14);
+}
+
+.pw-upload-message footer {
+  display: flex;
+  justify-content: flex-end;
 }

@@ -15,6 +15,5 @@ export const types = {
 
 export const views = {
   RECOVERY: 1,
-  ASSEMBLY: 2,
-  ANALYSIS: 3,
+  PROGRESS: 2,
 };
