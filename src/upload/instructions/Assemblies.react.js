@@ -68,16 +68,16 @@ export default () => (
       <ul className="bulleted">
         <li>
           <a
-            href="/pathogenwatch-metadata-template-assemblies.csv"
-            download="pathogenwatch-metadata-template-assemblies.csv"
+            href="/pathogenwatch-metadata-template-minimal.csv"
+            download="pathogenwatch-metadata-template-minimal.csv"
           >
             Minimal
           </a>
         </li>
         <li>
           <a
-            href="/pathogenwatch-metadata-template-assemblies-typhi.csv"
-            download="pathogenwatch-metadata-template-assemblies-typhi.csv"
+            href="/pathogenwatch-metadata-template-typhi.csv"
+            download="pathogenwatch-metadata-template-typhi.csv"
           >
             <FormattedName organismId="90370" />
           </a>

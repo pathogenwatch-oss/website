@@ -82,8 +82,8 @@ export default () => (
       <ul className="bulleted">
         <li>
           <a
-            href="/pathogenwatch-metadata-template-reads.csv"
-            download="pathogenwatch-metadata-template-reads.csv"
+            href="/pathogenwatch-metadata-template-reads-minimal.csv"
+            download="pathogenwatch-metadata-template-reads-minimal.csv"
           >
             Minimal
           </a>
