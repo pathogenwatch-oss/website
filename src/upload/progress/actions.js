@@ -102,7 +102,7 @@ function processReads(dispatch, getState, genome) {
   const uploadedAt = selectors.getUploadedAt(state);
   const recovery = selectors.getProgressView(state) === views.RECOVERY;
   const token = state.auth.token;
-  upload(genome, { token, uploadedAt, recovery }, dispatch);
+  return upload(genome, { token, uploadedAt, recovery }, dispatch);
 }
 
 export const PROCESS_GENOME = createAsyncConstants('PROCESS_GENOME');
