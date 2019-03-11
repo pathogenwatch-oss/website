@@ -66,24 +66,27 @@ export function upload(genome, { token, uploadedAt }, dispatch) {
     );
   });
   return new Promise((resolve, reject) => {
+    let alreadyAssembled = false;
     r.on('error', (message, file) => {
       reject({ message, file });
     });
     r.on('complete', () => {
-      Promise.all([
-        send('PATCH', '/api/pipelines', headers, {
-          session: uploadedAt,
-          genomeId: genome.id,
-          status: 'READS_UPLOADED',
-        }),
-        uploadComplete(genome.id),
-      ]).then(response => {
-        if (response.status !== 200) {
-          reject({ message: response.statusText });
-        } else {
-          resolve();
-        }
-      });
+      const promises = [ uploadComplete(genome.id) ];
+      if (!alreadyAssembled) {
+        promises.push(
+          send('PATCH', '/api/pipelines', headers, {
+            session: uploadedAt,
+            genomeId: genome.id,
+            status: 'READS_UPLOADED',
+          }).then(response => {
+            if (response.status !== 200) {
+              reject({ message: response.statusText });
+            }
+          })
+        );
+      }
+
+      Promise.all(promises).then(resolve);
     });
     r.on('filesAdded', addedFiles => {
       if (genome.recovery) {
@@ -120,6 +123,7 @@ export function upload(genome, { token, uploadedAt }, dispatch) {
       })
         .then(response => {
           if (response.status === 304) {
+            alreadyAssembled = true;
             r.fire('complete');
           } else if (response.status !== 201) {
             reject({ message: response.statusText });

@@ -43,7 +43,9 @@ const AnalysisChart = React.createClass({
   componentDidMount() {
     this.chart = new Chart(this.canvas, {
       type: 'doughnut',
-      data: this.props.data,
+      data: {
+        datasets: this.props.datasets.reverse(),
+      },
       options: {
         responsive: false,
         maintainAspectRatio: false,
@@ -104,8 +106,7 @@ const AnalysisChart = React.createClass({
   },
 
   componentDidUpdate() {
-    const { datasets } = this.props.data;
-    for (const dataset of datasets) {
+    for (const dataset of this.props.datasets) {
       const existing = this.chart.data.datasets.find(
         _ => _.label === dataset.label
       );
@@ -119,7 +120,7 @@ const AnalysisChart = React.createClass({
         existing.total = dataset.total;
         existing.tooltips = dataset.tooltips;
       } else {
-        this.chart.data.datasets.push(dataset);
+        this.chart.data.datasets.unshift(dataset);
       }
     }
     this.chart.update();
@@ -168,7 +169,7 @@ const AnalysisChart = React.createClass({
 
 function mapStateToProps(state) {
   return {
-    data: getChartData(state),
+    datasets: getChartData(state),
     specieationComplete: isSpecieationComplete(state),
     sonar: isAnalysisComplete(state) && !hasErrors(state),
     selectedOrganism: getSelectedOrganism(state),

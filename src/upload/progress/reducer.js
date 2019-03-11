@@ -267,6 +267,13 @@ export default function (state = initialState, { type, payload }) {
       };
     case 'UPLOAD_RECOVER_SESSION': {
       const genomes = {};
+      for (const genome of payload.genomes) {
+        genomes[genome.id] = {
+          ...genome,
+          progress: 0,
+          status: statuses.PENDING,
+        };
+      }
       for (const { genomeId, files } of payload.session) {
         genomes[genomeId] = {
           ...payload.genomes[genomeId],

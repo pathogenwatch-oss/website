@@ -10,7 +10,7 @@ import { useAssemblerSession } from './hooks';
 
 import * as upload from './selectors';
 
-import { addFiles } from '../instructions/actions';
+import { recoverUploadSession } from './actions';
 
 import { isReadsEligible } from '../utils';
 
@@ -43,7 +43,7 @@ const Recovery = ({
   if (session) {
     return (
       <FileDragAndDrop
-        onFiles={() => onFiles(session)}
+        onFiles={files => onFiles(files, session)}
         readsEligible={readsEligible}
       >
         <Container uploadedAt={uploadedAt}>
@@ -85,7 +85,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    onFiles: files => dispatch(addFiles(files)),
+    onFiles: (files, session) => dispatch(recoverUploadSession(files, session)),
   };
 }
 

@@ -243,21 +243,29 @@ function getSpeciesCode(organismName) {
   return organismName;
 }
 
-export const isAssemblyInProgress = createSelector(
-  getAssemblyProgress,
-  ({ runningSince = [] }) => runningSince.length > 0
+const getNumUploadedReads = createSelector(
+  getUploadedGenomeList,
+  genomes => {
+    let count = 0;
+    for (const genome of genomes) {
+      if (genome.type === types.READS) {
+        count++;
+      }
+    }
+    return count;
+  }
 );
 
-const expectedDuration = 1000 * 60 * 15; // 15 minutes
+const expectedDuration = 1000 * 60 * 20; // 20 minutes
 
 const getAssemblyChartData = createSelector(
   hasReads,
   getAssemblyProgress,
   state => state.upload.progress.assemblyTick,
-  getBatchSize,
+  getNumUploadedReads,
   (
     sessionHasReads,
-    { runningSince = [], failed = 0, complete = 0 },
+    { pending = 0, runningSince = [], failed = 0, complete = 0 },
     time = Date.now(),
     total
   ) => {
@@ -271,21 +279,24 @@ const getAssemblyChartData = createSelector(
     const progress = runningSince.length
       ? sumProgress / runningSince.length
       : 0;
+    const pendingPct = (pending / total) * 100;
     const completePct = (complete / total) * 100;
     const failedPct = (failed / total) * 100;
-    const pending = 100 - completePct - failedPct - progress;
+    const remaining = 100 - pendingPct - completePct - failedPct - progress;
 
     return {
       label: 'Assembly progress',
-      data: [ failedPct, completePct, progress, pending ],
+      data: [ pendingPct, failedPct, completePct, progress, remaining ],
       backgroundColor: [
+        '#a386bd',
         DEFAULT.DANGER_COLOUR,
         '#3c7383',
         '#AC65A6',
-        'rgba(0, 0, 0, 0.14)',
+        '#fefefe',
       ],
-      labels: [ 'Failed', 'Assembled', 'Assembling', 'Pending' ],
+      labels: [ 'Queued', 'Failed', 'Assembled', 'Assembling', 'Remaining' ],
       tooltips: [
+        `${pending} / ${total}`,
         `${failed} / ${total}`,
         `${complete} / ${total}, ${completePct.toFixed(1)}%`,
         `${runningSince.length} / ${total}, ${progress.toFixed(1)}%`,
@@ -339,7 +350,7 @@ const getAnalysisChartData = createSelector(
         // sts.total = total;
         sum -= st.total;
       }
-      if (sum > 0) {
+      if (sequenceTypes.length && sum > 0) {
         sts.data.push(sum);
         sts.backgroundColor.push('#fefefe');
         sts.labels.push('Unknown ST');
@@ -362,25 +373,43 @@ export const getChartData = createSelector(
     const datasets = [];
 
     if (assembly) {
-      datasets.unshift(assembly);
+      datasets.push(assembly);
     }
     if (organisms.data.length) {
-      datasets.unshift(organisms);
+      datasets.push(organisms);
     }
     if (sts.data.length) {
-      datasets.unshift(sts);
+      datasets.push(sts);
     }
 
-    return {
-      datasets,
-    };
+    return datasets;
   }
 );
 
+export const isAssemblyInProgress = createSelector(
+  getAssemblyProgress,
+  ({ runningSince = [] }) => runningSince.length > 0
+);
+
+const getAssemblySummary = createSelector(
+  getNumUploadedReads,
+  getAssemblyProgress,
+  (total, { complete }) => ({
+    total,
+    done: complete,
+    pending: total - complete,
+  })
+);
+
+export const isAssemblyComplete = createSelector(
+  getAssemblySummary,
+  ({ total, done }) => total === done
+);
+
 export const getOverallProgress = createSelector(
+  getAssemblySummary,
   getAnalysisList,
-  analysis => {
-    const assemblyCount = { pending: 0, done: 0, total: 0 };
+  (assemblyCount, analysis) => {
     const speciationCount = { pending: 0, done: 0, total: 0 };
     const analysisCount = { pending: 0, done: 0, total: 0 };
     let errors = 0;
@@ -401,7 +430,6 @@ export const getOverallProgress = createSelector(
       }
     }
 
-    assemblyCount.done = assemblyCount.total - assemblyCount.pending;
     speciationCount.done = speciationCount.total - speciationCount.pending;
     analysisCount.done = analysisCount.total - analysisCount.pending;
 

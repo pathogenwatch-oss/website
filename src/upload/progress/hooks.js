@@ -6,14 +6,15 @@ import config from '../../app/config';
 
 import { fetchSession } from '../utils/assembler';
 
-export const useAssemblyStatus = (
+export const useAssemblyStatus = ({
   uploadedAt,
   hasReads,
   assemblyInProgress,
-  token
-) => {
+  token,
+  assemblyComplete,
+}) => {
   React.useEffect(() => {
-    if (uploadedAt && hasReads && token) {
+    if (uploadedAt && hasReads && token && !assemblyComplete) {
       // Uses polyfill for Authorisation header
       const eventSource = new window.EventSourcePolyfill(
         `${config.assemblerAddress}/api/sessions/${uploadedAt}`,
@@ -29,7 +30,7 @@ export const useAssemblyStatus = (
         eventSource.close();
       };
     }
-  }, [ uploadedAt, hasReads, token ]);
+  }, [ uploadedAt, hasReads, token, assemblyComplete ]);
 
   React.useEffect(() => {
     if (uploadedAt && assemblyInProgress) {

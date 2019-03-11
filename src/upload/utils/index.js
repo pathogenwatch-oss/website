@@ -101,6 +101,7 @@ export function mapCSVsToGenomes(files, uploadedAt, assemblerUsage) {
     });
   }
 
+  console.log(files, assemblies, reads);
   if (assemblies.length === 0 && reads.length <= 1) {
     return Promise.reject({
       message:
