@@ -4,7 +4,7 @@ import 'eventsource/lib/eventsource-polyfill';
 import store from '../../app/store';
 import config from '../../app/config';
 
-import { fetchSession } from '../utils/assembler';
+import { fetchSession } from './files/utils/assembler';
 
 export const useAssemblyStatus = ({
   uploadedAt,

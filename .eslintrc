@@ -3,5 +3,8 @@
   "rules": {
     "react/prop-types": 0,
     "no-multiple-empty-lines": 0
+  },
+  "settings": {
+    "import/resolver": "webpack"
   }
 }

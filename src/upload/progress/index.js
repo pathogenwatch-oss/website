@@ -5,8 +5,8 @@ import Progress from './Progress.react';
 import Summary from './Summary.react';
 import Recovery from './Recovery.react';
 
+import { isUploadPending } from './files/selectors';
 import {
-  isUploadPending,
   isSpecieationComplete,
   getQueuePosition,
   getLastMessageReceived,
@@ -14,16 +14,16 @@ import {
   getProgressView,
 } from './selectors';
 
+import { processFiles } from './files/actions';
 import {
   receiveUploadAnalysis,
   fetchGenomes,
-  processFiles,
   fetchQueuePosition,
 } from './actions';
 
-import { subscribe, unsubscribe } from '../../utils/Notification';
+import { subscribe, unsubscribe } from '~/utils/Notification';
 
-import config from '../../app/config';
+import config from '~/app/config';
 import { views } from '../constants';
 
 const Component = React.createClass({

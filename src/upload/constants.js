@@ -1,19 +1,15 @@
-// N.B. this defines the sort order!
-export const statuses = {
-  PENDING: 0,
-  QUEUED: 1,
-  UPLOADING: 2,
-  COMPRESSING: 3,
-  ERROR: 4,
-  SUCCESS: 5,
+export const views = {
+  RECOVERY: 1,
+  PROGRESS: 2,
 };
 
-export const types = {
+export const fileTypes = {
   READS: 'reads',
   ASSEMBLY: 'assembly',
 };
 
-export const views = {
-  RECOVERY: 1,
-  PROGRESS: 2,
+export const assemblerStatuses = {
+  INACTIVE: 0,
+  RUNNING: 1,
+  COMPLETED: 2,
 };

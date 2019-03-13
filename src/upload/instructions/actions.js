@@ -1,13 +1,12 @@
-import { createAsyncConstants } from '../../actions';
+import { createAsyncConstants } from '~/actions';
 
-import { showToast } from '../../toast';
-import { addGenomes } from '../progress/actions';
-import { uploadErrorMessage } from '../actions';
+import { showToast } from '~/toast';
+import { addGenomes, uploadErrorMessage } from '../actions';
 
-import { history } from '../../app/router';
+import { history } from '~/app/router';
 
 import * as api from './api';
-import * as utils from '../utils';
+import { mapCSVsToGenomes } from '../utils';
 
 export function addFiles(newFiles) {
   const uploadedAt = new Date().toISOString();
@@ -15,8 +14,7 @@ export function addFiles(newFiles) {
     const { upload } = getState();
     const { usage } = upload.instructions;
 
-    utils
-      .mapCSVsToGenomes(newFiles, uploadedAt, usage)
+    mapCSVsToGenomes(newFiles, usage)
       .then(parsedFiles => {
         dispatch(addGenomes(parsedFiles, uploadedAt)).then(() =>
           history.push(`/upload/${uploadedAt}`)
@@ -31,18 +29,6 @@ export function addFiles(newFiles) {
           dispatch(uploadErrorMessage('Sorry, something went wrong 😞'));
         }
       });
-  };
-}
-
-export const UPLOAD_SETTING_CHANGED = 'UPLOAD_SETTING_CHANGED';
-
-export function changeUploadSetting(setting, value) {
-  return {
-    type: UPLOAD_SETTING_CHANGED,
-    payload: {
-      setting,
-      value,
-    },
   };
 }
 

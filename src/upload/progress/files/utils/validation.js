@@ -1,4 +1,4 @@
-import config from '../../app/config';
+import config from '~/app/config';
 
 export function InvalidGenomeError(message) {
   this.message = message;
@@ -11,7 +11,11 @@ export function validateGenomeSize(file) {
     if (file.size === 0) {
       reject(new InvalidGenomeError('This is an empty file.'));
     } else if (file.size > MAX_GENOME_FILE_SIZE) {
-      reject(new InvalidGenomeError(`This file is larger than ${config.maxGenomeFileSize} MB.`));
+      reject(
+        new InvalidGenomeError(
+          `This file is larger than ${config.maxGenomeFileSize} MB.`
+        )
+      );
     } else {
       resolve(file);
     }

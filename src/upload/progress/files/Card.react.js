@@ -1,11 +1,9 @@
 import React from 'react';
 
-import ProgressBar from '../../components/progress-bar';
+import ProgressBar from '~/components/progress-bar';
+import Error from './CardError.react';
 
-import Header from './Header.react';
-import GenomeError from './GenomeError.react';
-
-import { statuses, types } from '../constants';
+import { statuses, types } from './constants';
 
 const stages = {
   IDENTIFY: 'Identifying',
@@ -25,7 +23,7 @@ function renderReadsProgress(genome) {
 function renderAssemblyProgress(genome) {
   switch (genome.status) {
     case statuses.ERROR:
-      return <GenomeError genome={genome} />;
+      return <Error genome={genome} />;
     case statuses.COMPRESSING:
       return (
         <React.Fragment>
@@ -48,15 +46,15 @@ function renderAssemblyProgress(genome) {
   }
 }
 
-export default ({ item }) => {
-  const content =
-    item.type === types.READS
-      ? renderReadsProgress(item)
-      : renderAssemblyProgress(item);
-  return (
-    <div className="wgsa-genome-card">
-      <Header genome={item} />
-      {content}
-    </div>
-  );
-};
+export default ({ genome }) => (
+  <div className="wgsa-genome-card">
+    <header className="wgsa-card-header">
+      <h2 className="wgsa-card-title wgsa-overflow-fade" title={genome.name}>
+        {genome.name}
+      </h2>
+    </header>
+    {genome.type === types.READS
+      ? renderReadsProgress(genome)
+      : renderAssemblyProgress(genome)}
+  </div>
+);

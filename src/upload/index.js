@@ -9,7 +9,8 @@ import Progress from './progress';
 import Instructions from './instructions';
 import Previous from './previous';
 
-import { isUploading, getUploadedAt } from './progress/selectors';
+import { getUploadedAt } from './progress/selectors';
+import { isUploading } from './progress/files/selectors';
 import { useAuthToken } from '../auth/hooks';
 import ErrorOverlay from './ErrorOverlay.react';
 

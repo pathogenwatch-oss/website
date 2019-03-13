@@ -1,129 +1,29 @@
 import { createSelector } from 'reselect';
 
-import { isInvalidUpload, isFailedUpload } from '../utils/validation';
-import { getColourGenerator, getLightColour } from '../../utils/colours';
-import { statuses, types } from '../constants';
+import { isUploadPending, getUploadedGenomeList, getFileSummary } from './files/selectors';
 
-import { getOrganismName } from '../../organisms';
-import { DEFAULT } from '../../app/constants';
+import { getColourGenerator, getLightColour } from '~/utils/colours';
+import { getOrganismName } from '~/organisms';
+
+import { DEFAULT } from '~/app/constants';
+import { statuses } from './files/constants';
 
 export const getProgress = ({ upload }) => upload.progress;
 export const getProgressView = state => getProgress(state).view;
 
-const getUploadQueue = createSelector(
-  getProgress,
-  uploads => uploads.queue
-);
-
-const getProcessing = createSelector(
-  getProgress,
-  uploads => uploads.processing
-);
-
 export const getUploadedAt = state => getProgress(state).uploadedAt;
-export const getUploadedGenomes = state => getProgress(state).genomes;
-export const getGenome = (state, id) => getUploadedGenomes(state)[id];
 export const getSelectedOrganism = state => getProgress(state).selectedOrganism;
 export const getQueuePosition = state => getProgress(state).position;
 export const getLastMessageReceived = state =>
   getProgress(state).lastMessageReceived;
 export const getAssemblyProgress = state => getProgress(state).assemblyProgress;
 
-export const getUploadedGenomeList = createSelector(
-  getUploadedGenomes,
-  genomes => Object.keys(genomes).map(id => genomes[id])
-);
+export const getNumUploadedReads = state => getProgress(state).numberOfReads;
+export const hasReads = state => getNumUploadedReads(state) > 0;
 
 export const getAnalysisList = createSelector(
   state => getProgress(state).analysis,
   analysis => Object.keys(analysis).map(id => analysis[id])
-);
-
-export const getBatchSize = createSelector(
-  getUploadedGenomeList,
-  list => list.length
-);
-
-export const getGenomesInProgress = createSelector(
-  getProcessing,
-  getUploadedGenomes,
-  (processing, genomes) => Array.from(processing).map(id => genomes[id])
-);
-
-export const getNumRemainingUploads = createSelector(
-  getUploadQueue,
-  getProcessing,
-  (queue, processing) => queue.length + processing.size
-);
-
-export const isUploading = createSelector(
-  getProcessing,
-  processing => processing.size > 0
-);
-
-export const isUploadPending = createSelector(
-  getNumRemainingUploads,
-  remaining => remaining > 0
-);
-
-export const getNumCompletedUploads = createSelector(
-  getBatchSize,
-  getNumRemainingUploads,
-  (batchSize, numRemaining) => batchSize - numRemaining
-);
-
-export const getFailedUploads = createSelector(
-  getUploadedGenomeList,
-  genomes => genomes.filter(genome => isFailedUpload(genome))
-);
-
-export const getTotalFailures = createSelector(
-  getFailedUploads,
-  failedUploads => failedUploads.length
-);
-
-export const getInvalidUploads = createSelector(
-  getUploadedGenomeList,
-  genomes => genomes.filter(genome => isInvalidUpload(genome))
-);
-
-export const getTotalInvalid = createSelector(
-  getInvalidUploads,
-  invalidUploads => invalidUploads.length
-);
-
-export const getErroredUploads = createSelector(
-  getUploadedGenomeList,
-  genomes => genomes.filter(genome => genome.status === statuses.ERROR)
-);
-
-export const getTotalErrors = createSelector(
-  getErroredUploads,
-  erroredUploads => erroredUploads.length
-);
-
-export const isRetryable = createSelector(
-  isUploading,
-  getFailedUploads,
-  (uploading, failures) => !uploading && !!failures.length
-);
-
-export const getFileSummary = createSelector(
-  getUploadedGenomeList,
-  files => {
-    const summary = {};
-    for (const file of files) {
-      summary[file.status] = (summary[file.status] || 0) + 1;
-    }
-    return {
-      total: files.length,
-      completed: summary[statuses.SUCCESS] || 0,
-      errored: summary[statuses.ERROR] || 0,
-      pending: summary[statuses.PENDING] || 0,
-      uploading: summary[statuses.UPLOADING] || 0,
-      compressing: summary[statuses.COMPRESSING] || 0,
-    };
-  }
 );
 
 function getAnalysisBreakdown(analysis) {
@@ -169,16 +69,6 @@ function getAnalysisBreakdown(analysis) {
 
   return breakdown;
 }
-
-export const hasReads = createSelector(
-  getUploadedGenomeList,
-  genomes => {
-    for (const genome of genomes) {
-      if (genome.type === types.READS) return true;
-    }
-    return false;
-  }
-);
 
 export const getAnalysisSummary = createSelector(
   hasReads,
@@ -242,19 +132,6 @@ function getSpeciesCode(organismName) {
   }
   return organismName;
 }
-
-const getNumUploadedReads = createSelector(
-  getUploadedGenomeList,
-  genomes => {
-    let count = 0;
-    for (const genome of genomes) {
-      if (genome.type === types.READS) {
-        count++;
-      }
-    }
-    return count;
-  }
-);
 
 const expectedDuration = 1000 * 60 * 20; // 20 minutes
 
@@ -447,8 +324,8 @@ export const isSpecieationComplete = createSelector(
   getUploadedGenomeList,
   getOverallProgress,
   (uploadPending, genomes, { speciation }) => {
-    if (uploadPending) return null;
-    if (genomes.length === 0) return null;
+    if (uploadPending) return false;
+    if (genomes.length === 0) return false;
     return speciation.done === genomes.length;
   }
 );

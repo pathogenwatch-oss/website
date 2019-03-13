@@ -11,6 +11,7 @@ const srcFolder = path.join(__dirname, 'src');
 const resolve = {
   alias: {
     '^': srcFolder,
+    '~': srcFolder,
     react: path.join(srcFolder, 'react-shim.js'),
   },
   modules: [ 'node_modules', path.join(__dirname, 'node_modules') ],

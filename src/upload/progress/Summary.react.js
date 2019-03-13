@@ -2,12 +2,12 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import Summary from '../Summary.react';
-import ErrorSummary from './ErrorSummary.react';
+// import ErrorSummary from './ErrorSummary.react';
 
-import * as upload from './selectors';
-import DocumentTitle from '../../branding/DocumentTitle.react';
+import * as upload from './files/selectors';
+import DocumentTitle from '~/branding/DocumentTitle.react';
 
-import { formatDateTime } from '../../utils/Date';
+import { formatDateTime } from '~/utils/Date';
 
 const Component = React.createClass({
   getTitle() {
@@ -19,7 +19,7 @@ const Component = React.createClass({
   },
 
   renderContent() {
-    const { isUploading, summary, uploadedAt } = this.props;
+    const { uploadedAt } = this.props;
 
     const uploadedAtDisplay = (
       <p style={{ marginLeft: 'auto', fontWeight: '500' }}>
@@ -27,9 +27,9 @@ const Component = React.createClass({
       </p>
     );
 
-    if (!isUploading && summary.errored) {
-      return <ErrorSummary>{uploadedAtDisplay}</ErrorSummary>;
-    }
+    // if (!isUploading && summary.errored) {
+    //   return <ErrorSummary>{uploadedAtDisplay}</ErrorSummary>;
+    // }
 
     return <Summary>{uploadedAtDisplay}</Summary>;
   },

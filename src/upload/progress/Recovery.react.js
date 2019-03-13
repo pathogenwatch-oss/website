@@ -1,5 +1,3 @@
-import './styles.css';
-
 import React from 'react';
 import { connect } from 'react-redux';
 
@@ -14,7 +12,7 @@ import { recoverUploadSession } from './actions';
 
 import { isReadsEligible } from '../utils';
 
-const Container = ({ uploadedAt, children }) => (
+const ContentWrapper = ({ uploadedAt, children }) => (
   <div className="wgsa-hipster-style">
     <Summary uploadedAt={uploadedAt} />
     <section className="pw-upload-page">{children}</section>
@@ -33,10 +31,10 @@ const Recovery = ({
 
   if (error) {
     return (
-      <Container uploadedAt={uploadedAt}>
+      <ContentWrapper uploadedAt={uploadedAt}>
         <h1>Sorry, there's a problem.</h1>
         <p>{error.message}</p>
-      </Container>
+      </ContentWrapper>
     );
   }
 
@@ -46,7 +44,7 @@ const Recovery = ({
         onFiles={files => onFiles(files, session)}
         readsEligible={readsEligible}
       >
-        <Container uploadedAt={uploadedAt}>
+        <ContentWrapper uploadedAt={uploadedAt}>
           <h1>Recover this session.</h1>
           {numSuccessful > 0 && (
             <p className="pw-with-icon success">
@@ -67,12 +65,12 @@ const Recovery = ({
               </li>
             ))}
           </ul>
-        </Container>
+        </ContentWrapper>
       </FileDragAndDrop>
     );
   }
 
-  return <Container />;
+  return <ContentWrapper />;
 };
 
 function mapStateToProps(state) {

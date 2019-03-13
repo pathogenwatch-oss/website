@@ -25,43 +25,6 @@
   min-width: 560px;
 }
 
-.wgsa-upload-card-list {
-  display: block;
-  overflow: hidden;
-}
-
-.wgsa-upload-card-enter {
-  opacity: 0;
-}
-
-.wgsa-upload-card-enter.wgsa-upload-card-enter-active {
-  opacity: 1;
-  transition: 0.28s cubic-bezier(0.4, 0, 0.2, 1);
-  transition-property: opacity;
-}
-
-.wgsa-upload-card-leave {
-  transform: translateX(0);
-}
-
-.wgsa-upload-card-leave.wgsa-upload-card-leave-active {
-  transform: translateX(-100%);
-  transition: 0.28s cubic-bezier(0.4, 0, 0.2, 1);
-  transition-property: transform;
-}
-
-.wgsa-upload-progress .wgsa-card-header i {
-  position: absolute;
-  right: 0;
-  top: 0;
-  font-size: 18px;
-  color: #d11b1b;
-}
-
-.wgsa-upload-progress .wgsa-card-content {
-  height: auto;
-}
-
 .pw-upload-progress-view {
   flex-grow: 1;
 }

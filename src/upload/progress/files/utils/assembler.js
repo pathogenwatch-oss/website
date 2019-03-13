@@ -1,7 +1,7 @@
 import Resumable from 'resumablejs';
 import hashWorker from 'workerize-loader?name=hash.[hash]!./hashWorker';
 import { uploadComplete } from '../api';
-import config from '../../app/config';
+import config from '~/app/config';
 
 const { origin = window.location.origin, clientId } = config;
 

@@ -1,15 +1,13 @@
 import { readAsText } from 'promise-file-reader';
 
-import MetadataUtils from '../../utils/Metadata';
+import MetadataUtils from '~/utils/Metadata';
 
-import { validateGenomeSize, validateGenomeContent } from './validation';
-import validateMetadata from '../../../universal/validateMetadata.js';
+import validateMetadata from '~/../universal/validateMetadata.js';
 
-import { types } from '../constants';
-import { ASSEMBLY_FILE_EXTENSIONS } from '../../app/constants';
-import getCompressWorker from 'worker-loader?name=compress-worker.[hash].js!./compressWorker';
+import { fileTypes } from './constants';
+import { ASSEMBLY_FILE_EXTENSIONS } from '~/app/constants';
 
-import config from '../../app/config';
+import config from '~/app/config';
 
 export function isReadsEligible() {
   return 'assemblerAddress' in config;
@@ -77,7 +75,7 @@ function pairReadsFiles(files, assemblerUsage) {
   return pairs;
 }
 
-export function mapCSVsToGenomes(files, uploadedAt, assemblerUsage) {
+export function mapCSVsToGenomes(files, assemblerUsage) {
   const csvFiles = [];
   const assemblies = [];
   const reads = [];
@@ -101,7 +99,6 @@ export function mapCSVsToGenomes(files, uploadedAt, assemblerUsage) {
     });
   }
 
-  console.log(files, assemblies, reads);
   if (assemblies.length === 0 && reads.length <= 1) {
     return Promise.reject({
       message:
@@ -131,43 +128,22 @@ export function mapCSVsToGenomes(files, uploadedAt, assemblerUsage) {
           r => r.filename === id || fileNames.includes(r.filename)
         );
         return {
+          files: Object.values(filesByName),
           id: `${id}__${Date.now()}_${index}`,
-          type: types.READS,
-          name: id,
-          files: filesByName,
-          uploadedAt,
           metadata: row ? parseMetadata(row) : null,
+          name: id,
+          type: fileTypes.READS,
         };
       }),
       ...assemblies.map((file, index) => {
         const row = rows.find(r => r.filename === file.name);
         return {
+          files: [ file ],
           id: `${file.name}__${Date.now()}_${index}`,
-          type: types.ASSEMBLY,
-          name: file.name,
-          file,
-          uploadedAt,
           metadata: row ? parseMetadata(row) : null,
-          owner: 'me',
-          uploaded: true,
+          name: file.name,
+          type: fileTypes.ASSEMBLY,
         };
       }),
     ]);
-}
-
-export function compress(text) {
-  return new Promise((resolve, reject) => {
-    const worker = getCompressWorker();
-    worker.onmessage = function (event) {
-      resolve(event.data);
-    };
-    worker.onerror = reject;
-    worker.postMessage(text);
-  });
-}
-
-export function validate(genome) {
-  return validateGenomeSize(genome.file)
-    .then(readAsText)
-    .then(validateGenomeContent);
 }

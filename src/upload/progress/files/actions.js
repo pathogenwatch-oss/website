@@ -1,0 +1,170 @@
+import { createAsyncConstants } from '~/actions';
+
+import * as selectors from './selectors';
+import { getUploadedAt } from '../selectors';
+
+import { getAuthToken } from '~/auth/actions';
+
+import * as api from './api';
+import { compress, validate } from './utils';
+import { upload } from './utils/assembler';
+import { mapCSVsToGenomes } from '../../utils';
+
+import { fileTypes } from '../../constants';
+
+export const GENOME_UPLOAD_PROGRESS = 'GENOME_UPLOAD_PROGRESS';
+
+export function genomeUploadProgress(id, progress) {
+  return {
+    type: GENOME_UPLOAD_PROGRESS,
+    payload: {
+      id,
+      progress,
+    },
+  };
+}
+
+export const COMPRESS_GENOME = createAsyncConstants('COMPRESS_GENOME');
+
+export function compressGenome(id, text) {
+  return {
+    type: COMPRESS_GENOME,
+    payload: {
+      id,
+      promise: compress(text),
+    },
+  };
+}
+
+export const UPLOAD_GENOME = createAsyncConstants('UPLOAD_GENOME');
+
+export function uploadGenome(genome, data) {
+  return dispatch => {
+    const { id, metadata } = genome;
+    const progressFn = percent => dispatch(genomeUploadProgress(id, percent));
+
+    return dispatch({
+      type: UPLOAD_GENOME,
+      payload: {
+        id,
+        promise: api.upload(genome, data, progressFn).then(uploadResult => {
+          if (metadata) {
+            return api
+              .update(uploadResult.id, metadata)
+              .then(updateResult => ({ ...uploadResult, ...updateResult }));
+          }
+          return uploadResult;
+        }),
+      },
+    });
+  };
+}
+
+function processAssembly(dispatch, getState, genome) {
+  return (
+    validate(genome)
+      // .then(data => {
+      //   if (getSettingValue(getState(), 'compression')) {
+      //     return dispatch(compressGenome(genome.id, data));
+      //   }
+      //   return data;
+      // })
+      .then(data => dispatch(uploadGenome(genome, data)))
+  );
+}
+
+function processReads(dispatch, getState, genome) {
+  const state = getState();
+  const uploadedAt = getUploadedAt(state);
+  // TODO: determine this from state
+  const recovery = false;
+  const token = state.auth.token;
+  return upload(genome, { token, uploadedAt, recovery }, dispatch);
+}
+
+export const PROCESS_GENOME = createAsyncConstants('PROCESS_GENOME');
+
+function processGenome(id) {
+  return (dispatch, getState) => {
+    const state = getState();
+    const genome = selectors.getGenome(state, id);
+    return dispatch({
+      type: PROCESS_GENOME,
+      payload: {
+        id,
+        promise:
+          genome.type === fileTypes.READS
+            ? processReads(dispatch, getState, genome)
+            : processAssembly(dispatch, getState, genome),
+      },
+    }).catch(error => error);
+  };
+}
+
+export function processFiles() {
+  return (dispatch, getState) => {
+    const state = getState();
+    if (selectors.isUploading(state)) return;
+
+    // const isIndividual = getSettingValue(state, 'individual');
+    // const processLimit = isIndividual ? 1 : 5;
+    const processLimit = 1;
+
+    dispatch(getAuthToken()).then(() =>
+      (function processNext() {
+        const { queue, processing } = getFiles(getState());
+        if (queue.length && processing.size < processLimit) {
+          dispatch(processGenome(queue[0])).then(() => {
+            if (queue.length > processLimit) {
+              processNext();
+              return;
+            }
+          });
+          processNext();
+        }
+      }())
+    );
+  };
+}
+
+export function recoverUploadSession(files, session) {
+  return (dispatch, getState) =>
+    mapCSVsToGenomes(files).then(uploadedItems => {
+      const state = getState();
+      const { filenameToGenomeId } = state.upload.progress;
+      const remaining = new Set(Object.keys(filenameToGenomeId));
+      const genomes = {};
+      for (const item of uploadedItems) {
+        let genomeId;
+        if (item.files) {
+          const [ file1, file2 ] = Object.keys(item.files);
+          remaining.delete(file1);
+          remaining.delete(file2);
+          genomeId = filenameToGenomeId[file1] || filenameToGenomeId[file2];
+        } else {
+          remaining.delete(item.name);
+          genomeId = filenameToGenomeId[item.name];
+        }
+        item.id = genomeId;
+        genomes[genomeId] = item;
+      }
+      if (remaining.size > 0) {
+        dispatch({
+          type: 'UPLOAD_ERROR_MESSAGE',
+          payload: {
+            type: 'MISSING_FILES',
+            data: Array.from(remaining),
+          },
+        });
+      } else {
+        dispatch({
+          type: 'UPLOAD_RECOVER_SESSION',
+          payload: {
+            genomes,
+            session,
+          },
+        });
+        dispatch(processFiles());
+      }
+    });
+}
