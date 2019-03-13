@@ -2,7 +2,7 @@
   background-color: rgb(51, 51, 51);
   color: hsl(0, 2%, 76%);
   text-align: center;
-  padding: calc(16px + 24px) 16px 16px;
+  padding: 40px 16px 16px;
 }
 
 .mr-footer p {
