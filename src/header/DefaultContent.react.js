@@ -20,8 +20,31 @@ export default ({ offline = isOffline() }) => {
       <NavLink to="/genomes">Genomes</NavLink>
       <NavLink to="/collections">Collections</NavLink>
       <NavLink to="/upload">Upload</NavLink>
-      <NavLink to="https://cgps.gitbook.io/pathogenwatch/" external className="sm-hide">Documentation</NavLink>
-      <NavLink to="mailto:cgps@sanger.ac.uk" className="sm-hide" external>Contact</NavLink>
+      <NavLink
+        to="https://cgps.gitbook.io/pathogenwatch/"
+        external
+        className="sm-hide"
+      >
+        Documentation
+      </NavLink>
+      <a
+        className="mdl-button mdl-button--icon"
+        href="https://twitter.com/pathogenwatch"
+        rel="noopener"
+        target="_blank"
+        title="Follow @Pathogenwatch"
+      >
+        <i className="cgps-twitter-icon" />
+      </a>
+      <a
+        className="mdl-button mdl-button--icon"
+        href="mailto:cgps@sanger.ac.uk"
+        rel="noopener"
+        target="_blank"
+        title="Contact us"
+      >
+        <i className="material-icons">email</i>
+      </a>
     </nav>
   );
 };
