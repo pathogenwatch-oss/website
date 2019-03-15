@@ -3,12 +3,12 @@ import { connect } from 'react-redux';
 import classnames from 'classnames';
 
 import AddToSelection from '../selection/AddToSelection.react';
+import OrganismCell from './OrganismCell.react';
 
 import { getLastSelectedIndex } from '../selection/selectors';
 
 import { toggleSelection, selectRange } from '../selection/actions';
 
-import { FormattedName } from '../../organisms';
 import { formatDate } from '../../utils/Date';
 import { getCountryName } from '../../utils/country';
 
@@ -56,17 +56,6 @@ const displayAccessLevel = props => {
   );
 };
 
-function getOrganismName({ organismName, serotype }) {
-  if (serotype) {
-    return (
-      <span>
-        <em>{organismName}</em> ser. <strong>{serotype}</strong>
-      </span>
-    );
-  }
-  return organismName;
-}
-
 const ListItem = ({
   index,
   genome,
@@ -76,7 +65,7 @@ const ListItem = ({
   className,
   onMouseOver,
 }) => {
-  const { name, organismId, organismName, st, country } = genome;
+  const { name, st, country } = genome;
   const countryName = country ? getCountryName(country) : null;
   const date = genome.date ? formatDate(genome.date) : null;
 
@@ -101,14 +90,7 @@ const ListItem = ({
         </button>
       </Cell>
       <Cell>
-        {organismName ? (
-          <FormattedName
-            organismId={organismId}
-            title={getOrganismName(genome)}
-          />
-        ) : (
-          <span>&nbsp;</span>
-        )}
+        <OrganismCell genome={genome} />
       </Cell>
       {st ? (
         <Cell>

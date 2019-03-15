@@ -11,18 +11,20 @@ function mapStateToProps(state, { organismId, title }) {
   const offline = isOffline();
   return {
     isDeployed:
-      offline || !title ?
-        taxIdMap.has(organismId) :
-        deployedOrganisms && deployedOrganisms.has(organismId),
+      offline || !title
+        ? taxIdMap.has(organismId)
+        : deployedOrganisms && deployedOrganisms.has(organismId),
   };
 }
 
 export default connect(mapStateToProps)(
-  ({ isDeployed, organismId, title, shortName = false }) => (
+  ({ isDeployed, organismId, title, shortName = false, children = title }) => (
     <span title={title}>
-      { isDeployed ?
-        taxIdMap.get(organismId)[shortName ? 'formattedShortName' : 'formattedName'] :
-        title }
+      {isDeployed
+        ? taxIdMap.get(organismId)[
+          shortName ? 'formattedShortName' : 'formattedName'
+        ]
+        : children}
     </span>
   )
 );
