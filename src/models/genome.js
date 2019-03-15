@@ -50,7 +50,10 @@ schema.index({ 'analysis.paarsnp.antibiotics.state': 1 });
 schema.index({ 'analysis.speciator.organismId': 1 });
 schema.index({ 'analysis.speciator.speciesId': 1 });
 schema.index({ 'analysis.speciator.genusId': 1 });
-schema.index({ 'analysis.speciator.organismName': 1 });
+schema.index({
+  'analysis.speciator.speciesName': 1,
+  'analysis.serotype.serovar': 1,
+});
 schema.index({ 'analysis.speciator.organismId': 1, 'analysis.speciator.organismName': 1 });
 
 schema.statics.taxonomy = genome => {
@@ -184,6 +187,7 @@ schema.statics.getFilterQuery = function (props) {
     organismId,
     resistance,
     searchText,
+    serotype,
     sequenceType,
     speciesId,
     type,
@@ -237,6 +241,10 @@ schema.statics.getFilterQuery = function (props) {
     findQuery['analysis.speciator.genusId'] = genusId;
   }
 
+  if (serotype && genusId) {
+    findQuery['analysis.serotype.serovar'] = serotype;
+  }
+
   if (sequenceType && (organismId || speciesId || genusId)) {
     findQuery['analysis.mlst.st'] = sequenceType;
   }
@@ -270,7 +278,10 @@ schema.statics.getSort = function (sort = 'createdAt-') {
   }
 
   if (sortKey === 'organism') {
-    return { 'analysis.speciator.organismName': sortOrder };
+    return {
+      'analysis.speciator.speciesName': sortOrder,
+      'analysis.serotype.serovar': sortOrder,
+    };
   }
 
   return { [sortKey]: sortOrder };

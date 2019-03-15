@@ -5,31 +5,56 @@ const { getCollectionSchemes } = require('manifest');
 
 function getSummaryFields(deployedOrganisms) {
   return [
-    { field: 'organismId',
+    {
+      field: 'organismId',
       aggregation: () => [
         { $match: { 'analysis.speciator.organismId': { $in: deployedOrganisms } } },
-        { $group: { _id: { label: '$analysis.speciator.organismName', key: '$analysis.speciator.organismId' }, count: { $sum: 1 } } },
+        {
+          $group: {
+            _id: {
+              label: '$analysis.speciator.organismName',
+              key: '$analysis.speciator.organismId',
+            },
+            count: { $sum: 1 },
+          },
+        },
       ],
     },
-    { field: 'speciesId',
+    {
+      field: 'speciesId',
       aggregation: ({ query }) => {
         if (query.genusId || query.organismId) {
           return [
             { $match: { 'analysis.speciator.speciesId': { $exists: true } } },
-            { $group: { _id: { label: '$analysis.speciator.speciesName', key: '$analysis.speciator.speciesId' }, count: { $sum: 1 } } },
+            {
+              $group: {
+                _id: {
+                  label: '$analysis.speciator.speciesName',
+                  key: '$analysis.speciator.speciesId',
+                },
+                count: { $sum: 1 },
+              },
+            },
           ];
         }
         return null;
       },
     },
-    { field: 'genusId',
+    {
+      field: 'genusId',
       aggregation: () => [
         { $match: { 'analysis.speciator.genusId': { $exists: true } } },
-        { $group: { _id: { label: '$analysis.speciator.genusName', key: '$analysis.speciator.genusId' }, count: { $sum: 1 } } },
+        {
+          $group: {
+            _id: { label: '$analysis.speciator.genusName', key: '$analysis.speciator.genusId' },
+            count: { $sum: 1 },
+          },
+        },
       ],
     },
     { field: 'country' },
-    { field: 'type',
+    {
+      field: 'type',
       aggregation: ({ user }) => {
         const schemes = getCollectionSchemes(user);
         return [
@@ -37,10 +62,12 @@ function getSummaryFields(deployedOrganisms) {
             $group: {
               _id: {
                 $cond: [
-                  { $and: [
-                    { $eq: [ '$reference', true ] },
-                    { $in: [ '$analysis.speciator.organismId', schemes ] },
-                  ] },
+                  {
+                    $and: [
+                      { $eq: [ '$reference', true ] },
+                      { $in: [ '$analysis.speciator.organismId', schemes ] },
+                    ],
+                  },
                   'reference',
                   { $cond: [ { $eq: [ '$public', true ] }, 'public', 'private' ] },
                 ],
@@ -51,32 +78,47 @@ function getSummaryFields(deployedOrganisms) {
         ];
       },
     },
-    { field: 'uploadedAt',
+    {
+      field: 'uploadedAt',
       aggregation: ({ user }) => {
         if (!user) return null;
         const $match = { _user: user._id };
-        return [
-          { $match },
-          { $group: { _id: '$uploadedAt', count: { $sum: 1 } } },
-        ];
+        return [ { $match }, { $group: { _id: '$uploadedAt', count: { $sum: 1 } } } ];
       },
     },
     { field: 'date', range: true, queryKeys: [ 'minDate', 'maxDate' ] },
-    { field: 'st',
+    {
+      field: 'st',
       aggregation: ({ query = {} }) => {
         if (!query.organismId && !query.speciesId && !query.genusId) return null;
-        return [
-          { $group: { _id: '$analysis.mlst.st', count: { $sum: 1 } } },
-        ];
+        return [ { $group: { _id: '$analysis.mlst.st', count: { $sum: 1 } } } ];
       },
     },
-    { field: 'amr',
+    {
+      field: 'amr',
       aggregation: () => [
         { $project: { 'analysis.paarsnp.antibiotics': 1 } },
         { $unwind: '$analysis.paarsnp.antibiotics' },
         { $match: { 'analysis.paarsnp.antibiotics.state': 'RESISTANT' } },
         { $group: { _id: '$analysis.paarsnp.antibiotics.fullName', count: { $sum: 1 } } },
       ],
+    },
+    {
+      field: 'serotype',
+      aggregation: ({ query }) => {
+        if (query.genusId || query.speciesId) {
+          return [
+            { $match: { 'analysis.serotype': { $exists: true } } },
+            {
+              $group: {
+                _id: '$analysis.serotype.serovar',
+                count: { $sum: 1 },
+              },
+            },
+          ];
+        }
+        return null;
+      },
     },
   ];
 }
