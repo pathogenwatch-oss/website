@@ -73,6 +73,16 @@ const Filter = ({
       disabledText="Select a genus to filter by species."
     />
     <FilterSection
+      filterKey="serotype"
+      heading="Serotype"
+      icon="bug_report"
+      summary={filterSummary.serotype}
+      updateFilter={updateFilter}
+      hidden={!filterSummary.serotype.length}
+      disabled={!filterSummary.serotype.length}
+      disabledText="Select a genus to filter by serotype."
+    />
+    <FilterSection
       filterKey="sequenceType"
       heading="Sequence Type"
       icon="new_releases"

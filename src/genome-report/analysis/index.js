@@ -35,8 +35,7 @@ export default genome => {
 
   const sections = [];
 
-  const useTypingSection = hasSpeciesTypingResult(analysis);
-  if (useTypingSection) {
+  if (hasSpeciesTypingResult(analysis)) {
     sections.push({
       key: 'Typing',
       component: <Typing genome={genome} />,

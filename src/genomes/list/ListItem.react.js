@@ -21,16 +21,18 @@ const Cell = ({ title, icon, children, onClick }) => (
     title={title}
     onClick={onClick}
   >
-    { icon && <i title={title} className="material-icons">{icon}</i> }
+    {icon && (
+      <i title={title} className="material-icons">
+        {icon}
+      </i>
+    )}
     {children}
   </span>
 );
 
-const EmptyCell = (
-  <span className="wgsa-genome-list-cell wgsa-overflow-fade"></span>
-);
+const EmptyCell = <span className="wgsa-genome-list-cell wgsa-overflow-fade" />;
 
-const displayAccessLevel = (props) => {
+const displayAccessLevel = props => {
   if (props.reference) {
     return (
       <Cell title="Access" icon="book">
@@ -54,42 +56,75 @@ const displayAccessLevel = (props) => {
   );
 };
 
-const ListItem = ({ index, genome, onClick, style, onViewGenome, className, onMouseOver }) => {
+function getOrganismName({ organismName, serotype }) {
+  if (serotype) {
+    return (
+      <span>
+        <em>{organismName}</em> ser. <strong>{serotype}</strong>
+      </span>
+    );
+  }
+  return organismName;
+}
+
+const ListItem = ({
+  index,
+  genome,
+  onClick,
+  style,
+  onViewGenome,
+  className,
+  onMouseOver,
+}) => {
   const { name, organismId, organismName, st, country } = genome;
   const countryName = country ? getCountryName(country) : null;
   const date = genome.date ? formatDate(genome.date) : null;
+
   return (
     <div
-      className={classnames(className, 'wgsa-genome-list-item wgsa-genome-list-item--selectable')}
+      className={classnames(
+        className,
+        'wgsa-genome-list-item wgsa-genome-list-item--selectable'
+      )}
       style={style}
       onClick={onClick}
       onMouseOver={onMouseOver}
     >
       <Cell title={name}>
         <AddToSelection genomes={[ genome ]} index={index} onClick={onClick} />
-        <button title="View Details" className="wgsa-link-button" onClick={onViewGenome}>
+        <button
+          title="View Details"
+          className="wgsa-link-button"
+          onClick={onViewGenome}
+        >
           {name}
         </button>
       </Cell>
       <Cell>
-        { organismName ?
-            <FormattedName
-              organismId={organismId}
-              title={organismName}
-            /> :
-            <span>&nbsp;</span> }
+        {organismName ? (
+          <FormattedName
+            organismId={organismId}
+            title={getOrganismName(genome)}
+          />
+        ) : (
+          <span>&nbsp;</span>
+        )}
       </Cell>
-      { st ?
-        <Cell><ST id={st} /></Cell> :
-        EmptyCell }
-      { country ?
+      {st ? (
+        <Cell>
+          <ST id={st} />
+        </Cell>
+      ) : (
+        EmptyCell
+      )}
+      {country ? (
         <Cell title={countryName}>
-          <strong>{country.toUpperCase()}</strong> - {countryName}
-        </Cell> :
-        EmptyCell }
-      { date ?
-        <Cell title={date}>{date}</Cell> :
-        EmptyCell }
+          <strong>{country.toUpperCase()}</strong> &ndash; {countryName}
+        </Cell>
+      ) : (
+        EmptyCell
+      )}
+      {date ? <Cell title={date}>{date}</Cell> : EmptyCell}
       {displayAccessLevel(genome)}
     </div>
   );
@@ -106,7 +141,8 @@ function mergeProps(state, { dispatch }, props) {
   const { genome, index } = props;
   return {
     ...props,
-    onViewGenome: e => e.stopPropagation() || dispatch(showGenomeReport(genome.id, genome.name)),
+    onViewGenome: e =>
+      e.stopPropagation() || dispatch(showGenomeReport(genome.id, genome.name)),
     onClick: e => {
       e.stopPropagation();
       if (e.shiftKey && lastSelectedIndex !== null) {
@@ -118,4 +154,8 @@ function mergeProps(state, { dispatch }, props) {
   };
 }
 
-export default connect(mapStateToProps, null, mergeProps)(ListItem);
+export default connect(
+  mapStateToProps,
+  null,
+  mergeProps
+)(ListItem);
