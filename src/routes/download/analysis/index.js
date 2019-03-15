@@ -21,6 +21,7 @@ router.post('/mlst', require('./mlst'));
 router.post('/ngmast', require('./ngmast'));
 router.post('/paarsnp', require('./paarsnp'));
 router.post('/paarsnp-snps-genes', require('./paarsnp-snps-genes'));
+router.post('/serotype', require('./serotype'));
 router.post('/speciator', require('./speciator'));
 
 module.exports = router;
