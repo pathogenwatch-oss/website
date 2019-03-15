@@ -5,13 +5,14 @@ export const statuses = {
 };
 
 export const analysisLabels = {
+  cgmlst: 'cgMLST',
+  genotyphi: 'Genotyphi',
+  inctyper: 'IncTyper',
+  kleborate: 'Kleborate',
   metrics: 'Stats',
   mlst: 'MLST',
-  speciator: 'Speciation',
-  paarsnp: 'AMR antibiogram',
   ngmast: 'NG-MAST',
-  genotyphi: 'Genotyphi',
-  cgmlst: 'cgMLST',
-  kleborate: 'Kleborate',
-  inctyper: 'IncTyper',
+  paarsnp: 'AMR antibiogram',
+  serotype: 'Serotype',
+  speciator: 'Speciation',
 };

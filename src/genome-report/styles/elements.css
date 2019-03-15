@@ -57,6 +57,10 @@ dl.pw-genome-report-comfortable > div {
   margin-left: 8px;
 }
 
+.pw-genome-report-metadata.inline + * {
+  margin-top: 16px;
+}
+
 .wgsa-genome-report table {
   margin: 16px auto 0;
   font-size: 14px;
