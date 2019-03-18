@@ -73,6 +73,16 @@ const Filter = ({
       disabledText="Select a genus to filter by species."
     />
     <FilterSection
+      filterKey="subspecies"
+      heading="Subspecies"
+      icon="bug_report"
+      summary={filterSummary.subspecies}
+      updateFilter={updateFilter}
+      hidden={!filterSummary.subspecies.length}
+      disabled={!filterSummary.subspecies.length}
+      disabledText="Select a species to filter by subspecies."
+    />
+    <FilterSection
       filterKey="serotype"
       heading="Serotype"
       icon="bug_report"
@@ -80,7 +90,7 @@ const Filter = ({
       updateFilter={updateFilter}
       hidden={!filterSummary.serotype.length}
       disabled={!filterSummary.serotype.length}
-      disabledText="Select a genus to filter by serotype."
+      disabledText="Select a species to filter by serotype."
     />
     <FilterSection
       filterKey="sequenceType"

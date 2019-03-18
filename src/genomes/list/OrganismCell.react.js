@@ -1,33 +1,18 @@
 import React from 'react';
 
-import { FormattedName } from '../../organisms';
-
-function getTitle({ organismName, serotype }) {
-  if (serotype) {
-    return `${organismName} ser. ${serotype}`;
-  }
-  return organismName;
-}
-
-function getFormatted({ organismName, serotype }) {
-  if (serotype) {
-    return (
-      <span>
-        <em>{organismName}</em> ser. <strong>{serotype}</strong>
-      </span>
-    );
-  }
-  return organismName;
-}
+import OrganismName from '../../organisms/OrganismName.react';
 
 export default ({ genome }) => {
-  const { organismId, organismName } = genome;
+  const { speciesName, subspecies, serotype } = genome;
 
-  if (organismName) {
+  if (speciesName) {
     return (
-      <FormattedName organismId={organismId} title={getTitle(genome)}>
-        {getFormatted(genome)}
-      </FormattedName>
+      <OrganismName
+        abbreviated
+        speciesName={speciesName}
+        subspecies={subspecies}
+        serotype={serotype}
+      />
     );
   }
 

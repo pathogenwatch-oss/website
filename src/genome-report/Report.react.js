@@ -10,7 +10,7 @@ import Spinner from '../components/Spinner.react';
 
 import Overview from './Overview.react';
 import Metadata from './Metadata.react';
-import getAnalysisTabs from './analysis';
+import getAnalysisSections from './analysis';
 
 const Content = React.createClass({
   getInitialState() {
@@ -41,7 +41,7 @@ const Content = React.createClass({
         component: <Metadata genome={genome} />,
       });
     }
-    sections.push(...getAnalysisTabs(genome));
+    sections.push(...getAnalysisSections(genome));
     if (pending.length) {
       sections.push({
         key: `+${pending.length} Pending`,

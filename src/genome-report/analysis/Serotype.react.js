@@ -1,9 +1,8 @@
 import React from 'react';
 
-export default ({ result }) => (
-  <React.Fragment>
-    <header className="pw-genome-report-section-header flex">
-      <h2>Serotype</h2>
+const sources = {
+  sistr: {
+    link: (
       <a
         href="http://journals.plos.org/plosone/article?id=10.1371/journal.pone.0147101"
         target="_blank"
@@ -11,10 +10,33 @@ export default ({ result }) => (
       >
         <em>Salmonella In Silico</em> Typing Resource (SISTR)
       </a>
-    </header>
-    <div className="pw-genome-report-metadata inline">
-      <dt>Serovar</dt>
-      <dd>{result.serovar}</dd>
-    </div>
-  </React.Fragment>
-);
+    ),
+    title: 'Serovar',
+  },
+};
+
+export default ({ result }) => {
+  const source = sources[result.source];
+  return (
+    <React.Fragment>
+      <header className="pw-genome-report-section-header flex">
+        <h2>Serotype</h2>
+        {source.link}
+      </header>
+      <dl className="pw-genome-report-comfortable">
+        {result.subspecies && (
+          <div className="pw-genome-report-metadata">
+            <dt>Subspecies</dt>
+            <dd>
+              <em>{result.subspecies}</em>
+            </dd>
+          </div>
+        )}
+        <div className="pw-genome-report-metadata">
+          <dt>{source.title}</dt>
+          <dd>{result.value}</dd>
+        </div>
+      </dl>
+    </React.Fragment>
+  );
+};

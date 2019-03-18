@@ -40,6 +40,7 @@ export const getFilterSummary = createSelector(
       uploadedAt,
       date,
       serotype = {},
+      subspecies = {},
     } = summary;
     const sequenceType = summary.st || {};
     const antibiotics = summary.amr || {};
@@ -143,6 +144,15 @@ export const getFilterSummary = createSelector(
           label: value,
           count: serotype[value].count,
           active: filterState.serotype === value,
+        })),
+        'label'
+      ),
+      subspecies: sortBy(
+        Object.keys(subspecies).map(value => ({
+          value,
+          label: value,
+          count: subspecies[value].count,
+          active: filterState.subspecies === value,
         })),
         'label'
       ),
