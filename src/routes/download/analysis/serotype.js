@@ -7,7 +7,8 @@ const transformer = function (doc) {
     'Genome ID': doc._id.toString(),
     'Genome Name': doc.name,
     Version: doc.analysis.serotype.__v,
-    Serovar: doc.analysis.serotype.serovar,
+    Subspecies: doc.analysis.serotype.subspecies,
+    Serovar: doc.analysis.serotype.value,
   };
 };
 
@@ -26,8 +27,7 @@ module.exports = (req, res) => {
   );
   const projection = {
     name: 1,
-    'analysis.serotype.__v': 1,
-    'analysis.serotype.serovar': 1,
+    'analysis.serotype': 1,
   };
 
   return Genome.find(query, projection)
