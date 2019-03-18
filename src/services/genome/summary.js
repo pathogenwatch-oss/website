@@ -104,14 +104,31 @@ function getSummaryFields(deployedOrganisms) {
       ],
     },
     {
-      field: 'serotype',
+      field: 'subspecies',
       aggregation: ({ query }) => {
-        if (query.genusId || query.speciesId) {
+        if (query.speciesId) {
           return [
             { $match: { 'analysis.serotype': { $exists: true } } },
             {
               $group: {
-                _id: '$analysis.serotype.serovar',
+                _id: '$analysis.serotype.subspecies',
+                count: { $sum: 1 },
+              },
+            },
+          ];
+        }
+        return null;
+      },
+    },
+    {
+      field: 'serotype',
+      aggregation: ({ query }) => {
+        if (query.speciesId) {
+          return [
+            { $match: { 'analysis.serotype': { $exists: true } } },
+            {
+              $group: {
+                _id: '$analysis.serotype.value',
                 count: { $sum: 1 },
               },
             },

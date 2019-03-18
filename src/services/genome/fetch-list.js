@@ -23,7 +23,8 @@ module.exports = function (props) {
       'analysis.speciator.organismId': 1,
       'analysis.speciator.speciesName': 1,
       'analysis.mlst.st': 1,
-      'analysis.serotype.serovar': 1,
+      'analysis.serotype.subspecies': 1,
+      'analysis.serotype.value': 1,
       date: 1,
       country: 1,
       reference: 1,
@@ -45,8 +46,9 @@ module.exports = function (props) {
         const { mlst = {}, speciator = {}, serotype = {} } = analysis;
         formattedGenome.st = mlst.st;
         formattedGenome.organismId = speciator.organismId;
-        formattedGenome.organismName = speciator.speciesName;
-        formattedGenome.serotype = serotype.serovar;
+        formattedGenome.speciesName = speciator.speciesName;
+        formattedGenome.subspecies = serotype.subspecies;
+        formattedGenome.serotype = serotype.value;
         if (genome.reference && !schemes.has(speciator.organismId)) {
           genome.reference = false;
         }

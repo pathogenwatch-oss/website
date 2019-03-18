@@ -52,7 +52,8 @@ schema.index({ 'analysis.speciator.speciesId': 1 });
 schema.index({ 'analysis.speciator.genusId': 1 });
 schema.index({
   'analysis.speciator.speciesName': 1,
-  'analysis.serotype.serovar': 1,
+  'analysis.serotype.subspecies': 1,
+  'analysis.serotype.value': 1,
 });
 schema.index({ 'analysis.speciator.organismId': 1, 'analysis.speciator.organismName': 1 });
 
@@ -280,7 +281,8 @@ schema.statics.getSort = function (sort = 'createdAt-') {
   if (sortKey === 'organism') {
     return {
       'analysis.speciator.speciesName': sortOrder,
-      'analysis.serotype.serovar': sortOrder,
+      'analysis.serotype.subspecies': sortOrder,
+      'analysis.serotype.value': sortOrder,
     };
   }
 
