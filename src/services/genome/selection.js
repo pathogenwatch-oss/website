@@ -7,11 +7,28 @@ module.exports = function ({ user, ids }) {
 
   const $in = ids.map(id => new ObjectId(id));
   return Genome.aggregate([
-    { $match: Object.assign(
-      { _id: { $in }, 'analysis.speciator': { $exists: true } },
-      Genome.getPrefilterCondition({ user })
-    ) },
-    { $group: { _id: { organismId: '$analysis.speciator.organismId', organismName: '$analysis.speciator.organismName' }, genomes: { $push: { id: '$_id', name: '$name' } } } },
-    { $project: { organismId: '$_id.organismId', organismName: '$_id.organismName', genomes: 1, _id: 0 } },
+    {
+      $match: Object.assign(
+        { _id: { $in }, 'analysis.speciator': { $exists: true } },
+        Genome.getPrefilterCondition({ user })
+      ),
+    },
+    {
+      $group: {
+        _id: {
+          organismId: '$analysis.speciator.organismId',
+          speciesName: '$analysis.speciator.speciesName',
+        },
+        genomes: { $push: { id: '$_id', name: '$name' } },
+      },
+    },
+    {
+      $project: {
+        organismId: '$_id.organismId',
+        speciesName: '$_id.speciesName',
+        genomes: 1,
+        _id: 0,
+      },
+    },
   ]);
 };
