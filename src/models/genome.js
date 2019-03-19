@@ -50,6 +50,8 @@ schema.index({ 'analysis.paarsnp.antibiotics.state': 1 });
 schema.index({ 'analysis.speciator.organismId': 1 });
 schema.index({ 'analysis.speciator.speciesId': 1 });
 schema.index({ 'analysis.speciator.genusId': 1 });
+schema.index({ 'analysis.serotype.subspecies': 1 });
+schema.index({ 'analysis.serotype.value': 1 });
 schema.index({
   'analysis.speciator.speciesName': 1,
   'analysis.serotype.subspecies': 1,
