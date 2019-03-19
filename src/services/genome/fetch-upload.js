@@ -21,7 +21,7 @@ module.exports = async function (props) {
     'analysis.genotyphi.__v': 1,
     'analysis.kleborate.__v': 1,
     'analysis.inctyper.__v': 1,
-    'analysis.serotyping.__v': 1,
+    'analysis.serotype.__v': 1,
   };
   const genomes = await Genome.find(Genome.getFilterQuery(props), projection).lean();
 

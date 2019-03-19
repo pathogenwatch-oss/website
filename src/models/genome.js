@@ -193,6 +193,7 @@ schema.statics.getFilterQuery = function (props) {
     serotype,
     sequenceType,
     speciesId,
+    subspecies,
     type,
     uploadedAt,
   } = query;
@@ -244,12 +245,18 @@ schema.statics.getFilterQuery = function (props) {
     findQuery['analysis.speciator.genusId'] = genusId;
   }
 
-  if (serotype && genusId) {
-    findQuery['analysis.serotype.serovar'] = serotype;
-  }
+  if (organismId || speciesId || genusId) {
+    if (sequenceType) {
+      findQuery['analysis.mlst.st'] = sequenceType;
+    }
 
-  if (sequenceType && (organismId || speciesId || genusId)) {
-    findQuery['analysis.mlst.st'] = sequenceType;
+    if (subspecies) {
+      findQuery['analysis.serotype.subspecies'] = subspecies;
+    }
+
+    if (serotype) {
+      findQuery['analysis.serotype.value'] = serotype;
+    }
   }
 
   if (resistance) {

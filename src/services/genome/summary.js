@@ -106,7 +106,7 @@ function getSummaryFields(deployedOrganisms) {
     {
       field: 'subspecies',
       aggregation: ({ query }) => {
-        if (query.speciesId) {
+        if (query.genusId) {
           return [
             { $match: { 'analysis.serotype': { $exists: true } } },
             {
@@ -123,7 +123,7 @@ function getSummaryFields(deployedOrganisms) {
     {
       field: 'serotype',
       aggregation: ({ query }) => {
-        if (query.speciesId) {
+        if (query.genusId) {
           return [
             { $match: { 'analysis.serotype': { $exists: true } } },
             {
