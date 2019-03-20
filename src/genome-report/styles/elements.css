@@ -19,6 +19,11 @@ dl.pw-genome-report-comfortable > div {
   width: calc(50% - 16px);
 }
 
+dl.pw-genome-report-unsized > div {
+  width: auto;
+  min-width: calc(33.333% - 16px);
+}
+
 .wgsa-genome-report dt,
 .wgsa-genome-report table caption,
 .wgsa-genome-report figcaption {

@@ -19,11 +19,11 @@ export default ({ result }) => {
   const source = sources[result.source];
   return (
     <React.Fragment>
-      <header className="pw-genome-report-section-header flex">
+      <header className="pw-genome-report-section-header">
         <h2>Serotype</h2>
         {source.link}
       </header>
-      <dl className="pw-genome-report-comfortable">
+      <dl className="pw-genome-report-unsized">
         {result.subspecies && (
           <div className="pw-genome-report-metadata">
             <dt>Subspecies</dt>

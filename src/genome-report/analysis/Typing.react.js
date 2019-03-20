@@ -17,10 +17,10 @@ function getSecondaryTyping({ genotyphi, ngmast, serotype }) {
 
 export default ({ genome }) => (
   <React.Fragment>
-    <div className="pw-genome-report-column two thirds">
+    <div className="pw-genome-report-column one half">
       <MLST leftaligned result={genome.analysis.mlst} />
     </div>
-    <div className="pw-genome-report-column one third right">
+    <div className="pw-genome-report-column one half right">
       {getSecondaryTyping(genome.analysis)}
     </div>
   </React.Fragment>
