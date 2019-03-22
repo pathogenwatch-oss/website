@@ -16,45 +16,39 @@ if (!task) {
 const uploadedAt = new Date();
 
 function parseQuery() {
-  const { query = '{ "public": true }' } = argv.opts;
+  const { query = '{}' } = argv.opts;
   return JSON.parse(query);
 }
 
 function fetchGenomes(query) {
-  return Genome.find(query, { fileId: 1, 'analysis.speciator': 1 }).lean().limit(1);
+  return Genome.find(query, { fileId: 1, 'analysis.speciator': 1 }).lean();
+  // .limit(1);
 }
 
 function submitTasks(genomes) {
-  return mapLimit(
-    genomes,
-    limit,
-    ({ _id: genomeId, fileId, analysis }) => {
-      const { organismId, speciesId, genusId } = analysis.speciator || {};
-      const tasks = manifest.getTasksByOrganism(organismId, speciesId, genusId);
+  return mapLimit(genomes, limit, ({ _id: genomeId, fileId, analysis }) => {
+    const { organismId, speciesId, genusId } = analysis.speciator || {};
+    const tasks = manifest.getTasksByOrganism(organismId, speciesId, genusId);
 
-      const requestedTask = tasks.find(_ => _.task === task);
-
-      if (requestedTask) {
-        const { version, retries, timeout } = requestedTask;
-        const metadata = {
-          genomeId,
-          fileId,
-          organismId,
-          speciesId,
-          genusId,
-          uploadedAt: new Date(uploadedAt),
-        };
-        return enqueue(
-          'reprocessing',
-          { task, version, retries, timeout, metadata },
-          'task'
-        );
-      }
+    const requestedTask = tasks.find(_ => _.task === task);
+    console.log(task, requestedTask);
+    if (requestedTask) {
+      const { version, retries, timeout } = requestedTask;
+      const metadata = {
+        genomeId,
+        fileId,
+        organismId,
+        speciesId,
+        genusId,
+        uploadedAt: new Date(uploadedAt),
+      };
+      return enqueue('reprocessing', { task, version, retries, timeout, metadata }, 'task');
     }
-  );
+  });
 }
 
-mongoConnection.connect()
+mongoConnection
+  .connect()
   .then(parseQuery)
   .then(fetchGenomes)
   .then(submitTasks)

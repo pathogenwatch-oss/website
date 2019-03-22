@@ -58,6 +58,7 @@ schema.index({
   'analysis.serotype.value': 1,
 });
 schema.index({ 'analysis.speciator.organismId': 1, 'analysis.speciator.organismName': 1 });
+schema.index({ 'analysis.poppunk.strain': 1 });
 
 schema.statics.taxonomy = genome => {
   const speciator = (genome.analysis || {}).speciator || {};
@@ -193,6 +194,7 @@ schema.statics.getFilterQuery = function (props) {
     serotype,
     sequenceType,
     speciesId,
+    strain,
     subspecies,
     type,
     uploadedAt,
@@ -256,6 +258,10 @@ schema.statics.getFilterQuery = function (props) {
 
     if (serotype) {
       findQuery['analysis.serotype.value'] = serotype;
+    }
+
+    if (strain) {
+      findQuery['analysis.poppunk.strain'] = strain;
     }
   }
 

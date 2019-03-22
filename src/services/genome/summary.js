@@ -137,6 +137,23 @@ function getSummaryFields(deployedOrganisms) {
         return null;
       },
     },
+    {
+      field: 'poppunk',
+      aggregation: ({ query }) => {
+        if (query.genusId) {
+          return [
+            { $match: { 'analysis.poppunk': { $exists: true } } },
+            {
+              $group: {
+                _id: '$analysis.poppunk.strain',
+                count: { $sum: 1 },
+              },
+            },
+          ];
+        }
+        return null;
+      },
+    },
   ];
 }
 
