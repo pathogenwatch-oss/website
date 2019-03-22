@@ -10,6 +10,8 @@ import ProgressBar from '../../components/progress-bar';
 
 import * as upload from './selectors';
 
+import { analysisLabels } from '../../app/constants';
+
 const Analysis = ({ data, showBreakdown }) => (
   <ul className="wgsa-upload-legend">
     {data.map(({ key, label, total, colour, ...analyses }) => (
@@ -27,16 +29,18 @@ const Analysis = ({ data, showBreakdown }) => (
           <ul>
             {Object.keys(analyses).map(analysisKey => {
               const analysis = analyses[analysisKey];
-              if (analysis.active) {
+              if (analysisKey in analysisLabels) {
                 return (
                   <li key={analysisKey}>
                     {analysis.total === total ? (
                       <React.Fragment>
-                        {analysis.label}
+                        {analysisLabels[analysisKey]}
                         <i className="material-icons">check_circle</i>
                       </React.Fragment>
                     ) : (
-                      `${analysis.label}: ${analysis.total} / ${total}`
+                      `${analysisLabels[analysisKey]}: ${
+                        analysis.total
+                      } / ${total}`
                     )}
                     {analysis.errors > 0 && (
                       <small>

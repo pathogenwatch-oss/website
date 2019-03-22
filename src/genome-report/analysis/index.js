@@ -16,7 +16,10 @@ import Typing from './Typing.react';
 function hasSpeciesTypingResult(analysis) {
   return (
     analysis.mlst &&
-    (analysis.genotyphi || analysis.ngmast || analysis.serotype)
+    (analysis.genotyphi ||
+      analysis.ngmast ||
+      analysis.serotype ||
+      analysis.poppunk)
   );
 }
 

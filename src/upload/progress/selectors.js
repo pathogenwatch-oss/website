@@ -125,27 +125,16 @@ export const getFileSummary = createSelector(
 );
 
 function getAnalysisBreakdown(genomes) {
-  const breakdown = {
-    paarsnp: { active: false, label: 'AMR', total: 0, errors: 0 },
-    core: { active: false, label: 'Core', total: 0, errors: 0 },
-    cgmlst: { active: false, label: 'cgMLST', total: 0, errors: 0 },
-    genotyphi: { active: false, label: 'Genotyphi', total: 0, errors: 0 },
-    metrics: { active: false, label: 'Metrics', total: 0, errors: 0 },
-    mlst: { active: false, label: 'MLST', total: 0, errors: 0 },
-    ngmast: { active: false, label: 'NG-MAST', total: 0, errors: 0 },
-    kleborate: { active: false, label: 'Kleborate', total: 0, errors: 0 },
-    inctyper: { active: false, label: 'IncTyper', total: 0, errors: 0 },
-    serotype: { active: false, label: 'Serotype', total: 0, errors: 0 },
-  };
+  const breakdown = {};
   const sts = {};
 
   for (const { st, analysis } of genomes) {
     for (const key of Object.keys(analysis)) {
-      if (key in breakdown) {
-        breakdown[key].active = true;
-        if (analysis[key] !== null) breakdown[key].total++;
-        if (analysis[key] === false) breakdown[key].errors++;
+      if (!(key in breakdown)) {
+        breakdown[key] = { total: 0, errors: 0 };
       }
+      if (analysis[key] !== null) breakdown[key].total++;
+      if (analysis[key] === false) breakdown[key].errors++;
       if (key === 'mlst' && analysis.mlst) {
         sts[st] = (sts[st] || 0) + 1;
       }

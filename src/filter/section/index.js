@@ -1,3 +1,3 @@
 import './styles.css';
 
-export default from './Section.react.js';
+export { default } from './Section.react.js';

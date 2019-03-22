@@ -98,6 +98,14 @@ const Filter = ({
       hidden={!filterSummary.serotype.length}
     />
     <FilterSection
+      filterKey="strain"
+      heading="Strain"
+      icon="language"
+      summary={filterSummary.strain}
+      updateFilter={updateFilter}
+      hidden={!filterSummary.strain.length}
+    />
+    <FilterSection
       filterKey="sequenceType"
       heading="Sequence Type"
       icon="new_releases"
