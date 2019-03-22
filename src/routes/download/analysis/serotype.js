@@ -3,34 +3,31 @@ const csv = require('csv');
 const Genome = require('models/genome');
 
 const transformer = function (doc) {
-  const record = {
+  return {
     'Genome ID': doc._id.toString(),
     'Genome Name': doc.name,
+    Version: doc.analysis.serotype.__v,
+    Subspecies: doc.analysis.serotype.subspecies,
+    Serovar: doc.analysis.serotype.value,
   };
-
-  Object.keys(doc.analysis.kleborate).forEach(
-    prop =>
-      (record[prop.replace('__v', 'Version').replace(/_/g, ' ')] = doc.analysis.kleborate[prop])
-  );
-  return record;
 };
 
 module.exports = (req, res) => {
   const { user } = req;
   const { filename: rawFilename = '' } = req.query;
-  const filename = sanitize(rawFilename) || 'kleborate.csv';
+  const filename = sanitize(rawFilename) || 'serotype.csv';
   const { ids } = req.body;
 
   res.setHeader('Content-Disposition', `attachment; filename=${filename}`);
   res.setHeader('Content-Type', 'text/csv');
 
   const query = Object.assign(
-    { _id: { $in: ids.split(',') }, 'analysis.kleborate': { $exists: true } },
+    { _id: { $in: ids.split(',') }, 'analysis.serotype': { $exists: true } },
     Genome.getPrefilterCondition({ user })
   );
   const projection = {
     name: 1,
-    'analysis.kleborate': 1,
+    'analysis.serotype': 1,
   };
 
   return Genome.find(query, projection)

@@ -1,7 +1,6 @@
 const Genome = require('models/genome');
 
 module.exports = async function (props) {
-  const { user } = props;
   const projection = {
     name: 1,
     uploadedAt: 1,
@@ -22,13 +21,9 @@ module.exports = async function (props) {
     'analysis.genotyphi.__v': 1,
     'analysis.kleborate.__v': 1,
     'analysis.inctyper.__v': 1,
+    'analysis.serotype.__v': 1,
   };
-  const genomes = await Genome
-    .find(
-      Genome.getFilterQuery(props),
-      projection
-    )
-    .lean();
+  const genomes = await Genome.find(Genome.getFilterQuery(props), projection).lean();
 
   return genomes.map(genome => {
     const { analysis = {} } = genome;

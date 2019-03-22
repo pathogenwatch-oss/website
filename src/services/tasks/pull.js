@@ -9,8 +9,6 @@ const mapLimit = require('promise-map-limit');
 
 const { queues } = require('../taskQueue');
 
-const LIMIT = 5;
-
 function getImageNames(queue) {
   const speciator = getSpeciatorTask();
   const speciatorImage = getImageName(speciator.task, speciator.version);
@@ -50,6 +48,8 @@ function pullImage(name) {
     });
   });
 }
+
+const LIMIT = 5;
 
 function pullImages(imageNames) {
   return mapLimit(imageNames, LIMIT, pullImage);

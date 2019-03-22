@@ -18,24 +18,25 @@ const projection = {
   reference: 1,
   userDefined: 1,
   year: 1,
-  'analysis.metrics': 1,
-  'analysis.speciator': 1,
+  'analysis.cgmlst.scheme': 1,
+  'analysis.core.__v': 1,
+  'analysis.core.fp': 1,
+  'analysis.core.summary': 1,
   'analysis.genotyphi': 1,
-  'analysis.ngmast': 1,
+  'analysis.inctyper': 1,
+  'analysis.kleborate': 1,
+  'analysis.metrics': 1,
   'analysis.mlst.__v': 1,
+  'analysis.mlst.alleles': 1,
   'analysis.mlst.st': 1,
   'analysis.mlst.url': 1,
-  'analysis.mlst.alleles': 1,
-  'analysis.core.__v': 1,
-  'analysis.core.summary': 1,
-  'analysis.core.fp': 1,
+  'analysis.ngmast': 1,
   'analysis.paarsnp.__v': 1,
   'analysis.paarsnp.antibiotics': 1,
   'analysis.paarsnp.paar': 1,
   'analysis.paarsnp.snp': 1,
-  'analysis.cgmlst.scheme': 1,
-  'analysis.kleborate': 1,
-  'analysis.inctyper': 1,
+  'analysis.serotype': 1,
+  'analysis.speciator': 1,
 };
 
 // const taskNames = [
@@ -51,10 +52,10 @@ module.exports = async ({ user, id }) => {
   // TODO: Check if there are any relevant flags which disable tasks.
   return genome;
   // const promises = [
-    // Analysis.find(
-    //   { fileId: genome.fileId, task: { $in: taskNames } },
-    //   { _id: 0, task: 1, version: 1 }
-    // ).lean(),
+  // Analysis.find(
+  //   { fileId: genome.fileId, task: { $in: taskNames } },
+  //   { _id: 0, task: 1, version: 1 }
+  // ).lean(),
   // ];
 
   // const [ /* tasks,*/ clustering = null ] = await Promise.all(promises);
