@@ -261,7 +261,7 @@ schema.statics.getFilterQuery = function (props) {
     }
 
     if (strain) {
-      findQuery['analysis.poppunk.strain'] = strain;
+      findQuery['analysis.poppunk.strain'] = strain.split(',');
     }
   }
 
