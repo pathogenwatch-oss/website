@@ -54,6 +54,10 @@
   margin-left: 8px;
 }
 
+.wgsa-dropdown-footer .mdl-button {
+  min-width: 0;
+}
+
 .wgsa-dropdown-footer--right {
   flex-direction: row-reverse;
 }
