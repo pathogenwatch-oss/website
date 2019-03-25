@@ -3965,9 +3965,9 @@ path-type@^2.0.0:
     writers-digest "^1.0.0"
     zip-stream "^1.2.0"
 
-"pathogenwatch-front-end@https://gitlab.com/cgps/pathogenwatch-front-end#v7.5.2":
-  version "7.5.2"
-  resolved "https://gitlab.com/cgps/pathogenwatch-front-end#41eb61f1ca199eb73da8fc6bcb36d4f50aeb1465"
+"pathogenwatch-front-end@https://gitlab.com/cgps/pathogenwatch-front-end#v7.5.4":
+  version "7.5.4"
+  resolved "https://gitlab.com/cgps/pathogenwatch-front-end#db99108ecb8175e739c02643e19c76d7326add94"
 
 patrun@1.0:
   version "1.0.0"
