@@ -11,7 +11,7 @@ export default ({ result }) => (
     <dl className="pw-genome-report-unsized">
       <div className="pw-genome-report-metadata">
         <dt>GPSC</dt>
-        <dd>{result.strain}</dd>
+        <dd>{result.strain.join(', ')}</dd>
       </div>
     </dl>
   </React.Fragment>
