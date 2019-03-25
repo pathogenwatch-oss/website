@@ -14,7 +14,7 @@ const transformer = function (doc) {
 module.exports = (req, res) => {
   const { user } = req;
   const { filename: rawFilename = '' } = req.query;
-  const filename = sanitize(rawFilename) || 'poppunk.csv';
+  const filename = sanitize(rawFilename) || 'strain.csv';
   const { ids } = req.body;
 
   res.setHeader('Content-Disposition', `attachment; filename=${filename}`);
