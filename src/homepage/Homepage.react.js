@@ -215,6 +215,17 @@ export default ({ deployedOrganisms }) => (
             )}
             <tr>
               <td>
+                <em>Salmonella</em>
+              </td>
+              <td />
+              <td />
+              <td />
+              <td>
+                <small>SISTR</small>
+              </td>
+            </tr>
+            <tr>
+              <td>
                 <FormattedName organismId="90370" />
               </td>
               <td>
