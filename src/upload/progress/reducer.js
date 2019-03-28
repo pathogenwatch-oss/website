@@ -1,11 +1,13 @@
+import { combineReducers } from 'redux';
+
 import * as actions from './actions';
 
 import { views } from '../constants';
 
-const initialState = {
-  queue: [],
-  processing: new Set(),
+import files from './files/reducer';
+// import analysis from './analysis.reducer';
 
+const initialState = {
   analysis: {},
   uploadedAt: null,
   selectedOrganism: null,
@@ -16,7 +18,7 @@ const initialState = {
   assemblyProgress: {},
 };
 
-export default function (state = initialState, { type, payload }) {
+function legacy(state = initialState, { type, payload }) {
   switch (type) {
     case actions.UPLOAD_ANALYSIS_RECEIVED: {
       const { analysis } = state;
@@ -113,3 +115,8 @@ export default function (state = initialState, { type, payload }) {
       return state;
   }
 }
+
+export default combineReducers({
+  legacy,
+  files,
+});

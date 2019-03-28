@@ -9,6 +9,7 @@ import SpeciesBreakdown from './SpeciesBreakdown.react';
 import AnalysisChart from './AnalysisChart.react';
 
 import * as upload from './selectors';
+import * as file from './files/selectors';
 import { useAssemblyStatus } from './hooks';
 
 const AssemblyStatus = connect(state => ({
@@ -51,9 +52,9 @@ const Progress = ({
 function mapStateToProps(state) {
   return {
     analysis: upload.getAnalysisSummary(state),
-    errored: upload.getInvalidUploads(state),
-    files: upload.getFileSummary(state),
-    uploadsInProgress: upload.getGenomesInProgress(state),
+    errored: file.getInvalidUploads(state),
+    files: file.getFileSummary(state),
+    uploadsInProgress: file.getGenomesInProgress(state),
   };
 }
 

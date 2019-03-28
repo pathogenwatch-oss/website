@@ -6,9 +6,9 @@ import Summary from './Summary.react';
 
 import { useAssemblerSession } from './hooks';
 
-import * as upload from './selectors';
+import { getNumSuccessfulUploads, getPendingFiles } from './files/selectors';
 
-import { recoverUploadSession } from './actions';
+import { recoverUploadSession } from './files/actions';
 
 import { isReadsEligible } from '../utils';
 
@@ -75,8 +75,8 @@ const Recovery = ({
 
 function mapStateToProps(state) {
   return {
-    numSuccessful: upload.getNumSuccessfulUploads(state),
-    remainingFiles: upload.getPendingFiles(state),
+    numSuccessful: getNumSuccessfulUploads(state),
+    remainingFiles: getPendingFiles(state),
     token: state.auth.token,
   };
 }

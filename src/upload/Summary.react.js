@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 
 import { Summary } from '../filter/summary';
 
-import { isUploading } from './progress/selectors';
+import { isUploading } from './progress/files/selectors';
 
 function mapStateToProps(state) {
   return {

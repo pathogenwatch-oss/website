@@ -26,7 +26,7 @@ function updateFile(state, { id, filename }, update) {
   };
 }
 
-export default function (state = {}, { type, payload }) {
+export default function (state = initialState, { type, payload }) {
   switch (type) {
     case ADD_GENOMES.SUCCESS: {
       const entities = {};

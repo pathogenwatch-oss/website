@@ -1,12 +1,9 @@
 import { createSelector } from 'reselect';
 
-import { isUploadPending, getUploadedGenomeList, getFileSummary } from './files/selectors';
-
 import { getColourGenerator, getLightColour } from '~/utils/colours';
 import { getOrganismName } from '~/organisms';
 
 import { DEFAULT } from '~/app/constants';
-import { statuses } from './files/constants';
 
 export const getProgress = ({ upload }) => upload.progress;
 export const getProgressView = state => getProgress(state).view;
@@ -320,14 +317,8 @@ export const getOverallProgress = createSelector(
 );
 
 export const isSpecieationComplete = createSelector(
-  isUploadPending,
-  getUploadedGenomeList,
   getOverallProgress,
-  (uploadPending, genomes, { speciation }) => {
-    if (uploadPending) return false;
-    if (genomes.length === 0) return false;
-    return speciation.done === genomes.length;
-  }
+  ({ speciation }) => speciation.total > 0 && speciation.done === speciation.total
 );
 
 export const isAnalysisComplete = createSelector(
@@ -340,21 +331,3 @@ export const hasErrors = createSelector(
   ({ errors }) => errors > 0
 );
 
-export const getPendingFiles = createSelector(
-  getUploadedGenomeList,
-  genomes => {
-    const pending = [];
-    for (const { status, files } of genomes) {
-      if (status === statuses.PENDING) {
-        files.sort();
-        pending.push(files);
-      }
-    }
-    return pending;
-  }
-);
-
-export const getNumSuccessfulUploads = createSelector(
-  getFileSummary,
-  ({ completed }) => completed
-);

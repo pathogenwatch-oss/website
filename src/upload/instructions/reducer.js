@@ -1,7 +1,4 @@
-import {
-  UPLOAD_SETTING_CHANGED,
-  UPLOAD_FETCH_ASSEMBLER_USAGE,
-} from './actions';
+import { UPLOAD_FETCH_ASSEMBLER_USAGE } from './actions';
 
 const initialState = {
   compression: false,
@@ -12,12 +9,6 @@ const initialState = {
 
 export default function (state = initialState, { type, payload }) {
   switch (type) {
-    case UPLOAD_SETTING_CHANGED: {
-      return {
-        ...state,
-        [payload.setting]: payload.value,
-      };
-    }
     case UPLOAD_FETCH_ASSEMBLER_USAGE.SUCCESS:
       return {
         ...state,

@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import classnames from 'classnames';
 
 import * as upload from './selectors';
+import * as files from './files/selectors';
 
 const AssemblyStage = ({ complete, total }) => {
   if (complete === total) {
@@ -97,10 +98,10 @@ function mapStateToProps(state) {
   return {
     hasErrors: upload.hasErrors(state),
     hasReads: upload.hasReads(state),
-    isUploading: upload.isUploading(state),
+    isUploading: files.isUploading(state),
     position: upload.getQueuePosition(state),
     progress: upload.getOverallProgress(state),
-    totalGenomes: upload.getUploadedGenomeList(state).length,
+    totalGenomes: files.getUploadedGenomeList(state).length,
   };
 }
 

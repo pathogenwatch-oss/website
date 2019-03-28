@@ -1,7 +1,7 @@
 import { createAsyncConstants } from '~/actions';
 
 import * as selectors from './selectors';
-import { getUploadedAt } from '../selectors';
+import { getUploadedAt, getProgress } from '../selectors';
 
 import { getAuthToken } from '~/auth/actions';
 
@@ -112,7 +112,7 @@ export function processFiles() {
 
     dispatch(getAuthToken()).then(() =>
       (function processNext() {
-        const { queue, processing } = getFiles(getState());
+        const { queue, processing } = getProgress(getState());
         if (queue.length && processing.size < processLimit) {
           dispatch(processGenome(queue[0])).then(() => {
             if (queue.length > processLimit) {

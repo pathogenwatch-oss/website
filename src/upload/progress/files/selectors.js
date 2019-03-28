@@ -5,18 +5,12 @@ import { statuses, types } from './constants';
 
 import { getProgress } from '../selectors';
 
-const getUploadQueue = createSelector(
-  getProgress,
-  uploads => uploads.queue
-);
+export const getFiles = state => getProgress(state).files;
 
-const getProcessing = createSelector(
-  getProgress,
-  uploads => uploads.processing
-);
+const getUploadQueue = state => getFiles(state).queue;
+const getProcessing = state => getFiles(state).processing;
 
-export const getUploadedAt = state => getProgress(state).uploadedAt;
-export const getUploadedGenomes = state => getProgress(state).entities;
+export const getUploadedGenomes = state => getFiles(state).entities;
 export const getGenome = (state, id) => getUploadedGenomes(state)[id];
 
 export const getUploadedGenomeList = createSelector(
@@ -124,4 +118,18 @@ export const hasReads = createSelector(
 export const getNumSuccessfulUploads = createSelector(
   getFileSummary,
   ({ completed }) => completed
+);
+
+export const getPendingFiles = createSelector(
+  getUploadedGenomeList,
+  genomes => {
+    const pending = [];
+    for (const { status, files } of genomes) {
+      if (status === statuses.PENDING) {
+        files.sort();
+        pending.push(files);
+      }
+    }
+    return pending;
+  }
 );
