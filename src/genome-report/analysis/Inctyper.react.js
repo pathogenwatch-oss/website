@@ -14,8 +14,25 @@ import React from 'react';
 //    }
 // ]
 
-export default ({ result }) => {
-  const matches = result['Inc Matches'];
+export default ({ analysis }) => {
+
+  const { inctyper, paarsnp } = analysis;
+  const matches = inctyper['Inc Matches'];
+  matches.sort((a, b) => a.Contig.localeCompare(b.Contig));
+
+  const amrMatches = {};
+
+  for (const match of paarsnp.matches) {
+    // Snp annotations don't have the query field.
+    if (!match.query) {
+      continue;
+    }
+    if (!(match.query.id in amrMatches)) {
+      amrMatches[match.query.id] = [];
+    }
+    amrMatches[match.query.id].push(match.id);
+  }
+
   return (
     <React.Fragment>
       <header className="pw-genome-report-section-header">
@@ -33,30 +50,34 @@ export default ({ result }) => {
       </header>
       <table className="bordered wide" cellSpacing="0">
         <thead>
-          <tr>
-            <th>Inc Match</th>
-            <th>Contig</th>
-            <th>% Identity</th>
-            <th>Coverage</th>
-          </tr>
+        <tr>
+          <th>Contig ID</th>
+          <th>Inc Type</th>
+          <th>% Identity</th>
+          <th>Coverage</th>
+          <th>Linked AMR Genes</th>
+        </tr>
         </thead>
         <tbody>
-          {matches.length ? (
-            matches.map(incMatch => (
-              <tr>
-                <td>{incMatch['Inc Match']}</td>
-                <td>{incMatch.Contig}</td>
-                <td>{incMatch['Percent Identity']}</td>
-                <td>{incMatch['Match Coverage']}</td>
-              </tr>
-            ))
-          ) : (
+        {matches.length ? (
+          matches.map(incMatch => (
             <tr>
-              <td colSpan="4" className="muted">
-                No matches
-              </td>
+              <td>{incMatch.Contig}</td>
+              <td>{incMatch['Inc Match']}</td>
+              <td>{incMatch['Percent Identity']}</td>
+              <td>{incMatch['Match Coverage']}</td>
+              <td>{
+                (amrMatches[incMatch.Contig] || []).join(', ')
+              }</td>
             </tr>
-          )}
+          ))
+        ) : (
+          <tr>
+            <td colSpan="5" className="muted">
+              No matches
+            </td>
+          </tr>
+        )}
         </tbody>
       </table>
     </React.Fragment>
