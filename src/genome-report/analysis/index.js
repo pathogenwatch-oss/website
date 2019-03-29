@@ -76,13 +76,7 @@ export default genome => {
   if (inctyper && Object.keys(inctyper).includes('Inc Matches')) {
     sections.push({
       key: 'Inc Typing',
-      component: (
-        <VersionSwitcher
-          taskName="inctyper"
-          component={Inctyper}
-          genome={genome}
-        />
-      ),
+      component: <Inctyper analysis={analysis} />,
     });
   }
   if (cgmlst) {
