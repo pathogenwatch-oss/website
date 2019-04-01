@@ -35,6 +35,8 @@ const projection = {
   'analysis.paarsnp.antibiotics': 1,
   'analysis.paarsnp.paar': 1,
   'analysis.paarsnp.snp': 1,
+  'analysis.paarsnp.library': 1,
+  'analysis.paarsnp.matches': 1,
   'analysis.poppunk.strain': 1,
   'analysis.serotype': 1,
   'analysis.speciator': 1,
