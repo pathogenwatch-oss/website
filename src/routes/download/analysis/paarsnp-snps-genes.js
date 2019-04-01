@@ -5,14 +5,16 @@ const sort = require('natsort')({ insensitive: true });
 const Genome = require('models/genome');
 
 const transformer = function (doc) {
-  const result = {
+  const {__v, library = {version: '0.0.1', source: 'PUBLIC'}} = doc.analysis.paarsnp;
+  return {
     'Genome ID': doc._id.toString(),
     'Genome Name': doc.name,
-    Version: doc.analysis.paarsnp.__v,
+    Version: __v,
+    'Library Version': library.source === 'PUBLIC' ?
+      library.version : `${library.source}: ${library.version}`,
     SNPs: doc.analysis.paarsnp.snp.sort(sort).join(','),
     Genes: doc.analysis.paarsnp.paar.sort(sort).join(','),
   };
-  return result;
 };
 
 module.exports = (req, res) => {
@@ -31,6 +33,7 @@ module.exports = (req, res) => {
   const projection = {
     name: 1,
     'analysis.paarsnp.__v': 1,
+    'analysis.paarsnp.library': 1,
     'analysis.paarsnp.paar': 1,
     'analysis.paarsnp.snp': 1,
   };

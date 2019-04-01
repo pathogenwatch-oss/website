@@ -316,6 +316,7 @@ schema.statics.getForCollection = function (query) {
     'analysis.paarsnp.antibiotics': 1,
     'analysis.paarsnp.paar': 1,
     'analysis.paarsnp.snp': 1,
+    'analysis.paarsnp.library': 1,
     'analysis.speciator.organismId': 1,
     'analysis.kleborate': 1,
     'analysis.inctyper': 1,
