@@ -18,6 +18,7 @@ export default ({ analysis }) => {
 
   const { inctyper, paarsnp } = analysis;
   const matches = inctyper['Inc Matches'];
+
   matches.sort((a, b) => a.Contig.localeCompare(b.Contig));
 
   const amrMatches = {};
@@ -27,10 +28,14 @@ export default ({ analysis }) => {
     if (!match.query) {
       continue;
     }
-    if (!(match.query.id in amrMatches)) {
-      amrMatches[match.query.id] = [];
+    if (
+      (paarsnp.hasOwnProperty('paar') && match.id in paarsnp.paar)
+      || (paarsnp.hasOwnProperty('snp') && match.id in paarsnp.snp)) {
+      if (!(match.query.id in amrMatches)) {
+        amrMatches[match.query.id] = [];
+      }
+      amrMatches[match.query.id].push(match.id);
     }
-    amrMatches[match.query.id].push(match.id);
   }
 
   return (
@@ -82,4 +87,5 @@ export default ({ analysis }) => {
       </table>
     </React.Fragment>
   );
-};
+}
+;
