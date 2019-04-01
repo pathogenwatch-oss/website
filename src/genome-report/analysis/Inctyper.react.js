@@ -29,8 +29,8 @@ export default ({ analysis }) => {
       continue;
     }
     if (
-      (paarsnp.hasOwnProperty('paar') && match.id in paarsnp.paar)
-      || (paarsnp.hasOwnProperty('snp') && match.id in paarsnp.snp)) {
+      (paarsnp.hasOwnProperty('paar') && paarsnp.paar.includes(match.id))
+      || (paarsnp.hasOwnProperty('snp') && paarsnp.snp.includes(match.id))) {
       if (!(match.query.id in amrMatches)) {
         amrMatches[match.query.id] = [];
       }
