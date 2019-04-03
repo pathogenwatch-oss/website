@@ -6,13 +6,14 @@ import NgMast from './NgMast.react';
 import Serotype from './Serotype.react';
 import Strain from './Strain.react';
 
-function getSecondaryTyping({ genotyphi, ngmast, serotype, poppunk }) {
+function getSecondaryTyping(genome) {
+  const { genotyphi, ngmast, serotype, poppunk } = genome.analysis;
   return (
     <React.Fragment>
       {!!serotype && <Serotype result={serotype} />}
       {!!genotyphi && <Genotyphi result={genotyphi} />}
       {!!ngmast && <NgMast result={ngmast} />}
-      {!!poppunk && <Strain result={poppunk} />}
+      {!!poppunk && <Strain genome={genome} />}
     </React.Fragment>
   );
 }
@@ -23,7 +24,7 @@ export default ({ genome }) => (
       <MLST leftaligned result={genome.analysis.mlst} />
     </div>
     <div className="pw-genome-report-column one half right">
-      {getSecondaryTyping(genome.analysis)}
+      {getSecondaryTyping(genome)}
     </div>
   </React.Fragment>
 );
