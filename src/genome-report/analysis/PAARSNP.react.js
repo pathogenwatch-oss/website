@@ -8,7 +8,7 @@ const libraryLink = {
   TESTING: 'https://gitlab.com/cgps/pathogenwatch/amr-test-libraries/blob',
 };
 
-const originalPublicSet = new Set([ '1280', '1313', '485', '90370' ])
+const originalPublicSet = new Set([ '1280', '1313', '485', '90370' ]);
 
 export default ({ result, genome }) => {
   const { organismId } = genome.analysis.speciator;
@@ -34,45 +34,48 @@ export default ({ result, genome }) => {
     ? antibiotics.filter(({ name }) => !hiddenColumns.has(name))
     : antibiotics;
 
-  const libraryUrl = `${libraryLink[library.source]}/${library.version}/${library.label}.toml`;
+  const libraryUrl = `${libraryLink[library.source]}/${library.version}/${
+    library.label
+  }.toml`;
 
   return (
     <React.Fragment>
-      <h2>Antimicrobial Resistance (AMR)</h2>
-      <p><a href={libraryUrl} target="_blank" rel="noopener">
-        AMR
-        Library {library.label} Version {library.version}{library.source !== 'PUBLIC' ? ` (${library.source})` : ''}
-      </a></p>
+      <header className="pw-genome-report-section-header">
+        <h2>Antimicrobial Resistance (AMR)</h2>
+        <a href={libraryUrl} target="_blank" rel="noopener">
+          AMR Library {library.label} Version {library.version}
+          {library.source !== 'PUBLIC' ? ` (${library.source})` : ''}
+        </a>
+      </header>
       <table cellSpacing="0" className="wgsa-genome-report-amr wide bordered">
         <caption>Resistance Profile</caption>
         <thead>
-        <tr>
-          <th>Agent</th>
-          <th>Full Name</th>
-          <th>Genotype</th>
-          <th>SNPs/Genes</th>
-        </tr>
+          <tr>
+            <th>Agent</th>
+            <th>Full Name</th>
+            <th>Genotype</th>
+            <th>SNPs/Genes</th>
+          </tr>
         </thead>
         <tbody>
-        {filteredAntibiotics.map(({ name, fullName, state, mechanisms }) => (
-          <tr
-            key={name}
-            className={classnames({
-              'pw-genome-report-amr-present': state !== 'NOT_FOUND',
-              'pw-genome-report-amr-resistant': state === 'RESISTANT',
-            })}
-          >
-            <td>{name}</td>
-            <td>{fullName}</td>
-            <td className="wgsa-genome-report-amr-state">
-              {state.replace(/_/g, ' ')
-                .toLowerCase()}
-            </td>
-            <td className="pw-genome-report-amr-mechanisms">
-              {mechanisms.join(', ')}
-            </td>
-          </tr>
-        ))}
+          {filteredAntibiotics.map(({ name, fullName, state, mechanisms }) => (
+            <tr
+              key={name}
+              className={classnames({
+                'pw-genome-report-amr-present': state !== 'NOT_FOUND',
+                'pw-genome-report-amr-resistant': state === 'RESISTANT',
+              })}
+            >
+              <td>{name}</td>
+              <td>{fullName}</td>
+              <td className="wgsa-genome-report-amr-state">
+                {state.replace(/_/g, ' ').toLowerCase()}
+              </td>
+              <td className="pw-genome-report-amr-mechanisms">
+                {mechanisms.join(', ')}
+              </td>
+            </tr>
+          ))}
         </tbody>
       </table>
     </React.Fragment>
