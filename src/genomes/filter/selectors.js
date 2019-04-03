@@ -163,11 +163,11 @@ export const getFilterSummary = createSelector(
       strain: sortBy(
         Object.keys(poppunk).map(value => ({
           value,
-          label: value,
+          label: `GPSC ${value}`,
           count: poppunk[value].count,
           active: filterState.strain === value,
         })),
-        'label'
+        item => Number(item.value)
       ),
     };
   }
