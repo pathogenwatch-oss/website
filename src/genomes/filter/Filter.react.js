@@ -100,7 +100,7 @@ const Filter = ({
     <FilterSection
       filterKey="strain"
       heading="Strain"
-      icon="language"
+      icon="scatter_plot"
       summary={filterSummary.strain}
       updateFilter={updateFilter}
       hidden={!filterSummary.strain.length}
