@@ -140,7 +140,7 @@ function getSummaryFields(deployedOrganisms) {
     {
       field: 'poppunk',
       aggregation: ({ query }) => {
-        if (query.genusId) {
+        if (query.speciesId) {
           return [
             { $match: { 'analysis.poppunk': { $exists: true } } },
             {

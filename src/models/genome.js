@@ -259,9 +259,11 @@ schema.statics.getFilterQuery = function (props) {
     if (serotype) {
       findQuery['analysis.serotype.value'] = serotype;
     }
+  }
 
+  if (organismId || speciesId) {
     if (strain) {
-      findQuery['analysis.poppunk.strain'] = strain.split(',');
+      findQuery['analysis.poppunk.strain'] = strain;
     }
   }
 
