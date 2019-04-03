@@ -124,10 +124,8 @@ dl.pw-genome-report-unsized > div {
 }
 
 .pw-genome-report-external-link {
-  width: 100%;
-  display: flex;
   align-items: center;
-  margin-top: -8px;
+  display: flex;
 }
 
 .pw-genome-report-external-link a {
