@@ -78,13 +78,13 @@ export const getFilterSummary = createSelector(
             value,
             active,
             novel: isNovel(value),
-            label: <ST id={value} prefixed={active} />,
+            label: <ST id={value} prefixed />,
             title: active ? value : `ST ${value}`,
             count: sequenceType[value].count,
           };
         }),
         'novel',
-        'value'
+        item => Number(item.value)
       ),
       speciesId: sortBy(
         Object.keys(speciesId).map(value => ({
