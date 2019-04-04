@@ -7,7 +7,7 @@ const transformer = function (doc) {
     'Genome ID': doc._id.toString(),
     'Genome Name': doc.name,
     Version: doc.analysis.poppunk.__v,
-    Strain: doc.analysis.poppunk.strain.join(','),
+    Strain: doc.analysis.poppunk.strain,
   };
 };
 
