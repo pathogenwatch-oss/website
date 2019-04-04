@@ -41,12 +41,12 @@ router.get('/genome/map', (req, res, next) => {
     .catch(next);
 });
 
-router.get('/genome/at-location', (req, res, next) => {
+router.post('/genome/at-locations', (req, res, next) => {
   LOGGER.info('Received request to get selection');
   const { user } = req;
-  const { latitude, longitude } = req.query;
+  const { coordinates } = req.body;
   services
-    .request('genome', 'at-location', { user, latitude, longitude })
+    .request('genome', 'at-locations', { user, coordinates })
     .then(response => res.json(response))
     .catch(next);
 });
