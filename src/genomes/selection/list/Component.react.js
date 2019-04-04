@@ -5,6 +5,7 @@ import { List } from 'react-virtualized';
 import SignInLink from '../../../sign-in/SignInLink.react';
 
 import { getSelectedGenomeIds, getSelectedGenomeList } from '../selectors';
+import { canCreateCollection as getCreateCollectionPermission } from '../../create-collection-form/selectors';
 
 import {
   removeFromSelection,
@@ -24,6 +25,7 @@ const Selection = ({
   sendToBin,
   showGenome,
   toggle,
+  canCreateCollection,
 }) => (
   <div className="wgsa-genome-selection">
     <header className="wgsa-dropdown-header">
@@ -82,25 +84,45 @@ const Selection = ({
           >
             <i className="material-icons">delete_sweep</i>
           </button>
-          <button className="mdl-button" onClick={() => toggle('edit')}>
+          <button
+            title="Edit Metadata"
+            className="mdl-button"
+            onClick={() => toggle('edit')}
+          >
             Edit
           </button>
         </div>
       )}
-      <button className="mdl-button" onClick={() => toggle('download')}>
-        download
-      </button>
-      {!!user ? (
-        <button
-          className="mdl-button mdl-button--raised mdl-button--colored"
-          onClick={() => toggle('collection')}
-        >
-          Create Collection
-        </button>
+      {canCreateCollection ? (
+        <span key="can-create-collection">
+          <button className="mdl-button" onClick={() => toggle('download')}>
+            Download Data
+          </button>
+          {!!user ? (
+            <button
+              key="create-collection"
+              className="mdl-button mdl-button--raised mdl-button--colored"
+              onClick={() => toggle('collection')}
+            >
+              Create Collection
+            </button>
+          ) : (
+            <SignInLink
+              key="create-collection"
+              className="mdl-button mdl-button--raised mdl-button--colored"
+            >
+              Sign in to Create Collection
+            </SignInLink>
+          )}
+        </span>
       ) : (
-        <SignInLink className="mdl-button mdl-button--raised mdl-button--colored">
-          Sign in to Create Collection
-        </SignInLink>
+        <button
+          key="download-only"
+          className="mdl-button mdl-button--raised mdl-button--colored"
+          onClick={() => toggle('download')}
+        >
+          Download Data
+        </button>
       )}
     </footer>
   </div>
@@ -110,6 +132,7 @@ function mapStateToProps(state) {
   return {
     selectedGenomes: getSelectedGenomeList(state),
     selectedGenomeIds: getSelectedGenomeIds(state),
+    canCreateCollection: getCreateCollectionPermission(state),
   };
 }
 
