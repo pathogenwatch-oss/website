@@ -25,7 +25,8 @@ module.exports = function (props) {
     },
     {
       skip: Number(skip),
-      limit: Math.min(Number(limit), MAX_PAGE_SIZE),
+      limit: Number(limit),
+      // limit: Math.min(Number(limit), MAX_PAGE_SIZE),
       sort: Genome.getSort(sort),
     }
   )
