@@ -140,7 +140,7 @@ const MapView = React.createClass({
           onLassoPathChange={onLassoPathChange}
           stateKey={stateKey}
         />
-        {popup.position && (
+        {popup.open && (
           <Popup
             list={popupList}
             onItemClick={this.props.showGenomeReport}
@@ -169,8 +169,7 @@ function mapDispatchToProps(dispatch, { stateKey }) {
   return {
     onLassoPathChange: path => dispatch(selectByArea(stateKey, path)),
     showGenomeReport: id => dispatch(showGenomeReport(id)),
-    showMarkerPopup: ({ genomes, position }) =>
-      dispatch(showMarkerPopup(genomes, position)),
+    showMarkerPopup: ({ position }) => dispatch(showMarkerPopup([ position ])),
     fetch: () => dispatch(fetchGenomeMap()),
     closePopup: () => dispatch(closeMarkerPopup()),
   };
