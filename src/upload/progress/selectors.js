@@ -126,45 +126,36 @@ export const getFileSummary = createSelector(
   }
 );
 
-function getAnalysisBreakdown(analysis) {
-  const breakdown = {
-    paarsnp: { active: false, label: 'AMR', total: 0, errors: 0 },
-    core: { active: false, label: 'Core', total: 0, errors: 0 },
-    cgmlst: { active: false, label: 'cgMLST', total: 0, errors: 0 },
-    genotyphi: { active: false, label: 'Genotyphi', total: 0, errors: 0 },
-    metrics: { active: false, label: 'Metrics', total: 0, errors: 0 },
-    mlst: { active: false, label: 'MLST', total: 0, errors: 0 },
-    ngmast: { active: false, label: 'NG-MAST', total: 0, errors: 0 },
-    kleborate: { active: false, label: 'Kleborate', total: 0, errors: 0 },
-    inctyper: { active: false, label: 'IncTyper', total: 0, errors: 0 },
-  };
+function getAnalysisBreakdown(genomes) {
+  const breakdown = {};
   const sts = {};
 
-  for (const analyses of analysis) {
-    for (const key of Object.keys(analyses)) {
-      if (key in breakdown) {
-        breakdown[key].active = true;
-        if (analyses[key] !== null) breakdown[key].total++;
-        if (analyses[key] === false) breakdown[key].errors++;
+  for (const { st, analysis } of genomes) {
+    for (const key of Object.keys(analysis)) {
+      if (!(key in breakdown)) {
+        breakdown[key] = { total: 0, errors: 0 };
       }
-      if (key === 'mlst' && analyses.mlst) {
-        const { st } = analyses.mlst;
+      if (analysis[key] !== null) breakdown[key].total++;
+      if (analysis[key] === false) breakdown[key].errors++;
+      if (key === 'mlst' && analysis.mlst) {
         sts[st] = (sts[st] || 0) + 1;
       }
     }
   }
 
-  breakdown.mlst.sequenceTypes = Object.keys(sts).map(st => ({
-    label: `ST ${st}`,
-    total: sts[st],
-  }));
+  if (breakdown.mlst) {
+    breakdown.mlst.sequenceTypes = Object.keys(sts).map(st => ({
+      label: `ST ${st}`,
+      total: sts[st],
+    }));
 
-  if (breakdown.mlst.errors) {
-    breakdown.mlst.sequenceTypes.push({
-      label: 'Error',
-      total: breakdown.mlst.errors,
-      colour: DEFAULT.DANGER_COLOUR,
-    });
+    if (breakdown.mlst.errors) {
+      breakdown.mlst.sequenceTypes.push({
+        label: 'Error',
+        total: breakdown.mlst.errors,
+        colour: DEFAULT.DANGER_COLOUR,
+      });
+    }
   }
 
   return breakdown;

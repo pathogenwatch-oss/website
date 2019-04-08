@@ -13,30 +13,36 @@ export const getPopup = state => getGenomeState(state).map.popup;
 
 export const getPopupList = createSelector(
   getPopup,
-  (popup) => {
+  popup => {
     const list = [];
-    for (const { genomes, organismId, organismName } of popup.genomes) {
+    for (const {
+      genomes,
+      organismId,
+      speciesName,
+      subspecies,
+      serotype,
+    } of popup.genomes) {
       for (const { id, name } of genomes) {
-        list.push({ id, name, organismId, organismName });
+        list.push({ id, name, organismId, speciesName, subspecies, serotype });
       }
     }
     return sortBy(list, 'name');
   }
 );
 
-export const getGenomesInPath = createSelector(
+export const getPositionsInPath = createSelector(
   getMarkers,
   getLassoPath,
-  (markers, path) => (
-    path ?
-      markers.reduce((memo, { position, genomes }) => {
+  (markers, path) =>
+    (path
+      ? markers.reduce((memo, { position }) => {
         const [ latitude, longitude ] = position;
         if (!latitude || !longitude) return memo;
         if (contains(path, { lat: latitude, lng: longitude })) {
-          return memo.concat(genomes);
+          memo.push(position);
+          return memo;
         }
         return memo;
-      }, []) :
-      []
-  )
+      }, [])
+      : [])
 );

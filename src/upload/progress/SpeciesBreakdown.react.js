@@ -1,6 +1,8 @@
 import React from 'react';
 import classnames from 'classnames';
 
+import { analysisLabels } from '../../app/constants';
+
 export default React.memo(({ data, showBreakdown = true }) => (
   <ul className="wgsa-upload-legend">
     {data.map(({ key, label, total, colour, ...analyses }) => (
@@ -18,7 +20,7 @@ export default React.memo(({ data, showBreakdown = true }) => (
           <ul>
             {Object.keys(analyses).map(analysisKey => {
               const analysis = analyses[analysisKey];
-              if (analysis.active) {
+              if (analysisKey in analysisLabels) {
                 return (
                   <li
                     key={analysisKey}
@@ -29,11 +31,11 @@ export default React.memo(({ data, showBreakdown = true }) => (
                     {analysis.total === total ? (
                       <React.Fragment>
                         <i className="material-icons">check_circle</i>
-                        {analysis.label}
+                        {analysisLabels[analysisKey]}
                       </React.Fragment>
                     ) : (
                       <React.Fragment>
-                        {analysis.label}
+                        {analysisLabels[analysisKey]}
                         <span className="wgsa-upload-legend-count">
                           {analysis.total}
                         </span>

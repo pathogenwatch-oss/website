@@ -20,6 +20,6 @@ export function binGenomes(ids, status) {
   return fetchJson('POST', '/api/genome/bin', { status, ids });
 }
 
-export function fetchSelection(ids) {
-  return fetchJson('POST', '/api/genome/selection', ids);
+export function fetchSelection(query) {
+  return fetchJson('GET', '/api/genome/selection', query);
 }

@@ -9,6 +9,7 @@ import DateSection from '../../filter/date-section';
 import { selectors } from '../../filter';
 
 import {
+  getFilter,
   getFilterSummary,
   getSearchText,
   isFilterOpen,
@@ -18,16 +19,24 @@ import {
 import { stateKey } from './index';
 import * as actions from './actions';
 
+function getSerotypeHeading(genusId) {
+  if (genusId === '590') {
+    return 'Serovar';
+  }
+  return 'Serotype';
+}
+
 const Filter = ({
-  isActive,
-  filterSummary,
-  textValue,
-  updateFilterValue,
   applyFilter,
-  updateFilter,
-  updateMulti,
   clearFilter,
+  filterSummary,
+  isActive,
   prefilter,
+  genusId,
+  textValue,
+  updateFilter,
+  updateFilterValue,
+  updateMulti,
 }) => (
   <FilterAside
     loading={filterSummary.loading}
@@ -71,6 +80,30 @@ const Filter = ({
       hidden={!filterSummary.genusId.length}
       disabled={!filterSummary.speciesId.length}
       disabledText="Select a genus to filter by species."
+    />
+    <FilterSection
+      filterKey="subspecies"
+      heading="Subspecies"
+      icon="bug_report"
+      summary={filterSummary.subspecies}
+      updateFilter={updateFilter}
+      hidden={!filterSummary.subspecies.length}
+    />
+    <FilterSection
+      filterKey="serotype"
+      heading={getSerotypeHeading(genusId)}
+      icon="bug_report"
+      summary={filterSummary.serotype}
+      updateFilter={updateFilter}
+      hidden={!filterSummary.serotype.length}
+    />
+    <FilterSection
+      filterKey="strain"
+      heading="Strain"
+      icon="scatter_plot"
+      summary={filterSummary.strain}
+      updateFilter={updateFilter}
+      hidden={!filterSummary.strain.length}
     />
     <FilterSection
       filterKey="sequenceType"
@@ -123,6 +156,7 @@ function mapStateToProps(state) {
     textValue: getSearchText(state),
     isOpen: isFilterOpen(state),
     prefilter: getPrefilter(state),
+    genusId: getFilter(state, { stateKey }).genusId,
   };
 }
 

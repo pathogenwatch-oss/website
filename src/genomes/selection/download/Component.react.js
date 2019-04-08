@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import Spinner from '../../../components/Spinner.react';
-import { FormattedName } from '../../../organisms';
+import OrganismName from '../../../organisms/OrganismName.react';
 import Limiter from '../Limiter.react';
 import DownloadLink from './DownloadLink.react';
 
@@ -22,7 +22,7 @@ const Section = ({ speciesId, speciesName, total, tasks, ids }) => {
   if (!speciesId) return null;
   return (
     <li>
-      <FormattedName organismId={speciesId} title={speciesName} />
+      <OrganismName speciesName={speciesName} />
       <ul className="wgsa-genome-download-list">
         <li>
           <DownloadLink
