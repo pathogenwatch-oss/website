@@ -11,8 +11,12 @@
   width: 50%;
 }
 
-.wgsa-genome-report #mlst .pw-mlst-profile {
+.wgsa-genome-report #mlst > dl {
   margin-top: 0;
+}
+
+.wgsa-genome-report #mlst .pw-mlst-profile {
+  margin-top: 4px;
 }
 
 .pw-genome-report-column .pw-mlst-profile {

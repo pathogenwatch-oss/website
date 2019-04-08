@@ -1,8 +1,8 @@
 import { createSelector } from 'reselect';
 import sortBy from 'lodash.sortby';
 
-import { getGenomeList, getTotalGenomes } from '../selectors';
-import { getVisible } from '../summary/selectors';
+import { getGenomeList } from '../selectors';
+import { getVisible, getSummary } from '../summary/selectors';
 import { getDeployedOrganismIds } from '../../summary/selectors';
 import { getPrefilter } from '../filter/selectors';
 
@@ -111,7 +111,8 @@ export const getDownloadSummary = createSelector(
 );
 
 export const isSelectAllDisabled = createSelector(
-  getVisible,
-  getTotalGenomes,
-  (total, totalDownloaded) => total > totalDownloaded
+  getSummary,
+  getPrefilter,
+  (summary, prefilter) =>
+    prefilter === 'all' && summary.visible === summary.total
 );

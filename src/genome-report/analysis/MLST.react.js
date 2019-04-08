@@ -12,9 +12,11 @@ export default ({ result }) => (
         {result.url}
       </a>
     </header>
-    <Metadata label="Sequence Type">
-      <ST id={result.st} />
-    </Metadata>
+    <dl className="pw-genome-report-unsized">
+      <Metadata label="Sequence Type">
+        <ST id={result.st} />
+      </Metadata>
+    </dl>
     <table className="pw-mlst-profile" cellSpacing="0">
       <caption>Profile</caption>
       <thead>

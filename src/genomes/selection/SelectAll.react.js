@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import classnames from 'classnames';
 
 import { selectAll } from './actions';
 import { getSelectionStatus, isSelectAllDisabled } from './selectors';
@@ -11,22 +12,28 @@ const iconsByStatus = {
 };
 
 function getTitle(status, disabled) {
-  if (disabled) return '"Select All" is not available on the unfiltered list, please select at least one filter criterion.';
+  if (disabled) {
+    return '"Select All" is not available on the unfiltered list, please select at least one filter criterion.';
+  }
   return status === 'CHECKED' ? 'Remove from Selection' : 'Add to Selection';
 }
 
-const SelectAll = ({ status, disabled, select }) => (
-  <button
-    className="wgsa-genome-checkbox"
-    onClick={select}
-    disabled={disabled}
-    title={getTitle(status, disabled)}
-  >
-    <i className="material-icons">
-      {iconsByStatus[status]}
-    </i>
-  </button>
-);
+const SelectAll = ({ status, disabled, select }) => {
+  const [ loading, setLoading ] = React.useState(false);
+  return (
+    <button
+      className={classnames('wgsa-genome-checkbox', { 'wgsa-blink': loading })}
+      onClick={() => {
+        setLoading(true);
+        select().then(() => setLoading(false));
+      }}
+      disabled={disabled}
+      title={getTitle(status, disabled)}
+    >
+      <i className="material-icons">{iconsByStatus[status]}</i>
+    </button>
+  );
+};
 
 function mapStateToProps(state) {
   return {
@@ -41,4 +48,7 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(SelectAll);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(SelectAll);

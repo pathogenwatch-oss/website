@@ -78,13 +78,13 @@ export const getFilterSummary = createSelector(
             value,
             active,
             novel: isNovel(value),
-            label: <ST id={value} prefixed={active} />,
+            label: <ST id={value} prefixed />,
             title: active ? value : `ST ${value}`,
             count: sequenceType[value].count,
           };
         }),
         'novel',
-        'value'
+        item => Number(item.value)
       ),
       speciesId: sortBy(
         Object.keys(speciesId).map(value => ({
@@ -163,11 +163,11 @@ export const getFilterSummary = createSelector(
       strain: sortBy(
         Object.keys(poppunk).map(value => ({
           value,
-          label: value,
+          label: `GPSC ${value}`,
           count: poppunk[value].count,
           active: filterState.strain === value,
         })),
-        'label'
+        item => Number(item.value)
       ),
     };
   }
