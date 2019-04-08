@@ -2,9 +2,9 @@ import { createSelector } from 'reselect';
 import sortBy from 'lodash.sortby';
 
 import { getGenomeList } from '../selectors';
-import { getVisible } from '../summary/selectors';
+import { getVisible, getSummary } from '../summary/selectors';
 import { getDeployedOrganismIds } from '../../summary/selectors';
-import { getPrefilter, getFilter } from '../filter/selectors';
+import { getPrefilter } from '../filter/selectors';
 
 import { isOverSelectionLimit } from './utils';
 
@@ -111,8 +111,8 @@ export const getDownloadSummary = createSelector(
 );
 
 export const isSelectAllDisabled = createSelector(
-  getFilter,
-  filter =>
-    // prefilter is always the first filter, so less than 2 means nothing filtered
-    Object.values(filter).filter(v => typeof v !== 'undefined').length < 2
+  getSummary,
+  getPrefilter,
+  (summary, prefilter) =>
+    prefilter === 'all' && summary.visible === summary.total
 );
