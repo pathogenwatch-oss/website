@@ -41,6 +41,16 @@ router.get('/genome/map', (req, res, next) => {
     .catch(next);
 });
 
+router.post('/genome/at-locations', (req, res, next) => {
+  LOGGER.info('Received request to get selection');
+  const { user } = req;
+  const { coordinates } = req.body;
+  services
+    .request('genome', 'at-locations', { user, coordinates })
+    .then(response => res.json(response))
+    .catch(next);
+});
+
 router.get('/genome/:id', (req, res, next) => {
   const { user, params } = req;
   const { id } = params;
@@ -124,10 +134,9 @@ router.post('/genome/:id/clusters/edges', async (req, res, next) => {
 
 router.post('/genome/selection', (req, res, next) => {
   LOGGER.info('Received request to get selection');
-  const { user } = req;
-  const ids = req.body;
+  const { user, query } = req;
   services
-    .request('genome', 'selection', { user, ids })
+    .request('genome', 'selection', { user, query })
     .then(response => res.json(response))
     .catch(next);
 });

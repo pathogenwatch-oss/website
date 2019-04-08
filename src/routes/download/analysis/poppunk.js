@@ -1,41 +1,32 @@
-const csv = require('csv');
 const sanitize = require('sanitize-filename');
-const sort = require('natsort')({ insensitive: true });
-
+const csv = require('csv');
 const Genome = require('models/genome');
 
 const transformer = function (doc) {
-  const {__v, library = {version: '0.0.1', source: 'PUBLIC'}} = doc.analysis.paarsnp;
   return {
     'Genome ID': doc._id.toString(),
     'Genome Name': doc.name,
-    Version: __v,
-    'Library Version': library.source === 'PUBLIC' ?
-      library.version : `${library.source}: ${library.version}`,
-    SNPs: doc.analysis.paarsnp.snp.sort(sort).join(','),
-    Genes: doc.analysis.paarsnp.paar.sort(sort).join(','),
+    Version: doc.analysis.poppunk.__v,
+    Strain: doc.analysis.poppunk.strain,
   };
 };
 
 module.exports = (req, res) => {
   const { user } = req;
   const { filename: rawFilename = '' } = req.query;
-  const filename = sanitize(rawFilename) || 'amr-snps-genes.csv';
+  const filename = sanitize(rawFilename) || 'strain.csv';
   const { ids } = req.body;
 
   res.setHeader('Content-Disposition', `attachment; filename=${filename}`);
   res.setHeader('Content-Type', 'text/csv');
 
   const query = Object.assign(
-    { _id: { $in: ids.split(',') }, 'analysis.paarsnp': { $exists: true } },
+    { _id: { $in: ids.split(',') }, 'analysis.poppunk': { $exists: true } },
     Genome.getPrefilterCondition({ user })
   );
   const projection = {
     name: 1,
-    'analysis.paarsnp.__v': 1,
-    'analysis.paarsnp.library': 1,
-    'analysis.paarsnp.paar': 1,
-    'analysis.paarsnp.snp': 1,
+    'analysis.poppunk': 1,
   };
 
   return Genome.find(query, projection)

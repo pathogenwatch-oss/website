@@ -22,6 +22,7 @@ module.exports = async function ({ user, query }) {
     'analysis.genotyphi.__v': 1,
     'analysis.kleborate.__v': 1,
     'analysis.inctyper.__v': 1,
+    'analysis.serotype.__v': 1,
   };
   const genomes = await Genome.find({ ...query, _user: user._id }, projection).lean();
   return genomes.map(doc => {

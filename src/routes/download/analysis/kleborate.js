@@ -8,25 +8,25 @@ const transformer = function (doc) {
     'Genome Name': doc.name,
   };
 
-  Object.keys(doc.analysis.kleborate)
-      .forEach(prop =>
-          record[prop.replace('__v', 'Version').replace(/_/g, ' ')] = doc.analysis.kleborate[prop]
-      );
+  Object.keys(doc.analysis.kleborate).forEach(
+    prop =>
+      (record[prop.replace('__v', 'Version').replace(/_/g, ' ')] = doc.analysis.kleborate[prop])
+  );
   return record;
 };
 
 module.exports = (req, res) => {
-  const {user} = req;
-  const {filename: rawFilename = ''} = req.query;
+  const { user } = req;
+  const { filename: rawFilename = '' } = req.query;
   const filename = sanitize(rawFilename) || 'kleborate.csv';
-  const {ids} = req.body;
+  const { ids } = req.body;
 
   res.setHeader('Content-Disposition', `attachment; filename=${filename}`);
   res.setHeader('Content-Type', 'text/csv');
 
   const query = Object.assign(
-      {_id: {$in: ids.split(',')}, 'analysis.kleborate': {$exists: true}},
-      Genome.getPrefilterCondition({user})
+    { _id: { $in: ids.split(',') }, 'analysis.kleborate': { $exists: true } },
+    Genome.getPrefilterCondition({ user })
   );
   const projection = {
     name: 1,
@@ -34,9 +34,8 @@ module.exports = (req, res) => {
   };
 
   return Genome.find(query, projection)
-      .cursor()
-      .pipe(csv.transform(transformer))
-      .pipe(csv.stringify({header: true, quotedString: true}))
-      .pipe(res);
+    .cursor()
+    .pipe(csv.transform(transformer))
+    .pipe(csv.stringify({ header: true, quotedString: true }))
+    .pipe(res);
 };
-
