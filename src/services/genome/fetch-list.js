@@ -1,20 +1,11 @@
 const Genome = require('models/genome');
 const { getCollectionSchemes } = require('manifest');
 
-const config = require('configuration');
-const { pagination = { min: 100, max: 2500 } } = config;
-
-function shouldLimit(filters) {
-  const keys = Object.keys(filters);
-  if (keys.length === 1) {
-    return keys[0] === 'prefilter';
-  }
-  return keys.length === 0;
-}
+const MAX_PAGE_SIZE = 100;
 
 module.exports = function (props) {
   const { user, query = {} } = props;
-  const { skip = 0, limit = pagination.max, sort, ...filters } = query;
+  const { skip = 0, limit = MAX_PAGE_SIZE, sort } = query;
   const schemes = new Set(getCollectionSchemes(user));
   return Genome.find(
     Genome.getFilterQuery(props),
@@ -34,7 +25,8 @@ module.exports = function (props) {
     },
     {
       skip: Number(skip),
-      limit: shouldLimit(filters) ? Math.min(Number(limit), pagination.max) : null,
+      limit: Number(limit),
+      // limit: Math.min(Number(limit), MAX_PAGE_SIZE),
       sort: Genome.getSort(sort),
     }
   )
