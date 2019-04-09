@@ -6002,22 +6002,6 @@ react@^16.8.0:
     prop-types "^15.6.2"
     scheduler "^0.13.6"
 
-read-all-stream@^3.0.0:
-  version "3.1.0"
-  resolved "https://registry.yarnpkg.com/read-all-stream/-/read-all-stream-3.1.0.tgz#35c3e177f2078ef789ee4bfafa4373074eaef4fa"
-  integrity sha1-NcPhd/IHjveJ7kv6+kNzB06u9Po=
-  dependencies:
-    pinkie-promise "^2.0.0"
-    readable-stream "^2.0.0"
-
-read-pkg-up@^1.0.1:
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/read-pkg-up/-/read-pkg-up-1.0.1.tgz#9d63c13276c065918d57f002a57f40a1b643fb02"
-  integrity sha1-nWPBMnbAZZGNV/ACpX9AobZD+wI=
-  dependencies:
-    find-up "^1.0.0"
-    read-pkg "^1.0.0"
-
 read-pkg-up@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/read-pkg-up/-/read-pkg-up-2.0.0.tgz#6b72a8048984e0c41e79510fd5e9fa99b3b549be"
