@@ -4,6 +4,7 @@ const mapLimit = require('promise-map-limit');
 
 require('services');
 const Genome = require('models/genome');
+const User = require('models/user');
 const manifest = require('manifest.js');
 const { enqueue } = require('services/taskQueue');
 
@@ -11,7 +12,7 @@ const limit = 1;
 
 const { task } = argv.opts;
 if (!task) {
-  throw new Error('Task not provided');
+  throw new Error('--task not provided');
 }
 const uploadedAt = new Date();
 
@@ -21,14 +22,15 @@ function parseQuery() {
 }
 
 function fetchGenomes(query) {
-  return Genome.find(query, { fileId: 1, 'analysis.speciator': 1 }).lean();
+  return Genome.find(query, { fileId: 1, _user: 1, 'analysis.speciator': 1 }).lean();
   // .limit(1);
 }
 
 function submitTasks(genomes) {
-  return mapLimit(genomes, limit, ({ _id: genomeId, fileId, analysis }) => {
+  return mapLimit(genomes, limit, ({ _id: genomeId, _user, fileId, analysis }) => {
     const { organismId, speciesId, genusId } = analysis.speciator || {};
-    const tasks = manifest.getTasksByOrganism(organismId, speciesId, genusId);
+    const user = await User.findById(_user, { flags: 1 });
+    const tasks = manifest.getTasksByOrganism(organismId, speciesId, genusId, user);
 
     const requestedTask = tasks.find(_ => _.task === task);
     console.log(task, requestedTask);
