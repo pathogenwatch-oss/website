@@ -25,6 +25,12 @@
 
 .pw-genome-report-section-header > h2 + * {
   font-size: 13px;
+  white-space: nowrap;
+}
+
+.pw-genome-report-section-header.flex {
+  display: flex;
+  flex-direction: column;
 }
 
 .wgsa-genome-report-content > section {
@@ -35,14 +41,23 @@
   width: 50%;
   display: inline-block;
   vertical-align: top;
+  padding-top: 24px;
+}
+
+.pw-genome-report-column h2 {
+  padding-top: 0;
 }
 
 .pw-genome-report-column.right {
   text-align: right;
 }
 
-.pw-genome-report-column.half {
-  width: 50%;
+.pw-genome-report-column.right dl {
+  justify-content: flex-end;
+}
+
+.pw-genome-report-column.right .pw-genome-report-section-header.flex {
+  align-items: flex-end;
 }
 
 .pw-genome-report-column.one.third {

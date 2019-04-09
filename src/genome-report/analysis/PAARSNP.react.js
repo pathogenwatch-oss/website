@@ -3,9 +3,24 @@ import classnames from 'classnames';
 
 import { taxIdMap } from '../../organisms';
 
+const libraryLink = {
+  PUBLIC: 'https://gitlab.com/cgps/pathogenwatch/amr-libraries/blob',
+  TESTING: 'https://gitlab.com/cgps/pathogenwatch/amr-test-libraries/blob',
+};
+
+const originalPublicSet = new Set([ '1280', '1313', '485', '90370' ]);
+
 export default ({ result, genome }) => {
-  const { antibiotics } = result;
-  const { organismId } = genome;
+  const { organismId } = genome.analysis.speciator;
+  const {
+    antibiotics,
+    library = {
+      label: organismId,
+      source: originalPublicSet.has(organismId) ? 'PUBLIC' : 'TESTING',
+      version: '0.0.1',
+    },
+  } = result;
+
   let hiddenColumns = new Set();
 
   if (taxIdMap.has(organismId)) {
@@ -19,9 +34,19 @@ export default ({ result, genome }) => {
     ? antibiotics.filter(({ name }) => !hiddenColumns.has(name))
     : antibiotics;
 
+  const libraryUrl = `${libraryLink[library.source]}/${library.version}/${
+    library.label
+  }.toml`;
+
   return (
     <React.Fragment>
-      <h2>Antimicrobial Resistance (AMR)</h2>
+      <header className="pw-genome-report-section-header">
+        <h2>Antimicrobial Resistance (AMR)</h2>
+        <a href={libraryUrl} target="_blank" rel="noopener">
+          AMR Library {library.label} Version {library.version}
+          {library.source !== 'PUBLIC' ? ` (${library.source})` : ''}
+        </a>
+      </header>
       <table cellSpacing="0" className="wgsa-genome-report-amr wide bordered">
         <caption>Resistance Profile</caption>
         <thead>

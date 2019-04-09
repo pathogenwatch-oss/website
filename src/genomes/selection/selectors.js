@@ -1,14 +1,14 @@
 import { createSelector } from 'reselect';
 import sortBy from 'lodash.sortby';
 
-import { getGenomeList, getTotalGenomes } from '../selectors';
-import { getVisible } from '../summary/selectors';
+import { getGenomeList } from '../selectors';
+import { getVisible, getSummary } from '../summary/selectors';
 import { getDeployedOrganismIds } from '../../summary/selectors';
-import { getPrefilter, getFilter } from '../filter/selectors';
+import { getPrefilter } from '../filter/selectors';
 
 import { isOverSelectionLimit } from './utils';
 
-import { analysisLabels } from '../constants';
+import { analysisLabels } from '../../app/constants';
 
 export const getSelection = ({ genomes }) => genomes.selection;
 export const getSelectedGenomes = state => getSelection(state).genomes;
@@ -72,18 +72,27 @@ export const getDownloadSummary = createSelector(
       const allIds = new Set();
       const tasks = [];
       for (const { task, ids, sources } of item.tasks) {
-        tasks.push({
-          ids,
-          sources,
-          name: task,
-          label: analysisLabels[task] || task,
-        });
         if (task === 'paarsnp') {
+          tasks.push(
+            {
+              ids,
+              sources,
+              name: 'paarsnp',
+              label: 'AMR antibiogram',
+            },
+            {
+              ids,
+              sources,
+              name: 'paarsnp-snps-genes',
+              label: 'AMR SNPs/genes',
+            }
+          );
+        } else {
           tasks.push({
             ids,
             sources,
-            name: 'paarsnp-snps-genes',
-            label: 'AMR SNPs/genes',
+            name: task,
+            label: analysisLabels[task] || task,
           });
         }
         for (const id of ids) {
@@ -102,7 +111,8 @@ export const getDownloadSummary = createSelector(
 );
 
 export const isSelectAllDisabled = createSelector(
-  getVisible,
-  getTotalGenomes,
-  (total, totalDownloaded) => total > totalDownloaded
+  getSummary,
+  getPrefilter,
+  (summary, prefilter) =>
+    prefilter === 'all' && summary.visible === summary.total
 );

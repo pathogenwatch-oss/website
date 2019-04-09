@@ -3,7 +3,7 @@ import React from 'react';
 export default ({ result }) => (
   <React.Fragment>
     <h2>Genotyphi</h2>
-    <dl className="pw-genome-report-comfortable">
+    <dl className="pw-genome-report-unsized">
       <div>
         <dt>Genotype</dt>
         <dd>{result.genotype}</dd>

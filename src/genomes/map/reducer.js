@@ -5,7 +5,7 @@ import { MAP_LASSO_CHANGE } from '../../map/actions';
 const initialState = {
   markers: [],
   filter: null,
-  popup: { position: null, genomes: [] },
+  popup: { open: false, genomes: [] },
 };
 
 export default function (state = initialState, { type, payload }) {
@@ -27,7 +27,7 @@ export default function (state = initialState, { type, payload }) {
       return {
         ...state,
         popup: {
-          position: payload.position,
+          open: true,
           genomes: [],
         },
       };

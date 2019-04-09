@@ -1,19 +1,18 @@
 import { createAsyncConstants } from '../../actions';
 
-import { getGenomesInPath } from './selectors';
+import { getPositionsInPath } from './selectors';
 
 import { changeLassoPath } from '../../map/actions';
 
-import { fetchSelection } from '../api';
+import { fetchByCoordinates } from './api';
 
 export const SHOW_MARKER_POPUP = createAsyncConstants('SHOW_MARKER_POPUP');
 
-export function showMarkerPopup(ids, position = '') {
+export function showMarkerPopup(positions = []) {
   return {
     type: SHOW_MARKER_POPUP,
     payload: {
-      position,
-      promise: fetchSelection(ids),
+      promise: fetchByCoordinates(positions),
     },
   };
 }
@@ -31,7 +30,7 @@ export function selectByArea(stateKey, path) {
     dispatch(changeLassoPath(stateKey, path));
     const state = getState();
     if (path) {
-      dispatch(showMarkerPopup(getGenomesInPath(state, { stateKey }), path));
+      dispatch(showMarkerPopup(getPositionsInPath(state, { stateKey }), path));
     }
   };
 }

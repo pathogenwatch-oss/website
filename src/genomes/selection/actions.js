@@ -3,8 +3,16 @@ import { fetchGenomeList } from '../actions';
 
 import { getGenomeList, getGenomes, getListIndices } from '../selectors';
 import { getVisible } from '../summary/selectors';
-import { getSelectedGenomes, getSelectedGenomeIds, getSelectionStatus } from './selectors';
-import { setStoredSelection, addToStoredSelection, removeFromStoredSelection } from './utils';
+import {
+  getSelectedGenomes,
+  getSelectedGenomeIds,
+  getSelectionStatus,
+} from './selectors';
+import {
+  setStoredSelection,
+  addToStoredSelection,
+  removeFromStoredSelection,
+} from './utils';
 
 import * as api from './api';
 
@@ -17,7 +25,9 @@ export function toggleDropdown(view = null) {
   };
 }
 
-export const SELECTION_FETCH_DOWNLOADS = createAsyncConstants('SELECTION_FETCH_DOWNLOADS');
+export const SELECTION_FETCH_DOWNLOADS = createAsyncConstants(
+  'SELECTION_FETCH_DOWNLOADS'
+);
 
 export function fetchDownloads() {
   return (dispatch, getState) => {
@@ -102,12 +112,11 @@ export function selectRange(fromIndex, toIndex) {
 
     if (selection.length === size) {
       dispatch(appendToSelection(selection));
-    } else {
-      dispatch(fetchGenomeList(start, stop))
-        .then(fetchedGenomes =>
-          dispatch(appendToSelection(fetchedGenomes))
-        );
+      return Promise.resolve();
     }
+    return dispatch(fetchGenomeList(start, stop)).then(fetchedGenomes =>
+      dispatch(appendToSelection(fetchedGenomes))
+    );
   };
 }
 
@@ -119,21 +128,21 @@ export function selectAll() {
     if (selectionStatus === 'CHECKED') {
       const genomes = getGenomeList(state);
       dispatch(removeFromSelection(genomes));
-    } else {
-      const total = getVisible(state);
-      const selection = getSelectedGenomes(state);
-      const indices = getListIndices(state);
-
-      let start = 0;
-      for (let i = 0; i < total; i++) {
-        const id = indices[i];
-        if (!(id in selection)) {
-          start = i;
-          break;
-        }
-      }
-
-      dispatch(selectRange(start, total - 1));
+      return Promise.resolve();
     }
+    const total = getVisible(state);
+    const selection = getSelectedGenomes(state);
+    const indices = getListIndices(state);
+
+    let start = 0;
+    for (let i = 0; i < total; i++) {
+      const id = indices[i];
+      if (!(id in selection)) {
+        start = i;
+        break;
+      }
+    }
+
+    return dispatch(selectRange(start, total - 1));
   };
 }

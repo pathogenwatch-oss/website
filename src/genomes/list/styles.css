@@ -23,7 +23,7 @@
   color: rgba(0, 0, 0, 0.87);
 
   &:not(.wgsa-genome-list-header) {
-    border-top: 1px solid rgba(0, 0, 0, .28);
+    border-top: 1px solid rgba(0, 0, 0, 0.28);
   }
 }
 
@@ -83,6 +83,10 @@
   height: 100%;
 }
 
+.wgsa-genome-list-cell strong {
+  font-weight: 500;
+}
+
 @media (max-width: 1024px) {
   .wgsa-genome-list-cell:nth-child(1) {
     width: 40%;
@@ -120,7 +124,11 @@
 .wgsa-genome-list-item--selectable:hover *::after,
 .wgsa-genome-list-item--selectable:focus *::after,
 .wgsa-genome-list-item--selectable.active *::after {
-  background: linear-gradient(to right, rgba(255,255,255,0) 0%, rgb(238,238,238) 75%);
+  background: linear-gradient(
+    to right,
+    rgba(255, 255, 255, 0) 0%,
+    rgb(238, 238, 238) 75%
+  );
 }
 
 .wgsa-genome-list-item .wgsa-card-content {
@@ -184,7 +192,7 @@
 .wgsa-genome-list-placeholder span {
   display: inline-block;
   height: 1em;
-  background-color: #DDD;
+  background-color: #ddd;
   margin-left: 8px;
   border-radius: 2px;
   min-width: 80px;
