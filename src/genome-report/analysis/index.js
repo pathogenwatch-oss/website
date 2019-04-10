@@ -61,18 +61,16 @@ export default genome => {
       ),
     });
   }
-  if (paarsnp) {
-    sections.push({
-      key: 'AMR',
-      component: (
-        <VersionSwitcher
-          taskName="paarsnp"
-          component={PAARSNP}
-          genome={genome}
-        />
-      ),
-    });
-  }
+  sections.push({
+    key: 'AMR',
+    component: (
+      <VersionSwitcher
+        taskName="paarsnp"
+        component={PAARSNP}
+        genome={genome}
+      />
+    ),
+  });
   if (inctyper && Object.keys(inctyper).includes('Inc Matches')) {
     sections.push({
       key: 'Inc Typing',

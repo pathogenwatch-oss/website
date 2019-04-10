@@ -45,6 +45,11 @@ const klebAgentLinks = {
 
 export default ({result}) => (
   <table cellSpacing="0" className="wgsa-genome-report-amr wide bordered">
+    <header>
+      <h3>Kleborate AMR</h3>
+      <a href="https://github.com/katholt/Kleborate" target="_blank"
+         rel="noopener">https://github.com/katholt/Kleborate</a>
+    </header>
     <caption>Resistance Profile</caption>
     <thead>
     <tr>
