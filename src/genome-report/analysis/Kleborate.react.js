@@ -37,9 +37,6 @@ const kleborateAmrFields = [
   'Sul',
   'Tet',
   'Tmt',
-];
-
-const klebBlaFields = [
   'Bla',
   'Bla_Carb',
   'Bla_ESBL',
@@ -47,11 +44,35 @@ const klebBlaFields = [
   'Bla_broad',
   'Bla_broad_inhR',
 ];
+
+
+const klebAgentLinks = {
+  'AGly': {name: "Aminoglycosides", key: "AGS", type: "Aminoglycosides"},
+  'Col': {name: "Colistin", key: "CST", type: "Colistin"},
+  'Fcyn': {name: "Fosfomycin", key: "FOF", type: "Phosphonic Acid"},
+  'Flq': {name: "Fluoroquinolones", key: "FLQ", type: "Fluoroquinolones"},
+  'Gly': {name: "Glycopeptides", key: "GPA", type: "Glycopeptides"},
+  'MLS': {name: "Macrolides", key: "MAC", type: "Macrolides"},
+  'Ntmdz': {name: "Nitroimidazoles", key: "NIM", type: "Nitroimidazoles"},
+  'Phe': {name: "Phenicols", key: "PHE", type: "Phenicols"},
+  'Rif': {name: "Rifampicin", key: "RIF", type: "Rifamycin"},
+  'Sul': {name: "Sulfonamides", key: "SMX", type: "Sulfonamides"},
+  'Tet': {name: "Tetracycline", key: "TCY", type: "Tetracyclines"},
+  'Tmt': {name: "Trimethoprim", key: "TMP", type: "Diaminopyrimidine"},
+  'Bla': {name: "Beta-lactams", key: "BLA", type: "Beta-Lactams"},
+  'Bla_Carb': {name: "Carbapenems", key: "CBP", type: "Carbapenems"},
+  'Bla_ESBL': {name: "ESBLs", key: "EBL", type: "Extended Spectrum Beta-Lactams"},
+  'Bla_ESBL_inhR': {name: "ESBL Inhibitors", key: "EBI", type: "ESBL Inhibitors"},
+  'Bla_broad': {name: "Broad-Spectrum Cephalosporins", key: "CEP", type: "Broad-Spectrum Cephalosporins"},
+  'Bla_broad_inhR': {name: "BSBL Inhibitors", key: "BBI", type: "Broad-Spectrum Beta-Lactam Inhibitors"},
+};
+
 export default ({result}) => (
   <React.Fragment>
     <header className="pw-genome-report-section-header">
       <h2>Kleborate</h2>
-      <a href="https://github.com/katholt/Kleborate" target="_blank" rel="noopener">https://github.com/katholt/Kleborate</a>
+      <a href="https://github.com/katholt/Kleborate" target="_blank"
+         rel="noopener">https://github.com/katholt/Kleborate</a>
     </header>
     <table className="pw-kleborate-table" cellSpacing="0">
       <caption>Typing</caption>
@@ -99,36 +120,60 @@ export default ({result}) => (
       </tr>
       </tbody>
     </table>
-    <table className="pw-kleborate-table" cellSpacing="0">
-      <caption>Predicted AMR</caption>
+    <table cellSpacing="0" className="wgsa-genome-report-amr wide bordered">
+      <caption>Resistance Profile</caption>
       <thead>
       <tr>
-        {kleborateAmrFields.map((klebAmr) =>
-          <th key={klebAmr}>{klebAmr}</th>)}
+        <th>Agent</th>
+        <th>Variants/Genes</th>
       </tr>
       </thead>
       <tbody>
-      <tr>
-        {kleborateAmrFields.map((klebAmr) =>
-          <td key={klebAmr}>{result[klebAmr].replace(/;/g, '; ')}</td>)}
-      </tr>
+      {kleborateAmrFields.map((klebName) => (
+        <tr
+          key={klebAgentLinks[klebName].name}
+          className={classnames({
+            'pw-genome-report-amr-present': result[klebName] !== '',
+            'pw-genome-report-amr-resistant': result[klebName] !== '',
+          })}
+        >
+          <td>{klebAgentLinks[klebName].name}</td>
+          <td className="pw-genome-report-amr-mechanisms">{result[klebName].join(', ')}</td>
+        </tr>
+      ))}
       </tbody>
     </table>
-    <table className="pw-kleborate-table" cellSpacing="0">
-      <caption>Beta-lactamase Genes by Class</caption>
-      <thead>
-      <tr>
-        {klebBlaFields.map((klebBla) =>
-          <th key={klebBla}>{klebBla}</th>)}
-      </tr>
-      </thead>
-      <tbody>
-      <tr>
-        {klebBlaFields.map((klebBla) =>
-          <td key={klebBla}>{result[klebBla].replace(/;/g, '; ')}</td>)}
-      </tr>
-      </tbody>
-    </table>
+
+    {/*<table className="pw-kleborate-table" cellSpacing="0">*/}
+    {/*  <caption>Predicted AMR</caption>*/}
+    {/*  <thead>*/}
+    {/*  <tr>*/}
+    {/*    {kleborateAmrFields.map((klebAmr) =>*/}
+    {/*      <th key={klebAmr}>{klebAmr}</th>)}*/}
+    {/*  </tr>*/}
+    {/*  </thead>*/}
+    {/*  <tbody>*/}
+    {/*  <tr>*/}
+    {/*    {kleborateAmrFields.map((klebAmr) =>*/}
+    {/*      <td key={klebAmr}>{result[klebAmr].replace(/;/g, '; ')}</td>)}*/}
+    {/*  </tr>*/}
+    {/*  </tbody>*/}
+    {/*</table>*/}
+    {/*<table className="pw-kleborate-table" cellSpacing="0">*/}
+    {/*  <caption>Beta-lactamase Genes by Class</caption>*/}
+    {/*  <thead>*/}
+    {/*  <tr>*/}
+    {/*    {klebBlaFields.map((klebBla) =>*/}
+    {/*      <th key={klebBla}>{klebBla}</th>)}*/}
+    {/*  </tr>*/}
+    {/*  </thead>*/}
+    {/*  <tbody>*/}
+    {/*  <tr>*/}
+    {/*    {klebBlaFields.map((klebBla) =>*/}
+    {/*      <td key={klebBla}>{result[klebBla].replace(/;/g, '; ')}</td>)}*/}
+    {/*  </tr>*/}
+    {/*  </tbody>*/}
+    {/*</table>*/}
   </React.Fragment>
 );
 
