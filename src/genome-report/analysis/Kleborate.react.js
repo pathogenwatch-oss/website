@@ -1,4 +1,5 @@
 import React from 'react';
+import classnames from 'classnames';
 
 const kleborateTypingFields2 = [
   'Yersiniabactin',
@@ -143,37 +144,6 @@ export default ({result}) => (
       ))}
       </tbody>
     </table>
-
-    {/*<table className="pw-kleborate-table" cellSpacing="0">*/}
-    {/*  <caption>Predicted AMR</caption>*/}
-    {/*  <thead>*/}
-    {/*  <tr>*/}
-    {/*    {kleborateAmrFields.map((klebAmr) =>*/}
-    {/*      <th key={klebAmr}>{klebAmr}</th>)}*/}
-    {/*  </tr>*/}
-    {/*  </thead>*/}
-    {/*  <tbody>*/}
-    {/*  <tr>*/}
-    {/*    {kleborateAmrFields.map((klebAmr) =>*/}
-    {/*      <td key={klebAmr}>{result[klebAmr].replace(/;/g, '; ')}</td>)}*/}
-    {/*  </tr>*/}
-    {/*  </tbody>*/}
-    {/*</table>*/}
-    {/*<table className="pw-kleborate-table" cellSpacing="0">*/}
-    {/*  <caption>Beta-lactamase Genes by Class</caption>*/}
-    {/*  <thead>*/}
-    {/*  <tr>*/}
-    {/*    {klebBlaFields.map((klebBla) =>*/}
-    {/*      <th key={klebBla}>{klebBla}</th>)}*/}
-    {/*  </tr>*/}
-    {/*  </thead>*/}
-    {/*  <tbody>*/}
-    {/*  <tr>*/}
-    {/*    {klebBlaFields.map((klebBla) =>*/}
-    {/*      <td key={klebBla}>{result[klebBla].replace(/;/g, '; ')}</td>)}*/}
-    {/*  </tr>*/}
-    {/*  </tbody>*/}
-    {/*</table>*/}
   </React.Fragment>
 );
 
