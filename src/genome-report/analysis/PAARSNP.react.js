@@ -1,6 +1,5 @@
 import React from 'react';
 import classnames from 'classnames';
-import KleborateAMR from './KleborateAMR.react'
 
 import { taxIdMap } from '../../organisms';
 
@@ -21,7 +20,6 @@ export default ({ result, genome }) => {
       version: '0.0.1',
     },
   } = result;
-  const { kleborate } = genome.analysis;
 
   let hiddenColumns = new Set();
 
@@ -42,8 +40,7 @@ export default ({ result, genome }) => {
 
   return (
     <React.Fragment>
-      <header className="pw-genome-report-section-header">
-        <h2>Antimicrobial Resistance (AMR)</h2>
+      <header>
         <a href={libraryUrl} target="_blank" rel="noopener">
           AMR Library {library.label} Version {library.version}
           {library.source !== 'PUBLIC' ? ` (${library.source})` : ''}
@@ -78,7 +75,6 @@ export default ({ result, genome }) => {
           ))}
         </tbody>
       </table>
-      {!! kleborate && <KleborateAMR result={kleborate}/>}
     </React.Fragment>
   );
 };
