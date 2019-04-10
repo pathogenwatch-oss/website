@@ -42,7 +42,7 @@ export default ({ result, genome }) => {
     <React.Fragment>
       <header>
         <a href={libraryUrl} target="_blank" rel="noopener">
-          AMR Library {library.label} Version {library.version}
+          PAARSNP AMR Library {library.label} Version {library.version}
           {library.source !== 'PUBLIC' ? ` (${library.source})` : ''}
         </a>
       </header>
