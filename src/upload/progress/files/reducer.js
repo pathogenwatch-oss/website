@@ -30,7 +30,7 @@ export default function (state = initialState, { type, payload }) {
   switch (type) {
     case ADD_GENOMES.SUCCESS: {
       const entities = {};
-      for (const genome of payload.result) {
+      for (const genome of payload.genomes) {
         for (const file of genome.files) {
           genome.files[file.name] = {
             error: null,
@@ -40,7 +40,7 @@ export default function (state = initialState, { type, payload }) {
             status: statuses.PENDING,
           };
         }
-        entities[genome.id] = genome.files;
+        entities[payload.result[genome.id]] = genome.files;
       }
       return {
         ...initialState,

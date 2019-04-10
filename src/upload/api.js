@@ -7,7 +7,7 @@ export function initialise(genomes, uploadedAt) {
     genomes.map(_ => ({
       id: _.id,
       type: _.type,
-      files: _.file ? [ _.file.name ] : Object.keys(_.files),
+      files: _.files.map(f => f.name),
       metadata: {
         name: _.name,
         ..._.metadata,
@@ -22,8 +22,4 @@ export function fetchGenomes(uploadedAt) {
 
 export function fetchUploads() {
   return fetchJson('GET', '/api/upload');
-}
-
-export function fetchQueuePosition(uploadedAt) {
-  return fetchJson('GET', `/api/upload/${uploadedAt}/position`);
 }

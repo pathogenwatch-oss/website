@@ -5,42 +5,15 @@ import * as actions from './actions';
 import { views } from '../constants';
 
 import files from './files/reducer';
-// import analysis from './analysis.reducer';
+import analysis from './analysis/reducer';
 
 const initialState = {
-  analysis: {},
   uploadedAt: null,
-  selectedOrganism: null,
   view: null,
-  filenameToGenomeId: {},
-
-  session: {},
-  assemblyProgress: {},
 };
 
-function legacy(state = initialState, { type, payload }) {
+function _(state = initialState, { type, payload }) {
   switch (type) {
-    case actions.UPLOAD_ANALYSIS_RECEIVED: {
-      const { analysis } = state;
-      const { genomeId, results } = payload;
-      const analyses = analysis[genomeId] || {};
-      const nextAnalyses = { ...analyses };
-      for (const { task, version, result, error } of results) {
-        nextAnalyses[task] = error ? false : version;
-        if (result) {
-          nextAnalyses[task] = result;
-        }
-      }
-      return {
-        ...state,
-        analysis: {
-          ...analysis,
-          [genomeId]: nextAnalyses,
-        },
-        lastMessageReceived: new Date(),
-        position: 0,
-      };
-    }
     case actions.UPLOAD_FETCH_GENOMES.ATTEMPT: {
       if (state.uploadedAt === payload.uploadedAt) return state;
       return {
@@ -49,52 +22,19 @@ function legacy(state = initialState, { type, payload }) {
       };
     }
     case actions.UPLOAD_FETCH_GENOMES.SUCCESS: {
-      const nextAnalysis = {};
-      const nextFilenameToGenomeId = {};
-      const { genomes, position } = payload.result;
+      const { genomes } = payload.result;
       let incomplete = false;
-      for (const { analysis, ...genome } of genomes) {
-        const pendingAnalysis = {};
-        if (genome.pending) {
-          for (const task of genome.pending) {
-            pendingAnalysis[task] = null;
-          }
-        }
-        if (genome.errored) {
-          for (const task of genome.errored) {
-            pendingAnalysis[task] = false;
-          }
-        }
+      for (const genome of genomes) {
         if (genome.files) {
           incomplete = true;
-          for (const filename of genome.files) {
-            nextFilenameToGenomeId[filename] = genome.id;
-          }
+          break;
         }
-        nextAnalysis[genome.id] = {
-          ...analysis,
-          ...pendingAnalysis,
-        };
       }
       return {
         ...state,
-        position,
         view: incomplete ? views.RECOVERY : views.PROGRESS,
-        selectedOrganism: null,
-        analysis: nextAnalysis,
-        filenameToGenomeId: nextFilenameToGenomeId,
       };
     }
-    case actions.UPLOAD_ORGANISM_SELECTED:
-      return {
-        ...state,
-        selectedOrganism: payload.organismId,
-      };
-    case actions.UPLOAD_FETCH_POSITION.SUCCESS:
-      return {
-        ...state,
-        position: payload.result.position,
-      };
     case 'ASSEMBLY_PIPELINE_STATUS':
       return {
         ...state,
@@ -117,6 +57,7 @@ function legacy(state = initialState, { type, payload }) {
 }
 
 export default combineReducers({
-  legacy,
+  _,
   files,
+  analysis,
 });

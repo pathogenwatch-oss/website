@@ -106,8 +106,8 @@ function mapStateToProps(state, { match }) {
   return {
     uploadedAt,
     isUploading: isUploadPending(state),
-    isSpecieationComplete: isSpecieationComplete(state),
-    isAnalysisComplete: isAnalysisComplete(state),
+    // isSpecieationComplete: isSpecieationComplete(state),
+    // isAnalysisComplete: isAnalysisComplete(state),
     position: getQueuePosition(state),
     lastMessageReceived: getLastMessageReceived(state),
     view: getProgressView(state),

@@ -23,35 +23,35 @@ const AssemblyStatus = connect(state => ({
 });
 
 const Progress = ({
-  analysis,
+  // analysis,
   errored,
   files,
   uploadedAt,
   uploadsInProgress,
 }) => (
   <div className="wgsa-upload-progress pw-upload-page">
-    <AssemblyStatus uploadedAt={uploadedAt} />
+    {/* <AssemblyStatus uploadedAt={uploadedAt} /> */}
     <div>
       <div className="wgsa-section-divider">
         <Files pending={files.pending} uploadsInProgress={uploadsInProgress} />
-        <Overview />
+        {/* <Overview /> */}
       </div>
       <Errors genomes={errored} />
-      {!!analysis.length && analysis[0].key !== 'pending' && (
+      {/* {!!analysis.length && analysis[0].key !== 'pending' && (
         <div className="wgsa-section-divider">
           <SpeciesBreakdown data={analysis} />
         </div>
-      )}
+      )} */}
     </div>
     <div className="wgsa-section-divider wgsa-flex-section">
-      <AnalysisChart uploadedAt={uploadedAt} />
+      {/* <AnalysisChart uploadedAt={uploadedAt} /> */}
     </div>
   </div>
 );
 
 function mapStateToProps(state) {
   return {
-    analysis: upload.getAnalysisSummary(state),
+    // analysis: upload.getAnalysisSummary(state),
     errored: file.getInvalidUploads(state),
     files: file.getFileSummary(state),
     uploadsInProgress: file.getGenomesInProgress(state),
