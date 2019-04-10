@@ -134,8 +134,8 @@ export default ({result}) => (
         <tr
           key={klebAgentLinks[klebName].name}
           className={classnames({
-            'pw-genome-report-amr-present': result[klebName] !== '',
-            'pw-genome-report-amr-resistant': result[klebName] !== '',
+            'pw-genome-report-amr-present': result[klebName] !== '-',
+            'pw-genome-report-amr-resistant': result[klebName] !== '-',
           })}
         >
           <td>{klebAgentLinks[klebName].name}</td>
