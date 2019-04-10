@@ -139,7 +139,13 @@ export default ({result}) => (
           })}
         >
           <td>{klebAgentLinks[klebName].name}</td>
-          <td className="pw-genome-report-amr-mechanisms">{result[klebName].replace(/;/gi, ', ')}</td>
+          <td className="pw-genome-report-amr-mechanisms">
+            {result[klebName]
+              .replace(/;/gi, ', ')
+              .replace(/\*/gi, '_homolog')
+              .replace(/\?/gi, '_fragment')
+            }
+          </td>
         </tr>
       ))}
       </tbody>
