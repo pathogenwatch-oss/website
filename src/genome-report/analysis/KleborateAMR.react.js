@@ -44,39 +44,40 @@ const klebAgentLinks = {
 };
 
 export default ({result}) => (
-  <table cellSpacing="0" className="wgsa-genome-report-amr wide bordered">
+  <React.Fragment>
     <header>
-      <h3>Kleborate AMR</h3>
       <a href="https://github.com/katholt/Kleborate" target="_blank"
-         rel="noopener">https://github.com/katholt/Kleborate</a>
+         rel="noopener">Kleborate AMR - https://github.com/katholt/Kleborate</a>
     </header>
-    <caption>Resistance Profile</caption>
-    <thead>
-    <tr>
-      <th>Agent</th>
-      <th>Variants/Genes</th>
-    </tr>
-    </thead>
-    <tbody>
-    {kleborateAmrFields.map((klebName) => (
-      <tr
-        key={klebAgentLinks[klebName].name}
-        className={classnames({
-          'pw-genome-report-amr-present': result[klebName] !== '-',
-          'pw-genome-report-amr-resistant': result[klebName] !== '-',
-        })}
-      >
-        <td>{klebAgentLinks[klebName].name}</td>
-        <td className="pw-genome-report-amr-mechanisms">
-          {result[klebName]
-            .replace(/;/gi, ', ')
-            .replace(/\*/gi, '_homolog')
-            .replace(/\?/gi, '_fragment')
-          }
-        </td>
+    <table cellSpacing="0" className="wgsa-genome-report-amr wide bordered">
+      <caption>Resistance Profile</caption>
+      <thead>
+      <tr>
+        <th>Agent</th>
+        <th>Variants/Genes</th>
       </tr>
-    ))}
-    </tbody>
-  </table>
+      </thead>
+      <tbody>
+      {kleborateAmrFields.map((klebName) => (
+        <tr
+          key={klebAgentLinks[klebName].name}
+          className={classnames({
+            'pw-genome-report-amr-present': result[klebName] !== '-',
+            'pw-genome-report-amr-resistant': result[klebName] !== '-',
+          })}
+        >
+          <td>{klebAgentLinks[klebName].name}</td>
+          <td className="pw-genome-report-amr-mechanisms">
+            {result[klebName]
+              .replace(/;/gi, ', ')
+              .replace(/\*/gi, '_homolog')
+              .replace(/\?/gi, '_fragment')
+            }
+          </td>
+        </tr>
+      ))}
+      </tbody>
+    </table>
+  </React.Fragment>
 )
 
