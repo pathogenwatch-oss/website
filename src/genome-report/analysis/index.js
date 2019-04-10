@@ -8,7 +8,7 @@ import Inctyper from './Inctyper.react';
 import Kleborate from './Kleborate.react';
 import Metrics from './Metrics.react';
 import MLST from './MLST.react';
-import PAARSNP from './PAARSNP.react';
+import AMR from './AMR.react';
 import Speciator from './Speciator.react';
 import Typing from './Typing.react';
 // import renderGenericResults from './Generic.react';
@@ -63,13 +63,7 @@ export default genome => {
   }
   sections.push({
     key: 'AMR',
-    component: (
-      <VersionSwitcher
-        taskName="paarsnp"
-        component={PAARSNP}
-        genome={genome}
-      />
-    ),
+    component: <AMR genome={genome} />,
   });
   if (inctyper && Object.keys(inctyper).includes('Inc Matches')) {
     sections.push({
