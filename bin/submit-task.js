@@ -27,7 +27,7 @@ function fetchGenomes(query) {
 }
 
 function submitTasks(genomes) {
-  return mapLimit(genomes, limit, ({ _id: genomeId, _user, fileId, analysis }) => {
+  return mapLimit(genomes, limit, async ({ _id: genomeId, _user, fileId, analysis }) => {
     const { organismId, speciesId, genusId } = analysis.speciator || {};
     const user = await User.findById(_user, { flags: 1 });
     const tasks = manifest.getTasksByOrganism(organismId, speciesId, genusId, user);
