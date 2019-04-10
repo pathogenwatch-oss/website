@@ -52,8 +52,7 @@ export default ({ result, genome }) => {
         <thead>
           <tr>
             <th>Agent</th>
-            <th>Full Name</th>
-            <th>Genotype</th>
+            <th>Predicted Phenotype</th>
             <th>SNPs/Genes</th>
           </tr>
         </thead>
@@ -66,7 +65,6 @@ export default ({ result, genome }) => {
                 'pw-genome-report-amr-resistant': state === 'RESISTANT',
               })}
             >
-              <td>{name}</td>
               <td>{fullName}</td>
               <td className="wgsa-genome-report-amr-state">
                 {state.replace(/_/g, ' ').toLowerCase()}
