@@ -1,5 +1,4 @@
 import React from 'react';
-import KleborateAMR from "./KleborateAMR.react";
 
 const kleborateTypingFields2 = [
   'Yersiniabactin',
@@ -78,7 +77,6 @@ export default ({result}) => (
       </tr>
       </tbody>
     </table>
-    <KleborateAMR result={result} />
   </React.Fragment>
 );
 

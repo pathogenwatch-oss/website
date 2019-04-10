@@ -1,5 +1,6 @@
 import React from 'react';
 import classnames from 'classnames';
+import KleborateAMR from './KleborateAMR.react'
 
 import { taxIdMap } from '../../organisms';
 
@@ -20,6 +21,7 @@ export default ({ result, genome }) => {
       version: '0.0.1',
     },
   } = result;
+  const { kleborate } = genome.analysis;
 
   let hiddenColumns = new Set();
 
@@ -76,6 +78,7 @@ export default ({ result, genome }) => {
           ))}
         </tbody>
       </table>
+      {!! kleborate && <KleborateAMR result={kleborate}/>}
     </React.Fragment>
   );
 };
