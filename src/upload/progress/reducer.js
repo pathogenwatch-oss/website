@@ -1,11 +1,14 @@
 import { combineReducers } from 'redux';
 
 import * as actions from './actions';
+import { ADD_GENOMES } from '../actions';
 
 import { views } from '../constants';
 
-import files from './files/reducer';
+import assembly from './assembly/reducer';
 import analysis from './analysis/reducer';
+import files from './files/reducer';
+import recovery from './recovery/reducer';
 
 const initialState = {
   uploadedAt: null,
@@ -14,6 +17,14 @@ const initialState = {
 
 function _(state = initialState, { type, payload }) {
   switch (type) {
+    case ADD_GENOMES.SUCCESS:
+    case 'UPLOAD_RECOVER_SESSION': {
+      return {
+        ...initialState,
+        view: views.PROGRESS,
+      };
+    }
+
     case actions.UPLOAD_FETCH_GENOMES.ATTEMPT: {
       if (state.uploadedAt === payload.uploadedAt) return state;
       return {
@@ -21,6 +32,7 @@ function _(state = initialState, { type, payload }) {
         uploadedAt: payload.uploadedAt,
       };
     }
+
     case actions.UPLOAD_FETCH_GENOMES.SUCCESS: {
       const { genomes } = payload.result;
       let incomplete = false;
@@ -35,22 +47,7 @@ function _(state = initialState, { type, payload }) {
         view: incomplete ? views.RECOVERY : views.PROGRESS,
       };
     }
-    case 'ASSEMBLY_PIPELINE_STATUS':
-      return {
-        ...state,
-        assemblyProgress: payload,
-      };
-    case 'ASSEMBLY_PROGRESS_TICK':
-      return {
-        ...state,
-        assemblyTick: Date.now(),
-      };
-    case 'UPLOAD_RECOVER_SESSION': {
-      return {
-        ...initialState,
-        view: views.PROGRESS,
-      };
-    }
+
     default:
       return state;
   }
@@ -58,6 +55,8 @@ function _(state = initialState, { type, payload }) {
 
 export default combineReducers({
   _,
-  files,
   analysis,
+  assembly,
+  files,
+  recovery,
 });

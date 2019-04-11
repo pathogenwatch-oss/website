@@ -1,16 +1,19 @@
+import './styles.css';
+
 import React from 'react';
 import { connect } from 'react-redux';
 
-import FileDragAndDrop from '../instructions/drag-and-drop';
-import Summary from './Summary.react';
+import FileDragAndDrop from '~/upload/instructions/drag-and-drop';
+import Summary from '../Summary.react';
 
-import { useAssemblerSession } from './hooks';
+import { useAssemblerSession } from '../assembly/hooks';
 
-import { getNumSuccessfulUploads, getPendingFiles } from './files/selectors';
+import { getNumSuccessfulUploads } from '../files/selectors';
+import { getPendingFiles } from './selectors';
 
-import { recoverUploadSession } from './files/actions';
+import { recoverUploadSession } from './actions';
 
-import { isReadsEligible } from '../utils';
+import { isReadsEligible } from '../../utils';
 
 const ContentWrapper = ({ uploadedAt, children }) => (
   <div className="wgsa-hipster-style">

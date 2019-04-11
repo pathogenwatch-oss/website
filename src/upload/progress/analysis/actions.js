@@ -1,6 +1,6 @@
 import { createAsyncConstants } from '~/actions';
 
-import * as api from './api';
+import * as api from '~/queue/api';
 
 export const UPLOAD_ANALYSIS_RECEIVED = 'UPLOAD_ANALYSIS_RECEIVED';
 

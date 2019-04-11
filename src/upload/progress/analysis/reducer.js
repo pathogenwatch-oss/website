@@ -13,7 +13,7 @@ export default function (state = initialState, { type, payload }) {
     case actions.UPLOAD_ANALYSIS_RECEIVED: {
       const { genomeId, results } = payload;
       const { entities } = state;
-      const analyses = state[genomeId] || {};
+      const analyses = entities[genomeId] || {};
       const nextAnalyses = { ...analyses };
       for (const { task, version, result, error } of results) {
         nextAnalyses[task] = error ? false : version;
@@ -31,6 +31,16 @@ export default function (state = initialState, { type, payload }) {
         position: 0,
       };
     }
+    case actions.UPLOAD_ORGANISM_SELECTED:
+      return {
+        ...state,
+        selectedOrganism: payload.organismId,
+      };
+    case actions.UPLOAD_FETCH_POSITION.SUCCESS:
+      return {
+        ...state,
+        position: payload.result.position,
+      };
     case UPLOAD_FETCH_GENOMES.SUCCESS: {
       const nextAnalysis = {};
       const { genomes, position } = payload.result;
@@ -58,16 +68,6 @@ export default function (state = initialState, { type, payload }) {
         analysis: nextAnalysis,
       };
     }
-    case actions.UPLOAD_ORGANISM_SELECTED:
-      return {
-        ...state,
-        selectedOrganism: payload.organismId,
-      };
-    case actions.UPLOAD_FETCH_POSITION.SUCCESS:
-      return {
-        ...state,
-        position: payload.result.position,
-      };
     default:
       return state;
   }

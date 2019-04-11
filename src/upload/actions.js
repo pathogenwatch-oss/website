@@ -10,7 +10,14 @@ export function addGenomes(genomes, uploadedAt) {
     payload: {
       genomes,
       uploadedAt,
-      promise: api.initialise(genomes, uploadedAt),
+      promise: api.initialise(genomes, uploadedAt).then(result => {
+        for (const genome of genomes) {
+          if (genome.id in result) {
+            genome.id = result[genome.id];
+          }
+        }
+        return result;
+      }),
     },
   };
 }

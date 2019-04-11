@@ -3,23 +3,19 @@ import { connect } from 'react-redux';
 
 import Progress from './Progress.react';
 import Summary from './Summary.react';
-import Recovery from './Recovery.react';
+import Recovery from './recovery/Recovery.react';
 
 import { isUploadPending } from './files/selectors';
+import { getQueuePosition, getLastMessageReceived } from './analysis/selectors';
 import {
   isSpecieationComplete,
-  getQueuePosition,
-  getLastMessageReceived,
   isAnalysisComplete,
   getProgressView,
 } from './selectors';
 
 import { processFiles } from './files/actions';
-import {
-  receiveUploadAnalysis,
-  fetchGenomes,
-  fetchQueuePosition,
-} from './actions';
+import { receiveUploadAnalysis, fetchQueuePosition } from './analysis/actions';
+import { fetchGenomes } from './actions';
 
 import { subscribe, unsubscribe } from '~/utils/Notification';
 
@@ -106,8 +102,8 @@ function mapStateToProps(state, { match }) {
   return {
     uploadedAt,
     isUploading: isUploadPending(state),
-    // isSpecieationComplete: isSpecieationComplete(state),
-    // isAnalysisComplete: isAnalysisComplete(state),
+    isSpecieationComplete: isSpecieationComplete(state),
+    isAnalysisComplete: isAnalysisComplete(state),
     position: getQueuePosition(state),
     lastMessageReceived: getLastMessageReceived(state),
     view: getProgressView(state),

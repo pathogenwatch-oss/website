@@ -1,14 +1,13 @@
 import { createAsyncConstants } from '~/actions';
 
 import * as selectors from './selectors';
-import { getUploadedAt, getProgress } from '../selectors';
+import { getUploadedAt } from '../selectors';
 
 import { getAuthToken } from '~/auth/actions';
 
 import * as api from './api';
 import { compress, validate } from './utils';
-import { upload } from './utils/assembler';
-import { mapCSVsToGenomes } from '../../utils';
+import { upload } from '../assembly/service';
 
 import { fileTypes } from '../../constants';
 
@@ -103,8 +102,7 @@ function processGenome(id) {
 
 export function processFiles() {
   return (dispatch, getState) => {
-    const state = getState();
-    if (selectors.isUploading(state)) return;
+    if (selectors.isUploading(getState())) return;
 
     // const isIndividual = getSettingValue(state, 'individual');
     // const processLimit = isIndividual ? 1 : 5;
@@ -112,7 +110,9 @@ export function processFiles() {
 
     dispatch(getAuthToken()).then(() =>
       (function processNext() {
-        const { queue, processing } = getProgress(getState());
+        const state = getState();
+        const queue = selectors.getUploadQueue(state);
+        const processing = selectors.getProcessing(state);
         if (queue.length && processing.size < processLimit) {
           dispatch(processGenome(queue[0])).then(() => {
             if (queue.length > processLimit) {
@@ -125,46 +125,4 @@ export function processFiles() {
       }())
     );
   };
-}
-
-export function recoverUploadSession(files, session) {
-  return (dispatch, getState) =>
-    mapCSVsToGenomes(files).then(uploadedItems => {
-      const state = getState();
-      const { filenameToGenomeId } = state.upload.progress;
-      const remaining = new Set(Object.keys(filenameToGenomeId));
-      const genomes = {};
-      for (const item of uploadedItems) {
-        let genomeId;
-        if (item.files) {
-          const [ file1, file2 ] = Object.keys(item.files);
-          remaining.delete(file1);
-          remaining.delete(file2);
-          genomeId = filenameToGenomeId[file1] || filenameToGenomeId[file2];
-        } else {
-          remaining.delete(item.name);
-          genomeId = filenameToGenomeId[item.name];
-        }
-        item.id = genomeId;
-        genomes[genomeId] = item;
-      }
-      if (remaining.size > 0) {
-        dispatch({
-          type: 'UPLOAD_ERROR_MESSAGE',
-          payload: {
-            type: 'MISSING_FILES',
-            data: Array.from(remaining),
-          },
-        });
-      } else {
-        dispatch({
-          type: 'UPLOAD_RECOVER_SESSION',
-          payload: {
-            genomes,
-            session,
-          },
-        });
-        dispatch(processFiles());
-      }
-    });
 }

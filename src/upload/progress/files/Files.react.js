@@ -12,7 +12,7 @@ export default ({ uploadsInProgress, pending }) => (
       transitionLeave={false}
     >
       {uploadsInProgress.map(genome => (
-        <FileCard key={genome.id} genom={genome} />
+        <FileCard key={genome.id} genome={genome} />
       ))}
     </ReactCSSTransitionGroup>
     {pending > 0 && (

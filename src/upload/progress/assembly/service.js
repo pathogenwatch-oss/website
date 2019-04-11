@@ -1,6 +1,6 @@
 import Resumable from 'resumablejs';
 import hashWorker from 'workerize-loader?name=hash.[hash]!./hashWorker';
-import { uploadComplete } from '../api';
+import { uploadComplete } from '../files/api';
 import config from '~/app/config';
 
 const { origin = window.location.origin, clientId } = config;
@@ -17,13 +17,13 @@ function send(method, path, headers, data) {
   });
 }
 
-function uploadReadsProgress(stage, id, file, progress) {
+function uploadReadsProgress(stage, id, filename, progress) {
   return {
     type: 'UPLOAD_READS_PROGRESS',
     payload: {
       stage,
       id,
-      file,
+      filename,
       progress,
     },
   };

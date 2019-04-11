@@ -1,17 +1,29 @@
 import { createSelector } from 'reselect';
 
 import { isInvalidUpload, isFailedUpload } from './utils/validation';
-import { statuses, types } from './constants';
+import { statuses } from './constants';
 
 import { getProgress } from '../selectors';
 
 export const getFiles = state => getProgress(state).files;
 
-const getUploadQueue = state => getFiles(state).queue;
-const getProcessing = state => getFiles(state).processing;
+export const getUploadQueue = state => getFiles(state)._.queue;
+export const getProcessing = state => getFiles(state)._.processing;
+export const getNumUploadedReads = state => getFiles(state)._.numberOfReads;
 
-export const getUploadedGenomes = state => getFiles(state).entities;
-export const getGenome = (state, id) => getUploadedGenomes(state)[id];
+export const hasReads = createSelector(
+  getNumUploadedReads,
+  count => count > 0
+);
+
+export const getUploadedFiles = state => getFiles(state).entities;
+export const getUploadedGenomes = state => getFiles(state).genomes;
+
+export const getGenome = createSelector(
+  (state, id) => getUploadedFiles(state)[id],
+  (state, id) => getUploadedGenomes(state)[id],
+  (files, genome) => ({ ...genome, files })
+);
 
 export const getUploadedGenomeList = createSelector(
   getUploadedGenomes,
@@ -23,10 +35,15 @@ export const getBatchSize = createSelector(
   list => list.length
 );
 
-export const getGenomesInProgress = createSelector(
+export const getUploadsInProgress = createSelector(
   getProcessing,
   getUploadedGenomes,
-  (processing, genomes) => Array.from(processing).map(id => genomes[id])
+  getUploadedFiles,
+  (processing, genomes, files) =>
+    Array.from(processing).map(id => ({
+      ...genomes[id],
+      files: files[id],
+    }))
 );
 
 export const getNumRemainingUploads = createSelector(
@@ -89,13 +106,13 @@ export const isRetryable = createSelector(
 
 export const getFileSummary = createSelector(
   getUploadedGenomeList,
-  files => {
+  genomes => {
     const summary = {};
-    for (const file of files) {
-      summary[file.status] = (summary[file.status] || 0) + 1;
+    for (const genome of genomes) {
+      summary[genome.status] = (summary[genome.status] || 0) + 1;
     }
     return {
-      total: files.length,
+      total: genomes.length,
       completed: summary[statuses.SUCCESS] || 0,
       errored: summary[statuses.ERROR] || 0,
       pending: summary[statuses.PENDING] || 0,
@@ -105,31 +122,7 @@ export const getFileSummary = createSelector(
   }
 );
 
-export const hasReads = createSelector(
-  getUploadedGenomeList,
-  genomes => {
-    for (const genome of genomes) {
-      if (genome.type === types.READS) return true;
-    }
-    return false;
-  }
-);
-
 export const getNumSuccessfulUploads = createSelector(
   getFileSummary,
   ({ completed }) => completed
-);
-
-export const getPendingFiles = createSelector(
-  getUploadedGenomeList,
-  genomes => {
-    const pending = [];
-    for (const { status, files } of genomes) {
-      if (status === statuses.PENDING) {
-        files.sort();
-        pending.push(files);
-      }
-    }
-    return pending;
-  }
 );

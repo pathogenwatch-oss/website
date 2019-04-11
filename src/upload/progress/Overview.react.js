@@ -4,6 +4,7 @@ import classnames from 'classnames';
 
 import * as upload from './selectors';
 import * as files from './files/selectors';
+import { getQueuePosition } from './analysis/selectors';
 
 const AssemblyStage = ({ complete, total }) => {
   if (complete === total) {
@@ -97,9 +98,9 @@ const Overview = props => {
 function mapStateToProps(state) {
   return {
     hasErrors: upload.hasErrors(state),
-    hasReads: upload.hasReads(state),
+    hasReads: files.hasReads(state),
     isUploading: files.isUploading(state),
-    position: upload.getQueuePosition(state),
+    position: getQueuePosition(state),
     progress: upload.getOverallProgress(state),
     totalGenomes: files.getUploadedGenomeList(state).length,
   };

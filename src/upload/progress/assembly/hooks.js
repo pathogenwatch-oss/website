@@ -1,10 +1,12 @@
 import React from 'react';
 import 'eventsource/lib/eventsource-polyfill';
 
-import store from '../../app/store';
-import config from '../../app/config';
+import store from '~/app/store';
+import config from '~/app/config';
 
-import { fetchSession } from './files/utils/assembler';
+import { fetchSession } from './service';
+
+import { assemblyProgressTick, assemblyPipelineStatus } from './actions';
 
 export const useAssemblyStatus = ({
   uploadedAt,
@@ -21,10 +23,7 @@ export const useAssemblyStatus = ({
         { headers: { Authorization: `Bearer ${token}`, 'cache-control': null } }
       );
       eventSource.onmessage = e => {
-        store.dispatch({
-          type: 'ASSEMBLY_PIPELINE_STATUS',
-          payload: JSON.parse(e.data),
-        });
+        store.dispatch(assemblyPipelineStatus(JSON.parse(e.data)));
       };
       return () => {
         eventSource.close();
@@ -35,10 +34,7 @@ export const useAssemblyStatus = ({
   React.useEffect(() => {
     if (uploadedAt && assemblyInProgress) {
       const interval = setInterval(
-        () =>
-          store.dispatch({
-            type: 'ASSEMBLY_PROGRESS_TICK',
-          }),
+        () => store.dispatch(assemblyProgressTick()),
         2000
       );
       return () => clearInterval(interval);

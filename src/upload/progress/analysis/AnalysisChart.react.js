@@ -1,7 +1,5 @@
 /* global Chart */
 
-import './styles.css';
-
 import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
@@ -9,15 +7,14 @@ import classnames from 'classnames';
 import 'chart.piecelabel.js';
 import { AutoSizer } from 'react-virtualized';
 
-import ChartResizer from '../../components/chart-resizer';
+import ChartResizer from '~/components/chart-resizer';
 
+import { getChartData, getSelectedOrganism } from './selectors';
 import {
-  getChartData,
-  getSelectedOrganism,
   isSpecieationComplete,
   isAnalysisComplete,
   hasErrors,
-} from './selectors';
+} from '../selectors';
 
 import { selectOrganism } from './actions';
 
