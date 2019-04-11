@@ -85,7 +85,6 @@ export function upload(genome, { token, uploadedAt }, dispatch) {
           })
         );
       }
-
       Promise.all(promises).then(resolve);
     });
     r.on('filesAdded', addedFiles => {
@@ -133,7 +132,7 @@ export function upload(genome, { token, uploadedAt }, dispatch) {
         })
         .catch(e => reject({ message: e.message }));
     });
-    r.addFiles(Object.values(genome.files));
+    r.addFiles(Object.values(genome.files).map(_ => _.handle));
   });
 }
 

@@ -28,7 +28,7 @@ function _(state = initialState, { type, payload }) {
     case actions.UPLOAD_FETCH_GENOMES.ATTEMPT: {
       if (state.uploadedAt === payload.uploadedAt) return state;
       return {
-        ...initialState,
+        ...state,
         uploadedAt: payload.uploadedAt,
       };
     }

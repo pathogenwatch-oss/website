@@ -23,7 +23,13 @@ export const useAssemblyStatus = ({
         { headers: { Authorization: `Bearer ${token}`, 'cache-control': null } }
       );
       eventSource.onmessage = e => {
-        store.dispatch(assemblyPipelineStatus(JSON.parse(e.data)));
+        try {
+          const data = JSON.parse(e.data);
+          if (data.error) throw new Error(data.error);
+          store.dispatch(assemblyPipelineStatus(JSON.parse(e.data)));
+        } catch (err) {
+          console.error(err);
+        }
       };
       return () => {
         eventSource.close();
