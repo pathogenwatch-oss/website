@@ -34,9 +34,7 @@ export default ({ result, genome }) => {
     ? antibiotics.filter(({ name }) => !hiddenColumns.has(name))
     : antibiotics;
 
-  const libraryUrl = `${libraryLink[library.source]}/${library.version}/${
-    library.label
-  }.toml`;
+  const libraryUrl = `${libraryLink[library.source]}/${library.version}/${library.label}.toml`;
 
   return (
     <React.Fragment>
