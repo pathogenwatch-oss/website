@@ -5,12 +5,13 @@ import { VersionSwitcher } from '../components';
 import Clustering from './Clustering.react';
 import Core from './Core.react';
 import Inctyper from './Inctyper.react';
-import Kleborate from './Kleborate.react';
 import Metrics from './Metrics.react';
 import MLST from './MLST.react';
 import AMR from './AMR.react';
 import Speciator from './Speciator.react';
 import Typing from './Typing.react';
+import Virulence from './Virulence.react';
+
 // import renderGenericResults from './Generic.react';
 
 function hasSpeciesTypingResult(analysis) {
@@ -19,7 +20,8 @@ function hasSpeciesTypingResult(analysis) {
     (analysis.genotyphi ||
       analysis.ngmast ||
       analysis.serotype ||
-      analysis.poppunk)
+      analysis.poppunk ||
+      analysis.kleborate)
   );
 }
 
@@ -29,11 +31,10 @@ export default genome => {
     cgmlst,
     core,
     inctyper,
-    kleborate,
     metrics,
     mlst,
-    paarsnp,
     speciator,
+    kleborate
   } = analysis;
 
   const sections = [];
@@ -49,18 +50,18 @@ export default genome => {
       component: <MLST result={mlst} />,
     });
   }
-  if (kleborate) {
-    sections.push({
-      key: 'Kleborate',
-      component: (
-        <VersionSwitcher
-          taskName="kleborate"
-          component={Kleborate}
-          genome={genome}
-        />
-      ),
-    });
-  }
+  // if (kleborate) {
+  //   sections.push({
+  //     key: 'Kleborate',
+  //     component: (
+  //       <VersionSwitcher
+  //         taskName="kleborate"
+  //         component={Kleborate}
+  //         genome={genome}
+  //       />
+  //     ),
+  //   });
+  // }
   sections.push({
     key: 'AMR',
     component: <AMR genome={genome} />,
@@ -70,6 +71,12 @@ export default genome => {
       key: 'Inc Typing',
       component: <Inctyper analysis={analysis} />,
     });
+  }
+  if (kleborate) {
+    sections.push({
+      key: 'Virulence',
+      component: <Virulence genome={genome}/>
+    })
   }
   if (cgmlst) {
     sections.push({

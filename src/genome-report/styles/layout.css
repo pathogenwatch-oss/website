@@ -15,6 +15,15 @@
   margin-bottom: 8px;
 }
 
+.wgsa-genome-report-content h3 {
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 1;
+  color: #673c90;
+  margin-top: 0;
+  margin-bottom: 8px;
+}
+
 .pw-genome-report-section-header {
   margin-bottom: 8px;
 }

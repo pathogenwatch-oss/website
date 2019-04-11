@@ -7,7 +7,7 @@ import { ST, Hit } from '../../mlst';
 export default ({ result }) => (
   <React.Fragment>
     <header className="pw-genome-report-section-header">
-      <h2>Multilocus Sequence Typing (MLST)</h2>
+      <h3>Multilocus Sequence Typing (MLST)</h3>
       <a href={result.url} target="_blank" rel="noopener">
         {result.url}
       </a>
