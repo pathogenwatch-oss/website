@@ -51,12 +51,11 @@ class Previous extends React.Component {
   render() {
     const { loading, error, uploads } = this.props;
     return (
-      <div className="wgsa-hipster-style wgsa-previous-uploads">
-        <DocumentTitle>Previous Uploads</DocumentTitle>
-        <Summary previous />
+      <React.Fragment>
+        <Summary />
         {!!uploads.length ? (
           <Grid
-            className="wgsa-genome-list-view"
+            className="wgsa-genome-list-view wgsa-previous-uploads"
             template={ListItem}
             items={uploads}
             columnCount={1}
@@ -77,7 +76,7 @@ class Previous extends React.Component {
             )}
           </div>
         )}
-      </div>
+      </React.Fragment>
     );
   }
 }

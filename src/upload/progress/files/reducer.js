@@ -74,7 +74,7 @@ function genomes(state = {}, { type, payload }) {
         nextState[genome.id] = {
           id: genome.id,
           name: genome.name,
-          status: statuses.PENDING,
+          status: genome.files ? statuses.PENDING : statuses.SUCCESS,
           type: genome.type,
           ...state[genome.id], // retains existing state
         };

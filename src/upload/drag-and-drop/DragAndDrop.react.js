@@ -1,9 +1,8 @@
 import React from 'react';
 
-import { CGPS } from '../../../app/constants';
-import { Name } from '../../../branding';
+import { Name } from '~/branding';
 
-import Overlay from '../../../components/overlay';
+import Overlay from '~/components/overlay';
 
 const fileInputStyle = {
   position: 'fixed',

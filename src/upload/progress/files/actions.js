@@ -7,7 +7,7 @@ import { getAuthToken } from '~/auth/actions';
 
 import * as api from './api';
 import { compress, validate } from './utils';
-import { upload } from '../assembly/service';
+import { upload } from '../assembly/api';
 
 import { fileTypes } from '../../constants';
 

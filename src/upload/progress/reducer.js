@@ -22,6 +22,7 @@ function _(state = initialState, { type, payload }) {
       return {
         ...initialState,
         view: views.PROGRESS,
+        uploadedAt: payload.uploadedAt || state.uploadedAt,
       };
     }
 
@@ -30,6 +31,7 @@ function _(state = initialState, { type, payload }) {
       return {
         ...state,
         uploadedAt: payload.uploadedAt,
+        view: null,
       };
     }
 

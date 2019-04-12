@@ -82,17 +82,23 @@ const Component = React.createClass({
 
   interval: null,
 
-  render() {
+  renderContent() {
     if (!this.props.view) {
       return null;
     }
     return this.props.view === views.RECOVERY ? (
       <Recovery uploadedAt={this.props.uploadedAt} />
     ) : (
-      <div className="wgsa-hipster-style">
+      <Progress uploadedAt={this.props.uploadedAt} />
+    );
+  },
+
+  render() {
+    return (
+      <React.Fragment>
         <Summary uploadedAt={this.props.uploadedAt} />
-        <Progress uploadedAt={this.props.uploadedAt} />
-      </div>
+        {this.renderContent()}
+      </React.Fragment>
     );
   },
 });

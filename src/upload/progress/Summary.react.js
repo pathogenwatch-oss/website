@@ -7,8 +7,6 @@ import Summary from '../Summary.react';
 import * as upload from './files/selectors';
 import DocumentTitle from '~/branding/DocumentTitle.react';
 
-import { formatDateTime } from '~/utils/Date';
-
 const Component = React.createClass({
   getTitle() {
     const { summary } = this.props;
@@ -18,27 +16,11 @@ const Component = React.createClass({
     ].join(' ');
   },
 
-  renderContent() {
-    const { uploadedAt } = this.props;
-
-    const uploadedAtDisplay = (
-      <p style={{ marginLeft: 'auto', fontWeight: '500' }}>
-        {formatDateTime(uploadedAt)}
-      </p>
-    );
-
-    // if (!isUploading && summary.errored) {
-    //   return <ErrorSummary>{uploadedAtDisplay}</ErrorSummary>;
-    // }
-
-    return <Summary>{uploadedAtDisplay}</Summary>;
-  },
-
   render() {
     return (
       <React.Fragment>
         <DocumentTitle>{this.getTitle()}</DocumentTitle>
-        {this.renderContent()}
+        <Summary uploadedAt={this.props.uploadedAt} />
       </React.Fragment>
     );
   },

@@ -1,40 +1,42 @@
 import React from 'react';
-import classnames from 'classnames';
-import { Link } from 'react-router-dom';
-import { connect } from 'react-redux';
+import { NavLink } from 'react-router-dom';
 
 import { Summary } from '../filter/summary';
 
-import { isUploading } from './progress/files/selectors';
+import { formatDateTime } from '~/utils/Date';
 
-function mapStateToProps(state) {
-  return {
-    uploading: isUploading(state),
-  };
-}
-
-export default connect(mapStateToProps)(({ uploading, previous, children }) => (
+const UploadSummary = ({ uploadedAt }) => (
   <Summary className="wgsa-upload-summary">
-    {!uploading && (
-      <Link
-        className={classnames('mdl-button', {
-          'mdl-button--primary': !previous,
-        })}
-        to="/upload"
-      >
-        New Upload
-      </Link>
+    {uploadedAt ? (
+      <React.Fragment>
+        <a className="mdl-button" onClick={() => window.history.back()}>
+          <i className="material-icons">arrow_back</i> Go back
+        </a>
+        <p style={{ marginLeft: 'auto', fontWeight: '500' }}>
+          {formatDateTime(uploadedAt)}
+        </p>
+      </React.Fragment>
+    ) : (
+      <React.Fragment>
+        <NavLink
+          activeClassName="mdl-button--primary"
+          className="mdl-button"
+          exact
+          to="/upload"
+        >
+          New Upload
+        </NavLink>
+        <NavLink
+          activeClassName="mdl-button--primary"
+          className="mdl-button"
+          exact
+          to="/upload/previous"
+        >
+          Previous Uploads
+        </NavLink>
+      </React.Fragment>
     )}
-    {!uploading && (
-      <Link
-        className={classnames('mdl-button', {
-          'mdl-button--primary': previous,
-        })}
-        to="/upload/previous"
-      >
-        Previous Uploads
-      </Link>
-    )}
-    {children}
   </Summary>
-));
+);
+
+export default UploadSummary;

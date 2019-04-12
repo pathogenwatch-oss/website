@@ -3,8 +3,7 @@ import './styles.css';
 import React from 'react';
 import { connect } from 'react-redux';
 
-import FileDragAndDrop from '~/upload/instructions/drag-and-drop';
-import Summary from '../Summary.react';
+import FileDragAndDrop from '~/upload/drag-and-drop';
 
 import { useAssemblerSession } from '../assembly/hooks';
 
@@ -14,13 +13,6 @@ import { getPendingFiles } from './selectors';
 import { recoverUploadSession } from './actions';
 
 import { isReadsEligible } from '../../utils';
-
-const ContentWrapper = ({ uploadedAt, children }) => (
-  <div className="wgsa-hipster-style">
-    <Summary uploadedAt={uploadedAt} />
-    <section className="pw-upload-page">{children}</section>
-  </div>
-);
 
 const Recovery = ({
   uploadedAt,
@@ -34,10 +26,10 @@ const Recovery = ({
 
   if (error) {
     return (
-      <ContentWrapper uploadedAt={uploadedAt}>
+      <section className="pw-upload-page">
         <h1>Sorry, there's a problem.</h1>
         <p>{error.message}</p>
-      </ContentWrapper>
+      </section>
     );
   }
 
@@ -47,7 +39,7 @@ const Recovery = ({
         onFiles={files => onFiles(files, session)}
         readsEligible={readsEligible}
       >
-        <ContentWrapper uploadedAt={uploadedAt}>
+        <section className="pw-upload-page">
           <h1>Recover this session.</h1>
           {numSuccessful > 0 && (
             <p className="pw-with-icon success">
@@ -68,12 +60,12 @@ const Recovery = ({
               </li>
             ))}
           </ul>
-        </ContentWrapper>
+        </section>
       </FileDragAndDrop>
     );
   }
 
-  return <ContentWrapper />;
+  return null;
 };
 
 function mapStateToProps(state) {

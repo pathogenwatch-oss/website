@@ -4,6 +4,13 @@
 
 .wgsa-upload-summary .mdl-button {
   text-decoration: none !important;
+  display: flex;
+  align-items: center;
+}
+
+.wgsa-upload-summary .mdl-button i {
+  font-size: 18px;
+  margin-right: 4px;
 }
 
 .wgsa-genome-card {

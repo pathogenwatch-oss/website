@@ -6,7 +6,7 @@ import { DEFAULT } from '~/app/constants';
 
 export const getAssemblyState = ({ upload }) => upload.progress.assembly;
 
-export const getAssemblyProgress = state => getAssemblyState(state).progress;
+export const getAssemblyProgress = state => getAssemblyState(state).status;
 export const getAssemblyTick = state => getAssemblyState(state).tick;
 
 const expectedDuration = 1000 * 60 * 20; // 20 minutes

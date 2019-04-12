@@ -5,14 +5,14 @@ import { Route, Switch, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 import AuthRoute from '../sign-in/AuthRoute.react';
-import Progress from './progress';
+import ErrorOverlay from './ErrorOverlay.react';
 import Instructions from './instructions';
 import Previous from './previous';
+import Progress from './progress';
 
 import { getUploadedAt } from './progress/selectors';
 import { isUploading } from './progress/files/selectors';
 import { useAuthToken } from '../auth/hooks';
-import ErrorOverlay from './ErrorOverlay.react';
 
 const path = '/upload';
 
@@ -31,14 +31,14 @@ const Router = connect(mapStateToProps)(({ uploading, uploadedAt, match }) => {
   }
 
   return (
-    <React.Fragment>
+    <div className="wgsa-hipster-style">
       <Switch>
         <Route path={`${path}/previous`} component={Previous} />
         <Route path={`${path}/:uploadedAt`} component={Progress} />
         <Route component={Instructions} />
       </Switch>
       <ErrorOverlay />
-    </React.Fragment>
+    </div>
   );
 });
 
