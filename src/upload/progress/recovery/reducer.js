@@ -7,6 +7,9 @@ const initialState = {
 
 export default function (state = initialState, { type, payload }) {
   switch (type) {
+    case actions.UPLOAD_FETCH_GENOMES.ATTEMPT:
+      return initialState;
+
     case actions.UPLOAD_FETCH_GENOMES.SUCCESS: {
       const filenameToGenomeId = {};
       const pendingFiles = [];
@@ -25,6 +28,7 @@ export default function (state = initialState, { type, payload }) {
         filenameToGenomeId,
       };
     }
+
     default:
       return state;
   }

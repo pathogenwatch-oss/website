@@ -6,7 +6,7 @@ import { Summary } from '../filter/summary';
 import { formatDateTime } from '~/utils/Date';
 
 const UploadSummary = ({ uploadedAt }) => (
-  <Summary className="wgsa-upload-summary">
+  <Summary className="wgsa-upload-summary pw-upload-page">
     {uploadedAt ? (
       <React.Fragment>
         <a className="mdl-button" onClick={() => window.history.back()}>

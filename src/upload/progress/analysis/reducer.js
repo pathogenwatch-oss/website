@@ -31,16 +31,19 @@ export default function (state = initialState, { type, payload }) {
         position: 0,
       };
     }
+
     case actions.UPLOAD_ORGANISM_SELECTED:
       return {
         ...state,
         selectedOrganism: payload.organismId,
       };
+
     case actions.UPLOAD_FETCH_POSITION.SUCCESS:
       return {
         ...state,
         position: payload.result.position,
       };
+
     case UPLOAD_FETCH_GENOMES.SUCCESS: {
       const nextAnalysis = {};
       const { genomes, position } = payload.result;
@@ -68,6 +71,7 @@ export default function (state = initialState, { type, payload }) {
         analysis: nextAnalysis,
       };
     }
+
     default:
       return state;
   }

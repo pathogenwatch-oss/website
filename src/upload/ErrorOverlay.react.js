@@ -5,12 +5,33 @@ import Overlay from '../components/overlay';
 
 import { uploadErrorMessage } from './actions';
 
+const limit = 5;
+
+const messageTypes = {
+  MISSING_FILES: data => (
+    <React.Fragment>
+      <p>Some files are still missing:</p>
+      <ul>
+        {data.slice(0, limit).map(filename => (
+          <li>{filename}</li>
+        ))}
+        {data.length > limit && <li>+{data.length - limit} more</li>}
+      </ul>
+      <p>if the problem persists, please try a new upload.</p>
+    </React.Fragment>
+  ),
+};
+
 const ErrorOverlay = ({ message, clearMessage }) => (
   <Overlay visible={!!message} hide={clearMessage}>
     {message && (
       <div className="pw-upload-message" onClick={e => e.stopPropagation()}>
         <p className="h4 title-font">Sorry, there's a problem.</p>
-        <p>{message}</p>
+        {message.type ? (
+          messageTypes[message.type](message.data)
+        ) : (
+          <p>{message}</p>
+        )}
         <footer>
           <button
             className="mdl-button mdl-button--raised mdl-button--colored"

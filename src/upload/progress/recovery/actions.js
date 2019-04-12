@@ -11,13 +11,10 @@ export function recoverUploadSession(files, session) {
       for (const item of uploadedItems) {
         let genomeId;
         if (item.files) {
-          const [ file1, file2 ] = Object.keys(item.files);
-          remaining.delete(file1);
-          remaining.delete(file2);
-          genomeId = filenameToGenomeId[file1] || filenameToGenomeId[file2];
-        } else {
-          remaining.delete(item.name);
-          genomeId = filenameToGenomeId[item.name];
+          for (const file of item.files) {
+            remaining.delete(file.name);
+            genomeId = genomeId || filenameToGenomeId[file.name];
+          }
         }
         item.id = genomeId;
         genomes[genomeId] = item;

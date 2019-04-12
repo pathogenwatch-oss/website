@@ -11,6 +11,7 @@ import {
   isSpecieationComplete,
   isAnalysisComplete,
   getProgressView,
+  getUploadedAt,
 } from './selectors';
 
 import { processFiles } from './files/actions';
@@ -83,14 +84,18 @@ const Component = React.createClass({
   interval: null,
 
   renderContent() {
-    if (!this.props.view) {
+    const { match } = this.props;
+    if (match.params.uploadedAt !== this.props.uploadedAt) {
       return null;
     }
-    return this.props.view === views.RECOVERY ? (
-      <Recovery uploadedAt={this.props.uploadedAt} />
-    ) : (
-      <Progress uploadedAt={this.props.uploadedAt} />
-    );
+    switch (this.props.view) {
+      case views.RECOVERY:
+        return <Recovery uploadedAt={this.props.uploadedAt} />;
+      case views.PROGRESS:
+        return <Progress uploadedAt={this.props.uploadedAt} />;
+      default:
+        return null;
+    }
   },
 
   render() {
@@ -103,10 +108,9 @@ const Component = React.createClass({
   },
 });
 
-function mapStateToProps(state, { match }) {
-  const { uploadedAt } = match.params;
+function mapStateToProps(state) {
   return {
-    uploadedAt,
+    uploadedAt: getUploadedAt(state),
     isUploading: isUploadPending(state),
     isSpecieationComplete: isSpecieationComplete(state),
     isAnalysisComplete: isAnalysisComplete(state),
