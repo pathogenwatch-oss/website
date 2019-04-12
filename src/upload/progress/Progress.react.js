@@ -7,6 +7,7 @@ import { Files, Errors } from './files';
 import Overview from './Overview.react';
 import SpeciesBreakdown from './SpeciesBreakdown.react';
 import AnalysisChart from './analysis/AnalysisChart.react';
+import AnalysisListener from './analysis/Listener.react';
 import AssemblyStatus from './assembly/AssemblyStatus.react';
 
 import * as file from './files/selectors';
@@ -20,6 +21,7 @@ const Progress = ({
   uploadsInProgress,
 }) => (
   <div className="wgsa-upload-progress pw-upload-page">
+    <AnalysisListener uploadedAt={uploadedAt} />
     <AssemblyStatus uploadedAt={uploadedAt} />
     <div>
       <div className="wgsa-section-divider">

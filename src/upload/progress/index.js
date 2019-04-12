@@ -6,31 +6,20 @@ import Summary from './Summary.react';
 import Recovery from './recovery/Recovery.react';
 
 import { isUploadPending } from './files/selectors';
-import { getQueuePosition, getLastMessageReceived } from './analysis/selectors';
 import {
   isSpecieationComplete,
-  isAnalysisComplete,
   getProgressView,
   getUploadedAt,
 } from './selectors';
 
 import { processFiles } from './files/actions';
-import { receiveUploadAnalysis, fetchQueuePosition } from './analysis/actions';
+
 import { fetchGenomes } from './actions';
 
-import { subscribe, unsubscribe } from '~/utils/Notification';
-
-import config from '~/app/config';
 import { views } from '../constants';
 
 const Component = React.createClass({
   componentWillMount() {
-    const { uploadedAt } = this.props;
-    subscribe(
-      config.clientId,
-      `analysis-${uploadedAt}`,
-      this.props.receiveAnalysis
-    );
     const { isUploading, startUpload, fetch } = this.props;
     if (isUploading) {
       startUpload();
@@ -44,44 +33,11 @@ const Component = React.createClass({
     const specieationComplete =
       previous.isSpecieationComplete === false &&
       this.props.isSpecieationComplete;
+
     if (uploadComplete || specieationComplete) {
       this.props.fetch();
     }
-
-    if (this.props.isAnalysisComplete) {
-      this.stopPolling();
-      return;
-    }
-
-    const { position } = this.props;
-    if (!previous.uploadComplete && uploadComplete && position > 0) {
-      this.poll();
-    }
-
-    if (previous.position !== position && position > 0) {
-      this.poll();
-    }
-
-    if (this.props.lastMessageReceived !== previous.lastMessageReceived) {
-      this.poll();
-    }
   },
-
-  componentWillUnmount() {
-    unsubscribe(config.clientId);
-    this.stopPolling();
-  },
-
-  poll() {
-    this.stopPolling();
-    this.interval = setInterval(this.props.fetchPosition, 60000);
-  },
-
-  stopPolling() {
-    if (this.interval) clearInterval(this.interval);
-  },
-
-  interval: null,
 
   renderContent() {
     const { match } = this.props;
@@ -113,9 +69,6 @@ function mapStateToProps(state) {
     uploadedAt: getUploadedAt(state),
     isUploading: isUploadPending(state),
     isSpecieationComplete: isSpecieationComplete(state),
-    isAnalysisComplete: isAnalysisComplete(state),
-    position: getQueuePosition(state),
-    lastMessageReceived: getLastMessageReceived(state),
     view: getProgressView(state),
   };
 }
@@ -123,9 +76,7 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch, { match }) {
   const { uploadedAt } = match.params;
   return {
-    receiveAnalysis: msg => dispatch(receiveUploadAnalysis(msg)),
     fetch: () => dispatch(fetchGenomes(uploadedAt)),
-    fetchPosition: () => dispatch(fetchQueuePosition(uploadedAt)),
     startUpload: () => dispatch(processFiles()),
   };
 }
