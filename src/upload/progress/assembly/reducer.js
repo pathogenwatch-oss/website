@@ -3,7 +3,7 @@ import { ADD_GENOMES } from '../../actions';
 
 const initialState = {
   status: {},
-  tick: null,
+  tick: undefined,
 };
 
 export default function (state = initialState, { type, payload }) {

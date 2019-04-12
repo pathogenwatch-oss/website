@@ -43,7 +43,7 @@ export const getAssemblyChartData = createSelector(
         DEFAULT.DANGER_COLOUR,
         '#3c7383',
         '#AC65A6',
-        '#fefefe',
+        'rgba(0, 0, 0, .14)',
       ],
       labels: [ 'Queued', 'Failed', 'Assembled', 'Assembling', 'Remaining' ],
       tooltips: [
@@ -67,10 +67,10 @@ export const isAssemblyInProgress = createSelector(
 export const getAssemblySummary = createSelector(
   getNumUploadedReads,
   getAssemblyProgress,
-  (total, { complete }) => ({
+  (total, { complete = 0, failed = 0 }) => ({
     total,
     done: complete,
-    pending: total - complete,
+    pending: total - failed - complete,
   })
 );
 

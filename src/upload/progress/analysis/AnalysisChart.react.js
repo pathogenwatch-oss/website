@@ -82,17 +82,18 @@ const AnalysisChart = React.createClass({
           fontFamily: 'Roboto',
         },
         onClick: (e, [ item ]) => {
+          if (this.chart.data.datasets.length <= 1) return;
           if (!item) {
-            const organismsMeta = this.chart.getDatasetMeta(1);
+            const organismsMeta = this.chart.getDatasetMeta(2);
             const meta = organismsMeta.data.find(_ => _.selected);
             if (meta) {
               this.toggleOrganism(meta._index);
             }
             return;
           }
-          if (item._datasetIndex === 0) {
+          if (item._datasetIndex === 1) {
             this.toggleOrganism(
-              this.chart.data.datasets[0].parents[item._index]
+              this.chart.data.datasets[1].parents[item._index]
             );
           } else {
             this.toggleOrganism(item._index);
