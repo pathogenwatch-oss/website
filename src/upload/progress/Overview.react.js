@@ -71,7 +71,8 @@ const Overview = props => {
   const { assembly, analyses } = progress;
 
   const assemblyComplete = hasReads ? assembly.done === assembly.total : true;
-
+  const analysisPending =
+    analyses.total === 0 || analyses.done < analyses.total;
   return (
     <div className="wgsa-upload-progress-overview">
       <p className="pw-with-icon success">
@@ -88,7 +89,7 @@ const Overview = props => {
           hasErrors={hasErrors}
         />
       )}
-      {assemblyComplete && analyses.done < analyses.total && (
+      {assemblyComplete && analysisPending && (
         <QueuePosition position={position} />
       )}
     </div>

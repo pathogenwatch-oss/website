@@ -57,10 +57,20 @@ function _(state = initialState, { type, payload }) {
   }
 }
 
+function resettable(reducer) {
+  const _initialState = reducer({});
+  return function (state, action) {
+    if (action.type === actions.UPLOAD_RESET) {
+      return _initialState;
+    }
+    return reducer(state, action);
+  };
+}
+
 export default combineReducers({
-  _,
-  analysis,
-  assembly,
-  files,
-  recovery,
+  _: resettable(_),
+  analysis: resettable(analysis),
+  assembly: resettable(assembly),
+  files: resettable(files),
+  recovery: resettable(recovery),
 });

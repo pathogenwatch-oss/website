@@ -3,20 +3,9 @@ import { NavLink } from 'react-router-dom';
 
 import { Summary } from '../filter/summary';
 
-import { formatDateTime } from '~/utils/Date';
-
-const UploadSummary = ({ uploadedAt }) => (
+const UploadSummary = ({ children }) => (
   <Summary className="wgsa-upload-summary pw-upload-page">
-    {uploadedAt ? (
-      <React.Fragment>
-        <a className="mdl-button" onClick={() => window.history.back()}>
-          <i className="material-icons">arrow_back</i> Go back
-        </a>
-        <p style={{ marginLeft: 'auto', fontWeight: '500' }}>
-          {formatDateTime(uploadedAt)}
-        </p>
-      </React.Fragment>
-    ) : (
+    {children || (
       <React.Fragment>
         <NavLink
           activeClassName="mdl-button--primary"

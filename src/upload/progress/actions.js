@@ -15,3 +15,11 @@ export function fetchGenomes(uploadedAt) {
     },
   };
 }
+
+export const UPLOAD_RESET = 'UPLOAD_RESET';
+
+export function resetUpload() {
+  return {
+    type: UPLOAD_RESET,
+  };
+}

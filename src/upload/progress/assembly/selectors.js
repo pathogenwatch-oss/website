@@ -10,6 +10,7 @@ export const getAssemblyProgress = state => getAssemblyState(state).status;
 export const getAssemblyTick = state => getAssemblyState(state).tick;
 
 const expectedDuration = 1000 * 60 * 20; // 20 minutes
+const maxPercent = 99;
 
 export const getAssemblyChartData = createSelector(
   getNumUploadedReads,
@@ -24,8 +25,8 @@ export const getAssemblyChartData = createSelector(
     let sumProgress = 0;
     for (const timestamp of runningSince) {
       const elapsedTime = time - timestamp;
-      if (elapsedTime > expectedDuration) sumProgress += 99;
-      else sumProgress += (elapsedTime / expectedDuration) * 99;
+      if (elapsedTime > expectedDuration) sumProgress += maxPercent;
+      else sumProgress += (elapsedTime / expectedDuration) * maxPercent;
     }
     const progress = runningSince.length
       ? sumProgress / runningSince.length
@@ -33,11 +34,14 @@ export const getAssemblyChartData = createSelector(
     const pendingPct = (pending / total) * 100;
     const completePct = (complete / total) * 100;
     const failedPct = (failed / total) * 100;
-    const remaining = 100 - pendingPct - completePct - failedPct - progress;
+    const assemblingPct =
+      progress * ((100 - pendingPct - completePct - failedPct) / 100);
+    const remaining =
+      100 - pendingPct - completePct - failedPct - assemblingPct;
 
     return {
       label: 'Assembly progress',
-      data: [ pendingPct, failedPct, completePct, progress, remaining ],
+      data: [ pendingPct, failedPct, completePct, assemblingPct, remaining ],
       backgroundColor: [
         '#a386bd',
         DEFAULT.DANGER_COLOUR,
@@ -50,7 +54,7 @@ export const getAssemblyChartData = createSelector(
         `${pending} / ${total}`,
         `${failed} / ${total}`,
         `${complete} / ${total}, ${completePct.toFixed(1)}%`,
-        `${runningSince.length} / ${total}, ${sumProgress.toFixed(1)}%`,
+        `${runningSince.length} / ${total}, ${progress.toFixed(1)}%`,
         `${total - runningSince.length - failed - complete} / ${total}`,
       ],
       parents: [],

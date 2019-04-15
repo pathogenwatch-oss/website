@@ -3,9 +3,11 @@ import { connect } from 'react-redux';
 
 import Summary from '../Summary.react';
 // import ErrorSummary from './ErrorSummary.react';
+import DocumentTitle from '~/branding/DocumentTitle.react';
 
 import * as upload from './files/selectors';
-import DocumentTitle from '~/branding/DocumentTitle.react';
+
+import { formatDateTime } from '~/utils/Date';
 
 const Component = React.createClass({
   getTitle() {
@@ -17,10 +19,20 @@ const Component = React.createClass({
   },
 
   render() {
+    const { uploadedAt, isUploading } = this.props;
     return (
       <React.Fragment>
         <DocumentTitle>{this.getTitle()}</DocumentTitle>
-        <Summary uploadedAt={this.props.uploadedAt} />
+        <Summary>
+          {!isUploading && (
+            <a className="mdl-button" onClick={() => window.history.back()}>
+              <i className="material-icons">arrow_back</i> Go back
+            </a>
+          )}
+          <p style={{ marginLeft: 'auto', fontWeight: '500' }}>
+            {formatDateTime(uploadedAt)}
+          </p>
+        </Summary>
       </React.Fragment>
     );
   },

@@ -14,7 +14,7 @@ import {
 
 import { processFiles } from './files/actions';
 
-import { fetchGenomes } from './actions';
+import { fetchGenomes, resetUpload } from './actions';
 
 import { views } from '../constants';
 
@@ -37,6 +37,10 @@ const Component = React.createClass({
     if (uploadComplete || specieationComplete) {
       this.props.fetch();
     }
+  },
+
+  componentWillUnmount() {
+    this.props.reset();
   },
 
   renderContent() {
@@ -78,6 +82,7 @@ function mapDispatchToProps(dispatch, { match }) {
   return {
     fetch: () => dispatch(fetchGenomes(uploadedAt)),
     startUpload: () => dispatch(processFiles()),
+    reset: () => dispatch(resetUpload()),
   };
 }
 
