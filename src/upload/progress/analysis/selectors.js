@@ -20,18 +20,19 @@ export const getAnalysisList = createSelector(
   analysis => Object.keys(analysis.entities).map(id => analysis.entities[id])
 );
 
-function getAnalysisBreakdown(genomes) {
+function getAnalysisBreakdown(analysis) {
   const breakdown = {};
   const sts = {};
 
-  for (const { st, analysis } of genomes) {
-    for (const key of Object.keys(analysis)) {
+  for (const analyses of analysis) {
+    for (const key of Object.keys(analyses)) {
       if (!(key in breakdown)) {
         breakdown[key] = { total: 0, errors: 0 };
       }
-      if (analysis[key] !== null) breakdown[key].total++;
-      if (analysis[key] === false) breakdown[key].errors++;
-      if (key === 'mlst' && analysis.mlst) {
+      if (analyses[key] !== null) breakdown[key].total++;
+      if (analyses[key] === false) breakdown[key].errors++;
+      if (key === 'mlst' && analyses.mlst) {
+        const { st } = analysis.mlst;
         sts[st] = (sts[st] || 0) + 1;
       }
     }
