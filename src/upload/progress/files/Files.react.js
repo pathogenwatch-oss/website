@@ -15,7 +15,7 @@ export default ({ uploadsInProgress, pending }) => (
         <FileCard key={genome.id} genome={genome} />
       ))}
     </ReactCSSTransitionGroup>
-    {pending > 0 && (
+    {uploadsInProgress.length > 0 && pending > 0 && (
       <p>
         +{pending} genome{pending === 1 ? '' : 's'}.
       </p>

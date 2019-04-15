@@ -93,6 +93,7 @@ function genomes(state = {}, { type, payload }) {
 
     case actions.COMPRESS_GENOME.ATTEMPT:
       return {
+        ...state,
         [payload.id]: {
           ...state[payload.id],
           status: status.COMPRESSING,
@@ -101,6 +102,7 @@ function genomes(state = {}, { type, payload }) {
 
     case actions.UPLOAD_GENOME.ATTEMPT:
       return {
+        ...state,
         [payload.id]: {
           ...state[payload.id],
           status: status.UPLOADING,
@@ -109,6 +111,7 @@ function genomes(state = {}, { type, payload }) {
 
     case actions.GENOME_UPLOAD_PROGRESS:
       return {
+        ...state,
         [payload.id]: {
           ...state[payload.id],
           progress: payload.progress,
@@ -118,6 +121,7 @@ function genomes(state = {}, { type, payload }) {
     case actions.UPLOAD_GENOME.FAILURE:
     case actions.PROCESS_GENOME.FAILURE:
       return {
+        ...state,
         [payload.id]: {
           ...state[payload.id],
           error: payload.error,
@@ -128,6 +132,7 @@ function genomes(state = {}, { type, payload }) {
     case actions.UPLOAD_GENOME.SUCCESS:
     case actions.PROCESS_GENOME.SUCCESS:
       return {
+        ...state,
         [payload.id]: {
           ...state[payload.id],
           status: statuses.SUCCESS,

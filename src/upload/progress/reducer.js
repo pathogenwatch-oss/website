@@ -26,16 +26,17 @@ function _(state = initialState, { type, payload }) {
       };
     }
 
-    case actions.UPLOAD_FETCH_GENOMES.ATTEMPT: {
-      if (state.uploadedAt === payload.uploadedAt) return state;
-      return {
-        ...state,
-        uploadedAt: payload.uploadedAt,
-        view: null,
-      };
-    }
+    // case actions.UPLOAD_FETCH_GENOMES.ATTEMPT: {
+    //   if (state.uploadedAt === payload.uploadedAt) return state;
+    //   return {
+    //     ...state,
+    //     uploadedAt: payload.uploadedAt,
+    //     view: null,
+    //   };
+    // }
 
     case actions.UPLOAD_FETCH_GENOMES.SUCCESS: {
+      if (state.uploadedAt === payload.uploadedAt) return state;
       const { genomes } = payload.result;
       let incomplete = false;
       for (const genome of genomes) {
@@ -46,6 +47,7 @@ function _(state = initialState, { type, payload }) {
       }
       return {
         ...state,
+        uploadedAt: payload.uploadedAt,
         view: incomplete ? views.RECOVERY : views.PROGRESS,
       };
     }

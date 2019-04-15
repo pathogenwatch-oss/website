@@ -50,7 +50,7 @@ export const getAssemblyChartData = createSelector(
         `${pending} / ${total}`,
         `${failed} / ${total}`,
         `${complete} / ${total}, ${completePct.toFixed(1)}%`,
-        `${runningSince.length} / ${total}, ${progress.toFixed(1)}%`,
+        `${runningSince.length} / ${total}, ${sumProgress.toFixed(1)}%`,
         `${total - runningSince.length - failed - complete} / ${total}`,
       ],
       parents: [],

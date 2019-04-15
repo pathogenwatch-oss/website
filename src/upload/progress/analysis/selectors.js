@@ -17,7 +17,7 @@ export const getLastMessageReceived = state =>
 
 export const getAnalysisList = createSelector(
   getAnalysis,
-  analysis => Object.keys(analysis.entities).map(id => analysis[id])
+  analysis => Object.keys(analysis.entities).map(id => analysis.entities[id])
 );
 
 function getAnalysisBreakdown(genomes) {

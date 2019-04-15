@@ -45,7 +45,7 @@ export default function (state = initialState, { type, payload }) {
       };
 
     case UPLOAD_FETCH_GENOMES.SUCCESS: {
-      const nextAnalysis = {};
+      const nextEntities = {};
       const { genomes, position } = payload.result;
 
       for (const { analysis, ...genome } of genomes) {
@@ -60,7 +60,7 @@ export default function (state = initialState, { type, payload }) {
             pendingAnalysis[task] = false;
           }
         }
-        nextAnalysis[genome.id] = {
+        nextEntities[genome.id] = {
           ...analysis,
           ...pendingAnalysis,
         };
@@ -68,7 +68,7 @@ export default function (state = initialState, { type, payload }) {
       return {
         ...state,
         position,
-        analysis: nextAnalysis,
+        entities: nextEntities,
       };
     }
 

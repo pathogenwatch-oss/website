@@ -61,12 +61,12 @@ const Overview = props => {
   const {
     hasErrors,
     hasReads,
-    isUploading,
+    isUploadPending,
     position,
     progress,
     totalGenomes,
   } = props;
-  if (isUploading || totalGenomes === 0) return null;
+  if (isUploadPending || totalGenomes === 0) return null;
 
   const { assembly, analyses } = progress;
 
@@ -99,7 +99,7 @@ function mapStateToProps(state) {
   return {
     hasErrors: upload.hasErrors(state),
     hasReads: files.hasReads(state),
-    isUploading: files.isUploading(state),
+    isUploadPending: files.isUploadPending(state),
     position: getQueuePosition(state),
     progress: upload.getOverallProgress(state),
     totalGenomes: files.getUploadedGenomeList(state).length,

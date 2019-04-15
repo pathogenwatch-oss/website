@@ -2,6 +2,7 @@ import React from 'react';
 
 import ProgressBar from '~/components/progress-bar';
 import Error from './CardError.react';
+import Fade from '~/components/fade';
 
 import { statuses, types } from './constants';
 
@@ -15,7 +16,9 @@ function renderReadsProgress(genome) {
   return Object.values(genome.files).map(file => (
     <React.Fragment key={file.name}>
       <ProgressBar key={file.stage} progress={file.progress || 0} />
-      <small>{stages[file.stage] || 'Pending'}</small>
+      <Fade>
+        <small key={file.stage}>{stages[file.stage] || 'Pending'}</small>
+      </Fade>
     </React.Fragment>
   ));
 }
