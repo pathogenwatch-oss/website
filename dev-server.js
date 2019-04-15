@@ -86,9 +86,12 @@ assemblerRouter.get('/chunks', (req, res) => {
   setTimeout(() => res.sendStatus(200), 1000);
 });
 
-// 304 test
 assemblerRouter.post('/pipelines', (req, res) => {
-  setTimeout(() => res.sendStatus(304), 1000);
+  setTimeout(() => res.sendStatus(201), 1000);
+});
+
+assemblerRouter.use((req, res) => {
+  setTimeout(() => res.json({}), 1000);
 });
 
 app.use('/api', apiRouter);
