@@ -16,7 +16,7 @@ export default function (state = initialState, { type, payload }) {
       const { genomes } = payload.result;
       for (const genome of genomes) {
         if (genome.files) {
-          pendingFiles.push(genome.files);
+          pendingFiles.push(genome.files.sort());
           for (const filename of genome.files) {
             filenameToGenomeId[filename] = genome.id;
           }

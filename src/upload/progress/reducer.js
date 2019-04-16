@@ -71,6 +71,6 @@ export default combineReducers({
   _: resettable(_),
   analysis: resettable(analysis),
   assembly: resettable(assembly),
-  files: resettable(files),
+  files,
   recovery: resettable(recovery),
 });
