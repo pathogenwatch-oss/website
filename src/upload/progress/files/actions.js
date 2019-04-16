@@ -75,10 +75,8 @@ function processAssembly(dispatch, getState, genome) {
 function processReads(dispatch, getState, genome) {
   const state = getState();
   const uploadedAt = getUploadedAt(state);
-  // TODO: determine this from state
-  const recovery = false;
   const token = state.auth.token;
-  return upload(genome, { token, uploadedAt, recovery }, dispatch);
+  return upload(genome, { token, uploadedAt }, dispatch);
 }
 
 export const PROCESS_GENOME = createAsyncConstants('PROCESS_GENOME');

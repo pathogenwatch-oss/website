@@ -8,12 +8,6 @@ import { mapCSVsToGenomes } from '~/upload/utils';
 export function recoverUploadSession(files, session, uploadedAt) {
   return (dispatch, getState) =>
     mapCSVsToGenomes(files)
-      .catch(e => {
-        dispatch({
-          type: 'UPLOAD_ERROR_MESSAGE',
-          payload: e.message,
-        });
-      })
       .then(genomes => {
         const state = getState();
         const filenameToGenomeId = getFilenameToGenomeId(state);
@@ -28,7 +22,10 @@ export function recoverUploadSession(files, session, uploadedAt) {
           }
           if (genomeId) {
             genome.id = genomeId;
-            genome.recovery = session.find(_ => _.genomeId === genomeId).files;
+            const sessionRecord = session.find(_ => _.genomeId === genomeId);
+            if (sessionRecord) {
+              genome.recovery = sessionRecord.files;
+            }
           }
         }
         if (remaining.size > 0) {
@@ -49,5 +46,11 @@ export function recoverUploadSession(files, session, uploadedAt) {
           });
           dispatch(processFiles());
         }
+      })
+      .catch(e => {
+        dispatch({
+          type: 'UPLOAD_ERROR_MESSAGE',
+          payload: e.message,
+        });
       });
 }

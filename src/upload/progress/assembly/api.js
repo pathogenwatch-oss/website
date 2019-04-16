@@ -88,12 +88,12 @@ export function upload(genome, { token, uploadedAt }, dispatch) {
       Promise.all(promises).then(resolve);
     });
     r.on('filesAdded', addedFiles => {
-      console.log(genome.recovery);
       if (genome.recovery) {
         for (const { fileId } of genome.recovery) {
           let filename = null;
           for (const file of addedFiles) {
             if (file.uniqueIdentifier === fileId) {
+              filename = null;
               break;
             }
             filename = file.fileName;

@@ -19,7 +19,7 @@ function _(state = initialState, { type, payload }) {
   switch (type) {
     case ADD_GENOMES.SUCCESS:
       return {
-        ...initialState,
+        ...state,
         view: views.PROGRESS,
         uploadedAt: payload.uploadedAt || state.uploadedAt,
       };
