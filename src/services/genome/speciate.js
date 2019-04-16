@@ -9,9 +9,9 @@ const notify = require('services/genome/notify');
 const { summariseAnalysis } = require('../../utils/analysis');
 
 async function submitTasks({ genomeId, fileId, uploadedAt, clientId, userId }, doc) {
-  const { organismId, speciesId, genusId } = summariseAnalysis(doc);
+  const speciatorResult = summariseAnalysis(doc);
   const user = await User.findById(userId, { flags: 1 });
-  const tasks = getTasksByOrganism(organismId, speciesId, genusId, user);
+  const tasks = getTasksByOrganism(speciatorResult, user);
   const cachedResults = await Analysis.find({
     fileId,
     $or: tasks.map(({ task, version }) => ({ task, version })),
@@ -30,9 +30,12 @@ async function submitTasks({ genomeId, fileId, uploadedAt, clientId, userId }, d
 
   if (missingTasks.length === 0) return Promise.resolve();
 
+  const { organismId, speciesId, genusId, superkingdomId } = speciatorResult;
+
   return request('tasks', 'enqueue-genome', {
     genomeId,
     fileId,
+    superkingdomId,
     organismId,
     speciesId,
     genusId,

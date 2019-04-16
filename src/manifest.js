@@ -37,11 +37,13 @@ function hasFlags(task) {
 }
 
 const defaultUser = {
-  canRun: (task) => !hasFlags(task),
+  canRun: task => !hasFlags(task),
 };
 
-
-module.exports.getTasksByOrganism = function (organismId, speciesId, genusId, user = defaultUser) {
+module.exports.getTasksByOrganism = function (
+  { organismId, speciesId, genusId, superkingdomId },
+  user = defaultUser
+) {
   const genomeTasks = tasks.genome;
   const uniqueTasks = {};
 
@@ -51,15 +53,15 @@ module.exports.getTasksByOrganism = function (organismId, speciesId, genusId, us
   // or the first one listed.
   // If there isn't a user specified, we assume they're not part of any experiments.
 
-  for (const id of [ 'all', genusId, speciesId, organismId ]) {
+  for (const id of [ 'all', superkingdomId, genusId, speciesId, organismId ]) {
     if (!id) continue;
     // There is probably a better method than looping twice but it's not obvious and this seems clear
-    for (const task of (genomeTasks[id] || [])) {
+    for (const task of genomeTasks[id] || []) {
       if (!user.canRun(task)) continue;
       // We know we're using a more specific version of a task but we don't know which yet
       uniqueTasks[task.task] = undefined;
     }
-    for (const task of (genomeTasks[id] || [])) {
+    for (const task of genomeTasks[id] || []) {
       if (!user.canRun(task)) continue;
       // If there isn't already a version of a task, add one
       if (!uniqueTasks[task.task]) {

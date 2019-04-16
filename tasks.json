@@ -354,6 +354,12 @@
         "version": "20180806174658-v1.6.10"
       }
     ],
+    "2": [
+      {
+        "task": "inctyper",
+        "version": "v0.0.2"
+      }
+    ],
     "201": [
       {
         "task": "mlst",
@@ -1044,13 +1050,6 @@
       {
         "task": "metrics",
         "version": "v2"
-      },
-      {
-        "task": "inctyper",
-        "version": "v0.0.2",
-        "flags": {
-          "INCTYPER_EXPERIMENT_USER": true
-        }
       }
     ]
   },
