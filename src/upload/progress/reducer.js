@@ -58,7 +58,7 @@ function _(state = initialState, { type, payload }) {
 }
 
 function resettable(reducer) {
-  const _initialState = reducer({});
+  const _initialState = reducer(undefined, {});
   return function (state, action) {
     if (action.type === actions.UPLOAD_RESET) {
       return _initialState;
