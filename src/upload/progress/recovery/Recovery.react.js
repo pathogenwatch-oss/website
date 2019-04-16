@@ -36,7 +36,7 @@ const Recovery = ({
   if (session) {
     return (
       <FileDragAndDrop
-        onFiles={files => onFiles(files, session)}
+        onFiles={files => onFiles(files, session, uploadedAt)}
         readsEligible={readsEligible}
       >
         <section className="pw-upload-page">
@@ -44,11 +44,11 @@ const Recovery = ({
           {numSuccessful > 0 && (
             <p className="pw-with-icon success">
               <i className="material-icons">check_circle</i>
-              {numSuccessful} file{numSuccessful === 1 ? ' was' : 's were'}{' '}
+              {numSuccessful} genome{numSuccessful === 1 ? ' was' : 's were'}{' '}
               successfully uploaded.
             </p>
           )}
-          <p>Please re-upload these files to continue:</p>
+          <p>Please drag and drop these files to continue:</p>
           <ul className="pw-upload-recovery-files">
             {remainingFiles.map(files => (
               <li key={files[0]}>

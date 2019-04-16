@@ -1,6 +1,4 @@
 import { ASSEMBLY_PIPELINE_STATUS, ASSEMBLY_PROGRESS_TICK } from './actions';
-import { UPLOAD_FETCH_GENOMES } from '../actions';
-import { ADD_GENOMES } from '../../actions';
 
 const initialState = {
   status: {},
@@ -20,10 +18,6 @@ export default function (state = initialState, { type, payload }) {
         ...state,
         tick: Date.now(),
       };
-
-    case ADD_GENOMES.ATTEMPT:
-    case UPLOAD_FETCH_GENOMES.ATTEMPT:
-      return initialState;
 
     default:
       return state;

@@ -1,27 +1,34 @@
-import { processFiles } from '../files/actions';
-import { mapCSVsToGenomes } from '~/upload/utils';
 import { getFilenameToGenomeId } from './selectors';
 
-export function recoverUploadSession(files, session) {
-  console.log(session);
+import { processFiles } from '../files/actions';
+import { ADD_GENOMES } from '../../actions';
+
+import { mapCSVsToGenomes } from '~/upload/utils';
+
+export function recoverUploadSession(files, session, uploadedAt) {
   return (dispatch, getState) =>
     mapCSVsToGenomes(files)
-      .then(uploadedItems => {
+      .catch(e => {
+        dispatch({
+          type: 'UPLOAD_ERROR_MESSAGE',
+          payload: e.message,
+        });
+      })
+      .then(genomes => {
         const state = getState();
         const filenameToGenomeId = getFilenameToGenomeId(state);
         const remaining = new Set(Object.keys(filenameToGenomeId));
-        const genomes = {};
-        for (const item of uploadedItems) {
+        for (const genome of genomes) {
           let genomeId;
-          if (item.files) {
-            for (const file of item.files) {
+          if (genome.files) {
+            for (const file of genome.files) {
               remaining.delete(file.name);
               genomeId = genomeId || filenameToGenomeId[file.name];
             }
           }
           if (genomeId) {
-            item.id = genomeId;
-            genomes[genomeId] = item;
+            genome.id = genomeId;
+            genome.recovery = session.find(_ => _.genomeId === genomeId).files;
           }
         }
         if (remaining.size > 0) {
@@ -34,19 +41,13 @@ export function recoverUploadSession(files, session) {
           });
         } else {
           dispatch({
-            type: 'UPLOAD_RECOVER_SESSION',
+            type: ADD_GENOMES.SUCCESS,
             payload: {
               genomes,
-              session,
+              uploadedAt,
             },
           });
           dispatch(processFiles());
         }
-      })
-      .catch(e => {
-        dispatch({
-          type: 'UPLOAD_ERROR_MESSAGE',
-          payload: e.message,
-        });
       });
 }

@@ -4,6 +4,7 @@ import { isInvalidUpload, isFailedUpload } from './utils/validation';
 import { statuses } from './constants';
 
 import { getProgress } from '../selectors';
+import { getFileIds } from '../recovery/selectors';
 
 export const getFiles = state => getProgress(state).files;
 
@@ -22,7 +23,8 @@ export const getUploadedGenomes = state => getFiles(state).genomes;
 export const getGenome = createSelector(
   (state, id) => getUploadedFiles(state)[id],
   (state, id) => getUploadedGenomes(state)[id],
-  (files, genome) => ({ ...genome, files })
+  (state, id) => getFileIds(state)[id],
+  (files, genome, recovery) => ({ ...genome, files, recovery })
 );
 
 export const getUploadedGenomeList = createSelector(

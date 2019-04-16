@@ -18,22 +18,11 @@ const initialState = {
 function _(state = initialState, { type, payload }) {
   switch (type) {
     case ADD_GENOMES.SUCCESS:
-    case 'UPLOAD_RECOVER_SESSION': {
       return {
         ...initialState,
         view: views.PROGRESS,
         uploadedAt: payload.uploadedAt || state.uploadedAt,
       };
-    }
-
-    // case actions.UPLOAD_FETCH_GENOMES.ATTEMPT: {
-    //   if (state.uploadedAt === payload.uploadedAt) return state;
-    //   return {
-    //     ...state,
-    //     uploadedAt: payload.uploadedAt,
-    //     view: null,
-    //   };
-    // }
 
     case actions.UPLOAD_FETCH_GENOMES.SUCCESS: {
       if (state.uploadedAt === payload.uploadedAt) return state;
