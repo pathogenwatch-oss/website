@@ -5,15 +5,20 @@ import { getPositionsInPath } from './selectors';
 import { changeLassoPath } from '../../map/actions';
 
 import { fetchByCoordinates } from './api';
+import { getFilter } from '../filter/selectors';
 
 export const SHOW_MARKER_POPUP = createAsyncConstants('SHOW_MARKER_POPUP');
 
 export function showMarkerPopup(positions = []) {
-  return {
-    type: SHOW_MARKER_POPUP,
-    payload: {
-      promise: fetchByCoordinates(positions),
-    },
+  return (dispatch, getState) => {
+    const state = getState();
+    const filter = getFilter(state);
+    dispatch({
+      type: SHOW_MARKER_POPUP,
+      payload: {
+        promise: fetchByCoordinates(positions, filter),
+      },
+    });
   };
 }
 
