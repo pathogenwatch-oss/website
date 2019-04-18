@@ -16,6 +16,7 @@ module.exports = async function (props) {
     'analysis.cgmlst.__v': 1,
     'analysis.core.__v': 1,
     'analysis.paarsnp.__v': 1,
+    'analysis.poppunk.__v': 1,
     'analysis.metrics.__v': 1,
     'analysis.ngmast.__v': 1,
     'analysis.genotyphi.__v': 1,
