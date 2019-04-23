@@ -10,10 +10,10 @@ function getSecondaryTyping(genome) {
   const { genotyphi, ngmast, serotype, poppunk } = genome.analysis;
   return (
     <React.Fragment>
-      {!!serotype && <Serotype result={serotype} />}
+      {!!poppunk && <Strain genome={genome} />}
+      {!!serotype && <Serotype genome={genome} />}
       {!!genotyphi && <Genotyphi result={genotyphi} />}
       {!!ngmast && <NgMast result={ngmast} />}
-      {!!poppunk && <Strain genome={genome} />}
     </React.Fragment>
   );
 }
@@ -21,7 +21,7 @@ function getSecondaryTyping(genome) {
 export default ({ genome }) => (
   <React.Fragment>
     <div className="pw-genome-report-column one half">
-      <MLST leftaligned result={genome.analysis.mlst} />
+      <MLST genome={genome} />
     </div>
     <div className="pw-genome-report-column one half right">
       {getSecondaryTyping(genome)}
