@@ -71,7 +71,7 @@ dl.pw-genome-report-unsized > div {
 }
 
 .wgsa-genome-report table {
-  margin: 16px auto 0;
+  margin: 16px auto;
   font-size: 14px;
 }
 
@@ -89,7 +89,7 @@ dl.pw-genome-report-unsized > div {
 }
 
 .wgsa-genome-report figure {
-  margin: 24px 0 0;
+  margin: 16px 0;
 }
 
 .wgsa-genome-report figure canvas {
