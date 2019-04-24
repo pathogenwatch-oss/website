@@ -106,6 +106,13 @@
         "flags": {
           "PNEUMO_CGMLST_EXPERIMENT_USER": true
         }
+      },
+      {
+        "task": "serotype",
+        "version": "seroba-v1.0.0",
+        "flags": {
+          "PNEUMO_CGMLST_EXPERIMENT_USER": true
+        }
       }
     ],
     "1314": [
