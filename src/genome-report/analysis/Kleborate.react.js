@@ -47,90 +47,111 @@ const klebBlaFields = [
   'Bla_broad',
   'Bla_broad_inhR',
 ];
-export default ({result}) => (
+export default ({ result }) => (
   <React.Fragment>
     <header className="pw-genome-report-section-header">
       <h2>Kleborate</h2>
-      <a href="https://github.com/katholt/Kleborate" target="_blank" rel="noopener">https://github.com/katholt/Kleborate</a>
+      <p>
+        <a
+          href="https://github.com/katholt/Kleborate"
+          target="_blank"
+          rel="noopener"
+        >
+          https://github.com/katholt/Kleborate
+        </a>
+      </p>
     </header>
     <table className="pw-kleborate-table" cellSpacing="0">
       <caption>Typing</caption>
       <thead>
-      <tr>
-        {kleborateTypingFields1
-          .filter(field => field !== 'wzi')
-          .map((klebType) =>
-            <th key={klebType}>{
-              klebType
-                .replace(/_/g, ' ')
-                .replace(/\b\w/g, l => l.toUpperCase())
-                .replace(/^K Locus$/, 'K Locus Best Match')
-                .replace(/^O Locus$/, 'O Locus Best Match')
-            }</th>)
-        }
-        <th key="wzi" className="italic">wzi</th>
-      </tr>
+        <tr>
+          {kleborateTypingFields1
+            .filter(field => field !== 'wzi')
+            .map(klebType => (
+              <th key={klebType}>
+                {klebType
+                  .replace(/_/g, ' ')
+                  .replace(/\b\w/g, l => l.toUpperCase())
+                  .replace(/^K Locus$/, 'K Locus Best Match')
+                  .replace(/^O Locus$/, 'O Locus Best Match')}
+              </th>
+            ))}
+          <th key="wzi" className="italic">
+            wzi
+          </th>
+        </tr>
       </thead>
       <tbody>
-      <tr>
-        <td key="species" className="italic">{result.species}</td>
-        {kleborateTypingFields1
-          .filter(field => field !== 'species')
-          .filter(field => field !== 'wzi')
-          .map((klebType) =>
-            <td key={klebType}>{result[klebType]}</td>)}
-        <td key="wzi" className="italic">{result.wzi}</td>
-      </tr>
+        <tr>
+          <td key="species" className="italic">
+            {result.species}
+          </td>
+          {kleborateTypingFields1
+            .filter(field => field !== 'species')
+            .filter(field => field !== 'wzi')
+            .map(klebType => (
+              <td key={klebType}>{result[klebType]}</td>
+            ))}
+          <td key="wzi" className="italic">
+            {result.wzi}
+          </td>
+        </tr>
       </tbody>
     </table>
     <table className="pw-kleborate-table" cellSpacing="0">
       <caption>Virulence Locus Typing</caption>
       <thead>
-      <tr>
-        {kleborateTypingFields2.map((klebType) =>
-          <th key={klebType}>{klebType.replace(/_/g, ' ')
-            .replace(/\b\w/g, l => l.toUpperCase())}</th>)}
-      </tr>
+        <tr>
+          {kleborateTypingFields2.map(klebType => (
+            <th key={klebType}>
+              {klebType
+                .replace(/_/g, ' ')
+                .replace(/\b\w/g, l => l.toUpperCase())}
+            </th>
+          ))}
+        </tr>
       </thead>
       <tbody>
-      <tr>
-        {kleborateTypingFields2.map((klebType) =>
-          <td key={klebType}>{result[klebType]}</td>)}
-      </tr>
+        <tr>
+          {kleborateTypingFields2.map(klebType => (
+            <td key={klebType}>{result[klebType]}</td>
+          ))}
+        </tr>
       </tbody>
     </table>
     <table className="pw-kleborate-table" cellSpacing="0">
       <caption>Predicted AMR</caption>
       <thead>
-      <tr>
-        {kleborateAmrFields.map((klebAmr) =>
-          <th key={klebAmr}>{klebAmr}</th>)}
-      </tr>
+        <tr>
+          {kleborateAmrFields.map(klebAmr => (
+            <th key={klebAmr}>{klebAmr}</th>
+          ))}
+        </tr>
       </thead>
       <tbody>
-      <tr>
-        {kleborateAmrFields.map((klebAmr) =>
-          <td key={klebAmr}>{result[klebAmr].replace(/;/g, '; ')}</td>)}
-      </tr>
+        <tr>
+          {kleborateAmrFields.map(klebAmr => (
+            <td key={klebAmr}>{result[klebAmr].replace(/;/g, '; ')}</td>
+          ))}
+        </tr>
       </tbody>
     </table>
     <table className="pw-kleborate-table" cellSpacing="0">
       <caption>Beta-lactamase Genes by Class</caption>
       <thead>
-      <tr>
-        {klebBlaFields.map((klebBla) =>
-          <th key={klebBla}>{klebBla}</th>)}
-      </tr>
+        <tr>
+          {klebBlaFields.map(klebBla => (
+            <th key={klebBla}>{klebBla}</th>
+          ))}
+        </tr>
       </thead>
       <tbody>
-      <tr>
-        {klebBlaFields.map((klebBla) =>
-          <td key={klebBla}>{result[klebBla].replace(/;/g, '; ')}</td>)}
-      </tr>
+        <tr>
+          {klebBlaFields.map(klebBla => (
+            <td key={klebBla}>{result[klebBla].replace(/;/g, '; ')}</td>
+          ))}
+        </tr>
       </tbody>
     </table>
   </React.Fragment>
 );
-
-
-
