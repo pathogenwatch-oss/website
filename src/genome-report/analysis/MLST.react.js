@@ -16,18 +16,20 @@ export default ({ genome }) => {
           </a>
         </p>
       </header>
-      <dl className="pw-genome-report-unsized">
-        <Metadata label="Sequence Type">
-          <ST id={mlst.st} />
-        </Metadata>
-      </dl>
-      <ExternalLink
-        to={`/genomes/all?genusId=${speciator.genusId}&speciesId=${
-          speciator.speciesId
-        }&st=${mlst.st}`}
-      >
-        View all ST {mlst.st}
-      </ExternalLink>
+      <div>
+        <dl className="pw-genome-report-unsized">
+          <Metadata label="Sequence Type">
+            <ST id={mlst.st} />
+          </Metadata>
+        </dl>
+        <ExternalLink
+          to={`/genomes/all?genusId=${speciator.genusId}&speciesId=${
+            speciator.speciesId
+          }&st=${mlst.st}`}
+        >
+          View all ST {mlst.st}
+        </ExternalLink>
+      </div>
       <table className="pw-mlst-profile" cellSpacing="0">
         <caption>Profile</caption>
         <thead>
