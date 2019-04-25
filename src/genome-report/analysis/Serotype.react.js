@@ -15,7 +15,7 @@ const sources = {
     ),
     title: 'serovar',
   },
-  SEROBA: {
+  SeroBA: {
     link: (
       <a
         href="https://mgen.microbiologyresearch.org/content/journal/mgen/10.1099/mgen.0.000186"
