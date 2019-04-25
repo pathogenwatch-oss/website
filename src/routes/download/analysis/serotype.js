@@ -8,11 +8,11 @@ const transformer = function (doc, label) {
     'Genome ID': doc._id.toString(),
     'Genome Name': doc.name,
     Version: doc.analysis.serotype.__v,
-    [label]: doc.analysis.serotype.value,
   };
   if (subspeciesKey in doc.analysis.serotype) {
     row.Subspecies = doc.analysis.serotype[subspeciesKey];
   }
+  row[label] = doc.analysis.serotype.value;
   return row;
 };
 
