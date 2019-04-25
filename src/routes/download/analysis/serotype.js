@@ -17,7 +17,8 @@ const transformer = function (doc, label) {
 };
 
 const labels = {
-  580: 'Serovar',
+  28901: 'Serovar', // Salmonella enterica
+  54736: 'Serovar', // Salmonella bongori
   general: 'Serotype',
 };
 
