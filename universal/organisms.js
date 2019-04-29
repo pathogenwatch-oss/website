@@ -1,5 +1,6 @@
 module.exports = [
   { id: '485', speciesId: '485', genusId: '482', nickname: 'neigo' },
+  { id: '666', speciesId: '666', genusId: '662', nickname: 'vibcl'},
   { id: '1280', speciesId: '1280', genusId: '1279', nickname: 'saureus' },
   { id: '1313', speciesId: '1313', genusId: '1301', nickname: 'strpn' },
   { id: '1336', speciesId: '1336', genusId: '1301', nickname: 'sequi' },
