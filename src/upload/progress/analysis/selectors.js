@@ -32,7 +32,7 @@ function getAnalysisBreakdown(analysis) {
       if (analyses[key] !== null) breakdown[key].total++;
       if (analyses[key] === false) breakdown[key].errors++;
       if (key === 'mlst' && analyses.mlst) {
-        const { st } = analysis.mlst;
+        const { st } = analyses.mlst;
         sts[st] = (sts[st] || 0) + 1;
       }
     }

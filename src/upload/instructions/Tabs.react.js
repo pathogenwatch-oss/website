@@ -49,7 +49,9 @@ const Tabs = ({ token, usage, fetchUsage }) => {
             Assemblies
           </a>
           <a href="#reads-panel" className="mdl-tabs__tab">
-            <Badge text="testing">Reads</Badge>
+            <Badge text="Beta" color="turquoise">
+              Reads
+            </Badge>
           </a>
         </div>
 

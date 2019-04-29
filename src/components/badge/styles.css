@@ -3,20 +3,30 @@
 }
 
 .pw-badge::after {
-  border-radius: 4px;
-  color: #fff;
+  border-radius: 12px;
   content: attr(data-text);
-  font-size: 11px !important;
+  font-size: 13px !important;
   font-weight: 500;
   left: calc(100% + 0.5em);
   line-height: 1;
-  padding: 4px;
+  padding: 4px 8px;
   position: absolute;
   text-transform: uppercase;
   top: -1.5em;
   z-index: 1;
 }
 
+.pw-badge-turquoise::after {
+  color: hsl(194, 100%, 25%);
+  background-color: hsl(194, 74%, 37%, 0.075);
+}
+
+.pw-badge-magenta::after {
+  color: hsl(306, 82%, 34%);
+  background-color: hsl(306, 61.5%, 47%, 0.075);
+}
+
 .pw-badge-purple::after {
-  background-color: #673c90;
+  color: hsl(271, 41%, 40%);
+  background-color: hsl(271, 62%, 48%, 0.075);
 }

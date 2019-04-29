@@ -5,6 +5,7 @@ import classnames from 'classnames';
 import * as upload from './selectors';
 import * as files from './files/selectors';
 import { getQueuePosition } from './analysis/selectors';
+import { getAssemblyPending } from './assembly/selectors';
 
 const AssemblyStage = ({ complete, total }) => {
   if (complete === total) {
@@ -59,6 +60,7 @@ const QueuePosition = ({ position }) => {
 
 const Overview = props => {
   const {
+    assemblyQueued,
     hasErrors,
     hasReads,
     isUploadPending,
@@ -80,7 +82,11 @@ const Overview = props => {
         {totalGenomes} genome{totalGenomes === 1 ? '' : 's'} uploaded
       </p>
       {hasReads && (
-        <AssemblyStage complete={assembly.done} total={totalGenomes} />
+        <AssemblyStage
+          complete={assembly.done}
+          total={totalGenomes}
+          queued={assemblyQueued}
+        />
       )}
       {analyses.total > 0 && (
         <AnalysisStage
@@ -88,6 +94,11 @@ const Overview = props => {
           total={analyses.total}
           hasErrors={hasErrors}
         />
+      )}
+      {assemblyQueued > 0 && (
+        <p>
+          {assemblyQueued} assembly job{assemblyQueued === 1 ? '' : 's'} queued
+        </p>
       )}
       {assemblyComplete && analysisPending && (
         <QueuePosition position={position} />
@@ -98,6 +109,7 @@ const Overview = props => {
 
 function mapStateToProps(state) {
   return {
+    assemblyQueued: getAssemblyPending(state),
     hasErrors: upload.hasErrors(state),
     hasReads: files.hasReads(state),
     isUploadPending: files.isUploadPending(state),

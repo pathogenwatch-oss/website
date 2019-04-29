@@ -1,5 +1,4 @@
 import React from 'react';
-import classnames from 'classnames';
 
 import { analysisLabels } from '../../app/constants';
 
@@ -22,31 +21,21 @@ export default React.memo(({ data, showBreakdown = true }) => (
               const analysis = analyses[analysisKey];
               if (analysisKey in analysisLabels) {
                 return (
-                  <li
-                    key={analysisKey}
-                    className={classnames('pw-with-icon', {
-                      success: analysis.total === total,
-                    })}
-                  >
-                    {analysis.total === total ? (
-                      <React.Fragment>
-                        <i className="material-icons">check_circle</i>
-                        {analysisLabels[analysisKey]}
-                      </React.Fragment>
-                    ) : (
-                      <React.Fragment>
-                        {analysisLabels[analysisKey]}
-                        <span className="wgsa-upload-legend-count">
-                          {analysis.total}
+                  <li key={analysisKey} className="pw-with-icon">
+                    {analysisLabels[analysisKey]}
+                    <span className="wgsa-upload-legend-count aligned">
+                      {analysis.errors > 0 && (
+                        <span className="wgsa-upload-legend-count-errors">
+                          &nbsp;{analysis.errors} error
+                          {analysis.errors === 1 ? '' : 's'}
                         </span>
-                      </React.Fragment>
-                    )}
-                    {analysis.errors > 0 && (
-                      <small>
-                        &nbsp;{analysis.errors} error
-                        {analysis.errors === 1 ? '' : 's'}
-                      </small>
-                    )}
+                      )}
+                      {analysis.total === total ? (
+                        <i className="material-icons">check_circle</i>
+                      ) : (
+                        analysis.total
+                      )}
+                    </span>
                   </li>
                 );
               }

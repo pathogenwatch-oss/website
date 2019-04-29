@@ -8,6 +8,7 @@ export const getAssemblyState = ({ upload }) => upload.progress.assembly;
 
 export const getAssemblyProgress = state => getAssemblyState(state).status;
 export const getAssemblyTick = state => getAssemblyState(state).tick;
+export const getAssemblyPending = state => getAssemblyProgress(state).pending;
 
 const expectedDuration = 1000 * 60 * 20; // 20 minutes
 const maxPercent = 99;
@@ -18,7 +19,7 @@ export const getAssemblyChartData = createSelector(
   getAssemblyTick,
   (
     total,
-    { pending = 0, runningSince = [], failed = 0, complete = 0 },
+    { runningSince = [], failed = 0, complete = 0 },
     time = Date.now()
   ) => {
     if (total === 0) return null;
@@ -31,27 +32,22 @@ export const getAssemblyChartData = createSelector(
     const progress = runningSince.length
       ? sumProgress / runningSince.length
       : 0;
-    const pendingPct = (pending / total) * 100;
     const completePct = (complete / total) * 100;
     const failedPct = (failed / total) * 100;
-    const assemblingPct =
-      progress * ((100 - pendingPct - completePct - failedPct) / 100);
-    const remaining =
-      100 - pendingPct - completePct - failedPct - assemblingPct;
+    const assemblingPct = progress * ((100 - completePct - failedPct) / 100);
+    const remaining = 100 - completePct - failedPct - assemblingPct;
 
     return {
       label: 'Assembly progress',
-      data: [ pendingPct, failedPct, completePct, assemblingPct, remaining ],
+      data: [ failedPct, completePct, assemblingPct, remaining ],
       backgroundColor: [
-        '#a386bd',
         DEFAULT.DANGER_COLOUR,
         '#3c7383',
         '#AC65A6',
         'rgba(0, 0, 0, .14)',
       ],
-      labels: [ 'Queued', 'Failed', 'Assembled', 'Assembling', 'Remaining' ],
+      labels: [ 'Failed', 'Assembled', 'Assembling', 'Remaining' ],
       tooltips: [
-        `${pending} / ${total}`,
         `${failed} / ${total}`,
         `${complete} / ${total}, ${completePct.toFixed(1)}%`,
         `${runningSince.length} / ${total}, ${progress.toFixed(1)}%`,
