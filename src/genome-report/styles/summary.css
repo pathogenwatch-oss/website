@@ -2,12 +2,13 @@
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  padding-top: 40px;
+  padding-top: 48px;
 }
 
 .wgsa-genome-report-summary img {
   width: 160px;
   height: 40px;
+  padding: 4px 0;
 }
 
 .wgsa-genome-report-summary-content {
@@ -26,12 +27,13 @@
   margin-bottom: 0;
   overflow: hidden;
   text-overflow: ellipsis;
+  line-height: 48px;
 }
 
 .pw-genome-report-summary-subtitle {
-  margin: 4px 0 8px;
+  margin: 0;
   font-weight: 400;
-  line-height: 24px;
+  line-height: 16px;
 }
 
 .wgsa-genome-report-summary dl {

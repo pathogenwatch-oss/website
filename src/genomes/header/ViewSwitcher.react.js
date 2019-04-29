@@ -7,20 +7,16 @@ import { getPrefilter } from '../filter/selectors';
 
 const mapStateToProps = (state, { view }) => {
   const base = `/genomes/${getPrefilter(state)}`;
+  const path = view ? `${base}/${view}` : base;
+  const { location } = state;
   return {
-    location: state.location,
-    link: view ? `${base}/${view}` : base,
+    link: `${path}${location.search}`,
+    active: location.pathname === path,
   };
 };
 
-const ViewSwitcher = ({ location, title, link }) => (
-  <Link
-    to={link}
-    className={classnames(
-      'wgsa-button-group__item',
-      { active: location.pathname === link }
-    )}
-  >
+const ViewSwitcher = ({ active, link, title }) => (
+  <Link to={link} className={classnames('wgsa-button-group__item', { active })}>
     {title}
   </Link>
 );
