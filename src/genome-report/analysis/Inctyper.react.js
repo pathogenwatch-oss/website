@@ -14,8 +14,8 @@ import React from 'react';
 //    }
 // ]
 
-export default ({ analysis }) => {
-  const { inctyper, paarsnp } = analysis;
+export default ({analysis}) => {
+  const {inctyper, paarsnp = {matches: []}} = analysis;
   const matches = inctyper['Inc Matches'];
 
   matches.sort((a, b) => a.Contig.localeCompare(b.Contig));
@@ -55,32 +55,32 @@ export default ({ analysis }) => {
       </header>
       <table className="bordered wide" cellSpacing="0">
         <thead>
-          <tr>
-            <th>Contig ID</th>
-            <th>Inc Type</th>
-            <th>% Identity</th>
-            <th>Coverage</th>
-            <th>Linked AMR Genes</th>
-          </tr>
+        <tr>
+          <th>Contig ID</th>
+          <th>Inc Type</th>
+          <th>% Identity</th>
+          <th>Coverage</th>
+          <th>Linked AMR Genes</th>
+        </tr>
         </thead>
         <tbody>
-          {matches.length ? (
-            matches.map(incMatch => (
-              <tr>
-                <td>{incMatch.Contig}</td>
-                <td>{incMatch['Inc Match']}</td>
-                <td>{incMatch['Percent Identity']}</td>
-                <td>{incMatch['Match Coverage']}</td>
-                <td>{(amrMatches[incMatch.Contig] || []).join(', ')}</td>
-              </tr>
-            ))
-          ) : (
+        {matches.length ? (
+          matches.map(incMatch => (
             <tr>
-              <td colSpan="5" className="muted">
-                No matches
-              </td>
+              <td>{incMatch.Contig}</td>
+              <td>{incMatch['Inc Match']}</td>
+              <td>{incMatch['Percent Identity']}</td>
+              <td>{incMatch['Match Coverage']}</td>
+              <td>{(amrMatches[incMatch.Contig] || []).join(', ')}</td>
             </tr>
-          )}
+          ))
+        ) : (
+          <tr>
+            <td colSpan="5" className="muted">
+              No matches
+            </td>
+          </tr>
+        )}
         </tbody>
       </table>
     </React.Fragment>
