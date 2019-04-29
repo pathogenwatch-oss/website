@@ -1,5 +1,7 @@
 import React from 'react';
 
+import ExternalLink from '../ExternalLink.react';
+
 const sources = {
   SISTR: {
     link: (
@@ -11,32 +13,52 @@ const sources = {
         <em>Salmonella In Silico</em> Typing Resource (SISTR)
       </a>
     ),
-    title: 'Serovar',
+    title: 'serovar',
+  },
+  SeroBA: {
+    link: (
+      <a
+        href="https://mgen.microbiologyresearch.org/content/journal/mgen/10.1099/mgen.0.000186"
+        target="_blank"
+        rel="noopener"
+      >
+        SeroBA
+      </a>
+    ),
   },
 };
 
-export default ({ result }) => {
-  const source = sources[result.source];
+export default ({ genome }) => {
+  const { speciator, serotype } = genome.analysis;
+  const { link = <span>(unspecified source)</span>, title = 'serotype' } =
+    sources[serotype.source] || {};
   return (
     <React.Fragment>
       <header className="pw-genome-report-section-header">
         <h2>Serotype</h2>
-        {source.link}
+        <p>{link}</p>
       </header>
       <dl className="pw-genome-report-unsized">
-        {result.subspecies && (
+        {serotype.subspecies && (
           <div className="pw-genome-report-metadata">
             <dt>Subspecies</dt>
             <dd>
-              <em>{result.subspecies}</em>
+              <em>{serotype.subspecies}</em>
             </dd>
           </div>
         )}
         <div className="pw-genome-report-metadata">
-          <dt>{source.title}</dt>
-          <dd>{result.value}</dd>
+          <dt>{title}</dt>
+          <dd>{serotype.value}</dd>
         </div>
       </dl>
+      <ExternalLink
+        to={`/genomes/all?genusId=${speciator.genusId}&speciesId=${
+          speciator.speciesId
+        }&serotype=${serotype.value}`}
+      >
+        View all {title} {serotype.value}
+      </ExternalLink>
     </React.Fragment>
   );
 };

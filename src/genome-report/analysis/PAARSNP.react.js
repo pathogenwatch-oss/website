@@ -42,10 +42,12 @@ export default ({ result, genome }) => {
     <React.Fragment>
       <header className="pw-genome-report-section-header">
         <h2>Antimicrobial Resistance (AMR)</h2>
-        <a href={libraryUrl} target="_blank" rel="noopener">
-          AMR Library {library.label} Version {library.version}
-          {library.source !== 'PUBLIC' ? ` (${library.source})` : ''}
-        </a>
+        <p>
+          <a href={libraryUrl} target="_blank" rel="noopener">
+            AMR Library {library.label} Version {library.version}
+            {library.source !== 'PUBLIC' ? ` (${library.source})` : ''}
+          </a>
+        </p>
       </header>
       <table cellSpacing="0" className="wgsa-genome-report-amr wide bordered">
         <caption>Resistance Profile</caption>

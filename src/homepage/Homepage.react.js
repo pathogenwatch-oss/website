@@ -183,6 +183,17 @@ export default ({ deployedOrganisms }) => (
           <tbody>
             <tr>
               <td>
+                <em>Klebsiella</em>
+              </td>
+              <td />
+              <td />
+              <td />
+              <td>
+                <small>Kleborate</small>
+              </td>
+            </tr>
+            <tr>
+              <td>
                 <FormattedName organismId="485" />
               </td>
               <td>
