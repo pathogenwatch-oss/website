@@ -28,12 +28,14 @@ function fetchGenomes(query) {
 
 function submitTasks(genomes) {
   return mapLimit(genomes, limit, async ({ _id: genomeId, _user, fileId, analysis }) => {
-    const { organismId, speciesId, genusId } = analysis.speciator || {};
+    const { speciator = {} } = analysis;
     const user = await User.findById(_user, { flags: 1 });
-    const tasks = manifest.getTasksByOrganism(organismId, speciesId, genusId, user);
+    const tasks = manifest.getTasksByOrganism(speciator, user);
 
     const requestedTask = tasks.find(_ => _.task === task);
     console.log(task, requestedTask);
+
+    const { organismId, speciesId, genusId, superkingdomId } = speciator;
     if (requestedTask) {
       const { version, retries, timeout } = requestedTask;
       const metadata = {
@@ -42,6 +44,7 @@ function submitTasks(genomes) {
         organismId,
         speciesId,
         genusId,
+        superkingdomId,
         uploadedAt: new Date(uploadedAt),
       };
       return enqueue('reprocessing', { task, version, retries, timeout, metadata }, 'task');

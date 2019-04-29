@@ -43,10 +43,10 @@ router.get('/genome/map', (req, res, next) => {
 
 router.post('/genome/at-locations', (req, res, next) => {
   LOGGER.info('Received request to get selection');
-  const { user } = req;
+  const { user, query } = req;
   const { coordinates } = req.body;
   services
-    .request('genome', 'at-locations', { user, coordinates })
+    .request('genome', 'at-locations', { user, coordinates, query })
     .then(response => res.json(response))
     .catch(next);
 });

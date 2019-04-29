@@ -56,7 +56,11 @@
     "timeout": 300000,
     "speciation": {
       "task": "speciator",
+<<<<<<< HEAD
       "version": "t7"
+=======
+      "version": "t8"
+>>>>>>> master
     },
     "retries": 3,
     "registry": {
