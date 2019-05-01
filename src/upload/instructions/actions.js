@@ -26,7 +26,7 @@ export function addFiles(newFiles) {
         } else if (error.message) {
           dispatch(uploadErrorMessage(error.message));
         } else {
-          dispatch(uploadErrorMessage('Sorry, something went wrong 😞'));
+          dispatch(uploadErrorMessage('Sorry, something went wrong.'));
         }
       });
   };

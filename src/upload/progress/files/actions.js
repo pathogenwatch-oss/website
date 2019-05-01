@@ -4,6 +4,7 @@ import * as selectors from './selectors';
 import { getUploadedAt } from '../selectors';
 
 import { getAuthToken } from '~/auth/actions';
+import { uploadErrorMessage } from '../../actions';
 
 import * as api from './api';
 import { compress, validate } from './utils';
@@ -94,7 +95,9 @@ function processGenome(id) {
             ? processReads(dispatch, getState, genome)
             : processAssembly(dispatch, getState, genome),
       },
-    }).catch(error => error);
+    }).catch(error => {
+      dispatch(uploadErrorMessage(error.message || error));
+    });
   };
 }
 

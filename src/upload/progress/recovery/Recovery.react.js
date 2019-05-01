@@ -39,7 +39,7 @@ const Recovery = ({
         onFiles={files => onFiles(files, session, uploadedAt)}
         readsEligible={readsEligible}
       >
-        <section className="pw-upload-page">
+        <section className="pw-upload-page pw-upload-recovery">
           <h1>Recover this session.</h1>
           {numSuccessful > 0 && (
             <p className="pw-with-icon success">
@@ -54,7 +54,12 @@ const Recovery = ({
               <li key={files[0]}>
                 <ul>
                   {files.map(file => (
-                    <li key={file}>{file}</li>
+                    <li key={file}>
+                      <span className="wgsa-file-icon">
+                        <i className="material-icons">insert_drive_file</i>
+                      </span>
+                      {file}
+                    </li>
                   ))}
                 </ul>
               </li>

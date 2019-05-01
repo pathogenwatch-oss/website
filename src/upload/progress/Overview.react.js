@@ -97,7 +97,7 @@ const Overview = props => {
       )}
       {assemblyQueued > 0 && (
         <p>
-          {assemblyQueued} assembly job{assemblyQueued === 1 ? '' : 's'} queued
+          {assemblyQueued} job{assemblyQueued === 1 ? '' : 's'} queued
         </p>
       )}
       {assemblyComplete && analysisPending && (

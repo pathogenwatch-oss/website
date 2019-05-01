@@ -115,15 +115,15 @@ ul.inline li:last-child::after {
 }
 
 .pw-upload-assembler-usage aside {
-  background: #fafafa;
+  background: hsla(194, 74%, 37%, 0.025);
   padding: 10px 20px;
   border-radius: 0 3px 3px 0;
-  border-left: 4px solid #a947a0;
+  border-left: 4px solid #3c7383;
   margin-top: -20px;
 }
 
 .pw-upload-assembler-usage strong {
-  color: #a947a0;
+  color: hsl(194, 67%, 27%);
 }
 
 .pw-upload-assembler-usage p {
