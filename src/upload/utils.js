@@ -91,12 +91,6 @@ export function mapCSVsToGenomes(files, assemblerUsage) {
       reads.push(file);
       continue;
     }
-
-    return Promise.reject({
-      message: `"${
-        file.name
-      }" is not a recognised file. Please remove this file and try again.`,
-    });
   }
 
   if (assemblies.length === 0 && reads.length <= 1) {

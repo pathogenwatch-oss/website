@@ -21,8 +21,9 @@ export function compress(text) {
   });
 }
 
-export function validate(genome) {
-  return validateGenomeSize(genome.file)
+export function validateAssembly(genome) {
+  return Promise.resolve(genome.files[0].handle)
+    .then(validateGenomeSize)
     .then(readAsText)
     .then(validateGenomeContent);
 }

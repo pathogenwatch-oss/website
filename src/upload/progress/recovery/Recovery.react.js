@@ -44,8 +44,8 @@ const Recovery = ({
           {numSuccessful > 0 && (
             <p className="pw-with-icon success">
               <i className="material-icons">check_circle</i>
-              {numSuccessful} genome{numSuccessful === 1 ? ' was' : 's were'}{' '}
-              successfully uploaded.
+              {numSuccessful} genome{numSuccessful === 1 ? ' has' : 's have'}{' '}
+              been successfully uploaded.
             </p>
           )}
           <p>Please drag and drop these files to continue:</p>

@@ -7,19 +7,15 @@ export function InvalidGenomeError(message) {
 const MAX_GENOME_FILE_SIZE = config.maxGenomeFileSize * 1048576;
 
 export function validateGenomeSize(file) {
-  return new Promise((resolve, reject) => {
-    if (file.size === 0) {
-      reject(new InvalidGenomeError('This is an empty file.'));
-    } else if (file.size > MAX_GENOME_FILE_SIZE) {
-      reject(
-        new InvalidGenomeError(
-          `This file is larger than ${config.maxGenomeFileSize} MB.`
-        )
-      );
-    } else {
-      resolve(file);
-    }
-  });
+  if (file.size === 0) {
+    throw new InvalidGenomeError('This is an empty file.');
+  } else if (file.size > MAX_GENOME_FILE_SIZE) {
+    throw new InvalidGenomeError(
+      `This file is larger than ${config.maxGenomeFileSize} MB.`
+    );
+  } else {
+    return file;
+  }
 }
 
 const sequenceDataRegex = /^[ACGTURYKMSWBDHVN]+$/i;

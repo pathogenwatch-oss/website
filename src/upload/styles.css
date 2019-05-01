@@ -49,16 +49,44 @@
 
 .pw-upload-message {
   color: rgba(0, 0, 0, 0.54);
-  background: #fff;
+  background-color: #fff;
   border-radius: 4px;
   max-width: 320px;
-  padding: 32px;
-  border: 1px solid rgba(0, 0, 0, 0.14);
+  padding: 40px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+}
+
+.pw-upload-message p,
+.pw-upload-message li {
+  line-height: 20px;
+}
+
+.pw-upload-message p,
+.pw-upload-message ul {
+  margin-bottom: 20px;
+}
+
+.pw-upload-message li {
+  font-weight: 500;
+}
+
+.pw-upload-message .wgsa-file-icon {
+  margin: 0 auto 20px;
+  height: 40px;
+  width: 40px;
+  background-color: transparent;
+  border: 1px solid #d19b1b;
+  box-sizing: border-box;
+}
+
+.pw-upload-message .wgsa-file-icon i {
+  color: #d19b1b;
+  font-size: 24px;
 }
 
 .pw-upload-message footer {
   display: flex;
   justify-content: flex-end;
-  margin-bottom: -16px;
-  margin-right: -16px;
+  margin-bottom: -20px;
+  margin-right: -20px;
 }

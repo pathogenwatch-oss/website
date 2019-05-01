@@ -18,6 +18,7 @@ export default React.memo(({ data, showBreakdown = true }) => (
         {showBreakdown && (
           <ul>
             {Object.keys(analyses).map(analysisKey => {
+              if (analysisKey === 'speciator') return null;
               const analysis = analyses[analysisKey];
               if (analysisKey in analysisLabels) {
                 return (

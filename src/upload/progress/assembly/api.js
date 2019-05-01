@@ -133,7 +133,7 @@ export function upload(genome, { token, uploadedAt }, dispatch) {
         })
         .catch(e => reject({ message: e.message }));
     });
-    r.addFiles(Object.values(genome.files).map(_ => _.handle));
+    r.addFiles(genome.files.map(_ => _.handle));
   });
 }
 

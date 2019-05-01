@@ -2,6 +2,7 @@ import './styles.css';
 
 import React from 'react';
 import { connect } from 'react-redux';
+import { Prompt } from 'react-router-dom';
 
 import { Files, Errors } from './files';
 import Overview from './Overview.react';
@@ -21,6 +22,13 @@ const Progress = ({
   uploadsInProgress,
 }) => (
   <div className="wgsa-upload-progress pw-upload-page">
+    <Prompt
+      when={files.pending > 0}
+      message={`
+        Are you sure you want to leave the page?
+        You will need to resume your upload at a later time.
+      `}
+    />
     <AnalysisListener uploadedAt={uploadedAt} />
     <AssemblyStatus uploadedAt={uploadedAt} />
     <div>

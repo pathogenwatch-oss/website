@@ -10,7 +10,7 @@ const limit = 5;
 const messageTypes = {
   MISSING_FILES: data => (
     <React.Fragment>
-      <p>Some files are still missing:</p>
+      <p>These files are still missing:</p>
       <ul>
         {data.slice(0, limit).map(filename => (
           <li>{filename}</li>
@@ -26,7 +26,9 @@ const ErrorOverlay = ({ message, clearMessage }) => (
   <Overlay visible={!!message} hide={clearMessage}>
     {message && (
       <div className="pw-upload-message" onClick={e => e.stopPropagation()}>
-        <p className="h4 title-font">Sorry, there's a problem.</p>
+        <span className="wgsa-file-icon">
+          <i className="material-icons">warning</i>
+        </span>
         {message.type ? (
           messageTypes[message.type](message.data)
         ) : (

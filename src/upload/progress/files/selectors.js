@@ -24,7 +24,11 @@ export const getGenome = createSelector(
   (state, id) => getUploadedFiles(state)[id],
   (state, id) => getUploadedGenomes(state)[id],
   (state, id) => getFileIds(state)[id],
-  (files, genome, recovery) => ({ ...genome, files, recovery })
+  (files, genome, recovery) => ({
+    ...genome,
+    files: Object.values(files),
+    recovery,
+  })
 );
 
 export const getUploadedGenomeList = createSelector(

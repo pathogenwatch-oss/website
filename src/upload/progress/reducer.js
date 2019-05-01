@@ -56,10 +56,12 @@ function resettable(reducer) {
   };
 }
 
-export default combineReducers({
-  _: resettable(_),
-  analysis: resettable(analysis),
-  assembly: resettable(assembly),
+const reducer = combineReducers({
+  _,
+  analysis,
+  assembly,
   files,
-  recovery: resettable(recovery),
+  recovery,
 });
+
+export default resettable(reducer);

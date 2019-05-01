@@ -7,7 +7,7 @@ import { getAuthToken } from '~/auth/actions';
 import { uploadErrorMessage } from '../../actions';
 
 import * as api from './api';
-import { compress, validate } from './utils';
+import { compress, validateAssembly } from './utils';
 import { upload } from '../assembly/api';
 
 import { fileTypes } from '../../constants';
@@ -62,7 +62,7 @@ export function uploadGenome(genome, data) {
 
 function processAssembly(dispatch, getState, genome) {
   return (
-    validate(genome)
+    validateAssembly(genome)
       // .then(data => {
       //   if (getSettingValue(getState(), 'compression')) {
       //     return dispatch(compressGenome(genome.id, data));
@@ -95,8 +95,6 @@ function processGenome(id) {
             ? processReads(dispatch, getState, genome)
             : processAssembly(dispatch, getState, genome),
       },
-    }).catch(error => {
-      dispatch(uploadErrorMessage(error.message || error));
     });
   };
 }
@@ -116,7 +114,8 @@ export function processFiles() {
         const processing = selectors.getProcessing(state);
         if (queue.length && processing.size < processLimit) {
           dispatch(processGenome(queue[0])).then(() => {
-            if (queue.length > processLimit) {
+            const errors = selectors.getTotalErrors(getState());
+            if (queue.length > processLimit && errors === 0) {
               processNext();
               return;
             }

@@ -42,8 +42,6 @@ function renderAssemblyProgress(genome) {
           <small>Uploading</small>
         </React.Fragment>
       );
-    case statuses.SUCCESS:
-      return <small>Succeeded 👍</small>;
     default:
       return null;
   }
