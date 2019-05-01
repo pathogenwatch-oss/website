@@ -7,7 +7,7 @@ import AccountHeader from './AccountHeader.react';
 import GenomeIcon from '../components/GenomeIcon.react';
 import { Icon } from '../branding';
 
-import { getSummary } from '../summary/selectors';
+import { getFormattedSummary } from '../summary/selectors';
 
 import { toggleUserDrawer } from './actions';
 
@@ -136,7 +136,7 @@ const UserDrawer = React.createClass({
 
 function mapStateToProps(state) {
   return {
-    summary: getSummary(state),
+    summary: getFormattedSummary(state),
     location: state.location,
   };
 }

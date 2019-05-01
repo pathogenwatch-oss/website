@@ -125,21 +125,20 @@ a.wgsa-account-header {
 }
 
 .wgsa-nav-badge {
-  background: #673c90;
-  color: #fff;
-  width: auto;
-  height: 22px;
-  min-width: 22px;
-  border-radius: 11px;
-  padding: 0 6px;
-  box-sizing: border-box;
-  font-size: 12px;
-  font-weight: 600;
-  display: flex;
-  align-items: center;
   align-content: center;
+  align-items: center;
+  border-radius: 12px;
+  box-sizing: border-box;
+  display: flex;
+  font-size: 13px;
+  font-weight: 700;
+  height: 24px;
   justify-content: center;
+  line-height: 1;
   margin-right: 8px;
+  min-width: 24px;
+  padding: 0 8px;
+  width: auto;
 }
 
 .cgps-login-controls .mdl-spinner__layer-1,

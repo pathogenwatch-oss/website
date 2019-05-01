@@ -96,7 +96,7 @@ function genomes(state = {}, { type, payload }) {
         ...state,
         [payload.id]: {
           ...state[payload.id],
-          status: status.COMPRESSING,
+          status: statuses.COMPRESSING,
         },
       };
 
@@ -105,7 +105,7 @@ function genomes(state = {}, { type, payload }) {
         ...state,
         [payload.id]: {
           ...state[payload.id],
-          status: status.UPLOADING,
+          status: statuses.UPLOADING,
         },
       };
 

@@ -2,6 +2,13 @@
   position: relative;
 }
 
+.pw-pill {
+  border-radius: 1em;
+  padding: 0.5em 1em;
+  font-weight: 500;
+  line-height: 1;
+}
+
 .pw-badge::after {
   border-radius: 12px;
   content: attr(data-text);
@@ -36,9 +43,10 @@
   background-color: hsl(306, 61.5%, 47%, 0.075);
 }
 
+.pw-pill-purple,
 .pw-badge-purple::after {
-  color: hsl(271, 41%, 40%);
-  background-color: hsl(271, 62%, 48%, 0.075);
+  color: hsl(271, 41%, 39%);
+  background-color: hsl(271, 51.25%, 95%);
 }
 
 .pw-badge-gold::after {

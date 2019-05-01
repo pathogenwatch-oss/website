@@ -51,11 +51,14 @@ const QueuePosition = ({ position }) => {
   if (position === 0) {
     return <p className="wgsa-blink">Results processing</p>;
   }
-  return (
-    <p>
-      {position} job{position === 1 ? '' : 's'} till next result
-    </p>
-  );
+  if (position) {
+    return (
+      <p>
+        {position} job{position === 1 ? '' : 's'} till next result
+      </p>
+    );
+  }
+  return null;
 };
 
 const Overview = props => {
@@ -70,9 +73,11 @@ const Overview = props => {
   } = props;
   if (isUploadPending || totalGenomes === 0) return null;
 
-  const { assembly, analyses } = progress;
+  const { assembly, analyses, speciation } = progress;
 
   const assemblyComplete = hasReads ? assembly.done === assembly.total : true;
+  const speciationComplete =
+    speciation.total === totalGenomes && speciation.done === speciation.total;
   const analysisPending =
     analyses.total === 0 || analyses.done < analyses.total;
   return (
@@ -88,7 +93,7 @@ const Overview = props => {
           queued={assemblyQueued}
         />
       )}
-      {analyses.total > 0 && (
+      {speciationComplete && analyses.total > 0 && (
         <AnalysisStage
           complete={analyses.done}
           total={analyses.total}

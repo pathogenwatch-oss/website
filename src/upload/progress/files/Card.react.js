@@ -13,7 +13,7 @@ const stages = {
 };
 
 function renderReadsProgress(genome) {
-  return Object.values(genome.files).map(file => (
+  return genome.files.map(file => (
     <React.Fragment key={file.name}>
       <ProgressBar key={file.stage} progress={file.progress || 0} />
       <Fade>
@@ -42,6 +42,8 @@ function renderAssemblyProgress(genome) {
           <small>Uploading</small>
         </React.Fragment>
       );
+    case statuses.SUCCESS:
+      return <ProgressBar progress={100} />;
     default:
       return null;
   }

@@ -25,6 +25,10 @@
   min-width: 560px;
 }
 
+.pw-upload-session-time {
+  margin-left: auto;
+}
+
 .pw-upload-progress-view {
   flex-grow: 1;
 }

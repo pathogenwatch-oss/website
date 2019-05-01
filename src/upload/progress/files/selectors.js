@@ -48,7 +48,7 @@ export const getUploadsInProgress = createSelector(
   (processing, genomes, files) =>
     Array.from(processing).map(id => ({
       ...genomes[id],
-      files: files[id],
+      files: Object.values(files[id]),
     }))
 );
 

@@ -29,7 +29,7 @@ const Component = React.createClass({
               <i className="material-icons">arrow_back</i> Go back
             </a>
           )}
-          <p style={{ marginLeft: 'auto', fontWeight: '500' }}>
+          <p className="pw-upload-session-time pw-pill pw-pill-purple">
             {formatDateTime(uploadedAt)}
           </p>
         </Summary>
