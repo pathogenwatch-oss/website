@@ -9,10 +9,10 @@
 .wgsa-drop-indicator__message {
   position: relative;
   background: rgb(255, 255, 255);
+  color: hsl(271, 1%, 28%);
   padding: 32px 64px;
   border-radius: 16px;
-  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2),
-    0 1px 5px 0 rgba(0, 0, 0, 0.12);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
   pointer-events: none;
 }
 
@@ -38,8 +38,7 @@
 
 .wgsa-file-icon {
   align-items: center;
-  background-color: currentColor;
-  background-color: rgba(0, 0, 0, 0.28);
+  border: 1px solid currentColor;
   border-radius: 50%;
   display: flex;
   flex-direction: column;
@@ -61,7 +60,7 @@
 
 .wgsa-file-icon > .material-icons {
   font-size: 28px;
-  color: #fff;
+  color: currentColor;
 }
 
 .wgsa-file-icon__label {
@@ -69,7 +68,7 @@
   text-align: center;
   position: absolute;
   font-size: 16px;
-  bottom: -1.5em;
+  bottom: -1.625em;
 }
 
 .wgsa-drop-indicator__title {

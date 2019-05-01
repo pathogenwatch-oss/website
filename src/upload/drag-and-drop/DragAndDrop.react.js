@@ -91,7 +91,7 @@ export default React.createClass({
             <div className="wgsa-drop-indicator__icons">
               {readsEligible && (
                 <span className="wgsa-file-icon wgsa-file-icon--purple">
-                  <i className="material-icons">insert_drive_file</i>
+                  <i className="material-icons">file_copy</i>
                   <span className="wgsa-file-icon__label">.fastq.gz</span>
                 </span>
               )}

@@ -44,22 +44,22 @@ const Recovery = ({
           {numSuccessful > 0 && (
             <p className="pw-with-icon success">
               <i className="material-icons">check_circle</i>
-              {numSuccessful} genome{numSuccessful === 1 ? ' has' : 's have'}{' '}
-              been successfully uploaded.
+              {numSuccessful} genome{numSuccessful === 1 ? '' : 's'} uploaded
+              successfully
             </p>
           )}
           <p>Please drag and drop these files to continue:</p>
           <ul className="pw-upload-recovery-files">
             {remainingFiles.map(files => (
               <li key={files[0]}>
+                <span className="wgsa-file-icon">
+                  <i className="material-icons">
+                    {files.length === 1 ? 'insert_drive_file' : 'file_copy'}
+                  </i>
+                </span>
                 <ul>
                   {files.map(file => (
-                    <li key={file}>
-                      <span className="wgsa-file-icon">
-                        <i className="material-icons">insert_drive_file</i>
-                      </span>
-                      {file}
-                    </li>
+                    <li key={file}>{file}</li>
                   ))}
                 </ul>
               </li>
