@@ -25,7 +25,7 @@ export default ({ genome }) => {
         <ExternalLink
           to={`/genomes/all?genusId=${speciator.genusId}&speciesId=${
             speciator.speciesId
-          }&st=${mlst.st}`}
+          }&sequenceType=${mlst.st}`}
         >
           View all ST {mlst.st}
         </ExternalLink>
