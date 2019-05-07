@@ -50,7 +50,11 @@
 }
 
 .mdl-layout__drawer .mdl-navigation .mdl-navigation__link:hover {
-  background-color: hsl(271, 62%, 95%);
+  background-color: hsl(271, 51.25%, 95%);
+}
+
+.mdl-layout__drawer .material-icons {
+  color: hsl(194, 12%, 57%);
 }
 
 .wgsa-menu-footer {
@@ -84,6 +88,10 @@
 .mdl-navigation__link--active {
   color: #673c90 !important;
   font-weight: 500;
+}
+
+.mdl-layout__drawer .mdl-navigation__link--active .material-icons {
+  color: inherit;
 }
 
 .wgsa-menu-footer .contact-email {

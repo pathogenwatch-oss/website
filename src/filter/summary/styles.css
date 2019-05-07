@@ -19,7 +19,7 @@
 }
 
 .wgsa-filter-summary > :first-child {
-  margin-left: 0;
+  /* margin-left: 0; */
 }
 
 .wgsa-filter-summary .mdl-button {

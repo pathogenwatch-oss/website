@@ -1,5 +1,7 @@
 /* global Chart */
 
+import './styles.css';
+
 import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
@@ -17,24 +19,6 @@ import {
 } from '../selectors';
 
 import { selectOrganism } from './actions';
-
-function toggleOrganism(index, chart) {
-  const [ sts, organisms ] = chart.config.data.datasets;
-  const organismsMeta = chart.getDatasetMeta(1);
-  const isSelected = organismsMeta.data[index].selected;
-  for (const [ i, meta ] of organismsMeta.data.entries()) {
-    meta.hidden = isSelected ? false : i !== index;
-    meta.selected = i !== index ? false : !meta.selected;
-  }
-  const stMeta = chart.getDatasetMeta(0);
-  for (let i = 0; i < sts.parents.length; i++) {
-    stMeta.data[i].hidden = organismsMeta.data[sts.parents[i]].hidden;
-  }
-  chart.update();
-  return organismsMeta.data[index].selected
-    ? organisms.organismIds[index]
-    : null;
-}
 
 const AnalysisChart = React.createClass({
   componentDidMount() {
@@ -81,26 +65,9 @@ const AnalysisChart = React.createClass({
           fontStyle: '400',
           fontFamily: 'Roboto',
         },
-        onClick: (e, [ item ]) => {
-          if (this.chart.data.datasets.length <= 1) return;
-          if (!item) {
-            const organismsMeta = this.chart.getDatasetMeta(2);
-            const meta = organismsMeta.data.find(_ => _.selected);
-            if (meta) {
-              this.toggleOrganism(meta._index);
-            }
-            return;
-          }
-          if (item._datasetIndex === 1) {
-            this.toggleOrganism(
-              this.chart.data.datasets[1].parents[item._index]
-            );
-          } else {
-            this.toggleOrganism(item._index);
-          }
-        },
       },
     });
+    window.pw = { chart: this.chart };
   },
 
   componentDidUpdate() {
@@ -131,11 +98,6 @@ const AnalysisChart = React.createClass({
     return link;
   },
 
-  toggleOrganism(index) {
-    const id = toggleOrganism(index, this.chart);
-    this.props.selectOrganism(id);
-  },
-
   render() {
     return (
       <div className="wgsa-analysis-chart">
@@ -151,14 +113,20 @@ const AnalysisChart = React.createClass({
           )}
         </AutoSizer>
         {this.props.specieationComplete && (
-          <Link
-            className={classnames('mdl-shadow--2dp wgsa-view-genomes-button', {
-              'wgsa-sonar-effect': this.props.sonar,
-            })}
-            to={this.getGenomesLink()}
-          >
-            View Genomes
-          </Link>
+          <React.Fragment>
+            <div className="pw-analysis-chart-hover-trigger" />
+            <Link
+              className={classnames(
+                'mdl-shadow--2dp wgsa-view-genomes-button',
+                {
+                  'wgsa-sonar-effect': this.props.sonar,
+                }
+              )}
+              to={this.getGenomesLink()}
+            >
+              View Genomes
+            </Link>
+          </React.Fragment>
         )}
       </div>
     );

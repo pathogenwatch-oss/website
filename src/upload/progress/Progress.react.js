@@ -14,19 +14,13 @@ import AssemblyStatus from './assembly/AssemblyStatus.react';
 import * as file from './files/selectors';
 import { getAnalysisSummary } from './analysis/selectors';
 
-const Progress = ({
-  analysis,
-  errored,
-  files,
-  uploadedAt,
-  uploadsInProgress,
-}) => (
+const Progress = ({ analysis, files, uploadedAt, uploadsInProgress }) => (
   <div className="wgsa-upload-progress pw-upload-page">
     <Prompt
       when={files.pending > 0}
       message={`
         Are you sure you want to leave the page?
-        You will need to resume your upload at a later time.
+        You will need to re-upload your files at a later time.
       `}
     />
     <AnalysisListener uploadedAt={uploadedAt} />
@@ -36,7 +30,6 @@ const Progress = ({
         <Files pending={files.pending} uploadsInProgress={uploadsInProgress} />
         <Overview />
       </div>
-      <Errors genomes={errored} />
       {!!analysis.length && analysis[0].key !== 'pending' && (
         <div className="wgsa-section-divider">
           <SpeciesBreakdown data={analysis} />
@@ -52,7 +45,6 @@ const Progress = ({
 function mapStateToProps(state) {
   return {
     analysis: getAnalysisSummary(state),
-    errored: file.getInvalidUploads(state),
     files: file.getFileSummary(state),
     uploadsInProgress: file.getUploadsInProgress(state),
   };

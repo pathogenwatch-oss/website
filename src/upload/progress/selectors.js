@@ -2,6 +2,7 @@ import { createSelector } from 'reselect';
 
 import { getAssemblySummary } from './assembly/selectors';
 import { getAnalysisList } from './analysis/selectors';
+import { getBatchSize } from './files/selectors';
 
 export const getProgress = ({ upload }) => upload.progress;
 export const getProgressView = state => getProgress(state)._.view;
@@ -44,9 +45,10 @@ export const getOverallProgress = createSelector(
 );
 
 export const isSpecieationComplete = createSelector(
+  getBatchSize,
   getOverallProgress,
-  ({ speciation }) =>
-    speciation.total > 0 && speciation.done === speciation.total
+  (totalGenomes, { speciation }) =>
+    speciation.total > 0 && speciation.done === totalGenomes
 );
 
 export const isAnalysisComplete = createSelector(

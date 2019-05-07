@@ -161,7 +161,7 @@ const getAnalysisChartData = createSelector(
         // sts.total = total;
         sum -= st.total;
       }
-      if (sequenceTypes.length && sum > 0) {
+      if (sum > 0) {
         sts.data.push(sum);
         sts.backgroundColor.push('#fefefe');
         sts.labels.push('Unknown ST');

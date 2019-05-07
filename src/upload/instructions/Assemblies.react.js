@@ -61,8 +61,9 @@ export default () => (
         <li>day</li>
       </ul>
       <p>
-        When providing a date, month and day are optional. Additional metadata
-        may be included and will be saved.
+        When providing a date, month and day are optional. Coordinates should be
+        provided in decimal degrees. Additional metadata may be included and
+        will be saved.
       </p>
       <h3>CSV Templates</h3>
       <ul className="bulleted">

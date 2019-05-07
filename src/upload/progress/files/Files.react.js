@@ -17,7 +17,7 @@ export default ({ uploadsInProgress, pending }) => (
     </ReactCSSTransitionGroup>
     {uploadsInProgress.length > 0 && pending > 0 && (
       <p>
-        +{pending} genome{pending === 1 ? '' : 's'}.
+        +{pending} genome{pending === 1 ? '' : 's'}
       </p>
     )}
   </React.Fragment>
