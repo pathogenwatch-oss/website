@@ -1,5 +1,6 @@
 import React from 'react';
 
+import SettingsSwitch from './SettingsSwitch.react';
 import { FormattedName } from '../../organisms';
 
 import { ASSEMBLY_FILE_EXTENSIONS } from '../../app/constants';
@@ -29,6 +30,19 @@ export default () => (
         <strong>whole genomes</strong>. Please ensure that there is{' '}
         <strong>one file per genome</strong> as metagenomic samples are not
         supported.
+      </p>
+      <h2>Settings</h2>
+      <p>
+        <SettingsSwitch setting="compression">
+          <strong>Compress files</strong>
+        </SettingsSwitch>
+        <small>Recommended for slow connections.</small>
+      </p>
+      <p>
+        <SettingsSwitch setting="individual">
+          <strong>Upload files individually</strong>
+        </SettingsSwitch>
+        <small>Recommended for unstable connections.</small>
       </p>
     </div>
     <div className="pw-upload-instructions-column">

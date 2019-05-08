@@ -1,8 +1,6 @@
 import { UPLOAD_FETCH_ASSEMBLER_USAGE } from './actions';
 
 const initialState = {
-  compression: false,
-  individual: false,
   loading: false,
   usage: null,
 };

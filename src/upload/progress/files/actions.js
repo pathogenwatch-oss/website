@@ -1,10 +1,9 @@
 import { createAsyncConstants } from '~/actions';
 
 import * as selectors from './selectors';
-import { getUploadedAt } from '../selectors';
+import { getUploadedAt, getSettingValue } from '../selectors';
 
 import { getAuthToken } from '~/auth/actions';
-import { uploadErrorMessage } from '../../actions';
 
 import * as api from './api';
 import { compress, validateAssembly } from './utils';
@@ -61,16 +60,14 @@ export function uploadGenome(genome, data) {
 }
 
 function processAssembly(dispatch, getState, genome) {
-  return (
-    validateAssembly(genome)
-      // .then(data => {
-      //   if (getSettingValue(getState(), 'compression')) {
-      //     return dispatch(compressGenome(genome.id, data));
-      //   }
-      //   return data;
-      // })
-      .then(data => dispatch(uploadGenome(genome, data)))
-  );
+  return validateAssembly(genome)
+    .then(data => {
+      if (getSettingValue(getState(), 'compression')) {
+        return dispatch(compressGenome(genome.id, data));
+      }
+      return data;
+    })
+    .then(data => dispatch(uploadGenome(genome, data)));
 }
 
 function processReads(dispatch, getState, genome) {
@@ -82,30 +79,11 @@ function processReads(dispatch, getState, genome) {
 
 export const PROCESS_GENOME = createAsyncConstants('PROCESS_GENOME');
 
-function processGenome(id) {
-  return (dispatch, getState) => {
-    const state = getState();
-    const genome = selectors.getGenome(state, id);
-    return dispatch({
-      type: PROCESS_GENOME,
-      payload: {
-        id,
-        promise:
-          genome.type === fileTypes.READS
-            ? processReads(dispatch, getState, genome)
-            : processAssembly(dispatch, getState, genome),
-      },
-    });
-  };
-}
-
 export function processFiles() {
   return (dispatch, getState) => {
     if (selectors.isUploading(getState())) return;
-
-    // const isIndividual = getSettingValue(state, 'individual');
-    // const processLimit = isIndividual ? 1 : 5;
-    const processLimit = 1;
+    const isIndividual = getSettingValue(getState(), 'individual');
+    let processLimit = 1;
 
     dispatch(getAuthToken()).then(() =>
       (function processNext() {
@@ -113,9 +91,22 @@ export function processFiles() {
         const queue = selectors.getUploadQueue(state);
         const processing = selectors.getProcessing(state);
         if (queue.length && processing.size < processLimit) {
-          dispatch(processGenome(queue[0])).then(() => {
-            const errors = selectors.getTotalErrors(getState());
-            if (queue.length > processLimit && errors === 0) {
+          const id = queue[0];
+          const genome = selectors.getGenome(state, id);
+          if (genome.type === fileTypes.ASSEMBLY) {
+            processLimit = isIndividual ? 1 : 5;
+          }
+          dispatch({
+            type: PROCESS_GENOME,
+            payload: {
+              id,
+              promise:
+                genome.type === fileTypes.READS
+                  ? processReads(dispatch, getState, genome)
+                  : processAssembly(dispatch, getState, genome),
+            },
+          }).then(() => {
+            if (queue.length > processLimit) {
               processNext();
               return;
             }

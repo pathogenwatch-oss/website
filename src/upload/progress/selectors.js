@@ -8,6 +8,9 @@ export const getProgress = ({ upload }) => upload.progress;
 export const getProgressView = state => getProgress(state)._.view;
 export const getUploadedAt = state => getProgress(state)._.uploadedAt;
 
+export const getSettingValue = (state, setting) =>
+  getProgress(state)._.settings[setting];
+
 export const getOverallProgress = createSelector(
   getAssemblySummary,
   getAnalysisList,

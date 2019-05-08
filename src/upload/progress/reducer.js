@@ -13,6 +13,10 @@ import recovery from './recovery/reducer';
 const initialState = {
   uploadedAt: null,
   view: null,
+  settings: {
+    compression: false,
+    individual: false,
+  },
 };
 
 function _(state = initialState, { type, payload }) {
@@ -38,6 +42,16 @@ function _(state = initialState, { type, payload }) {
         ...state,
         uploadedAt: payload.uploadedAt,
         view: incomplete ? views.RECOVERY : views.PROGRESS,
+      };
+    }
+
+    case actions.UPLOAD_SETTING_CHANGED: {
+      return {
+        ...state,
+        settings: {
+          ...state.settings,
+          [payload.setting]: payload.value,
+        },
       };
     }
 

@@ -16,6 +16,18 @@ export function fetchGenomes(uploadedAt) {
   };
 }
 
+export const UPLOAD_SETTING_CHANGED = 'UPLOAD_SETTING_CHANGED';
+
+export function changeUploadSetting(setting, value) {
+  return {
+    type: UPLOAD_SETTING_CHANGED,
+    payload: {
+      setting,
+      value,
+    },
+  };
+}
+
 export const UPLOAD_RESET = 'UPLOAD_RESET';
 
 export function resetUpload() {

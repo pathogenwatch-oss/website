@@ -75,7 +75,12 @@ ul.inline li:last-child::after {
   line-height: 20px;
 }
 
-/* .baseline-grid {
+.wgsa-upload-instructions .wgsa-settings-switch {
+  height: 20px;
+  user-select: none;
+}
+
+.wgsa-upload-instructions .baseline-grid {
   background-image: linear-gradient(
     to bottom,
     rgba(0, 170, 255, 0.3) 1px,
@@ -84,7 +89,7 @@ ul.inline li:last-child::after {
   background-position: left top;
   background-repeat: repeat;
   background-size: 100% 20px;
-} */
+}
 
 /* Tabs */
 

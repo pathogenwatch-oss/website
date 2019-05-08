@@ -115,6 +115,10 @@ export function upload(genome, { token, uploadedAt }, dispatch) {
         callback: `${origin}/api/genome/${
           genome.id
         }/assembly?clientId=${clientId}`,
+        progress: {
+          channel: clientId,
+          topic: `assembly-${uploadedAt}`,
+        },
         files: addedFiles.map(f => ({
           filename: f.fileName,
           fileId: f.uniqueIdentifier,
