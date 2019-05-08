@@ -55,7 +55,14 @@ export const CSV_FILENAME_REGEX = /(\.csv)$/i;
 
 function pairReadsFiles(files, assemblerUsage) {
   const pairs = {};
+  const maxSizeMB = assemblerUsage.maxSize || 500;
+  const maxSize = maxSizeMB * 1048576;
   for (const file of files) {
+    if (file.size > maxSize) {
+      throw new Error(
+        `${file.name} is too large, the limit is ${maxSizeMB}MB.`
+      );
+    }
     const id = file.name.match(READS_FILENAME_REGEX)[1];
     pairs[id] = pairs[id] || {};
     pairs[id][file.name] = file;

@@ -1,5 +1,5 @@
 import * as actions from '../actions';
-import { ADD_GENOMES } from '../../actions';
+import { UPLOAD_ADD_GENOMES } from '../../actions';
 
 const initialState = {
   filenameToGenomeId: {},
@@ -31,7 +31,7 @@ export default function (state = initialState, { type, payload }) {
       };
     }
 
-    case ADD_GENOMES.SUCCESS: {
+    case UPLOAD_ADD_GENOMES.SUCCESS: {
       const fileIds = {};
       for (const genome of payload.genomes) {
         if (genome.recovery) {

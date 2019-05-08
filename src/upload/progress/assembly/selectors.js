@@ -43,7 +43,7 @@ export const getAssemblyChartData = createSelector(
       backgroundColor: [
         DEFAULT.DANGER_COLOUR,
         '#3c7383',
-        '#AC65A6',
+        '#ac65a6',
         'rgba(0, 0, 0, .14)',
       ],
       labels: [ 'Failed', 'Assembled', 'Assembling', 'Remaining' ],

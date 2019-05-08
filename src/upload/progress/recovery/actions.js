@@ -1,7 +1,7 @@
 import { getFilenameToGenomeId } from './selectors';
 
 import { processFiles } from '../files/actions';
-import { ADD_GENOMES } from '../../actions';
+import { UPLOAD_ADD_GENOMES } from '../../actions';
 
 import { mapCSVsToGenomes } from '~/upload/utils';
 
@@ -38,7 +38,7 @@ export function recoverUploadSession(files, session, uploadedAt) {
           });
         } else {
           dispatch({
-            type: ADD_GENOMES.SUCCESS,
+            type: UPLOAD_ADD_GENOMES.SUCCESS,
             payload: {
               genomes,
               uploadedAt,

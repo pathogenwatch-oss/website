@@ -2,7 +2,7 @@ import { combineReducers } from 'redux';
 
 import * as actions from './actions';
 import { UPLOAD_FETCH_GENOMES } from '../actions';
-import { ADD_GENOMES } from '../../actions';
+import { UPLOAD_ADD_GENOMES } from '../../actions';
 
 import { statuses, types } from './constants';
 
@@ -22,7 +22,7 @@ function updateFile(state, { id, filename }, update) {
 
 function entities(state = {}, { type, payload }) {
   switch (type) {
-    case ADD_GENOMES.SUCCESS: {
+    case UPLOAD_ADD_GENOMES.SUCCESS: {
       const nextState = {};
       for (const genome of payload.genomes) {
         const files = {};
@@ -55,7 +55,7 @@ function entities(state = {}, { type, payload }) {
 
 function genomes(state = {}, { type, payload }) {
   switch (type) {
-    case ADD_GENOMES.SUCCESS: {
+    case UPLOAD_ADD_GENOMES.SUCCESS: {
       const nextState = {};
       for (const genome of payload.genomes) {
         nextState[genome.id] = {
@@ -152,7 +152,7 @@ const initialState = {
 
 function _(state = initialState, { type, payload }) {
   switch (type) {
-    case ADD_GENOMES.SUCCESS: {
+    case UPLOAD_ADD_GENOMES.SUCCESS: {
       let numberOfReads = 0;
       const queue = [];
       for (const genome of payload.genomes) {

@@ -1,5 +1,6 @@
 import * as actions from './actions';
 import { UPLOAD_FETCH_GENOMES } from '../actions';
+import { UPLOAD_ADD_GENOMES } from '../../actions';
 
 const initialState = {
   entities: {},
@@ -69,6 +70,17 @@ export default function (state = initialState, { type, payload }) {
         ...state,
         position,
         entities: nextEntities,
+      };
+    }
+
+    case UPLOAD_ADD_GENOMES.SUCCESS: {
+      const entities = {};
+      for (const genome of payload.genomes) {
+        entities[genome.id] = {};
+      }
+      return {
+        ...state,
+        entities,
       };
     }
 

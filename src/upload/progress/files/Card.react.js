@@ -1,7 +1,6 @@
 import React from 'react';
 
 import ProgressBar from '~/components/progress-bar';
-import Error from './CardError.react';
 import Fade from '~/components/fade';
 
 import { statuses, types } from './constants';
@@ -25,8 +24,6 @@ function renderReadsProgress(genome) {
 
 function renderAssemblyProgress(genome) {
   switch (genome.status) {
-    case statuses.ERROR:
-      return <Error genome={genome} />;
     case statuses.COMPRESSING:
       return (
         <React.Fragment>

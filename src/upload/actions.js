@@ -2,11 +2,11 @@ import { createAsyncConstants } from '~/actions';
 
 import * as api from './api';
 
-export const ADD_GENOMES = createAsyncConstants('ADD_GENOMES');
+export const UPLOAD_ADD_GENOMES = createAsyncConstants('UPLOAD_ADD_GENOMES');
 
 export function addGenomes(genomes, uploadedAt) {
   return {
-    type: ADD_GENOMES,
+    type: UPLOAD_ADD_GENOMES,
     payload: {
       genomes,
       uploadedAt,

@@ -1,7 +1,7 @@
 import { combineReducers } from 'redux';
 
 import * as actions from './actions';
-import { ADD_GENOMES } from '../actions';
+import { UPLOAD_ADD_GENOMES } from '../actions';
 
 import { views } from '../constants';
 
@@ -17,7 +17,7 @@ const initialState = {
 
 function _(state = initialState, { type, payload }) {
   switch (type) {
-    case ADD_GENOMES.SUCCESS:
+    case UPLOAD_ADD_GENOMES.SUCCESS:
       return {
         ...state,
         view: views.PROGRESS,
