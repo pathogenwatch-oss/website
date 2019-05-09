@@ -1,13 +1,15 @@
 /* global Pusher */
 
-import CONFIG from '../app/config';
+import config from '../app/config';
+
+const { key, cluster } = config.pusher || {};
 
 let pusher = null;
 
 export function subscribe(channelId, message, callback) {
   console.log('[Pusher] Subscribing to', channelId, message);
   if (pusher === null) {
-    pusher = new Pusher(CONFIG.pusherKey, { encrypted: true });
+    pusher = new Pusher(key, { cluster, encrypted: true });
   }
 
   const channel = pusher.subscribe(channelId);
