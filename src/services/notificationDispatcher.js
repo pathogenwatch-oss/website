@@ -7,6 +7,7 @@ const pusher = new Pusher({
   appId: pusherConfig.appId,
   key: pusherConfig.key,
   secret: pusherConfig.secret,
+  cluster: pusherConfig.cluster,
   encrypted: pusherConfig.encrypted || false,
   proxy: pusherConfig.proxy || '',
 });

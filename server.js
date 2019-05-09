@@ -138,7 +138,10 @@ module.exports = () =>
           maxDownloadSize: config.maxDownloadSize,
           maxGenomeFileSize: config.maxGenomeFileSize,
           pagination: config.pagination,
-          wiki: config.wikiLocation,
+          pusher: {
+            key: config.pusher.key,
+            cluster: config.pusher.cluster,
+          },
           strategies: Object.keys(config.passport.strategies || {}),
           user,
           version,
