@@ -8,6 +8,12 @@ export const fileTypes = {
   ASSEMBLY: 'assembly',
 };
 
+export const genomeStatuses = {
+  PENDING: 0,
+  ERROR: 1,
+  SUCCESS: 2,
+};
+
 export const assemblerStatuses = {
   INACTIVE: 0,
   RUNNING: 1,

@@ -30,9 +30,9 @@ function _(state = initialState, { type, payload }) {
 
     case actions.UPLOAD_FETCH_GENOMES.SUCCESS: {
       if (state.uploadedAt === payload.uploadedAt) return state;
-      const { genomes } = payload.result;
+      const { result } = payload;
       let incomplete = false;
-      for (const genome of genomes) {
+      for (const genome of result.genomes) {
         if (genome.files) {
           incomplete = true;
           break;
@@ -60,6 +60,38 @@ function _(state = initialState, { type, payload }) {
   }
 }
 
+function genomes(state = {}, { type, payload }) {
+  switch (type) {
+    case UPLOAD_ADD_GENOMES.SUCCESS: {
+      const nextState = {};
+      for (const genome of payload.genomes) {
+        nextState[genome.id] = {
+          id: genome.id,
+          name: genome.name,
+          type: genome.type,
+        };
+      }
+      return nextState;
+    }
+
+    case actions.UPLOAD_FETCH_GENOMES.SUCCESS: {
+      const nextState = {};
+      for (const genome of payload.result.genomes) {
+        nextState[genome.id] = {
+          id: genome.id,
+          name: genome.name,
+          type: genome.type,
+          ...state[genome.id], // retains existing state during an upload
+        };
+      }
+      return nextState;
+    }
+
+    default:
+      return state;
+  }
+}
+
 function resettable(reducer) {
   const _initialState = reducer(undefined, {});
   return function (state, action) {
@@ -75,6 +107,7 @@ const reducer = combineReducers({
   analysis,
   assembly,
   files,
+  genomes,
   recovery,
 });
 

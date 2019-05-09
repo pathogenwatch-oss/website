@@ -2,14 +2,38 @@ import { createSelector } from 'reselect';
 
 import { getAssemblySummary } from './assembly/selectors';
 import { getAnalysisList } from './analysis/selectors';
-import { getBatchSize } from './files/selectors';
+import { getUploadedFiles, getUploadStatuses } from './files/selectors';
+import { getFileIds } from './recovery/selectors';
 
 export const getProgress = ({ upload }) => upload.progress;
 export const getProgressView = state => getProgress(state)._.view;
 export const getUploadedAt = state => getProgress(state)._.uploadedAt;
-
 export const getSettingValue = (state, setting) =>
   getProgress(state)._.settings[setting];
+export const getUploadedGenomes = state => getProgress(state).genomes;
+
+export const getGenome = createSelector(
+  (state, id) => getUploadedGenomes(state)[id],
+  (state, id) => getUploadedFiles(state)[id],
+  (state, id) => getFileIds(state)[id],
+  (state, id) => getUploadStatuses(state)[id],
+  (genome, files, recovery, status) => ({
+    ...genome,
+    files: Object.values(files),
+    recovery,
+    status,
+  })
+);
+
+export const getUploadedGenomeList = createSelector(
+  getUploadedGenomes,
+  genomes => Object.keys(genomes).map(id => genomes[id])
+);
+
+export const getBatchSize = createSelector(
+  getUploadedGenomeList,
+  list => list.length
+);
 
 export const getOverallProgress = createSelector(
   getAssemblySummary,

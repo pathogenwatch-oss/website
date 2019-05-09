@@ -12,7 +12,11 @@ import Progress from './progress';
 
 import { getUploadedAt } from './progress/selectors';
 import { isUploading } from './progress/files/selectors';
+
+import { fetchAssemblerUsage } from './actions';
+
 import { useAuthToken } from '../auth/hooks';
+import { isReadsEligible } from './utils';
 
 const path = '/upload';
 
@@ -20,27 +24,36 @@ function mapStateToProps(state) {
   return {
     uploading: isUploading(state),
     uploadedAt: getUploadedAt(state),
+    token: state.auth.token,
   };
 }
 
-const Router = connect(mapStateToProps)(({ uploading, uploadedAt, match }) => {
-  useAuthToken();
+const Router = connect(mapStateToProps)(
+  ({ uploading, uploadedAt, token, match, dispatch }) => {
+    useAuthToken();
 
-  if (match.isExact && uploading) {
-    return <Redirect to={`${path}/${uploadedAt}`} />;
+    React.useEffect(() => {
+      if (isReadsEligible() && token) {
+        dispatch(fetchAssemblerUsage(token));
+      }
+    }, [ token ]);
+
+    if (match.isExact && uploading) {
+      return <Redirect to={`${path}/${uploadedAt}`} />;
+    }
+
+    return (
+      <div className="wgsa-hipster-style">
+        <Switch>
+          <Route path={`${path}/previous`} component={Previous} />
+          <Route path={`${path}/:uploadedAt`} component={Progress} />
+          <Route component={Instructions} />
+        </Switch>
+        <ErrorOverlay />
+      </div>
+    );
   }
-
-  return (
-    <div className="wgsa-hipster-style">
-      <Switch>
-        <Route path={`${path}/previous`} component={Previous} />
-        <Route path={`${path}/:uploadedAt`} component={Progress} />
-        <Route component={Instructions} />
-      </Switch>
-      <ErrorOverlay />
-    </div>
-  );
-});
+);
 
 export default (
   <AuthRoute

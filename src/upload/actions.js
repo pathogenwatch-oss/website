@@ -30,3 +30,16 @@ export function uploadErrorMessage(message) {
     payload: message,
   };
 }
+
+export const UPLOAD_FETCH_ASSEMBLER_USAGE = createAsyncConstants(
+  'UPLOAD_FETCH_ASSEMBLER_USAGE'
+);
+
+export function fetchAssemblerUsage(token) {
+  return {
+    type: UPLOAD_FETCH_ASSEMBLER_USAGE,
+    payload: {
+      promise: api.fetchUsage(token),
+    },
+  };
+}

@@ -45,39 +45,52 @@ function entities(state = {}, { type, payload }) {
         progress: payload.progress,
       });
 
-      // case actions.GENOME_UPLOAD_PROGRESS:
-      //   return updateFile(state, payload, { progress: payload.progress });
+    case actions.GENOME_UPLOAD_PROGRESS: {
+      const [ filename ] = Object.keys(state[payload.id]);
+      return updateFile(
+        state,
+        { ...payload, filename },
+        {
+          progress: payload.progress,
+        }
+      );
+    }
+
+    case actions.UPLOAD_GENOME.FAILURE:
+    case actions.PROCESS_GENOME.FAILURE: {
+      const [ filename ] = Object.keys(state[payload.id]);
+      return updateFile(
+        state,
+        { ...payload, filename },
+        {
+          error: payload.error,
+        }
+      );
+    }
 
     default:
       return state;
   }
 }
 
-function genomes(state = {}, { type, payload }) {
+function status(state = {}, { type, payload }) {
   switch (type) {
     case UPLOAD_ADD_GENOMES.SUCCESS: {
       const nextState = {};
       for (const genome of payload.genomes) {
-        nextState[genome.id] = {
-          id: genome.id,
-          name: genome.name,
-          status: statuses.PENDING,
-          type: genome.type,
-        };
+        nextState[genome.id] = statuses.PENDING;
       }
       return nextState;
     }
 
     case UPLOAD_FETCH_GENOMES.SUCCESS: {
-      const nextState = {};
+      const nextState = { ...state };
       for (const genome of payload.result.genomes) {
-        nextState[genome.id] = {
-          id: genome.id,
-          name: genome.name,
-          status: genome.files ? statuses.PENDING : statuses.SUCCESS,
-          type: genome.type,
-          ...state[genome.id], // retains existing state
-        };
+        if (!(genome.id in nextState)) {
+          nextState[genome.id] = genome.files
+            ? statuses.PENDING
+            : statuses.SUCCESS;
+        }
       }
       return nextState;
     }
@@ -85,58 +98,33 @@ function genomes(state = {}, { type, payload }) {
     case actions.PROCESS_GENOME.ATTEMPT:
       return {
         ...state,
-        [payload.id]: {
-          ...state[payload.id],
-          status: statuses.QUEUED,
-        },
+        [payload.id]: statuses.QUEUED,
       };
 
     case actions.COMPRESS_GENOME.ATTEMPT:
       return {
         ...state,
-        [payload.id]: {
-          ...state[payload.id],
-          status: statuses.COMPRESSING,
-        },
+        [payload.id]: statuses.COMPRESSING,
       };
 
     case actions.UPLOAD_GENOME.ATTEMPT:
       return {
         ...state,
-        [payload.id]: {
-          ...state[payload.id],
-          status: statuses.UPLOADING,
-        },
-      };
-
-    case actions.GENOME_UPLOAD_PROGRESS:
-      return {
-        ...state,
-        [payload.id]: {
-          ...state[payload.id],
-          progress: payload.progress,
-        },
+        [payload.id]: statuses.UPLOADING,
       };
 
     case actions.UPLOAD_GENOME.FAILURE:
     case actions.PROCESS_GENOME.FAILURE:
       return {
         ...state,
-        [payload.id]: {
-          ...state[payload.id],
-          error: payload.error,
-          status: statuses.ERROR,
-        },
+        [payload.id]: statuses.ERROR,
       };
 
     case actions.UPLOAD_GENOME.SUCCESS:
     case actions.PROCESS_GENOME.SUCCESS:
       return {
         ...state,
-        [payload.id]: {
-          ...state[payload.id],
-          status: statuses.SUCCESS,
-        },
+        [payload.id]: statuses.SUCCESS,
       };
 
     default:
@@ -202,5 +190,5 @@ function _(state = initialState, { type, payload }) {
 export default combineReducers({
   _,
   entities,
-  genomes,
+  status,
 });

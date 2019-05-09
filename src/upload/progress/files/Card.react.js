@@ -31,18 +31,25 @@ function renderAssemblyProgress(genome) {
           <small>Compressing</small>
         </React.Fragment>
       );
-    case statuses.UPLOADING:
-    case statuses.PENDING:
+    case statuses.UPLOADING: {
+      const [ file ] = genome.files;
       return (
         <React.Fragment>
-          <ProgressBar progress={genome.progress || 0} />
+          <ProgressBar progress={file.progress || 0} />
           <small>Uploading</small>
         </React.Fragment>
       );
+    }
     case statuses.SUCCESS:
       return <ProgressBar progress={100} />;
+    case statuses.QUEUED:
     default:
-      return null;
+      return (
+        <React.Fragment>
+          <ProgressBar progress={0} />
+          <small>Pending</small>
+        </React.Fragment>
+      );
   }
 }
 

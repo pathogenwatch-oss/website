@@ -4,7 +4,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Prompt } from 'react-router-dom';
 
-import { Files, Errors } from './files';
+import Files from './files';
 import Overview from './Overview.react';
 import SpeciesBreakdown from './SpeciesBreakdown.react';
 import AnalysisChart from './analysis/AnalysisChart.react';
@@ -45,7 +45,7 @@ const Progress = ({ analysis, files, uploadedAt, uploadsInProgress }) => (
 function mapStateToProps(state) {
   return {
     analysis: getAnalysisSummary(state),
-    files: file.getFileSummary(state),
+    files: file.getStatusSummary(state),
     uploadsInProgress: file.getUploadsInProgress(state),
   };
 }

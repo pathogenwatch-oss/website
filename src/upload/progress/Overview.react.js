@@ -89,7 +89,7 @@ const Overview = props => {
       {hasReads && (
         <AssemblyStage
           complete={assembly.done}
-          total={totalGenomes}
+          total={assembly.total}
           queued={assemblyQueued}
         />
       )}

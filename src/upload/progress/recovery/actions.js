@@ -1,4 +1,5 @@
 import { getFilenameToGenomeId } from './selectors';
+import { getAssemblerUsage } from '~/upload/selectors';
 
 import { processFiles } from '../files/actions';
 import { UPLOAD_ADD_GENOMES } from '../../actions';
@@ -6,10 +7,11 @@ import { UPLOAD_ADD_GENOMES } from '../../actions';
 import { mapCSVsToGenomes } from '~/upload/utils';
 
 export function recoverUploadSession(files, session, uploadedAt) {
-  return (dispatch, getState) =>
-    mapCSVsToGenomes(files)
+  return (dispatch, getState) => {
+    const state = getState();
+    const usage = getAssemblerUsage(state);
+    mapCSVsToGenomes(files, usage)
       .then(genomes => {
-        const state = getState();
         const filenameToGenomeId = getFilenameToGenomeId(state);
         const remaining = new Set(Object.keys(filenameToGenomeId));
         for (const genome of genomes) {
@@ -53,4 +55,5 @@ export function recoverUploadSession(files, session, uploadedAt) {
           payload: e.message,
         });
       });
+  };
 }
