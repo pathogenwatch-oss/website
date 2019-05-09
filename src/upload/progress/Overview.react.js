@@ -120,7 +120,7 @@ function mapStateToProps(state) {
     isUploadPending: files.isUploadPending(state),
     position: getQueuePosition(state),
     progress: upload.getOverallProgress(state),
-    totalGenomes: files.getUploadedGenomeList(state).length,
+    totalGenomes: upload.getUploadedGenomeList(state).length,
   };
 }
 

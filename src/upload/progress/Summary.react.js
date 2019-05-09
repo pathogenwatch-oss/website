@@ -2,7 +2,6 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import Summary from '../Summary.react';
-// import ErrorSummary from './ErrorSummary.react';
 import DocumentTitle from '~/branding/DocumentTitle.react';
 
 import * as upload from './files/selectors';
@@ -38,7 +37,7 @@ const Component = React.createClass({
 
 function mapStateToProps(state) {
   return {
-    summary: upload.getFileSummary(state),
+    summary: upload.getStatusSummary(state),
     isUploading: upload.isUploading(state),
   };
 }

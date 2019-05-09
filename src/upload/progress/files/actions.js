@@ -1,7 +1,7 @@
 import { createAsyncConstants } from '~/actions';
 
 import * as selectors from './selectors';
-import { getUploadedAt, getSettingValue } from '../selectors';
+import { getUploadedAt, getSettingValue, getGenome } from '../selectors';
 
 import { getAuthToken } from '~/auth/actions';
 
@@ -92,7 +92,7 @@ export function processFiles() {
         const processing = selectors.getProcessing(state);
         if (queue.length && processing.size < processLimit) {
           const id = queue[0];
-          const genome = selectors.getGenome(state, id);
+          const genome = getGenome(state, id);
           if (genome.type === fileTypes.ASSEMBLY) {
             processLimit = isIndividual ? 1 : 5;
           }

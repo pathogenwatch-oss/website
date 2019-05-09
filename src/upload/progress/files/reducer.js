@@ -136,6 +136,7 @@ const initialState = {
   queue: [],
   processing: new Set(),
   numberOfReads: 0,
+  batchSize: 0,
 };
 
 function _(state = initialState, { type, payload }) {
@@ -151,6 +152,7 @@ function _(state = initialState, { type, payload }) {
         ...initialState,
         queue,
         numberOfReads,
+        batchSize: payload.genomes.length,
       };
     }
 
@@ -162,6 +164,7 @@ function _(state = initialState, { type, payload }) {
       return {
         ...state,
         numberOfReads,
+        batchSize: payload.result.genomes.length,
       };
     }
 

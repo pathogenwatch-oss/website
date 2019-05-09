@@ -11,6 +11,7 @@ import AnalysisChart from './analysis/AnalysisChart.react';
 import AnalysisListener from './analysis/Listener.react';
 import AssemblyStatus from './assembly/AssemblyStatus.react';
 
+import { getUploadsInProgress } from './selectors';
 import * as file from './files/selectors';
 import { getAnalysisSummary } from './analysis/selectors';
 
@@ -46,7 +47,7 @@ function mapStateToProps(state) {
   return {
     analysis: getAnalysisSummary(state),
     files: file.getStatusSummary(state),
-    uploadsInProgress: file.getUploadsInProgress(state),
+    uploadsInProgress: getUploadsInProgress(state),
   };
 }
 

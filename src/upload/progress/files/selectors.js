@@ -2,13 +2,12 @@ import { createSelector } from 'reselect';
 
 import { statuses } from './constants';
 
-import { getUploadedGenomes, getBatchSize } from '../selectors';
-
 export const getFiles = state => state.upload.progress.files;
 
 export const getUploadQueue = state => getFiles(state)._.queue;
 export const getProcessing = state => getFiles(state)._.processing;
 export const getNumUploadedReads = state => getFiles(state)._.numberOfReads;
+const getBatchSize = state => getFiles(state)._.batchSize;
 
 export const hasReads = createSelector(
   getNumUploadedReads,
@@ -20,17 +19,6 @@ export const getUploadedFiles = state => getFiles(state).entities;
 export const getUploadedFilesList = createSelector(
   getUploadedFiles,
   files => Object.values(files)
-);
-
-export const getUploadsInProgress = createSelector(
-  getProcessing,
-  getUploadedGenomes,
-  getUploadedFiles,
-  (processing, genomes, files) =>
-    Array.from(processing).map(id => ({
-      ...genomes[id],
-      files: Object.values(files[id]),
-    }))
 );
 
 export const getNumRemainingUploads = createSelector(
@@ -55,7 +43,7 @@ export const getNumCompletedUploads = createSelector(
   (batchSize, numRemaining) => batchSize - numRemaining
 );
 
-export const getUploadStatuses = state => getFiles(state).statuses;
+export const getUploadStatuses = state => getFiles(state).status;
 
 export const getStatusSummary = createSelector(
   getBatchSize,

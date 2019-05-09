@@ -2,7 +2,11 @@ import { createSelector } from 'reselect';
 
 import { getAssemblySummary } from './assembly/selectors';
 import { getAnalysisList } from './analysis/selectors';
-import { getUploadedFiles, getUploadStatuses } from './files/selectors';
+import {
+  getProcessing,
+  getUploadedFiles,
+  getUploadStatuses,
+} from './files/selectors';
 import { getFileIds } from './recovery/selectors';
 
 export const getProgress = ({ upload }) => upload.progress;
@@ -28,6 +32,19 @@ export const getGenome = createSelector(
 export const getUploadedGenomeList = createSelector(
   getUploadedGenomes,
   genomes => Object.keys(genomes).map(id => genomes[id])
+);
+
+export const getUploadsInProgress = createSelector(
+  getProcessing,
+  getUploadedGenomes,
+  getUploadedFiles,
+  getUploadStatuses,
+  (processing, genomes, files, statuses) =>
+    Array.from(processing).map(id => ({
+      ...genomes[id],
+      files: Object.values(files[id]),
+      status: statuses[id],
+    }))
 );
 
 export const getBatchSize = createSelector(
