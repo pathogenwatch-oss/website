@@ -5,9 +5,10 @@ import { UPLOAD_ADD_GENOMES } from '../actions';
 
 import { views } from '../constants';
 
-import assembly from './assembly/reducer';
 import analysis from './analysis/reducer';
+import assembly from './assembly/reducer';
 import files from './files/reducer';
+import genomes from './genomes/reducer';
 import recovery from './recovery/reducer';
 
 const initialState = {
@@ -61,38 +62,6 @@ function _(state = initialState, { type, payload }) {
         ...state,
         showFailures: !state.showFailures,
       };
-
-    default:
-      return state;
-  }
-}
-
-function genomes(state = {}, { type, payload }) {
-  switch (type) {
-    case UPLOAD_ADD_GENOMES.SUCCESS: {
-      const nextState = {};
-      for (const genome of payload.genomes) {
-        nextState[genome.id] = {
-          id: genome.id,
-          name: genome.name,
-          type: genome.type,
-        };
-      }
-      return nextState;
-    }
-
-    case actions.UPLOAD_FETCH_GENOMES.SUCCESS: {
-      const nextState = {};
-      for (const genome of payload.result.genomes) {
-        nextState[genome.id] = {
-          id: genome.id,
-          name: genome.name,
-          type: genome.type,
-          ...state[genome.id], // retains existing state during an upload
-        };
-      }
-      return nextState;
-    }
 
     default:
       return state;

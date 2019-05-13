@@ -20,7 +20,7 @@ const UploadErrors = ({ errors, numOtherErrors }) => (
         <i className="material-icons">error_outline</i>
         <div>
           <h5>
-            {numOtherErrors} file{numOtherErrors === 1 ? '' : 's'} failed to
+            {numOtherErrors} genome{numOtherErrors === 1 ? '' : 's'} failed to
             upload
           </h5>
         </div>

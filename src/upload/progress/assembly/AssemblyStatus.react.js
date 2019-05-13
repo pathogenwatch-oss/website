@@ -4,6 +4,7 @@ import 'eventsource/lib/eventsource-polyfill';
 
 import { getAssemblySummary, isAssemblyInProgress } from './selectors';
 import * as files from '../files/selectors';
+import { getFailedReadsUploads } from '../genomes/selectors';
 
 import { assemblyProgressTick, assemblyPipelineStatus } from './actions';
 
@@ -13,13 +14,14 @@ const Status = ({
   assemblySummary,
   assemblyInProgress,
   hasReads,
+  numFailedReadsUploads,
   token,
   uploadedAt,
   dispatch,
 }) => {
-  const pending = assemblySummary.pending > 0;
+  const pending = assemblySummary.pending - numFailedReadsUploads > 0;
   React.useEffect(() => {
-    if (uploadedAt && hasReads && token && pending) {
+    if (hasReads && token && pending) {
       // Uses polyfill for Authorisation header
       const eventSource = new window.EventSourcePolyfill(
         `${config.assemblerAddress}/api/sessions/${uploadedAt}`,
@@ -38,23 +40,24 @@ const Status = ({
         eventSource.close();
       };
     }
-  }, [ uploadedAt, hasReads, token, pending ]);
+  }, [ hasReads, token, pending ]);
 
   React.useEffect(() => {
-    if (uploadedAt && assemblyInProgress) {
+    if (assemblyInProgress) {
       const interval = setInterval(
         () => dispatch(assemblyProgressTick()),
         2000
       );
       return () => clearInterval(interval);
     }
-  }, [ uploadedAt, assemblyInProgress ]);
+  }, [ assemblyInProgress ]);
   return null;
 };
 
 function mapStateToProps(state) {
   return {
     assemblySummary: getAssemblySummary(state),
+    numFailedReadsUploads: getFailedReadsUploads(state),
     assemblyInProgress: isAssemblyInProgress(state),
     hasReads: files.hasReads(state),
     token: state.auth.token,

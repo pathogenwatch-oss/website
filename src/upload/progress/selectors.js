@@ -1,7 +1,8 @@
 import { createSelector } from 'reselect';
 
-import { getAssemblySummary } from './assembly/selectors';
 import { getAnalysisList } from './analysis/selectors';
+import { getAssemblySummary } from './assembly/selectors';
+import { getUploadedGenomes, getBatchSize } from './genomes/selectors';
 import {
   getProcessing,
   getUploadedFiles,
@@ -16,7 +17,6 @@ export const getProgressView = state => getProgress(state)._.view;
 export const getUploadedAt = state => getProgress(state)._.uploadedAt;
 export const getSettingValue = (state, setting) =>
   getProgress(state)._.settings[setting];
-export const getUploadedGenomes = state => getProgress(state).genomes;
 
 export const getGenome = createSelector(
   (state, id) => getUploadedGenomes(state)[id],
@@ -31,11 +31,6 @@ export const getGenome = createSelector(
   })
 );
 
-export const getUploadedGenomeList = createSelector(
-  getUploadedGenomes,
-  genomes => Object.keys(genomes).map(id => genomes[id])
-);
-
 export const getUploadsInProgress = createSelector(
   getProcessing,
   getUploadedGenomes,
@@ -47,11 +42,6 @@ export const getUploadsInProgress = createSelector(
       files: Object.values(files[id]),
       status: statuses[id],
     }))
-);
-
-export const getBatchSize = createSelector(
-  getUploadedGenomeList,
-  list => list.length
 );
 
 export const getOverallProgress = createSelector(
@@ -113,7 +103,7 @@ export const shouldShowUploadErrors = createSelector(
   getBatchSize,
   state => getProgress(state)._.showFailures,
   (remaining, failed, total, toggled) => {
-    if (remaining === 0 && failed === total) return true;
+    if (total > 0 && remaining === 0 && failed === total) return true;
     return !!toggled;
   }
 );

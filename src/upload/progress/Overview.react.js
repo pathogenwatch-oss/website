@@ -6,6 +6,7 @@ import * as upload from './selectors';
 import * as files from './files/selectors';
 import { getQueuePosition } from './analysis/selectors';
 import { getAssemblyPending } from './assembly/selectors';
+import { getBatchSize } from './genomes/selectors';
 
 const AssemblyStage = ({ complete, total }) => {
   if (complete === total) {
@@ -129,7 +130,7 @@ function mapStateToProps(state) {
     hasReads: files.hasReads(state),
     position: getQueuePosition(state),
     progress: upload.getOverallProgress(state),
-    totalGenomes: upload.getUploadedGenomeList(state).length,
+    totalGenomes: getBatchSize(state),
   };
 }
 

@@ -25,7 +25,7 @@ const AnalysisChart = React.createClass({
     this.chart = new Chart(this.canvas, {
       type: 'doughnut',
       data: {
-        datasets: this.props.datasets.reverse(),
+        datasets: this.props.datasets,
       },
       options: {
         responsive: false,
@@ -70,6 +70,7 @@ const AnalysisChart = React.createClass({
   },
 
   componentDidUpdate() {
+    const newDatasets = [];
     for (const dataset of this.props.datasets) {
       const existing = this.chart.data.datasets.find(
         _ => _.label === dataset.label
@@ -84,8 +85,11 @@ const AnalysisChart = React.createClass({
         existing.total = dataset.total;
         existing.tooltips = dataset.tooltips;
       } else {
-        this.chart.data.datasets.unshift(dataset);
+        newDatasets.unshift(dataset);
       }
+    }
+    for (const dataset of newDatasets) {
+      this.chart.data.datasets.unshift(dataset);
     }
     this.chart.update();
   },

@@ -1,6 +1,6 @@
 import { createSelector } from 'reselect';
 
-import { getNumUploadedReads } from '../files/selectors';
+import { getNumUploadedTypes, getNumUploadedReads } from '../genomes/selectors';
 
 import { DEFAULT } from '~/app/constants';
 
@@ -14,15 +14,16 @@ const expectedDuration = 1000 * 60 * 20; // 20 minutes
 const maxPercent = 99;
 
 export const getAssemblyChartData = createSelector(
-  getNumUploadedReads,
+  getNumUploadedTypes,
   getAssemblyProgress,
   getAssemblyTick,
   (
-    total,
+    { reads, assemblies },
     { runningSince = [], failed = 0, complete = 0 },
     time = Date.now()
   ) => {
-    if (total === 0) return null;
+    if (reads === 0) return null;
+    const total = reads + assemblies;
     let sumProgress = 0;
     for (const timestamp of runningSince) {
       const elapsedTime = time - timestamp;
@@ -32,24 +33,24 @@ export const getAssemblyChartData = createSelector(
     const progress = runningSince.length
       ? sumProgress / runningSince.length
       : 0;
-    const completePct = (complete / total) * 100;
+    const completePct = ((complete + assemblies) / total) * 100;
     const failedPct = (failed / total) * 100;
     const assemblingPct = progress * ((100 - completePct - failedPct) / 100);
     const remaining = 100 - completePct - failedPct - assemblingPct;
 
     return {
       label: 'Assembly progress',
-      data: [ failedPct, completePct, assemblingPct, remaining ],
+      data: [ completePct, failedPct, assemblingPct, remaining ],
       backgroundColor: [
-        DEFAULT.DANGER_COLOUR,
         '#3c7383',
+        DEFAULT.DANGER_COLOUR,
         '#ac65a6',
         'rgba(0, 0, 0, .14)',
       ],
-      labels: [ 'Failed', 'Assembled', 'Assembling', 'Remaining' ],
+      labels: [ 'Assembled', 'Failed', 'Assembling', 'Remaining' ],
       tooltips: [
+        `${complete + assemblies} / ${total}, ${completePct.toFixed(1)}%`,
         `${failed} / ${total}`,
-        `${complete} / ${total}, ${completePct.toFixed(1)}%`,
         `${runningSince.length} / ${total}, ${progress.toFixed(1)}%`,
         `${total - runningSince.length - failed - complete} / ${total}`,
       ],

@@ -53,9 +53,9 @@ const ASSEMBLY_FILENAME_REGEX = new RegExp(
 );
 export const CSV_FILENAME_REGEX = /(\.csv)$/i;
 
-function pairReadsFiles(files, assemblerUsage = {}) {
+function pairReadsFiles(files, assemblerUsage) {
   const pairs = {};
-  const maxSizeMB = assemblerUsage.maxSize || 500;
+  const { maxSizeMB = 500 } = assemblerUsage || {};
   const maxSize = maxSizeMB * 1048576;
   for (const file of files) {
     if (file.size > maxSize) {
@@ -63,7 +63,7 @@ function pairReadsFiles(files, assemblerUsage = {}) {
         `${file.name} is too large, the limit is ${maxSizeMB} MB.`
       );
     }
-    if (file.type !== 'application/gzip' || file.type !== 'text/gzip') {
+    if (file.type !== 'application/gzip' && file.type !== 'text/gzip') {
       throw new Error(
         `${file.name} is not in the correct format, reads must be gzipped.`
       );

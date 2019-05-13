@@ -14,15 +14,16 @@ import Fade from '~/components/fade';
 import UploadErrors from './files/UploadErrors.react';
 
 import { getUploadsInProgress, shouldShowUploadErrors } from './selectors';
-import { getStatusSummary } from './files/selectors';
+import { getStatusSummary, isUploadPending } from './files/selectors';
 import { getAnalysisSummary } from './analysis/selectors';
 
 const Progress = ({
   analysis,
   files,
+  showErrors,
   uploadedAt,
   uploadsInProgress,
-  showErrors,
+  uploadsPending,
 }) => (
   <div className="wgsa-upload-progress pw-upload-page">
     <Prompt
@@ -36,7 +37,7 @@ const Progress = ({
     <AssemblyStatus uploadedAt={uploadedAt} />
     <div>
       <div className="wgsa-section-divider">
-        {files.pending ? (
+        {uploadsPending ? (
           <Files
             pending={files.pending}
             uploadsInProgress={uploadsInProgress}
@@ -67,6 +68,7 @@ function mapStateToProps(state) {
   return {
     analysis: getAnalysisSummary(state),
     files: getStatusSummary(state),
+    uploadsPending: isUploadPending(state),
     uploadsInProgress: getUploadsInProgress(state),
     showErrors: shouldShowUploadErrors(state),
   };
