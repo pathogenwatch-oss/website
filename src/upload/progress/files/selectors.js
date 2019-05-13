@@ -37,12 +37,6 @@ export const isUploadPending = createSelector(
   remaining => remaining > 0
 );
 
-export const getNumCompletedUploads = createSelector(
-  getBatchSize,
-  getNumRemainingUploads,
-  (batchSize, numRemaining) => batchSize - numRemaining
-);
-
 export const getUploadStatuses = state => getFiles(state).status;
 
 export const getStatusSummary = createSelector(
@@ -65,4 +59,19 @@ export const getStatusSummary = createSelector(
 export const getNumSuccessfulUploads = createSelector(
   getStatusSummary,
   ({ completed }) => completed
+);
+
+export const getNumFailedUploads = createSelector(
+  getStatusSummary,
+  ({ errored }) => errored
+);
+
+export const getUploadErrors = createSelector(
+  state => getFiles(state).entities,
+  state => getFiles(state).errors,
+  (files, errors) =>
+    Object.keys(errors).map(id => ({
+      filename: Object.keys(files[id])[0],
+      error: errors[id],
+    }))
 );

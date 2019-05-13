@@ -53,14 +53,19 @@ const ASSEMBLY_FILENAME_REGEX = new RegExp(
 );
 export const CSV_FILENAME_REGEX = /(\.csv)$/i;
 
-function pairReadsFiles(files, assemblerUsage) {
+function pairReadsFiles(files, assemblerUsage = {}) {
   const pairs = {};
   const maxSizeMB = assemblerUsage.maxSize || 500;
   const maxSize = maxSizeMB * 1048576;
   for (const file of files) {
     if (file.size > maxSize) {
       throw new Error(
-        `${file.name} is too large, the limit is ${maxSizeMB}MB.`
+        `${file.name} is too large, the limit is ${maxSizeMB} MB.`
+      );
+    }
+    if (file.type !== 'application/gzip' || file.type !== 'text/gzip') {
+      throw new Error(
+        `${file.name} is not in the correct format, reads must be gzipped.`
       );
     }
     const id = file.name.match(READS_FILENAME_REGEX)[1];
@@ -82,6 +87,20 @@ function pairReadsFiles(files, assemblerUsage) {
   return pairs;
 }
 
+const MAX_ASSEMBLY_FILE_SIZE = config.maxGenomeFileSize * 1048576;
+
+function validateAssemblySize(file) {
+  if (file.size === 0) {
+    throw new Error(`${file.name} is an empty file.`);
+  } else if (file.size > MAX_ASSEMBLY_FILE_SIZE) {
+    throw new Error(
+      `${file.name} is too large, the limit is ${config.maxGenomeFileSize} MB.`
+    );
+  } else {
+    return file;
+  }
+}
+
 export function mapCSVsToGenomes(files, assemblerUsage) {
   const csvFiles = [];
   const assemblies = [];
@@ -92,6 +111,11 @@ export function mapCSVsToGenomes(files, assemblerUsage) {
       csvFiles.push(file);
       continue;
     } else if (ASSEMBLY_FILENAME_REGEX.test(file.name)) {
+      try {
+        validateAssemblySize(file);
+      } catch (e) {
+        return Promise.reject(e);
+      }
       assemblies.push(file);
       continue;
     } else if (readsElligible && READS_FILENAME_REGEX.test(file.name)) {

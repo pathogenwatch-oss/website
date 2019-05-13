@@ -34,3 +34,27 @@
 .wgsa-upload-progress .wgsa-card-content {
   height: auto;
 }
+
+.pw-upload-file-error {
+  display: flex;
+  align-items: center;
+  padding: 4px 0;
+  margin-top: 12px;
+}
+
+.pw-upload-file-error .material-icons {
+  color: hsl(0, 62.25%, 52.5%);
+  padding: 0 20px;
+}
+
+.pw-upload-file-error h5 {
+  font-size: 14px;
+  letter-spacing: 0;
+  line-height: 20px;
+  margin: 0;
+}
+
+.pw-upload-file-error p {
+  margin: 0;
+  line-height: 20px;
+}

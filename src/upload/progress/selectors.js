@@ -6,6 +6,8 @@ import {
   getProcessing,
   getUploadedFiles,
   getUploadStatuses,
+  getNumRemainingUploads,
+  getNumFailedUploads,
 } from './files/selectors';
 import { getFileIds } from './recovery/selectors';
 
@@ -103,4 +105,15 @@ export const isAnalysisComplete = createSelector(
 export const hasErrors = createSelector(
   getOverallProgress,
   ({ errors }) => errors > 0
+);
+
+export const shouldShowUploadErrors = createSelector(
+  getNumRemainingUploads,
+  getNumFailedUploads,
+  getBatchSize,
+  state => getProgress(state)._.showFailures,
+  (remaining, failed, total, toggled) => {
+    if (remaining === 0 && failed === total) return true;
+    return !!toggled;
+  }
 );

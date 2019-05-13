@@ -31,7 +31,7 @@ const AnalysisStage = ({ complete, total, hasErrors }) => {
     return (
       <p className={classnames('pw-with-icon', { success: !hasErrors })}>
         <i className="material-icons">
-          {hasErrors ? 'warning' : 'check_circle'}
+          {hasErrors ? 'error_outline' : 'check_circle'}
         </i>
         {total} analyses completed{hasErrors && ', with errors'}
       </p>
@@ -66,25 +66,35 @@ const Overview = props => {
     assemblyQueued,
     hasErrors,
     hasReads,
-    isUploadPending,
     position,
     progress,
     totalGenomes,
+    completedUploads,
   } = props;
-  if (isUploadPending || totalGenomes === 0) return null;
+  if (totalGenomes === 0) return null;
 
   const { assembly, analyses, speciation } = progress;
 
   const assemblyComplete = hasReads ? assembly.done === assembly.total : true;
-  const speciationComplete =
-    speciation.total === totalGenomes && speciation.done === speciation.total;
+  const speciationComplete = speciation.done === totalGenomes;
   const analysisPending =
-    analyses.total === 0 || analyses.done < analyses.total;
+    completedUploads > 0 &&
+    (analyses.total === 0 || analyses.done < analyses.total);
   return (
     <div className="wgsa-upload-progress-overview">
-      <p className="pw-with-icon success">
-        <i className="material-icons">check_circle</i>
-        {totalGenomes} genome{totalGenomes === 1 ? '' : 's'} uploaded
+      <p
+        className={classnames('pw-with-icon', {
+          success: completedUploads === totalGenomes,
+        })}
+      >
+        <i className="material-icons">
+          {completedUploads === totalGenomes ? 'check_circle' : 'error_outline'}
+        </i>
+        {completedUploads === 0
+          ? 'No successful uploads'
+          : `${completedUploads} genome${
+            completedUploads === 1 ? '' : 's'
+          } uploaded`}
       </p>
       {hasReads && (
         <AssemblyStage
@@ -117,7 +127,6 @@ function mapStateToProps(state) {
     assemblyQueued: getAssemblyPending(state),
     hasErrors: upload.hasErrors(state),
     hasReads: files.hasReads(state),
-    isUploadPending: files.isUploadPending(state),
     position: getQueuePosition(state),
     progress: upload.getOverallProgress(state),
     totalGenomes: upload.getUploadedGenomeList(state).length,

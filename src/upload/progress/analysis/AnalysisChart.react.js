@@ -67,7 +67,6 @@ const AnalysisChart = React.createClass({
         },
       },
     });
-    window.pw = { chart: this.chart };
   },
 
   componentDidUpdate() {

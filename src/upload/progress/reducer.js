@@ -17,6 +17,7 @@ const initialState = {
     compression: false,
     individual: false,
   },
+  showFailures: false,
 };
 
 function _(state = initialState, { type, payload }) {
@@ -54,6 +55,12 @@ function _(state = initialState, { type, payload }) {
         },
       };
     }
+
+    case actions.UPLOAD_TOGGLE_ERRORS:
+      return {
+        ...state,
+        showFailures: !state.showFailures,
+      };
 
     default:
       return state;

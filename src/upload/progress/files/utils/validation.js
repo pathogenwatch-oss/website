@@ -1,21 +1,5 @@
-import config from '~/app/config';
-
 export function InvalidGenomeError(message) {
   this.message = message;
-}
-
-const MAX_GENOME_FILE_SIZE = config.maxGenomeFileSize * 1048576;
-
-export function validateGenomeSize(file) {
-  if (file.size === 0) {
-    throw new InvalidGenomeError('This is an empty file.');
-  } else if (file.size > MAX_GENOME_FILE_SIZE) {
-    throw new InvalidGenomeError(
-      `This file is larger than ${config.maxGenomeFileSize} MB.`
-    );
-  } else {
-    return file;
-  }
 }
 
 const sequenceDataRegex = /^[ACGTURYKMSWBDHVN]+$/i;

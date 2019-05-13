@@ -1,6 +1,6 @@
 import { readAsText } from 'promise-file-reader';
 
-import { validateGenomeSize, validateGenomeContent } from './validation';
+import { validateGenomeContent } from './validation';
 
 import getCompressWorker from 'worker-loader?name=compress.[hash].worker.js!./compressWorker';
 
@@ -23,7 +23,6 @@ export function compress(text) {
 
 export function validateAssembly(genome) {
   return Promise.resolve(genome.files[0].handle)
-    .then(validateGenomeSize)
     .then(readAsText)
     .then(validateGenomeContent);
 }

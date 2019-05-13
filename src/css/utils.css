@@ -17,6 +17,10 @@
   margin: 0 auto;
 }
 
+.pw-uppercase {
+  text-transform: uppercase;
+}
+
 .baseline-grid {
   background-image: linear-gradient(
     to bottom,
