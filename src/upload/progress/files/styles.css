@@ -38,8 +38,16 @@
 .pw-upload-file-error {
   display: flex;
   align-items: center;
-  padding: 4px 0;
-  margin-top: 12px;
+  padding: 0;
+  margin-top: 20px;
+}
+
+.pw-upload-file-error:first-of-type {
+  margin-top: 18px;
+}
+
+.pw-upload-file-error:last-of-type {
+  margin-bottom: 20px;
 }
 
 .pw-upload-file-error .material-icons {
@@ -57,4 +65,8 @@
 .pw-upload-file-error p {
   margin: 0;
   line-height: 20px;
+}
+
+.pw-upload-file-error-footer {
+  text-align: center;
 }

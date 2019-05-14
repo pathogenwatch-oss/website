@@ -11,6 +11,7 @@
   padding-left: 64px;
   padding-right: 64px;
   width: 100%;
+  line-height: 20px;
 }
 
 .wgsa-upload-progress > :first-child {
@@ -18,7 +19,7 @@
 }
 
 .wgsa-upload-progress > :last-child {
-  margin-left: 16px;
+  margin-left: 20px;
   flex-grow: 1;
   position: relative;
   flex-basis: 320px;
@@ -40,17 +41,23 @@
   margin-left: auto;
 }
 
+.pw-upload-page .wgsa-section-divider {
+  padding: 18px 0 20px;
+  box-sizing: border-box;
+}
+
 .pw-upload-progress-view {
   flex-grow: 1;
 }
 
 .wgsa-upload-legend {
-  padding-right: 8px;
+  padding-right: 4px;
   margin-top: 0;
+  line-height: inherit;
 }
 
 .wgsa-upload-legend li {
-  line-height: 24px;
+  line-height: inherit;
   display: flex;
   align-items: center;
   flex-wrap: wrap;
@@ -74,11 +81,12 @@
 }
 
 .wgsa-upload-legend > li {
-  margin-bottom: 12px;
+  margin-bottom: 20px;
 }
 
 .wgsa-upload-legend li > ul {
   width: 100%;
+  line-height: 20px;
   /* margin-top: 8px; */
 }
 
@@ -134,6 +142,7 @@
 .wgsa-upload-progress-overview > * {
   margin-bottom: 0;
   padding-left: 24px;
+  line-height: inherit;
 }
 
 .wgsa-upload-progress-overview .wgsa-progress-bar {

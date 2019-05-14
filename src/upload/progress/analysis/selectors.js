@@ -1,4 +1,5 @@
 import { createSelector } from 'reselect';
+import sortBy from 'lodash.sortby';
 
 import { getAssemblyChartData } from '../assembly/selectors';
 import { hasReads } from '../files/selectors';
@@ -6,7 +7,7 @@ import { hasReads } from '../files/selectors';
 import { getColourGenerator, getLightColour } from '~/utils/colours';
 import { getOrganismName } from '~/organisms';
 
-import { DEFAULT } from '~/app/constants';
+import { DEFAULT, analysisLabels } from '~/app/constants';
 
 export const getAnalysis = ({ upload }) => upload.progress.analysis;
 
@@ -87,7 +88,7 @@ export const getAnalysisSummary = createSelector(
         label,
         colour,
         total: organismGenomes.length,
-        ...getAnalysisBreakdown(organismGenomes),
+        analyses: getAnalysisBreakdown(organismGenomes),
       });
     }
     if (pending && (!sessionHasReads || result.length)) {
@@ -108,6 +109,26 @@ export const getAnalysisSummary = createSelector(
     }
     return result;
   }
+);
+
+export const getSpeciesBreakdown = createSelector(
+  getAnalysisSummary,
+  summary =>
+    summary.map(section => {
+      if (section.analyses) {
+        const analysesList = Object.keys(section.analyses).map(key => ({
+          key,
+          label: analysisLabels[key],
+          ...section.analyses[key],
+        }));
+
+        return {
+          ...section,
+          analyses: sortBy(analysesList, 'label'),
+        };
+      }
+      return section;
+    })
 );
 
 function getSpeciesCode(organismName) {
@@ -141,7 +162,7 @@ const getAnalysisChartData = createSelector(
     };
 
     let organismIndex = 0;
-    for (const { label, colour, total, key, mlst = {} } of data) {
+    for (const { label, colour, total, key, analyses = {} } of data) {
       organisms.data.push(total);
 
       organisms.backgroundColor.push(colour);
@@ -152,6 +173,7 @@ const getAnalysisChartData = createSelector(
 
       let sum = total;
       sts.total = total;
+      const { mlst = {} } = analyses;
       const { sequenceTypes = [] } = mlst;
       for (const st of sequenceTypes) {
         sts.data.push(st.total);

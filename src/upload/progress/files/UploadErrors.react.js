@@ -1,10 +1,16 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { getUploadErrors } from './selectors';
+import { getUploadErrors, isUploadPending } from './selectors';
+
 import { InvalidGenomeError } from './utils/validation';
 
-const UploadErrors = ({ errors, numOtherErrors }) => (
+const reload = e => {
+  e.preventDefault();
+  window.location.reload();
+};
+
+const UploadErrors = ({ errors, numOtherErrors, uploadPending }) => (
   <section>
     {errors.map(({ filename, error }) => (
       <article key={filename} className="pw-upload-file-error">
@@ -20,12 +26,23 @@ const UploadErrors = ({ errors, numOtherErrors }) => (
         <i className="material-icons">error_outline</i>
         <div>
           <h5>
-            {numOtherErrors} genome{numOtherErrors === 1 ? '' : 's'} failed to
-            upload
+            {numOtherErrors} genome{numOtherErrors === 1 ? ' was ' : 's were '}
+            interrupted during upload
           </h5>
         </div>
       </article>
     )}
+    <footer className="pw-upload-file-error-footer">
+      {!uploadPending && (
+        <a
+          className="mdl-button mdl-button--raised mdl-button--colored"
+          href="#"
+          onClick={reload}
+        >
+          Reload page
+        </a>
+      )}
+    </footer>
   </section>
 );
 
@@ -42,6 +59,7 @@ function mapStateToProps(state) {
   return {
     errors,
     numOtherErrors,
+    uploadPending: isUploadPending(state),
   };
 }
 

@@ -38,7 +38,7 @@ const Component = React.createClass({
                   className="pw-pill pw-pill-danger pw-uppercase"
                   onClick={this.props.toggleFailures}
                 >
-                  {numFailed} failure{numFailed === 1 ? '' : 's'}
+                  {numFailed} problem{numFailed === 1 ? '' : 's'}
                 </button>
               )}
             </Fade>

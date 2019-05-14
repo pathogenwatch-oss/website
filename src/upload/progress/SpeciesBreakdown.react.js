@@ -1,10 +1,8 @@
 import React from 'react';
 
-import { analysisLabels } from '../../app/constants';
-
 export default React.memo(({ data, showBreakdown = true }) => (
   <ul className="wgsa-upload-legend">
-    {data.map(({ key, label, total, colour, ...analyses }) => (
+    {data.map(({ key, label, total, colour, analyses = [] }) => (
       <li key={key}>
         <span className="pw-with-icon wgsa-upload-legend-header">
           <i className="material-icons" style={{ color: colour }}>
@@ -17,13 +15,12 @@ export default React.memo(({ data, showBreakdown = true }) => (
         </span>
         {showBreakdown && (
           <ul>
-            {Object.keys(analyses).map(analysisKey => {
-              if (analysisKey === 'speciator') return null;
-              const analysis = analyses[analysisKey];
-              if (analysisKey in analysisLabels) {
+            {analyses.map(analysis => {
+              if (analysis.key === 'speciator') return null;
+              if (analysis.label) {
                 return (
-                  <li key={analysisKey} className="pw-with-icon">
-                    {analysisLabels[analysisKey]}
+                  <li key={analysis.key} className="pw-with-icon">
+                    {analysis.label}
                     <span className="wgsa-upload-legend-count aligned">
                       {analysis.errors > 0 && (
                         <span className="wgsa-upload-legend-count-errors">

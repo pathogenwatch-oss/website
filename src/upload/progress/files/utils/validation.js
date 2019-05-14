@@ -19,10 +19,10 @@ export function validateGenomeContent(genomeContent) {
     if (ignoreLineRegex.test(line)) continue;
     const isSequenceData = sequenceDataRegex.test(line);
     if (!firstContigFound && isSequenceData) {
-      throw new InvalidGenomeError('First contig header not found.');
+      throw new InvalidGenomeError('First contig header not found');
     }
     if (!isSequenceData) {
-      throw new InvalidGenomeError(`Invalid sequence data at line ${i + 1}.`);
+      throw new InvalidGenomeError(`Invalid sequence data at line ${i + 1}`);
     }
   }
   return cleanContent;
