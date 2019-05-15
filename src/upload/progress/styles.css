@@ -51,7 +51,6 @@
 }
 
 .wgsa-upload-legend {
-  padding-right: 4px;
   margin-top: 0;
   line-height: inherit;
 }
@@ -92,6 +91,8 @@
 
 .wgsa-upload-legend-count {
   margin-left: auto;
+  min-width: 18px;
+  text-align: center;
 }
 
 .wgsa-upload-legend-count.aligned {
@@ -102,7 +103,6 @@
 
 .wgsa-upload-legend-count .material-icons {
   color: #48996f;
-  margin-right: -5px;
 }
 
 .wgsa-upload-legend-count-errors {

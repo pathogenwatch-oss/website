@@ -29,8 +29,8 @@ const Progress = ({
     <Prompt
       when={files.pending > 0}
       message={`
-        Are you sure you want to leave the page?
-        You will need to re-upload your files at a later time.
+        Your upload is not complete.
+        Return to "Previous Uploads" to resume this session at a later date.
       `}
     />
     <AnalysisListener uploadedAt={uploadedAt} />

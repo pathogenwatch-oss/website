@@ -13,7 +13,7 @@ const AssemblyStage = ({ complete, total }) => {
     return (
       <p className="pw-with-icon success">
         <i className="material-icons">check_circle</i>
-        {total} genome{total === 1 ? '' : 's'} assembled
+        {total.toLocaleString()} genome{total === 1 ? '' : 's'} assembled
       </p>
     );
   }
@@ -21,7 +21,7 @@ const AssemblyStage = ({ complete, total }) => {
     <p className="pw-with-icon">
       Assembly
       <span className="wgsa-upload-legend-count">
-        <strong>{complete}</strong> of <strong>{total}</strong>
+        <strong>{complete.toLocaleString()}</strong> of <strong>{total.toLocaleString()}</strong>
       </span>
     </p>
   );
@@ -34,7 +34,7 @@ const AnalysisStage = ({ complete, total, hasErrors }) => {
         <i className="material-icons">
           {hasErrors ? 'error_outline' : 'check_circle'}
         </i>
-        {total} analyses completed{hasErrors && ', with errors'}
+        {total.toLocaleString()} analyses completed{hasErrors && ', with errors'}
       </p>
     );
   }
@@ -42,7 +42,7 @@ const AnalysisStage = ({ complete, total, hasErrors }) => {
     <p className="pw-with-icon">
       Analysis
       <span className="wgsa-upload-legend-count">
-        <strong>{complete}</strong> of <strong>{total}</strong>
+        <strong>{complete.toLocaleString()}</strong> of <strong>{total.toLocaleString()}</strong>
       </span>
     </p>
   );
@@ -55,7 +55,7 @@ const QueuePosition = ({ position }) => {
   if (position) {
     return (
       <p>
-        {position} job{position === 1 ? '' : 's'} till next result
+        {position.toLocaleString()} job{position === 1 ? '' : 's'} till next result
       </p>
     );
   }
@@ -93,7 +93,7 @@ const Overview = props => {
         </i>
         {completedUploads === 0
           ? 'No successful uploads'
-          : `${completedUploads} genome${
+          : `${completedUploads.toLocaleString()} genome${
             completedUploads === 1 ? '' : 's'
           } uploaded`}
       </p>
