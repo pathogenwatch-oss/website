@@ -4,8 +4,6 @@ import * as selectors from './selectors';
 import { getUploadedAt, getGenome } from '../selectors';
 import { getSettingValue } from '../../selectors';
 
-import { getAuthToken } from '~/auth/actions';
-
 import * as api from './api';
 import { compress, validateAssembly } from './utils';
 import { upload } from '../assembly/api';
@@ -86,35 +84,33 @@ export function processFiles() {
     const isIndividual = getSettingValue(getState(), 'individual');
     let processLimit = 1;
 
-    dispatch(getAuthToken()).then(() =>
-      (function processNext() {
-        const state = getState();
-        const queue = selectors.getUploadQueue(state);
-        const processing = selectors.getProcessing(state);
-        if (queue.length && processing.size < processLimit) {
-          const id = queue[0];
-          const genome = getGenome(state, id);
-          if (genome.type === fileTypes.ASSEMBLY) {
-            processLimit = isIndividual ? 1 : 5;
-          }
-          dispatch({
-            type: PROCESS_GENOME,
-            payload: {
-              id,
-              promise:
-                genome.type === fileTypes.READS
-                  ? processReads(dispatch, getState, genome)
-                  : processAssembly(dispatch, getState, genome),
-            },
-          }).then(() => {
-            if (queue.length > processLimit) {
-              processNext();
-              return;
-            }
-          });
-          processNext();
+    (function processNext() {
+      const state = getState();
+      const queue = selectors.getUploadQueue(state);
+      const processing = selectors.getProcessing(state);
+      if (queue.length && processing.size < processLimit) {
+        const id = queue[0];
+        const genome = getGenome(state, id);
+        if (genome.type === fileTypes.ASSEMBLY) {
+          processLimit = isIndividual ? 1 : 5;
         }
-      }())
-    );
+        dispatch({
+          type: PROCESS_GENOME,
+          payload: {
+            id,
+            promise:
+              genome.type === fileTypes.READS
+                ? processReads(dispatch, getState, genome)
+                : processAssembly(dispatch, getState, genome),
+          },
+        }).then(() => {
+          if (queue.length > processLimit) {
+            processNext();
+            return;
+          }
+        });
+        processNext();
+      }
+    }());
   };
 }
