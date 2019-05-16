@@ -6,7 +6,7 @@ import { UPLOAD_ADD_GENOMES } from '../../actions';
 
 import { mapCSVsToGenomes } from '~/upload/utils';
 
-export function recoverUploadSession(files, session, uploadedAt) {
+export function recoverUploadSession(files, session = []) {
   return (dispatch, getState) => {
     const state = getState();
     const usage = getAssemblerUsage(state);
@@ -43,7 +43,6 @@ export function recoverUploadSession(files, session, uploadedAt) {
             type: UPLOAD_ADD_GENOMES.SUCCESS,
             payload: {
               genomes,
-              uploadedAt,
             },
           });
           dispatch(processFiles());

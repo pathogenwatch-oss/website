@@ -13,31 +13,17 @@ import Progress from './progress';
 import { getUploadedAt } from './progress/selectors';
 import { isUploading } from './progress/files/selectors';
 
-import { fetchAssemblerUsage } from './actions';
-
-import { useAuthToken } from '../auth/hooks';
-import { isReadsEligible } from './utils';
-
 const path = '/upload';
 
 function mapStateToProps(state) {
   return {
     uploading: isUploading(state),
     uploadedAt: getUploadedAt(state),
-    token: state.auth.token,
   };
 }
 
 const Router = connect(mapStateToProps)(
-  ({ uploading, uploadedAt, token, match, dispatch }) => {
-    useAuthToken();
-
-    React.useEffect(() => {
-      if (isReadsEligible() && token) {
-        dispatch(fetchAssemblerUsage(token));
-      }
-    }, [ token ]);
-
+  ({ uploading, uploadedAt, match }) => {
     if (match.isExact && uploading) {
       return <Redirect to={`${path}/${uploadedAt}`} />;
     }

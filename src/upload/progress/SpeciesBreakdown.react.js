@@ -11,7 +11,7 @@ export default React.memo(({ data, showBreakdown = true }) => (
           <strong className="wgsa-upload-legend-organism" title={label}>
             {label}
           </strong>
-          <span className="wgsa-upload-legend-count">{total}</span>
+          <span className="wgsa-upload-legend-count">{total.toLocaleString()}</span>
         </span>
         {showBreakdown && (
           <ul>

@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 
 import Progress from './Progress.react';
 import Summary from './Summary.react';
-import Recovery from './recovery/Recovery.react';
+import Recovery from './recovery';
 
 import { isUploadPending } from './files/selectors';
 import {
@@ -44,15 +44,15 @@ const Component = React.createClass({
   },
 
   renderContent() {
-    const { match } = this.props;
-    if (match.params.uploadedAt !== this.props.uploadedAt) {
+    const { match, uploadedAt } = this.props;
+    if (match.params.uploadedAt !== uploadedAt) {
       return null;
     }
     switch (this.props.view) {
       case views.RECOVERY:
-        return <Recovery uploadedAt={this.props.uploadedAt} />;
+        return <Recovery uploadedAt={uploadedAt} />;
       case views.PROGRESS:
-        return <Progress uploadedAt={this.props.uploadedAt} />;
+        return <Progress uploadedAt={uploadedAt} />;
       default:
         return null;
     }

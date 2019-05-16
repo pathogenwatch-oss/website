@@ -5,15 +5,23 @@ import Assemblies from './Assemblies.react';
 import Reads from './Reads.react';
 import Fade from '../../components/fade';
 import Badge from '../../components/badge';
-import { getAssemblerUsage } from '../selectors';
 
-const Tabs = ({ usage }) => {
+import { useAssemblerUsage } from '../hooks';
+
+import { getAssemblerUsage } from '../selectors';
+import { useAuthToken } from '~/auth/hooks';
+
+const Tabs = ({ usage, token }) => {
+  useAuthToken();
+  useAssemblerUsage(token);
+
   const tabsRef = React.useRef();
   React.useEffect(() => {
     if (tabsRef.current && !tabsRef.current.MaterialTabs) {
       componentHandler.upgradeElement(tabsRef.current);
     }
   }, []);
+
   return (
     <React.Fragment>
       <Fade className="pw-upload-assembler-usage">
@@ -65,6 +73,7 @@ const Tabs = ({ usage }) => {
 function mapStateToProps(state) {
   return {
     usage: getAssemblerUsage(state),
+    token: state.auth.token,
   };
 }
 
