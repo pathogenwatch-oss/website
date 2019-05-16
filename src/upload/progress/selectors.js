@@ -15,8 +15,6 @@ import { getFileIds } from './recovery/selectors';
 export const getProgress = ({ upload }) => upload.progress;
 export const getProgressView = state => getProgress(state)._.view;
 export const getUploadedAt = state => getProgress(state)._.uploadedAt;
-export const getSettingValue = (state, setting) =>
-  getProgress(state)._.settings[setting];
 
 export const getGenome = createSelector(
   (state, id) => getUploadedGenomes(state)[id],

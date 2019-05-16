@@ -1,7 +1,8 @@
 import { createAsyncConstants } from '~/actions';
 
 import * as selectors from './selectors';
-import { getUploadedAt, getSettingValue, getGenome } from '../selectors';
+import { getUploadedAt, getGenome } from '../selectors';
+import { getSettingValue } from '../../selectors';
 
 import { getAuthToken } from '~/auth/actions';
 

@@ -35,7 +35,7 @@ const Tabs = ({ usage, token }) => {
               this month.
               <br />
               <strong>
-                {usage.usage.total} of {usage.limits.total} assemblies
+                {usage.usage.total.toLocaleString()} of {usage.limits.total.toLocaleString()} assemblies
               </strong>{' '}
               have been completed this month.
             </p>

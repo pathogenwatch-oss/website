@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux';
 
-import { UPLOAD_FETCH_ASSEMBLER_USAGE } from './actions';
+import { UPLOAD_FETCH_ASSEMBLER_USAGE, UPLOAD_SETTING_CHANGED } from './actions';
 
 import progress from './progress/reducer';
 import previous from './previous/reducer';
@@ -23,9 +23,23 @@ function errorMessage(state = null, action) {
   }
 }
 
+function settings(state = { compression: false, individual: false }, { type, payload }) {
+  switch (type) {
+    case UPLOAD_SETTING_CHANGED: {
+      return {
+        ...state,
+        [payload.setting]: payload.value,
+      };
+    }
+    default:
+      return state;
+  }
+}
+
 export default combineReducers({
   progress,
   previous,
   errorMessage,
   usage,
+  settings,
 });

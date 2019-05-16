@@ -27,7 +27,7 @@ const Progress = ({
 }) => (
   <div className="wgsa-upload-progress pw-upload-page">
     <Prompt
-      when={files.pending > 0}
+      when={uploadsPending}
       message={`
         Your upload is not complete.
         Return to "Previous Uploads" to resume this session at a later date.

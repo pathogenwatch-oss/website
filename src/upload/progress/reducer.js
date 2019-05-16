@@ -14,10 +14,6 @@ import recovery from './recovery/reducer';
 const initialState = {
   uploadedAt: null,
   view: null,
-  settings: {
-    compression: false,
-    individual: false,
-  },
   showFailures: false,
 };
 
@@ -47,16 +43,6 @@ function _(state = initialState, { type, payload }) {
       };
     }
 
-    case actions.UPLOAD_SETTING_CHANGED: {
-      return {
-        ...state,
-        settings: {
-          ...state.settings,
-          [payload.setting]: payload.value,
-        },
-      };
-    }
-
     case actions.UPLOAD_TOGGLE_ERRORS:
       return {
         ...state,
@@ -68,16 +54,6 @@ function _(state = initialState, { type, payload }) {
   }
 }
 
-function resettable(reducer) {
-  const _initialState = reducer(undefined, {});
-  return function (state, action) {
-    if (action.type === actions.UPLOAD_RESET) {
-      return _initialState;
-    }
-    return reducer(state, action);
-  };
-}
-
 const reducer = combineReducers({
   _,
   analysis,
@@ -87,4 +63,10 @@ const reducer = combineReducers({
   recovery,
 });
 
-export default resettable(reducer);
+const _initialState = reducer(undefined, {});
+export default function (state = _initialState, action) {
+  if (action.type === actions.UPLOAD_RESET) {
+    return _initialState;
+  }
+  return reducer(state, action);
+}

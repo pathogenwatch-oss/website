@@ -43,3 +43,15 @@ export function fetchAssemblerUsage(token) {
     },
   };
 }
+
+export const UPLOAD_SETTING_CHANGED = 'UPLOAD_SETTING_CHANGED';
+
+export function changeUploadSetting(setting, value) {
+  return {
+    type: UPLOAD_SETTING_CHANGED,
+    payload: {
+      setting,
+      value,
+    },
+  };
+}

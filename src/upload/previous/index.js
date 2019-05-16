@@ -52,6 +52,7 @@ class Previous extends React.Component {
     const { loading, error, uploads } = this.props;
     return (
       <React.Fragment>
+        <DocumentTitle>Previous Uploads</DocumentTitle>
         <Summary />
         {!!uploads.length ? (
           <Grid

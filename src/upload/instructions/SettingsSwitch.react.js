@@ -3,9 +3,9 @@ import { connect } from 'react-redux';
 
 import Switch from '~/components/switch';
 
-import { getSettingValue } from '../progress/selectors';
+import { getSettingValue } from '../selectors';
 
-import { changeUploadSetting } from '../progress/actions';
+import { changeUploadSetting } from '../actions';
 
 function mapStateToProps(state, { setting }) {
   return {
