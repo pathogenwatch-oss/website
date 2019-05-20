@@ -116,8 +116,8 @@ export function upload(genome, { token, uploadedAt }, dispatch) {
           genome.id
         }/assembly?clientId=${clientId}`,
         progress: {
-          channel: clientId,
-          topic: `assembly-${uploadedAt}`,
+          channel: `${clientId}-assembly`,
+          topic: uploadedAt,
         },
         files: addedFiles.map(f => ({
           filename: f.fileName,
@@ -150,6 +150,20 @@ export function fetchSession(uploadedAt, token) {
         resolve(response.json());
       } else if (response.status === 404) {
         reject({ type: 'NOT_FOUND' });
+      } else {
+        reject({ message: response.statusText });
+      }
+    })
+  );
+}
+
+export function fetchProgress(uploadedAt, token) {
+  return new Promise((resolve, reject) =>
+    send('GET', `/api/sessions/${uploadedAt}/progress`, {
+      Authorization: `Bearer ${token}`,
+    }).then(response => {
+      if (response.status === 200) {
+        resolve(response.json());
       } else {
         reject({ message: response.statusText });
       }

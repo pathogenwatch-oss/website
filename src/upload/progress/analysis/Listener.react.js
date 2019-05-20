@@ -9,10 +9,11 @@ import config from '~/app/config';
 
 export default React.memo(({ uploadedAt }) => {
   React.useEffect(() => {
-    subscribe(config.clientId, `analysis-${uploadedAt}`, msg =>
+    const channelId = `${config.clientId}-analysis`;
+    subscribe(channelId, uploadedAt, msg =>
       store.dispatch(receiveUploadAnalysis(msg))
     );
-    return () => unsubscribe(config.clientId);
+    return () => unsubscribe(channelId);
   }, [ uploadedAt ]);
 
   React.useEffect(() => {

@@ -14,13 +14,14 @@ import Fade from '~/components/fade';
 import UploadErrors from './files/UploadErrors.react';
 
 import { getUploadsInProgress, shouldShowUploadErrors } from './selectors';
-import { getStatusSummary, isUploadPending } from './files/selectors';
+import { getStatusSummary, isUploadPending, hasReads } from './files/selectors';
 import { getSpeciesBreakdown } from './analysis/selectors';
 
 const Progress = ({
-  speciesBreakdown,
   files,
+  sessionHasReads,
   showErrors,
+  speciesBreakdown,
   uploadedAt,
   uploadsInProgress,
   uploadsPending,
@@ -34,7 +35,7 @@ const Progress = ({
       `}
     />
     <AnalysisListener uploadedAt={uploadedAt} />
-    <AssemblyStatus uploadedAt={uploadedAt} />
+    { sessionHasReads && <AssemblyStatus uploadedAt={uploadedAt} /> }
     <div>
       <div className="wgsa-section-divider">
         {uploadsPending ? (
@@ -66,11 +67,12 @@ const Progress = ({
 
 function mapStateToProps(state) {
   return {
-    speciesBreakdown: getSpeciesBreakdown(state),
     files: getStatusSummary(state),
-    uploadsPending: isUploadPending(state),
-    uploadsInProgress: getUploadsInProgress(state),
+    sessionHasReads: hasReads(state),
     showErrors: shouldShowUploadErrors(state),
+    speciesBreakdown: getSpeciesBreakdown(state),
+    uploadsInProgress: getUploadsInProgress(state),
+    uploadsPending: isUploadPending(state),
   };
 }
 

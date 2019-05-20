@@ -1,6 +1,10 @@
 import { createSelector } from 'reselect';
 
-import { getNumUploadedTypes, getNumUploadedReads } from '../genomes/selectors';
+import {
+  getNumUploadedTypes,
+  getNumUploadedReads,
+  getFailedReadsUploads,
+} from '../genomes/selectors';
 
 import { DEFAULT } from '~/app/constants';
 
@@ -12,6 +16,7 @@ export const getAssemblyPending = state => getAssemblyProgress(state).pending;
 
 const expectedDuration = 1000 * 60 * 20; // 20 minutes
 const maxPercent = 99;
+const minPercent = 1;
 
 export const getAssemblyChartData = createSelector(
   getNumUploadedTypes,
@@ -25,14 +30,11 @@ export const getAssemblyChartData = createSelector(
     if (reads === 0) return null;
     const total = reads + assemblies;
     let sumProgress = 0;
-    for (const timestamp of runningSince) {
-      const elapsedTime = time - timestamp;
-      if (elapsedTime > expectedDuration) sumProgress += maxPercent;
-      else sumProgress += (elapsedTime / expectedDuration) * maxPercent;
+    for (const timestampInSeconds of runningSince) {
+      const elapsedTime = time - (timestampInSeconds * 1000);
+      sumProgress += Math.min((elapsedTime / expectedDuration) * (100 / total));
     }
-    const progress = runningSince.length
-      ? sumProgress / runningSince.length
-      : 0;
+    const progress = runningSince.length > 0 ? Math.max(Math.min(maxPercent, sumProgress), minPercent) : 0;
     const completePct = ((complete + assemblies) / total) * 100;
     const failedPct = (failed / total) * 100;
     const assemblingPct = progress * ((100 - completePct - failedPct) / 100);
@@ -73,6 +75,12 @@ export const getAssemblySummary = createSelector(
     done: complete,
     pending: total - failed - complete,
   })
+);
+
+export const isAssemblyPending = createSelector(
+  getAssemblySummary,
+  getFailedReadsUploads,
+  ({ pending }, numFailed) => pending - numFailed > 0
 );
 
 export const isAssemblyComplete = createSelector(

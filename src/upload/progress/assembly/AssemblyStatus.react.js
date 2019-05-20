@@ -2,50 +2,43 @@ import React from 'react';
 import { connect } from 'react-redux';
 import 'eventsource/lib/eventsource-polyfill';
 
-import { getAssemblySummary, isAssemblyInProgress } from './selectors';
-import * as files from '../files/selectors';
-import { getFailedReadsUploads } from '../genomes/selectors';
+import { useAuthToken } from '~/auth/hooks';
+
+import { isAssemblyInProgress, isAssemblyPending } from './selectors';
 
 import { assemblyProgressTick, assemblyPipelineStatus } from './actions';
 
+import { subscribe, unsubscribe } from '~/utils/Notification';
+
 import config from '~/app/config';
+import { fetchProgress } from './api';
 
 const Status = ({
-  assemblySummary,
   assemblyInProgress,
-  hasReads,
-  numFailedReadsUploads,
+  handleStatusUpdate,
+  pending,
+  progressTick,
   token,
   uploadedAt,
-  dispatch,
 }) => {
-  const pending = assemblySummary.pending - numFailedReadsUploads > 0;
+  useAuthToken();
   React.useEffect(() => {
-    if (hasReads && token && pending) {
-      // Uses polyfill for Authorisation header
-      const eventSource = new window.EventSourcePolyfill(
-        `${config.assemblerAddress}/api/sessions/${uploadedAt}`,
-        { headers: { Authorization: `Bearer ${token}`, 'cache-control': null } }
+    if (pending && token) {
+      fetchProgress(uploadedAt, token)
+        .then(handleStatusUpdate)
+        .catch(console.error);
+      const channelId = `${config.clientId}-assembly`;
+      subscribe(
+        channelId, uploadedAt, handleStatusUpdate
       );
-      eventSource.onmessage = e => {
-        try {
-          const data = JSON.parse(e.data);
-          if (data.error) throw new Error(data.error);
-          dispatch(assemblyPipelineStatus(JSON.parse(e.data)));
-        } catch (err) {
-          console.error(err);
-        }
-      };
-      return () => {
-        eventSource.close();
-      };
+      return () => unsubscribe(channelId);
     }
-  }, [ hasReads, token, pending ]);
+  }, [ pending, token ]);
 
   React.useEffect(() => {
     if (assemblyInProgress) {
       const interval = setInterval(
-        () => dispatch(assemblyProgressTick()),
+        progressTick,
         2000
       );
       return () => clearInterval(interval);
@@ -56,12 +49,20 @@ const Status = ({
 
 function mapStateToProps(state) {
   return {
-    assemblySummary: getAssemblySummary(state),
-    numFailedReadsUploads: getFailedReadsUploads(state),
+    pending: isAssemblyPending(state),
     assemblyInProgress: isAssemblyInProgress(state),
-    hasReads: files.hasReads(state),
     token: state.auth.token,
   };
 }
 
-export default connect(mapStateToProps)(Status);
+function mapDispatchToProps(dispatch) {
+  return {
+    handleStatusUpdate: data => {
+      if (data.error) throw new Error(data.error);
+      dispatch(assemblyPipelineStatus(data));
+    },
+    progressTick: () => dispatch(assemblyProgressTick()),
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Status);
