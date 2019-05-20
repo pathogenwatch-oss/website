@@ -17,8 +17,8 @@ function getNotification(analysis) {
 module.exports = async function ({ genomeId, clientId, uploadedAt, tasks = [] }) {
   if (!clientId) return Promise.resolve();
   return request('notification', 'send', {
-    channel: clientId,
-    topic: `analysis-${uploadedAt.toISOString()}`,
+    channel: `${clientId}-analysis`,
+    topic: uploadedAt.toISOString(),
     message: { genomeId, results: tasks.map(getNotification) },
   });
 };
