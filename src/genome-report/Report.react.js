@@ -32,7 +32,7 @@ const Content = React.createClass({
 
   render() {
     const { genome } = this.props;
-    const { pending = [], userDefined = null } = genome;
+    const { fileId, pending = [], userDefined = null, upload = { type: 'assembly' } } = genome;
     const sections = [ { key: 'Top', component: <Overview genome={genome} /> } ];
     if (userDefined && Object.keys(userDefined).length > 0) {
       sections.push({
@@ -89,6 +89,16 @@ const Content = React.createClass({
               {component}
             </section>
           ))}
+          {!fileId &&
+            <div className="pw-expand pw-flex-center">
+              <span className="wgsa-file-icon">
+                <i className="material-icons">
+                  {upload.type === 'assembly' ? 'insert_drive_file' : 'file_copy'}
+                </i>
+              </span>
+              <p className="h6">Awaiting assembly</p>
+            </div>
+          }
         </div>
       </React.Fragment>
     );
@@ -102,7 +112,7 @@ const Report = ({ name, genome, loading, close }) => {
       title={
         <span className="wgsa-genome-report-title">
           Genome Report: {genome ? genome.name : name}{' '}
-          {genome && (
+          {genome && genome.fileId && (
             <DownloadLink key="download" id={genome.id} name={genome.name} />
           )}
         </span>

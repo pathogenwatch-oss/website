@@ -23,11 +23,11 @@ function formatValue(value) {
 
 export const Metadata = ({ label, children, inline }) => (
   hasValue(children) ?
-  <div className={classnames('pw-genome-report-metadata', { inline })}>
-    <dt>{label}</dt>
-    <dd>{formatValue(children)}</dd>
-  </div> :
-  null
+    <div className={classnames('pw-genome-report-metadata', { inline })}>
+      <dt>{label}</dt>
+      <dd>{formatValue(children)}</dd>
+    </div> :
+    null
 );
 
 export const Section = ({ heading, version, children }) => (
@@ -53,17 +53,23 @@ export const VersionSwitcher = React.createClass({
   getVersions() {
     const { genome, taskName } = this.props;
     const { tasks = [] } = genome;
-    return tasks
-      .filter(_ => _.task === taskName)
-      .map(task =>
-        <button key={task.version} className={classnames(
-          'wgsa-analysis-version', {
-            'is-active': task.version === this.state.version,
-          })}
-          onClick={() => this.setState({ version: task.version })}
+    const versions = [];
+    for (const { task, version } of tasks) {
+      if (task !== taskName) continue;
+      versions.push(
+        <button
+          key={version}
+          className={classnames(
+            'wgsa-analysis-version', {
+              'is-active': version === this.state.version,
+            })}
+          onClick={() => this.setState({ version })}
         >
-          {task.version}
-        </button>);
+          {version}
+        </button>
+      );
+    }
+    return versions;
   },
 
   render() {

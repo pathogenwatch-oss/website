@@ -29,10 +29,5 @@
 
 .pw-upload-recovery-files .wgsa-file-icon {
   margin-bottom: 8px;
-  border: 1px solid hsl(271, 28%, 75%);
   background-color: transparent;
-}
-
-.pw-upload-recovery-files .wgsa-file-icon i {
-  color: hsl(271, 28%, 75%);
 }

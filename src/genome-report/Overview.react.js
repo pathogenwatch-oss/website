@@ -7,14 +7,9 @@ import { getFormattedDateString } from '../utils/Date';
 import { getCountryName } from '../utils/country';
 import { Logo } from '../branding';
 
-function getTask({ analysis = {} }, taskName) {
-  return analysis[taskName] || {};
-}
-
 export default ({ genome }) => {
-  const { country, pmid } = genome;
-  const speciator = getTask(genome, 'speciator');
-  const serotype = getTask(genome, 'serotype');
+  const { analysis = {}, country, pmid } = genome;
+  const { speciator, serotype = {} } = analysis;
   const date = getFormattedDateString(genome);
   return (
     <div className="wgsa-genome-report-summary">
@@ -32,7 +27,7 @@ export default ({ genome }) => {
             serotype={serotype.value}
           />
         ) : (
-          <em>Pending speciation</em>
+          <em>Species prediction pending</em>
         )}
       </p>
       {(date || country || pmid) && (
