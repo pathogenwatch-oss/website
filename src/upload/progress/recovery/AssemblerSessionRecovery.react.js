@@ -21,14 +21,20 @@ const AssemblySessionRecovery = ({
     return (
       <section className="pw-upload-page">
         <h1>Sorry, there's a problem.</h1>
-        <p>{error.message}</p>
+        {typeof error.message === 'string' ?
+          (<p>{error.message}</p>) :
+          error.message }
       </section>
     );
   }
 
-  return (
-    <Recovery session={session} />
-  );
+  if (session) {
+    return (
+      <Recovery session={session} />
+    );
+  }
+
+  return null;
 };
 
 function mapStateToProps(state) {

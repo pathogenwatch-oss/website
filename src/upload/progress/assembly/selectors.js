@@ -32,7 +32,7 @@ export const getAssemblyChartData = createSelector(
     let sumProgress = 0;
     for (const timestampInSeconds of runningSince) {
       const elapsedTime = time - (timestampInSeconds * 1000);
-      sumProgress += Math.min((elapsedTime / expectedDuration) * (100 / total));
+      sumProgress += (elapsedTime / expectedDuration) * (100 / total);
     }
     const progress = runningSince.length > 0 ? Math.max(Math.min(maxPercent, sumProgress), minPercent) : 0;
     const completePct = ((complete + assemblies) / total) * 100;

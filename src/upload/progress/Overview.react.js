@@ -112,7 +112,7 @@ const Overview = props => {
         />
       )}
       {assemblyQueued > 0 && (
-        <p>
+        <p className="wgsa-blink">
           {assemblyQueued} job{assemblyQueued === 1 ? '' : 's'} queued
         </p>
       )}
