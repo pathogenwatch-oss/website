@@ -196,7 +196,7 @@ router.put(
       const { error } = req.body;
       if (error) {
         services
-          .request('genome', 'assembly-error', {
+          .request('genome', 'assembler-error', {
             id,
             user,
             clientId,
