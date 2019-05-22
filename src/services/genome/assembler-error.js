@@ -1,10 +1,8 @@
-const { request } = require('services/bus');
-
 const Genome = require('models/genome');
 
 const { ServiceRequestError } = require('utils/errors');
 
-module.exports = async ({ user, id, clientId, error }) => {
+module.exports = async ({ user, id, error }) => {
   if (!user) {
     throw new ServiceRequestError('Not authorised');
   }
@@ -15,10 +13,4 @@ module.exports = async ({ user, id, clientId, error }) => {
   }
 
   await Genome.update({ _user: user, _id: id }, { $set: { assembler: { error } } });
-
-  request('notification', 'send', {
-    channel: `${clientId}-assembly`,
-    topic: 'error',
-    message: { genomeId: id, error },
-  });
 };

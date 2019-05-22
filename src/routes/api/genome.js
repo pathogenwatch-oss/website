@@ -188,7 +188,6 @@ router.put(
   contentLength.validateMax({ max: (config.maxGenomeFileSize || 10) * 1048576 }),
   (req, res, next) => {
     const { user } = req;
-    const { clientId } = req.query;
     const { id } = req.params;
 
     if (req.headers['content-type'] === 'application/json') {
@@ -199,7 +198,6 @@ router.put(
           .request('genome', 'assembler-error', {
             id,
             user,
-            clientId,
             error,
           })
           .then(() => res.sendStatus(200))
@@ -211,6 +209,7 @@ router.put(
     }
 
     LOGGER.info('Received request to upload genome assembly');
+    const { clientId } = req.query;
     services
       .request('genome', 'upload', {
         timeout$: 1000 * 60 * 5,
