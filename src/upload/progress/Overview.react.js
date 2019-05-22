@@ -8,11 +8,13 @@ import { getQueuePosition } from './analysis/selectors';
 import { getAssemblyPending } from './assembly/selectors';
 import { getBatchSize } from './genomes/selectors';
 
-const AssemblyStage = ({ complete, total }) => {
+const AssemblyStage = ({ complete, total, hasErrors }) => {
   if (complete === total) {
     return (
-      <p className="pw-with-icon success">
-        <i className="material-icons">check_circle</i>
+      <p className={classnames('pw-with-icon', { success: !hasErrors })} >
+        <i className="material-icons">
+          {hasErrors ? 'error_outline' : 'check_circle'}
+        </i>
         {total.toLocaleString()} genome{total === 1 ? '' : 's'} assembled
       </p>
     );
@@ -34,7 +36,7 @@ const AnalysisStage = ({ complete, total, hasErrors }) => {
         <i className="material-icons">
           {hasErrors ? 'error_outline' : 'check_circle'}
         </i>
-        {total.toLocaleString()} analyses completed{hasErrors && ', with errors'}
+        {total.toLocaleString()} {total === 1 ? 'analysis' : 'analyses'} completed
       </p>
     );
   }
@@ -81,6 +83,7 @@ const Overview = props => {
   const analysisPending =
     completedUploads > 0 &&
     (analyses.total === 0 || analyses.done < analyses.total);
+
   return (
     <div className="wgsa-upload-progress-overview">
       <p
@@ -101,7 +104,7 @@ const Overview = props => {
         <AssemblyStage
           complete={assembly.done}
           total={assembly.total}
-          queued={assemblyQueued}
+          hasErrors={assembly.failed > 0}
         />
       )}
       {speciationComplete && analyses.total > 0 && (
