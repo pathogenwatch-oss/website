@@ -28,16 +28,15 @@ const Tabs = ({ usage, token }) => {
         {usage && (
           <aside>
             <p>
-              <strong>Processing reads is currently a trial service.</strong>{' '}
+              <strong>Processing reads is a trial service with fair-use limits.</strong>
             </p>
             <p>
-              You have <strong>{usage.remaining} assemblies</strong> remaining
-              this month.
+              {usage.remaining > 0 ?
+                (<React.Fragment>You have no assemblies remaining, check back soon.</React.Fragment>) :
+                (<React.Fragment>You are currently limited to <strong>{usage.remaining} assemblies</strong>.</React.Fragment>)
+              }
               <br />
-              <strong>
-                {usage.usage.total.toLocaleString()} of {usage.limits.total.toLocaleString()} assemblies
-              </strong>{' '}
-              have been completed this month.
+              <a href="https://cgps.gitbook.io/pathogenwatch/technical-descriptions/short-read-assembly" target="_blank" rel="noopener">How the service works</a>
             </p>
           </aside>
         )}

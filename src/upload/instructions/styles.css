@@ -117,6 +117,7 @@ ul.inline li:last-child::after {
   position: absolute;
   top: -20px;
   right: 20px;
+  max-width: 400px;
 }
 
 .pw-upload-assembler-usage aside {
@@ -127,7 +128,8 @@ ul.inline li:last-child::after {
   margin-top: -20px;
 }
 
-.pw-upload-assembler-usage strong {
+.pw-upload-assembler-usage strong,
+.pw-upload-assembler-usage a {
   color: hsl(194, 67%, 27%);
 }
 
