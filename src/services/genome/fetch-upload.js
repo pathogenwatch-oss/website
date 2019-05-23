@@ -2,11 +2,6 @@ const Genome = require('models/genome');
 
 module.exports = async function ({ user, query }) {
   const projection = {
-    name: 1,
-    uploadedAt: 1,
-    pending: 1,
-    errored: 1,
-    upload: 1,
     'analysis.cgmlst.__v': 1,
     'analysis.core.__v': 1,
     'analysis.genotyphi.__v': 1,
@@ -24,12 +19,19 @@ module.exports = async function ({ user, query }) {
     'analysis.speciator.organismId': 1,
     'analysis.speciator.organismName': 1,
     'analysis.speciator.speciesId': 1,
+    assembler: 1,
+    errored: 1,
+    name: 1,
+    pending: 1,
+    upload: 1,
+    uploadedAt: 1,
   };
   const genomes = await Genome.find({ ...query, _user: user._id }, projection).lean();
   return genomes.map(doc => {
     const { analysis = {}, upload = { complete: true, type: Genome.uploadTypes.ASSEMBLY } } = doc;
     const genome = {
       analysis,
+      assembler: doc.assembler,
       errored: doc.errored,
       id: doc._id,
       pending: doc.pending,
