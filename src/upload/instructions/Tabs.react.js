@@ -31,7 +31,7 @@ const Tabs = ({ usage, token }) => {
               <strong>Processing reads is a trial service with fair-use limits.</strong>
             </p>
             <p>
-              {usage.remaining > 0 ?
+              {usage.remaining === 0 ?
                 (<React.Fragment>You have no assemblies remaining, check back soon.</React.Fragment>) :
                 (<React.Fragment>You are currently limited to <strong>{usage.remaining} assemblies</strong>.</React.Fragment>)
               }
