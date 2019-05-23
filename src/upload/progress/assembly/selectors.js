@@ -72,8 +72,9 @@ export const getAssemblySummary = createSelector(
   getAssemblyProgress,
   (total, { complete = 0, failed = 0 }) => ({
     total,
-    done: complete + failed,
+    complete,
     failed,
+    done: complete + failed,
     pending: total - failed - complete,
   })
 );

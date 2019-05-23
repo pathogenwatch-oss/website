@@ -82,6 +82,7 @@ const Overview = props => {
   const speciationComplete = speciation.done === totalGenomes;
   const analysisPending =
     completedUploads > 0 &&
+    (hasReads ? assembly.complete > 0 : true) &&
     (analyses.total === 0 || analyses.done < analyses.total);
 
   return (
