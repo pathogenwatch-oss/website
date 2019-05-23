@@ -6,7 +6,7 @@ import { useAuthToken } from '~/auth/hooks';
 
 import { isAssemblyInProgress, isAssemblyPending } from './selectors';
 
-import { assemblyProgressTick, assemblyPipelineStatus } from './actions';
+import { assemblyProgressTick, assemblyPipelineStatus, assemblyPipelineError } from './actions';
 
 import { subscribe, unsubscribe } from '~/utils/Notification';
 
@@ -25,7 +25,12 @@ const Status = ({
   React.useEffect(() => {
     if (pending && token) {
       fetchProgress(uploadedAt, token)
-        .then(handleStatusUpdate)
+        .then(payload => {
+          handleStatusUpdate({
+            type: 'STATUS',
+            payload,
+          });
+        })
         .catch(console.error);
       const channelId = `${config.clientId}-assembly`;
       subscribe(
@@ -57,9 +62,17 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    handleStatusUpdate: data => {
-      if (data.error) throw new Error(data.error);
-      dispatch(assemblyPipelineStatus(data));
+    handleStatusUpdate: ({ type, payload }) => {
+      switch (type) {
+        case 'ERROR':
+          dispatch(assemblyPipelineError(payload));
+          break;
+        case 'STATUS':
+          dispatch(assemblyPipelineStatus(payload));
+          break;
+        default:
+          console.log('[Assembly] Unknown message type:', type, payload);
+      }
     },
     progressTick: () => dispatch(assemblyProgressTick()),
   };

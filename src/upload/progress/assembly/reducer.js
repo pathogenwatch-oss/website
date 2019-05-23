@@ -1,8 +1,13 @@
-import { ASSEMBLY_PIPELINE_STATUS, ASSEMBLY_PROGRESS_TICK } from './actions';
+import {
+  ASSEMBLY_PIPELINE_STATUS,
+  ASSEMBLY_PROGRESS_TICK,
+  ASSEMBLY_PIPELINE_ERROR,
+} from './actions';
 
 const initialState = {
   status: {},
   tick: undefined,
+  errors: {},
 };
 
 export default function (state = initialState, { type, payload }) {
@@ -16,9 +21,17 @@ export default function (state = initialState, { type, payload }) {
     case ASSEMBLY_PROGRESS_TICK:
       return {
         ...state,
-        tick: Date.now(),
+        tick: payload,
       };
 
+    case ASSEMBLY_PIPELINE_ERROR:
+      return {
+        ...state,
+        errors: {
+          ...state.errors,
+          [payload.id]: payload.error,
+        },
+      };
     default:
       return state;
   }
