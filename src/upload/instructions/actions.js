@@ -5,7 +5,7 @@ import { addGenomes, uploadErrorMessage } from '../actions';
 
 import { history } from '~/app/router';
 
-import { mapCSVsToGenomes } from '../utils';
+import { mapCSVsToGenomes } from '../file-utils';
 
 export function addFiles(newFiles) {
   const uploadedAt = new Date().toISOString();
