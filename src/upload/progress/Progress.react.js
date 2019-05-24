@@ -11,7 +11,7 @@ import AnalysisChart from './analysis/AnalysisChart.react';
 import AnalysisListener from './analysis/Listener.react';
 import AssemblyStatus from './assembly/AssemblyStatus.react';
 import Fade from '~/components/fade';
-import UploadErrors from './files/UploadErrors.react';
+import Errors from './errors/Errors.react';
 
 import { getUploadsInProgress, shouldShowUploadErrors } from './selectors';
 import { getStatusSummary, isUploadPending, hasReads } from './files/selectors';
@@ -56,7 +56,7 @@ const Progress = ({
     <div className="wgsa-section-divider wgsa-flex-section">
       <Fade className="pw-expand">
         {showErrors ? (
-          <UploadErrors key="errors" />
+          <Errors key="errors" />
         ) : (
           <AnalysisChart key="analysis" uploadedAt={uploadedAt} />
         )}

@@ -1,16 +1,18 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { getUploadErrors, isUploadPending } from './selectors';
-
-import { InvalidGenomeError } from './utils/validation';
+import {
+  getNumOtherErrors,
+  getValidationErrors,
+  isUploadPending,
+} from '../files/selectors';
 
 const reload = e => {
   e.preventDefault();
   window.location.reload();
 };
 
-const UploadErrors = ({ errors, numOtherErrors, uploadPending }) => (
+const Errors = ({ errors, numOtherErrors, uploadPending }) => (
   <section>
     {errors.map(({ filename, error }) => (
       <article key={filename} className="pw-upload-file-error">
@@ -47,20 +49,11 @@ const UploadErrors = ({ errors, numOtherErrors, uploadPending }) => (
 );
 
 function mapStateToProps(state) {
-  const errors = [];
-  let numOtherErrors = 0;
-  for (const item of getUploadErrors(state)) {
-    if (item.error instanceof InvalidGenomeError) {
-      errors.push(item);
-    } else {
-      numOtherErrors++;
-    }
-  }
   return {
-    errors,
-    numOtherErrors,
+    errors: getValidationErrors(state),
+    numOtherErrors: getNumOtherErrors(state),
     uploadPending: isUploadPending(state),
   };
 }
 
-export default connect(mapStateToProps)(UploadErrors);
+export default connect(mapStateToProps)(Errors);

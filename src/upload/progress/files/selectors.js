@@ -1,5 +1,7 @@
 import { createSelector } from 'reselect';
 
+import { InvalidGenomeError } from './utils/validation';
+
 import { statuses } from './constants';
 
 export const getFiles = state => state.upload.progress.files;
@@ -66,12 +68,26 @@ export const getNumFailedUploads = createSelector(
   ({ errored }) => errored
 );
 
-export const getUploadErrors = createSelector(
+export const getValidationErrors = createSelector(
   state => getFiles(state).entities,
   state => getFiles(state).errors,
-  (files, errors) =>
-    Object.keys(errors).map(id => ({
-      filename: Object.keys(files[id])[0],
-      error: errors[id],
-    }))
+  (files, fileErrors) => {
+    const errors = [];
+    for (const id of Object.keys(fileErrors)) {
+      if (fileErrors[id] instanceof InvalidGenomeError) {
+        errors.push({
+          filename: Object.keys(files[id])[0],
+          error: fileErrors[id],
+        });
+      }
+    }
+    return errors;
+  }
+);
+
+export const getNumOtherErrors = createSelector(
+  state => getFiles(state).errors,
+  getValidationErrors,
+  (errors, validationErrors) =>
+    Object.keys(errors).length - validationErrors.length
 );
