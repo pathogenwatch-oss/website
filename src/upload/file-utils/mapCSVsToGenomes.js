@@ -58,16 +58,16 @@ export default function (files, assemblerUsage) {
     });
   }
 
-  let pairedReads = {};
+  let readsPairs = {};
   try {
-    pairedReads = pairReadsFiles(reads, READS_FILENAME_REGEX, assemblerUsage);
+    readsPairs = pairReadsFiles(reads, READS_FILENAME_REGEX, assemblerUsage);
   } catch (e) {
     return Promise.reject(e);
   }
 
   return getCsvRows(csvFiles)
     .then(rows => [
-      ...Object.entries(pairedReads).map(([ id, filesByName ], index) => {
+      ...Object.entries(readsPairs).map(([ id, filesByName ], index) => {
         const fileNames = Object.keys(filesByName);
         const row = rows.find(
           r => r.filename === id || fileNames.includes(r.filename)

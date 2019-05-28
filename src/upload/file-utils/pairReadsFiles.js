@@ -1,5 +1,3 @@
-import validateGzipped from './validateGzipped';
-
 export default function pairReadsFiles(files, filenameRegex, assemblerUsage) {
   const pairs = {};
   const { maxSizeMB = 500 } = assemblerUsage || {};
@@ -10,7 +8,6 @@ export default function pairReadsFiles(files, filenameRegex, assemblerUsage) {
         `${file.name} is too large, the limit is ${maxSizeMB} MB.`
       );
     }
-    validateGzipped(file);
     const id = file.name.match(filenameRegex)[1];
     pairs[id] = pairs[id] || {};
     pairs[id][file.name] = file;
