@@ -8,7 +8,7 @@ import Recovery from './Recovery.react';
 
 import { hasReads } from '../files/selectors';
 
-import { isReadsEligible } from '../../utils';
+import { isReadsEligible } from '../../file-utils';
 
 const RecoveryPage = ({
   uploadedAt,

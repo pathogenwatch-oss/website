@@ -4,7 +4,7 @@ import { getAssemblerUsage } from '~/upload/selectors';
 import { processFiles } from '../files/actions';
 import { UPLOAD_ADD_GENOMES } from '../../actions';
 
-import { mapCSVsToGenomes } from '~/upload/utils';
+import { mapCSVsToGenomes } from '~/upload/file-utils';
 
 export function recoverUploadSession(files, session = []) {
   return (dispatch, getState) => {

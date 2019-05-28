@@ -1,6 +1,9 @@
 /* eslint no-param-reassign: ["error", { "props": false }] */
 
 import Papa from 'papaparse';
+import validateMetadata from '../../universal/validateMetadata';
+
+export const CSV_FILENAME_REGEX = /(\.csv)$/i;
 
 function convertFieldNamesToLowerCase(row) {
   const cleanRow = {};
@@ -16,7 +19,7 @@ function transformRawCsv(rows) {
   return rows.map(convertFieldNamesToLowerCase);
 }
 
-function parseCsvToJson(csv) {
+export function parseCsvToJson(csv) {
   const results = Papa.parse(csv, {
     header: true,
     dynamicTyping: false,
@@ -32,7 +35,7 @@ function parseCsvToJson(csv) {
   return results;
 }
 
-function isValid({ date }) {
+export function isValid({ date }) {
   const thisYear = new Date().getFullYear();
 
   if (!date) {
@@ -54,6 +57,35 @@ function isValid({ date }) {
   }
 
   return true;
+}
+
+export function parseMetadata(row) {
+  const { displayname, id, name, filename, ...columns } = row;
+
+  const genomeName = displayname || id || name || filename;
+
+  const { year, month, day, latitude, longitude, pmid, ...rest } = columns;
+
+  const userDefined = {};
+  for (const [ key, value ] of Object.entries(rest)) {
+    if (!value.length) continue;
+    userDefined[key] = value;
+  }
+
+  const values = {
+    name: genomeName,
+    year: year ? parseInt(year, 10) : null,
+    month: month ? parseInt(month, 10) : null,
+    day: day ? parseInt(day, 10) : null,
+    latitude: latitude ? parseFloat(latitude) : null,
+    longitude: longitude ? parseFloat(longitude) : null,
+    pmid: pmid || null,
+    userDefined,
+  };
+
+  validateMetadata(values);
+
+  return values;
 }
 
 export default {

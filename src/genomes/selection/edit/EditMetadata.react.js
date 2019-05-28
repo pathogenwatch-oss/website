@@ -6,7 +6,7 @@ import classnames from 'classnames';
 import DownloadLink from '../download/DownloadLink.react';
 import DropArea from './DropArea.react';
 import Progress from './Progress.react';
-import Fade from '../../../components/fade';
+import Fade from '~/components/fade';
 import Limiter from '../Limiter.react';
 import { Link } from 'react-router-dom';
 
@@ -15,9 +15,9 @@ import { getSelectedGenomeIds } from '../selectors';
 import { toggleDropdown } from '../actions';
 import { sendMetadataUpdate } from './actions';
 
-import { getServerPath } from '../../../utils/Api';
-import { CSV_FILENAME_REGEX, parseMetadata } from '../../../upload/utils';
-import MetadataUtils from '../../../utils/Metadata';
+import { getServerPath } from '~/utils/Api';
+import { CSV_FILENAME_REGEX, parseMetadata } from '~/utils/Metadata';
+import MetadataUtils from '~/utils/Metadata';
 
 function getInitialState() {
   return {
