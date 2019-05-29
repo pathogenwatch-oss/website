@@ -190,15 +190,15 @@ router.put(
     const { user } = req;
     const { id } = req.params;
 
-    if (req.headers['content-type'] === 'application/json') {
+    if (req.is('application/json')) {
       LOGGER.info('Received status notification of genome assembly');
-      const { error } = req.body;
-      if (error) {
+      const { type, payload } = req.body;
+      if (type === 'ERROR') {
         services
           .request('genome', 'assembler-error', {
             id,
             user,
-            error,
+            error: payload.error,
           })
           .then(() => res.sendStatus(200))
           .catch(next);
