@@ -124,7 +124,7 @@ export const getSpeciesBreakdown = createSelector(
 
         return {
           ...section,
-          analyses: sortBy(analysesList, 'label'),
+          analyses: sortBy(analysesList, _ => _.label.toUpperCase()),
         };
       }
       return section;
