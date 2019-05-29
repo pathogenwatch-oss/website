@@ -15,13 +15,13 @@ import UploadErrors from './files/UploadErrors.react';
 
 import { getUploadsInProgress, shouldShowUploadErrors } from './selectors';
 import { getStatusSummary, isUploadPending, hasReads } from './files/selectors';
-import { getSpeciesBreakdown } from './analysis/selectors';
+import { shouldShowSpeciesBreakdown } from './analysis/selectors';
 
 const Progress = ({
   files,
   sessionHasReads,
   showErrors,
-  speciesBreakdown,
+  showSpeciesBreakdown,
   uploadedAt,
   uploadsInProgress,
   uploadsPending,
@@ -47,9 +47,9 @@ const Progress = ({
           <Overview completedUploads={files.completed} />
         )}
       </div>
-      {!!speciesBreakdown.length && speciesBreakdown[0].key !== 'pending' && (
+      {showSpeciesBreakdown && (
         <div className="wgsa-section-divider">
-          <SpeciesBreakdown data={speciesBreakdown} />
+          <SpeciesBreakdown />
         </div>
       )}
     </div>
@@ -70,7 +70,7 @@ function mapStateToProps(state) {
     files: getStatusSummary(state),
     sessionHasReads: hasReads(state),
     showErrors: shouldShowUploadErrors(state),
-    speciesBreakdown: getSpeciesBreakdown(state),
+    showSpeciesBreakdown: shouldShowSpeciesBreakdown(state),
     uploadsInProgress: getUploadsInProgress(state),
     uploadsPending: isUploadPending(state),
   };

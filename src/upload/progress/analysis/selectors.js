@@ -131,6 +131,11 @@ export const getSpeciesBreakdown = createSelector(
     })
 );
 
+export const shouldShowSpeciesBreakdown = createSelector(
+  getSpeciesBreakdown,
+  breakdown => !!breakdown.length && breakdown[0].key !== 'pending'
+);
+
 function getSpeciesCode(organismName) {
   const match = organismName.match(/^(.)\S* (..).*$/);
   if (match) {
