@@ -124,11 +124,16 @@ export const getSpeciesBreakdown = createSelector(
 
         return {
           ...section,
-          analyses: sortBy(analysesList, 'label'),
+          analyses: sortBy(analysesList, _ => _.label.toUpperCase()),
         };
       }
       return section;
     })
+);
+
+export const shouldShowSpeciesBreakdown = createSelector(
+  getSpeciesBreakdown,
+  breakdown => !!breakdown.length && breakdown[0].key !== 'pending'
 );
 
 function getSpeciesCode(organismName) {

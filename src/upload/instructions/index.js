@@ -11,7 +11,7 @@ import Summary from '../Summary.react';
 
 import { addFiles } from './actions';
 
-import { isReadsEligible } from '../utils';
+import { isReadsEligible } from '../file-utils';
 
 const Component = ({ onFiles }) => {
   const readsEligible = isReadsEligible();

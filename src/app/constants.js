@@ -55,7 +55,7 @@ export const statuses = {
 
 export const analysisLabels = {
   cgmlst: 'cgMLST',
-  core: 'Core',
+  core: 'Core SNPs',
   genotyphi: 'Genotyphi',
   inctyper: 'IncTyper',
   kleborate: 'Kleborate',
@@ -63,7 +63,7 @@ export const analysisLabels = {
   mlst: 'MLST',
   ngmast: 'NG-MAST',
   paarsnp: 'AMR',
-  serotype: 'Serotype',
-  speciator: 'Speciation',
   poppunk: 'Strain',
+  serotype: 'Serotype',
+  speciator: 'Species Prediction',
 };

@@ -10,7 +10,7 @@ import { getPendingFiles } from './selectors';
 
 import { recoverUploadSession } from './actions';
 
-import { isReadsEligible } from '../../utils';
+import { isReadsEligible } from '../../file-utils';
 
 const readsEligible = isReadsEligible();
 
