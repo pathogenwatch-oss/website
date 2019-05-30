@@ -23,8 +23,8 @@ const schema = new Schema({
   _user: { type: Schema.Types.ObjectId, ref: 'User', index: true },
   analysis: Object,
   assembler: {
-    type: { error: String },
-    default: null,
+    error: String,
+    qc: Object,
   },
   binned: { type: Boolean, default: false },
   binnedDate: Date,
