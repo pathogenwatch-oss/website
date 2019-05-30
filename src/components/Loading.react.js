@@ -3,7 +3,7 @@ import React from 'react';
 import Fade from './fade';
 
 export default ({ complete, placeholder, children, wait = 280 }) => {
-  const [ waited, setWaited ] = React.useState(false);
+  const [ waited, setWaited ] = React.useState(complete);
   React.useEffect(() => {
     setTimeout(() => setWaited(true), wait);
   }, []);
@@ -15,5 +15,4 @@ export default ({ complete, placeholder, children, wait = 280 }) => {
       }
     </Fade>
   );
-}
-;
+};
