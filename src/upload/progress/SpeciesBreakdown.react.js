@@ -1,5 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import classnames from 'classnames';
+
 import { getSpeciesBreakdown } from './analysis/selectors';
 import { isSpecieationComplete } from './selectors';
 
@@ -26,12 +28,13 @@ const SpeciesBreakdown = ({ data, speciesPredictionComplete }) => (
                   <span className="wgsa-upload-legend-count aligned">
                     {analysis.errors > 0 && (
                       <span className="wgsa-upload-legend-count-errors">
-                        &nbsp;{analysis.errors} error
-                        {analysis.errors === 1 ? '' : 's'}
+                        &nbsp;{analysis.errors} error{analysis.errors === 1 ? '' : 's'}
                       </span>
                     )}
                     {speciesPredictionComplete && analysis.total === total ? (
-                      <i className="material-icons">check_circle</i>
+                      <i className={classnames('material-icons', { success: !(analysis.errors > 0) })}>
+                        {analysis.errors > 0 ? 'error_outline' : 'check_circle'}
+                      </i>
                     ) : (
                       analysis.total
                     )}

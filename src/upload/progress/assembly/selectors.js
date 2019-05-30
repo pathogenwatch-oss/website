@@ -4,6 +4,7 @@ import {
   getNumUploadedTypes,
   getNumUploadedReads,
   getFailedReadsUploads,
+  getUploadedGenomes,
 } from '../genomes/selectors';
 
 import { DEFAULT } from '~/app/constants';
@@ -14,7 +15,7 @@ export const getAssemblyProgress = state => getAssemblyState(state).status;
 export const getAssemblyTick = state => getAssemblyState(state).tick;
 export const getAssemblyPending = state => getAssemblyProgress(state).pending;
 
-const expectedDuration = 1000 * 60 * 20; // 20 minutes
+const expectedDuration = 1000 * 60 * 30; // 30 minutes
 const maxPercent = 99;
 const minPercent = 1;
 
@@ -83,4 +84,26 @@ export const isAssemblyPending = createSelector(
   getAssemblySummary,
   getFailedReadsUploads,
   ({ pending }, numFailed) => pending - numFailed > 0
+);
+
+export const getNumAssemblerErrors = createSelector(
+  getAssemblySummary,
+  ({ failed }) => failed,
+);
+
+export const getAssemblerErrors = createSelector(
+  state => getAssemblyState(state).errors,
+  getUploadedGenomes,
+  (errors, genomes) => {
+    const _errors = [];
+    for (const [ id, error ] of Object.entries(errors)) {
+      if (id in genomes) {
+        _errors.push({
+          name: genomes[id].name,
+          message: error,
+        });
+      }
+    }
+    return _errors;
+  }
 );

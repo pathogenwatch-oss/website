@@ -14,14 +14,16 @@ const ASSEMBLY_FILENAME_REGEX = new RegExp(
 );
 
 import config from '~/app/config';
-const MAX_ASSEMBLY_FILE_SIZE = config.maxGenomeFileSize * 1048576;
+const { maxGenomeFileSize = 20 } = config;
+const MAX_ASSEMBLY_FILE_SIZE = maxGenomeFileSize * 1048576;
 
 function validateAssemblySize(file) {
+  console.log(file, maxGenomeFileSize);
   if (file.size === 0) {
     throw new Error(`${file.name} is an empty file.`);
   } else if (file.size > MAX_ASSEMBLY_FILE_SIZE) {
     throw new Error(
-      `${file.name} is too large, the limit is ${config.maxGenomeFileSize} MB.`
+      `${file.name} is too large, the limit is ${maxGenomeFileSize} MB.`
     );
   } else {
     return file;

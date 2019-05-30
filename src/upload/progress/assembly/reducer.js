@@ -3,6 +3,7 @@ import {
   ASSEMBLY_PROGRESS_TICK,
   ASSEMBLY_PIPELINE_ERROR,
 } from './actions';
+import { UPLOAD_FETCH_GENOMES } from '../actions';
 
 const initialState = {
   status: {},
@@ -32,6 +33,18 @@ export default function (state = initialState, { type, payload }) {
           [payload.id]: payload.error,
         },
       };
+    case UPLOAD_FETCH_GENOMES.SUCCESS: {
+      const errors = {};
+      for (const genome of payload.result.genomes) {
+        if (genome.assembler && genome.assembler.error) {
+          errors[genome.id] = genome.assembler.error;
+        }
+      }
+      return {
+        ...state,
+        errors,
+      };
+    }
     default:
       return state;
   }

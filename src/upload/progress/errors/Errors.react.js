@@ -6,15 +6,25 @@ import {
   getValidationErrors,
   isUploadPending,
 } from '../files/selectors';
+import { getAssemblerErrors } from '../assembly/selectors';
 
 const reload = e => {
   e.preventDefault();
   window.location.reload();
 };
 
-const Errors = ({ errors, numOtherErrors, uploadPending }) => (
+const Errors = ({ assemblerErrors, validationErrors, numOtherErrors, uploadPending }) => (
   <section>
-    {errors.map(({ filename, error }) => (
+    {assemblerErrors.map(({ name, message }) => (
+      <article key={name} className="pw-upload-file-error">
+        <i className="material-icons">error_outline</i>
+        <div>
+          <h5>{name}</h5>
+          <p>{message}</p>
+        </div>
+      </article>
+    ))}
+    {validationErrors.map(({ filename, error }) => (
       <article key={filename} className="pw-upload-file-error">
         <i className="material-icons">error_outline</i>
         <div>
@@ -50,9 +60,10 @@ const Errors = ({ errors, numOtherErrors, uploadPending }) => (
 
 function mapStateToProps(state) {
   return {
-    errors: getValidationErrors(state),
+    assemblerErrors: getAssemblerErrors(state),
     numOtherErrors: getNumOtherErrors(state),
     uploadPending: isUploadPending(state),
+    validationErrors: getValidationErrors(state),
   };
 }
 

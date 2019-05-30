@@ -13,9 +13,10 @@ import AssemblyStatus from './assembly/AssemblyStatus.react';
 import Fade from '~/components/fade';
 import Errors from './errors/Errors.react';
 
-import { getUploadsInProgress, shouldShowUploadErrors } from './selectors';
+import { getUploadsInProgress } from './selectors';
 import { getStatusSummary, isUploadPending, hasReads } from './files/selectors';
 import { shouldShowSpeciesBreakdown } from './analysis/selectors';
+import { shouldShowErrors } from './errors/selectors';
 
 const Progress = ({
   files,
@@ -69,7 +70,7 @@ function mapStateToProps(state) {
   return {
     files: getStatusSummary(state),
     sessionHasReads: hasReads(state),
-    showErrors: shouldShowUploadErrors(state),
+    showErrors: shouldShowErrors(state),
     showSpeciesBreakdown: shouldShowSpeciesBreakdown(state),
     uploadsInProgress: getUploadsInProgress(state),
     uploadsPending: isUploadPending(state),

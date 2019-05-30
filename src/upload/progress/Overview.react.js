@@ -101,7 +101,7 @@ const Overview = props => {
             completedUploads === 1 ? '' : 's'
           } uploaded`}
       </p>
-      {hasReads && (
+      {hasReads && completedUploads > 0 && (
         <AssemblyStage
           complete={assembly.done}
           total={assembly.total}
