@@ -74,6 +74,8 @@ function mapDispatchToProps(dispatch) {
           default:
             console.log('[Assembly] Unknown message type:', message);
         }
+      } else if (message.error) {
+        throw new Error(message.error);
       } else {
         dispatch(assemblyPipelineStatus(message));
       }

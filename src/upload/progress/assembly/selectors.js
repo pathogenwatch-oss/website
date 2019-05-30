@@ -93,7 +93,7 @@ export const getAssemblerErrors = createSelector(
   (errors, genomes) => {
     const _errors = [];
     for (const [ id, error ] of Object.entries(errors)) {
-      if (id in genomes) {
+      if (id in genomes && !error.includes('quality')) {
         _errors.push({
           name: genomes[id].name,
           message: error,
