@@ -10,8 +10,9 @@ import {
 import { DEFAULT } from '~/app/constants';
 
 export const getAssemblyState = ({ upload }) => upload.progress.assembly;
-
+export const getAssemblyLoaded = ({ upload }) => upload.progress.assembly;
 export const getAssemblyProgress = state => getAssemblyState(state).status;
+export const getSessionLoaded = state => getAssemblyState(state).loaded;
 export const getAssemblyTick = state => getAssemblyState(state).tick;
 export const getAssemblyPending = state => getAssemblyProgress(state).pending;
 
@@ -86,11 +87,6 @@ export const isAssemblyPending = createSelector(
   ({ pending }, numFailed) => pending - numFailed > 0
 );
 
-export const getNumAssemblerErrors = createSelector(
-  getAssemblySummary,
-  ({ failed }) => failed,
-);
-
 export const getAssemblerErrors = createSelector(
   state => getAssemblyState(state).errors,
   getUploadedGenomes,
@@ -106,4 +102,9 @@ export const getAssemblerErrors = createSelector(
     }
     return _errors;
   }
+);
+
+export const getNumAssemblerErrors = createSelector(
+  getAssemblerErrors,
+  errors => errors.length,
 );

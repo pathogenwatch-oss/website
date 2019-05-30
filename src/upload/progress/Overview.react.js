@@ -3,10 +3,9 @@ import { connect } from 'react-redux';
 import classnames from 'classnames';
 
 import * as upload from './selectors';
-import * as files from './files/selectors';
 import { getQueuePosition } from './analysis/selectors';
 import { getAssemblyPending } from './assembly/selectors';
-import { getBatchSize } from './genomes/selectors';
+import { getBatchSize, hasReads } from './genomes/selectors';
 
 const AssemblyStage = ({ complete, total, hasErrors }) => {
   if (complete === total) {
@@ -68,7 +67,7 @@ const Overview = props => {
   const {
     assemblyQueued,
     hasErrors,
-    hasReads,
+    sessionHasReads,
     position,
     progress,
     totalGenomes,
@@ -78,11 +77,11 @@ const Overview = props => {
 
   const { assembly, analyses, speciation } = progress;
 
-  const assemblyComplete = hasReads ? assembly.done === assembly.total : true;
+  const assemblyComplete = sessionHasReads ? assembly.done === assembly.total : true;
   const speciationComplete = speciation.done === totalGenomes;
   const analysisPending =
     completedUploads > 0 &&
-    (hasReads ? assembly.complete > 0 : true) &&
+    (sessionHasReads ? assembly.complete > 0 : true) &&
     (analyses.total === 0 || analyses.done < analyses.total);
 
   return (
@@ -101,7 +100,7 @@ const Overview = props => {
             completedUploads === 1 ? '' : 's'
           } uploaded`}
       </p>
-      {hasReads && completedUploads > 0 && (
+      {sessionHasReads && completedUploads > 0 && (
         <AssemblyStage
           complete={assembly.done}
           total={assembly.total}
@@ -131,7 +130,7 @@ function mapStateToProps(state) {
   return {
     assemblyQueued: getAssemblyPending(state),
     hasErrors: upload.hasErrors(state),
-    hasReads: files.hasReads(state),
+    sessionHasReads: hasReads(state),
     position: getQueuePosition(state),
     progress: upload.getOverallProgress(state),
     totalGenomes: getBatchSize(state),

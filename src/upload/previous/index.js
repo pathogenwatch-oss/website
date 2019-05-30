@@ -4,14 +4,15 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 
-import Spinner from '../../components/Spinner.react';
+import DocumentTitle from '~/branding/DocumentTitle.react';
+import Grid from '~/grid';
+import Loading from '~/components/Loading.react';
+import Spinner from '~/components/Spinner.react';
 import Summary from '../Summary.react';
-import Grid from '../../grid';
-import DocumentTitle from '../../branding/DocumentTitle.react';
 
 import { fetchUploads } from './actions';
 
-import { formatDateTime } from '../../utils/Date';
+import { formatDateTime } from '~/utils/Date';
 
 const ListItem = ({ item }) => {
   const { uploadedAt, total, complete } = item;
@@ -43,44 +44,46 @@ const Header = () => (
   </header>
 );
 
-class Previous extends React.Component {
-  componentDidMount() {
-    this.props.fetch();
+function getContent({ loading, error, uploads }) {
+  if (error) {
+    return <p>Failed to fetch previous uploads.</p>;
+  } else if (!loading && uploads.length === 0) {
+    return <p>No previous uploads found.</p>;
   }
-
-  render() {
-    const { loading, error, uploads } = this.props;
-    return (
-      <React.Fragment>
-        <DocumentTitle>Previous Uploads</DocumentTitle>
-        <Summary />
-        {!!uploads.length ? (
-          <Grid
-            className="wgsa-genome-list-view wgsa-previous-uploads"
-            template={ListItem}
-            items={uploads}
-            columnCount={1}
-            rowHeight={40}
-            header={<Header />}
-            headerHeight={25}
-          />
-        ) : (
-          <div className="wgsa-content-margin">
-            {loading && (
-              <div className="pw-flex-center">
-                <Spinner />
-              </div>
-            )}
-            {error && <p>Failed to fetch previous uploads.</p>}
-            {!loading && !error && uploads.length === 0 && (
-              <p>No previous uploads found.</p>
-            )}
-          </div>
-        )}
-      </React.Fragment>
-    );
-  }
+  return (
+    <Grid
+      className="wgsa-genome-list-view wgsa-previous-uploads"
+      template={ListItem}
+      items={uploads}
+      columnCount={1}
+      rowHeight={40}
+      header={<Header />}
+      headerHeight={25}
+    />
+  );
 }
+
+const Previous = (props) => {
+  React.useEffect(() => {
+    props.fetch();
+  }, []);
+  return (
+    <React.Fragment>
+      <DocumentTitle>Previous Uploads</DocumentTitle>
+      <Summary />
+      <Loading
+        complete={props.uploads.length > 0 || props.error}
+        placeholder={
+          <div className="pw-flex-center">
+            <Spinner />
+          </div>
+        }
+      >
+        {getContent(props)}
+      </Loading>
+    </React.Fragment>
+  );
+};
 
 function mapStateToProps(state) {
   return state.upload.previous;

@@ -18,7 +18,6 @@ const { maxGenomeFileSize = 20 } = config;
 const MAX_ASSEMBLY_FILE_SIZE = maxGenomeFileSize * 1048576;
 
 function validateAssemblySize(file) {
-  console.log(file, maxGenomeFileSize);
   if (file.size === 0) {
     throw new Error(`${file.name} is an empty file.`);
   } else if (file.size > MAX_ASSEMBLY_FILE_SIZE) {

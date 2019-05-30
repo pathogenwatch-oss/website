@@ -6,6 +6,7 @@ import {
 import { UPLOAD_FETCH_GENOMES } from '../actions';
 
 const initialState = {
+  loaded: false,
   status: {},
   tick: undefined,
   errors: {},
@@ -16,6 +17,7 @@ export default function (state = initialState, { type, payload }) {
     case ASSEMBLY_PIPELINE_STATUS:
       return {
         ...state,
+        loaded: true,
         status: payload,
       };
 

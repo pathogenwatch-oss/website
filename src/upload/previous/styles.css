@@ -1,6 +1,7 @@
 .wgsa-genome-list-view.wgsa-previous-uploads {
   margin-top: 16px;
   margin-left: 0;
+  height: calc(100% - 16px);
 }
 
 .wgsa-previous-uploads .wgsa-genome-list-header {

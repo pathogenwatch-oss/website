@@ -4,12 +4,13 @@ import { connect } from 'react-redux';
 import Fade from '~/components/fade';
 
 import { getNumberOfProblems } from './selectors';
+import { isLoading } from '../selectors';
 
 import { toggleErrors } from './actions';
 
-const Toggle = ({ numProblems, onClick }) => (
+const Toggle = ({ visible, numProblems, onClick }) => (
   <Fade>
-    {numProblems > 0 && (
+    {visible && (
       <button
         className="pw-pill pw-pill-danger pw-uppercase"
         onClick={onClick}
@@ -21,8 +22,11 @@ const Toggle = ({ numProblems, onClick }) => (
 );
 
 function mapStateToProps(state) {
+  const numProblems = getNumberOfProblems(state);
+  const sessionIsLoading = isLoading(state);
   return {
-    numProblems: getNumberOfProblems(state),
+    numProblems,
+    visible: !sessionIsLoading && numProblems > 0,
   };
 }
 

@@ -1,6 +1,7 @@
 .wgsa-upload-progress {
   display: flex;
   justify-content: space-between;
+  height: 100%;
 }
 
 .pw-upload-page {

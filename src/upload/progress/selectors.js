@@ -1,12 +1,13 @@
 import { createSelector } from 'reselect';
 
 import { getAnalysisList } from './analysis/selectors';
-import { getAssemblySummary } from './assembly/selectors';
-import { getUploadedGenomes, getBatchSize } from './genomes/selectors';
+import { getAssemblySummary, getSessionLoaded } from './assembly/selectors';
+import { getUploadedGenomes, getBatchSize, hasReads } from './genomes/selectors';
 import {
   getProcessing,
   getUploadedFiles,
   getUploadStatuses,
+  isUploadPending,
 } from './files/selectors';
 import { getFileIds } from './recovery/selectors';
 
@@ -91,4 +92,17 @@ export const isAnalysisComplete = createSelector(
 export const hasErrors = createSelector(
   getOverallProgress,
   ({ errors }) => errors > 0
+);
+
+export const isLoading = createSelector(
+  getBatchSize,
+  isUploadPending,
+  hasReads,
+  getSessionLoaded,
+  (size, uploadsPending, sessionHasReads, loaded) => {
+    if (!(size > 0)) return true;
+    if (uploadsPending) return false;
+    if (sessionHasReads) return !loaded;
+    return false;
+  }
 );

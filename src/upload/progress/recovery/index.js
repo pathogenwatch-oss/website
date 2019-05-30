@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import AssemblerSessionRecovery from './AssemblerSessionRecovery.react';
 import Recovery from './Recovery.react';
 
-import { hasReads } from '../files/selectors';
+import { hasReads } from '../genomes/selectors';
 
 import { isReadsEligible } from '../../file-utils';
 

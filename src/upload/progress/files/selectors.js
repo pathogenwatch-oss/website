@@ -6,15 +6,8 @@ import { statuses } from './constants';
 
 export const getFiles = state => state.upload.progress.files;
 
-export const getUploadQueue = state => getFiles(state)._.queue;
-export const getProcessing = state => getFiles(state)._.processing;
-export const getNumUploadedReads = state => getFiles(state)._.numberOfReads;
-const getBatchSize = state => getFiles(state)._.batchSize;
-
-export const hasReads = createSelector(
-  getNumUploadedReads,
-  count => count > 0
-);
+export const getUploadQueue = state => getFiles(state).queue.pending;
+export const getProcessing = state => getFiles(state).queue.processing;
 
 export const getUploadedFiles = state => getFiles(state).entities;
 
@@ -42,15 +35,15 @@ export const isUploadPending = createSelector(
 export const getUploadStatuses = state => getFiles(state).status;
 
 export const getStatusSummary = createSelector(
-  getBatchSize,
   getUploadStatuses,
-  (total, uploadStatuses) => {
+  (uploadStatuses) => {
     const summary = {};
-    for (const status of Object.values(uploadStatuses)) {
+    const _statuses = Object.values(uploadStatuses);
+    for (const status of _statuses) {
       summary[status] = (summary[status] || 0) + 1;
     }
     return {
-      total,
+      total: _statuses.length,
       completed: summary[statuses.SUCCESS] || 0,
       errored: summary[statuses.ERROR] || 0,
       pending: summary[statuses.PENDING] || 0,

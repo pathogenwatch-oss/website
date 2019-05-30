@@ -2,7 +2,7 @@ import { createSelector } from 'reselect';
 import sortBy from 'lodash.sortby';
 
 import { getAssemblyChartData } from '../assembly/selectors';
-import { hasReads } from '../files/selectors';
+import { hasReads } from '../genomes/selectors';
 
 import { getColourGenerator, getLightColour } from '~/utils/colours';
 import { getOrganismName } from '~/organisms';

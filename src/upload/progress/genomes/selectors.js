@@ -55,10 +55,12 @@ export const getNumUploadedTypes = createSelector(
 
 export const getNumUploadedAssemblies = createSelector(
   getNumUploadedTypes,
-  ({ assemblies }) => assemblies
+  numberOf => numberOf.assemblies
 );
 
 export const getNumUploadedReads = createSelector(
   getNumUploadedTypes,
-  ({ reads }) => reads
+  numberOf => numberOf.reads
 );
+
+export const hasReads = state => getNumUploadedReads(state) > 0;
