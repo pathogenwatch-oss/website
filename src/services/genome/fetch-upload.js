@@ -34,6 +34,7 @@ module.exports = async function ({ user, query }) {
       assembler: doc.assembler,
       errored: doc.errored,
       id: doc._id,
+      name: doc.name,
       pending: doc.pending,
       type: upload.type,
       uploadedAt: doc.uploadedAt,

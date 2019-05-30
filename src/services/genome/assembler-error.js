@@ -12,5 +12,5 @@ module.exports = async ({ user, id, error }) => {
     throw new ServiceRequestError('Not authorised');
   }
 
-  await Genome.update({ _user: user, _id: id }, { $set: { assembler: { error } } });
+  await Genome.update({ _user: user, _id: id }, { $set: { 'assembler.error': error } });
 };
