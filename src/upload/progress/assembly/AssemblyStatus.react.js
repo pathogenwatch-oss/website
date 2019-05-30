@@ -62,16 +62,20 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    handleStatusUpdate: ({ type, payload }) => {
-      switch (type) {
-        case 'ERROR':
-          dispatch(assemblyPipelineError(payload));
-          break;
-        case 'STATUS':
-          dispatch(assemblyPipelineStatus(payload));
-          break;
-        default:
-          console.log('[Assembly] Unknown message type:', type, payload);
+    handleStatusUpdate: (message) => {
+      if (message.type) {
+        switch (message.type) {
+          case 'ERROR':
+            dispatch(assemblyPipelineError(message.payload));
+            break;
+          case 'STATUS':
+            dispatch(assemblyPipelineStatus(message.payload));
+            break;
+          default:
+            console.log('[Assembly] Unknown message type:', message);
+        }
+      } else {
+        dispatch(assemblyPipelineStatus(message));
       }
     },
     progressTick: () => dispatch(assemblyProgressTick()),
