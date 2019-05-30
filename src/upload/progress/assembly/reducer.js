@@ -4,6 +4,7 @@ import {
   ASSEMBLY_PIPELINE_ERROR,
 } from './actions';
 import { UPLOAD_FETCH_GENOMES } from '../actions';
+import { UPLOAD_ADD_GENOMES } from '../../actions';
 
 const initialState = {
   loaded: false,
@@ -35,6 +36,7 @@ export default function (state = initialState, { type, payload }) {
           [payload.id]: payload.error,
         },
       };
+
     case UPLOAD_FETCH_GENOMES.SUCCESS: {
       const errors = {};
       for (const genome of payload.result.genomes) {
@@ -47,6 +49,13 @@ export default function (state = initialState, { type, payload }) {
         errors,
       };
     }
+
+    case UPLOAD_ADD_GENOMES.SUCCESS:
+      return {
+        ...state,
+        loaded: true,
+      };
+
     default:
       return state;
   }

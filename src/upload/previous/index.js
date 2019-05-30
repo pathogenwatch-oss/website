@@ -46,9 +46,9 @@ const Header = () => (
 
 function getContent({ loading, error, uploads }) {
   if (error) {
-    return <p>Failed to fetch previous uploads.</p>;
+    return <p className="pw-upload-page pw-centre-text">Failed to fetch previous uploads.</p>;
   } else if (!loading && uploads.length === 0) {
-    return <p>No previous uploads found.</p>;
+    return <p className="pw-upload-page pw-centre-text">No previous uploads found.</p>;
   }
   return (
     <Grid
