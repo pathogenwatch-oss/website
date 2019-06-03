@@ -4,7 +4,7 @@ import 'eventsource/lib/eventsource-polyfill';
 
 import { useAuthToken } from '~/auth/hooks';
 
-import { isAssemblyInProgress, isAssemblyPending } from './selectors';
+import { isAssemblyInProgress, shouldListenForUpdates } from './selectors';
 
 import { assemblyProgressTick, assemblyPipelineStatus, assemblyPipelineError } from './actions';
 
@@ -16,14 +16,14 @@ import { fetchProgress } from './api';
 const Status = ({
   assemblyInProgress,
   handleStatusUpdate,
-  pending,
+  listening,
   progressTick,
   token,
   uploadedAt,
 }) => {
   useAuthToken();
   React.useEffect(() => {
-    if (pending && token) {
+    if (listening && token) {
       fetchProgress(uploadedAt, token)
         .then(payload => {
           handleStatusUpdate({
@@ -38,7 +38,7 @@ const Status = ({
       );
       return () => unsubscribe(channelId);
     }
-  }, [ pending, token ]);
+  }, [ listening, token ]);
 
   React.useEffect(() => {
     if (assemblyInProgress) {
@@ -54,7 +54,7 @@ const Status = ({
 
 function mapStateToProps(state) {
   return {
-    pending: isAssemblyPending(state),
+    listening: shouldListenForUpdates(state),
     assemblyInProgress: isAssemblyInProgress(state),
     token: state.auth.token,
   };
@@ -63,21 +63,15 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return {
     handleStatusUpdate: (message) => {
-      if (message.type) {
-        switch (message.type) {
-          case 'ERROR':
-            dispatch(assemblyPipelineError(message.payload));
-            break;
-          case 'STATUS':
-            dispatch(assemblyPipelineStatus(message.payload));
-            break;
-          default:
-            console.log('[Assembly] Unknown message type:', message);
-        }
-      } else if (message.error) {
-        throw new Error(message.error);
-      } else {
-        dispatch(assemblyPipelineStatus(message));
+      switch (message.type) {
+        case 'ERROR':
+          dispatch(assemblyPipelineError(message.payload));
+          break;
+        case 'STATUS':
+          dispatch(assemblyPipelineStatus(message.payload));
+          break;
+        default:
+          console.log('[Assembly] Unknown message type:', message);
       }
     },
     progressTick: () => dispatch(assemblyProgressTick()),

@@ -108,3 +108,13 @@ export const getNumAssemblerErrors = createSelector(
   getAssemblerErrors,
   errors => errors.length,
 );
+
+export const shouldListenForUpdates = createSelector(
+  isAssemblyPending,
+  getAssemblyProgress,
+  getNumAssemblerErrors,
+  (pending, { failed = 0 }, numErrors) => {
+    if (pending) return true;
+    return failed > 0 && numErrors < failed;
+  }
+);
