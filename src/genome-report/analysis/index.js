@@ -47,7 +47,7 @@ export default genome => {
   } else if (mlst) {
     sections.push({
       key: 'MLST',
-      component: <MLST result={mlst} />,
+      component: <MLST genome={genome} />,
     });
   }
   // if (kleborate) {

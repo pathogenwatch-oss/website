@@ -57,6 +57,7 @@ export const statuses = {
 
 export const analysisLabels = {
   cgmlst: 'cgMLST',
+  core: 'Core',
   genotyphi: 'Genotyphi',
   inctyper: 'IncTyper',
   kleborate: 'Kleborate',

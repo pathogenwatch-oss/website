@@ -43,7 +43,9 @@ const Section = ({ speciesId, speciesName, total, tasks, ids }) => {
         {tasks.map(task => (
           <li key={task.name}>
             <DownloadLink
-              link={getServerPath(`/download/analysis/${task.name}`)}
+              link={getServerPath(
+                `/download/analysis/${task.name}?speciesId=${speciesId}`
+              )}
               ids={task.ids}
             >
               {task.label}

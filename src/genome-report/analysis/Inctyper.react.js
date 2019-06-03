@@ -14,9 +14,8 @@ import React from 'react';
 //    }
 // ]
 
-export default ({ analysis }) => {
-
-  const { inctyper, paarsnp } = analysis;
+export default ({analysis}) => {
+  const {inctyper, paarsnp = {matches: []}} = analysis;
   const matches = inctyper['Inc Matches'];
 
   matches.sort((a, b) => a.Contig.localeCompare(b.Contig));
@@ -29,8 +28,9 @@ export default ({ analysis }) => {
       continue;
     }
     if (
-      (paarsnp.hasOwnProperty('paar') && paarsnp.paar.includes(match.id))
-      || (paarsnp.hasOwnProperty('snp') && paarsnp.snp.includes(match.id))) {
+      (paarsnp.hasOwnProperty('paar') && paarsnp.paar.includes(match.id)) ||
+      (paarsnp.hasOwnProperty('snp') && paarsnp.snp.includes(match.id))
+    ) {
       if (!(match.query.id in amrMatches)) {
         amrMatches[match.query.id] = [];
       }
@@ -42,7 +42,7 @@ export default ({ analysis }) => {
     <React.Fragment>
       <header className="pw-genome-report-section-header">
         <h2>Plasmid Inc Types</h2>
-        <span>
+        <p>
           Database sourced from{' '}
           <a
             href="https://cge.cbs.dtu.dk/services/PlasmidFinder/"
@@ -51,7 +51,7 @@ export default ({ analysis }) => {
           >
             https://cge.cbs.dtu.dk/services/PlasmidFinder/
           </a>
-        </span>
+        </p>
       </header>
       <table className="bordered wide" cellSpacing="0">
         <thead>
@@ -71,9 +71,7 @@ export default ({ analysis }) => {
               <td>{incMatch['Inc Match']}</td>
               <td>{incMatch['Percent Identity']}</td>
               <td>{incMatch['Match Coverage']}</td>
-              <td>{
-                (amrMatches[incMatch.Contig] || []).join(', ')
-              }</td>
+              <td>{(amrMatches[incMatch.Contig] || []).join(', ')}</td>
             </tr>
           ))
         ) : (
@@ -87,5 +85,4 @@ export default ({ analysis }) => {
       </table>
     </React.Fragment>
   );
-}
-;
+};
