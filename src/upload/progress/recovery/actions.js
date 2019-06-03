@@ -12,7 +12,15 @@ export function recoverUploadSession(files, session = []) {
     const usage = getAssemblerUsage(state);
     const filenameToGenomeId = getFilenameToGenomeId(state);
     const filesToRecover = new Set(Object.keys(filenameToGenomeId));
-    mapCSVsToGenomes(files.filter(file => filesToRecover.has(file.name)), usage)
+    const relevantFiles = files.filter(file => filesToRecover.has(file.name));
+    if (relevantFiles.length === 0) {
+      dispatch({
+        type: 'UPLOAD_ERROR_MESSAGE',
+        payload: 'No matching files for this session, please try again.',
+      });
+      return;
+    }
+    mapCSVsToGenomes(relevantFiles, usage)
       .then(genomes => {
         for (const genome of genomes) {
           let genomeId;
