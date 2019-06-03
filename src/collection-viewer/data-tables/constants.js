@@ -87,14 +87,6 @@ export const systemDataColumns = {
         .join('; ');
     },
   },
-  __kleborate_species: {
-    columnKey: '__kleborate_species',
-    displayName: 'Species',
-    valueGetter({ analysis }) {
-      if (!analysis.kleborate) return null;
-      return analysis.kleborate.species;
-    },
-  },
   __virulence_score: {
     columnKey: '__virulence_score',
     displayName: 'Virulence Score',
