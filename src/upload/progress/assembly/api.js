@@ -85,7 +85,9 @@ export function upload(genome, { token, uploadedAt }, dispatch) {
           })
         );
       }
-      Promise.all(promises).then(resolve);
+      Promise.all(promises)
+        .then(resolve)
+        .catch(reject);
     });
     r.on('filesAdded', addedFiles => {
       if (genome.recovery) {
