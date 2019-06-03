@@ -164,6 +164,7 @@ const getAnalysisChartData = createSelector(
       labels: [],
       parents: [],
       total: 0,
+      tooltips: [],
     };
 
     let organismIndex = 0;
@@ -177,7 +178,6 @@ const getAnalysisChartData = createSelector(
       organisms.total += total;
 
       let sum = total;
-      sts.total = total;
       const { mlst = {} } = analyses;
       const { sequenceTypes = [] } = mlst;
       for (const st of sequenceTypes) {
@@ -185,7 +185,7 @@ const getAnalysisChartData = createSelector(
         sts.backgroundColor.push(st.colour || getLightColour(colour));
         sts.labels.push(st.label);
         sts.parents.push(organismIndex);
-        // sts.total = total;
+        sts.tooltips.push(`${st.total} / ${total}, ${(st.total / total * 100).toFixed(1)}%`);
         sum -= st.total;
       }
       if (sum > 0) {
