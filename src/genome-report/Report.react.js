@@ -54,8 +54,9 @@ const Content = React.createClass({
         ),
       });
     }
+    // Extraneous wrapping div smooths out the animation
     return (
-      <React.Fragment>
+      <div>
         <nav onClick={e => e.stopPropagation()}>
           <ScrollSpy
             items={sections.map(_ => _.key.toLowerCase())}
@@ -104,7 +105,7 @@ const Content = React.createClass({
             </div>
           }
         </div>
-      </React.Fragment>
+      </div>
     );
   },
 });
@@ -130,7 +131,7 @@ const Report = ({ name, genome, status, close }) => {
     >
       <Loading
         placeholder={
-          <div className="wgsa-genome-report-content pw-flex-center" onClick={e => e.stopPropagation()}>
+          <div className="wgsa-genome-report-loader" onClick={e => e.stopPropagation()}>
             <Spinner />
           </div>
         }

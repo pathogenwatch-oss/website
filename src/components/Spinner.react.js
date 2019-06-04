@@ -15,7 +15,7 @@ export default React.createClass({
           'mdl-spinner mdl-js-spinner is-active',
           { 'mdl-spinner--single-colour': this.props.singleColour }
         )}
-      ></div>
+      />
     );
   },
 
