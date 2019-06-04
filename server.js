@@ -114,24 +114,18 @@ module.exports = () =>
       }
 
       let clientId = null;
-      let assemblerAddress = undefined;
 
       if (req.user) {
         const hash = crypto.createHash('sha1');
         hash.update(req.user.id);
         clientId = hash.digest('hex');
-
-        const { flags = {} } = req.user;
-        if (flags.ASSEMBLY_SERVICE_EXPERIMENT) {
-          assemblerAddress = config.assemblerAddress;
-        }
       }
 
       return res.render('index', {
         files,
         gaTrackingId: config.gaTrackingId,
         frontEndConfig: {
-          assemblerAddress,
+          assemblerAddress: config.assemblerAddress,
           clientId,
           mapboxKey: config.mapboxKey,
           maxCollectionSize: config.maxCollectionSize,
