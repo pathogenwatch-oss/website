@@ -87,22 +87,6 @@ export const systemDataColumns = {
         .join('; ');
     },
   },
-  __virulence_score: {
-    columnKey: '__virulence_score',
-    displayName: 'Virulence Score',
-    valueGetter({ analysis }) {
-      if (!analysis.kleborate) return null;
-      return analysis.kleborate.virulence_score;
-    },
-  },
-  __resistance_score: {
-    columnKey: '__resistance_score',
-    displayName: 'Resistance Score',
-    valueGetter({ analysis }) {
-      if (!analysis.kleborate) return null;
-      return analysis.kleborate.resistance_score;
-    },
-  },
   __K_locus: {
     columnKey: '__K_locus',
     displayName: 'K Locus',
@@ -160,6 +144,7 @@ export const systemDataColumns = {
     displayName: 'rmpA',
     valueGetter({ analysis }) {
       if (!analysis.kleborate) return null;
+      if (analysis.kleborate.rmpA === '-') return null;
       return analysis.kleborate.rmpA;
     },
   },
@@ -168,6 +153,7 @@ export const systemDataColumns = {
     displayName: 'rmpA2',
     valueGetter({ analysis }) {
       if (!analysis.kleborate) return null;
+      if (analysis.kleborate.rmpA2 === '-') return null;
       return analysis.kleborate.rmpA2;
     },
   },
