@@ -121,66 +121,38 @@ export const systemDataColumns = {
   },
   __Aerobactin: {
     columnKey: '__Aerobactin',
-    displayName: 'Aerobactin',
+    displayName: 'Aerobactin (AbST)',
     valueGetter({ analysis }) {
       if (!analysis.kleborate) return null;
-      return analysis.kleborate.Aerobactin;
-    },
-  },
-  __AbST: {
-    columnKey: '__AbST',
-    displayName: 'AbST',
-    valueGetter({ analysis }) {
-      if (!analysis.kleborate) return null;
-      return analysis.kleborate.AbST;
+      if (analysis.kleborate.Aerobactin === '-') return null;
+      return `${analysis.kleborate.Aerobactin} (${analysis.kleborate.AbST})`;
     },
   },
   __Colibactin: {
     columnKey: '__Colibactin',
-    displayName: 'Colibactin',
+    displayName: 'Colibactin (CbST)',
     valueGetter({ analysis }) {
       if (!analysis.kleborate) return null;
-      return analysis.kleborate.Colibactin;
-    },
-  },
-  __CbST: {
-    columnKey: '__CbST',
-    displayName: 'CbST',
-    valueGetter({ analysis }) {
-      if (!analysis.kleborate) return null;
-      return analysis.kleborate.CbST;
+      if (analysis.kleborate.Colibactin === '-') return null;
+      return `${analysis.kleborate.Colibactin} (${analysis.kleborate.CbST})`;
     },
   },
   __Salmochelin: {
     columnKey: '__Salmochelin',
-    displayName: 'Salmochelin',
+    displayName: 'Salmochelin (SmST)',
     valueGetter({ analysis }) {
       if (!analysis.kleborate) return null;
-      return analysis.kleborate.Salmochelin;
-    },
-  },
-  __SmST: {
-    columnKey: '__SmST',
-    displayName: 'SmST',
-    valueGetter({ analysis }) {
-      if (!analysis.kleborate) return null;
-      return analysis.kleborate.SmST;
+      if (analysis.kleborate.Salmochelin === '-') return null;
+      return `${analysis.kleborate.Salmochelin} (${analysis.kleborate.SmST})`;
     },
   },
   __Yersiniabactin: {
     columnKey: '__Yersiniabactin',
-    displayName: 'Yersiniabactin',
+    displayName: 'Yersiniabactin (YbST)',
     valueGetter({ analysis }) {
       if (!analysis.kleborate) return null;
-      return analysis.kleborate.Yersiniabactin;
-    },
-  },
-  __YbST: {
-    columnKey: '__YbST',
-    displayName: 'YbST',
-    valueGetter({ analysis }) {
-      if (!analysis.kleborate) return null;
-      return analysis.kleborate.YbST;
+      if (analysis.kleborate.Yersiniabactin === '-') return null;
+      return `${analysis.kleborate.Yersiniabactin} (${analysis.kleborate.YbST})`;
     },
   },
   __rmpA: {

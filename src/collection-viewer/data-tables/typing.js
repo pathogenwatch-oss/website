@@ -77,7 +77,7 @@ const inctyperGroup = {
 const kleborateGroup = {
   group: true,
   columnKey: 'kleborate',
-  columns: [ '__kleborate_species', '__virulence_score', '__resistance_score', '__K_locus', '__O_locus', '__Aerobactin', '__AbST', '__Colibactin', '__CbST', '__Salmochelin', '__SmST', '__Yersiniabactin', '__YbST', '__rmpA', '__rmpA2' ],
+  columns: [ '__kleborate_species', '__virulence_score', '__resistance_score', '__K_locus', '__O_locus', '__Aerobactin','__Colibactin', '__Salmochelin', '__Yersiniabactin', '__rmpA', '__rmpA2' ],
 };
 
 function fillColumnDefs({ columns, ...group }) {
