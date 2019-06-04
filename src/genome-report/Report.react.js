@@ -6,6 +6,7 @@ import RemoveButton from './RemoveButton.react';
 
 import DownloadLink from '../downloads/GenomeFileLink.react';
 import Spinner from '../components/Spinner.react';
+import Loading from '../components/Loading.react';
 
 import Overview from './Overview.react';
 import Metadata from './Metadata.react';
@@ -55,17 +56,20 @@ const Content = React.createClass({
     }
     return (
       <React.Fragment>
-        <nav onClick={this.props.onClick}>
+        <nav onClick={e => e.stopPropagation()}>
           <ScrollSpy
             items={sections.map(_ => _.key.toLowerCase())}
             currentClassName="active"
-            rootEl=".wgsa-genome-report > span > .wgsa-overlay"
+            rootEl=".wgsa-genome-report .wgsa-overlay"
           >
             {sections.map(({ key }) => (
               <li key={key}>
                 <a
                   href={`#${key.toLowerCase()}`}
-                  onClick={e => e.preventDefault() || this.scrollTo(key)}
+                  onClick={e => {
+                    e.preventDefault();
+                    this.scrollTo(key);
+                  }}
                 >
                   {key}
                 </a>
@@ -76,7 +80,7 @@ const Content = React.createClass({
         </nav>
         <div
           className="wgsa-genome-report-content"
-          onClick={this.props.onClick}
+          onClick={e => e.stopPropagation()}
         >
           {sections.map(({ key, component }) => (
             <section
@@ -105,8 +109,10 @@ const Content = React.createClass({
   },
 });
 
-const Report = ({ name, genome, loading, close }) => {
-  const isOpen = !!loading || !!genome;
+const openStatuses = new Set([ 'LOADING', 'READY' ]);
+
+const Report = ({ name, genome, status, close }) => {
+  const isOpen = openStatuses.has(status);
   return (
     <Modal
       title={
@@ -122,14 +128,16 @@ const Report = ({ name, genome, loading, close }) => {
       animationKey="genome-report"
       containerClassName="wgsa-genome-report"
     >
-      {loading ? (
-        <div className="wgsa-genome-report-loader">
-          <Spinner />
-          <p>Loading Report</p>
-        </div>
-      ) : (
+      <Loading
+        placeholder={
+          <div className="wgsa-genome-report-content pw-flex-center" onClick={e => e.stopPropagation()}>
+            <Spinner />
+          </div>
+        }
+        complete={status === 'READY'}
+      >
         <Content genome={genome} />
-      )}
+      </Loading>
     </Modal>
   );
 };
