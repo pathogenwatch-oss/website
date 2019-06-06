@@ -6,6 +6,8 @@ const initialState = {
 
 export default function (state = initialState, { payload, type }) {
   switch (type) {
+    case GET_AUTH_TOKEN.ATTEMPT:
+      return initialState;
     case GET_AUTH_TOKEN.SUCCESS:
       return {
         ...state,

@@ -12,7 +12,7 @@ import { getAssemblerUsage } from '../selectors';
 import { useAuthToken } from '~/auth/hooks';
 
 const Tabs = ({ usage, token }) => {
-  useAuthToken();
+  useAuthToken(true);
   useAssemblerUsage(token);
 
   const tabsRef = React.useRef();
