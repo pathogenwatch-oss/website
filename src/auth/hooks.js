@@ -5,10 +5,18 @@ import { getAuthToken } from './actions';
 
 export function useAuthToken(refresh = false) {
   const state = store.getState();
-  const { token } = state.auth;
+  const { token, pending } = state.auth;
+
   useEffect(() => {
-    if (refresh || !token) {
+    if (!token && !pending) {
       store.dispatch(getAuthToken());
     }
-  }, [ token ]);
+  }, [ token, pending ]);
+
+  // update existing token only once on mount
+  useEffect(() => {
+    if (token && refresh) {
+      store.dispatch(getAuthToken());
+    }
+  }, []);
 }

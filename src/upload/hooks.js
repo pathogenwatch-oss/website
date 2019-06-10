@@ -5,7 +5,8 @@ import { fetchAssemblerUsage } from './actions';
 
 export const useAssemblerUsage = (token) => {
   React.useEffect(() => {
-    if (token) {
+    const state = store.getState();
+    if (token && !state.auth.pending) {
       store.dispatch(fetchAssemblerUsage(token));
     }
   }, [ token ]);
