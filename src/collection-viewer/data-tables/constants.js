@@ -89,8 +89,8 @@ export const systemDataColumns = {
   },
   __K_locus: {
     columnKey: '__K_locus',
-    displayName: 'K Locus (wzi)',
-    label: 'K Locus (wzi)',
+    displayName: 'K LOCUS (wzi)',
+    label: 'K LOCUS (wzi)',
     valueGetter({ analysis }) {
       if (!analysis.kleborate) return null;
       return `${analysis.kleborate.K_locus} (${analysis.kleborate.wzi})`;
