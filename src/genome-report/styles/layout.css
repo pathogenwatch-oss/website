@@ -1,5 +1,5 @@
 .wgsa-genome-report-content {
-  background: #fff;
+  background-color: #fff;
   box-sizing: border-box;
   min-height: calc(100vh - 96px);
   margin-bottom: 100vh;
@@ -28,6 +28,10 @@
 
 .pw-genome-report-section-header {
   margin-bottom: 8px;
+}
+
+p.pw-genome-report-section-header {
+  max-height: 16px;
 }
 
 .pw-genome-report-section-header > h2 + *,
@@ -75,4 +79,13 @@
 
 .pw-genome-report-column.two.thirds {
   width: 66.666%;
+}
+
+.pw-genome-report-section-header ~ .pw-genome-report-column {
+  margin-top: -8px;
+}
+
+/* specificity hacking */
+.wgsa-genome-report .pw-genome-report-column + table {
+  margin-top: 0;
 }

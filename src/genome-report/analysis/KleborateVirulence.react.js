@@ -22,11 +22,11 @@ const scores = {
 
 export default ({ result }) => (
   <React.Fragment>
-    <header className="pw-genome-report-section-header">
+    <p className="pw-genome-report-section-header">
       <a href="https://github.com/katholt/Kleborate#virulence-loci" target="_blank"
         rel="noopener" className="pw-genome-report-reference-link"
-      >Kleborate Virulence - https://github.com/katholt/Kleborate#virulence-loci</a>
-    </header>
+      ><strong>Kleborate Virulence</strong> - https://github.com/katholt/Kleborate#virulence-loci</a>
+    </p>
     <div className="pw-genome-report-column two thirds">
       <dl className="pw-genome-report-unsized">
         <div>
@@ -44,8 +44,7 @@ export default ({ result }) => (
       </dl>
     </div>
     { result.virulence_score !== '0' &&
-      <table className="pw-kleborate-table" cellSpacing="0">
-        <caption>Virulence Loci</caption>
+      <table className="wide bordered" cellSpacing="0">
         <thead>
           <tr>
             {fields.map((klebType) =>
