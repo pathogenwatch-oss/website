@@ -7,7 +7,7 @@ const pullTaskImages = require('services/tasks/pull');
 const taskQueue = require('services/taskQueue');
 
 const { queues } = taskQueue;
-const { queue, type = queue, pull = 1 } = argv.opts;
+const { queue, type = queue, pull = 1, precache = false } = argv.opts;
 
 if (type && !(type in queues)) {
   LOGGER.error(`Queue type ${type} not recognised, exiting...`);
@@ -31,7 +31,7 @@ function subscribeToQueue(queueName, queueType = queueName) {
     taskQueue.dequeue(
       queueName,
       ({ task, version, timeout, metadata }) =>
-        request('tasks', 'run', { task, version, timeout$: timeout * 1000, metadata }),
+        request('tasks', 'run', { task, version, timeout$: timeout * 1000, metadata, precache }),
       message => request('genome', 'add-error', message)
     );
   }

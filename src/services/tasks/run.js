@@ -77,7 +77,7 @@ function runTask({ fileId, task, version, organismId, speciesId, genusId, timeou
   });
 }
 
-module.exports = async function ({ task, version, metadata, timeout$: timeout = DEFAULT_TIMEOUT }) {
+module.exports = async function ({ task, version, metadata, timeout$: timeout = DEFAULT_TIMEOUT, precache = false }) {
   const {
     organismId,
     speciesId,
@@ -108,13 +108,15 @@ module.exports = async function ({ task, version, metadata, timeout$: timeout = 
     doc = { fileId, task, version, results };
   }
 
-  await Genome.addAnalysisResults(genomeId, doc);
-  notify({
-    speciator: { organismId, speciesId, genusId },
-    genomeId,
-    clientId,
-    userId,
-    uploadedAt,
-    tasks: [ doc ],
-  });
+  if (!precache) {
+    await Genome.addAnalysisResults(genomeId, doc);
+    notify({
+      speciator: { organismId, speciesId, genusId },
+      genomeId,
+      clientId,
+      userId,
+      uploadedAt,
+      tasks: [ doc ],
+    });
+  }
 };
