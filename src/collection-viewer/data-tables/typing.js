@@ -77,7 +77,7 @@ const inctyperGroup = {
 const kleborateGroup = {
   group: true,
   columnKey: 'kleborate',
-  columns: [ '__K_locus', '__O_locus', '__Aerobactin','__Colibactin', '__Salmochelin', '__Yersiniabactin', '__rmpA', '__rmpA2' ],
+  columns: [ '__K_locus', '__O_locus', '__Aerobactin', '__Colibactin', '__Salmochelin', '__Yersiniabactin', '__rmpA', '__rmpA2' ],
 };
 
 function fillColumnDefs({ columns, ...group }) {
@@ -96,7 +96,7 @@ export function getTypingColumnGroups({ isClusterView }, uiOptions) {
     uiOptions.ngMast ? ngMastGroup : null,
     uiOptions.genotyphi ? genotyphiGroup : null,
     uiOptions.inctyper ? inctyperGroup : null,
-    uiOptions.kleborate ? kleborateGroup : null
+    uiOptions.kleborate ? kleborateGroup : null,
   ]
     .filter(_ => _)
     .map(fillColumnDefs);

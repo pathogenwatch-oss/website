@@ -54,7 +54,7 @@ export const systemDataColumns = {
     },
     display({ analysis }) {
       if (!analysis.mlst) return null;
-      return <ST id={analysis.mlst.st} textOnly/>;
+      return <ST id={analysis.mlst.st} textOnly />;
     },
   },
   __mlst_profile: {
@@ -71,7 +71,7 @@ export const systemDataColumns = {
       if (!analysis.mlst) return null;
       const { code, alleles } = analysis.mlst;
       if (code) return code;
-      return <Profile alleles={alleles} textOnly/>;
+      return <Profile alleles={alleles} textOnly />;
     },
   },
   __inc_types: {
@@ -89,23 +89,24 @@ export const systemDataColumns = {
   },
   __K_locus: {
     columnKey: '__K_locus',
-    displayName: 'K Locus',
+    displayName: 'K Locus (wzi)',
+    label: 'K Locus (wzi)',
     valueGetter({ analysis }) {
       if (!analysis.kleborate) return null;
-      return analysis.kleborate.K_locus;
+      return `${analysis.kleborate.K_locus} (${analysis.kleborate.wzi})`;
     },
   },
   __O_locus: {
     columnKey: '__O_locus',
-    displayName: 'O Locus (wzi)',
     valueGetter({ analysis }) {
       if (!analysis.kleborate) return null;
-      return `${analysis.kleborate.O_locus} (${analysis.kleborate.wzi})`;
+      return analysis.kleborate.O_locus;
     },
   },
   __Aerobactin: {
     columnKey: '__Aerobactin',
     displayName: 'Aerobactin (AbST)',
+    label: 'Aerobactin (AbST)',
     valueGetter({ analysis }) {
       if (!analysis.kleborate) return null;
       if (analysis.kleborate.Aerobactin === '-') return null;
@@ -115,6 +116,7 @@ export const systemDataColumns = {
   __Colibactin: {
     columnKey: '__Colibactin',
     displayName: 'Colibactin (CbST)',
+    label: 'Colibactin (CbST)',
     valueGetter({ analysis }) {
       if (!analysis.kleborate) return null;
       if (analysis.kleborate.Colibactin === '-') return null;
@@ -124,6 +126,7 @@ export const systemDataColumns = {
   __Salmochelin: {
     columnKey: '__Salmochelin',
     displayName: 'Salmochelin (SmST)',
+    label: 'Salmochelin (SmST)',
     valueGetter({ analysis }) {
       if (!analysis.kleborate) return null;
       if (analysis.kleborate.Salmochelin === '-') return null;
@@ -133,6 +136,7 @@ export const systemDataColumns = {
   __Yersiniabactin: {
     columnKey: '__Yersiniabactin',
     displayName: 'Yersiniabactin (YbST)',
+    label: 'Yersiniabactin (YbST)',
     valueGetter({ analysis }) {
       if (!analysis.kleborate) return null;
       if (analysis.kleborate.Yersiniabactin === '-') return null;
