@@ -81,7 +81,7 @@ const devConfig = {
   module: {
     rules: [
       ...commonRules,
-      { test: /\.css$/, use: [ 'style-loader', ...cssLoaders ] },
+      { test: /\.css$/, use: [ { loader: 'style-loader', options: { attrs: { media: 'all' } } }, ...cssLoaders ] },
     ],
   },
 };

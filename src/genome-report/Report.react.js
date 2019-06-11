@@ -1,5 +1,6 @@
 import React from 'react';
 import ScrollSpy from 'react-scrollspy';
+import ReactToPrint from 'react-to-print';
 
 import Modal from '../components/modal';
 import RemoveButton from './RemoveButton.react';
@@ -82,6 +83,7 @@ const Content = React.createClass({
         <div
           className="wgsa-genome-report-content"
           onClick={e => e.stopPropagation()}
+          ref={el => { this.printRef = el; }}
         >
           {sections.map(({ key, component }) => (
             <section
@@ -112,12 +114,25 @@ const Content = React.createClass({
 
 const openStatuses = new Set([ 'LOADING', 'READY' ]);
 
+const PrintButton = () => (
+  <button className="mdl-button mdl-button--icon" title="Print Report">
+    <i className="material-icons">print</i>
+  </button>
+);
+
 const Report = ({ name, genome, status, close }) => {
   const isOpen = openStatuses.has(status);
+  const printRef = React.useRef();
   return (
     <Modal
       title={
         <span className="wgsa-genome-report-title">
+          <div className="pw-genome-report-print-button" onClick={e => e.stopPropagation()}>
+            <ReactToPrint
+              trigger={PrintButton}
+              content={() => printRef.current}
+            />
+          </div>
           Genome Report: {genome ? genome.name : name}{' '}
           {genome && genome.fileId && (
             <DownloadLink key="download" id={genome.id} name={genome.name} />
@@ -137,7 +152,7 @@ const Report = ({ name, genome, status, close }) => {
         }
         complete={status === 'READY'}
       >
-        <Content genome={genome} />
+        <Content genome={genome} ref={c => { if (c) printRef.current = c.printRef; }} />
       </Loading>
     </Modal>
   );

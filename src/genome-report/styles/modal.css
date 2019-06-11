@@ -77,3 +77,13 @@
   margin-top: 16px;
   font-weight: 500;
 }
+
+.pw-genome-report-print-button {
+  position: absolute;
+  left: 0;
+  top: 0;
+  padding: 0 16px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+}

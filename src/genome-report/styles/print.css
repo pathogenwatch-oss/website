@@ -1,0 +1,35 @@
+@media print {
+
+  @page {
+    margin-top: 1cm;
+    margin-bottom: 1cm;
+  }
+
+  .wgsa-genome-report-content {
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+
+  .wgsa-genome-report-content section,
+  .wgsa-genome-report-content figure {
+    page-break-inside: avoid;
+  }
+
+  a {
+    display: none;
+  }
+
+  /* table {
+    width: 100%;
+    border: 1px solid #ccc;
+  }
+
+  td {
+    text-align: center;
+  }
+
+  dl {
+
+  } */
+
+}

@@ -43,13 +43,12 @@ export default ({ analysis }) => {
       <header className="pw-genome-report-section-header">
         <h2>Plasmid Inc Types</h2>
         <p>
-          Database sourced from{' '}
           <a
             href="https://cge.cbs.dtu.dk/services/PlasmidFinder/"
             target="_blank"
             rel="noopener"
           >
-            https://cge.cbs.dtu.dk/services/PlasmidFinder/
+            Database sourced from https://cge.cbs.dtu.dk/services/PlasmidFinder/
           </a>
         </p>
       </header>
