@@ -118,9 +118,8 @@ dl.pw-genome-report-unsized > div,
 .wgsa-genome-report th,
 .wgsa-genome-report td {
   color: rgba(0, 0, 0, 0.54);
+  padding: 8px;
   text-align: center;
-  height: 32px;
-  padding: 0 8px;
 }
 
 .wgsa-genome-report td {
@@ -135,7 +134,8 @@ dl.pw-genome-report-unsized > div,
 }
 
 .wgsa-genome-report table.bordered th {
-  height: 31px; /* accounts for top border */
+  padding-top: 7px;
+  padding-bottom: 7px;
 }
 
 .wgsa-genome-report th.italic,
