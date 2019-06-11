@@ -105,8 +105,8 @@ export const systemDataColumns = {
   },
   __Aerobactin: {
     columnKey: '__Aerobactin',
-    displayName: 'Aerobactin (AbST)',
-    label: 'Aerobactin (AbST)',
+    displayName: 'AEROBACTIN (AbST)',
+    label: 'AEROBACTIN (AbST)',
     valueGetter({ analysis }) {
       if (!analysis.kleborate) return null;
       if (analysis.kleborate.Aerobactin === '-') return null;
@@ -115,8 +115,8 @@ export const systemDataColumns = {
   },
   __Colibactin: {
     columnKey: '__Colibactin',
-    displayName: 'Colibactin (CbST)',
-    label: 'Colibactin (CbST)',
+    displayName: 'COLIBACTIN (CbST)',
+    label: 'COLIBACTIN (CbST)',
     valueGetter({ analysis }) {
       if (!analysis.kleborate) return null;
       if (analysis.kleborate.Colibactin === '-') return null;
@@ -125,8 +125,8 @@ export const systemDataColumns = {
   },
   __Salmochelin: {
     columnKey: '__Salmochelin',
-    displayName: 'Salmochelin (SmST)',
-    label: 'Salmochelin (SmST)',
+    displayName: 'SALMOCHELIN (SmST)',
+    label: 'SALMOCHELIN (SmST)',
     valueGetter({ analysis }) {
       if (!analysis.kleborate) return null;
       if (analysis.kleborate.Salmochelin === '-') return null;
@@ -135,8 +135,8 @@ export const systemDataColumns = {
   },
   __Yersiniabactin: {
     columnKey: '__Yersiniabactin',
-    displayName: 'Yersiniabactin (YbST)',
-    label: 'Yersiniabactin (YbST)',
+    displayName: 'YERSINIABACTIN (YbST)',
+    label: 'YERSINIABACTIN (YbST)',
     valueGetter({ analysis }) {
       if (!analysis.kleborate) return null;
       if (analysis.kleborate.Yersiniabactin === '-') return null;
