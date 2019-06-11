@@ -1,5 +1,5 @@
 import React from 'react';
-import {Metadata} from "../components";
+import { Metadata } from '../components';
 
 // const kleborateTypingFields1 = [
 //   'species',
@@ -13,26 +13,45 @@ import {Metadata} from "../components";
 // ];
 
 export default ({ genome }) => {
-
   const { kleborate } = genome.analysis;
-
-  const kLocus = kleborate.K_locus + ' (' + kleborate.K_locus_confidence + ')';
-  const oLocus = kleborate.O_locus + ' (' + kleborate.O_locus_confidence + ') [' + kleborate.wzi +']';
-
-  const species = kleborate.species === genome.analysis.speciator.species;
+  const species = kleborate.species !== genome.analysis.speciator.speciesName;
 
   return (
     <React.Fragment>
       <header className="pw-genome-report-section-header">
-        <h3>Kleborate</h3>
+        <h2>Kleborate</h2>
         <a href="https://github.com/katholt/Kleborate" target="_blank"
-           rel="noopener">https://github.com/katholt/Kleborate</a>
+          rel="noopener"
+        >https://github.com/katholt/Kleborate</a>
       </header>
       <dl>
-        {species && <Metadata label="Species" children={kleborate.species}/>}
-        <Metadata label="K Locus (Confidence)" children={kLocus} />
-        <Metadata label="O Locus (Confidence) [wzi]" children={oLocus} />
+        <div className="pw-genome-report-metadata">
+          <dt>K Locus (wzi)</dt>
+          <dd>{kleborate.K_locus} ({kleborate.wzi})</dd>
+        </div>
+        <div className="pw-genome-report-metadata">
+          <dt>Confidence</dt>
+          <dd>{kleborate.K_locus_confidence}</dd>
+        </div>
       </dl>
+      <dl>
+        <div className="pw-genome-report-metadata">
+          <dt>O Locus</dt>
+          <dd>{kleborate.O_locus}</dd>
+        </div>
+        <div className="pw-genome-report-metadata">
+          <dt>Confidence</dt>
+          <dd>{kleborate.O_locus_confidence}</dd>
+        </div>
+      </dl>
+      {species &&
+        <dl className="pw-genome-report-unsized">
+          <div className="pw-genome-report-metadata">
+            <dt className="danger">Species</dt>
+            <dd>{kleborate.species}</dd>
+          </div>
+        </dl>
+      }
     </React.Fragment>
   );
-}
+};
