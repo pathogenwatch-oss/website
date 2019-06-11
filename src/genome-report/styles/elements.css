@@ -23,6 +23,10 @@
   margin-top: -8px;
 }
 
+.pw-genome-report-section-header + .pw-genome-report-reference-link {
+  display: block
+}
+
 .wgsa-genome-report dl + .pw-genome-report-external-link {
   margin-top: -16px;
 }
@@ -31,7 +35,8 @@ dl.pw-genome-report-comfortable > div {
   width: calc(50% - 16px);
 }
 
-dl.pw-genome-report-unsized > div {
+dl.pw-genome-report-unsized > div,
+.wgsa-genome-report dl > .pw-genome-report-unsized {
   width: auto;
   min-width: calc(33.333% - 16px);
 }
@@ -41,6 +46,9 @@ dl.pw-genome-report-unsized > div {
 .wgsa-genome-report figcaption {
   font-size: 13px;
   font-weight: 400;
+}
+
+.pw-genome-report-capitalise-titles dt {
   text-transform: capitalize;
 }
 

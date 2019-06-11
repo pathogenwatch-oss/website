@@ -7,10 +7,8 @@ export default ({ genome }) => {
 
   return (
     <React.Fragment>
-      <header className="pw-genome-report-section-header">
-        <h2>Virulence</h2>
-      </header>
-      {!!kleborate && <KleborateVirulence result={kleborate}/>}
+      <h2>Virulence</h2>
+      {!!kleborate && <KleborateVirulence result={kleborate} />}
     </React.Fragment>
-  )
-}
+  );
+};

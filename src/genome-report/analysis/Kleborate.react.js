@@ -1,5 +1,4 @@
 import React from 'react';
-import { Metadata } from '../components';
 
 // const kleborateTypingFields1 = [
 //   'species',
@@ -26,7 +25,7 @@ export default ({ genome }) => {
       </header>
       <dl>
         <div className="pw-genome-report-metadata">
-          <dt>K Locus (wzi)</dt>
+          <dt>K Locus (<em>wzi</em>)</dt>
           <dd>{kleborate.K_locus} ({kleborate.wzi})</dd>
         </div>
         <div className="pw-genome-report-metadata">

@@ -38,12 +38,10 @@ export default ({ result, genome }) => {
 
   return (
     <React.Fragment>
-      <header>
-        <a href={libraryUrl} target="_blank" rel="noopener">
-          PAARSNP AMR Library {library.label} Version {library.version}
-          {library.source !== 'PUBLIC' ? ` (${library.source})` : ''}
-        </a>
-      </header>
+      <a href={libraryUrl} target="_blank" rel="noopener" className="pw-genome-report-reference-link">
+        PAARSNP AMR Library {library.label} Version {library.version}
+        {library.source !== 'PUBLIC' ? ` (${library.source})` : ''}
+      </a>
       <table cellSpacing="0" className="wgsa-genome-report-amr wide bordered">
         <caption>Resistance Profile</caption>
         <thead>

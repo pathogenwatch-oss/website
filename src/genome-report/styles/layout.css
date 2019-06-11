@@ -30,7 +30,8 @@
   margin-bottom: 8px;
 }
 
-.pw-genome-report-section-header > h2 + * {
+.pw-genome-report-section-header > h2 + *,
+.pw-genome-report-reference-link {
   font-size: 13px;
   white-space: nowrap;
   margin: 0;
@@ -50,12 +51,11 @@
   width: 50%;
   display: inline-block;
   vertical-align: top;
-  padding-top: 16px;
 }
 
-.pw-genome-report-column > .pw-genome-report-section-header:first-child > h2 {
+/* .pw-genome-report-column > .pw-genome-report-section-header:first-child > h2 {
   padding-top: 0;
-}
+} */
 
 .pw-genome-report-column.right {
   text-align: right;

@@ -31,10 +31,11 @@ export default genome => {
     cgmlst,
     core,
     inctyper,
+    kleborate,
     metrics,
     mlst,
+    paarsnp,
     speciator,
-    kleborate
   } = analysis;
 
   const sections = [];
@@ -50,22 +51,12 @@ export default genome => {
       component: <MLST genome={genome} />,
     });
   }
-  // if (kleborate) {
-  //   sections.push({
-  //     key: 'Kleborate',
-  //     component: (
-  //       <VersionSwitcher
-  //         taskName="kleborate"
-  //         component={Kleborate}
-  //         genome={genome}
-  //       />
-  //     ),
-  //   });
-  // }
-  sections.push({
-    key: 'AMR',
-    component: <AMR genome={genome} />,
-  });
+  if (paarsnp || kleborate) {
+    sections.push({
+      key: 'AMR',
+      component: <AMR genome={genome} />,
+    });
+  }
   if (inctyper && Object.keys(inctyper).includes('Inc Matches')) {
     sections.push({
       key: 'Inc Typing',
@@ -75,8 +66,8 @@ export default genome => {
   if (kleborate) {
     sections.push({
       key: 'Virulence',
-      component: <Virulence genome={genome}/>
-    })
+      component: <Virulence genome={genome} />,
+    });
   }
   if (cgmlst) {
     sections.push({
