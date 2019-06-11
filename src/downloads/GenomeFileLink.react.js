@@ -2,11 +2,11 @@ import React from 'react';
 
 import DownloadIcon from '../downloads/DownloadIcon.react';
 
-import { CGPS, DEFAULT } from '../app/constants';
+import { CGPS, ASSEMBLY_FILE_EXTENSIONS } from '../app/constants';
 import { getServerPath } from '../utils/Api';
 
 function formatGenomeFilename(genomeName) {
-  for (const ext in DEFAULT.GENOME_FILE_EXTENSIONS) {
+  for (const ext in ASSEMBLY_FILE_EXTENSIONS) {
     if (genomeName.indexOf(ext) !== -1) {
       return genomeName;
     }
@@ -18,7 +18,8 @@ export default ({ id, name }) => (
   <a
     href={getServerPath(`/download/genome/${id}/fasta`)}
     download={formatGenomeFilename(name)}
-    target="_blank" rel="noopener"
+    target="_blank"
+    rel="noopener"
     title="Download Genome"
     className="wgsa-download-button mdl-button mdl-button--icon"
   >

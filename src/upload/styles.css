@@ -4,6 +4,13 @@
 
 .wgsa-upload-summary .mdl-button {
   text-decoration: none !important;
+  display: flex;
+  align-items: center;
+}
+
+.wgsa-upload-summary .mdl-button i {
+  font-size: 18px;
+  margin-right: 4px;
 }
 
 .wgsa-genome-card {
@@ -18,7 +25,7 @@
 }
 
 .wgsa-genome-card a {
-  color: #AC65A6;
+  color: #ac65a6;
 }
 
 .wgsa-hub-card-error {
@@ -32,4 +39,56 @@
 
 .wgsa-hub-card-error p {
   white-space: normal;
+}
+
+/* Error message */
+
+.wgsa-upload-instructions .wgsa-overlay {
+  background: rgba(255, 255, 255, 0.666);
+}
+
+.pw-upload-message {
+  border-top: 5px solid hsl(42, 77%, 46%);
+  color: rgba(0, 0, 0, 0.54);
+  background-color: #fff;
+  border-radius: 2px;
+  max-width: 320px;
+  padding: 40px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+}
+
+.pw-upload-message p,
+.pw-upload-message li {
+  line-height: 20px;
+}
+
+.pw-upload-message p,
+.pw-upload-message ul {
+  margin-bottom: 20px;
+}
+
+.pw-upload-message li {
+  font-weight: 500;
+}
+
+.pw-upload-message .wgsa-file-icon {
+  margin: 0 auto 20px;
+  height: 40px;
+  width: 40px;
+  background-color: transparent;
+  border: 1px solid #d19b1b;
+  box-sizing: border-box;
+}
+
+.pw-upload-message .wgsa-file-icon i {
+  color: #d19b1b;
+  font-size: 24px;
+}
+
+.pw-upload-message footer {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: -20px;
+  margin-right: -20px;
+  padding-top: 20px;
 }

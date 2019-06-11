@@ -1,7 +1,7 @@
 import { createAsyncConstants } from '../actions';
 
 import { getCollection } from './api';
-import { fetchQueuePosition } from '../upload/api';
+import { fetchQueuePosition } from '~/queue/api';
 
 import Organisms from '../organisms';
 
@@ -11,12 +11,10 @@ export function fetchCollection(collectionId) {
   return {
     type: FETCH_COLLECTION,
     payload: {
-      promise:
-        getCollection(collectionId)
-          .then(result => {
-            Organisms.current = result.organismId;
-            return result;
-          }),
+      promise: getCollection(collectionId).then(result => {
+        Organisms.current = result.organismId;
+        return result;
+      }),
     },
   };
 }
@@ -38,8 +36,9 @@ export function resetCollectionView() {
   };
 }
 
-export const COLLECTION_FETCH_POSITION =
-  createAsyncConstants('COLLECTION_FETCH_POSITION');
+export const COLLECTION_FETCH_POSITION = createAsyncConstants(
+  'COLLECTION_FETCH_POSITION'
+);
 
 export function fetchPosition(started) {
   return {

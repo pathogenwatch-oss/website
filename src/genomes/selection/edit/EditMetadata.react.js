@@ -6,7 +6,7 @@ import classnames from 'classnames';
 import DownloadLink from '../download/DownloadLink.react';
 import DropArea from './DropArea.react';
 import Progress from './Progress.react';
-import Fade from '../../../components/fade';
+import Fade from '~/components/fade';
 import Limiter from '../Limiter.react';
 import { Link } from 'react-router-dom';
 
@@ -15,9 +15,9 @@ import { getSelectedGenomeIds } from '../selectors';
 import { toggleDropdown } from '../actions';
 import { sendMetadataUpdate } from './actions';
 
-import { getServerPath } from '../../../utils/Api';
-import { CSV_FILE_NAME_REGEX, parseMetadata } from '../../../upload/utils';
-import MetadataUtils from '../../../utils/Metadata';
+import { getServerPath } from '~/utils/Api';
+import { CSV_FILENAME_REGEX, parseMetadata } from '~/utils/Metadata';
+import MetadataUtils from '~/utils/Metadata';
 
 function getInitialState() {
   return {
@@ -44,7 +44,7 @@ class UpdateMetadata extends React.Component {
   handleFiles(fileList) {
     const file = Array.from(fileList)[0];
 
-    if (!CSV_FILE_NAME_REGEX.test(file.name)) return;
+    if (!CSV_FILENAME_REGEX.test(file.name)) return;
 
     this.setState({ uploading: true }, () =>
       readAsText(file)
@@ -154,7 +154,7 @@ class UpdateMetadata extends React.Component {
               Go back
             </button>
           )}
-          <Fade out={false}>
+          <Fade>
             {this.state.error && (
               <button
                 className="mdl-button mdl-button--raised mdl-button--colored"

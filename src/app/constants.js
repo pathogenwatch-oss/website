@@ -13,7 +13,7 @@ export const CGPS = {
   },
 };
 
-const GENOME_FILE_EXTENSIONS = [
+export const ASSEMBLY_FILE_EXTENSIONS = [
   '.fa',
   '.fas',
   '.fna',
@@ -45,8 +45,6 @@ export const DEFAULT = {
       LONGITUDE: 5.85082183,
     },
   },
-  GENOME_FILE_EXTENSIONS,
-  SUPPORTED_FILE_EXTENSIONS: [ '.csv' ].concat(GENOME_FILE_EXTENSIONS),
 };
 
 export const statuses = {
@@ -57,7 +55,7 @@ export const statuses = {
 
 export const analysisLabels = {
   cgmlst: 'cgMLST',
-  core: 'Core',
+  core: 'Core SNPs',
   genotyphi: 'Genotyphi',
   inctyper: 'IncTyper',
   kleborate: 'Kleborate',
@@ -65,7 +63,7 @@ export const analysisLabels = {
   mlst: 'MLST',
   ngmast: 'NG-MAST',
   paarsnp: 'AMR',
-  serotype: 'Serotype',
-  speciator: 'Speciation',
   poppunk: 'Strain',
+  serotype: 'Serotype',
+  speciator: 'Species Prediction',
 };

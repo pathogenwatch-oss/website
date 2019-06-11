@@ -16,25 +16,46 @@ function mapStateToProps({ location }) {
 }
 
 export default connect(mapStateToProps)(
-  ({ className, icon, to, activeOnIndexOnly, activePathname, external, badge = null, children }) => (
-    external ? (
-      <a href={to} target="_blank" rel="noopener" className={classnames('mdl-navigation__link', className)}>
-        { icon && <i className="material-icons">{icon}</i>}
+  ({
+    className,
+    icon,
+    to,
+    activeOnIndexOnly,
+    activePathname,
+    external,
+    badge = null,
+    children,
+  }) =>
+    (external ? (
+      <a
+        href={to}
+        target="_blank"
+        rel="noopener"
+        className={classnames('mdl-navigation__link', className)}
+      >
+        {icon && <i className="material-icons">{icon}</i>}
         <span>{children}</span>
       </a>
     ) : (
       <Link
-        className={classnames(
-          'mdl-navigation__link',
-          className,
-          { 'mdl-navigation__link--active': isActive(activePathname, to, activeOnIndexOnly) },
-        )}
+        className={classnames('mdl-navigation__link', className, {
+          'mdl-navigation__link--active': isActive(
+            activePathname,
+            to,
+            activeOnIndexOnly
+          ),
+        })}
         to={to}
       >
-        { typeof icon === 'string' ? <i className="material-icons">{icon}</i> : icon }
+        {typeof icon === 'string' ? (
+          <i className="material-icons">{icon}</i>
+        ) : (
+          icon
+        )}
         <span className="wgsa-nav-label">{children}</span>
-        { badge !== null && <span className="wgsa-nav-badge">{badge}</span>}
+        {badge !== null && (
+          <span className="wgsa-nav-badge pw-pill-purple">{badge}</span>
+        )}
       </Link>
-    )
-  )
+    ))
 );

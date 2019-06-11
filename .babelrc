@@ -1,10 +1,13 @@
 {
   "presets": [
     "react",
-    [ "env", {
-      "targets": { "browsers": [ "last 2 versions" ] },
-      "modules": false
-    } ]
+    [
+      "env",
+      {
+        "targets": { "browsers": ["last 2 versions"] },
+        "modules": false
+      }
+    ]
   ],
   "plugins": [
     "react-hot-loader/babel",

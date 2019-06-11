@@ -1,11 +1,12 @@
 import React from 'react';
 import classnames from 'classnames';
 
-export default React.createClass({
+import Fade from '../fade';
 
+export default React.createClass({
   propTypes: {
-    isVisible: React.PropTypes.bool.isRequired,
-    hide: React.PropTypes.func.isRequired,
+    visible: React.PropTypes.bool.isRequired,
+    hide: React.PropTypes.func,
     children: React.PropTypes.node,
   },
 
@@ -18,26 +19,27 @@ export default React.createClass({
   },
 
   closeMenuOnEsc(event) {
-    if (this.props.isVisible && event.keyCode === 27) {
+    if (this.props.visible && event.keyCode === 27) {
       this.props.hide();
     }
   },
 
   render() {
+    const { visible, children, hide, className, ...props } = this.props;
     return (
-      <div
-        onClick={this.props.hide}
-        className={classnames(
-          'wgsa-overlay',
-          { 'wgsa-overlay--is-visible': this.props.isVisible },
-          { 'wgsa-overlay--no-content': !this.props.children }
+      <Fade out>
+        {visible && (
+          <div
+            onClick={hide}
+            className={classnames(className, 'wgsa-overlay', {
+              'wgsa-overlay--no-content': !children,
+            })}
+            {...props}
+          >
+            {children}
+          </div>
         )}
-      >
-        {React.cloneElement(
-          this.props.children, { onClick: e => e.stopPropagation() }
-        )}
-      </div>
+      </Fade>
     );
   },
-
 });

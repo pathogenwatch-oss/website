@@ -14,10 +14,12 @@ export default class CircularProgress extends React.Component {
     const height = this.props.radius * 2;
     const viewBox = `0 0 ${width} ${height}`;
     const dashArray = radius * Math.PI * 2;
-    const dashOffset = dashArray - dashArray * this.props.percentage / 100;
+    const dashOffset = dashArray - (dashArray * this.props.percentage) / 100;
     return (
       <svg
-        className={`CircularProgress ${this.props.percentage >= 100 ? 'CircularProgress-success' : ''}`.trim()}
+        className={`CircularProgress ${
+          this.props.percentage >= 100 ? 'CircularProgress-success' : ''
+        }`.trim()}
         width={this.props.radius * 2}
         height={this.props.radius * 2}
         viewBox={viewBox}
@@ -34,6 +36,7 @@ export default class CircularProgress extends React.Component {
           cx={this.props.radius}
           cy={this.props.radius}
           r={radius}
+          stroke={this.props.colour || '#673c90'}
           strokeWidth={`${this.props.strokeWidth}px`}
           style={{
             strokeDasharray: dashArray,

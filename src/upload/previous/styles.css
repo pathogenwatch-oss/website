@@ -1,9 +1,12 @@
-.wgsa-previous-uploads .wgsa-genome-list-view {
-  margin-left: 80px;
+.wgsa-genome-list-view.wgsa-previous-uploads {
+  margin-top: 16px;
+  margin-left: 0;
+  height: calc(100% - 16px);
 }
 
 .wgsa-previous-uploads .wgsa-genome-list-header {
-  margin-right: 80px;
+  margin-left: 64px;
+  margin-right: 64px;
 }
 
 .wgsa-previous-uploads .wgsa-list-header-cell {
@@ -11,7 +14,25 @@
 }
 
 .wgsa-previous-uploads .wgsa-grid-item {
-  padding-right: 80px;
+  padding-left: 64px;
+  padding-right: 64px;
+}
+
+.wgsa-previous-uploads .wgsa-genome-list-item {
+  text-decoration: none;
+  padding-left: 64px;
+  padding-right: 64px;
+}
+
+@media (min-width: 960px) {
+  .wgsa-previous-uploads .wgsa-grid-item {
+    padding-left: calc(50vw - 436px);
+    padding-right: calc(50vw - 436px);
+  }
+  .wgsa-previous-uploads .wgsa-genome-list-header {
+    margin-left: calc(50vw - 436px);
+    margin-right: calc(50vw - 436px);
+  }
 }
 
 .wgsa-previous-uploads .wgsa-genome-list-item > * {
@@ -19,16 +40,19 @@
   text-align: center;
 }
 
-@media(min-width: 960px) {
-  .wgsa-previous-uploads .wgsa-genome-list-view {
-    margin-left: calc(50vw - 400px);
-  }
+.pw-upload-session-status {
+  font-weight: 500;
+  font-size: 13px;
+  padding: 4px 8px;
+  border-radius: 12px;
+}
 
-  .wgsa-previous-uploads .wgsa-genome-list-header {
-    margin-right: calc(50vw - 400px);
-  }
+.pw-upload-session-status.uploaded {
+  color: hsl(149, 90%, 20%);
+  background-color: hsl(149, 45%, 48%, 0.075);
+}
 
-  .wgsa-previous-uploads .wgsa-grid-item {
-    padding-right: calc(50vw - 400px);
-  }
+.pw-upload-session-status.incomplete {
+  color: hsl(271, 41%, 40%);
+  background-color: hsl(271, 41%, 48%, 0.075);
 }

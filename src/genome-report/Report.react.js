@@ -2,11 +2,11 @@ import React from 'react';
 import ScrollSpy from 'react-scrollspy';
 
 import Modal from '../components/modal';
-import Fade from '../components/fade';
 import RemoveButton from './RemoveButton.react';
 
 import DownloadLink from '../downloads/GenomeFileLink.react';
 import Spinner from '../components/Spinner.react';
+import Loading from '../components/Loading.react';
 
 import Overview from './Overview.react';
 import Metadata from './Metadata.react';
@@ -33,7 +33,7 @@ const Content = React.createClass({
 
   render() {
     const { genome } = this.props;
-    const { pending = [], userDefined = null } = genome;
+    const { fileId, pending = [], userDefined = null, upload = { type: 'assembly' } } = genome;
     const sections = [ { key: 'Top', component: <Overview genome={genome} /> } ];
     if (userDefined && Object.keys(userDefined).length > 0) {
       sections.push({
@@ -54,19 +54,23 @@ const Content = React.createClass({
         ),
       });
     }
+    // Extraneous wrapping div smooths out the animation
     return (
-      <React.Fragment>
-        <nav>
+      <div>
+        <nav onClick={e => e.stopPropagation()}>
           <ScrollSpy
             items={sections.map(_ => _.key.toLowerCase())}
             currentClassName="active"
-            rootEl=".wgsa-genome-report > .wgsa-overlay"
+            rootEl=".wgsa-genome-report .wgsa-overlay"
           >
             {sections.map(({ key }) => (
               <li key={key}>
                 <a
                   href={`#${key.toLowerCase()}`}
-                  onClick={e => e.preventDefault() || this.scrollTo(key)}
+                  onClick={e => {
+                    e.preventDefault();
+                    this.scrollTo(key);
+                  }}
                 >
                   {key}
                 </a>
@@ -75,7 +79,10 @@ const Content = React.createClass({
           </ScrollSpy>
           <RemoveButton key="remove" genome={genome} onRemove={close} />
         </nav>
-        <div className="wgsa-genome-report-content">
+        <div
+          className="wgsa-genome-report-content"
+          onClick={e => e.stopPropagation()}
+        >
           {sections.map(({ key, component }) => (
             <section
               key={key}
@@ -87,46 +94,52 @@ const Content = React.createClass({
               {component}
             </section>
           ))}
+          {!fileId &&
+            <div className="pw-expand pw-flex-center">
+              <span className="wgsa-file-icon">
+                <i className="material-icons">
+                  {upload.type === 'assembly' ? 'insert_drive_file' : 'file_copy'}
+                </i>
+              </span>
+              <p className="h6">Awaiting assembly</p>
+            </div>
+          }
         </div>
-      </React.Fragment>
+      </div>
     );
   },
 });
 
-const Report = ({ name, genome, loading, close }) => {
-  const isOpen = !!loading || !!genome;
+const openStatuses = new Set([ 'LOADING', 'READY' ]);
+
+const Report = ({ name, genome, status, close }) => {
+  const isOpen = openStatuses.has(status);
   return (
-    <Fade>
-      {isOpen && (
-        <Modal
-          title={
-            <span className="wgsa-genome-report-title">
-              Genome Report: {genome ? genome.name : name}{' '}
-              {genome && (
-                <DownloadLink
-                  key="download"
-                  id={genome.id}
-                  name={genome.name}
-                />
-              )}
-            </span>
-          }
-          isOpen={isOpen}
-          onClose={close}
-          animationKey="genome-report"
-          containerClassName="wgsa-genome-report"
-        >
-          {loading ? (
-            <div className="wgsa-genome-report-loader">
-              <Spinner />
-              <p>Loading Report</p>
-            </div>
-          ) : (
-            <Content genome={genome} />
+    <Modal
+      title={
+        <span className="wgsa-genome-report-title">
+          Genome Report: {genome ? genome.name : name}{' '}
+          {genome && genome.fileId && (
+            <DownloadLink key="download" id={genome.id} name={genome.name} />
           )}
-        </Modal>
-      )}
-    </Fade>
+        </span>
+      }
+      isOpen={isOpen}
+      onClose={close}
+      animationKey="genome-report"
+      containerClassName="wgsa-genome-report"
+    >
+      <Loading
+        placeholder={
+          <div className="wgsa-genome-report-loader" onClick={e => e.stopPropagation()}>
+            <Spinner />
+          </div>
+        }
+        complete={status === 'READY'}
+      >
+        <Content genome={genome} />
+      </Loading>
+    </Modal>
   );
 };
 

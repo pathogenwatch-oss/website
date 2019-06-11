@@ -63,7 +63,7 @@ export default React.createClass({
         onDrop={this.handleDrop}
         onClick={this.handleClick}
       >
-        <Fade out={false}>
+        <Fade>
           {this.state.indicatorVisible ? (
             <p key="drop">
               <strong>Drop to upload</strong>

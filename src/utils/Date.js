@@ -29,10 +29,11 @@ export const formatMonth = index => months[index - 1].text;
 
 export function formatDay(number) {
   const b = number % 10;
+  // prettier-ignore
   const output = (~~(number % 100 / 10) === 1) ? 'th' :
     (b === 1) ? 'st' :
-    (b === 2) ? 'nd' :
-    (b === 3) ? 'rd' : 'th';
+      (b === 2) ? 'nd' :
+        (b === 3) ? 'rd' : 'th';
   return number + output;
 }
 
@@ -61,12 +62,12 @@ import format from 'date-fns/format';
 export function formatDateTime(date) {
   if (!date) return null;
   if (isToday(date)) {
-    return `Today ${format(date, 'HH:mm')}`;
+    return `Today, ${format(date, 'HH:mm')}`;
   }
   if (isYesterday(date)) {
-    return `Yesterday ${format(date, 'HH:mm')}`;
+    return `Yesterday, ${format(date, 'HH:mm')}`;
   }
-  return format(date, 'DD MMM YYYY HH:mm');
+  return format(date, 'D MMMM, HH:mm');
 }
 
 export function formatDate(date) {

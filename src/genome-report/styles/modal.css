@@ -62,10 +62,15 @@
 
 .wgsa-genome-report-loader {
   height: calc(100vh - 48px);
+  width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
+}
+
+.wgsa-genome-report-loader .mdl-spinner .mdl-spinner__layer {
+  border-color: #fff;
 }
 
 .wgsa-genome-report-loader p {

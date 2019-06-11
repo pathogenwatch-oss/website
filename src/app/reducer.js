@@ -1,6 +1,7 @@
 import { combineReducers } from 'redux';
 
 import account from '../account/reducer';
+import auth from '../auth/reducer';
 import branding from '../branding/reducer';
 import clustering from '../clustering/reducer';
 import collections from '../collections/reducer';
@@ -19,6 +20,7 @@ import upload from '../upload/reducer';
 
 export default combineReducers({
   account,
+  auth,
   branding,
   clustering,
   collections,

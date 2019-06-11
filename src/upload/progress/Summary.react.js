@@ -2,13 +2,14 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import Summary from '../Summary.react';
-import ErrorSummary from './ErrorSummary.react';
+import DocumentTitle from '~/branding/DocumentTitle.react';
+import ToggleErrors from './errors/Toggle.react';
 
-import * as upload from './selectors';
-import DocumentTitle from '../../branding/DocumentTitle.react';
+import * as upload from './files/selectors';
+
+import { formatDateTime } from '~/utils/Date';
 
 const Component = React.createClass({
-
   getTitle() {
     const { summary } = this.props;
     return [
@@ -17,38 +18,32 @@ const Component = React.createClass({
     ].join(' ');
   },
 
-  renderContent() {
-    const { isUploading, summary, uploadedAt } = this.props;
-
-    const uploadedAtDisplay = (
-      <p style={{ marginLeft: 'auto' }}>
-        Uploaded: <strong>{new Date(uploadedAt).toLocaleString()}</strong>
-      </p>
-    );
-
-    if (!isUploading && summary.errored) {
-      return <ErrorSummary>{uploadedAtDisplay}</ErrorSummary>;
-    }
-
-    return (
-      <Summary>{uploadedAtDisplay}</Summary>
-    );
-  },
-
   render() {
+    const { uploadedAt, isUploading } = this.props;
     return (
       <React.Fragment>
         <DocumentTitle>{this.getTitle()}</DocumentTitle>
-        {this.renderContent()}
+        <Summary>
+          {!isUploading && (
+            <a className="mdl-button" onClick={() => window.history.back()}>
+              <i className="material-icons">arrow_back</i> Go back
+            </a>
+          )}
+          <div className="pw-upload-summary-column">
+            <ToggleErrors />
+            <p className="pw-upload-session-time">
+              {formatDateTime(uploadedAt)}
+            </p>
+          </div>
+        </Summary>
       </React.Fragment>
     );
   },
-
 });
 
 function mapStateToProps(state) {
   return {
-    summary: upload.getFileSummary(state),
+    summary: upload.getStatusSummary(state),
     isUploading: upload.isUploading(state),
   };
 }

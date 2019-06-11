@@ -1,6 +1,6 @@
 {
   "name": "pathogenwatch-front-end",
-  "version": "7.5.17",
+  "version": "8.0.9",
   "description": "Web client for Pathogenwatch",
   "main": "index.js",
   "scripts": {
@@ -20,7 +20,6 @@
   },
   "homepage": "https://pathogen.watch",
   "devDependencies": {
-    "ava": "^0.17.0",
     "babel-core": "^6.26.0",
     "babel-loader": "^7.1.2",
     "babel-plugin-transform-class-properties": "^6.24.1",
@@ -39,7 +38,9 @@
     "date-fns": "^1.28.4",
     "ejs": "^2.5.1",
     "ejs-loader": "^0.3.0",
-    "eslint-config-cgps": "github:cgps-dev/eslint-config-cgps#v2.0.0",
+    "eslint-config-cgps": "github:cgps-dev/eslint-config-cgps#v2.1.1",
+    "eslint-import-resolver-webpack": "^0.11.0",
+    "eventsource": "^1.0.7",
     "express": "^4.12.2",
     "extract-text-webpack-plugin": "^3.0.2",
     "file-loader": "^0.10.0",
@@ -52,6 +53,7 @@
     "libmicroreact": "https://gitlab.com/cgps/libmicroreact#5cddecd50890d68aef5819aa7180d17f4b749bc1",
     "lodash.sortby": "^4.7.0",
     "name-all-modules-plugin": "^1.0.1",
+    "node-forge": "^0.8.0",
     "pako": "^1.0.5",
     "papaparse": "^4.1.1",
     "phylocanvas": "^2.8.1",
@@ -80,9 +82,9 @@
     "redux-thunk": "^2.1.0",
     "remove-markdown": "^0.2.0",
     "reselect": "^3.0.1",
+    "resumablejs": "^1.1.0",
     "shortid": "^2.2.1",
     "style-loader": "^0.19.0",
-    "testdouble": "^1.6.1",
     "universal-cookie": "^2.0.5",
     "webpack": "^3.10.0",
     "webpack-assets-manifest": "^1.0.0",
@@ -90,6 +92,7 @@
     "webpack-hot-middleware": "^2.20.0",
     "webpack-monitor": "^1.0.13",
     "why-did-you-update": "^0.1.1",
-    "worker-loader": "^1.1.0"
+    "worker-loader": "^1.1.0",
+    "workerize-loader": "^1.0.4"
   }
 }

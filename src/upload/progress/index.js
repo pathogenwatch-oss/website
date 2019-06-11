@@ -3,31 +3,23 @@ import { connect } from 'react-redux';
 
 import Progress from './Progress.react';
 import Summary from './Summary.react';
+import Recovery from './recovery';
 
+import { isUploadPending } from './files/selectors';
 import {
-  isUploadPending,
   isSpecieationComplete,
-  getQueuePosition,
-  getLastMessageReceived,
-  isAnalysisComplete,
+  getProgressView,
+  getUploadedAt,
 } from './selectors';
 
-import {
-  receiveUploadAnalysis,
-  fetchGenomes,
-  processFiles,
-  fetchQueuePosition,
-} from './actions';
+import { processFiles } from './files/actions';
 
-import { subscribe, unsubscribe } from '../../utils/Notification';
+import { fetchGenomes, resetUpload } from './actions';
 
-import config from '../../app/config';
+import { views } from '../constants';
 
 const Component = React.createClass({
-
   componentWillMount() {
-    const { uploadedAt } = this.props;
-    subscribe(config.clientId, `analysis-${uploadedAt}`, this.props.receiveAnalysis);
     const { isUploading, startUpload, fetch } = this.props;
     if (isUploading) {
       startUpload();
@@ -37,78 +29,64 @@ const Component = React.createClass({
   },
 
   componentDidUpdate(previous) {
-    const uploadComplete = (previous.isUploading && !this.props.isUploading);
-    const specieationComplete = (previous.isSpecieationComplete === false && this.props.isSpecieationComplete);
+    const uploadComplete = previous.isUploading && !this.props.isUploading;
+    const specieationComplete =
+      previous.isSpecieationComplete === false &&
+      this.props.isSpecieationComplete;
+
     if (uploadComplete || specieationComplete) {
       this.props.fetch();
-    }
-
-    if (this.props.isAnalysisComplete) {
-      this.stopPolling();
-      return;
-    }
-
-    const { position } = this.props;
-    if (!previous.uploadComplete && uploadComplete && position > 0) {
-      this.poll();
-    }
-
-    if (previous.position !== position && position > 0) {
-      this.poll();
-    }
-
-    if (this.props.lastMessageReceived !== previous.lastMessageReceived) {
-      this.poll();
     }
   },
 
   componentWillUnmount() {
-    unsubscribe(config.clientId);
-    this.stopPolling();
+    this.props.reset();
   },
 
-  poll() {
-    this.stopPolling();
-    this.interval = setInterval(this.props.fetchPosition, 60000);
+  renderContent() {
+    const { match, uploadedAt } = this.props;
+    if (match.params.uploadedAt !== uploadedAt) {
+      return null;
+    }
+    switch (this.props.view) {
+      case views.RECOVERY:
+        return <Recovery uploadedAt={uploadedAt} />;
+      case views.PROGRESS:
+        return <Progress uploadedAt={uploadedAt} />;
+      default:
+        return null;
+    }
   },
-
-  stopPolling() {
-    if (this.interval) clearInterval(this.interval);
-  },
-
-  interval: null,
 
   render() {
     return (
-      <div className="wgsa-hipster-style">
+      <React.Fragment>
         <Summary uploadedAt={this.props.uploadedAt} />
-        <Progress uploadedAt={this.props.uploadedAt} />
-      </div>
+        {this.renderContent()}
+      </React.Fragment>
     );
   },
-
 });
 
-function mapStateToProps(state, { match }) {
-  const { uploadedAt } = match.params;
+function mapStateToProps(state) {
   return {
-    uploadedAt,
+    uploadedAt: getUploadedAt(state),
     isUploading: isUploadPending(state),
     isSpecieationComplete: isSpecieationComplete(state),
-    isAnalysisComplete: isAnalysisComplete(state),
-    position: getQueuePosition(state),
-    lastMessageReceived: getLastMessageReceived(state),
+    view: getProgressView(state),
   };
 }
 
 function mapDispatchToProps(dispatch, { match }) {
   const { uploadedAt } = match.params;
   return {
-    receiveAnalysis: msg => dispatch(receiveUploadAnalysis(msg)),
     fetch: () => dispatch(fetchGenomes(uploadedAt)),
-    fetchPosition: () => dispatch(fetchQueuePosition(uploadedAt)),
     startUpload: () => dispatch(processFiles()),
+    reset: () => dispatch(resetUpload()),
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Component);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Component);

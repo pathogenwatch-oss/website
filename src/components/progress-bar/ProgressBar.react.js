@@ -2,7 +2,6 @@ import React from 'react';
 import classnames from 'classnames';
 
 export default React.createClass({
-
   displayName: 'Progress Bar',
 
   propTypes: {
@@ -15,7 +14,7 @@ export default React.createClass({
   componentDidMount() {
     const { progressBar } = this.refs;
 
-    progressBar.addEventListener('mdl-componentupgraded', (event) => {
+    progressBar.addEventListener('mdl-componentupgraded', event => {
       this.progressBar = event.target.MaterialProgress;
       this.setProgress();
     });
@@ -34,19 +33,19 @@ export default React.createClass({
   },
 
   render() {
-    const { className, indeterminate, label } = this.props;
+    const { className, indeterminate, children, label = children } = this.props;
     return (
       <div className="wgsa-progress-bar">
-        { label ? <label className="wgsa-progress-bar__label">{label}</label> : null }
-        <div ref="progressBar"
-          className={classnames(
-            className,
-            'mdl-progress mdl-js-progress',
-            { 'mdl-progress__indeterminate': indeterminate }
-          )}
+        {label ? (
+          <label className="wgsa-progress-bar__label">{label}</label>
+        ) : null}
+        <div
+          ref="progressBar"
+          className={classnames(className, 'mdl-progress mdl-js-progress', {
+            'mdl-progress__indeterminate': indeterminate,
+          })}
         />
       </div>
     );
   },
-
 });

@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 
-export default ({ className, children, out = true }) => (
+export default ({ className, children, out = false }) => (
   <ReactCSSTransitionGroup
     className={className}
     transitionName="wgsa-fade"

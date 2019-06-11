@@ -13,18 +13,13 @@ import { getSelectionDropdownView, getSelectionSize } from '../selectors';
 const EmptySelection = (
   <div className="wgsa-selection-message">
     <h3>No Genomes Selected</h3>
-    <p>You can select genomes with the following methods:</p>
-    <ul className="bulleted">
-      <li>
-        <strong>Checkboxes</strong> in the List view
-      </li>
-      <li>
-        <strong>Lasso</strong> in the Map view
-      </li>
-      <li>
-        <strong>Checkbox</strong> in the Detail view
-      </li>
-    </ul>
+    <p>
+      In the <strong>List</strong> view, select genomes by clicking a row. Try
+      selecting one genome and holding <strong>shift</strong> to select more.
+    </p>
+    <p>
+      In the <strong>Map</strong> view, select genomes by using the lasso tool.
+    </p>
   </div>
 );
 
@@ -51,7 +46,7 @@ const Dropdown = React.createClass({
   render() {
     const { view, hasSelection } = this.props;
     return (
-      <Fade>
+      <Fade out>
         {view ? (
           <div className="wgsa-genome-selection-dropdown mdl-shadow--2dp">
             {hasSelection ? (
