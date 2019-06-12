@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 import { names } from './constants';
 
 class DocumentTitle extends React.Component {
-
   componentWillMount() {
     this.updateTitle();
   }
@@ -22,7 +21,6 @@ class DocumentTitle extends React.Component {
   render() {
     return null;
   }
-
 }
 
 function mapStateToProps(state) {

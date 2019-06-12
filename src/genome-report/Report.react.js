@@ -1,6 +1,5 @@
 import React from 'react';
 import ScrollSpy from 'react-scrollspy';
-import ReactToPrint from 'react-to-print';
 
 import Modal from '../components/modal';
 import RemoveButton from './RemoveButton.react';
@@ -8,10 +7,13 @@ import RemoveButton from './RemoveButton.react';
 import DownloadLink from '../downloads/GenomeFileLink.react';
 import Spinner from '../components/Spinner.react';
 import Loading from '../components/Loading.react';
+import DocumentTitle from '../branding/DocumentTitle.react';
 
 import Overview from './Overview.react';
 import Metadata from './Metadata.react';
 import getAnalysisSections from './analysis';
+
+import printStyles from 'raw-loader!./styles/print.css';
 
 const Content = React.createClass({
   getInitialState() {
@@ -55,9 +57,12 @@ const Content = React.createClass({
         ),
       });
     }
+
     // Extraneous wrapping div smooths out the animation
     return (
       <div>
+        <DocumentTitle>{`Genome Report: ${genome.name}`}</DocumentTitle>
+        <style>{printStyles}</style>
         <nav onClick={e => e.stopPropagation()}>
           <ScrollSpy
             items={sections.map(_ => _.key.toLowerCase())}
@@ -114,12 +119,6 @@ const Content = React.createClass({
 
 const openStatuses = new Set([ 'LOADING', 'READY' ]);
 
-const PrintButton = () => (
-  <button className="mdl-button mdl-button--icon" title="Print Report">
-    <i className="material-icons">print</i>
-  </button>
-);
-
 const Report = ({ name, genome, status, close }) => {
   const isOpen = openStatuses.has(status);
   const printRef = React.useRef();
@@ -128,10 +127,9 @@ const Report = ({ name, genome, status, close }) => {
       title={
         <span className="wgsa-genome-report-title">
           <div className="pw-genome-report-print-button" onClick={e => e.stopPropagation()}>
-            <ReactToPrint
-              trigger={PrintButton}
-              content={() => printRef.current}
-            />
+            <button className="mdl-button mdl-button--icon" title="Print Report" onClick={() => window.print()}>
+              <i className="material-icons">print</i>
+            </button>
           </div>
           Genome Report: {genome ? genome.name : name}{' '}
           {genome && genome.fileId && (
