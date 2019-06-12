@@ -34,28 +34,22 @@ export default ({ result, genome }) => {
     ? antibiotics.filter(({ name }) => !hiddenColumns.has(name))
     : antibiotics;
 
-  const libraryUrl = `${libraryLink[library.source]}/${library.version}/${
-    library.label
-  }.toml`;
+  const libraryUrl = `${libraryLink[library.source]}/${library.version}/${library.label}.toml`;
 
   return (
     <React.Fragment>
-      <header className="pw-genome-report-section-header">
-        <h2>Antimicrobial Resistance (AMR)</h2>
-        <p>
-          <a href={libraryUrl} target="_blank" rel="noopener">
-            AMR Library {library.label} Version {library.version}
-            {library.source !== 'PUBLIC' ? ` (${library.source})` : ''}
-          </a>
-        </p>
-      </header>
+      <p className="pw-genome-report-section-header">
+        <a href={libraryUrl} target="_blank" rel="noopener" className="pw-genome-report-reference-link">
+          <strong>PAARSNP AMR</strong> - Library {library.label} Version {library.version}
+          {library.source !== 'PUBLIC' ? ` (${library.source})` : ''}
+        </a>
+      </p>
       <table cellSpacing="0" className="wgsa-genome-report-amr wide bordered">
         <caption>Resistance Profile</caption>
         <thead>
           <tr>
             <th>Agent</th>
-            <th>Full Name</th>
-            <th>Genotype</th>
+            <th>Predicted Phenotype</th>
             <th>SNPs/Genes</th>
           </tr>
         </thead>
@@ -68,7 +62,6 @@ export default ({ result, genome }) => {
                 'pw-genome-report-amr-resistant': state === 'RESISTANT',
               })}
             >
-              <td>{name}</td>
               <td>{fullName}</td>
               <td className="wgsa-genome-report-amr-state">
                 {state.replace(/_/g, ' ').toLowerCase()}

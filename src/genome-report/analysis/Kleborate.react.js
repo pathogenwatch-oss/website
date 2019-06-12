@@ -1,157 +1,56 @@
 import React from 'react';
 
-const kleborateTypingFields2 = [
-  'Yersiniabactin',
-  'YbST',
-  'Colibactin',
-  'CbST',
-  'Aerobactin',
-  'AbST',
-  'Salmochelin',
-  'SmST',
-  'rmpA',
-  'rmpA2',
-];
+// const kleborateTypingFields1 = [
+//   'species',
+//   'virulence_score',
+//   'resistance_score',
+//   'K_locus',
+//   'K_locus_confidence',
+//   'O_locus',
+//   'O_locus_confidence',
+//   'wzi',
+// ];
 
-const kleborateTypingFields1 = [
-  'species',
-  'virulence_score',
-  'resistance_score',
-  'K_locus',
-  'K_locus_confidence',
-  'O_locus',
-  'O_locus_confidence',
-  'wzi',
-];
+export default ({ genome }) => {
+  const { kleborate } = genome.analysis;
+  const species = kleborate.species !== genome.analysis.speciator.speciesName;
 
-const kleborateAmrFields = [
-  'AGly',
-  'Col',
-  'Fcyn',
-  'Flq',
-  'Gly',
-  'MLS',
-  'Ntmdz',
-  'Phe',
-  'Rif',
-  'Sul',
-  'Tet',
-  'Tmt',
-];
-
-const klebBlaFields = [
-  'Bla',
-  'Bla_Carb',
-  'Bla_ESBL',
-  'Bla_ESBL_inhR',
-  'Bla_broad',
-  'Bla_broad_inhR',
-];
-export default ({ result }) => (
-  <React.Fragment>
-    <header className="pw-genome-report-section-header">
-      <h2>Kleborate</h2>
-      <p>
-        <a
-          href="https://github.com/katholt/Kleborate"
-          target="_blank"
+  return (
+    <React.Fragment>
+      <header className="pw-genome-report-section-header">
+        <h2>Kleborate</h2>
+        <a href="https://github.com/katholt/Kleborate" target="_blank"
           rel="noopener"
-        >
-          https://github.com/katholt/Kleborate
-        </a>
-      </p>
-    </header>
-    <table className="pw-kleborate-table" cellSpacing="0">
-      <caption>Typing</caption>
-      <thead>
-        <tr>
-          {kleborateTypingFields1
-            .filter(field => field !== 'wzi')
-            .map(klebType => (
-              <th key={klebType}>
-                {klebType
-                  .replace(/_/g, ' ')
-                  .replace(/\b\w/g, l => l.toUpperCase())
-                  .replace(/^K Locus$/, 'K Locus Best Match')
-                  .replace(/^O Locus$/, 'O Locus Best Match')}
-              </th>
-            ))}
-          <th key="wzi" className="italic">
-            wzi
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td key="species" className="italic">
-            {result.species}
-          </td>
-          {kleborateTypingFields1
-            .filter(field => field !== 'species')
-            .filter(field => field !== 'wzi')
-            .map(klebType => (
-              <td key={klebType}>{result[klebType]}</td>
-            ))}
-          <td key="wzi" className="italic">
-            {result.wzi}
-          </td>
-        </tr>
-      </tbody>
-    </table>
-    <table className="pw-kleborate-table" cellSpacing="0">
-      <caption>Virulence Locus Typing</caption>
-      <thead>
-        <tr>
-          {kleborateTypingFields2.map(klebType => (
-            <th key={klebType}>
-              {klebType
-                .replace(/_/g, ' ')
-                .replace(/\b\w/g, l => l.toUpperCase())}
-            </th>
-          ))}
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          {kleborateTypingFields2.map(klebType => (
-            <td key={klebType}>{result[klebType]}</td>
-          ))}
-        </tr>
-      </tbody>
-    </table>
-    <table className="pw-kleborate-table" cellSpacing="0">
-      <caption>Predicted AMR</caption>
-      <thead>
-        <tr>
-          {kleborateAmrFields.map(klebAmr => (
-            <th key={klebAmr}>{klebAmr}</th>
-          ))}
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          {kleborateAmrFields.map(klebAmr => (
-            <td key={klebAmr}>{result[klebAmr].replace(/;/g, '; ')}</td>
-          ))}
-        </tr>
-      </tbody>
-    </table>
-    <table className="pw-kleborate-table" cellSpacing="0">
-      <caption>Beta-lactamase Genes by Class</caption>
-      <thead>
-        <tr>
-          {klebBlaFields.map(klebBla => (
-            <th key={klebBla}>{klebBla}</th>
-          ))}
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          {klebBlaFields.map(klebBla => (
-            <td key={klebBla}>{result[klebBla].replace(/;/g, '; ')}</td>
-          ))}
-        </tr>
-      </tbody>
-    </table>
-  </React.Fragment>
-);
+        >https://github.com/katholt/Kleborate</a>
+      </header>
+      <dl>
+        <div className="pw-genome-report-metadata">
+          <dt>K Locus (<em>wzi</em>)</dt>
+          <dd>{kleborate.K_locus} ({kleborate.wzi})</dd>
+        </div>
+        <div className="pw-genome-report-metadata">
+          <dt>Confidence</dt>
+          <dd>{kleborate.K_locus_confidence}</dd>
+        </div>
+      </dl>
+      <dl>
+        <div className="pw-genome-report-metadata">
+          <dt>O Locus</dt>
+          <dd>{kleborate.O_locus}</dd>
+        </div>
+        <div className="pw-genome-report-metadata">
+          <dt>Confidence</dt>
+          <dd>{kleborate.O_locus_confidence}</dd>
+        </div>
+      </dl>
+      {species &&
+        <dl className="pw-genome-report-unsized">
+          <div className="pw-genome-report-metadata">
+            <dt className="danger">Species</dt>
+            <dd>{kleborate.species}</dd>
+          </div>
+        </dl>
+      }
+    </React.Fragment>
+  );
+};
