@@ -28,14 +28,14 @@ export function checkStatus() {
         navigator.serviceWorker.getRegistrations(),
         caches.has(createCacheKey(uuid)),
       ])
-      .then(([ registrations, hasCache ]) => registrations.length && hasCache)
-      .then(isSaved =>
-        dispatch(setStatus(isSaved ? statuses.SAVED : statuses.UNSAVED))
-      )
-      .catch(err => {
-        console.error(err);
-        dispatch(setStatus(statuses.ERRORED));
-      })
+        .then(([ registrations, hasCache ]) => registrations.length && hasCache)
+        .then(isSaved =>
+          dispatch(setStatus(isSaved ? statuses.SAVED : statuses.UNSAVED))
+        )
+        .catch(err => {
+          console.error(err);
+          dispatch(setStatus(statuses.ERRORED));
+        })
     );
   };
 }
@@ -72,7 +72,7 @@ export function saveForOffline() {
       .then(cache => Promise.all([
         cacheCollectionRequest(cache, token),
         cache.addAll(subtrees.map(subtree =>
-          getServerPath(`/api/collection/${token}/tree/${subtree}`))
+          getServerPath(`/api/collection/${token}/tree/${encodeURIComponent(subtree)}`))
         ),
       ]))
       .then(() => saveToOfflineList(collection))
