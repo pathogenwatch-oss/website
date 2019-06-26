@@ -1,7 +1,7 @@
 @media print {
 
   * {
-    -webkit-print-color-adjust: exact;
+    overflow: visible !important;
   }
 
   /* hide everything that isn't the report */
@@ -12,13 +12,27 @@
     display: none;
   }
 
+  /* put everything in view */
   .mdl-layout__container,
   .wgsa-modal-container.wgsa-genome-report,
   .wgsa-genome-report .wgsa-overlay,
   .wgsa-genome-report .wgsa-modal {
     position: static;
   }
+  html,
+  body,
+  .mdl-layout__container,
+  .mdl-layout {
+    height: auto;
+  }
+  .mdl-layout,
+  .wgsa-genome-report,
+  .wgsa-modal,
+  .wgsa-overlay {
+    display: block !important;
+  }
 
+  /* make the report the full width of the page */
   .wgsa-genome-report .wgsa-modal {
     width: auto;
     max-width: none;
@@ -36,20 +50,42 @@
 
   .wgsa-genome-report-content {
     margin-top: 0;
-    margin-bottom: 0;
+    padding-bottom: 16px;
   }
 
   .wgsa-genome-report-summary header {
     padding-top: 0;
   }
 
-  .wgsa-genome-report-content section,
-  .wgsa-genome-report-content figure {
-    page-break-inside: avoid;
+  /* page break rules */
+  .wgsa-genome-report-content figure,
+  .wgsa-genome-report-content table,
+  .wgsa-genome-report-content h2,
+  .pw-cluster-content {
+    break-inside: avoid;
   }
 
-  a {
+  /* https://stackoverflow.com/a/53742871 */
+  .wgsa-genome-report-content h2 {
+    break-inside: avoid;
+  }
+  .wgsa-genome-report-content h2::after {
+    content: "";
+    display: block;
+    height: 100px;
+    margin-bottom: -100px;
+  }
+
+  /* hide unnecessary links */
+  .pw-genome-report-external-link,
+  a::after {
     display: none;
+  }
+
+  /* show content links as text */
+  .wgsa-genome-report-content dd a {
+    text-decoration: none;
+    font-weight: inherit;
   }
 
 }

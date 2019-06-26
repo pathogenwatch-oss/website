@@ -107,6 +107,11 @@ dl.pw-genome-report-unsized > div,
   text-align: center;
 }
 
+.wgsa-genome-report table caption.pw-genome-report-section-header {
+  margin-bottom: 16px;
+  text-align: left;
+}
+
 .wgsa-genome-report figure {
   margin: 0 0 16px;
 }
