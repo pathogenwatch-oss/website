@@ -5,15 +5,17 @@ import Genotyphi from './Genotyphi.react';
 import NgMast from './NgMast.react';
 import Serotype from './Serotype.react';
 import Strain from './Strain.react';
+import Kleborate from './Kleborate.react';
 
 function getSecondaryTyping(genome) {
-  const { genotyphi, ngmast, serotype, poppunk } = genome.analysis;
+  const { genotyphi, ngmast, serotype, poppunk, kleborate } = genome.analysis;
   return (
     <React.Fragment>
       {!!poppunk && <Strain genome={genome} />}
       {!!serotype && <Serotype genome={genome} />}
       {!!genotyphi && <Genotyphi result={genotyphi} />}
       {!!ngmast && <NgMast result={ngmast} />}
+      {!!kleborate && <Kleborate genome={genome} /> }
     </React.Fragment>
   );
 }

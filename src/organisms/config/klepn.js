@@ -30,6 +30,7 @@ export default {
   publicMetadataColumnNames: [],
   collections: [],
   uiOptions: {
+    noPopulation: true,
     kleborate: true,
   },
 };

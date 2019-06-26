@@ -77,13 +77,7 @@ const inctyperGroup = {
 const kleborateGroup = {
   group: true,
   columnKey: 'kleborate',
-  columns: [ '__kleborate_species', '__kleborate_mlst', '__virulence_score', '__resistance_score', '__K_locus', '__K_locus_confidence', '__O_locus', '__O_locus_confidence', '__wzi', '__Aerobactin', '__AbST', '__Colibactin', '__CbST', '__Salmochelin', '__SmST', '__Yersiniabactin', '__YbST', '__rmpA', '__rmpA2' ],
-};
-
-const kleborateAmrGroup = {
-  group: true,
-  columnKey: 'kleborate_amr',
-  columns: [ '__AGly', '__Col', '__Fcyn', '__Flq', '__Gly', '__MLS', '__Ntmdz', '__Phe', '__Rif', '__Sul', '__Tet', '__Tmt', '__Bla', '__Bla_Carb', '__Bla_ESBL', '__Bla_ESBL_inhR', '__Bla_broad', '__Bla_broad_inhR' ],
+  columns: [ '__K_locus', '__O_locus', '__Aerobactin', '__Colibactin', '__Salmochelin', '__Yersiniabactin', '__rmpA', '__rmpA2' ],
 };
 
 function fillColumnDefs({ columns, ...group }) {
@@ -103,7 +97,6 @@ export function getTypingColumnGroups({ isClusterView }, uiOptions) {
     uiOptions.genotyphi ? genotyphiGroup : null,
     uiOptions.inctyper ? inctyperGroup : null,
     uiOptions.kleborate ? kleborateGroup : null,
-    uiOptions.kleborate ? kleborateAmrGroup : null,
   ]
     .filter(_ => _)
     .map(fillColumnDefs);
