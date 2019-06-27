@@ -57,14 +57,6 @@
     padding-top: 0;
   }
 
-  /* page break rules */
-  .wgsa-genome-report-content figure,
-  .wgsa-genome-report-content table,
-  .wgsa-genome-report-content h2,
-  .pw-cluster-content {
-    break-inside: avoid;
-  }
-
   /* https://stackoverflow.com/a/53742871 */
   .wgsa-genome-report-content h2 {
     break-inside: avoid;
@@ -76,9 +68,10 @@
     margin-bottom: -100px;
   }
 
-  /* hide unnecessary links */
+  /* hide unnecessary elements */
   .pw-genome-report-external-link,
-  a::after {
+  a::after,
+  .pw-genome-report-noprint {
     display: none;
   }
 
@@ -86,6 +79,17 @@
   .wgsa-genome-report-content dd a {
     text-decoration: none;
     font-weight: inherit;
+  }
+
+  /* Clustering overrides */
+  .pw-cluster-view button,
+  .pw-cluster-view a,
+  .libmr-ZoomControls,
+  .pw-cluster-chart-intro {
+    display: none !important;
+  }
+  .pw-cluster-view > canvas {
+    margin: 0 auto;
   }
 
 }

@@ -1,23 +1,29 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
+import classnames from 'classnames';
 
-import Clustering from '../../clustering';
-import Network from '../../clustering/Network.react';
-import ThresholdChart from '../../clustering/ThresholdChart.react';
-import ClusterButton from '../../clustering/ClusterButton.react';
+import Clustering from '~/clustering';
+import Network from '~/clustering/Network.react';
+import ThresholdChart from '~/clustering/ThresholdChart.react';
+import ClusterButton from '~/clustering/ClusterButton.react';
 
-import { getSelectedGenomeId, getThreshold } from '../../clustering/selectors';
+import {
+  getSelectedGenomeId,
+  getStatus,
+  getThreshold,
+} from '~/clustering/selectors';
 
 import * as actions from '../../clustering/actions';
 
 const ClusteringSection = ({
   result,
   selectedGenomeId,
-  threshold,
   setThreshold,
+  status,
+  threshold,
 }) => (
-  <React.Fragment>
+  <div className={classnames({ 'pw-genome-report-noprint': status !== 'COMPLETED_LAYOUT' })}>
     <header className="pw-genome-report-section-header">
       <h2>Core Genome Clustering</h2>
       <p>
@@ -44,13 +50,14 @@ const ClusteringSection = ({
         </div>
       </div>
     </Clustering>
-  </React.Fragment>
+  </div>
 );
 
 function mapStateToProps(state) {
   return {
     selectedGenomeId: getSelectedGenomeId(state),
     threshold: getThreshold(state),
+    status: getStatus(state),
   };
 }
 
