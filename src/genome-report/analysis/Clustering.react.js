@@ -14,7 +14,7 @@ import {
   getThreshold,
 } from '~/clustering/selectors';
 
-import * as actions from '../../clustering/actions';
+import * as actions from '~/clustering/actions';
 
 const ClusteringSection = ({
   result,
