@@ -45,14 +45,15 @@ const klebAgentLinks = {
 
 export default ({ result }) => (
   <React.Fragment>
+    <p className="pw-genome-report-section-header">
+      <a href="https://github.com/katholt/Kleborate#resistance-gene-detection" target="_blank"
+        rel="noopener" className="pw-genome-report-reference-link"
+      >
+        <strong>Kleborate AMR</strong> - https://github.com/katholt/Kleborate#resistance-gene-detection
+      </a>
+    </p>
     <table cellSpacing="0" className="wgsa-genome-report-amr wide bordered">
-      <caption className="pw-genome-report-section-header">
-        <a href="https://github.com/katholt/Kleborate#resistance-gene-detection" target="_blank"
-          rel="noopener" className="pw-genome-report-reference-link"
-        >
-          <strong>Kleborate AMR</strong> - https://github.com/katholt/Kleborate#resistance-gene-detection
-        </a>
-      </caption>
+      <caption>Resistance Profile</caption>
       <thead>
         <tr>
           <th>Agent</th>
