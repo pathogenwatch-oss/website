@@ -85,7 +85,8 @@
   .pw-cluster-view button,
   .pw-cluster-view a,
   .libmr-ZoomControls,
-  .pw-cluster-chart-intro {
+  .pw-cluster-chart-intro,
+  .chartjs-size-monitor {
     display: none !important;
   }
   .pw-cluster-view > canvas {
