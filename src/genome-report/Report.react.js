@@ -13,7 +13,7 @@ import Overview from './Overview.react';
 import Metadata from './Metadata.react';
 import getAnalysisSections from './analysis';
 
-import printStyles from 'raw-loader!./styles/print.css';
+import printStyles from '!!raw-loader!./styles/print.css';
 
 const Content = React.createClass({
   getInitialState() {
