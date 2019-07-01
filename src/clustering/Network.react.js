@@ -58,6 +58,12 @@ const ClusterNetwork = React.createClass({
     const { controlsVisible } = this.state;
     return (
       <div className="pw-cluster-network">
+        { this.props.coverMessage !== false &&
+          <p className="pw-network-cover-message">
+            { this.props.status === 'RUNNING_LAYOUT' ?
+              <span className="wgsa-blink">Rendering cluster...</span> :
+              <ClusterDescription /> }
+          </p> }
         <Network
           controlsVisible={controlsVisible}
           graph={this.props.graph}
@@ -78,12 +84,6 @@ const ClusterNetwork = React.createClass({
           style={style}
           theme="purple"
         />
-        { this.props.coverMessage !== false &&
-          <p className="pw-network-cover-message">
-            { this.props.status === 'RUNNING_LAYOUT' ?
-              <span className="wgsa-blink">Rendering cluster...</span> :
-              <ClusterDescription /> }
-          </p> }
       </div>
     );
   },

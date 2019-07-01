@@ -95,5 +95,13 @@
   .wgsa-genome-report-content #clustering {
     break-inside: avoid;
   }
+  .pw-network-cover-message {
+    position: static;
+    margin: 0;
+    padding: 0;
+  }
+  .pw-cluster-network {
+    margin-bottom: 16px;
+  }
 
 }
