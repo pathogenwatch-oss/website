@@ -92,5 +92,8 @@
   .pw-cluster-view > canvas {
     margin: 0 auto;
   }
+  .wgsa-genome-report-content #clustering {
+    break-inside: avoid;
+  }
 
 }
