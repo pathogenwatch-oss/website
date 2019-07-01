@@ -16,22 +16,24 @@ export default React.createClass({
     if (isNovel(id)) {
       return (
         textOnly ?
-        <span
-          ref={el => { this.el = el; }}
-          onClick={e => e.stopPropagation()}
-          className="wgsa-mlst-hit"
-          title={`Novel Allele: ${id}\n(Click to Copy)`}
-        >
+          <span
+            ref={el => { this.el = el; }}
+            onClick={e => e.stopPropagation()}
+            className="wgsa-mlst-hit is-novel"
+            title={`Novel Allele: ${id}\n(Click to Copy)`}
+          >
           ({id.slice(0, 4)})
-        </span> :
-        <i
-          ref={el => { this.el = el; }}
-          onClick={e => e.stopPropagation()}
-          className="material-icons wgsa-mlst-profile-hit"
-          title={`Novel Allele: ${id}\n(Click to Copy)`}
-        >
-          new_releases
-        </i>
+          </span> :
+          <span className="wgsa-mlst-profile-hit is-novel">
+            <i
+              ref={el => { this.el = el; }}
+              onClick={e => e.stopPropagation()}
+              className="material-icons"
+              title={`Novel Allele: ${id}\n(Click to Copy)`}
+            >
+              new_releases
+            </i>
+          </span>
       );
     }
     return <span className="wgsa-mlst-profile-hit">{id}</span>;

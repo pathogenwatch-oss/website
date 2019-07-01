@@ -57,6 +57,11 @@
     padding-top: 0;
   }
 
+  /* page breaks */
+  figure {
+    break-inside: avoid;
+  }
+
   /* https://stackoverflow.com/a/53742871 */
   .wgsa-genome-report-content h2 {
     break-inside: avoid;
@@ -73,6 +78,16 @@
   a::after,
   .pw-genome-report-noprint {
     display: none;
+  }
+
+  /* Replace novel MLST icon */
+  .wgsa-mlst-hit .material-icons,
+  .wgsa-mlst-profile-hit .material-icons {
+    display: none;
+  }
+  .wgsa-mlst-hit.is-novel::before,
+  .wgsa-mlst-profile-hit.is-novel::before {
+    content: "(!)";
   }
 
   /* show content links as text */

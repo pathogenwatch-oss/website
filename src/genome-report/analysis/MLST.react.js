@@ -27,7 +27,7 @@ export default ({ genome }) => {
             speciator.speciesId
           }&sequenceType=${mlst.st}`}
         >
-          View all ST {mlst.st}
+          View all ST <ST id={mlst.st} textOnly />
         </ExternalLink>
       </div>
       <table className="pw-mlst-profile" cellSpacing="0">

@@ -19,7 +19,7 @@ export default React.createClass({
           ref={el => {
             this.el = el;
           }}
-          className="wgsa-mlst-hit"
+          className="wgsa-mlst-hit is-novel"
           title={`Novel ST: ${id}\n(Click to Copy)`}
           onClick={e => e.stopPropagation()}
         >
