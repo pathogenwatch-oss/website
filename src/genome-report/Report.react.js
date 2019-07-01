@@ -88,7 +88,6 @@ const Content = React.createClass({
         <div
           className="wgsa-genome-report-content"
           onClick={e => e.stopPropagation()}
-          ref={el => { this.printRef = el; }}
         >
           {sections.map(({ key, component }) => (
             <section
@@ -121,7 +120,6 @@ const openStatuses = new Set([ 'LOADING', 'READY' ]);
 
 const Report = ({ name, genome, status, close }) => {
   const isOpen = openStatuses.has(status);
-  const printRef = React.useRef();
   return (
     <Modal
       title={
@@ -150,7 +148,7 @@ const Report = ({ name, genome, status, close }) => {
         }
         complete={status === 'READY'}
       >
-        <Content genome={genome} ref={c => { if (c) printRef.current = c.printRef; }} />
+        <Content genome={genome} />
       </Loading>
     </Modal>
   );
