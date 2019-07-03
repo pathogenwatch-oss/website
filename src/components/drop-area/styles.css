@@ -1,0 +1,34 @@
+.pw-drop-area-form {
+  align-items: baseline;
+  align-self: stretch;
+  border: 2px dashed rgba(0, 0, 0, 0.28);
+  color: rgba(0, 0, 0, 0.54);
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  margin-left: 0;
+  margin-right: 0;
+  padding: 16px;
+  text-align: center;
+  transition-property: border-color;
+  transition: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.pw-drop-area-form > * {
+  pointer-events: none;
+}
+
+.pw-drop-area-form input {
+  position: absolute;
+  z-index: -1;
+  opacity: 0;
+}
+
+.pw-drop-area-form p {
+  margin: 0;
+}
+
+.pw-drop-area-form.is-indicating {
+  color: #3c7383;
+  border-color: currentColor;
+}

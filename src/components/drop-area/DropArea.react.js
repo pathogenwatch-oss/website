@@ -1,7 +1,7 @@
 import React from 'react';
 import classnames from 'classnames';
 
-import Fade from '../../../components/fade';
+import Fade from '../fade';
 
 export default React.createClass({
   displayName: 'DropArea',
@@ -53,9 +53,10 @@ export default React.createClass({
     return (
       <form
         className={classnames(
-          'pw-edit-metadata-form pw-edit-metadata-section',
+          'pw-drop-area-form',
+          this.props.className,
           {
-            indicating: this.state.indicatorVisible,
+            'is-indicating': this.state.indicatorVisible,
           }
         )}
         onDragOver={this.showDropIndicator}
@@ -69,7 +70,7 @@ export default React.createClass({
               <strong>Drop to upload</strong>
             </p>
           ) : (
-            this.props.children
+            React.cloneElement(this.props.children, { key: 'instructions' })
           )}
         </Fade>
         <input

@@ -6,12 +6,26 @@ import { getNetworkFilteredIds } from '../cluster-viewer/selectors';
 
 import { createColourGetter } from './amr-utils';
 import { filterKeys } from './filter/constants';
+import { getPrivateMetadata } from './private-metadata/selectors';
 
 export const getViewer = ({ viewer }) => viewer;
 
 export const getCollection = state => getViewer(state).entities.collection;
-export const getGenomes = state => getViewer(state).entities.genomes;
 export const isClusterView = state => getCollection(state).isClusterView;
+export const getGenomes = createSelector(
+  state => getViewer(state).entities.genomes,
+  getPrivateMetadata,
+  (genomes, metadata) => {
+    const merged = {};
+    for (const [ key, value ] of Object.entries(genomes)) {
+      merged[key] = {
+        ...value,
+        ...metadata[value.name],
+      };
+    }
+    return merged;
+  }
+);
 
 export const getCollectionTitle = createSelector(
   getCollection,

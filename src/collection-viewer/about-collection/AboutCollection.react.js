@@ -1,11 +1,14 @@
 import React from 'react';
 import classnames from 'classnames';
 import Markdown from 'react-markdown';
+import dateSince from 'date-fns/distance_in_words';
 
 import SaveForOffline from '../offline';
-import PubMedLink from '../../components/PubMedLink.react';
-import MarkdownHeading from '../../components/MarkdownHeading.react';
+import PubMedLink from '~/components/PubMedLink.react';
+import MarkdownHeading from '~/components/MarkdownHeading.react';
 import Access from '../access';
+import { CardMetadata } from '~/card';
+import PrivateMetadata from '../private-metadata';
 
 export default ({ organism, metadata, isOpen, onButtonClick }) => (
   <div
@@ -29,27 +32,27 @@ export default ({ organism, metadata, isOpen, onButtonClick }) => (
       >
         { metadata.title || 'About Collection' }
       </MarkdownHeading>
+      <span className="wgsa-card-metadata-inliner wgsa-collection-summary">
+        <CardMetadata title="Organism" icon="bug_report">
+          {organism}
+        </CardMetadata>
+        <CardMetadata tooltip={metadata.dateCreated.toLocaleString()} icon="access_time">
+          {dateSince(metadata.dateCreated, new Date())} ago
+        </CardMetadata>
+      </span>
       { metadata.description ?
-          <Markdown source={metadata.description} /> :
-          <p>(no description)</p> }
+        <Markdown source={metadata.description} /> :
+        <p>(no description)</p> }
       { metadata.pmid &&
         <p>
           <PubMedLink pmid={metadata.pmid}>
             View Publication
           </PubMedLink>
         </p> }
-      <dl>
-        <div>
-          <dt className="wgsa-hub-stats-heading">Organism</dt>
-          <dd className="wgsa-hub-stats-value">{organism}</dd>
-        </div>
-        <div>
-          <dt className="wgsa-hub-stats-heading">Created</dt>
-          <dd className="wgsa-hub-stats-value">{metadata.dateCreated}</dd>
-        </div>
-      </dl>
       { metadata.owner === 'me' && <hr /> }
       { metadata.owner === 'me' && <Access access={metadata.access} /> }
+      <hr />
+      <PrivateMetadata />
       <hr />
       <SaveForOffline />
     </div>

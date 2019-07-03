@@ -1,6 +1,8 @@
 import { createSelector } from 'reselect';
 
 import { getViewer, getCollection } from '../selectors';
+import { hasPrivateMetadata } from '../private-metadata/selectors';
+import { getMetadataColumns, getActiveMetadataColumn } from '../data-tables/selectors';
 
 import Organisms from '../../organisms';
 
@@ -12,11 +14,19 @@ export const getVisibleTableName = state => getTableState(state).visible;
 export const getDataTableName = state => getTableState(state).activeData;
 export const getAMRTableName = state => getTableState(state).activeAMR;
 
-export const getVisibleTable = createSelector(
-  getTables,
-  getVisibleTableName,
-  (tables, name) => tables[name]
-);
+
+export const getVisibleTable = state => {
+  const name = getVisibleTableName(state);
+  const tableState = getTables(state)[name];
+  if (name === 'metadata') {
+    return {
+      ...tableState,
+      activeColumn: getActiveMetadataColumn(state),
+      columns: getMetadataColumns(state),
+    };
+  }
+  return getTables(state)[name];
+};
 
 export const getActiveDataTable = createSelector(
   getTables,
@@ -32,7 +42,8 @@ export const getActiveAMRTable = createSelector(
 
 export const hasMetadata = createSelector(
   getTables,
-  tables => tables.metadata.active
+  hasPrivateMetadata,
+  (tables, privateMetadata) => tables.metadata.active || privateMetadata
 );
 
 export const hasTyping = createSelector(

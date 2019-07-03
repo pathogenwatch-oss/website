@@ -2,13 +2,13 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { readAsText } from 'promise-file-reader';
 import classnames from 'classnames';
+import { Link } from 'react-router-dom';
 
 import DownloadLink from '../download/DownloadLink.react';
-import DropArea from './DropArea.react';
-import Progress from './Progress.react';
+import DropArea from '~/components/drop-area';
 import Fade from '~/components/fade';
 import Limiter from '../Limiter.react';
-import { Link } from 'react-router-dom';
+import Progress from './Progress.react';
 
 import { getSelectedGenomeIds } from '../selectors';
 
@@ -103,7 +103,7 @@ class UpdateMetadata extends React.Component {
   }
 
   render() {
-    const { ids, goBack, update } = this.props;
+    const { ids, goBack } = this.props;
     const progress = (this.state.completed / this.state.rows) * 100;
     return (
       <div className="wgsa-dropdown">
@@ -133,8 +133,8 @@ class UpdateMetadata extends React.Component {
                   1. Download existing metadata for selected genomes
                 </DownloadLink>
                 <p>2. Make changes to the spreadsheet (e.g. in Excel)</p>
-                <DropArea update={update} onFiles={this.handleFiles}>
-                  <p key="instructions">
+                <DropArea className="pw-edit-metadata-section" onFiles={this.handleFiles}>
+                  <p>
                     3. Drag file here to upload <br />
                     or click to select file
                   </p>
