@@ -6,7 +6,7 @@ import { getUserDefinedValue } from '../table/utils';
 
 import * as table from '../table/constants';
 import { systemDataColumns } from './constants';
-import { getTables } from '../table/selectors';
+import { getTableEntities } from '../table/selectors';
 
 
 function getColumnNames(genomes) {
@@ -71,7 +71,7 @@ export const getMetadataColumns = createSelector(
 
 export const getActiveMetadataColumn = createSelector(
   getMetadataColumns,
-  state => getTables(state).metadata.activeColumn,
+  state => getTableEntities(state).metadata.activeColumn,
   (columns, activeColumn) => {
     for (const column of columns) {
       if (column.columnKey === activeColumn.columnKey) {

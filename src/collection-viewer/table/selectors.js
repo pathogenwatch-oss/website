@@ -8,23 +8,34 @@ import Organisms from '../../organisms';
 
 export const getTableState = state => getViewer(state).table;
 
-export const getTables = state => getTableState(state).entities;
-
 export const getVisibleTableName = state => getTableState(state).visible;
 export const getDataTableName = state => getTableState(state).activeData;
 export const getAMRTableName = state => getTableState(state).activeAMR;
 
+export const getTableEntities = state => getTableState(state).entities;
+
+const getMetadataTable = createSelector(
+  getTableEntities,
+  getMetadataColumns,
+  getActiveMetadataColumn,
+  ({ metadata }, columns, activeColumn) => ({
+    ...metadata,
+    activeColumn,
+    columns,
+  })
+);
+
+export const getTables = createSelector(
+  getTableEntities,
+  getMetadataTable,
+  (tables, metadata) => ({
+    ...tables,
+    metadata,
+  }),
+);
 
 export const getVisibleTable = state => {
   const name = getVisibleTableName(state);
-  const tableState = getTables(state)[name];
-  if (name === 'metadata') {
-    return {
-      ...tableState,
-      activeColumn: getActiveMetadataColumn(state),
-      columns: getMetadataColumns(state),
-    };
-  }
   return getTables(state)[name];
 };
 
