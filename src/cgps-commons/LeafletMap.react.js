@@ -55,12 +55,12 @@ export default React.createClass({
   },
 
   componentDidUpdate(previous) {
-    if (this.props.refitOnMarkerChange) {
+    if (previous.markers.length === 0 && this.props.markers.length) {
+      this.refitMapBounds();
+    } else if (this.props.refitOnMarkerChange) {
       if (previous.markerIds !== this.props.markerIds) {
         this.refitMapBounds();
       }
-    } else if (previous.markers.length === 0 && this.props.markers) {
-      this.refitMapBounds();
     }
   },
 
@@ -118,7 +118,7 @@ export default React.createClass({
     if (point) {
       this.leafletMap.leafletElement.panTo(point);
     } else {
-      this.leafletMap.leafletElement.fitBounds(this.getBounds(), { maxZoom: 5 });
+      this.leafletMap.leafletElement.fitBounds(this.getBounds());
     }
   },
 

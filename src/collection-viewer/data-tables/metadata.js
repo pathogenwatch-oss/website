@@ -25,7 +25,7 @@ export default function (state = initialState, { type, payload }) {
 
       return {
         ...state,
-        active: !hasMetadata(genomes),
+        active: hasMetadata(genomes),
       };
     }
     case SET_LABEL_COLUMN: {
