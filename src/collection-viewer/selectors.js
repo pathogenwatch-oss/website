@@ -15,12 +15,19 @@ export const isClusterView = state => getCollection(state).isClusterView;
 export const getGenomes = createSelector(
   state => getViewer(state).entities.genomes,
   getPrivateMetadata,
-  (genomes, metadata) => {
-    const merged = {};
-    for (const [ key, value ] of Object.entries(genomes)) {
+  (genomes, privateData) => {
+    const merged = { ...genomes };
+    const used = new Set();
+    for (const [ key, shared ] of Object.entries(genomes)) {
+      if (!(shared.name in privateData) || used.has(shared.name)) continue;
+      const { userDefined, ...topLevel } = privateData[shared.name];
       merged[key] = {
-        ...value,
-        ...metadata[value.name],
+        ...shared,
+        ...topLevel,
+        userDefined: {
+          ...shared.userDefined,
+          ...userDefined,
+        },
       };
     }
     return merged;
