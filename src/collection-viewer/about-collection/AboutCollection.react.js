@@ -8,7 +8,6 @@ import PubMedLink from '~/components/PubMedLink.react';
 import MarkdownHeading from '~/components/MarkdownHeading.react';
 import Access from '../access';
 import { CardMetadata } from '~/card';
-import PrivateMetadata from '../private-metadata';
 
 export default ({ organism, metadata, isOpen, onButtonClick }) => (
   <div
@@ -51,8 +50,6 @@ export default ({ organism, metadata, isOpen, onButtonClick }) => (
         </p> }
       { metadata.owner === 'me' && <hr /> }
       { metadata.owner === 'me' && <Access access={metadata.access} /> }
-      <hr />
-      <PrivateMetadata />
       <hr />
       <SaveForOffline />
     </div>

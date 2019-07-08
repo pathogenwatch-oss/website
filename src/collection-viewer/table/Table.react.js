@@ -3,15 +3,17 @@ import { connect } from 'react-redux';
 
 import FixedTable from '../../fixed-table';
 import TableSwitcher from '../table/Switcher.react';
+import ToggleAddMetadata from '../private-metadata/ToggleAddMetadata.react';
 
 import { getCollection } from '../../collection-viewer/selectors';
 import { getActiveGenomes } from '../selectors';
-import { getVisibleTable, getFixedGroupWidth } from '../table/selectors';
+import { getVisibleTable, getVisibleTableName, getFixedGroupWidth } from '../table/selectors';
 
 import { onRowClick } from './thunks';
 
 import { addColumnWidth } from '../table/columnWidth';
 import { getColumnLabel, setFixedGroupMinWidth } from './utils';
+import { tableKeys } from '../constants';
 
 const preventDefault = e => e.preventDefault();
 
@@ -64,6 +66,9 @@ const Table = React.createClass({
             No matching results.
           </p>
         }
+        { this.props.tableName === tableKeys.metadata &&
+          <ToggleAddMetadata />
+        }
       </section>
     );
   },
@@ -92,6 +97,7 @@ function mapStateToProps(state) {
     collection: getCollection(state),
     data: getActiveGenomes(state),
     fixedGroupWidth: getFixedGroupWidth(state),
+    tableName: getVisibleTableName(state),
   };
 }
 
@@ -121,6 +127,7 @@ function mergeProps(state, { dispatch }, props) {
     ...props,
     activeColumns,
     data,
+    tableName: state.tableName,
     columns: mappedColumns,
     onRowClick: row => dispatch(onRowClick(row)),
     getDefaultHeaderContent: columnProps => (

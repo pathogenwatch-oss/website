@@ -1,7 +1,10 @@
 import { createSelector } from 'reselect';
 import { getGenomeList } from '../selectors';
 
-export const getPrivateMetadata = state => state.viewer.entities.metadata;
+const getMetadataState = state => state.viewer.metadata;
+
+export const getPrivateMetadata = state => getMetadataState(state).entities;
+export const showingAddMetadata = state => getMetadataState(state).showing;
 
 const getGenomes = state => (getGenomeList ? getGenomeList(state) : []);
 
