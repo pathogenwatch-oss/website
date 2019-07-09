@@ -276,9 +276,3 @@
   display: inline-block;
   margin: 0 4px;
 }
-
-.Pane .mdl-button--fab {
-  position: absolute;
-  bottom: 16px;
-  right: 16px;
-}

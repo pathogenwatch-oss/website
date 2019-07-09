@@ -1,3 +1,5 @@
+import './styles.css';
+
 import { connect } from 'react-redux';
 
 import PrivateMetadata from './PrivateMetadata.react';

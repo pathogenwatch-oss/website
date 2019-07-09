@@ -1,0 +1,15 @@
+.pw-viewer-add-metadata-form {
+  background: rgba(255, 255, 255, 0.9);
+  bottom: 64px;
+  height: 160px;
+  position: fixed;
+  right: 64px;
+  width: 320px;
+  z-index: 3;
+}
+
+.pw-viewer-add-metadata-button {
+  bottom: 16px;
+  position: fixed;
+  right: 16px;
+}

@@ -3,8 +3,6 @@ import { connect } from 'react-redux';
 
 import FixedTable from '../../fixed-table';
 import TableSwitcher from '../table/Switcher.react';
-import ToggleAddMetadata from '../private-metadata/ToggleAddMetadata.react';
-import PrivateMetadata from '../private-metadata/PrivateMetadata.react';
 import Fade from '~/components/fade';
 
 import { getCollection, getActiveGenomes } from '../selectors';
@@ -15,14 +13,12 @@ import { onRowClick } from './thunks';
 
 import { addColumnWidth } from '../table/columnWidth';
 import { getColumnLabel, setFixedGroupMinWidth } from './utils';
-import { tableKeys } from '../constants';
 
 const preventDefault = e => e.preventDefault();
 
 const Table = React.createClass({
 
   displayName: 'Table',
-
 
   propTypes: {
     height: React.PropTypes.number,
@@ -62,26 +58,17 @@ const Table = React.createClass({
       >
         <TableSwitcher />
         <Fade>
-          { this.props.showAddMetadata ?
-            <PrivateMetadata key="add-metadata" /> :
-            <FixedTable
-              key={this.props.tableName}
-              { ...this.props }
-              rowClickHandler={this.props.onRowClick}
-              getDefaultHeaderContent={this.props.getDefaultHeaderContent}
-            />
-          }
+          <FixedTable
+            key={this.props.tableName}
+            { ...this.props }
+            rowClickHandler={this.props.onRowClick}
+            getDefaultHeaderContent={this.props.getDefaultHeaderContent}
+          />
         </Fade>
         { this.props.data.length === 0 &&
           <p className="wgsa-text-overlay wgsa-hipster-style">
             No matching results.
-          </p>
-        }
-        <Fade>
-          { this.props.tableName === tableKeys.metadata &&
-            <ToggleAddMetadata />
-          }
-        </Fade>
+          </p> }
       </section>
     );
   },
@@ -111,7 +98,6 @@ function mapStateToProps(state) {
     data: getActiveGenomes(state),
     fixedGroupWidth: getFixedGroupWidth(state),
     tableName: getVisibleTableName(state),
-    showAddMetadata: showingAddMetadata(state),
   };
 }
 
@@ -130,7 +116,7 @@ function mapStateToColumn(column, state, dispatch) {
 }
 
 function mergeProps(state, { dispatch }, props) {
-  const { data, columns, activeColumns, tableName, showAddMetadata } = state;
+  const { data, columns, activeColumns, tableName } = state;
 
   const mappedColumns =
     columns.map(column => mapStateToColumn(column, state, dispatch));
@@ -141,7 +127,6 @@ function mergeProps(state, { dispatch }, props) {
     ...props,
     activeColumns,
     data,
-    showAddMetadata,
     tableName,
     columns: mappedColumns,
     onRowClick: row => dispatch(onRowClick(row)),

@@ -1,11 +1,8 @@
 import React from 'react';
-import { connect } from 'react-redux';
-
-import { toggleAddMetadata } from './actions';
 
 const Toggle = ({ toggle }) => (
   <button
-    className="mdl-button mdl-button--fab mdl-button--mini-fab mdl-button--alt mdl-shadow--3dp"
+    className="mdl-button mdl-button--fab mdl-button--mini-fab mdl-button--alt mdl-shadow--3dp pw-viewer-add-metadata-button"
     onClick={toggle}
     title="Add Metadata"
   >
@@ -13,10 +10,4 @@ const Toggle = ({ toggle }) => (
   </button>
 );
 
-function mapDispatchToProps(dispatch) {
-  return {
-    toggle: () => dispatch(toggleAddMetadata()),
-  };
-}
-
-export default connect(null, mapDispatchToProps)(Toggle);
+export default Toggle;
