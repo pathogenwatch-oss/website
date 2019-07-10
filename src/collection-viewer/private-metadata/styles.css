@@ -1,15 +1,21 @@
-.pw-viewer-add-metadata-form {
-  background: rgba(255, 255, 255, 0.9);
-  bottom: 64px;
-  height: 160px;
-  position: fixed;
-  right: 64px;
-  width: 320px;
-  z-index: 3;
+.pw-viewer-add-metadata-menu.libmr-Menu-element {
+  max-width: calc(400px + 32px);
 }
 
-.pw-viewer-add-metadata-button {
-  bottom: 16px;
-  position: fixed;
-  right: 16px;
+.pw-viewer-add-metadata-menu h3 {
+  font-family: inherit;
+  font-size: 13px;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+
+.pw-viewer-add-metadata-menu li,
+.pw-viewer-add-metadata-menu strong {
+  font-weight: 700;
+}
+
+form.pw-viewer-add-metadata-form {
+  height: 80px;
+  display: flex;
+  align-items: center;
 }

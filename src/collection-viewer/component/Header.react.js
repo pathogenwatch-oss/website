@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import Search from '../search/Search.react';
+import AddPrivateMetadata from '../private-metadata';
 import AboutCollection from '../about-collection';
 
 import { isMenuOpen } from '../downloads/selectors';
@@ -31,8 +32,14 @@ export default connect(mapStateToProps, null, mergeProps)(
           <i className="wgsa-button-icon material-icons">file_download</i>
           <span>Downloads</span>
         </button>
+        <AddPrivateMetadata />
         { !clusterView && <AboutCollection /> }
       </nav>
+      <style>
+        {`.libmr-RelativePortal > div {
+          z-index: 3;
+        }`}
+      </style>
     </span>
   )
 );

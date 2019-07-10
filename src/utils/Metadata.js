@@ -62,7 +62,7 @@ export function isValid({ date }) {
 export function parseMetadata(row) {
   const { displayname, id, name, filename, ...columns } = row;
 
-  const genomeName = displayname || id || name || filename;
+  const genomeName = displayname || name || id || filename;
 
   const { year, month, day, latitude, longitude, pmid, ...rest } = columns;
 

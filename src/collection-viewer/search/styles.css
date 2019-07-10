@@ -8,6 +8,7 @@
   @media (min-width: 1024px) {
     max-width: 560px;
   }
+  padding: 8px;
 }
 
 .wgsa-search-box {

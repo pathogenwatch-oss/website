@@ -89,6 +89,10 @@
   margin-left: 8px;
 }
 
-.wgsa-header-collection-options > :first-child {
-  margin-left: 0;
+.pw-viewer-header-menu.libmr-Menu-element {
+  margin-top: 24px;
+}
+
+.pw-viewer-header-menu > button::after {
+  top: 48px;
 }
