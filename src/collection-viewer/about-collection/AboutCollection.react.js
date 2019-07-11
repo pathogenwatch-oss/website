@@ -44,7 +44,7 @@ export default ({ organism, metadata, isOpen, onButtonClick }) => (
       <CardMetadata title="Organism" icon="bug_report">
         {organism}
       </CardMetadata>
-      <CardMetadata tooltip={metadata.dateCreated.toLocaleString()} icon="access_time">
+      <CardMetadata tooltip={metadata.dateCreated.toLocaleDateString()} icon="access_time">
         {dateSince(metadata.dateCreated, new Date())} ago
       </CardMetadata>
     </span>

@@ -156,7 +156,7 @@ export const getCollectionMetadata = createSelector(
   collection => ({
     title: collection.title,
     description: collection.description,
-    dateCreated: new Date(collection.createdAt).toLocaleDateString(),
+    dateCreated: new Date(collection.createdAt),
     pmid: collection.pmid,
     owner: collection.owner,
     access: collection.access,
