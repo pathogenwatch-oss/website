@@ -28,9 +28,9 @@ export default connect(mapStateToProps, null, mergeProps)(
     <span className="mdl-layout-spacer mdl-layout-spacer--flex">
       <Search />
       <nav className="wgsa-header-collection-options mdl-navigation" onClick={e => e.stopPropagation()}>
-        <button className="wgsa-menu-button mdl-button" onClick={downloadMenuButtonClick}>
-          <i className="wgsa-button-icon material-icons">file_download</i>
-          <span>Downloads</span>
+        <button title="Downloads" className="mdl-button mdl-button--icon" onClick={downloadMenuButtonClick}>
+          {/* hacking for alignment! */}
+          <i className="material-icons" style={{ marginTop: '1px' }}>file_download</i>
         </button>
         <AddPrivateMetadata />
         { !clusterView && <AboutCollection /> }

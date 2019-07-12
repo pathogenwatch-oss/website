@@ -53,8 +53,7 @@ export const getActiveAMRTable = createSelector(
 
 export const hasMetadata = createSelector(
   getTables,
-  hasPrivateMetadata,
-  (tables, privateMetadata) => tables.metadata.active || privateMetadata
+  (tables) => tables.metadata.active
 );
 
 export const hasTyping = createSelector(

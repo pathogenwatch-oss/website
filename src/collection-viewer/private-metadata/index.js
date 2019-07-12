@@ -4,12 +4,20 @@ import { connect } from 'react-redux';
 
 import PrivateMetadata from './PrivateMetadata.react';
 
-import { addPrivateMetadata } from './actions';
+import { addPrivateMetadata, clearPrivateMetadata } from './actions';
+import { numberOfMetadataRows } from './selectors';
+
+function mapStateToProps(state) {
+  return {
+    numberOfRows: numberOfMetadataRows(state),
+  };
+}
 
 function mapDispatchToProps(dispatch) {
   return {
     addMetadata: data => dispatch(addPrivateMetadata(data)),
+    clearMetadata: () => dispatch(clearPrivateMetadata()),
   };
 }
 
-export default connect(null, mapDispatchToProps)(PrivateMetadata);
+export default connect(mapStateToProps, mapDispatchToProps)(PrivateMetadata);

@@ -1,6 +1,6 @@
 import { createSelector } from 'reselect';
 
-import { getServerPath } from '../../utils/Api';
+import { getServerPath } from '~/utils/Api';
 import { getViewer, getCollection, getGenomes, getActiveGenomeIds } from '../selectors';
 
 import { getVisibleTree } from '../tree/selectors';

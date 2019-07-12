@@ -7,10 +7,10 @@ export function addPrivateMetadata(data) {
   };
 }
 
-export const VIEWER_TOGGLE_ADD_METADATA = 'VIEWER_TOGGLE_ADD_METADATA';
+export const VIEWER_CLEAR_PRIVATE_METADATA = 'VIEWER_CLEAR_PRIVATE_METADATA';
 
-export function toggleAddMetadata() {
+export function clearPrivateMetadata() {
   return {
-    type: VIEWER_TOGGLE_ADD_METADATA,
+    type: VIEWER_CLEAR_PRIVATE_METADATA,
   };
 }
