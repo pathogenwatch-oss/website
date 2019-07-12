@@ -93,7 +93,7 @@ export default function ({ addMetadata, numberOfRows, clearMetadata }) {
       </p>
       <p>
         When providing a date, month and day are optional. Coordinates should be
-        provided in decimal degrees. Other columns will be included in the metadata table.
+        provided in decimal degrees. Extra columns will be included in the metadata table.
       </p>
       {/* <p className="pw-viewer-add-metadata-actions">
         <button className="wgsa-link-button" onClick={clearMetadata}>
