@@ -1,10 +1,10 @@
 import { createSelector } from 'reselect';
 
-import { getViewer, getCollection } from '../selectors';
-import { hasPrivateMetadata } from '../private-metadata/selectors';
+import { getViewer, getCollection, hasMetadata } from '../selectors';
 import { getMetadataColumns, getActiveMetadataColumn } from '../data-tables/selectors';
 
-import Organisms from '../../organisms';
+import { createColourGetter } from '../amr-utils';
+import Organisms from '~/organisms';
 
 export const getTableState = state => getViewer(state).table;
 
@@ -18,8 +18,10 @@ const getMetadataTable = createSelector(
   getTableEntities,
   getMetadataColumns,
   getActiveMetadataColumn,
-  ({ metadata }, columns, activeColumn) => ({
+  hasMetadata,
+  ({ metadata }, columns, activeColumn, active) => ({
     ...metadata,
+    active,
     activeColumn,
     columns,
   })
@@ -51,11 +53,6 @@ export const getActiveAMRTable = createSelector(
   (tables, name) => tables[name]
 );
 
-export const hasMetadata = createSelector(
-  getTables,
-  (tables) => tables.metadata.active
-);
-
 export const hasTyping = createSelector(
   getTables,
   tables => tables.typing.active
@@ -85,4 +82,10 @@ export const getFixedGroupWidth = createSelector(
     if (!typing) width -= 53;
     return width;
   }
+);
+
+export const getColourGetter = createSelector(
+  getTableState,
+  getAMRTableName,
+  (tables, name) => createColourGetter(tables.entities[name], tables.multi)
 );

@@ -5,7 +5,10 @@ import classnames from 'classnames';
 import Multi from './Multi.react';
 
 import { getVisibleTableName, hasTyping, hasAMR } from './selectors';
+import { hasMetadata } from '../selectors';
+
 import { setTable } from './actions';
+
 import { tableKeys, tableDisplayNames } from '../constants';
 
 function mapStateToProps(state, { table }) {
@@ -45,7 +48,8 @@ const TableSwitcher = props => (
   >
     <ButtonGroup>
       <i className="material-icons" title="Data">list</i>
-      <Button table={tableKeys.metadata} />
+      { props.hasMetadata &&
+        <Button table={tableKeys.metadata} /> }
       { props.hasTyping &&
         <Button table={tableKeys.typing} /> }
       <Button table={tableKeys.stats} />
@@ -65,6 +69,7 @@ TableSwitcher.displayName = 'TableSwitcher';
 
 function mapSwitcherStateToProps(state) {
   return {
+    hasMetadata: hasMetadata(state),
     hasTyping: hasTyping(state),
     hasAMR: hasAMR(state),
   };

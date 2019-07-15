@@ -1,8 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { getGenomes, getActiveGenomeIds, getCollection } from '../selectors';
-import { getTables, hasMetadata, hasTyping, hasAMR } from '../table/selectors';
+import { getGenomes, getActiveGenomeIds, getCollection, hasMetadata } from '../selectors';
+import { getTables, hasTyping, hasAMR } from '../table/selectors';
 
 import { formatCollectionFilename } from './utils';
 import {
@@ -125,8 +125,9 @@ const DownloadsMenu = (props) => {
             filename={formatCollectionFilename(collection, item.filenameSegment)}
             genomeIds={genomeIds}
             generateFile={() => item.getFileContents({ genomes, genomeIds, tables })}
-          >{item.description}</DownloadButton>
-          </li>)) }
+          >
+            {item.description}</DownloadButton>
+        </li>)) }
       </ul>
     </li>
   );

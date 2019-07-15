@@ -1,9 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { getGenomes } from '../../collection-viewer/selectors';
-import { getFilter, getColourGetter, getHighlightedIds } from '../selectors';
-import { getActiveDataTable } from '../table/selectors';
+import { getGenomes, getFilter, getHighlightedIds } from '../selectors';
+import { getActiveDataTable, getColourGetter } from '../table/selectors';
 import { getVisibleTree, getSelectedInternalNode } from './selectors';
 
 import { nonResistantColour } from '../amr-utils';

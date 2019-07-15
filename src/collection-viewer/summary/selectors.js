@@ -1,11 +1,7 @@
 import { createSelector } from 'reselect';
 
-import { getViewer } from '../../collection-viewer/selectors';
-
-import {
-  getActiveGenomes,
-  getColourGetter,
-} from '../selectors';
+import { getViewer, getActiveGenomes } from '../selectors';
+import { getColourGetter } from '../table/selectors';
 
 export const getColouredActiveGenomes = createSelector(
   getActiveGenomes,
@@ -14,8 +10,7 @@ export const getColouredActiveGenomes = createSelector(
     items.map((genome) => ({
       genome,
       colour: colourGetter(genome),
-    })
-  )
+    }))
 );
 
 export const getGenomeSummary = createSelector(

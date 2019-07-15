@@ -1,12 +1,10 @@
 import { createSelector } from 'reselect';
 import removeMarkdown from 'remove-markdown';
 
-import { getTableState, getAMRTableName } from './table/selectors';
 import { getNetworkFilteredIds } from '../cluster-viewer/selectors';
-
-import { createColourGetter } from './amr-utils';
-import { filterKeys } from './filter/constants';
 import { getPrivateMetadata } from './private-metadata/selectors';
+
+import { filterKeys } from './filter/constants';
 
 export const getViewer = ({ viewer }) => viewer;
 
@@ -145,12 +143,6 @@ export const getActiveGenomes = createSelector(
     Array.from(highlighted.size ? highlighted : visible).map(id => genomes[id])
 );
 
-export const getColourGetter = createSelector(
-  getTableState,
-  getAMRTableName,
-  (tables, name) => createColourGetter(tables.entities[name], tables.multi)
-);
-
 export const getCollectionMetadata = createSelector(
   getCollection,
   collection => ({
@@ -174,4 +166,14 @@ export const getCollectionGenomeIds = createSelector(
     }
     return collectionGenomes;
   }
+);
+
+export const hasMetadata = createSelector(
+  getActiveGenomes,
+  genomes =>
+    genomes.some(({ date, pmid, userDefined }) => !!(
+      (date && date.year) ||
+      pmid ||
+      (userDefined && Object.keys(userDefined).length)
+    ))
 );
