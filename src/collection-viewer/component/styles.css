@@ -93,11 +93,3 @@
 .wgsa-header-collection-options > * {
   margin-left: 8px;
 }
-
-/* Move menus below header */
-.pw-viewer-header-menu.libmr-Menu-element {
-  margin-top: 24px;
-}
-.pw-viewer-header-menu > button::after {
-  top: 48px;
-}

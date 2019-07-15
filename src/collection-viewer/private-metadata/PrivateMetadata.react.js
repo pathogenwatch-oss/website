@@ -14,7 +14,7 @@ class Button extends React.Component {
         className="mdl-button mdl-button--icon"
         onClick={this.props.onClick}
         ref={el => { this.el = el; }}
-        title="Add Metadata"
+        title="Private Metadata"
       >
         <i className="material-icons">note_add</i>
       </button>

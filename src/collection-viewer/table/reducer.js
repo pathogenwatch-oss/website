@@ -5,18 +5,24 @@ import { antibiotics, snps, genes } from '../amr-tables';
 
 import { FETCH_COLLECTION } from '../actions';
 import { SET_TABLE, AMR_TOGGLE_MULTI } from './actions';
+import {
+  VIEWER_ADD_PRIVATE_METADATA,
+  VIEWER_CLEAR_PRIVATE_METADATA,
+} from '../private-metadata/actions';
 
 import { getInitialTable } from '../data-tables/utils';
 
 import { dataTables, amrTables } from './constants';
 import { tableKeys } from '../constants';
 
-function visible(state = tableKeys.metadata, { type, payload }) {
+function visible(state = null, { type, payload }) {
   switch (type) {
-    case FETCH_COLLECTION.SUCCESS:
-      return getInitialTable(payload.result);
     case SET_TABLE:
       return payload.name;
+    case VIEWER_ADD_PRIVATE_METADATA:
+      return tableKeys.metadata;
+    case VIEWER_CLEAR_PRIVATE_METADATA:
+      return state === tableKeys.metadata ? null : state;
     default:
       return state;
   }

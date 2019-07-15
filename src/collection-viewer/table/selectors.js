@@ -6,12 +6,11 @@ import { getMetadataColumns, getActiveMetadataColumn } from '../data-tables/sele
 import { createColourGetter } from '../amr-utils';
 import Organisms from '~/organisms';
 
-export const getTableState = state => getViewer(state).table;
+import { tableKeys } from '../constants';
 
-export const getVisibleTableName = state => getTableState(state).visible;
+export const getTableState = state => getViewer(state).table;
 export const getDataTableName = state => getTableState(state).activeData;
 export const getAMRTableName = state => getTableState(state).activeAMR;
-
 export const getTableEntities = state => getTableState(state).entities;
 
 const getMetadataTable = createSelector(
@@ -36,6 +35,24 @@ export const getTables = createSelector(
   }),
 );
 
+export const hasTyping = createSelector(
+  getTables,
+  tables => tables.typing.active
+);
+
+export const getVisibleTableName = createSelector(
+  state => getTableState(state).visible,
+  hasMetadata,
+  hasTyping,
+  (visible, metadata, typing) => {
+    if (visible !== null) return visible;
+    if (metadata) return tableKeys.metadata;
+    if (typing) return tableKeys.typing;
+    return tableKeys.stats;
+  }
+);
+
+
 export const getVisibleTable = state => {
   const name = getVisibleTableName(state);
   return getTables(state)[name];
@@ -51,11 +68,6 @@ export const getActiveAMRTable = createSelector(
   getTables,
   getAMRTableName,
   (tables, name) => tables[name]
-);
-
-export const hasTyping = createSelector(
-  getTables,
-  tables => tables.typing.active
 );
 
 export const hasAMR = createSelector(
