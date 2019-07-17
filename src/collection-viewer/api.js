@@ -1,9 +1,17 @@
-import { fetchJson } from '../utils/Api';
+import { fetchJson } from '~/utils/Api';
+
+import { formatGenomeRecords } from './utils';
 
 export function getCollection(collectionId) {
   console.log(`[Pathogenwatch] Getting collection ${collectionId}`);
   return fetchJson('GET', `/api/collection/${collectionId}`)
-    .then(result => result.collection || result);
+    .then(result => {
+      const collection = result.collection || result;
+      return {
+        ...collection,
+        genomes: formatGenomeRecords(collection.genomes),
+      };
+    });
 }
 
 export function requestFile({ organismId, idType = 'genome', format }, requestBody) {

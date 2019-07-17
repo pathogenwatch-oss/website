@@ -6,10 +6,12 @@ import PrivateMetadata from './PrivateMetadata.react';
 
 import { addPrivateMetadata, clearPrivateMetadata } from './actions';
 import { numberOfMetadataRows } from './selectors';
+import { getOwnGenomes } from '../selectors';
 
 function mapStateToProps(state) {
   return {
     numberOfRows: numberOfMetadataRows(state),
+    genomes: getOwnGenomes(state),
   };
 }
 
@@ -20,4 +22,12 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(PrivateMetadata);
+function mergeProps({ numberOfRows, genomes }, mappedDispatches) {
+  return {
+    numberOfRows,
+    ...mappedDispatches,
+    generateCSV: () => Promise.resolve('name\n'.concat(genomes.map(_ => _.name).join('\n'))),
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps, mergeProps)(PrivateMetadata);

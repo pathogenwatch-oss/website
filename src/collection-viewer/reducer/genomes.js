@@ -1,33 +1,10 @@
 import * as actions from '../actions';
-import { FETCH_TREE } from '../../collection-viewer/tree/actions';
+import { FETCH_TREE } from '../tree/actions';
 
 function flagGenomes(genomes, flag) {
   return genomes.reduce((memo, genome) => {
-    const analysis = { ...genome.analysis };
-    if (analysis.paarsnp && Array.isArray(analysis.paarsnp.antibiotics)) {
-      const { antibiotics = [] } = analysis.paarsnp;
-      analysis.paarsnp = {
-        ...analysis.paarsnp,
-        antibiotics: antibiotics.reduce((abs, antibiotic) => {
-          abs[antibiotic.name] = antibiotic;
-          return abs;
-        }, {}),
-      };
-    }
-    const uuid = genome.uuid || genome._id;
-    memo[uuid] = {
+    memo[genome.uuid] = {
       ...genome,
-      uuid,
-      analysis,
-      position: genome.position || {
-        latitude: genome.latitude,
-        longitude: genome.longitude,
-      },
-      date: genome.date || {
-        year: genome.year,
-        month: genome.month,
-        day: genome.day,
-      },
       [`__${flag}`]: true,
     };
     return memo;

@@ -103,15 +103,6 @@ export const getFilter = createSelector(
 
 export const getUnfilteredGenomeIds = state => getFilter(state).unfilteredIds;
 
-export const getFilteredGenomes = createSelector(
-  getGenomes,
-  getFilter,
-  (genomes, filter) => {
-    const { active, ids, unfilteredIds } = filter;
-    return Array.from(active ? ids : unfilteredIds).map(id => genomes[id]);
-  }
-);
-
 export const getGenomeList = createSelector(
   getGenomes,
   getUnfilteredGenomeIds,
@@ -176,4 +167,9 @@ export const hasMetadata = createSelector(
       pmid ||
       (userDefined && Object.keys(userDefined).length)
     ))
+);
+
+export const getOwnGenomes = createSelector(
+  getActiveGenomes,
+  genomes => genomes.filter(_ => _.owner === 'me')
 );

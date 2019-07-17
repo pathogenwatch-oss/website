@@ -1,1 +1,1474 @@
-{"createdAt":"2019-07-03T15:32:41.927Z","description":"","organismId":"1280","pmid":"","size":5,"title":"","subtrees":[{"populationSize":2,"size":3,"name":"Newman","task":"subtree","status":"READY"},{"populationSize":5,"size":6,"name":"DAR4145","task":"subtree","status":"READY"},{"populationSize":323,"size":326,"name":"EMRSA15_HO50960412","task":"subtree","status":"READY"}],"tree":{"populationSize":0,"size":5,"newick":"((5d1b52c5cc05dd36dcfa0117:4671,5d1b52c5cc05dd3babfa0115:4697):4891.25,((5d1b52c5cc05dd62f0fa0114:1,5d1b52c5cc05dd84f7fa0118:0):143.75,5d1b52c5cc05dd432cfa0116:140.25):9443.5);","status":"READY","name":"collection","versions":{"core":"v1","tree":"v1"},"task":"tree"},"token":"zuqizqwqlf1p","genomes":[{"_id":"5d1b52c5cc05dd36dcfa0117","name":"patient4","year":null,"month":null,"day":null,"latitude":null,"longitude":null,"pmid":null,"createdAt":"2019-07-02T12:49:09.357Z","reference":false,"public":false,"analysis":{"speciator":{"organismId":"1280"},"core":{"fp":{"reference":"Newman"},"summary":{"assemblyId":"0af71fc83abf996ed56980767bd9b90fe04c3d8a","speciesId":"1280","familiesMatched":1624,"completeAlleles":1623,"kernelSize":1626,"percentKernelMatched":99.9,"percentAssemblyMatched":62.8}},"metrics":{"__v":"v2","length":2774143,"contigs":28,"smallestContig":773,"largestContig":490859,"averageContig":99076,"N50":255775,"N50Contig":4,"nonATCG":200,"gcContent":"32.6","contigSums":[490859,920590,1215799,1471574,1653473,1822705,1943839,2061950,2157720,2246150,2334115,2407449,2467285,2521117,2560016,2598110,2635692,2668884,2689891,2710232,2730146,2747473,2756197,2763220,2768658,2771681,2773370,2774143]},"mlst":{"st":"8","alleles":[{"gene":"arcC","hits":[3]},{"gene":"aroE","hits":[3]},{"gene":"glpF","hits":[1]},{"gene":"gmk","hits":[1]},{"gene":"pta","hits":[4]},{"gene":"tpi","hits":[4]},{"gene":"yqiL","hits":[3]}]},"paarsnp":{"antibiotics":[{"name":"AMI","fullName":"Amikacin","state":"NOT_FOUND","mechanisms":[]},{"name":"GEN","fullName":"Gentamicin","state":"NOT_FOUND","mechanisms":[]},{"name":"TOB","fullName":"Tobramycin","state":"NOT_FOUND","mechanisms":[]},{"name":"KAN","fullName":"Kanamycin","state":"NOT_FOUND","mechanisms":[]},{"name":"MET","fullName":"Methicillin","state":"RESISTANT","mechanisms":["mecA"]},{"name":"PEN","fullName":"Penicillin","state":"RESISTANT","mechanisms":["blaZ","mecA"]},{"name":"FUS","fullName":"Fusidic Acid","state":"NOT_FOUND","mechanisms":[]},{"name":"VAN","fullName":"Vancomycin","state":"NOT_FOUND","mechanisms":[]},{"name":"CLI","fullName":"Clindamycin","state":"NOT_FOUND","mechanisms":[]},{"name":"ERY","fullName":"Erythromycin","state":"RESISTANT","mechanisms":["ermA"]},{"name":"MUP","fullName":"Mupirocin","state":"NOT_FOUND","mechanisms":[]},{"name":"LNZ","fullName":"Linezolid","state":"NOT_FOUND","mechanisms":[]},{"name":"TCY","fullName":"Tetracycline","state":"NOT_FOUND","mechanisms":[]},{"name":"TMP","fullName":"Trimethoprim","state":"NOT_FOUND","mechanisms":[]},{"name":"DAP","fullName":"Daptomycin","state":"NOT_FOUND","mechanisms":[]},{"name":"RIF","fullName":"Rifampicin","state":"NOT_FOUND","mechanisms":[]},{"name":"CIP","fullName":"Ciprofloxacin","state":"NOT_FOUND","mechanisms":[]},{"name":"MFX","fullName":"Moxifloxacin","state":"NOT_FOUND","mechanisms":[]},{"name":"TEC","fullName":"Teicoplanin","state":"NOT_FOUND","mechanisms":[]}],"paar":["mecA","blaZ","ermA"],"snp":[]}},"userDefined":{},"country":null,"uuid":"5d1b52c5cc05dd36dcfa0117"},{"_id":"5d1b52c5cc05dd3babfa0115","name":"patient2","year":null,"month":null,"day":null,"latitude":null,"longitude":null,"pmid":null,"createdAt":"2019-07-02T12:49:09.357Z","reference":false,"public":false,"analysis":{"speciator":{"organismId":"1280"},"core":{"fp":{"reference":"DAR4145"},"summary":{"assemblyId":"dca16401258254710ebf95e226e9c157057f92c0","speciesId":"1280","familiesMatched":1625,"completeAlleles":1619,"kernelSize":1627,"percentKernelMatched":100,"percentAssemblyMatched":62.9}},"metrics":{"__v":"v2","length":2769920,"contigs":37,"smallestContig":598,"largestContig":374682,"averageContig":74862,"N50":265543,"N50Contig":5,"nonATCG":700,"gcContent":"32.7","contigSums":[374682,710210,1037981,1343540,1609083,1866913,2053787,2129523,2202425,2261326,2319446,2370391,2419480,2467340,2506344,2545187,2580849,2615627,2644767,2669313,2692678,2712829,2723311,2733022,2742154,2745902,2749454,2752861,2756137,2759215,2761793,2763859,2765504,2767016,2768340,2769322,2769920]},"mlst":{"st":"772","alleles":[{"gene":"arcC","hits":[1]},{"gene":"aroE","hits":[1]},{"gene":"glpF","hits":[1]},{"gene":"gmk","hits":[1]},{"gene":"pta","hits":[22]},{"gene":"tpi","hits":[1]},{"gene":"yqiL","hits":[1]}]},"paarsnp":{"antibiotics":[{"name":"AMI","fullName":"Amikacin","state":"RESISTANT","mechanisms":["aphA-3"]},{"name":"GEN","fullName":"Gentamicin","state":"RESISTANT","mechanisms":["aacA-aphD"]},{"name":"TOB","fullName":"Tobramycin","state":"RESISTANT","mechanisms":["aacA-aphD","aphA-3"]},{"name":"KAN","fullName":"Kanamycin","state":"RESISTANT","mechanisms":["aacA-aphD","aphA-3"]},{"name":"MET","fullName":"Methicillin","state":"RESISTANT","mechanisms":["mecA"]},{"name":"PEN","fullName":"Penicillin","state":"RESISTANT","mechanisms":["mecA","blaZ"]},{"name":"FUS","fullName":"Fusidic Acid","state":"NOT_FOUND","mechanisms":[]},{"name":"VAN","fullName":"Vancomycin","state":"NOT_FOUND","mechanisms":[]},{"name":"CLI","fullName":"Clindamycin","state":"NOT_FOUND","mechanisms":[]},{"name":"ERY","fullName":"Erythromycin","state":"RESISTANT","mechanisms":["msrA"]},{"name":"MUP","fullName":"Mupirocin","state":"NOT_FOUND","mechanisms":[]},{"name":"LNZ","fullName":"Linezolid","state":"NOT_FOUND","mechanisms":[]},{"name":"TCY","fullName":"Tetracycline","state":"NOT_FOUND","mechanisms":[]},{"name":"TMP","fullName":"Trimethoprim","state":"RESISTANT","mechanisms":["dfrG"]},{"name":"DAP","fullName":"Daptomycin","state":"NOT_FOUND","mechanisms":[]},{"name":"RIF","fullName":"Rifampicin","state":"NOT_FOUND","mechanisms":[]},{"name":"CIP","fullName":"Ciprofloxacin","state":"RESISTANT","mechanisms":["gyrA_S84L","grlA_S80Y"]},{"name":"MFX","fullName":"Moxifloxacin","state":"NOT_FOUND","mechanisms":[]},{"name":"TEC","fullName":"Teicoplanin","state":"NOT_FOUND","mechanisms":[]}],"paar":["aacA-aphD","mecA","msrA","dfrG","blaZ","aphA-3"],"snp":["gyrA_S84L","grlA_S80Y"]}},"userDefined":{},"country":null,"uuid":"5d1b52c5cc05dd3babfa0115"},{"_id":"5d1b52c5cc05dd432cfa0116","name":"patient3","year":null,"month":null,"day":null,"latitude":null,"longitude":null,"pmid":null,"createdAt":"2019-07-02T12:49:09.357Z","reference":false,"public":false,"analysis":{"speciator":{"organismId":"1280"},"core":{"fp":{"reference":"EMRSA15_HO50960412"},"summary":{"assemblyId":"82c9707afec49c22c100ef1d4cda830b8ac9abc8","speciesId":"1280","familiesMatched":1625,"completeAlleles":1618,"kernelSize":1628,"percentKernelMatched":100,"percentAssemblyMatched":62.4}},"metrics":{"__v":"v2","length":2796239,"contigs":38,"smallestContig":722,"largestContig":511841,"averageContig":73585,"N50":174086,"N50Contig":5,"nonATCG":700,"gcContent":"32.7","contigSums":[511841,915765,1167639,1379508,1553594,1717245,1863554,1988957,2096555,2164652,2229655,2291309,2352412,2410112,2464526,2518579,2557311,2595296,2632348,2664993,2694477,2718017,2738311,2751291,2762178,2769974,2777084,2780591,2783545,2785703,2787840,2789752,2791456,2792679,2793649,2794596,2795517,2796239]},"mlst":{"st":"22","alleles":[{"gene":"arcC","hits":[7]},{"gene":"aroE","hits":[6]},{"gene":"glpF","hits":[1]},{"gene":"gmk","hits":[5]},{"gene":"pta","hits":[8]},{"gene":"tpi","hits":[8]},{"gene":"yqiL","hits":[6]}]},"paarsnp":{"antibiotics":[{"name":"AMI","fullName":"Amikacin","state":"NOT_FOUND","mechanisms":[]},{"name":"GEN","fullName":"Gentamicin","state":"NOT_FOUND","mechanisms":[]},{"name":"TOB","fullName":"Tobramycin","state":"NOT_FOUND","mechanisms":[]},{"name":"KAN","fullName":"Kanamycin","state":"NOT_FOUND","mechanisms":[]},{"name":"MET","fullName":"Methicillin","state":"RESISTANT","mechanisms":["mecA"]},{"name":"PEN","fullName":"Penicillin","state":"RESISTANT","mechanisms":["mecA","blaZ"]},{"name":"FUS","fullName":"Fusidic Acid","state":"NOT_FOUND","mechanisms":[]},{"name":"VAN","fullName":"Vancomycin","state":"NOT_FOUND","mechanisms":[]},{"name":"CLI","fullName":"Clindamycin","state":"NOT_FOUND","mechanisms":[]},{"name":"ERY","fullName":"Erythromycin","state":"NOT_FOUND","mechanisms":[]},{"name":"MUP","fullName":"Mupirocin","state":"NOT_FOUND","mechanisms":[]},{"name":"LNZ","fullName":"Linezolid","state":"NOT_FOUND","mechanisms":[]},{"name":"TCY","fullName":"Tetracycline","state":"NOT_FOUND","mechanisms":[]},{"name":"TMP","fullName":"Trimethoprim","state":"NOT_FOUND","mechanisms":[]},{"name":"DAP","fullName":"Daptomycin","state":"NOT_FOUND","mechanisms":[]},{"name":"RIF","fullName":"Rifampicin","state":"NOT_FOUND","mechanisms":[]},{"name":"CIP","fullName":"Ciprofloxacin","state":"RESISTANT","mechanisms":["grlA_S80F","gyrA_S84L"]},{"name":"MFX","fullName":"Moxifloxacin","state":"NOT_FOUND","mechanisms":[]},{"name":"TEC","fullName":"Teicoplanin","state":"NOT_FOUND","mechanisms":[]}],"paar":["mecA","blaZ"],"snp":["grlA_S80F","gyrA_S84L"]}},"userDefined":{},"country":null,"uuid":"5d1b52c5cc05dd432cfa0116"},{"_id":"5d1b52c5cc05dd62f0fa0114","name":"patient1","year":null,"month":null,"day":null,"latitude":null,"longitude":null,"pmid":null,"createdAt":"2019-07-02T12:49:09.357Z","reference":false,"public":false,"analysis":{"speciator":{"organismId":"1280"},"core":{"fp":{"reference":"EMRSA15_HO50960412"},"summary":{"assemblyId":"f4b4023e6df3c4d460a01a54fd653e5a122af489","speciesId":"1280","familiesMatched":1623,"completeAlleles":1614,"kernelSize":1626,"percentKernelMatched":99.9,"percentAssemblyMatched":62.5}},"metrics":{"__v":"v2","length":2786995,"contigs":57,"smallestContig":574,"largestContig":343117,"averageContig":48894,"N50":156458,"N50Contig":7,"nonATCG":800,"gcContent":"32.7","contigSums":[343117,594990,783159,959625,1133656,1298989,1455447,1584890,1694521,1802349,1899851,1993762,2061639,2126063,2186058,2243644,2298280,2352838,2406836,2456629,2495728,2531064,2564655,2595738,2621889,2646254,2669793,2691496,2708715,2721695,2729490,2736253,2741528,2746572,2751276,2754847,2758150,2761249,2763797,2765995,2768132,2770164,2772092,2774010,2775714,2777264,2778487,2779647,2780594,2781534,2782459,2783327,2784163,2784953,2785723,2786421,2786995]},"mlst":{"st":"2371","alleles":[{"gene":"arcC","hits":[258]},{"gene":"aroE","hits":[6]},{"gene":"glpF","hits":[1]},{"gene":"gmk","hits":[5]},{"gene":"pta","hits":[8]},{"gene":"tpi","hits":[8]},{"gene":"yqiL","hits":[6]}]},"paarsnp":{"antibiotics":[{"name":"AMI","fullName":"Amikacin","state":"RESISTANT","mechanisms":["aadD"]},{"name":"GEN","fullName":"Gentamicin","state":"RESISTANT","mechanisms":["aacA-aphD"]},{"name":"TOB","fullName":"Tobramycin","state":"RESISTANT","mechanisms":["aadD","aacA-aphD"]},{"name":"KAN","fullName":"Kanamycin","state":"RESISTANT","mechanisms":["aadD","aacA-aphD"]},{"name":"MET","fullName":"Methicillin","state":"RESISTANT","mechanisms":["mecA"]},{"name":"PEN","fullName":"Penicillin","state":"RESISTANT","mechanisms":["mecA","blaZ"]},{"name":"FUS","fullName":"Fusidic Acid","state":"NOT_FOUND","mechanisms":[]},{"name":"VAN","fullName":"Vancomycin","state":"NOT_FOUND","mechanisms":[]},{"name":"CLI","fullName":"Clindamycin","state":"INDUCIBLE","mechanisms":["ermC"]},{"name":"ERY","fullName":"Erythromycin","state":"RESISTANT","mechanisms":["ermC"]},{"name":"MUP","fullName":"Mupirocin","state":"NOT_FOUND","mechanisms":[]},{"name":"LNZ","fullName":"Linezolid","state":"NOT_FOUND","mechanisms":[]},{"name":"TCY","fullName":"Tetracycline","state":"NOT_FOUND","mechanisms":[]},{"name":"TMP","fullName":"Trimethoprim","state":"RESISTANT","mechanisms":["dfrA"]},{"name":"DAP","fullName":"Daptomycin","state":"NOT_FOUND","mechanisms":[]},{"name":"RIF","fullName":"Rifampicin","state":"NOT_FOUND","mechanisms":[]},{"name":"CIP","fullName":"Ciprofloxacin","state":"RESISTANT","mechanisms":["gyrA_S84L","grlA_S80F"]},{"name":"MFX","fullName":"Moxifloxacin","state":"NOT_FOUND","mechanisms":[]},{"name":"TEC","fullName":"Teicoplanin","state":"NOT_FOUND","mechanisms":[]}],"paar":["aacA-aphD","mecA","ermC","blaZ","aadD","ermC_LP","dfrA"],"snp":["grlA_S80F","gyrA_S84L"]}},"userDefined":{},"country":null,"uuid":"5d1b52c5cc05dd62f0fa0114"},{"_id":"5d1b52c5cc05dd84f7fa0118","name":"patient5","year":null,"month":null,"day":null,"latitude":null,"longitude":null,"pmid":null,"createdAt":"2019-07-02T12:49:09.357Z","reference":false,"public":false,"analysis":{"speciator":{"organismId":"1280"},"core":{"fp":{"reference":"EMRSA15_HO50960412"},"summary":{"assemblyId":"d149bc9dc0226540f2d16fee92f9c2c0157a0e34","speciesId":"1280","familiesMatched":1623,"completeAlleles":1614,"kernelSize":1626,"percentKernelMatched":99.9,"percentAssemblyMatched":62.4}},"metrics":{"__v":"v2","length":2788494,"contigs":58,"smallestContig":503,"largestContig":406515,"averageContig":48077,"N50":156458,"N50Contig":7,"nonATCG":900,"gcContent":"32.7","contigSums":[406515,658648,846817,1023283,1197314,1362647,1519105,1648548,1758179,1865714,1963216,2057027,2124904,2189223,2246809,2301445,2356003,2410001,2459794,2497778,2533114,2565770,2596853,2623004,2647855,2672220,2695759,2712966,2725946,2733741,2740504,2745779,2750823,2755527,2759098,2762197,2764745,2766943,2769080,2771112,2773030,2774734,2776284,2777507,2778667,2779614,2780554,2781479,2782400,2783268,2784104,2784894,2785664,2786362,2786936,2787464,2787991,2788494]},"mlst":{"st":"2371","alleles":[{"gene":"arcC","hits":[258]},{"gene":"aroE","hits":[6]},{"gene":"glpF","hits":[1]},{"gene":"gmk","hits":[5]},{"gene":"pta","hits":[8]},{"gene":"tpi","hits":[8]},{"gene":"yqiL","hits":[6]}]},"paarsnp":{"antibiotics":[{"name":"AMI","fullName":"Amikacin","state":"RESISTANT","mechanisms":["aadD"]},{"name":"GEN","fullName":"Gentamicin","state":"RESISTANT","mechanisms":["aacA-aphD"]},{"name":"TOB","fullName":"Tobramycin","state":"RESISTANT","mechanisms":["aadD","aacA-aphD"]},{"name":"KAN","fullName":"Kanamycin","state":"RESISTANT","mechanisms":["aadD","aacA-aphD"]},{"name":"MET","fullName":"Methicillin","state":"RESISTANT","mechanisms":["mecA"]},{"name":"PEN","fullName":"Penicillin","state":"RESISTANT","mechanisms":["mecA","blaZ"]},{"name":"FUS","fullName":"Fusidic Acid","state":"NOT_FOUND","mechanisms":[]},{"name":"VAN","fullName":"Vancomycin","state":"NOT_FOUND","mechanisms":[]},{"name":"CLI","fullName":"Clindamycin","state":"INDUCIBLE","mechanisms":["ermC"]},{"name":"ERY","fullName":"Erythromycin","state":"RESISTANT","mechanisms":["ermC"]},{"name":"MUP","fullName":"Mupirocin","state":"NOT_FOUND","mechanisms":[]},{"name":"LNZ","fullName":"Linezolid","state":"NOT_FOUND","mechanisms":[]},{"name":"TCY","fullName":"Tetracycline","state":"NOT_FOUND","mechanisms":[]},{"name":"TMP","fullName":"Trimethoprim","state":"RESISTANT","mechanisms":["dfrA"]},{"name":"DAP","fullName":"Daptomycin","state":"NOT_FOUND","mechanisms":[]},{"name":"RIF","fullName":"Rifampicin","state":"NOT_FOUND","mechanisms":[]},{"name":"CIP","fullName":"Ciprofloxacin","state":"RESISTANT","mechanisms":["grlA_S80F","gyrA_S84L"]},{"name":"MFX","fullName":"Moxifloxacin","state":"NOT_FOUND","mechanisms":[]},{"name":"TEC","fullName":"Teicoplanin","state":"NOT_FOUND","mechanisms":[]}],"paar":["aacA-aphD","mecA","ermC","blaZ","aadD","ermC_LP","dfrA"],"snp":["grlA_S80F","gyrA_S84L"]}},"userDefined":{},"country":null,"uuid":"5d1b52c5cc05dd84f7fa0118"}],"access":"private","id":"5d1cca995e22c550494e7e33","owner":"me","organism":{"tree":"(((((ED133:4718.014706,LG251:4365.985294):2176.851562,RF122:7503.648438):449.4875,SA957:7056.5125):1594.453125,JKD6159:14745.42188):1563.37066,(((((CN1:4553.039062,(MSSA476:113.1761364,MW2:93.82386364):4203.960938):148.9663086,(((Mu50:90.24565972,N315:22.75434028):60.02587891,JH1:138.9741211):4799.329753,DAR4145:4300.670247):358.1274414):638.7788086,(((COL:135.8136161,Newman:108.1863839):45.98372396,USA300_FPR3757:169.016276):1357.953516,(JKD6008:165.0143229,TW20:173.9856771):3804.546484):2713.252441):3831.726074,EMRSA15_HO50960412:9971.144531):2391.402344,(MRSA252:8839.055556,S0385:9568.944444):6510.825721):229.0223691);","references":[{"name":"MSSA476_ST1","uuid":"MSSA476"},{"name":"MW2_ST1","uuid":"MW2"},{"name":"Mu50_ST5","uuid":"Mu50"},{"name":"N315_ST5","uuid":"N315"},{"name":"Newman_ST254","uuid":"Newman"},{"name":"USA300 FPR3757_ST8","uuid":"USA300_FPR3757"},{"name":"HO 5096 0412_ST22","uuid":"EMRSA15_HO50960412"},{"name":"MRSA252_ST36","uuid":"MRSA252"},{"name":"SA957_ST59","uuid":"SA957"},{"name":"CN1_ST72","uuid":"CN1"},{"name":"JKD6159_ST93","uuid":"JKD6159"},{"name":"JH1_ST105","uuid":"JH1"},{"name":"ED133_ST133","uuid":"ED133"},{"name":"ET3-1_ST151","uuid":"RF122"},{"name":"TW20_ST239","uuid":"TW20"},{"name":"JKD6008_ST239","uuid":"JKD6008"},{"name":"COL_ST250","uuid":"COL"},{"name":"S0385_ST398","uuid":"S0385"},{"name":"LG251_ST425","uuid":"LG251"},{"name":"DAR4145_ST772","uuid":"DAR4145"}],"resistance":{"snp":{"LNZ":{"rplD":[{"effect":"RESISTANT","snpName":"K68Q"}],"rplC":[{"effect":"RESISTANT","snpName":"G139R"},{"effect":"RESISTANT","snpName":"G152D"},{"effect":"RESISTANT","snpName":"G155R"},{"effect":"RESISTANT","snpName":"M169L"}]},"TEC":{"rpoB":[{"effect":"RESISTANT","snpName":"A621E"}]},"VAN":{"rpoB":[{"effect":"RESISTANT","snpName":"A621E"}]},"DAP":{"mprF":[{"effect":"RESISTANT","snpName":"S295L"},{"effect":"RESISTANT","snpName":"T345A"}],"rpoB":[{"effect":"RESISTANT","snpName":"A621E"}]},"RIF":{"rpoB":[{"effect":"RESISTANT","snpName":"A477D"},{"effect":"RESISTANT","snpName":"A477G"},{"effect":"RESISTANT","snpName":"A477T"},{"effect":"RESISTANT","snpName":"A477V"},{"effect":"RESISTANT","snpName":"D471Y"},{"effect":"RESISTANT","snpName":"D550G"},{"effect":"RESISTANT","snpName":"D552N"},{"effect":"RESISTANT","snpName":"H481D"},{"effect":"RESISTANT","snpName":"H481N"},{"effect":"RESISTANT","snpName":"H481Y"},{"effect":"RESISTANT","snpName":"I527F"},{"effect":"RESISTANT","snpName":"N474K"},{"effect":"RESISTANT","snpName":"Q468K"},{"effect":"RESISTANT","snpName":"Q468L"},{"effect":"RESISTANT","snpName":"Q468R"},{"effect":"RESISTANT","snpName":"R484H"},{"effect":"RESISTANT","snpName":"S463P"},{"effect":"RESISTANT","snpName":"S464P"},{"effect":"RESISTANT","snpName":"S486L"}]},"CIP":{"grlB":[{"effect":"RESISTANT","snpName":"D432H"},{"effect":"RESISTANT","snpName":"D432N"},{"effect":"RESISTANT","snpName":"D432V"},{"effect":"RESISTANT","snpName":"D443E"},{"effect":"RESISTANT","snpName":"P451S"},{"effect":"RESISTANT","snpName":"P585S"},{"effect":"RESISTANT","snpName":"R444S"},{"effect":"RESISTANT","snpName":"R470D"}],"gyrA":[{"effect":"RESISTANT","snpName":"D73G"},{"effect":"RESISTANT","snpName":"E88K"},{"effect":"RESISTANT","snpName":"E88L"},{"effect":"RESISTANT","snpName":"E88R"},{"effect":"RESISTANT","snpName":"G82C"},{"effect":"RESISTANT","snpName":"G106D"},{"effect":"RESISTANT","snpName":"S84A"},{"effect":"RESISTANT","snpName":"S84L"},{"effect":"RESISTANT","snpName":"S84V"},{"effect":"RESISTANT","snpName":"S85P"}],"gyrB":[{"effect":"RESISTANT","snpName":"D437N"},{"effect":"RESISTANT","snpName":"E477D"}],"grlA":[{"effect":"RESISTANT","snpName":"A116E"},{"effect":"RESISTANT","snpName":"A116V"},{"effect":"RESISTANT","snpName":"E84K"},{"effect":"RESISTANT","snpName":"S80F"},{"effect":"RESISTANT","snpName":"S80Y"}]},"MUP":{"ileS-1":[{"effect":"RESISTANT","snpName":"F563L"},{"effect":"RESISTANT","snpName":"G593V"},{"effect":"RESISTANT","snpName":"H67Q"},{"effect":"RESISTANT","snpName":"R816C"},{"effect":"RESISTANT","snpName":"V588F"},{"effect":"RESISTANT","snpName":"V631F"}]},"TMP":{"dfrB":[{"effect":"RESISTANT","snpName":"F99I"},{"effect":"RESISTANT","snpName":"F99S"},{"effect":"RESISTANT","snpName":"F99Y"},{"effect":"RESISTANT","snpName":"H31N"},{"effect":"RESISTANT","snpName":"H150R"},{"effect":"RESISTANT","snpName":"L21V"},{"effect":"RESISTANT","snpName":"L41F"}]}},"paar":{"LNZ":[{"effect":"RESISTANT","element":"cfr"}],"MET":[{"effect":"RESISTANT","element":"mecA"},{"effect":"RESISTANT","element":"mecC"}],"TCY":[{"effect":"RESISTANT","element":"tetK"},{"effect":"RESISTANT","element":"tetL"},{"effect":"RESISTANT","element":"tetM"},{"effect":"RESISTANT","element":"tetO"}],"TMP":[{"effect":"RESISTANT","element":"dfrA"},{"effect":"RESISTANT","element":"dfrG"},{"effect":"RESISTANT","element":"dfrK"}],"TEC":[{"effect":"RESISTANT","element":"vanA"},{"effect":"RESISTANT","element":"vanZ"}],"VAN":[{"effect":"RESISTANT","element":"vanA"},{"effect":"RESISTANT","element":"vanZ"}],"CLI":[{"effect":"RESISTANT","element":"ermA"},{"effect":"RESISTANT","element":"ermA_SDS"},{"effect":"RESISTANT","element":"ermC"},{"effect":"RESISTANT","element":"linA"},{"effect":"RESISTANT","element":"linB"},{"effect":"RESISTANT","element":"linC"}],"MUP":[{"effect":"RESISTANT","element":"ileS-2"},{"effect":"RESISTANT","element":"mupB"}],"AMI":[{"effect":"RESISTANT","element":"aadD"},{"effect":"RESISTANT","element":"aphA-3"}],"PEN":[{"effect":"RESISTANT","element":"blaZ"},{"effect":"RESISTANT","element":"blaZ_LGA251"},{"effect":"RESISTANT","element":"mecA"}],"KAN":[{"effect":"RESISTANT","element":"aacA-aphD"},{"effect":"RESISTANT","element":"aadD"},{"effect":"RESISTANT","element":"aphA-3"}],"TOB":[{"effect":"RESISTANT","element":"aacA-aphD"},{"effect":"RESISTANT","element":"aadD"},{"effect":"RESISTANT","element":"aphA-3"}],"GEN":[{"effect":"RESISTANT","element":"aacA-aphD"}],"ERY":[{"effect":"RESISTANT","element":"ereA"},{"effect":"RESISTANT","element":"ereB"},{"effect":"RESISTANT","element":"erm33"},{"effect":"RESISTANT","element":"ermA"},{"effect":"RESISTANT","element":"ermB"},{"effect":"RESISTANT","element":"ermC"},{"effect":"RESISTANT","element":"ermT"},{"effect":"RESISTANT","element":"mefA"},{"effect":"RESISTANT","element":"mefE"},{"effect":"RESISTANT","element":"msrA"}]},"antibiotics":[{"displayName":"AMI","fullName":"Amikacin","antimicrobialClass":"Aminoglycosides","key":"AMI"},{"displayName":"GEN","fullName":"Gentamicin","antimicrobialClass":"Aminoglycosides","key":"GEN"},{"displayName":"TOB","fullName":"Tobramycin","antimicrobialClass":"Aminoglycosides","key":"TOB"},{"displayName":"KAN","fullName":"Kanamycin","antimicrobialClass":"Aminoglycosides","key":"KAN"},{"displayName":"MET","fullName":"Methicillin","antimicrobialClass":"Beta-Lactam","key":"MET"},{"displayName":"PEN","fullName":"Penicillin","antimicrobialClass":"Beta-lactams","key":"PEN"},{"displayName":"VAN","fullName":"Vancomycin","antimicrobialClass":"Glycopeptides","key":"VAN"},{"displayName":"TEC","fullName":"Teicoplanin","antimicrobialClass":"Glycopeptides","key":"TEC"},{"displayName":"CLI","fullName":"Clindamycin","antimicrobialClass":"Lincosamides","key":"CLI"},{"displayName":"ERY","fullName":"Erythromycin","antimicrobialClass":"Macrolides","key":"ERY"},{"displayName":"MUP","fullName":"Mupirocin","antimicrobialClass":"Mupirocin","key":"MUP"},{"displayName":"LNZ","fullName":"Linezolid","antimicrobialClass":"Oxazolidinone","key":"LNZ"},{"displayName":"TCY","fullName":"Tetracycline","antimicrobialClass":"Tetracyclines","key":"TCY"},{"displayName":"TMP","fullName":"Trimethoprim","antimicrobialClass":"Diaminopyrimidine","key":"TMP"},{"displayName":"DAP","fullName":"Daptomycin","antimicrobialClass":"Lipopeptides","key":"DAP"},{"displayName":"RIF","fullName":"Rifampicin","antimicrobialClass":"Rifamycin","key":"RIF"},{"displayName":"CIP","fullName":"Ciprofloxacin","antimicrobialClass":"Fluoroquinolones","key":"CIP"},{"displayName":"MFX","fullName":"Moxifloxacin","antimicrobialClass":"Fluoroquinolones","key":"MFX"}]},"id":"5a956e031ff4b200075f5939"},"status":"READY","uuid":"zuqizqwqlf1p"}
+{
+  "createdAt": "2019-07-03T15:32:41.927Z",
+  "description": "",
+  "organismId": "1280",
+  "pmid": "",
+  "size": 5,
+  "title": "",
+  "subtrees": [
+    {
+      "populationSize": 2,
+      "size": 3,
+      "name": "Newman",
+      "task": "subtree",
+      "status": "READY"
+    },
+    {
+      "populationSize": 5,
+      "size": 6,
+      "name": "DAR4145",
+      "task": "subtree",
+      "status": "READY"
+    },
+    {
+      "populationSize": 323,
+      "size": 326,
+      "name": "EMRSA15_HO50960412",
+      "task": "subtree",
+      "status": "READY"
+    }
+  ],
+  "tree": {
+    "populationSize": 0,
+    "size": 5,
+    "newick": "((5d1b52c5cc05dd36dcfa0117:4671,5d1b52c5cc05dd3babfa0115:4697):4891.25,((5d1b52c5cc05dd62f0fa0114:1,5d1b52c5cc05dd84f7fa0118:0):143.75,5d1b52c5cc05dd432cfa0116:140.25):9443.5);",
+    "status": "READY",
+    "name": "collection",
+    "versions": { "core": "v1", "tree": "v1" },
+    "task": "tree"
+  },
+  "token": "zuqizqwqlf1p",
+  "genomes": [
+    {
+      "id": "5d1b52c5cc05dd36dcfa0117",
+      "owner": "me",
+      "name": "patient4",
+      "year": null,
+      "month": null,
+      "day": null,
+      "latitude": null,
+      "longitude": null,
+      "pmid": null,
+      "createdAt": "2019-07-02T12:49:09.357Z",
+      "reference": false,
+      "public": false,
+      "analysis": {
+        "speciator": { "organismId": "1280" },
+        "core": {
+          "fp": { "reference": "Newman" },
+          "summary": {
+            "assemblyId": "0af71fc83abf996ed56980767bd9b90fe04c3d8a",
+            "speciesId": "1280",
+            "familiesMatched": 1624,
+            "completeAlleles": 1623,
+            "kernelSize": 1626,
+            "percentKernelMatched": 99.9,
+            "percentAssemblyMatched": 62.8
+          }
+        },
+        "metrics": {
+          "__v": "v2",
+          "length": 2774143,
+          "contigs": 28,
+          "smallestContig": 773,
+          "largestContig": 490859,
+          "averageContig": 99076,
+          "N50": 255775,
+          "N50Contig": 4,
+          "nonATCG": 200,
+          "gcContent": "32.6",
+          "contigSums": [
+            490859,
+            920590,
+            1215799,
+            1471574,
+            1653473,
+            1822705,
+            1943839,
+            2061950,
+            2157720,
+            2246150,
+            2334115,
+            2407449,
+            2467285,
+            2521117,
+            2560016,
+            2598110,
+            2635692,
+            2668884,
+            2689891,
+            2710232,
+            2730146,
+            2747473,
+            2756197,
+            2763220,
+            2768658,
+            2771681,
+            2773370,
+            2774143
+          ]
+        },
+        "mlst": {
+          "st": "8",
+          "alleles": [
+            { "gene": "arcC", "hits": [3] },
+            { "gene": "aroE", "hits": [3] },
+            { "gene": "glpF", "hits": [1] },
+            { "gene": "gmk", "hits": [1] },
+            { "gene": "pta", "hits": [4] },
+            { "gene": "tpi", "hits": [4] },
+            { "gene": "yqiL", "hits": [3] }
+          ]
+        },
+        "paarsnp": {
+          "antibiotics": [
+            {
+              "name": "AMI",
+              "fullName": "Amikacin",
+              "state": "NOT_FOUND",
+              "mechanisms": []
+            },
+            {
+              "name": "GEN",
+              "fullName": "Gentamicin",
+              "state": "NOT_FOUND",
+              "mechanisms": []
+            },
+            {
+              "name": "TOB",
+              "fullName": "Tobramycin",
+              "state": "NOT_FOUND",
+              "mechanisms": []
+            },
+            {
+              "name": "KAN",
+              "fullName": "Kanamycin",
+              "state": "NOT_FOUND",
+              "mechanisms": []
+            },
+            {
+              "name": "MET",
+              "fullName": "Methicillin",
+              "state": "RESISTANT",
+              "mechanisms": ["mecA"]
+            },
+            {
+              "name": "PEN",
+              "fullName": "Penicillin",
+              "state": "RESISTANT",
+              "mechanisms": ["blaZ", "mecA"]
+            },
+            {
+              "name": "FUS",
+              "fullName": "Fusidic Acid",
+              "state": "NOT_FOUND",
+              "mechanisms": []
+            },
+            {
+              "name": "VAN",
+              "fullName": "Vancomycin",
+              "state": "NOT_FOUND",
+              "mechanisms": []
+            },
+            {
+              "name": "CLI",
+              "fullName": "Clindamycin",
+              "state": "NOT_FOUND",
+              "mechanisms": []
+            },
+            {
+              "name": "ERY",
+              "fullName": "Erythromycin",
+              "state": "RESISTANT",
+              "mechanisms": ["ermA"]
+            },
+            {
+              "name": "MUP",
+              "fullName": "Mupirocin",
+              "state": "NOT_FOUND",
+              "mechanisms": []
+            },
+            {
+              "name": "LNZ",
+              "fullName": "Linezolid",
+              "state": "NOT_FOUND",
+              "mechanisms": []
+            },
+            {
+              "name": "TCY",
+              "fullName": "Tetracycline",
+              "state": "NOT_FOUND",
+              "mechanisms": []
+            },
+            {
+              "name": "TMP",
+              "fullName": "Trimethoprim",
+              "state": "NOT_FOUND",
+              "mechanisms": []
+            },
+            {
+              "name": "DAP",
+              "fullName": "Daptomycin",
+              "state": "NOT_FOUND",
+              "mechanisms": []
+            },
+            {
+              "name": "RIF",
+              "fullName": "Rifampicin",
+              "state": "NOT_FOUND",
+              "mechanisms": []
+            },
+            {
+              "name": "CIP",
+              "fullName": "Ciprofloxacin",
+              "state": "NOT_FOUND",
+              "mechanisms": []
+            },
+            {
+              "name": "MFX",
+              "fullName": "Moxifloxacin",
+              "state": "NOT_FOUND",
+              "mechanisms": []
+            },
+            {
+              "name": "TEC",
+              "fullName": "Teicoplanin",
+              "state": "NOT_FOUND",
+              "mechanisms": []
+            }
+          ],
+          "paar": ["mecA", "blaZ", "ermA"],
+          "snp": []
+        }
+      },
+      "userDefined": {},
+      "country": null
+    },
+    {
+      "id": "5d1b52c5cc05dd3babfa0115",
+      "owner": "me",
+      "name": "patient2",
+      "year": null,
+      "month": null,
+      "day": null,
+      "latitude": null,
+      "longitude": null,
+      "pmid": null,
+      "createdAt": "2019-07-02T12:49:09.357Z",
+      "reference": false,
+      "public": false,
+      "analysis": {
+        "speciator": { "organismId": "1280" },
+        "core": {
+          "fp": { "reference": "DAR4145" },
+          "summary": {
+            "assemblyId": "dca16401258254710ebf95e226e9c157057f92c0",
+            "speciesId": "1280",
+            "familiesMatched": 1625,
+            "completeAlleles": 1619,
+            "kernelSize": 1627,
+            "percentKernelMatched": 100,
+            "percentAssemblyMatched": 62.9
+          }
+        },
+        "metrics": {
+          "__v": "v2",
+          "length": 2769920,
+          "contigs": 37,
+          "smallestContig": 598,
+          "largestContig": 374682,
+          "averageContig": 74862,
+          "N50": 265543,
+          "N50Contig": 5,
+          "nonATCG": 700,
+          "gcContent": "32.7",
+          "contigSums": [
+            374682,
+            710210,
+            1037981,
+            1343540,
+            1609083,
+            1866913,
+            2053787,
+            2129523,
+            2202425,
+            2261326,
+            2319446,
+            2370391,
+            2419480,
+            2467340,
+            2506344,
+            2545187,
+            2580849,
+            2615627,
+            2644767,
+            2669313,
+            2692678,
+            2712829,
+            2723311,
+            2733022,
+            2742154,
+            2745902,
+            2749454,
+            2752861,
+            2756137,
+            2759215,
+            2761793,
+            2763859,
+            2765504,
+            2767016,
+            2768340,
+            2769322,
+            2769920
+          ]
+        },
+        "mlst": {
+          "st": "772",
+          "alleles": [
+            { "gene": "arcC", "hits": [1] },
+            { "gene": "aroE", "hits": [1] },
+            { "gene": "glpF", "hits": [1] },
+            { "gene": "gmk", "hits": [1] },
+            { "gene": "pta", "hits": [22] },
+            { "gene": "tpi", "hits": [1] },
+            { "gene": "yqiL", "hits": [1] }
+          ]
+        },
+        "paarsnp": {
+          "antibiotics": [
+            {
+              "name": "AMI",
+              "fullName": "Amikacin",
+              "state": "RESISTANT",
+              "mechanisms": ["aphA-3"]
+            },
+            {
+              "name": "GEN",
+              "fullName": "Gentamicin",
+              "state": "RESISTANT",
+              "mechanisms": ["aacA-aphD"]
+            },
+            {
+              "name": "TOB",
+              "fullName": "Tobramycin",
+              "state": "RESISTANT",
+              "mechanisms": ["aacA-aphD", "aphA-3"]
+            },
+            {
+              "name": "KAN",
+              "fullName": "Kanamycin",
+              "state": "RESISTANT",
+              "mechanisms": ["aacA-aphD", "aphA-3"]
+            },
+            {
+              "name": "MET",
+              "fullName": "Methicillin",
+              "state": "RESISTANT",
+              "mechanisms": ["mecA"]
+            },
+            {
+              "name": "PEN",
+              "fullName": "Penicillin",
+              "state": "RESISTANT",
+              "mechanisms": ["mecA", "blaZ"]
+            },
+            {
+              "name": "FUS",
+              "fullName": "Fusidic Acid",
+              "state": "NOT_FOUND",
+              "mechanisms": []
+            },
+            {
+              "name": "VAN",
+              "fullName": "Vancomycin",
+              "state": "NOT_FOUND",
+              "mechanisms": []
+            },
+            {
+              "name": "CLI",
+              "fullName": "Clindamycin",
+              "state": "NOT_FOUND",
+              "mechanisms": []
+            },
+            {
+              "name": "ERY",
+              "fullName": "Erythromycin",
+              "state": "RESISTANT",
+              "mechanisms": ["msrA"]
+            },
+            {
+              "name": "MUP",
+              "fullName": "Mupirocin",
+              "state": "NOT_FOUND",
+              "mechanisms": []
+            },
+            {
+              "name": "LNZ",
+              "fullName": "Linezolid",
+              "state": "NOT_FOUND",
+              "mechanisms": []
+            },
+            {
+              "name": "TCY",
+              "fullName": "Tetracycline",
+              "state": "NOT_FOUND",
+              "mechanisms": []
+            },
+            {
+              "name": "TMP",
+              "fullName": "Trimethoprim",
+              "state": "RESISTANT",
+              "mechanisms": ["dfrG"]
+            },
+            {
+              "name": "DAP",
+              "fullName": "Daptomycin",
+              "state": "NOT_FOUND",
+              "mechanisms": []
+            },
+            {
+              "name": "RIF",
+              "fullName": "Rifampicin",
+              "state": "NOT_FOUND",
+              "mechanisms": []
+            },
+            {
+              "name": "CIP",
+              "fullName": "Ciprofloxacin",
+              "state": "RESISTANT",
+              "mechanisms": ["gyrA_S84L", "grlA_S80Y"]
+            },
+            {
+              "name": "MFX",
+              "fullName": "Moxifloxacin",
+              "state": "NOT_FOUND",
+              "mechanisms": []
+            },
+            {
+              "name": "TEC",
+              "fullName": "Teicoplanin",
+              "state": "NOT_FOUND",
+              "mechanisms": []
+            }
+          ],
+          "paar": ["aacA-aphD", "mecA", "msrA", "dfrG", "blaZ", "aphA-3"],
+          "snp": ["gyrA_S84L", "grlA_S80Y"]
+        }
+      },
+      "userDefined": {},
+      "country": null
+    },
+    {
+      "id": "5d1b52c5cc05dd432cfa0116",
+      "owner": "me",
+      "name": "patient3",
+      "year": null,
+      "month": null,
+      "day": null,
+      "latitude": null,
+      "longitude": null,
+      "pmid": null,
+      "createdAt": "2019-07-02T12:49:09.357Z",
+      "reference": false,
+      "public": false,
+      "analysis": {
+        "speciator": { "organismId": "1280" },
+        "core": {
+          "fp": { "reference": "EMRSA15_HO50960412" },
+          "summary": {
+            "assemblyId": "82c9707afec49c22c100ef1d4cda830b8ac9abc8",
+            "speciesId": "1280",
+            "familiesMatched": 1625,
+            "completeAlleles": 1618,
+            "kernelSize": 1628,
+            "percentKernelMatched": 100,
+            "percentAssemblyMatched": 62.4
+          }
+        },
+        "metrics": {
+          "__v": "v2",
+          "length": 2796239,
+          "contigs": 38,
+          "smallestContig": 722,
+          "largestContig": 511841,
+          "averageContig": 73585,
+          "N50": 174086,
+          "N50Contig": 5,
+          "nonATCG": 700,
+          "gcContent": "32.7",
+          "contigSums": [
+            511841,
+            915765,
+            1167639,
+            1379508,
+            1553594,
+            1717245,
+            1863554,
+            1988957,
+            2096555,
+            2164652,
+            2229655,
+            2291309,
+            2352412,
+            2410112,
+            2464526,
+            2518579,
+            2557311,
+            2595296,
+            2632348,
+            2664993,
+            2694477,
+            2718017,
+            2738311,
+            2751291,
+            2762178,
+            2769974,
+            2777084,
+            2780591,
+            2783545,
+            2785703,
+            2787840,
+            2789752,
+            2791456,
+            2792679,
+            2793649,
+            2794596,
+            2795517,
+            2796239
+          ]
+        },
+        "mlst": {
+          "st": "22",
+          "alleles": [
+            { "gene": "arcC", "hits": [7] },
+            { "gene": "aroE", "hits": [6] },
+            { "gene": "glpF", "hits": [1] },
+            { "gene": "gmk", "hits": [5] },
+            { "gene": "pta", "hits": [8] },
+            { "gene": "tpi", "hits": [8] },
+            { "gene": "yqiL", "hits": [6] }
+          ]
+        },
+        "paarsnp": {
+          "antibiotics": [
+            {
+              "name": "AMI",
+              "fullName": "Amikacin",
+              "state": "NOT_FOUND",
+              "mechanisms": []
+            },
+            {
+              "name": "GEN",
+              "fullName": "Gentamicin",
+              "state": "NOT_FOUND",
+              "mechanisms": []
+            },
+            {
+              "name": "TOB",
+              "fullName": "Tobramycin",
+              "state": "NOT_FOUND",
+              "mechanisms": []
+            },
+            {
+              "name": "KAN",
+              "fullName": "Kanamycin",
+              "state": "NOT_FOUND",
+              "mechanisms": []
+            },
+            {
+              "name": "MET",
+              "fullName": "Methicillin",
+              "state": "RESISTANT",
+              "mechanisms": ["mecA"]
+            },
+            {
+              "name": "PEN",
+              "fullName": "Penicillin",
+              "state": "RESISTANT",
+              "mechanisms": ["mecA", "blaZ"]
+            },
+            {
+              "name": "FUS",
+              "fullName": "Fusidic Acid",
+              "state": "NOT_FOUND",
+              "mechanisms": []
+            },
+            {
+              "name": "VAN",
+              "fullName": "Vancomycin",
+              "state": "NOT_FOUND",
+              "mechanisms": []
+            },
+            {
+              "name": "CLI",
+              "fullName": "Clindamycin",
+              "state": "NOT_FOUND",
+              "mechanisms": []
+            },
+            {
+              "name": "ERY",
+              "fullName": "Erythromycin",
+              "state": "NOT_FOUND",
+              "mechanisms": []
+            },
+            {
+              "name": "MUP",
+              "fullName": "Mupirocin",
+              "state": "NOT_FOUND",
+              "mechanisms": []
+            },
+            {
+              "name": "LNZ",
+              "fullName": "Linezolid",
+              "state": "NOT_FOUND",
+              "mechanisms": []
+            },
+            {
+              "name": "TCY",
+              "fullName": "Tetracycline",
+              "state": "NOT_FOUND",
+              "mechanisms": []
+            },
+            {
+              "name": "TMP",
+              "fullName": "Trimethoprim",
+              "state": "NOT_FOUND",
+              "mechanisms": []
+            },
+            {
+              "name": "DAP",
+              "fullName": "Daptomycin",
+              "state": "NOT_FOUND",
+              "mechanisms": []
+            },
+            {
+              "name": "RIF",
+              "fullName": "Rifampicin",
+              "state": "NOT_FOUND",
+              "mechanisms": []
+            },
+            {
+              "name": "CIP",
+              "fullName": "Ciprofloxacin",
+              "state": "RESISTANT",
+              "mechanisms": ["grlA_S80F", "gyrA_S84L"]
+            },
+            {
+              "name": "MFX",
+              "fullName": "Moxifloxacin",
+              "state": "NOT_FOUND",
+              "mechanisms": []
+            },
+            {
+              "name": "TEC",
+              "fullName": "Teicoplanin",
+              "state": "NOT_FOUND",
+              "mechanisms": []
+            }
+          ],
+          "paar": ["mecA", "blaZ"],
+          "snp": ["grlA_S80F", "gyrA_S84L"]
+        }
+      },
+      "userDefined": {},
+      "country": null
+    },
+    {
+      "id": "5d1b52c5cc05dd62f0fa0114",
+      "owner": "me",
+      "name": "patient1",
+      "year": null,
+      "month": null,
+      "day": null,
+      "latitude": null,
+      "longitude": null,
+      "pmid": null,
+      "createdAt": "2019-07-02T12:49:09.357Z",
+      "reference": false,
+      "public": false,
+      "analysis": {
+        "speciator": { "organismId": "1280" },
+        "core": {
+          "fp": { "reference": "EMRSA15_HO50960412" },
+          "summary": {
+            "assemblyId": "f4b4023e6df3c4d460a01a54fd653e5a122af489",
+            "speciesId": "1280",
+            "familiesMatched": 1623,
+            "completeAlleles": 1614,
+            "kernelSize": 1626,
+            "percentKernelMatched": 99.9,
+            "percentAssemblyMatched": 62.5
+          }
+        },
+        "metrics": {
+          "__v": "v2",
+          "length": 2786995,
+          "contigs": 57,
+          "smallestContig": 574,
+          "largestContig": 343117,
+          "averageContig": 48894,
+          "N50": 156458,
+          "N50Contig": 7,
+          "nonATCG": 800,
+          "gcContent": "32.7",
+          "contigSums": [
+            343117,
+            594990,
+            783159,
+            959625,
+            1133656,
+            1298989,
+            1455447,
+            1584890,
+            1694521,
+            1802349,
+            1899851,
+            1993762,
+            2061639,
+            2126063,
+            2186058,
+            2243644,
+            2298280,
+            2352838,
+            2406836,
+            2456629,
+            2495728,
+            2531064,
+            2564655,
+            2595738,
+            2621889,
+            2646254,
+            2669793,
+            2691496,
+            2708715,
+            2721695,
+            2729490,
+            2736253,
+            2741528,
+            2746572,
+            2751276,
+            2754847,
+            2758150,
+            2761249,
+            2763797,
+            2765995,
+            2768132,
+            2770164,
+            2772092,
+            2774010,
+            2775714,
+            2777264,
+            2778487,
+            2779647,
+            2780594,
+            2781534,
+            2782459,
+            2783327,
+            2784163,
+            2784953,
+            2785723,
+            2786421,
+            2786995
+          ]
+        },
+        "mlst": {
+          "st": "2371",
+          "alleles": [
+            { "gene": "arcC", "hits": [258] },
+            { "gene": "aroE", "hits": [6] },
+            { "gene": "glpF", "hits": [1] },
+            { "gene": "gmk", "hits": [5] },
+            { "gene": "pta", "hits": [8] },
+            { "gene": "tpi", "hits": [8] },
+            { "gene": "yqiL", "hits": [6] }
+          ]
+        },
+        "paarsnp": {
+          "antibiotics": [
+            {
+              "name": "AMI",
+              "fullName": "Amikacin",
+              "state": "RESISTANT",
+              "mechanisms": ["aadD"]
+            },
+            {
+              "name": "GEN",
+              "fullName": "Gentamicin",
+              "state": "RESISTANT",
+              "mechanisms": ["aacA-aphD"]
+            },
+            {
+              "name": "TOB",
+              "fullName": "Tobramycin",
+              "state": "RESISTANT",
+              "mechanisms": ["aadD", "aacA-aphD"]
+            },
+            {
+              "name": "KAN",
+              "fullName": "Kanamycin",
+              "state": "RESISTANT",
+              "mechanisms": ["aadD", "aacA-aphD"]
+            },
+            {
+              "name": "MET",
+              "fullName": "Methicillin",
+              "state": "RESISTANT",
+              "mechanisms": ["mecA"]
+            },
+            {
+              "name": "PEN",
+              "fullName": "Penicillin",
+              "state": "RESISTANT",
+              "mechanisms": ["mecA", "blaZ"]
+            },
+            {
+              "name": "FUS",
+              "fullName": "Fusidic Acid",
+              "state": "NOT_FOUND",
+              "mechanisms": []
+            },
+            {
+              "name": "VAN",
+              "fullName": "Vancomycin",
+              "state": "NOT_FOUND",
+              "mechanisms": []
+            },
+            {
+              "name": "CLI",
+              "fullName": "Clindamycin",
+              "state": "INDUCIBLE",
+              "mechanisms": ["ermC"]
+            },
+            {
+              "name": "ERY",
+              "fullName": "Erythromycin",
+              "state": "RESISTANT",
+              "mechanisms": ["ermC"]
+            },
+            {
+              "name": "MUP",
+              "fullName": "Mupirocin",
+              "state": "NOT_FOUND",
+              "mechanisms": []
+            },
+            {
+              "name": "LNZ",
+              "fullName": "Linezolid",
+              "state": "NOT_FOUND",
+              "mechanisms": []
+            },
+            {
+              "name": "TCY",
+              "fullName": "Tetracycline",
+              "state": "NOT_FOUND",
+              "mechanisms": []
+            },
+            {
+              "name": "TMP",
+              "fullName": "Trimethoprim",
+              "state": "RESISTANT",
+              "mechanisms": ["dfrA"]
+            },
+            {
+              "name": "DAP",
+              "fullName": "Daptomycin",
+              "state": "NOT_FOUND",
+              "mechanisms": []
+            },
+            {
+              "name": "RIF",
+              "fullName": "Rifampicin",
+              "state": "NOT_FOUND",
+              "mechanisms": []
+            },
+            {
+              "name": "CIP",
+              "fullName": "Ciprofloxacin",
+              "state": "RESISTANT",
+              "mechanisms": ["gyrA_S84L", "grlA_S80F"]
+            },
+            {
+              "name": "MFX",
+              "fullName": "Moxifloxacin",
+              "state": "NOT_FOUND",
+              "mechanisms": []
+            },
+            {
+              "name": "TEC",
+              "fullName": "Teicoplanin",
+              "state": "NOT_FOUND",
+              "mechanisms": []
+            }
+          ],
+          "paar": [
+            "aacA-aphD",
+            "mecA",
+            "ermC",
+            "blaZ",
+            "aadD",
+            "ermC_LP",
+            "dfrA"
+          ],
+          "snp": ["grlA_S80F", "gyrA_S84L"]
+        }
+      },
+      "userDefined": {},
+      "country": null
+    },
+    {
+      "id": "5d1b52c5cc05dd84f7fa0118",
+      "owner": "me",
+      "name": "patient5",
+      "year": null,
+      "month": null,
+      "day": null,
+      "latitude": null,
+      "longitude": null,
+      "pmid": null,
+      "createdAt": "2019-07-02T12:49:09.357Z",
+      "reference": false,
+      "public": false,
+      "analysis": {
+        "speciator": { "organismId": "1280" },
+        "core": {
+          "fp": { "reference": "EMRSA15_HO50960412" },
+          "summary": {
+            "assemblyId": "d149bc9dc0226540f2d16fee92f9c2c0157a0e34",
+            "speciesId": "1280",
+            "familiesMatched": 1623,
+            "completeAlleles": 1614,
+            "kernelSize": 1626,
+            "percentKernelMatched": 99.9,
+            "percentAssemblyMatched": 62.4
+          }
+        },
+        "metrics": {
+          "__v": "v2",
+          "length": 2788494,
+          "contigs": 58,
+          "smallestContig": 503,
+          "largestContig": 406515,
+          "averageContig": 48077,
+          "N50": 156458,
+          "N50Contig": 7,
+          "nonATCG": 900,
+          "gcContent": "32.7",
+          "contigSums": [
+            406515,
+            658648,
+            846817,
+            1023283,
+            1197314,
+            1362647,
+            1519105,
+            1648548,
+            1758179,
+            1865714,
+            1963216,
+            2057027,
+            2124904,
+            2189223,
+            2246809,
+            2301445,
+            2356003,
+            2410001,
+            2459794,
+            2497778,
+            2533114,
+            2565770,
+            2596853,
+            2623004,
+            2647855,
+            2672220,
+            2695759,
+            2712966,
+            2725946,
+            2733741,
+            2740504,
+            2745779,
+            2750823,
+            2755527,
+            2759098,
+            2762197,
+            2764745,
+            2766943,
+            2769080,
+            2771112,
+            2773030,
+            2774734,
+            2776284,
+            2777507,
+            2778667,
+            2779614,
+            2780554,
+            2781479,
+            2782400,
+            2783268,
+            2784104,
+            2784894,
+            2785664,
+            2786362,
+            2786936,
+            2787464,
+            2787991,
+            2788494
+          ]
+        },
+        "mlst": {
+          "st": "2371",
+          "alleles": [
+            { "gene": "arcC", "hits": [258] },
+            { "gene": "aroE", "hits": [6] },
+            { "gene": "glpF", "hits": [1] },
+            { "gene": "gmk", "hits": [5] },
+            { "gene": "pta", "hits": [8] },
+            { "gene": "tpi", "hits": [8] },
+            { "gene": "yqiL", "hits": [6] }
+          ]
+        },
+        "paarsnp": {
+          "antibiotics": [
+            {
+              "name": "AMI",
+              "fullName": "Amikacin",
+              "state": "RESISTANT",
+              "mechanisms": ["aadD"]
+            },
+            {
+              "name": "GEN",
+              "fullName": "Gentamicin",
+              "state": "RESISTANT",
+              "mechanisms": ["aacA-aphD"]
+            },
+            {
+              "name": "TOB",
+              "fullName": "Tobramycin",
+              "state": "RESISTANT",
+              "mechanisms": ["aadD", "aacA-aphD"]
+            },
+            {
+              "name": "KAN",
+              "fullName": "Kanamycin",
+              "state": "RESISTANT",
+              "mechanisms": ["aadD", "aacA-aphD"]
+            },
+            {
+              "name": "MET",
+              "fullName": "Methicillin",
+              "state": "RESISTANT",
+              "mechanisms": ["mecA"]
+            },
+            {
+              "name": "PEN",
+              "fullName": "Penicillin",
+              "state": "RESISTANT",
+              "mechanisms": ["mecA", "blaZ"]
+            },
+            {
+              "name": "FUS",
+              "fullName": "Fusidic Acid",
+              "state": "NOT_FOUND",
+              "mechanisms": []
+            },
+            {
+              "name": "VAN",
+              "fullName": "Vancomycin",
+              "state": "NOT_FOUND",
+              "mechanisms": []
+            },
+            {
+              "name": "CLI",
+              "fullName": "Clindamycin",
+              "state": "INDUCIBLE",
+              "mechanisms": ["ermC"]
+            },
+            {
+              "name": "ERY",
+              "fullName": "Erythromycin",
+              "state": "RESISTANT",
+              "mechanisms": ["ermC"]
+            },
+            {
+              "name": "MUP",
+              "fullName": "Mupirocin",
+              "state": "NOT_FOUND",
+              "mechanisms": []
+            },
+            {
+              "name": "LNZ",
+              "fullName": "Linezolid",
+              "state": "NOT_FOUND",
+              "mechanisms": []
+            },
+            {
+              "name": "TCY",
+              "fullName": "Tetracycline",
+              "state": "NOT_FOUND",
+              "mechanisms": []
+            },
+            {
+              "name": "TMP",
+              "fullName": "Trimethoprim",
+              "state": "RESISTANT",
+              "mechanisms": ["dfrA"]
+            },
+            {
+              "name": "DAP",
+              "fullName": "Daptomycin",
+              "state": "NOT_FOUND",
+              "mechanisms": []
+            },
+            {
+              "name": "RIF",
+              "fullName": "Rifampicin",
+              "state": "NOT_FOUND",
+              "mechanisms": []
+            },
+            {
+              "name": "CIP",
+              "fullName": "Ciprofloxacin",
+              "state": "RESISTANT",
+              "mechanisms": ["grlA_S80F", "gyrA_S84L"]
+            },
+            {
+              "name": "MFX",
+              "fullName": "Moxifloxacin",
+              "state": "NOT_FOUND",
+              "mechanisms": []
+            },
+            {
+              "name": "TEC",
+              "fullName": "Teicoplanin",
+              "state": "NOT_FOUND",
+              "mechanisms": []
+            }
+          ],
+          "paar": [
+            "aacA-aphD",
+            "mecA",
+            "ermC",
+            "blaZ",
+            "aadD",
+            "ermC_LP",
+            "dfrA"
+          ],
+          "snp": ["grlA_S80F", "gyrA_S84L"]
+        }
+      },
+      "userDefined": {},
+      "country": null
+    }
+  ],
+  "access": "private",
+  "id": "5d1cca995e22c550494e7e33",
+  "owner": "me",
+  "organism": {
+    "tree": "(((((ED133:4718.014706,LG251:4365.985294):2176.851562,RF122:7503.648438):449.4875,SA957:7056.5125):1594.453125,JKD6159:14745.42188):1563.37066,(((((CN1:4553.039062,(MSSA476:113.1761364,MW2:93.82386364):4203.960938):148.9663086,(((Mu50:90.24565972,N315:22.75434028):60.02587891,JH1:138.9741211):4799.329753,DAR4145:4300.670247):358.1274414):638.7788086,(((COL:135.8136161,Newman:108.1863839):45.98372396,USA300_FPR3757:169.016276):1357.953516,(JKD6008:165.0143229,TW20:173.9856771):3804.546484):2713.252441):3831.726074,EMRSA15_HO50960412:9971.144531):2391.402344,(MRSA252:8839.055556,S0385:9568.944444):6510.825721):229.0223691);",
+    "references": [
+      { "name": "MSSA476_ST1", "uuid": "MSSA476" },
+      { "name": "MW2_ST1", "uuid": "MW2" },
+      { "name": "Mu50_ST5", "uuid": "Mu50" },
+      { "name": "N315_ST5", "uuid": "N315" },
+      { "name": "Newman_ST254", "uuid": "Newman" },
+      { "name": "USA300 FPR3757_ST8", "uuid": "USA300_FPR3757" },
+      { "name": "HO 5096 0412_ST22", "uuid": "EMRSA15_HO50960412" },
+      { "name": "MRSA252_ST36", "uuid": "MRSA252" },
+      { "name": "SA957_ST59", "uuid": "SA957" },
+      { "name": "CN1_ST72", "uuid": "CN1" },
+      { "name": "JKD6159_ST93", "uuid": "JKD6159" },
+      { "name": "JH1_ST105", "uuid": "JH1" },
+      { "name": "ED133_ST133", "uuid": "ED133" },
+      { "name": "ET3-1_ST151", "uuid": "RF122" },
+      { "name": "TW20_ST239", "uuid": "TW20" },
+      { "name": "JKD6008_ST239", "uuid": "JKD6008" },
+      { "name": "COL_ST250", "uuid": "COL" },
+      { "name": "S0385_ST398", "uuid": "S0385" },
+      { "name": "LG251_ST425", "uuid": "LG251" },
+      { "name": "DAR4145_ST772", "uuid": "DAR4145" }
+    ],
+    "resistance": {
+      "snp": {
+        "LNZ": {
+          "rplD": [{ "effect": "RESISTANT", "snpName": "K68Q" }],
+          "rplC": [
+            { "effect": "RESISTANT", "snpName": "G139R" },
+            { "effect": "RESISTANT", "snpName": "G152D" },
+            { "effect": "RESISTANT", "snpName": "G155R" },
+            { "effect": "RESISTANT", "snpName": "M169L" }
+          ]
+        },
+        "TEC": { "rpoB": [{ "effect": "RESISTANT", "snpName": "A621E" }] },
+        "VAN": { "rpoB": [{ "effect": "RESISTANT", "snpName": "A621E" }] },
+        "DAP": {
+          "mprF": [
+            { "effect": "RESISTANT", "snpName": "S295L" },
+            { "effect": "RESISTANT", "snpName": "T345A" }
+          ],
+          "rpoB": [{ "effect": "RESISTANT", "snpName": "A621E" }]
+        },
+        "RIF": {
+          "rpoB": [
+            { "effect": "RESISTANT", "snpName": "A477D" },
+            { "effect": "RESISTANT", "snpName": "A477G" },
+            { "effect": "RESISTANT", "snpName": "A477T" },
+            { "effect": "RESISTANT", "snpName": "A477V" },
+            { "effect": "RESISTANT", "snpName": "D471Y" },
+            { "effect": "RESISTANT", "snpName": "D550G" },
+            { "effect": "RESISTANT", "snpName": "D552N" },
+            { "effect": "RESISTANT", "snpName": "H481D" },
+            { "effect": "RESISTANT", "snpName": "H481N" },
+            { "effect": "RESISTANT", "snpName": "H481Y" },
+            { "effect": "RESISTANT", "snpName": "I527F" },
+            { "effect": "RESISTANT", "snpName": "N474K" },
+            { "effect": "RESISTANT", "snpName": "Q468K" },
+            { "effect": "RESISTANT", "snpName": "Q468L" },
+            { "effect": "RESISTANT", "snpName": "Q468R" },
+            { "effect": "RESISTANT", "snpName": "R484H" },
+            { "effect": "RESISTANT", "snpName": "S463P" },
+            { "effect": "RESISTANT", "snpName": "S464P" },
+            { "effect": "RESISTANT", "snpName": "S486L" }
+          ]
+        },
+        "CIP": {
+          "grlB": [
+            { "effect": "RESISTANT", "snpName": "D432H" },
+            { "effect": "RESISTANT", "snpName": "D432N" },
+            { "effect": "RESISTANT", "snpName": "D432V" },
+            { "effect": "RESISTANT", "snpName": "D443E" },
+            { "effect": "RESISTANT", "snpName": "P451S" },
+            { "effect": "RESISTANT", "snpName": "P585S" },
+            { "effect": "RESISTANT", "snpName": "R444S" },
+            { "effect": "RESISTANT", "snpName": "R470D" }
+          ],
+          "gyrA": [
+            { "effect": "RESISTANT", "snpName": "D73G" },
+            { "effect": "RESISTANT", "snpName": "E88K" },
+            { "effect": "RESISTANT", "snpName": "E88L" },
+            { "effect": "RESISTANT", "snpName": "E88R" },
+            { "effect": "RESISTANT", "snpName": "G82C" },
+            { "effect": "RESISTANT", "snpName": "G106D" },
+            { "effect": "RESISTANT", "snpName": "S84A" },
+            { "effect": "RESISTANT", "snpName": "S84L" },
+            { "effect": "RESISTANT", "snpName": "S84V" },
+            { "effect": "RESISTANT", "snpName": "S85P" }
+          ],
+          "gyrB": [
+            { "effect": "RESISTANT", "snpName": "D437N" },
+            { "effect": "RESISTANT", "snpName": "E477D" }
+          ],
+          "grlA": [
+            { "effect": "RESISTANT", "snpName": "A116E" },
+            { "effect": "RESISTANT", "snpName": "A116V" },
+            { "effect": "RESISTANT", "snpName": "E84K" },
+            { "effect": "RESISTANT", "snpName": "S80F" },
+            { "effect": "RESISTANT", "snpName": "S80Y" }
+          ]
+        },
+        "MUP": {
+          "ileS-1": [
+            { "effect": "RESISTANT", "snpName": "F563L" },
+            { "effect": "RESISTANT", "snpName": "G593V" },
+            { "effect": "RESISTANT", "snpName": "H67Q" },
+            { "effect": "RESISTANT", "snpName": "R816C" },
+            { "effect": "RESISTANT", "snpName": "V588F" },
+            { "effect": "RESISTANT", "snpName": "V631F" }
+          ]
+        },
+        "TMP": {
+          "dfrB": [
+            { "effect": "RESISTANT", "snpName": "F99I" },
+            { "effect": "RESISTANT", "snpName": "F99S" },
+            { "effect": "RESISTANT", "snpName": "F99Y" },
+            { "effect": "RESISTANT", "snpName": "H31N" },
+            { "effect": "RESISTANT", "snpName": "H150R" },
+            { "effect": "RESISTANT", "snpName": "L21V" },
+            { "effect": "RESISTANT", "snpName": "L41F" }
+          ]
+        }
+      },
+      "paar": {
+        "LNZ": [{ "effect": "RESISTANT", "element": "cfr" }],
+        "MET": [
+          { "effect": "RESISTANT", "element": "mecA" },
+          { "effect": "RESISTANT", "element": "mecC" }
+        ],
+        "TCY": [
+          { "effect": "RESISTANT", "element": "tetK" },
+          { "effect": "RESISTANT", "element": "tetL" },
+          { "effect": "RESISTANT", "element": "tetM" },
+          { "effect": "RESISTANT", "element": "tetO" }
+        ],
+        "TMP": [
+          { "effect": "RESISTANT", "element": "dfrA" },
+          { "effect": "RESISTANT", "element": "dfrG" },
+          { "effect": "RESISTANT", "element": "dfrK" }
+        ],
+        "TEC": [
+          { "effect": "RESISTANT", "element": "vanA" },
+          { "effect": "RESISTANT", "element": "vanZ" }
+        ],
+        "VAN": [
+          { "effect": "RESISTANT", "element": "vanA" },
+          { "effect": "RESISTANT", "element": "vanZ" }
+        ],
+        "CLI": [
+          { "effect": "RESISTANT", "element": "ermA" },
+          { "effect": "RESISTANT", "element": "ermA_SDS" },
+          { "effect": "RESISTANT", "element": "ermC" },
+          { "effect": "RESISTANT", "element": "linA" },
+          { "effect": "RESISTANT", "element": "linB" },
+          { "effect": "RESISTANT", "element": "linC" }
+        ],
+        "MUP": [
+          { "effect": "RESISTANT", "element": "ileS-2" },
+          { "effect": "RESISTANT", "element": "mupB" }
+        ],
+        "AMI": [
+          { "effect": "RESISTANT", "element": "aadD" },
+          { "effect": "RESISTANT", "element": "aphA-3" }
+        ],
+        "PEN": [
+          { "effect": "RESISTANT", "element": "blaZ" },
+          { "effect": "RESISTANT", "element": "blaZ_LGA251" },
+          { "effect": "RESISTANT", "element": "mecA" }
+        ],
+        "KAN": [
+          { "effect": "RESISTANT", "element": "aacA-aphD" },
+          { "effect": "RESISTANT", "element": "aadD" },
+          { "effect": "RESISTANT", "element": "aphA-3" }
+        ],
+        "TOB": [
+          { "effect": "RESISTANT", "element": "aacA-aphD" },
+          { "effect": "RESISTANT", "element": "aadD" },
+          { "effect": "RESISTANT", "element": "aphA-3" }
+        ],
+        "GEN": [{ "effect": "RESISTANT", "element": "aacA-aphD" }],
+        "ERY": [
+          { "effect": "RESISTANT", "element": "ereA" },
+          { "effect": "RESISTANT", "element": "ereB" },
+          { "effect": "RESISTANT", "element": "erm33" },
+          { "effect": "RESISTANT", "element": "ermA" },
+          { "effect": "RESISTANT", "element": "ermB" },
+          { "effect": "RESISTANT", "element": "ermC" },
+          { "effect": "RESISTANT", "element": "ermT" },
+          { "effect": "RESISTANT", "element": "mefA" },
+          { "effect": "RESISTANT", "element": "mefE" },
+          { "effect": "RESISTANT", "element": "msrA" }
+        ]
+      },
+      "antibiotics": [
+        {
+          "displayName": "AMI",
+          "fullName": "Amikacin",
+          "antimicrobialClass": "Aminoglycosides",
+          "key": "AMI"
+        },
+        {
+          "displayName": "GEN",
+          "fullName": "Gentamicin",
+          "antimicrobialClass": "Aminoglycosides",
+          "key": "GEN"
+        },
+        {
+          "displayName": "TOB",
+          "fullName": "Tobramycin",
+          "antimicrobialClass": "Aminoglycosides",
+          "key": "TOB"
+        },
+        {
+          "displayName": "KAN",
+          "fullName": "Kanamycin",
+          "antimicrobialClass": "Aminoglycosides",
+          "key": "KAN"
+        },
+        {
+          "displayName": "MET",
+          "fullName": "Methicillin",
+          "antimicrobialClass": "Beta-Lactam",
+          "key": "MET"
+        },
+        {
+          "displayName": "PEN",
+          "fullName": "Penicillin",
+          "antimicrobialClass": "Beta-lactams",
+          "key": "PEN"
+        },
+        {
+          "displayName": "VAN",
+          "fullName": "Vancomycin",
+          "antimicrobialClass": "Glycopeptides",
+          "key": "VAN"
+        },
+        {
+          "displayName": "TEC",
+          "fullName": "Teicoplanin",
+          "antimicrobialClass": "Glycopeptides",
+          "key": "TEC"
+        },
+        {
+          "displayName": "CLI",
+          "fullName": "Clindamycin",
+          "antimicrobialClass": "Lincosamides",
+          "key": "CLI"
+        },
+        {
+          "displayName": "ERY",
+          "fullName": "Erythromycin",
+          "antimicrobialClass": "Macrolides",
+          "key": "ERY"
+        },
+        {
+          "displayName": "MUP",
+          "fullName": "Mupirocin",
+          "antimicrobialClass": "Mupirocin",
+          "key": "MUP"
+        },
+        {
+          "displayName": "LNZ",
+          "fullName": "Linezolid",
+          "antimicrobialClass": "Oxazolidinone",
+          "key": "LNZ"
+        },
+        {
+          "displayName": "TCY",
+          "fullName": "Tetracycline",
+          "antimicrobialClass": "Tetracyclines",
+          "key": "TCY"
+        },
+        {
+          "displayName": "TMP",
+          "fullName": "Trimethoprim",
+          "antimicrobialClass": "Diaminopyrimidine",
+          "key": "TMP"
+        },
+        {
+          "displayName": "DAP",
+          "fullName": "Daptomycin",
+          "antimicrobialClass": "Lipopeptides",
+          "key": "DAP"
+        },
+        {
+          "displayName": "RIF",
+          "fullName": "Rifampicin",
+          "antimicrobialClass": "Rifamycin",
+          "key": "RIF"
+        },
+        {
+          "displayName": "CIP",
+          "fullName": "Ciprofloxacin",
+          "antimicrobialClass": "Fluoroquinolones",
+          "key": "CIP"
+        },
+        {
+          "displayName": "MFX",
+          "fullName": "Moxifloxacin",
+          "antimicrobialClass": "Fluoroquinolones",
+          "key": "MFX"
+        }
+      ]
+    },
+    "id": "5a956e031ff4b200075f5939"
+  },
+  "status": "READY",
+  "uuid": "zuqizqwqlf1p"
+}

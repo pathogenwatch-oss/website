@@ -4,6 +4,7 @@ import Menu from 'libmicroreact/menu';
 
 import DropArea from '~/components/drop-area';
 import Fade from '~/components/fade';
+import DownloadButton from '../downloads/DownloadButton.react';
 
 import { CSV_FILENAME_REGEX, parseCsvToJson, parseMetadata } from '~/utils/Metadata';
 
@@ -22,7 +23,7 @@ class Button extends React.Component {
   }
 }
 
-export default function ({ addMetadata, numberOfRows, clearMetadata }) {
+export default function ({ addMetadata, numberOfRows, clearMetadata, generateCSV }) {
   const [ isOpen, toggleIsOpen ] = React.useState(false);
   const [ csvError, setCsvError ] = React.useState(null);
 
@@ -84,7 +85,14 @@ export default function ({ addMetadata, numberOfRows, clearMetadata }) {
       <p>
         The <strong>name</strong> column is used to match rows to genome records.
         <br />
-        <a href="" download="genomes.csv">Download names of the genomes you own in this view</a>.
+        <DownloadButton
+          className="wgsa-link-button"
+          filename="genomes.csv"
+          generateFile={generateCSV}
+        >
+          Download names of your uploaded genomes in this view
+        </DownloadButton>
+        {/* <a href="" download="genomes.csv">Download names of your uploaded genomes in this view</a> */}
       </p>
       <p>
         We recommend you include the following columns:

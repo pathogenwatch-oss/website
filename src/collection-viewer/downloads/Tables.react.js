@@ -1,6 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
+import DownloadButton from './DownloadButton.react';
+
 import { getGenomes, getActiveGenomeIds, getCollection, hasMetadata } from '../selectors';
 import { getTables, hasTyping, hasAMR } from '../table/selectors';
 
@@ -12,58 +14,8 @@ import {
   generateAMRProfile,
   generateAMRSNPs,
   generateAMRGenes,
-  createCSVLink } from './client-side';
+} from './client-side';
 
-const DownloadButton = React.createClass({
-  getInitialState() {
-    return {
-      link: null,
-    };
-  },
-  componentWillReceiveProps(nextProps) {
-    if (this.props.genomeIds !== nextProps.genomeIds) {
-      this.setState({ link: null });
-    }
-  },
-  componentDidUpdate(_, previous) {
-    if (!previous.link && this.state.link) {
-      this.link.click();
-    }
-  },
-  onClick() {
-    this.props.generateFile()
-      .then(data => {
-        this.setState({ link: createCSVLink(data) });
-      });
-  },
-  render() {
-    const { filename, title, children } = this.props;
-    if (this.state.link) {
-      return (
-        <a
-          ref={el => { this.link = el; }}
-          href={this.state.link}
-          target="_blank" rel="noopener"
-          download={filename}
-          title={title}
-          className="mdl-button"
-        >
-          {children}
-        </a>
-      );
-    }
-
-    return (
-      <button
-        onClick={this.onClick}
-        title={title}
-        className="mdl-button"
-      >
-        {children}
-      </button>
-    );
-  },
-});
 
 const items = [
   {
@@ -120,14 +72,17 @@ const DownloadsMenu = (props) => {
     <li>
       <h4>Tables</h4>
       <ul>
-        { items.map(item => (item.hideFromMenu(props) ? null : <li key={item.filenameSegment}>
-          <DownloadButton
-            filename={formatCollectionFilename(collection, item.filenameSegment)}
-            genomeIds={genomeIds}
-            generateFile={() => item.getFileContents({ genomes, genomeIds, tables })}
-          >
-            {item.description}</DownloadButton>
-        </li>)) }
+        { items.map(item => (item.hideFromMenu(props) ? null :
+          <li key={item.filenameSegment}>
+            <DownloadButton
+              className="mdl-button"
+              filename={formatCollectionFilename(collection, item.filenameSegment)}
+              genomeIds={genomeIds}
+              generateFile={() => item.getFileContents({ genomes, genomeIds, tables })}
+            >
+              {item.description}
+            </DownloadButton>
+          </li>)) }
       </ul>
     </li>
   );

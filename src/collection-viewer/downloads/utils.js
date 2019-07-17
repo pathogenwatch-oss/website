@@ -1,5 +1,5 @@
-import { getServerPath } from '../../utils/Api';
-import Organisms from '../../organisms';
+import { getServerPath } from '~/utils/Api';
+import Organisms from '~/organisms';
 
 export const encode = encodeURIComponent;
 export const downloadPath = getServerPath('/download/file');
