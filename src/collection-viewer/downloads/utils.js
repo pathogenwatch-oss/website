@@ -9,6 +9,9 @@ export function createDownloadKey(id) {
   return typeof id === 'string' ? id : JSON.stringify(id);
 }
 
-export function formatCollectionFilename({ uuid }, suffix = '') {
-  return [ 'pathogenwatch', Organisms.nickname, uuid, suffix ].join('-');
+export function formatCollectionFilename(collection, suffix = '') {
+  if (collection.isClusterView) {
+    return `pathogenwatch-${suffix}`;
+  }
+  return [ 'pathogenwatch', Organisms.nickname, collection.uuid, suffix ].join('-');
 }

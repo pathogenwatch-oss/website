@@ -40,22 +40,23 @@ export default ({ organism, metadata, isOpen, onButtonClick }) => (
     >
       { metadata.title || 'About Collection' }
     </MarkdownHeading>
-    <span className="wgsa-card-metadata-inliner wgsa-collection-summary">
+    <p className="wgsa-card-metadata-inliner">
       <CardMetadata title="Organism" icon="bug_report">
         {organism}
       </CardMetadata>
       <CardMetadata tooltip={metadata.dateCreated.toLocaleDateString()} icon="access_time">
         {dateSince(metadata.dateCreated, new Date())} ago
       </CardMetadata>
-    </span>
+    </p>
     { metadata.description ?
       <Markdown source={metadata.description} /> :
       <p>(no description)</p> }
     { metadata.pmid &&
-        <p>
+        <p className="pw-append-icon">
           <PubMedLink pmid={metadata.pmid}>
             View Publication
           </PubMedLink>
+          <i className="material-icons">launch</i>
         </p> }
     { metadata.owner === 'me' && <hr /> }
     { metadata.owner === 'me' && <Access access={metadata.access} /> }

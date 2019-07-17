@@ -72,16 +72,14 @@ export function parseMetadata(row) {
     userDefined[key] = value;
   }
 
-  const values = {
-    name: genomeName,
-    year: year ? parseInt(year, 10) : null,
-    month: month ? parseInt(month, 10) : null,
-    day: day ? parseInt(day, 10) : null,
-    latitude: latitude ? parseFloat(latitude) : null,
-    longitude: longitude ? parseFloat(longitude) : null,
-    pmid: pmid || null,
-    userDefined,
-  };
+  const values = { name: genomeName, userDefined };
+
+  if (year) values.year = parseInt(year, 10);
+  if (month) values.month = parseInt(month, 10);
+  if (day) values.day = parseInt(day, 10);
+  if (latitude) values.latitude = parseFloat(latitude);
+  if (longitude) values.longitude = parseFloat(longitude);
+  if (pmid) values.pmid = pmid;
 
   validateMetadata(values);
 

@@ -121,17 +121,21 @@ export const hasHighlightedIds = createSelector(
   ids => ids.size > 0
 );
 
-export const getActiveGenomeIds = createSelector(
+export const getFilteredGenomeIds = createSelector(
   getFilter,
   filter => Array.from(filter.active ? filter.ids : filter.unfilteredIds)
+);
+
+export const getActiveGenomeIds = createSelector(
+  getHighlightedIds,
+  getFilteredGenomeIds,
+  (highlighted, visible) => Array.from(highlighted.size ? highlighted : visible)
 );
 
 export const getActiveGenomes = createSelector(
   getGenomes,
   getActiveGenomeIds,
-  getHighlightedIds,
-  (genomes, visible, highlighted) =>
-    Array.from(highlighted.size ? highlighted : visible).map(id => genomes[id])
+  (genomes, ids) => ids.map(id => genomes[id])
 );
 
 export const getCollectionMetadata = createSelector(
@@ -160,7 +164,7 @@ export const getCollectionGenomeIds = createSelector(
 );
 
 export const hasMetadata = createSelector(
-  getActiveGenomes,
+  getGenomeList,
   genomes =>
     genomes.some(({ date, pmid, userDefined }) => !!(
       (date && date.year) ||

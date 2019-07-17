@@ -92,7 +92,6 @@ export default function ({ addMetadata, numberOfRows, clearMetadata, generateCSV
         >
           Download names of your uploaded genomes in this view
         </DownloadButton>
-        {/* <a href="" download="genomes.csv">Download names of your uploaded genomes in this view</a> */}
       </p>
       <p>
         We recommend you include the following columns:
@@ -103,13 +102,6 @@ export default function ({ addMetadata, numberOfRows, clearMetadata, generateCSV
         When providing a date, month and day are optional. Coordinates should be
         provided in decimal degrees. Extra columns will be included in the metadata table.
       </p>
-      {/* <p className="pw-viewer-add-metadata-actions">
-        <button className="wgsa-link-button" onClick={clearMetadata}>
-          <i className="material-icons wgsa-button-icon">file_download</i>
-          Download names
-        </button>
-
-      </p> */}
       <DropArea className="pw-viewer-add-metadata-form" onFiles={handleFiles}>
         { csvError ?
           <p key="error">

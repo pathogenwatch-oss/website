@@ -1,3 +1,7 @@
+.wgsa-about-collection-dropdown.libmr-Menu-element {
+  max-width: calc(400px + 24px * 2);
+}
+
 .wgsa-about-collection-dropdown .libmr-Menu-content {
   padding: 24px;
 }
@@ -8,13 +12,10 @@
   color: #673c90;
 }
 
-.wgsa-about-collection-dropdown dl {
-  display: flex;
-  box-sizing: border-box;
-  justify-content: space-between;
-  padding-bottom: 8px;
+.wgsa-about-collection-dropdown p {
+  margin-bottom: 12px;
 }
 
-.wgsa-about-collection-dropdown dl > div {
-  width: calc(50% - 8px);
+.wgsa-about-collection-dropdown .pw-append-icon {
+  color: #673c90;
 }

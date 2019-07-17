@@ -6,7 +6,7 @@ import { getCountryCentroid } from '~/utils/country';
 import {
   getGenomeList,
   getGenomes,
-  getActiveGenomeIds,
+  getFilteredGenomeIds,
   getHighlightedIds,
 } from '../selectors';
 import { getLassoPath, getViewByCountry } from '~/map/selectors';
@@ -50,7 +50,7 @@ export const getPositionExtractor = createSelector(
 export const getMarkers = createSelector(
   getPositionExtractor,
   getGenomes,
-  getActiveGenomeIds,
+  getFilteredGenomeIds,
   getHighlightedIds,
   getColourGetter,
   (positionExtractor, genomes, visibleIds = [], filteredIds, colourGetter) => {
@@ -78,4 +78,4 @@ export const getMarkers = createSelector(
   }
 );
 
-export const getMarkerIds = getActiveGenomeIds;
+export const getMarkerIds = getFilteredGenomeIds;

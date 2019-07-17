@@ -6,3 +6,4 @@ config.json
 fastas
 .idea/
 package-lock.json
+static_data/clustering

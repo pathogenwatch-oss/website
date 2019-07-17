@@ -23,7 +23,7 @@ app.use(bodyParser.json());
 
 app.use(express.static('public'));
 
-const getCollectionPath = species => `${__dirname}/static_data/${species}`;
+const getPath = folder => `${__dirname}/static_data/${folder}`;
 
 const apiRouter = express.Router();
 
@@ -39,23 +39,34 @@ apiRouter.get('/collection', (req, res) => {
 
 apiRouter.get('/collection/:id', (req, res) => {
   setTimeout(() => {
-    res.sendFile(`${getCollectionPath(req.params.id)}/collection.json`);
+    res.sendFile(`${getPath(req.params.id)}/collection.json`);
   }, 0);
 });
 
-// let subtreeError = false;
 apiRouter.get('/collection/:id/tree/:subtree', (req, res) => {
-  // subtreeError = !subtreeError;
   setTimeout(
     () =>
-      // subtreeError ?
-      //   res.sendStatus(500) :
       res.sendFile(
-        `${getCollectionPath(req.params.id)}/${req.params.subtree}.json`
+        `${getPath(req.params.id)}/${req.params.subtree}.json`
       ),
     1000
   );
 });
+
+
+/* Clustering */
+apiRouter.get('/clustering/:id', (req, res) => {
+  setTimeout(() => res.sendFile(`${getPath('clustering')}/collection.json`), 1000);
+});
+
+apiRouter.get('/genome/:id/clusters', (req, res) => {
+  setTimeout(() => res.sendFile(`${getPath('clustering')}/clusters.json`), 1000);
+});
+
+apiRouter.post('/genome/:id/clusters/edges', (req, res) => {
+  setTimeout(() => res.sendFile(`${getPath('clustering')}/edges.json`), 1000);
+});
+
 
 apiRouter.post('/collection', (req, res) =>
   setTimeout(() => res.json({ collectionId: '123' }), 2000)

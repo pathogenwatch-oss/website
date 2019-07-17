@@ -19,9 +19,9 @@ export function formatGenomeRecords(genomes) {
       const { antibiotics = [] } = analysis.paarsnp;
       analysis.paarsnp = {
         ...analysis.paarsnp,
-        antibiotics: antibiotics.reduce((abs, antibiotic) => {
-          abs[antibiotic.name] = antibiotic;
-          return abs;
+        antibiotics: antibiotics.reduce((memo, antibiotic) => {
+          memo[antibiotic.name] = antibiotic;
+          return memo;
         }, {}),
       };
     }

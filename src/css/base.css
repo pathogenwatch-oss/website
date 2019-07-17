@@ -128,3 +128,14 @@ sup {
 .danger {
   color: #d11b1b;
 }
+
+
+.pw-append-icon {
+  display: flex;
+  align-items: center;
+}
+
+.pw-append-icon .material-icons {
+  font-size: 16px;
+  margin-left: 4px;
+}
