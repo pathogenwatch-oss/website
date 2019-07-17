@@ -34,7 +34,7 @@ module.exports = ({ user, token }) =>
           'references.uuid': 1,
         })
         .execPopulate()
-        .then(() => Genome.getForCollection({ _id: { $in: collection.genomes } }))
+        .then(() => Genome.getForCollection({ _id: { $in: collection.genomes } }, user))
         .then(genomes => {
           const doc = collection.toObject({ user });
           doc.genomes = genomes;

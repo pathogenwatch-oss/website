@@ -323,7 +323,7 @@ schema.statics.getSort = function (sort = 'createdAt-') {
   return { [sortKey]: sortOrder };
 };
 
-schema.statics.getForCollection = function (query) {
+schema.statics.getForCollection = function (query, user = {}) {
   return this.find(query, {
     'analysis.core.fp.reference': 1,
     'analysis.core.summary': 1,
@@ -351,9 +351,10 @@ schema.statics.getForCollection = function (query) {
     reference: 1,
     userDefined: 1,
     year: 1,
+    _user: 1,
   })
     .lean()
-    .then(genomes => genomes.map(doc => Object.assign(doc, { uuid: doc._id })));
+    .then(genomes => genomes.map(doc => toObject(doc, user)));
 };
 
 schema.statics.lookupCgMlstScheme = async function (genomeId, user) {
