@@ -22,6 +22,6 @@ module.exports = ({ user, token, name }) => {
       return Genome.getForCollection(
         { _id: { $in: leafIds, $nin: genomes }, population: true, 'analysis.core.fp.reference': name }
       )
-      .then(docs => ({ status, newick, genomes: docs }));
+        .then(docs => ({ status, newick, genomes: docs }));
     });
 };

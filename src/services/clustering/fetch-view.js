@@ -29,7 +29,7 @@ module.exports = async ({ user, genomeId, threshold }) => {
   const genomes = await Genome.getForCollection(query);
 
   const now = new Date().toISOString();
-  const genome = genomes.find(_ => _._id && _._id.toString() === genomeId);
+  const genome = genomes.find(_ => _.id && _.id.toString() === genomeId);
   const name = genome.name || 'Unknown';
   const { speciator = {} } = genome.analysis;
   const { organismId = null } = speciator;
