@@ -7,7 +7,7 @@ export default ({ className, pmid, children = 'PubMed' }) => (
       href={`http://www.ncbi.nlm.nih.gov/pubmed/${pmid}`}
       target="_blank"
       rel="noopener"
-      title="View Publication"
+      title={`PMID ${pmid}`}
     >
       {children}
     </a> :

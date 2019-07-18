@@ -4,12 +4,11 @@ import { connect } from 'react-redux';
 
 import AboutCollection from './AboutCollection.react';
 
-import { getViewer } from '../../collection-viewer/selectors';
+import { getViewer, getCollectionMetadata } from '../selectors';
 
-import { getCollectionMetadata } from '../../collection-viewer/selectors';
 import { toggleAboutCollection } from './actions';
 
-import Organisms from '../../organisms';
+import Organisms from '~/organisms';
 
 function mapStateToProps(state) {
   const { aboutCollectionOpen } = getViewer(state);

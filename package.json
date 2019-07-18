@@ -50,7 +50,7 @@
     "leaflet": "^1.2.0",
     "leaflet-lassoselect": "https://gitlab.com/cgps/leaflet-lassoselect#leaflet-1.x",
     "leaflet.markercluster": "^1.2.0",
-    "libmicroreact": "https://gitlab.com/cgps/libmicroreact#5cddecd50890d68aef5819aa7180d17f4b749bc1",
+    "libmicroreact": "https://gitlab.com/cgps/libmicroreact#v1.3.6",
     "lodash.sortby": "^4.7.0",
     "name-all-modules-plugin": "^1.0.1",
     "node-forge": "^0.8.0",

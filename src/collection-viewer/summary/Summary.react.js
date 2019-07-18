@@ -2,8 +2,8 @@ import React from 'react';
 import { connect } from 'react-redux';
 import classnames from 'classnames';
 
-import PieChart from '../../cgps-commons/PieChart.react';
-import ChipButton from '../../cgps-commons/ChipButton.react';
+import PieChart from '~/cgps-commons/PieChart.react';
+import ChipButton from '~/cgps-commons/ChipButton.react';
 
 import { activateFilter } from '../filter/actions';
 

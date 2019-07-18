@@ -1,3 +1,7 @@
+.Pane {
+  background: #fff;
+}
+
 .wgsa-no-overflow-pane .Pane {
   overflow: hidden;
 }

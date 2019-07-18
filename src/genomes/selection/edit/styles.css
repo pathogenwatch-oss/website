@@ -28,42 +28,11 @@
   margin-right: 4px;
 }
 
-.pw-edit-metadata-form {
-  border: 2px dashed rgba(0, 0, 0, 0.28);
-  cursor: pointer;
-  padding: 16px;
-  align-self: stretch;
-  margin-left: 0;
-  margin-right: 0;
-  transition: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-  transition-property: border-color;
-  text-align: center;
-}
-
-.pw-edit-metadata-form > * {
-  pointer-events: none;
-}
-
-.pw-edit-metadata-form input {
-  position: absolute;
-  z-index: -1;
-  opacity: 0;
-}
-
-.pw-edit-metadata-form p {
-  margin: 0;
-}
-
 .pw-edit-metadata-link {
   color: #673c90;
   font-weight: 500;
   margin-bottom: 8px;
   text-decoration: underline;
-}
-
-.pw-edit-metadata-form.indicating {
-  color: #3c7383;
-  border-color: currentColor;
 }
 
 .pw-edit-metadata-progress {

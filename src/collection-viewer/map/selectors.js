@@ -1,16 +1,16 @@
 import { createSelector } from 'reselect';
 import { contains } from 'leaflet-lassoselect/utils';
 
-import { getCountryCentroid } from '../../utils/country';
+import { getCountryCentroid } from '~/utils/country';
 
 import {
   getGenomeList,
   getGenomes,
-  getActiveGenomeIds,
+  getFilteredGenomeIds,
   getHighlightedIds,
-  getColourGetter,
 } from '../selectors';
-import { getLassoPath, getViewByCountry } from '../../map/selectors';
+import { getLassoPath, getViewByCountry } from '~/map/selectors';
+import { getColourGetter } from '../table/selectors';
 
 export const getGenomeIdsInPath = createSelector(
   getGenomeList,
@@ -50,7 +50,7 @@ export const getPositionExtractor = createSelector(
 export const getMarkers = createSelector(
   getPositionExtractor,
   getGenomes,
-  getActiveGenomeIds,
+  getFilteredGenomeIds,
   getHighlightedIds,
   getColourGetter,
   (positionExtractor, genomes, visibleIds = [], filteredIds, colourGetter) => {
@@ -78,4 +78,4 @@ export const getMarkers = createSelector(
   }
 );
 
-export const getMarkerIds = getActiveGenomeIds;
+export const getMarkerIds = getFilteredGenomeIds;

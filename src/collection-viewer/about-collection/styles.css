@@ -1,68 +1,21 @@
-.wgsa-about-collection-dropdown {
-  margin-left: 0.75rem;
+.wgsa-about-collection-dropdown.libmr-Menu-element {
+  max-width: calc(400px + 24px * 2);
 }
 
-.wgsa-about-collection-dropdown__title {
-  margin: 8px 0;
+.wgsa-about-collection-dropdown .libmr-Menu-content {
+  padding: 24px;
+}
+
+.wgsa-about-collection-dropdown h3 {
+  margin: 0 0 8px;
   font-size: 1.5rem;
-  line-height: 1.5;
   color: #673c90;
 }
 
-.wgsa-about-collection-dropdown dl {
-  display: flex;
-  box-sizing: border-box;
-  justify-content: space-between;
-  padding-bottom: 8px;
+.wgsa-about-collection-dropdown p {
+  margin-bottom: 12px;
 }
 
-.wgsa-about-collection-dropdown dl > div {
-  width: calc(50% - 8px);
-}
-
-.wgsa-header-dropdown {
-  position: relative;
-}
-
-.wgsa-header-dropdown__content {
-  background-color: #fff;
-  color: rgba(0,0,0,0.87);
-  box-shadow: 0 1px 5px 0 rgba(0,0,0,0.2),0 2px 2px 0 rgba(0,0,0,0.14),0 3px 1px -2px rgba(0,0,0,0.12);
-  max-width: 560px;
-  position: absolute;
-  padding: 16px 32px;
-  opacity: 0;
-  top: calc(100% + 24px);
-  transition: .28s cubic-bezier(.4,0,.2,1);
-  transition-property: opacity;
-  visibility: hidden;
-  min-width: 400px;
-}
-
-.wgsa-header-dropdown .wgsa-header-dropdown__content::before {
-  border-color: transparent;
-  border-bottom-color: #fff;
-  border-style: dashed dashed solid;
-  border-width: 0 8.5px 8.5px;
-  content: "";
-  position: absolute;
-  left: 6.5px;
-  top: 37px;
-  z-index: 1;
-  top: -8.5px;
-  height: 0;
-  width: 0;
-}
-
-.wgsa-header-dropdown--is-open .wgsa-header-dropdown__content {
-  visibility: visible;
-  opacity: 1;
-}
-
-.wgsa-header-dropdown--right .wgsa-header-dropdown__content {
-  right: 0;
-}
-
-.wgsa-header-dropdown--right .wgsa-header-dropdown__content::before {
-  left: calc(100% - 25.5px);
+.wgsa-about-collection-dropdown .pw-append-icon {
+  color: #673c90;
 }

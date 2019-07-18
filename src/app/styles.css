@@ -51,6 +51,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  margin: 0;
 }
 
 .wgsa-error-message {
@@ -153,4 +154,12 @@
   font-size: inherit;
   color: color(#3c7383 shade(20%));
   text-decoration: underline;
+}
+
+.wgsa-link-button:hover {
+  text-decoration: none;
+}
+
+.wgsa-link-button .wgsa-button-icon {
+  font-size: 18px;
 }

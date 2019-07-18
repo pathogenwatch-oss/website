@@ -3,10 +3,10 @@ import { connect } from 'react-redux';
 
 import FixedTable from '../../fixed-table';
 import TableSwitcher from '../table/Switcher.react';
+import Fade from '~/components/fade';
 
-import { getCollection } from '../../collection-viewer/selectors';
-import { getActiveGenomes } from '../selectors';
-import { getVisibleTable, getFixedGroupWidth } from '../table/selectors';
+import { getCollection, getActiveGenomes } from '../selectors';
+import { getVisibleTable, getVisibleTableName, getFixedGroupWidth } from '../table/selectors';
 
 import { onRowClick } from './thunks';
 
@@ -55,15 +55,18 @@ const Table = React.createClass({
         onTouchMove={preventDefault}
       >
         <TableSwitcher />
-        <FixedTable { ...this.props }
-          rowClickHandler={this.props.onRowClick}
-          getDefaultHeaderContent={this.props.getDefaultHeaderContent}
-        />
+        <Fade>
+          <FixedTable
+            key={this.props.tableName}
+            { ...this.props }
+            rowClickHandler={this.props.onRowClick}
+            getDefaultHeaderContent={this.props.getDefaultHeaderContent}
+          />
+        </Fade>
         { this.props.data.length === 0 &&
           <p className="wgsa-text-overlay wgsa-hipster-style">
             No matching results.
-          </p>
-        }
+          </p> }
       </section>
     );
   },
@@ -92,6 +95,7 @@ function mapStateToProps(state) {
     collection: getCollection(state),
     data: getActiveGenomes(state),
     fixedGroupWidth: getFixedGroupWidth(state),
+    tableName: getVisibleTableName(state),
   };
 }
 
@@ -110,7 +114,7 @@ function mapStateToColumn(column, state, dispatch) {
 }
 
 function mergeProps(state, { dispatch }, props) {
-  const { data, columns, activeColumns } = state;
+  const { data, columns, activeColumns, tableName } = state;
 
   const mappedColumns =
     columns.map(column => mapStateToColumn(column, state, dispatch));
@@ -121,6 +125,7 @@ function mergeProps(state, { dispatch }, props) {
     ...props,
     activeColumns,
     data,
+    tableName,
     columns: mappedColumns,
     onRowClick: row => dispatch(onRowClick(row)),
     getDefaultHeaderContent: columnProps => (

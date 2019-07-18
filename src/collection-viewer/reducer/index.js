@@ -12,6 +12,7 @@ import tree from '../tree/reducer';
 import table from '../table/reducer';
 import offline from '../offline/reducer';
 import search from '../search/reducer';
+import metadata from '../private-metadata/reducer';
 
 import clusterView from '../../cluster-viewer/reducer';
 
@@ -23,15 +24,16 @@ const reducer = combineReducers({
     collection,
   }),
   aboutCollectionOpen,
+  clusterView,
   downloads,
   filter,
   highlight,
-  summary,
-  tree,
-  table,
+  metadata,
   offline,
   search,
-  clusterView,
+  summary,
+  table,
+  tree,
 });
 
 const initialState = reducer(undefined, {});

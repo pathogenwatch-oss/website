@@ -85,10 +85,11 @@
   background-color: #673c90;
 }
 
-.wgsa-header-collection-options > * {
-  margin-left: 8px;
+.wgsa-header-collection-options .mdl-button--icon {
+  width: 40px;
+  height: 40px;
 }
 
-.wgsa-header-collection-options > :first-child {
-  margin-left: 0;
+.wgsa-header-collection-options > * {
+  margin-left: 8px;
 }

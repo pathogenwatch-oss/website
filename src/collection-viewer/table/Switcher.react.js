@@ -4,8 +4,11 @@ import classnames from 'classnames';
 
 import Multi from './Multi.react';
 
-import { getVisibleTableName, hasMetadata, hasTyping, hasAMR } from './selectors';
+import { getVisibleTableName, hasTyping, hasAMR } from './selectors';
+import { hasMetadata } from '../selectors';
+
 import { setTable } from './actions';
+
 import { tableKeys, tableDisplayNames } from '../constants';
 
 function mapStateToProps(state, { table }) {

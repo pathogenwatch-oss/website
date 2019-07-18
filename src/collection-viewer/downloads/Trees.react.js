@@ -41,49 +41,49 @@ const DownloadButton = ({ link, filename, title, children }) => (
 
 const DownloadsMenu = ({ collection, genomeIds, prefix, tree }) => (
   tree ?
-  <li>
-    <h4>Trees</h4>
-    <ul>
-      <li>
-        <DownloadForm
-          link={`${prefix}/core-allele-distribution`}
-          filename={formatCollectionFilename(collection, 'core-allele-distribution.csv')}
-          genomeIds={genomeIds}
-          tree={tree}
-        >
+    <li>
+      <h4>Trees</h4>
+      <ul>
+        <li>
+          <DownloadForm
+            link={`${prefix}/core-allele-distribution`}
+            filename={formatCollectionFilename(collection, 'core-allele-distribution.csv')}
+            genomeIds={genomeIds}
+            tree={tree}
+          >
           Core Allele Distribution
-        </DownloadForm>
-      </li>
-      <li>
-        <DownloadForm
-          link={`${prefix}/score-matrix`}
-          filename={formatCollectionFilename(collection, 'score-matrix.csv')}
-          genomeIds={genomeIds}
-          tree={tree}
-        >
+          </DownloadForm>
+        </li>
+        <li>
+          <DownloadForm
+            link={`${prefix}/score-matrix`}
+            filename={formatCollectionFilename(collection, 'score-matrix.csv')}
+            genomeIds={genomeIds}
+            tree={tree}
+          >
           Score Matrix
-        </DownloadForm>
-      </li>
-      <li>
-        <DownloadForm
-          link={`${prefix}/difference-matrix`}
-          filename={formatCollectionFilename(collection, 'difference-matrix.csv')}
-          genomeIds={genomeIds}
-          tree={tree}
-        >
+          </DownloadForm>
+        </li>
+        <li>
+          <DownloadForm
+            link={`${prefix}/difference-matrix`}
+            filename={formatCollectionFilename(collection, 'difference-matrix.csv')}
+            genomeIds={genomeIds}
+            tree={tree}
+          >
           Difference Matrix
-        </DownloadForm>
-      </li>
-      <li>
-        <DownloadButton
-          link={`${prefix}/variance-summary`}
-          filename={formatCollectionFilename(collection, 'variance-summary.csv')}
-        >
+          </DownloadForm>
+        </li>
+        <li>
+          <DownloadButton
+            link={`${prefix}/variance-summary`}
+            filename={formatCollectionFilename(collection, 'variance-summary.csv')}
+          >
           Variance Summary
-        </DownloadButton>
-      </li>
-    </ul>
-  </li> : null
+          </DownloadButton>
+        </li>
+      </ul>
+    </li> : null
 );
 
 DownloadsMenu.propTypes = {

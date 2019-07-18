@@ -28,8 +28,9 @@ function getHeaderContent(status) {
 }
 
 export default connect(mapStateToProps)(
-  ({ status }) =>
+  ({ status }) => (
     <Header className={getHeaderClassName(status)}>
       {getHeaderContent(status)}
     </Header>
+  )
 );

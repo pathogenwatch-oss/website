@@ -1,22 +1,77 @@
 import { createSelector } from 'reselect';
 
-import { getViewer, getCollection } from '../selectors';
+import { getViewer, getCollection, hasMetadata } from '../selectors';
+import { getMetadataColumns, getActiveMetadataColumn } from '../data-tables/selectors';
 
-import Organisms from '../../organisms';
+import { createColourGetter } from '../amr-utils';
+import Organisms from '~/organisms';
+
+import { tableKeys } from '../constants';
 
 export const getTableState = state => getViewer(state).table;
-
-export const getTables = state => getTableState(state).entities;
-
-export const getVisibleTableName = state => getTableState(state).visible;
-export const getDataTableName = state => getTableState(state).activeData;
 export const getAMRTableName = state => getTableState(state).activeAMR;
+export const getTableEntities = state => getTableState(state).entities;
 
-export const getVisibleTable = createSelector(
-  getTables,
-  getVisibleTableName,
-  (tables, name) => tables[name]
+const getMetadataTable = createSelector(
+  getTableEntities,
+  getMetadataColumns,
+  getActiveMetadataColumn,
+  hasMetadata,
+  ({ metadata }, columns, activeColumn, active) => ({
+    ...metadata,
+    active,
+    activeColumn,
+    columns,
+  })
 );
+
+export const getTables = createSelector(
+  getTableEntities,
+  getMetadataTable,
+  (tables, metadata) => ({
+    ...tables,
+    metadata,
+  }),
+);
+
+export const hasTyping = createSelector(
+  getTables,
+  tables => tables.typing.active
+);
+
+const getInitialTable = createSelector(
+  hasMetadata,
+  hasTyping,
+  (metadata, typing) => {
+    if (metadata) return tableKeys.metadata;
+    if (typing) return tableKeys.typing;
+    return tableKeys.stats;
+  }
+);
+
+export const getVisibleTableName = createSelector(
+  state => getTableState(state).visible,
+  getInitialTable,
+  hasTyping,
+  (visible, initial) => {
+    if (visible !== null) return visible;
+    return initial;
+  }
+);
+
+export const getDataTableName = createSelector(
+  state => getTableState(state).activeData,
+  getInitialTable,
+  (active, initial) => {
+    if (active !== null) return active;
+    return initial;
+  }
+);
+
+export const getVisibleTable = state => {
+  const name = getVisibleTableName(state);
+  return getTables(state)[name];
+};
 
 export const getActiveDataTable = createSelector(
   getTables,
@@ -28,16 +83,6 @@ export const getActiveAMRTable = createSelector(
   getTables,
   getAMRTableName,
   (tables, name) => tables[name]
-);
-
-export const hasMetadata = createSelector(
-  getTables,
-  tables => tables.metadata.active
-);
-
-export const hasTyping = createSelector(
-  getTables,
-  tables => tables.typing.active
 );
 
 export const hasAMR = createSelector(
@@ -64,4 +109,10 @@ export const getFixedGroupWidth = createSelector(
     if (!typing) width -= 53;
     return width;
   }
+);
+
+export const getColourGetter = createSelector(
+  getTableState,
+  getAMRTableName,
+  (tables, name) => createColourGetter(tables.entities[name], tables.multi)
 );

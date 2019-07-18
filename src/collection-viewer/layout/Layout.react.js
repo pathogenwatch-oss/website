@@ -11,7 +11,7 @@ import Map from '../map';
 import Summary from '../summary';
 import Table from '../table';
 
-import ClusterViewNetwork from '../../cluster-viewer/Network.react';
+import ClusterViewNetwork from '~/cluster-viewer/Network.react';
 
 import { getVisibleTree } from '../tree/selectors';
 import { getCollection } from '../selectors';

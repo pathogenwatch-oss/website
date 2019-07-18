@@ -2,13 +2,11 @@ import { FETCH_COLLECTION } from '../actions';
 import { SET_LABEL_COLUMN } from '../table/actions';
 import { onHeaderClick } from './thunks';
 
-import { hasTyping } from './utils';
-
 import { systemDataColumns } from './constants';
 import * as constants from '../table/constants';
 import { tableKeys } from '../constants';
 
-import Organisms from '../../organisms';
+import Organisms from '~/organisms';
 
 const initialState = {
   name: tableKeys.typing,
@@ -100,6 +98,11 @@ export function getTypingColumnGroups({ isClusterView }, uiOptions) {
   ]
     .filter(_ => _)
     .map(fillColumnDefs);
+}
+
+export function hasTyping({ noPopulation, noMLST, ngMast, genotyphi }) {
+  if (noPopulation && noMLST && !ngMast && !genotyphi) return false;
+  return true;
 }
 
 export default function (state = initialState, { type, payload }) {

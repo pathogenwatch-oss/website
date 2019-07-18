@@ -1,17 +1,36 @@
 import { createSelector } from 'reselect';
 import removeMarkdown from 'remove-markdown';
 
-import { getTableState, getAMRTableName } from './table/selectors';
 import { getNetworkFilteredIds } from '../cluster-viewer/selectors';
+import { getPrivateMetadata } from './private-metadata/selectors';
 
-import { createColourGetter } from './amr-utils';
 import { filterKeys } from './filter/constants';
 
 export const getViewer = ({ viewer }) => viewer;
 
 export const getCollection = state => getViewer(state).entities.collection;
-export const getGenomes = state => getViewer(state).entities.genomes;
 export const isClusterView = state => getCollection(state).isClusterView;
+export const getGenomes = createSelector(
+  state => getViewer(state).entities.genomes,
+  getPrivateMetadata,
+  (genomes, privateData) => {
+    const merged = { ...genomes };
+    const used = new Set();
+    for (const [ key, shared ] of Object.entries(genomes)) {
+      if (!(shared.name in privateData) || used.has(shared.name)) continue;
+      const { userDefined, ...topLevel } = privateData[shared.name];
+      merged[key] = {
+        ...shared,
+        ...topLevel,
+        userDefined: {
+          ...shared.userDefined,
+          ...userDefined,
+        },
+      };
+    }
+    return merged;
+  }
+);
 
 export const getCollectionTitle = createSelector(
   getCollection,
@@ -84,15 +103,6 @@ export const getFilter = createSelector(
 
 export const getUnfilteredGenomeIds = state => getFilter(state).unfilteredIds;
 
-export const getFilteredGenomes = createSelector(
-  getGenomes,
-  getFilter,
-  (genomes, filter) => {
-    const { active, ids, unfilteredIds } = filter;
-    return Array.from(active ? ids : unfilteredIds).map(id => genomes[id]);
-  }
-);
-
 export const getGenomeList = createSelector(
   getGenomes,
   getUnfilteredGenomeIds,
@@ -111,23 +121,21 @@ export const hasHighlightedIds = createSelector(
   ids => ids.size > 0
 );
 
-export const getActiveGenomeIds = createSelector(
+export const getFilteredGenomeIds = createSelector(
   getFilter,
   filter => Array.from(filter.active ? filter.ids : filter.unfilteredIds)
+);
+
+export const getActiveGenomeIds = createSelector(
+  getHighlightedIds,
+  getFilteredGenomeIds,
+  (highlighted, visible) => Array.from(highlighted.size ? highlighted : visible)
 );
 
 export const getActiveGenomes = createSelector(
   getGenomes,
   getActiveGenomeIds,
-  getHighlightedIds,
-  (genomes, visible, highlighted) =>
-    Array.from(highlighted.size ? highlighted : visible).map(id => genomes[id])
-);
-
-export const getColourGetter = createSelector(
-  getTableState,
-  getAMRTableName,
-  (tables, name) => createColourGetter(tables.entities[name], tables.multi)
+  (genomes, ids) => ids.map(id => genomes[id])
 );
 
 export const getCollectionMetadata = createSelector(
@@ -135,7 +143,7 @@ export const getCollectionMetadata = createSelector(
   collection => ({
     title: collection.title,
     description: collection.description,
-    dateCreated: new Date(collection.createdAt).toLocaleDateString(),
+    dateCreated: new Date(collection.createdAt),
     pmid: collection.pmid,
     owner: collection.owner,
     access: collection.access,
@@ -153,4 +161,19 @@ export const getCollectionGenomeIds = createSelector(
     }
     return collectionGenomes;
   }
+);
+
+export const hasMetadata = createSelector(
+  getGenomeList,
+  genomes =>
+    genomes.some(({ year, pmid, userDefined }) => !!(
+      year ||
+      pmid ||
+      (userDefined && Object.keys(userDefined).length)
+    ))
+);
+
+export const getOwnGenomes = createSelector(
+  getActiveGenomes,
+  genomes => genomes.filter(_ => _.owner === 'me')
 );
