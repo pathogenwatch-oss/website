@@ -7,7 +7,6 @@ import Fade from '~/components/fade';
 
 import { getCollection, getActiveGenomes } from '../selectors';
 import { getVisibleTable, getVisibleTableName, getFixedGroupWidth } from '../table/selectors';
-import { showingAddMetadata } from '../private-metadata/selectors';
 
 import { onRowClick } from './thunks';
 
@@ -36,12 +35,11 @@ const Table = React.createClass({
   },
 
   shouldComponentUpdate(previous) {
-    const { data, columns, filter, showAddMetadata } = this.props;
+    const { data, columns, filter } = this.props;
     return (
       data !== previous.data ||
       columns !== previous.columns ||
-      filter !== previous.filter ||
-      showAddMetadata !== previous.showAddMetadata
+      filter !== previous.filter
     );
   },
 
