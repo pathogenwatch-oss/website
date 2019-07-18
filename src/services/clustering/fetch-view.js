@@ -26,7 +26,7 @@ module.exports = async ({ user, genomeId, threshold }) => {
     'analysis.cgmlst.st': { $in: sts },
     ...Genome.getPrefilterCondition({ user }),
   };
-  const genomes = await Genome.getForCollection(query);
+  const genomes = await Genome.getForCollection(query, user);
 
   const now = new Date().toISOString();
   const genome = genomes.find(_ => _.id && _.id.toString() === genomeId);
