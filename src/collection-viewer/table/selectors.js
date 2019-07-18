@@ -9,7 +9,6 @@ import Organisms from '~/organisms';
 import { tableKeys } from '../constants';
 
 export const getTableState = state => getViewer(state).table;
-export const getDataTableName = state => getTableState(state).activeData;
 export const getAMRTableName = state => getTableState(state).activeAMR;
 export const getTableEntities = state => getTableState(state).entities;
 
@@ -40,18 +39,34 @@ export const hasTyping = createSelector(
   tables => tables.typing.active
 );
 
-export const getVisibleTableName = createSelector(
-  state => getTableState(state).visible,
+const getInitialTable = createSelector(
   hasMetadata,
   hasTyping,
-  (visible, metadata, typing) => {
-    if (visible !== null) return visible;
+  (metadata, typing) => {
     if (metadata) return tableKeys.metadata;
     if (typing) return tableKeys.typing;
     return tableKeys.stats;
   }
 );
 
+export const getVisibleTableName = createSelector(
+  state => getTableState(state).visible,
+  getInitialTable,
+  hasTyping,
+  (visible, initial) => {
+    if (visible !== null) return visible;
+    return initial;
+  }
+);
+
+export const getDataTableName = createSelector(
+  state => getTableState(state).activeData,
+  getInitialTable,
+  (active, initial) => {
+    if (active !== null) return active;
+    return initial;
+  }
+);
 
 export const getVisibleTable = state => {
   const name = getVisibleTableName(state);
