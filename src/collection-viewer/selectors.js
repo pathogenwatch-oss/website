@@ -166,8 +166,8 @@ export const getCollectionGenomeIds = createSelector(
 export const hasMetadata = createSelector(
   getGenomeList,
   genomes =>
-    genomes.some(({ date, pmid, userDefined }) => !!(
-      (date && date.year) ||
+    genomes.some(({ year, pmid, userDefined }) => !!(
+      year ||
       pmid ||
       (userDefined && Object.keys(userDefined).length)
     ))

@@ -34,11 +34,6 @@ export function formatGenomeRecords(genomes) {
         latitude: genome.latitude,
         longitude: genome.longitude,
       },
-      date: genome.date || {
-        year: genome.year,
-        month: genome.month,
-        day: genome.day,
-      },
     };
   });
 }
