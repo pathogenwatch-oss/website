@@ -29,7 +29,7 @@ module.exports = async function ({ user, data, uploadedAt }) {
       insertOne: {
         document: {
           name: row.id,
-          ...row.metadata,
+          ...Genome.getMetadataUpdate(row.metadata),
           _user: user._id,
           createdAt: new Date(),
           upload: {

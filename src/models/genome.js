@@ -150,7 +150,16 @@ schema.statics.addAnalysisError = function (_id, task) {
 };
 
 schema.statics.getMetadataUpdate = function (metadata) {
-  const { name, year, month, day, latitude = null, longitude = null, pmid, userDefined } = metadata;
+  const {
+    name,
+    year = null,
+    month = null,
+    day = null,
+    latitude = null,
+    longitude = null,
+    pmid,
+    userDefined,
+  } = metadata;
   const country = getCountryCode(latitude, longitude);
   return {
     name,
