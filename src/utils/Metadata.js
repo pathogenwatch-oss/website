@@ -59,16 +59,16 @@ export function isValid({ date }) {
   return true;
 }
 
-export function parseMetadata(row) {
-  const { displayname, id, name, filename, ...columns } = row;
+export function parseMetadata(row, fallbackName = row.filename) {
+  const { displayname, id, name, ...columns } = row;
 
-  const genomeName = displayname || name || id || filename;
+  const genomeName = displayname || name || id || fallbackName;
 
   const { year, month, day, latitude, longitude, pmid, ...rest } = columns;
 
   const userDefined = {};
   for (const [ key, value ] of Object.entries(rest)) {
-    if (!value.length) continue;
+    if (!value.length || key === 'filename') continue;
     userDefined[key] = value;
   }
 

@@ -9,7 +9,7 @@ import { ASSEMBLY_FILE_EXTENSIONS } from '~/app/constants';
 import { CSV_FILENAME_REGEX } from '~/utils/Metadata';
 const READS_FILENAME_REGEX = /^(.*)[_\.]R?[12]\.fastq\.gz$/;
 const ASSEMBLY_FILENAME_REGEX = new RegExp(
-  `(${ASSEMBLY_FILE_EXTENSIONS.join('|')})$`,
+  `\.(${ASSEMBLY_FILE_EXTENSIONS.join('|')})$`,
   'i'
 );
 
@@ -68,6 +68,17 @@ export default function (files, assemblerUsage) {
 
   return getCsvRows(csvFiles)
     .then(rows => [
+      ...assemblies.map((file, index) => {
+        const name = file.name.replace(ASSEMBLY_FILENAME_REGEX, '');
+        const row = rows.find(r => r.filename === file.name || r.filename === name);
+        return {
+          files: [ file ],
+          id: `${file.name}__${Date.now()}_${index}`,
+          metadata: row ? parseMetadata(row, name) : null,
+          name,
+          type: fileTypes.ASSEMBLY,
+        };
+      }),
       ...Object.entries(readsPairs).map(([ id, filesByName ], index) => {
         const fileNames = Object.keys(filesByName);
         const row = rows.find(
@@ -79,16 +90,6 @@ export default function (files, assemblerUsage) {
           metadata: row ? parseMetadata(row) : null,
           name: id,
           type: fileTypes.READS,
-        };
-      }),
-      ...assemblies.map((file, index) => {
-        const row = rows.find(r => r.filename === file.name);
-        return {
-          files: [ file ],
-          id: `${file.name}__${Date.now()}_${index}`,
-          metadata: row ? parseMetadata(row) : null,
-          name: file.name,
-          type: fileTypes.ASSEMBLY,
         };
       }),
     ]);

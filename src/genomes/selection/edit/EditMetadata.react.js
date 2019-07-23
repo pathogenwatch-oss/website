@@ -84,7 +84,7 @@ class UpdateMetadata extends React.Component {
                       the genomes in the file.
                       <br />
                       {window.location.pathname !== '/genomes/user' && (
-                        <Link to="/genomes/user">View genomes owned by me</Link>
+                        <Link to="/genomes/user">View genomes owned by you</Link>
                       )}
                     </React.Fragment>
                   ),
