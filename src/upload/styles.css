@@ -92,3 +92,16 @@
   margin-right: -20px;
   padding-top: 20px;
 }
+
+.pw-blipper {
+  width: 8px;
+  height: 8px;
+  background-color: #673c90;
+  border-radius: 50%;
+  margin-left: 8px;
+  cursor: help;
+}
+
+.mdl-button--primary > .pw-blipper {
+  display: none;
+}

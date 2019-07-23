@@ -1,9 +1,12 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
+import { connect } from 'react-redux';
 
 import { Summary } from '../filter/summary';
 
-const UploadSummary = ({ children }) => (
+import { hasIncompleteUploads } from './selectors';
+
+const UploadSummary = ({ children, hasIncomplete }) => (
   <Summary className="wgsa-upload-summary pw-upload-page">
     {children || (
       <React.Fragment>
@@ -22,10 +25,17 @@ const UploadSummary = ({ children }) => (
           to="/upload/previous"
         >
           Previous Uploads
+          { hasIncomplete && <span title="You have incomplete uploads." className="pw-blipper wgsa-blink" /> }
         </NavLink>
       </React.Fragment>
     )}
   </Summary>
 );
 
-export default UploadSummary;
+function mapStateToProps(state) {
+  return {
+    hasIncomplete: hasIncompleteUploads(state),
+  };
+}
+
+export default connect(mapStateToProps)(UploadSummary);

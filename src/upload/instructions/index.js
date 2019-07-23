@@ -10,10 +10,15 @@ import Assemblies from './Assemblies.react';
 import Summary from '../Summary.react';
 
 import { addFiles } from './actions';
+import { fetchUploads } from '../previous/actions';
 
 import { isReadsEligible } from '../file-utils';
 
-const Component = ({ onFiles }) => {
+const Instructions = ({ onFiles, fetchPreviousUploads }) => {
+  React.useEffect(() => {
+    fetchPreviousUploads();
+  }, []);
+
   const readsEligible = isReadsEligible();
   return (
     <FileDragAndDrop onFiles={onFiles} readsEligible={readsEligible}>
@@ -30,10 +35,11 @@ const Component = ({ onFiles }) => {
 function mapDispatchToProps(dispatch) {
   return {
     onFiles: files => dispatch(addFiles(files)),
+    fetchPreviousUploads: () => dispatch(fetchUploads()),
   };
 }
 
 export default connect(
   null,
   mapDispatchToProps
-)(Component);
+)(Instructions);
