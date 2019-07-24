@@ -9,7 +9,7 @@ import { ASSEMBLY_FILE_EXTENSIONS } from '~/app/constants';
 import { CSV_FILENAME_REGEX } from '~/utils/Metadata';
 const READS_FILENAME_REGEX = /^(.*)[_\.]R?[12]\.fastq\.gz$/;
 const ASSEMBLY_FILENAME_REGEX = new RegExp(
-  `\.(${ASSEMBLY_FILE_EXTENSIONS.join('|')})$`,
+  `(${ASSEMBLY_FILE_EXTENSIONS.join('|')})$`,
   'i'
 );
 
