@@ -21,6 +21,10 @@
   text-transform: uppercase;
 }
 
+.pw-capitalise {
+  text-transform: capitalize;
+}
+
 .pw-centre-text {
   text-align: center;
 }

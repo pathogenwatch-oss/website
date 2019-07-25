@@ -31,6 +31,20 @@ apiRouter.get('/summary', (req, res) => {
   res.sendFile(`${__dirname}/static_data/summary.json`);
 });
 
+
+/* Genomes */
+
+apiRouter.get('/genome/summary', (req, res) => {
+  res.sendFile(`${__dirname}/static_data/genomes/summary.json`);
+});
+
+apiRouter.get('/genome/:id', (req, res) => {
+  res.sendFile(`${__dirname}/static_data/genomes/report.json`);
+});
+
+
+/* Collections */
+
 apiRouter.get('/collection', (req, res) => {
   setTimeout(() => {
     res.sendFile(`${__dirname}/static_data/collections.json`);
@@ -53,8 +67,13 @@ apiRouter.get('/collection/:id/tree/:subtree', (req, res) => {
   );
 });
 
+apiRouter.post('/collection', (req, res) =>
+  setTimeout(() => res.json({ collectionId: '123' }), 2000)
+);
+
 
 /* Clustering */
+
 apiRouter.get('/clustering/:id', (req, res) => {
   setTimeout(() => res.sendFile(`${getPath('clustering')}/collection.json`), 1000);
 });
@@ -67,10 +86,6 @@ apiRouter.post('/genome/:id/clusters/edges', (req, res) => {
   setTimeout(() => res.sendFile(`${getPath('clustering')}/edges.json`), 1000);
 });
 
-
-apiRouter.post('/collection', (req, res) =>
-  setTimeout(() => res.json({ collectionId: '123' }), 2000)
-);
 
 const assemblerRouter = express.Router();
 

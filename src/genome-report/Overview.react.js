@@ -7,9 +7,23 @@ import { getFormattedDateString } from '../utils/Date';
 import { getCountryName } from '../utils/country';
 import { Logo } from '../branding';
 
+const SpeciesSubtitle = ({ analysis }) => {
+  const { speciator, serotype = {} } = analysis;
+  if (!speciator) return <em>Species prediction pending</em>;
+  if (speciator.species === '28901') {
+    return (
+      <OrganismName
+        speciesName={speciator.speciesName}
+        subspecies={serotype.subspecies}
+        serotype={serotype.value}
+      />
+    );
+  }
+  return <OrganismName speciesName={speciator.speciesName} />;
+};
+
 export default ({ genome }) => {
   const { analysis = {}, country, pmid } = genome;
-  const { speciator, serotype = {} } = analysis;
   const date = getFormattedDateString(genome);
   return (
     <div className="wgsa-genome-report-summary">
@@ -20,15 +34,7 @@ export default ({ genome }) => {
         <Logo />
       </header>
       <p className="h6 pw-genome-report-summary-subtitle">
-        {speciator ? (
-          <OrganismName
-            speciesName={speciator.speciesName}
-            subspecies={serotype.subspecies}
-            serotype={serotype.value}
-          />
-        ) : (
-          <em>Species prediction pending</em>
-        )}
+        <SpeciesSubtitle analysis={analysis} />
       </p>
       {(date || country || pmid) && (
         <dl>

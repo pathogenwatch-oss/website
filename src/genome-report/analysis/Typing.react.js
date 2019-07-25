@@ -20,13 +20,41 @@ function getSecondaryTyping(genome) {
   );
 }
 
-export default ({ genome }) => (
-  <React.Fragment>
-    <div className="pw-genome-report-column one half">
-      <MLST genome={genome} />
-    </div>
-    <div className="pw-genome-report-column one half right">
-      {getSecondaryTyping(genome)}
-    </div>
-  </React.Fragment>
-);
+function getPneumoTyping(genome) {
+  const { mlst, serotype, poppunk } = genome.analysis;
+  return (
+    <React.Fragment>
+      {!!mlst &&
+        <div id="mlst">
+          <MLST genome={genome} />
+        </div>
+      }
+      {!!poppunk &&
+        <div className="pw-genome-report-column one half">
+          <Strain genome={genome} />
+        </div>
+      }
+      {!!serotype &&
+        <div className="pw-genome-report-column one half">
+          <Serotype genome={genome} />
+        </div>
+      }
+    </React.Fragment>
+  );
+}
+
+export default ({ genome }) => {
+  if (genome.analysis.speciator.speciesId === '1313') {
+    return getPneumoTyping(genome);
+  }
+  return (
+    <React.Fragment>
+      <div className="pw-genome-report-column one half">
+        <MLST genome={genome} />
+      </div>
+      <div className="pw-genome-report-column one half right">
+        {getSecondaryTyping(genome)}
+      </div>
+    </React.Fragment>
+  );
+};

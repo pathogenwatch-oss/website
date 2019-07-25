@@ -89,3 +89,8 @@ p.pw-genome-report-section-header {
 .wgsa-genome-report .pw-genome-report-column + table {
   margin-top: 0;
 }
+
+.pw-genome-report-flex-area {
+  display: flex;
+  flex-wrap: wrap;
+}

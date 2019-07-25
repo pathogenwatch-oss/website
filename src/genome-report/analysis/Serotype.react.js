@@ -48,7 +48,7 @@ export default ({ genome }) => {
           </div>
         )}
         <div className="pw-genome-report-metadata">
-          <dt>{title}</dt>
+          <dt className="pw-capitalise">{title}</dt>
           <dd>{serotype.value}</dd>
         </div>
       </dl>
