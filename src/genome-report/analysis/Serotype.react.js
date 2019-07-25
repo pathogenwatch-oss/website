@@ -25,13 +25,15 @@ const sources = {
         SeroBA
       </a>
     ),
+    docs: 'https://cgps.gitbook.io/pathogenwatch/technical-descriptions/typing-methods/seroba',
   },
 };
 
 export default ({ genome }) => {
   const { speciator, serotype } = genome.analysis;
-  const { link = <span>(unspecified source)</span>, title = 'serotype' } =
+  const { link = <span>(unspecified source)</span>, title = 'serotype', docs } =
     sources[serotype.source] || {};
+
   return (
     <React.Fragment>
       <header className="pw-genome-report-section-header">
@@ -49,7 +51,14 @@ export default ({ genome }) => {
         )}
         <div className="pw-genome-report-metadata">
           <dt className="pw-capitalise">{title}</dt>
-          <dd>{serotype.value}</dd>
+          <dd>
+            {serotype.value}
+            {serotype.warn && docs &&
+              <a href={docs} target="_blank" rel="noopener" className="pw-genome-report-reference-link">
+                Guidance on this result
+              </a>
+            }
+          </dd>
         </div>
       </dl>
       <ExternalLink
