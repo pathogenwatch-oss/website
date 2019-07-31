@@ -44,7 +44,8 @@ function getPneumoTyping(genome) {
 }
 
 export default ({ genome }) => {
-  if (genome.analysis.speciator.speciesId === '1313') {
+  const { analysis = {} } = genome;
+  if (analysis.speciator && analysis.speciator.speciesId === '1313') {
     return getPneumoTyping(genome);
   }
   return (

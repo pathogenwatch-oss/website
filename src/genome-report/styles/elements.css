@@ -78,8 +78,9 @@ dl.pw-genome-report-unsized > div,
   content: "(none)";
 }
 
-.wgsa-genome-report dd .pw-genome-report-reference-link {
+.wgsa-genome-report dd .pw-genome-report-secondary-link {
   margin-left: 8px;
+  line-height: 16px;
 }
 
 .pw-genome-report-metadata.inline {

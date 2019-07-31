@@ -54,7 +54,7 @@ export default ({ genome }) => {
           <dd>
             {serotype.value}
             {serotype.warn && docs &&
-              <a href={docs} target="_blank" rel="noopener" className="pw-genome-report-reference-link">
+              <a href={docs} target="_blank" rel="noopener" className="pw-genome-report-secondary-link">
                 Guidance on this result
               </a>
             }

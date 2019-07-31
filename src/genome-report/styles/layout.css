@@ -35,7 +35,7 @@ p.pw-genome-report-section-header {
 }
 
 .pw-genome-report-section-header > h2 + *,
-.pw-genome-report-reference-link {
+.pw-genome-report-secondary-link {
   font-size: 13px;
   white-space: nowrap;
   margin: 0;

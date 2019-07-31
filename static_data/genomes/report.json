@@ -8,7 +8,7 @@
   "fileId": "9212b7e81971984445b64595a9bc3a5fdf4bb9b7",
   "analysis": {
     "serotype": { "value": "19F", "source": "SeroBA", "__v": "seroba-v1.0.0", "warn": true },
-    "poppunk": { "strain": "1" },
+    "poppunk": { "strain": "novel" },
     "paarsnp": {
       "matches": [
         {

@@ -24,7 +24,7 @@ export default ({ result }) => (
   <React.Fragment>
     <p className="pw-genome-report-section-header">
       <a href="https://github.com/katholt/Kleborate#virulence-loci" target="_blank"
-        rel="noopener" className="pw-genome-report-reference-link"
+        rel="noopener" className="pw-genome-report-secondary-link"
       ><strong>Kleborate Virulence</strong> - https://github.com/katholt/Kleborate#virulence-loci</a>
     </p>
     <div className="pw-genome-report-column two thirds">
