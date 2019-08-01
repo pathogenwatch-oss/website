@@ -38,8 +38,18 @@ apiRouter.get('/genome/summary', (req, res) => {
   res.sendFile(`${__dirname}/static_data/genomes/summary.json`);
 });
 
+const reports = {
+  '5d38615e184c059809cfdca6': 'pneumo',
+  '5d370bd97dd9512a544e98d1': 'senterica',
+  '5d370bbd7dd95167ac4e98ce': 'abaumannii',
+  '5d1f1728cc05ddc802fa18b3': 'saureus',
+  '5ced510bbfa03c727626c879': 'styphi',
+  '58ac37e2c492e60001aa24ab': 'kp',
+  '5a27f2ce54e0d10001e0d3dd': 'gono',
+};
+
 apiRouter.get('/genome/:id', (req, res) => {
-  res.sendFile(`${__dirname}/static_data/genomes/report.json`);
+  res.sendFile(`${__dirname}/static_data/genomes/report-${reports[req.params.id]}.json`);
 });
 
 

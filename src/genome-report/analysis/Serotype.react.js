@@ -40,7 +40,7 @@ export default ({ genome }) => {
         <h2>Serotype</h2>
         <p>{link}</p>
       </header>
-      <dl className="pw-genome-report-unsized">
+      <dl className="flex">
         {serotype.subspecies && (
           <div className="pw-genome-report-metadata">
             <dt>Subspecies</dt>

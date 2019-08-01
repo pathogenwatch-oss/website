@@ -5,7 +5,7 @@ import N50Chart from './N50Chart.react';
 export default ({ result }) => (
   <React.Fragment>
     <h2>Assembly Stats</h2>
-    <dl>
+    <dl className="grid">
       <div>
         <dt>Genome Length</dt>
         <dd>{result.length}</dd>

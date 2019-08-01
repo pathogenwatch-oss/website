@@ -1,0 +1,620 @@
+{
+  "name": "ERR668456",
+  "createdAt": "2019-05-28T15:17:31.618Z",
+  "fileId": "4354a11fec3ca640a4cbea3951b40dd9d5b4842a",
+  "analysis": {
+    "serotype": {
+      "source": "SISTR",
+      "subspecies": "enterica",
+      "value": "Typhi",
+      "__v": "sistr-v1.0.2"
+    },
+    "paarsnp": {
+      "library": { "label": "90370", "version": "0.0.3", "source": "PUBLIC" },
+      "matches": [
+        {
+          "agents": ["CEP", "AMP"],
+          "query": {
+            "id": "NODE_72_length_1321_cov_34.229943",
+            "stop": 1130,
+            "start": 255
+          },
+          "library": {
+            "id": "blaCTX-M-15_23",
+            "length": 876,
+            "stop": 876,
+            "start": 1
+          },
+          "percentIdentity": 100,
+          "evalue": 0,
+          "reversed": false,
+          "type": "CDS",
+          "source": "WGSA_PAAR",
+          "id": "blaCTX-M-15_23"
+        },
+        {
+          "agents": ["CHL"],
+          "query": {
+            "id": "NODE_60_length_5682_cov_11.129124",
+            "stop": 958,
+            "start": 299
+          },
+          "library": { "id": "catA1", "length": 660, "stop": 660, "start": 1 },
+          "percentIdentity": 100,
+          "evalue": 0,
+          "reversed": false,
+          "type": "CDS",
+          "source": "WGSA_PAAR",
+          "id": "catA1"
+        },
+        {
+          "agents": ["SXT"],
+          "query": {
+            "id": "NODE_78_length_758_cov_17.051245",
+            "stop": 567,
+            "start": 94
+          },
+          "library": { "id": "dfrA7", "length": 474, "stop": 474, "start": 1 },
+          "percentIdentity": 100,
+          "evalue": 0,
+          "reversed": false,
+          "type": "CDS",
+          "source": "WGSA_PAAR",
+          "id": "sul2__dfrA7"
+        },
+        {
+          "agents": ["TMP"],
+          "query": {
+            "id": "NODE_78_length_758_cov_17.051245",
+            "stop": 567,
+            "start": 94
+          },
+          "library": { "id": "dfrA7", "length": 474, "stop": 474, "start": 1 },
+          "percentIdentity": 100,
+          "evalue": 0,
+          "reversed": false,
+          "type": "CDS",
+          "source": "WGSA_PAAR",
+          "id": "dfrA7"
+        },
+        {
+          "agents": ["SXT"],
+          "query": {
+            "id": "NODE_78_length_758_cov_17.051245",
+            "stop": 567,
+            "start": 94
+          },
+          "library": { "id": "dfrA7", "length": 474, "stop": 474, "start": 1 },
+          "percentIdentity": 100,
+          "evalue": 0,
+          "reversed": false,
+          "type": "CDS",
+          "source": "WGSA_PAAR",
+          "id": "sul1__dfrA7"
+        },
+        {
+          "agents": ["SXT"],
+          "query": {
+            "id": "NODE_55_length_7197_cov_41.856220",
+            "stop": 1294,
+            "start": 455
+          },
+          "library": { "id": "sul1", "length": 840, "stop": 840, "start": 1 },
+          "percentIdentity": 100,
+          "evalue": 0,
+          "reversed": false,
+          "type": "CDS",
+          "source": "WGSA_PAAR",
+          "id": "dfrA5__sul1"
+        },
+        {
+          "agents": ["SXT"],
+          "query": {
+            "id": "NODE_55_length_7197_cov_41.856220",
+            "stop": 1294,
+            "start": 455
+          },
+          "library": { "id": "sul1", "length": 840, "stop": 840, "start": 1 },
+          "percentIdentity": 100,
+          "evalue": 0,
+          "reversed": false,
+          "type": "CDS",
+          "source": "WGSA_PAAR",
+          "id": "dfrA14__sul1"
+        },
+        {
+          "agents": ["SMX"],
+          "query": {
+            "id": "NODE_55_length_7197_cov_41.856220",
+            "stop": 1294,
+            "start": 455
+          },
+          "library": { "id": "sul1", "length": 840, "stop": 840, "start": 1 },
+          "percentIdentity": 100,
+          "evalue": 0,
+          "reversed": false,
+          "type": "CDS",
+          "source": "WGSA_PAAR",
+          "id": "sul1"
+        },
+        {
+          "agents": ["SXT"],
+          "query": {
+            "id": "NODE_55_length_7197_cov_41.856220",
+            "stop": 1294,
+            "start": 455
+          },
+          "library": { "id": "sul1", "length": 840, "stop": 840, "start": 1 },
+          "percentIdentity": 100,
+          "evalue": 0,
+          "reversed": false,
+          "type": "CDS",
+          "source": "WGSA_PAAR",
+          "id": "sul1__dfrA1"
+        },
+        {
+          "agents": ["SXT"],
+          "query": {
+            "id": "NODE_55_length_7197_cov_41.856220",
+            "stop": 1294,
+            "start": 455
+          },
+          "library": { "id": "sul1", "length": 840, "stop": 840, "start": 1 },
+          "percentIdentity": 100,
+          "evalue": 0,
+          "reversed": false,
+          "type": "CDS",
+          "source": "WGSA_PAAR",
+          "id": "sul1__dfrA7"
+        },
+        {
+          "agents": ["SXT"],
+          "query": {
+            "id": "NODE_55_length_7197_cov_41.856220",
+            "stop": 7015,
+            "start": 6176
+          },
+          "library": { "id": "sul1", "length": 840, "stop": 840, "start": 1 },
+          "percentIdentity": 100,
+          "evalue": 0,
+          "reversed": false,
+          "type": "CDS",
+          "source": "WGSA_PAAR",
+          "id": "dfrA5__sul1"
+        },
+        {
+          "agents": ["SXT"],
+          "query": {
+            "id": "NODE_55_length_7197_cov_41.856220",
+            "stop": 7015,
+            "start": 6176
+          },
+          "library": { "id": "sul1", "length": 840, "stop": 840, "start": 1 },
+          "percentIdentity": 100,
+          "evalue": 0,
+          "reversed": false,
+          "type": "CDS",
+          "source": "WGSA_PAAR",
+          "id": "dfrA14__sul1"
+        },
+        {
+          "agents": ["SMX"],
+          "query": {
+            "id": "NODE_55_length_7197_cov_41.856220",
+            "stop": 7015,
+            "start": 6176
+          },
+          "library": { "id": "sul1", "length": 840, "stop": 840, "start": 1 },
+          "percentIdentity": 100,
+          "evalue": 0,
+          "reversed": false,
+          "type": "CDS",
+          "source": "WGSA_PAAR",
+          "id": "sul1"
+        },
+        {
+          "agents": ["SXT"],
+          "query": {
+            "id": "NODE_55_length_7197_cov_41.856220",
+            "stop": 7015,
+            "start": 6176
+          },
+          "library": { "id": "sul1", "length": 840, "stop": 840, "start": 1 },
+          "percentIdentity": 100,
+          "evalue": 0,
+          "reversed": false,
+          "type": "CDS",
+          "source": "WGSA_PAAR",
+          "id": "sul1__dfrA1"
+        },
+        {
+          "agents": ["SXT"],
+          "query": {
+            "id": "NODE_55_length_7197_cov_41.856220",
+            "stop": 7015,
+            "start": 6176
+          },
+          "library": { "id": "sul1", "length": 840, "stop": 840, "start": 1 },
+          "percentIdentity": 100,
+          "evalue": 0,
+          "reversed": false,
+          "type": "CDS",
+          "source": "WGSA_PAAR",
+          "id": "sul1__dfrA7"
+        },
+        {
+          "agents": ["SXT"],
+          "query": {
+            "id": "NODE_62_length_4535_cov_10.489013",
+            "stop": 2599,
+            "start": 1784
+          },
+          "library": { "id": "sul2", "length": 816, "stop": 816, "start": 1 },
+          "percentIdentity": 100,
+          "evalue": 0,
+          "reversed": true,
+          "type": "CDS",
+          "source": "WGSA_PAAR",
+          "id": "sul2__dfrA5"
+        },
+        {
+          "agents": ["SXT"],
+          "query": {
+            "id": "NODE_62_length_4535_cov_10.489013",
+            "stop": 2599,
+            "start": 1784
+          },
+          "library": { "id": "sul2", "length": 816, "stop": 816, "start": 1 },
+          "percentIdentity": 100,
+          "evalue": 0,
+          "reversed": true,
+          "type": "CDS",
+          "source": "WGSA_PAAR",
+          "id": "sul2__dfrA7"
+        },
+        {
+          "agents": ["SXT"],
+          "query": {
+            "id": "NODE_62_length_4535_cov_10.489013",
+            "stop": 2599,
+            "start": 1784
+          },
+          "library": { "id": "sul2", "length": 816, "stop": 816, "start": 1 },
+          "percentIdentity": 100,
+          "evalue": 0,
+          "reversed": true,
+          "type": "CDS",
+          "source": "WGSA_PAAR",
+          "id": "sul2__dfrA1"
+        },
+        {
+          "agents": ["SXT"],
+          "query": {
+            "id": "NODE_62_length_4535_cov_10.489013",
+            "stop": 2599,
+            "start": 1784
+          },
+          "library": { "id": "sul2", "length": 816, "stop": 816, "start": 1 },
+          "percentIdentity": 100,
+          "evalue": 0,
+          "reversed": true,
+          "type": "CDS",
+          "source": "WGSA_PAAR",
+          "id": "sul2__dfrA14"
+        },
+        {
+          "agents": ["SMX"],
+          "query": {
+            "id": "NODE_62_length_4535_cov_10.489013",
+            "stop": 2599,
+            "start": 1784
+          },
+          "library": { "id": "sul2", "length": 816, "stop": 816, "start": 1 },
+          "percentIdentity": 100,
+          "evalue": 0,
+          "reversed": true,
+          "type": "CDS",
+          "source": "WGSA_PAAR",
+          "id": "sul2"
+        },
+        {
+          "query": {
+            "id": "NODE_11_length_144683_cov_10.371598",
+            "stop": 144568,
+            "start": 141932
+          },
+          "library": { "id": "gyrA", "length": 2637, "stop": 2637, "start": 1 },
+          "percentIdentity": 99.92,
+          "evalue": 0,
+          "reversed": false,
+          "type": "CDS",
+          "source": "WGSA_SNPAR",
+          "id": "gyrA_S83F"
+        },
+        {
+          "agents": ["AMP"],
+          "query": {
+            "id": "NODE_68_length_1823_cov_15.665437",
+            "stop": 1293,
+            "start": 433
+          },
+          "library": { "id": "TEM-1", "length": 861, "stop": 861, "start": 1 },
+          "percentIdentity": 99.88,
+          "evalue": 0,
+          "reversed": false,
+          "type": "CDS",
+          "source": "WGSA_PAAR",
+          "id": "TEM-1"
+        },
+        {
+          "agents": ["CIP"],
+          "query": {
+            "id": "NODE_55_length_7197_cov_41.856220",
+            "stop": 5722,
+            "start": 5041
+          },
+          "library": { "id": "qnrB", "length": 681, "stop": 681, "start": 1 },
+          "percentIdentity": 96.19,
+          "evalue": 0,
+          "reversed": true,
+          "type": "CDS",
+          "source": "WGSA_PAAR",
+          "id": "qnrB"
+        },
+        {
+          "libraryStart": 1,
+          "name": "S83F",
+          "referenceLocation": 248,
+          "queryLocation": 142179,
+          "reversed": false,
+          "type": "point_mutation",
+          "source": "WGSA_SNPAR",
+          "id": "NODE_11_length_144683_cov_10.371598",
+          "agents": ["NAL", "CIP"]
+        }
+      ],
+      "snp": ["gyrA_S83F"],
+      "paar": [
+        "catA1",
+        "sul1",
+        "qnrB",
+        "blaCTX-M-15_23",
+        "sul2",
+        "TEM-1",
+        "dfrA7"
+      ],
+      "antibiotics": [
+        {
+          "mechanisms": ["blaCTX-M-15_23", "TEM-1"],
+          "state": "RESISTANT",
+          "fullName": "Ampicillin",
+          "name": "AMP"
+        },
+        {
+          "mechanisms": ["blaCTX-M-15_23"],
+          "state": "RESISTANT",
+          "fullName": "Broad-Spectrum Cephalosporins",
+          "name": "CEP"
+        },
+        {
+          "mechanisms": ["catA1"],
+          "state": "RESISTANT",
+          "fullName": "Chloramphenicol",
+          "name": "CHL"
+        },
+        {
+          "mechanisms": ["qnrB", "gyrA_S83F"],
+          "state": "RESISTANT",
+          "fullName": "Ciprofloxacin",
+          "name": "CIP"
+        },
+        {
+          "mechanisms": ["gyrA_S83F"],
+          "state": "RESISTANT",
+          "fullName": "Nalidixic acid",
+          "name": "NAL"
+        },
+        {
+          "mechanisms": ["sul1", "sul2"],
+          "state": "RESISTANT",
+          "fullName": "Sulfonamides",
+          "name": "SMX"
+        },
+        {
+          "mechanisms": ["dfrA7"],
+          "state": "RESISTANT",
+          "fullName": "Trimethoprim",
+          "name": "TMP"
+        },
+        {
+          "mechanisms": ["sul2", "dfrA7", "sul1", "dfrA7"],
+          "state": "RESISTANT",
+          "fullName": "Co-Trimoxazole",
+          "name": "SXT"
+        },
+        {
+          "mechanisms": [],
+          "state": "NOT_FOUND",
+          "fullName": "Tetracycline",
+          "name": "TCY"
+        },
+        {
+          "mechanisms": [],
+          "state": "NOT_FOUND",
+          "fullName": "Azithromycin",
+          "name": "AZM"
+        },
+        {
+          "mechanisms": [],
+          "state": "NOT_FOUND",
+          "fullName": "Colistin",
+          "name": "CST"
+        },
+        {
+          "mechanisms": [],
+          "state": "NOT_FOUND",
+          "fullName": "Meropenem",
+          "name": "MEM"
+        },
+        {
+          "mechanisms": [],
+          "state": "NOT_FOUND",
+          "fullName": "Other",
+          "name": "SIL"
+        }
+      ],
+      "__v": "v2.4.3"
+    },
+    "mlst": {
+      "alleles": [
+        { "hits": [1], "gene": "aroC" },
+        { "hits": [1], "gene": "dnaN" },
+        { "hits": [1], "gene": "hemD" },
+        { "hits": [1], "gene": "hisD" },
+        { "hits": [1], "gene": "purE" },
+        { "hits": [1], "gene": "sucA" },
+        { "hits": [5], "gene": "thrA" }
+      ],
+      "url": "https://pubmlst.org/data/profiles/senterica.txt",
+      "st": "1",
+      "__v": "20180806174658-v1.6.10"
+    },
+    "metrics": {
+      "contigSums": [
+        488881,
+        738416,
+        982910,
+        1187189,
+        1384356,
+        1580014,
+        1751907,
+        1905573,
+        2055052,
+        2204362,
+        2349045,
+        2493640,
+        2638070,
+        2781725,
+        2917481,
+        3040946,
+        3147727,
+        3253087,
+        3352621,
+        3450497,
+        3544182,
+        3636314,
+        3708793,
+        3779281,
+        3845491,
+        3911239,
+        3975927,
+        4036501,
+        4092652,
+        4147137,
+        4196558,
+        4245391,
+        4293290,
+        4339982,
+        4383788,
+        4427109,
+        4469584,
+        4508645,
+        4541734,
+        4573697,
+        4605254,
+        4636120,
+        4662297,
+        4684591,
+        4704739,
+        4724036,
+        4740269,
+        4755081,
+        4767374,
+        4778586,
+        4788030,
+        4796761,
+        4805242,
+        4813138,
+        4820335,
+        4827357,
+        4833998,
+        4840297,
+        4846529,
+        4852211,
+        4857416,
+        4861951,
+        4866303,
+        4870112,
+        4873246,
+        4876043,
+        4878683,
+        4880506,
+        4881937,
+        4883329,
+        4884685,
+        4886006,
+        4887268,
+        4888257,
+        4889176,
+        4889996,
+        4890764,
+        4891522,
+        4892232,
+        4892909,
+        4893576,
+        4894148,
+        4894678,
+        4895196
+      ],
+      "gcContent": "52.0",
+      "nonATCG": 630,
+      "N50Contig": 12,
+      "N50": 144595,
+      "averageContig": 58276,
+      "largestContig": 488881,
+      "smallestContig": 518,
+      "contigs": 84,
+      "length": 4895196,
+      "__v": "v2"
+    },
+    "genotyphi": { "foundLoci": 75, "genotype": "4.3.1.1", "__v": "v2.0.4" },
+    "core": {
+      "summary": {
+        "percentAssemblyMatched": 73.4,
+        "percentKernelMatched": 100,
+        "kernelSize": 3283,
+        "completeAlleles": 3282,
+        "familiesMatched": 3283,
+        "speciesId": "90370",
+        "assemblyId": "4354a11fec3ca640a4cbea3951b40dd9d5b4842a"
+      },
+      "fp": { "size": 2483, "reference": "007898" },
+      "__v": "v1"
+    },
+    "cgmlst": {
+      "scheme": "http://enterobase.warwick.ac.uk/api/v2.0/senterica/cgMLST_v2/loci"
+    },
+    "speciator": {
+      "organismName": "Salmonella enterica subsp. enterica serovar Typhi",
+      "organismId": "90370",
+      "matchingHashes": "394/400",
+      "pValue": 0,
+      "mashDistance": 0.00047408571182853124,
+      "referenceId": "GCF_001079085.1",
+      "superkingdomName": "Bacteria",
+      "superkingdomId": "2",
+      "genusName": "Salmonella",
+      "genusId": "590",
+      "speciesName": "Salmonella enterica",
+      "speciesId": "28901",
+      "__v": "t8"
+    }
+  },
+  "reference": false,
+  "upload": { "type": "reads" },
+  "public": false,
+  "population": false,
+  "binned": false,
+  "id": "5ced510bbfa03c727626c879",
+  "owner": "me"
+}
