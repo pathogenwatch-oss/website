@@ -17,7 +17,7 @@ dl.grid {
 }
 
 dl.flex > div {
-  margin-left: 16px;
+  margin-left: 32px;
 }
 
 dl.flex > div:first-child {
@@ -101,8 +101,7 @@ dl.grid + dl {
 }
 
 .wgsa-genome-report table.wide {
-  width: calc(100% + 16px);
-  margin-left: -8px;
+  width: 100%;
 }
 
 .wgsa-genome-report table caption,

@@ -1,15 +1,18 @@
+#mlst {
+  margin-bottom: 16px;
+}
+
 #mlst .pw-genome-report-column {
   margin-bottom: 0;
 }
 
 .pw-genome-report-column .pw-mlst-profile {
   margin: 0;
-  margin-left: -8px;
 }
 
-.pw-genome-report-column .pw-mlst-profile caption {
-  text-align: left;
-  padding-left: 8px;
+.pw-genome-report-column .pw-mlst-profile td,
+.pw-genome-report-column .pw-mlst-profile th {
+  text-align: center;
 }
 
 .pw-genome-report-column .pw-mlst-profile td {

@@ -100,10 +100,15 @@
   /* Clustering overrides */
   .pw-cluster-view button,
   .pw-cluster-view a,
+  .pw-cluster-buttons,
   .libmr-ZoomControls,
   .pw-cluster-chart-intro,
   .chartjs-size-monitor {
     display: none !important;
+  }
+  .wgsa-genome-report .pw-cluster-view {
+    height: auto;
+    margin: 0;
   }
   .pw-cluster-view > canvas {
     margin: 0 auto;
