@@ -28,9 +28,10 @@ function getSecondaryTyping(genome) {
           <NgMast result={ngmast} />
         </div>}
       {!!kleborate &&
-        <div className="pw-genome-report-column one half">
+        <div>
           <Kleborate genome={genome} />
-        </div>}
+        </div>
+      }
     </React.Fragment>
   );
 }

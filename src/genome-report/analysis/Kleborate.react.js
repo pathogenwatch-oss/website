@@ -23,17 +23,21 @@ export default ({ genome }) => {
           rel="noopener"
         >https://github.com/katholt/Kleborate</a>
       </header>
-      <dl className="flex">
+      <dl className="grid">
         <div className="pw-genome-report-metadata">
-          <dt>K Locus (<em>wzi</em>)</dt>
-          <dd>{kleborate.K_locus} ({kleborate.wzi})</dd>
+          <dt>K Locus</dt>
+          <dd>{kleborate.K_locus}</dd>
         </div>
         <div className="pw-genome-report-metadata">
           <dt>Confidence</dt>
           <dd>{kleborate.K_locus_confidence}</dd>
         </div>
+        <div className="pw-genome-report-metadata">
+          <dt><em>wzi</em></dt>
+          <dd>{kleborate.wzi}</dd>
+        </div>
       </dl>
-      <dl className="flex">
+      <dl className="grid">
         <div className="pw-genome-report-metadata">
           <dt>O Locus</dt>
           <dd>{kleborate.O_locus}</dd>
