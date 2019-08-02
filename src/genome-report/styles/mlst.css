@@ -10,11 +10,6 @@ section#mlst {
   margin: 0;
 }
 
-.pw-genome-report-column .pw-mlst-profile td,
-.pw-genome-report-column .pw-mlst-profile th {
-  text-align: center;
-}
-
 .pw-genome-report-column .pw-mlst-profile td {
   font-weight: 500;
 }

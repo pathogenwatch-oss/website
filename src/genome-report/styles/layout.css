@@ -67,10 +67,6 @@ p.pw-genome-report-section-header {
   width: 66.666%;
 }
 
-.pw-genome-report-column h2 {
-  padding-top: 0;
-}
-
 .pw-genome-report-flex-area {
   display: flex;
   flex-wrap: wrap;
