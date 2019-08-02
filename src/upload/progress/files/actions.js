@@ -103,12 +103,9 @@ export function processFiles() {
                 ? processReads(dispatch, getState, genome)
                 : processAssembly(dispatch, getState, genome),
           },
-        }).then(() => {
-          if (queue.length > processLimit) {
-            processNext();
-            return;
-          }
-        });
+        })
+          .then(processNext)
+          .catch(processNext);
         processNext();
       }
     }());
