@@ -21,7 +21,7 @@ export default ({ genome }) => {
           <dt>GPSC</dt>
           <dd>
             {poppunk.strain}
-            {poppunk.strain === 'novel' &&
+            {poppunk.strain === 'novel' && genome.owner === 'me' &&
               <a href={mailto} target="_blank" rel="noopener" className="pw-genome-report-secondary-link">
                 Submit for assignment
               </a>
