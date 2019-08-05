@@ -6,6 +6,13 @@ import { ST, Hit } from '../../mlst';
 
 export default ({ genome }) => {
   const { mlst, speciator } = genome.analysis;
+  const alleles = mlst.alleles.map(_ => {
+    const split = _.gene.split('_');
+    return {
+      gene: split[1] || split[0],
+      hits: _.hits,
+    };
+  });
   return (
     <React.Fragment>
       <header className="pw-genome-report-section-header">
@@ -16,8 +23,8 @@ export default ({ genome }) => {
           </a>
         </p>
       </header>
-      <div>
-        <dl className="pw-genome-report-unsized">
+      <div className="pw-genome-report-column">
+        <dl>
           <Metadata label="Sequence Type">
             <ST id={mlst.st} />
           </Metadata>
@@ -30,29 +37,31 @@ export default ({ genome }) => {
           View all ST <ST id={mlst.st} textOnly />
         </ExternalLink>
       </div>
-      <table className="pw-mlst-profile" cellSpacing="0">
-        <caption>Profile</caption>
-        <thead>
-          <tr>
-            {mlst.alleles.map(({ gene }) => (
-              <th key={gene}>{gene}</th>
-            ))}
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            {mlst.alleles.map(({ gene, hits }) => (
-              <td key={gene}>
-                {hits.length ? (
-                  hits.map(id => <Hit key={id} id={id} />)
-                ) : (
-                  <span title="Not Found">&mdash;</span>
-                )}
-              </td>
-            ))}
-          </tr>
-        </tbody>
-      </table>
+      <div className="pw-genome-report-column">
+        <table className="pw-mlst-profile" cellSpacing="0">
+          <caption>Profile</caption>
+          <thead>
+            <tr>
+              {alleles.map(({ gene }) => (
+                <th key={gene}>{gene}</th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              {alleles.map(({ gene, hits }) => (
+                <td key={gene}>
+                  {hits.length ? (
+                    hits.map(id => <Hit key={id} id={id} />)
+                  ) : (
+                    <span title="Not Found">&mdash;</span>
+                  )}
+                </td>
+              ))}
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </React.Fragment>
   );
 };

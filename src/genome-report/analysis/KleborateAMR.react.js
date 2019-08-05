@@ -47,7 +47,7 @@ export default ({ result }) => (
   <React.Fragment>
     <p className="pw-genome-report-section-header">
       <a href="https://github.com/katholt/Kleborate#resistance-gene-detection" target="_blank"
-        rel="noopener" className="pw-genome-report-reference-link"
+        rel="noopener" className="pw-genome-report-secondary-link"
       >
         <strong>Kleborate AMR</strong> - https://github.com/katholt/Kleborate#resistance-gene-detection
       </a>

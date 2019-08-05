@@ -1,9 +1,10 @@
-.wgsa-genome-report .pw-cluster-content {
-  height: 496px; /* 16*31 */
-  margin: 16px 0;
+.wgsa-genome-report .pw-cluster-content,
+.wgsa-genome-report .pw-cluster-view {
+  height: 512px; /* 16*32 */
 }
 
 .wgsa-genome-report .pw-cluster-status,
 .wgsa-genome-report .pw-cluster-network {
   height: 320px;
 }
+

@@ -1,0 +1,469 @@
+{
+  "createdAt": "2017-12-06T13:38:22.416Z",
+  "fileId": "d63ab4e3f6fc77357471b499dce1ff53862c41cc",
+  "name": "ECDC_GE13_096",
+  "userDefined": {
+    "porb1 duplicated": "",
+    "pena duplicated": "",
+    "genogroup": "G4995",
+    "cro sir": "S",
+    "cro mic": "0.012",
+    "cip sir": "R",
+    "cip mic": "",
+    "cfm sir": "S",
+    "cfm mic": "0.016",
+    "azm sir": "S",
+    "azm mic": "",
+    "reporting country": "DE"
+  },
+  "pmid": null,
+  "country": "de",
+  "date": "2013-01-01T00:00:00.000Z",
+  "day": null,
+  "month": null,
+  "year": 2013,
+  "analysis": {
+    "core": {
+      "summary": {
+        "percentAssemblyMatched": 66.8,
+        "percentKernelMatched": 99.8,
+        "kernelSize": 1539,
+        "completeAlleles": 1537,
+        "familiesMatched": 1539,
+        "speciesId": "485",
+        "assemblyId": "d63ab4e3f6fc77357471b499dce1ff53862c41cc"
+      },
+      "fp": { "size": 9023, "reference": "WHO_M" },
+      "__v": "v1"
+    },
+    "cgmlst": {
+      "scheme": "http://rest.pubmlst.org/db/pubmlst_neisseria_seqdef/schemes/62"
+    },
+    "paarsnp": {
+      "matches": [
+        {
+          "query": {
+            "id": "ERR1680320.18090_3_62.16",
+            "length": 42113,
+            "start": 22406,
+            "stop": 24325
+          },
+          "library": { "id": "tetM", "length": 1920, "start": 1, "stop": 1920 },
+          "identity": 100,
+          "evalue": 0,
+          "reversed": false,
+          "type": "CDS",
+          "source": "WGSA_PAAR",
+          "id": "tetM",
+          "agents": ["TCY"]
+        },
+        {
+          "query": {
+            "id": "ERR1680320.18090_3_62.7",
+            "length": 133997,
+            "start": 10514,
+            "stop": 11657
+          },
+          "library": {
+            "id": "porA_WHO_U_01087c",
+            "length": 1188,
+            "start": 1,
+            "stop": 1188
+          },
+          "identity": 88.06,
+          "evalue": 0,
+          "reversed": false,
+          "type": "CDS",
+          "source": "WGSA_PAAR",
+          "id": "porA",
+          "agents": ["POA"]
+        },
+        {
+          "query": {
+            "id": "ERR1680320.18090_3_62.11 Top Hit:WHO_G Neisseria gonorrhoeae WHO G",
+            "start": 20120,
+            "stop": 20752
+          },
+          "library": { "id": "mtrR", "length": 633, "start": 1, "stop": 633 },
+          "identity": 98.42022116903634,
+          "evalue": 0,
+          "reversed": true,
+          "type": "CDS",
+          "source": "WGSA_SNPAR",
+          "id": "mtrR_G45D"
+        },
+        {
+          "libraryStart": 1,
+          "name": "mtrR_G45D",
+          "referenceLocation": 134,
+          "queryLocation": 20619,
+          "reversed": true,
+          "type": "point_mutation",
+          "source": "WGSA_SNPAR",
+          "id": "ERR1680320.18090_3_62.11 Top Hit:WHO_G Neisseria gonorrhoeae WHO G",
+          "agents": ["CRO", "AZM", "PEN", "CFM", "TCY"]
+        },
+        {
+          "query": {
+            "id": "ERR1680320.18090_3_62.7 Top Hit:WHO_K Neisseria gonorrhoeae WHO K",
+            "start": 68916,
+            "stop": 71312
+          },
+          "library": {
+            "id": "ponA1",
+            "length": 2397,
+            "start": 1,
+            "stop": 2397
+          },
+          "identity": 99.9165623696287,
+          "evalue": 0,
+          "reversed": true,
+          "type": "CDS",
+          "source": "WGSA_SNPAR",
+          "id": "ponA1_L421P"
+        },
+        {
+          "libraryStart": 1,
+          "name": "ponA1_L421P",
+          "referenceLocation": 1262,
+          "queryLocation": 70051,
+          "reversed": true,
+          "type": "point_mutation",
+          "source": "WGSA_SNPAR",
+          "id": "ERR1680320.18090_3_62.7 Top Hit:WHO_K Neisseria gonorrhoeae WHO K",
+          "agents": ["PEN"]
+        },
+        {
+          "query": {
+            "id": "ERR1680320.18090_3_62.4 Top Hit:WHO_G Neisseria gonorrhoeae WHO G",
+            "start": 109395,
+            "stop": 112145
+          },
+          "library": { "id": "gyrA", "length": 2751, "start": 1, "stop": 2751 },
+          "identity": 99.92729916394039,
+          "evalue": 0,
+          "reversed": false,
+          "type": "CDS",
+          "source": "WGSA_SNPAR",
+          "id": "gyrA_S91F"
+        },
+        {
+          "libraryStart": 1,
+          "name": "gyrA_S91F",
+          "referenceLocation": 272,
+          "queryLocation": 109666,
+          "reversed": false,
+          "type": "point_mutation",
+          "source": "WGSA_SNPAR",
+          "id": "ERR1680320.18090_3_62.4 Top Hit:WHO_G Neisseria gonorrhoeae WHO G",
+          "agents": ["CIP"]
+        },
+        {
+          "query": {
+            "id": "ERR1680320.18090_3_62.11 Top Hit:WHO_G Neisseria gonorrhoeae WHO G",
+            "start": 20120,
+            "stop": 20752
+          },
+          "library": { "id": "mtrR", "length": 633, "start": 1, "stop": 633 },
+          "identity": 98.42022116903634,
+          "evalue": 0,
+          "reversed": true,
+          "type": "CDS",
+          "source": "WGSA_SNPAR",
+          "id": "mtrR_promoter_A24-"
+        },
+        {
+          "libraryStart": 1,
+          "name": "mtrR_G45D",
+          "referenceLocation": 134,
+          "queryLocation": 20619,
+          "reversed": true,
+          "type": "point_mutation",
+          "source": "WGSA_SNPAR",
+          "id": "ERR1680320.18090_3_62.11 Top Hit:WHO_G Neisseria gonorrhoeae WHO G",
+          "agents": ["CRO", "AZM", "PEN", "CFM", "TCY"]
+        },
+        {
+          "query": {
+            "id": "ERR1680320.18090_3_62.11 Top Hit:WHO_G Neisseria gonorrhoeae WHO G",
+            "start": 20729,
+            "stop": 20827
+          },
+          "library": {
+            "id": "mtrR_promoter",
+            "length": 100,
+            "start": 1,
+            "stop": 100
+          },
+          "identity": 99,
+          "evalue": 1.12433e-43,
+          "reversed": true,
+          "type": "CDS",
+          "source": "WGSA_SNPAR",
+          "id": "mtrR_promoter_A24-"
+        },
+        {
+          "libraryStart": 1,
+          "name": "mtrR_promoter_A24-",
+          "referenceLocation": 24,
+          "queryLocation": 20804,
+          "reversed": true,
+          "type": "point_mutation",
+          "source": "WGSA_SNPAR",
+          "id": "ERR1680320.18090_3_62.11 Top Hit:WHO_G Neisseria gonorrhoeae WHO G",
+          "agents": ["CRO", "AZM", "PEN", "CFM", "TCY"]
+        },
+        {
+          "query": {
+            "id": "ERR1680320.18090_3_62.34 Top Hit:WHO_G Neisseria gonorrhoeae WHO G",
+            "start": 2422,
+            "stop": 4725
+          },
+          "library": { "id": "parC", "length": 2304, "start": 1, "stop": 2304 },
+          "identity": 99.56597222222221,
+          "evalue": 0,
+          "reversed": false,
+          "type": "CDS",
+          "source": "WGSA_SNPAR",
+          "id": "parC_S87R"
+        },
+        {
+          "libraryStart": 1,
+          "name": "parC_S87R",
+          "referenceLocation": 259,
+          "queryLocation": 2680,
+          "reversed": false,
+          "type": "point_mutation",
+          "source": "WGSA_SNPAR",
+          "id": "ERR1680320.18090_3_62.34 Top Hit:WHO_G Neisseria gonorrhoeae WHO G",
+          "agents": ["CIP"]
+        },
+        {
+          "query": {
+            "id": "ERR1680320.18090_3_62.11 Top Hit:WHO_G Neisseria gonorrhoeae WHO G",
+            "start": 45727,
+            "stop": 46581
+          },
+          "library": { "id": "folP", "length": 852, "start": 1, "stop": 852 },
+          "identity": 99.41520467836257,
+          "evalue": 0,
+          "reversed": false,
+          "type": "CDS",
+          "source": "WGSA_SNPAR",
+          "id": "folP_R228S"
+        },
+        {
+          "libraryStart": 1,
+          "name": "folP_R228S",
+          "referenceLocation": 682,
+          "queryLocation": 46411,
+          "reversed": false,
+          "type": "point_mutation",
+          "source": "WGSA_SNPAR",
+          "id": "ERR1680320.18090_3_62.11 Top Hit:WHO_G Neisseria gonorrhoeae WHO G",
+          "agents": ["SMX"]
+        },
+        {
+          "query": {
+            "id": "ERR1680320.18090_3_62.2 Top Hit:WHO_M Neisseria gonorrhoeae WHO M",
+            "start": 70356,
+            "stop": 70667
+          },
+          "library": { "id": "rpsJ", "length": 312, "start": 1, "stop": 312 },
+          "identity": 99.67948717948718,
+          "evalue": 1.93895e-159,
+          "reversed": false,
+          "type": "CDS",
+          "source": "WGSA_SNPAR",
+          "id": "rpsJ_V57M"
+        },
+        {
+          "libraryStart": 1,
+          "name": "rpsJ_V57M",
+          "referenceLocation": 169,
+          "queryLocation": 70524,
+          "reversed": false,
+          "type": "point_mutation",
+          "source": "WGSA_SNPAR",
+          "id": "ERR1680320.18090_3_62.2 Top Hit:WHO_M Neisseria gonorrhoeae WHO M",
+          "agents": ["TCY"]
+        }
+      ],
+      "snp": [
+        "gyrA_S91F",
+        "parC_S87R",
+        "folP_R228S",
+        "ponA1_L421P",
+        "mtrR_promoter_A24-",
+        "rpsJ_V57M",
+        "mtrR_G45D"
+      ],
+      "paar": ["porA_WHO_U_01087c", "tetM"],
+      "antibiotics": [
+        {
+          "mechanisms": ["mtrR_G45D", "mtrR_promoter_A24-"],
+          "state": "INTERMEDIATE",
+          "fullName": "Azithromycin",
+          "name": "AZM"
+        },
+        {
+          "mechanisms": ["mtrR_G45D", "mtrR_promoter_A24-"],
+          "state": "INTERMEDIATE",
+          "fullName": "Ceftriaxone",
+          "name": "CRO"
+        },
+        {
+          "mechanisms": ["mtrR_G45D", "mtrR_promoter_A24-"],
+          "state": "INTERMEDIATE",
+          "fullName": "Cefixime",
+          "name": "CFM"
+        },
+        {
+          "mechanisms": ["gyrA_S91F", "parC_S87R"],
+          "state": "RESISTANT",
+          "fullName": "Ciprofloxacin",
+          "name": "CIP"
+        },
+        {
+          "mechanisms": ["mtrR_G45D", "ponA1_L421P", "mtrR_promoter_A24-"],
+          "state": "INTERMEDIATE",
+          "fullName": "Penicillin",
+          "name": "PEN"
+        },
+        {
+          "mechanisms": ["folP_R228S"],
+          "state": "RESISTANT",
+          "fullName": "Sulfonamides",
+          "name": "SMX"
+        },
+        {
+          "mechanisms": [],
+          "state": "NOT_FOUND",
+          "fullName": "Spectinomycin",
+          "name": "SPT"
+        },
+        {
+          "mechanisms": [
+            "mtrR_G45D",
+            "mtrR_promoter_A24-",
+            "rpsJ_V57M",
+            "tetM"
+          ],
+          "state": "RESISTANT",
+          "fullName": "Tetracycline",
+          "name": "TCY"
+        },
+        {
+          "mechanisms": ["porA_WHO_U_01087c"],
+          "state": "RESISTANT",
+          "fullName": "Pore A",
+          "name": "POA"
+        }
+      ],
+      "__v": "v2"
+    },
+    "mlst": {
+      "alleles": [
+        { "hits": [126], "gene": "abcZ" },
+        { "hits": [39], "gene": "adk" },
+        { "hits": [170], "gene": "aroE" },
+        { "hits": [111], "gene": "fumC" },
+        { "hits": [148], "gene": "gdh" },
+        { "hits": [153], "gene": "pdhC" },
+        { "hits": [65], "gene": "pgm" }
+      ],
+      "url": "https://pubmlst.org/data/profiles/neisseria.txt",
+      "st": "7822",
+      "__v": "20180516172348-v1.6.1"
+    },
+    "ngmast": { "ngmast": "4995", "por": "3031", "tbpb": "33", "__v": "v1" },
+    "metrics": {
+      "contigSums": [
+        238503,
+        400424,
+        552992,
+        705196,
+        848288,
+        988035,
+        1122032,
+        1235743,
+        1329816,
+        1402214,
+        1465115,
+        1520928,
+        1576434,
+        1625385,
+        1672788,
+        1714901,
+        1755635,
+        1791225,
+        1826279,
+        1857787,
+        1885909,
+        1912503,
+        1938478,
+        1964102,
+        1986614,
+        2008642,
+        2029362,
+        2047736,
+        2064658,
+        2077017,
+        2088811,
+        2098344,
+        2106328,
+        2114244,
+        2122035,
+        2129214,
+        2136073,
+        2142457,
+        2148725,
+        2154880,
+        2159832,
+        2164595,
+        2169292,
+        2173602,
+        2177894,
+        2182156,
+        2186186,
+        2188801,
+        2191303,
+        2193479,
+        2195603,
+        2197182,
+        2198151,
+        2198807,
+        2199295
+      ],
+      "gcContent": "52.4",
+      "nonATCG": 41,
+      "N50Contig": 7,
+      "N50": 133997,
+      "averageContig": 39987,
+      "largestContig": 238503,
+      "smallestContig": 488,
+      "contigs": 55,
+      "length": 2199295,
+      "__v": "v2"
+    },
+    "speciator": {
+      "organismName": "Neisseria gonorrhoeae",
+      "organismId": "485",
+      "speciesId": "485",
+      "speciesName": "Neisseria gonorrhoeae",
+      "genusId": "482",
+      "genusName": "Neisseria",
+      "referenceId": "GCF_001146625.1",
+      "mashDistance": 0.0020493639264369274,
+      "pValue": 0,
+      "matchingHashes": "375/400",
+      "__v": "v1"
+    }
+  },
+  "reference": false,
+  "public": true,
+  "population": false,
+  "binned": false,
+  "id": "5a27f2ce54e0d10001e0d3dd",
+  "owner": "other"
+}

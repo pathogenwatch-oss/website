@@ -27,7 +27,8 @@
 }
 
 .pw-genome-report-section-header {
-  margin-bottom: 8px;
+  display: block;
+  margin-bottom: 16px;
 }
 
 p.pw-genome-report-section-header {
@@ -35,7 +36,7 @@ p.pw-genome-report-section-header {
 }
 
 .pw-genome-report-section-header > h2 + *,
-.pw-genome-report-reference-link {
+.pw-genome-report-secondary-link {
   font-size: 13px;
   white-space: nowrap;
   margin: 0;
@@ -55,22 +56,7 @@ p.pw-genome-report-section-header {
   width: 50%;
   display: inline-block;
   vertical-align: top;
-}
-
-/* .pw-genome-report-column > .pw-genome-report-section-header:first-child > h2 {
-  padding-top: 0;
-} */
-
-.pw-genome-report-column.right {
-  text-align: right;
-}
-
-.pw-genome-report-column.right dl {
-  justify-content: flex-end;
-}
-
-.pw-genome-report-column.right .pw-genome-report-section-header.flex {
-  align-items: flex-end;
+  margin: 0 0 16px;
 }
 
 .pw-genome-report-column.one.third {
@@ -81,11 +67,7 @@ p.pw-genome-report-section-header {
   width: 66.666%;
 }
 
-.pw-genome-report-section-header ~ .pw-genome-report-column {
-  margin-top: -8px;
-}
-
-/* specificity hacking */
-.wgsa-genome-report .pw-genome-report-column + table {
-  margin-top: 0;
+.pw-genome-report-flex-area {
+  display: flex;
+  flex-wrap: wrap;
 }

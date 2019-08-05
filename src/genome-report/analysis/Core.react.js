@@ -4,7 +4,7 @@ import { Name } from '../../branding';
 export default ({ result: { fp, summary } }) => (
   <React.Fragment>
     <h2>Core Stats</h2>
-    <dl>
+    <dl className="grid">
       <div>
         <dt>Core Matches</dt>
         <dd>{summary.kernelSize}</dd>

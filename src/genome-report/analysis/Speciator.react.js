@@ -5,7 +5,7 @@ import { Metadata } from '../components';
 export default ({ result }) => (
   <React.Fragment>
     <h2>Organism Prediction</h2>
-    <dl>
+    <dl className="grid">
       <Metadata label="Taxonomy ID">
         <a
           href={`https://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?mode=Tree&id=${result.organismId}`}

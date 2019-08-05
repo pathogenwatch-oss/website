@@ -2,8 +2,13 @@ import React from 'react';
 
 export default ({ result }) => (
   <React.Fragment>
-    <h2>NG-MAST</h2>
-    <dl>
+    <header className="pw-genome-report-section-header">
+      <h2>NG-MAST</h2>
+      <a href="https://github.com/MDU-PHL/ngmaster" target="_blank" rel="noopener">
+        https://github.com/MDU-PHL/ngmaster
+      </a>
+    </header>
+    <dl className="flex">
       <div>
         <dt>NG-MAST</dt>
         <dd>{result.ngmast}</dd>

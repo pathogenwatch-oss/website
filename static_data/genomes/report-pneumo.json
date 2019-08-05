@@ -1,0 +1,253 @@
+{
+  "name": "ERS015858",
+  "year": null,
+  "month": null,
+  "day": null,
+  "country": null,
+  "createdAt": "2019-07-24T13:47:10.738Z",
+  "fileId": "9212b7e81971984445b64595a9bc3a5fdf4bb9b7",
+  "analysis": {
+    "serotype": { "value": "19F", "source": "SeroBA", "__v": "seroba-v1.0.0", "warn": true },
+    "poppunk": { "strain": "novel" },
+    "paarsnp": {
+      "matches": [
+        {
+          "query": {
+            "id": "gi|809664764|emb|CHYO01000008.1|",
+            "length": 73671,
+            "start": 56034,
+            "stop": 57497
+          },
+          "library": {
+            "id": "msrD_2_AF274302",
+            "length": 1464,
+            "start": 1,
+            "stop": 1464
+          },
+          "identity": 100,
+          "evalue": 0,
+          "reversed": false,
+          "type": "CDS",
+          "source": "WGSA_PAAR",
+          "id": "msrD_2",
+          "agents": ["MAC"]
+        },
+        {
+          "query": {
+            "id": "gi|809664764|emb|CHYO01000008.1|",
+            "length": 73671,
+            "start": 54697,
+            "stop": 55914
+          },
+          "library": {
+            "id": "mefA_10_AF376746",
+            "length": 1218,
+            "start": 1,
+            "stop": 1218
+          },
+          "identity": 100,
+          "evalue": 0,
+          "reversed": false,
+          "type": "CDS",
+          "source": "WGSA_PAAR",
+          "id": "mefA_10",
+          "agents": ["MAC"]
+        },
+        {
+          "query": {
+            "id": "gi|809664764|emb|CHYO01000008.1|",
+            "length": 73671,
+            "start": 59223,
+            "stop": 61142
+          },
+          "library": {
+            "id": "tetM_2_X90939",
+            "length": 1920,
+            "start": 1920,
+            "stop": 1
+          },
+          "identity": 100,
+          "evalue": 0,
+          "reversed": true,
+          "type": "CDS",
+          "source": "WGSA_PAAR",
+          "id": "tetM_2",
+          "agents": ["TCY"]
+        }
+      ],
+      "snp": ["folA_AE007317_I100L"],
+      "paar": ["tetM_2_X90939", "mefA_10_AF376746", "msrD_2_AF274302"],
+      "antibiotics": [
+        {
+          "mechanisms": [],
+          "state": "NOT_FOUND",
+          "fullName": "Kanamycin",
+          "name": "KAN"
+        },
+        {
+          "mechanisms": ["msrD_2_AF274302", "mefA_10_AF376746"],
+          "state": "RESISTANT",
+          "fullName": "Macrolides",
+          "name": "MAC"
+        },
+        {
+          "mechanisms": [],
+          "state": "NOT_FOUND",
+          "fullName": "Chloramphenicol",
+          "name": "CHL"
+        },
+        {
+          "mechanisms": ["tetM_2_X90939"],
+          "state": "RESISTANT",
+          "fullName": "Tetracycline",
+          "name": "TCY"
+        },
+        {
+          "mechanisms": ["folA_AE007317_I100L"],
+          "state": "RESISTANT",
+          "fullName": "Trimethoprim",
+          "name": "TMP"
+        },
+        {
+          "mechanisms": [],
+          "state": "NOT_FOUND",
+          "fullName": "Sulfamethoxazole",
+          "name": "SSS"
+        },
+        {
+          "mechanisms": [],
+          "state": "NOT_FOUND",
+          "fullName": "Fluoroquinolones",
+          "name": "FLQ"
+        }
+      ],
+      "__v": "v2.1"
+    },
+    "_cgmlst": {
+      "scheme": "http://www.fake_website_does_not_exist.com/nicks_scheme_converted_to_ridom/alleles/"
+    },
+    "mlst": {
+      "alleles": [
+        { "hits": [15], "gene": "aroE" },
+        { "hits": [26], "gene": "ddl" },
+        { "hits": [16], "gene": "gdh" },
+        { "hits": [19], "gene": "gki" },
+        { "hits": [15], "gene": "recP" },
+        { "hits": [6], "gene": "spi" },
+        { "hits": [20], "gene": "xpt" }
+      ],
+      "url": "https://pubmlst.org/data/profiles/spneumoniae.txt",
+      "st": "236",
+      "__v": "20180806174658-v1.6.10"
+    },
+    "metrics": {
+      "contigSums": [
+        125677,
+        247488,
+        354169,
+        457302,
+        557560,
+        656512,
+        730794,
+        804465,
+        861859,
+        918872,
+        974698,
+        1023452,
+        1069469,
+        1112425,
+        1152892,
+        1192735,
+        1232266,
+        1270759,
+        1308735,
+        1344214,
+        1378383,
+        1412186,
+        1441429,
+        1469378,
+        1497208,
+        1523752,
+        1547790,
+        1571303,
+        1593733,
+        1615508,
+        1637048,
+        1658380,
+        1678480,
+        1698383,
+        1717841,
+        1737015,
+        1755983,
+        1774672,
+        1792529,
+        1810227,
+        1827525,
+        1844645,
+        1858891,
+        1873041,
+        1887177,
+        1900977,
+        1913182,
+        1925136,
+        1937038,
+        1948822,
+        1960279,
+        1971563,
+        1980777,
+        1988954,
+        1996185,
+        2003353,
+        2009874,
+        2016213,
+        2022297,
+        2027845,
+        2031856,
+        2035367,
+        2036997,
+        2038236,
+        2039458,
+        2040653,
+        2041376,
+        2042007,
+        2042497,
+        2042855,
+        2043201,
+        2043544,
+        2043846
+      ],
+      "gcContent": "39.7",
+      "nonATCG": 1,
+      "N50Contig": 12,
+      "N50": 48754,
+      "averageContig": 27997,
+      "largestContig": 125677,
+      "smallestContig": 302,
+      "contigs": 73,
+      "length": 2043846,
+      "__v": "v2"
+    },
+    "speciator": {
+      "organismName": "Streptococcus pneumoniae",
+      "organismId": "1313",
+      "matchingHashes": "400/400",
+      "pValue": 0,
+      "mashDistance": 0,
+      "referenceId": "GCF_001330055.1",
+      "superkingdomName": "Bacteria",
+      "superkingdomId": "2",
+      "genusName": "Streptococcus",
+      "genusId": "1301",
+      "speciesName": "Streptococcus pneumoniae",
+      "speciesId": "1313",
+      "__v": "t8"
+    }
+  },
+  "reference": false,
+  "upload": { "type": "assembly" },
+  "public": false,
+  "population": false,
+  "binned": false,
+  "id": "5d38615e184c059809cfdca6",
+  "owner": "me"
+}

@@ -1,16 +1,5 @@
 import React from 'react';
 
-const fields = [
-  'Yersiniabactin',
-  'YbST',
-  'Colibactin',
-  'CbST',
-  'Aerobactin',
-  'AbST',
-  'Salmochelin',
-  'SmST',
-];
-
 const scores = {
   0: 'no virulence loci',
   1: 'yersiniabactin only',
@@ -20,11 +9,17 @@ const scores = {
   5: 'yersiniabactin, colibactin and aerobactin and/or salmochelin',
 };
 
+const Value = ({ className, children }) => (
+  <td className={className}>
+    {children.replace('0', '-')}
+  </td>
+);
+
 export default ({ result }) => (
   <React.Fragment>
     <p className="pw-genome-report-section-header">
       <a href="https://github.com/katholt/Kleborate#virulence-loci" target="_blank"
-        rel="noopener" className="pw-genome-report-reference-link"
+        rel="noopener" className="pw-genome-report-secondary-link"
       ><strong>Kleborate Virulence</strong> - https://github.com/katholt/Kleborate#virulence-loci</a>
     </p>
     <div className="pw-genome-report-column two thirds">
@@ -47,13 +42,26 @@ export default ({ result }) => (
       <table className="wide bordered" cellSpacing="0">
         <thead>
           <tr>
-            {fields.map((klebType) =>
-              <th key={klebType}>{klebType.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}</th>)}
+            <th>Yersiniabactin</th>
+            <th>YbST</th>
+            <th>Colibactin</th>
+            <th>CbST</th>
+            <th>Aerobactin</th>
+            <th>AbST</th>
+            <th>Salmochelin</th>
+            <th>SmST</th>
           </tr>
         </thead>
         <tbody>
           <tr>
-            {fields.map((klebType) => <td key={klebType}>{result[klebType].replace('0', '-')}</td>)}
+            <Value>{result.Yersiniabactin}</Value>
+            <Value>{result.YbST}</Value>
+            <Value>{result.Colibactin}</Value>
+            <Value>{result.CbST}</Value>
+            <Value>{result.Aerobactin}</Value>
+            <Value>{result.AbST}</Value>
+            <Value>{result.Salmochelin}</Value>
+            <Value>{result.SmST}</Value>
           </tr>
         </tbody>
       </table>

@@ -39,7 +39,7 @@ export default ({ result, genome }) => {
   return (
     <React.Fragment>
       <p className="pw-genome-report-section-header">
-        <a href={libraryUrl} target="_blank" rel="noopener" className="pw-genome-report-reference-link">
+        <a href={libraryUrl} target="_blank" rel="noopener" className="pw-genome-report-secondary-link">
           <strong>PAARSNP AMR</strong> - Library {library.label} Version {library.version}
           {library.source !== 'PUBLIC' ? ` (${library.source})` : ''}
         </a>
