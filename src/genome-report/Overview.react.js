@@ -10,9 +10,10 @@ import { Logo } from '../branding';
 const SpeciesSubtitle = ({ analysis }) => {
   const { speciator, serotype = {} } = analysis;
   if (!speciator) return <em>Species prediction pending</em>;
-  if (speciator.species === '28901') {
+  if (speciator.speciesId === '28901') {
     return (
       <OrganismName
+        abbreviated
         speciesName={speciator.speciesName}
         subspecies={serotype.subspecies}
         serotype={serotype.value}
