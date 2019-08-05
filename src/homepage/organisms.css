@@ -52,6 +52,9 @@
 
 .wgsa-organism-table td {
   vertical-align: middle;
+  height: 64px;
+  box-sizing: border-box;
+  line-height: 16px;
 }
 
 .wgsa-organism-table i {

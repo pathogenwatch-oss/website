@@ -305,7 +305,11 @@ export default ({ deployedOrganisms }) => (
                   <i className="material-icons">check</i>
                 )}
               </td>
-              <td />
+              <td>
+                <small>PopPUNK</small>
+                <br />
+                <small>SeroBA</small>
+              </td>
             </tr>
             {deployedOrganisms.has('64320') && (
               <tr>
