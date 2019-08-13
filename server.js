@@ -114,11 +114,23 @@ module.exports = () =>
       }
 
       let clientId = null;
+      const limits = {
+        maxCollectionSize: config.maxCollectionSize,
+        maxDownloadSize: config.maxDownloadSize,
+      };
 
       if (req.user) {
         const hash = crypto.createHash('sha1');
         hash.update(req.user.id);
         clientId = hash.digest('hex');
+        if (req.user.limits) {
+          for (const [ key, value ] of Object.entries(req.user.limits)) {
+            // model will provide missing properties as undefined, should not overwrite.
+            if (!!value) {
+              limits[key] = value;
+            }
+          }
+        }
       }
 
       return res.render('index', {
@@ -128,8 +140,8 @@ module.exports = () =>
           assemblerAddress: config.assemblerAddress,
           clientId,
           mapboxKey: config.mapboxKey,
-          maxCollectionSize: config.maxCollectionSize,
-          maxDownloadSize: config.maxDownloadSize,
+          maxCollectionSize: limits.maxCollectionSize,
+          maxDownloadSize: limits.maxDownloadSize,
           maxGenomeFileSize: config.maxGenomeFileSize,
           pagination: config.pagination,
           pusher: {

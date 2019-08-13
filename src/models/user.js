@@ -4,17 +4,21 @@ const { Schema } = mongoose;
 const { addPreSaveHook } = require('./utils');
 
 const schema = new Schema({
+  admin: { type: Boolean, default: undefined },
   createdAt: Date,
   email: String,
+  flags: Object,
   lastAccessedAt: Date,
   lastUpdatedAt: Date,
+  limits: {
+    maxCollectionSize: Number,
+    maxDownloadSize: Number,
+  },
   name: String,
   organisation: { type: Schema.Types.ObjectId, ref: 'Organisation' },
   photo: String,
-  providerType: String,
   providerId: String,
-  admin: { type: Boolean, default: undefined },
-  flags: Object,
+  providerType: String,
 });
 
 addPreSaveHook(schema);

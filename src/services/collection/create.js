@@ -16,7 +16,7 @@ function getGenomes(genomeIds) {
     { _id: { $in: genomeIds } },
     { latitude: 1, longitude: 1, 'analysis.core.fp.reference': 1 }
   )
-  .lean();
+    .lean();
 }
 
 function getLocations(genomes) {
@@ -91,7 +91,7 @@ function submitCollection(collection) {
     collectionId: _id,
     clientId: token,
   })
-  .then(() => collection);
+    .then(() => collection);
 }
 
 module.exports = function (message) {

@@ -24,7 +24,7 @@ module.exports = async function ({ genomeIds, organismId, user }) {
   if (!task) throw new ServiceRequestError('Unsupported organism');
 
   const size = genomeIds.length;
-  const maxSize = user.admin ? null : maxCollectionSize;
+  const maxSize = user.limits && user.limits.maxCollectionSize || maxCollectionSize;
   if (maxSize !== null && size > maxSize) {
     throw new ServiceRequestError('Too many genome IDs provided');
   }
