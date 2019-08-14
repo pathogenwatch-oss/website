@@ -12,7 +12,7 @@ export function sortGenomes(genomes) {
   });
 }
 
-export function formatGenomeRecords(genomes) {
+export function formatGenomeRecords(genomes = []) {
   return genomes.map(genome => {
     const analysis = { ...genome.analysis };
     if (analysis.paarsnp && Array.isArray(analysis.paarsnp.antibiotics)) {
