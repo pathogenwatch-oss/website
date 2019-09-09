@@ -66,4 +66,5 @@ export const analysisLabels = {
   poppunk: 'Strain',
   serotype: 'Serotype',
   speciator: 'Species Prediction',
+  spn_pbp_amr: 'AMR',
 };
