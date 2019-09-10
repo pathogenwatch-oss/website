@@ -1,5 +1,7 @@
 import { combineReducers } from 'redux';
 
+import treeReducer from '@cgps/libmicroreact/tree/reducer';
+
 import { FETCH_COLLECTION, UPDATE_COLLECTION_PROGRESS }
   from '../actions';
 import { RESET_FILTER, ACTIVATE_FILTER, CLEAR_FILTERS } from '../filter/actions';
@@ -7,28 +9,6 @@ import * as ACTIONS from './actions';
 
 import { simpleTrees } from './constants';
 import { COLLECTION, POPULATION } from '../../app/stateKeys/tree';
-
-import Organisms from '../../organisms';
-
-function setSize(state, step, maxStepFactor) {
-  if (step === state.step) return state;
-
-  return {
-    ...state,
-    step,
-    base: Math.min(step / 2, 15),
-    scale: 1,
-    max: Math.ceil(maxStepFactor / step),
-  };
-}
-
-function setNodeSize(state, { step }) {
-  return setSize(state, step, 30);
-}
-
-function setLabelSize(state, { step }) {
-  return setSize(state, step, 40);
-}
 
 function updateHistory(tree, { image }) {
   const { history, type, root, nodeSize, labelSize } = tree;
@@ -49,43 +29,55 @@ function updateHistory(tree, { image }) {
 
 function getInitialState() {
   return {
-    type: Organisms.uiOptions.defaultTree || 'rectangular',
-    nodeSize: {},
-    labelSize: {},
     history: [],
   };
 }
 
-function entities(state = {}, { type, payload }) {
+function entities(state = {}, action) {
+  if (action.stateKey) {
+    const treeState = state[action.stateKey];
+    return {
+      ...state,
+      [action.stateKey]: treeReducer(treeState, action),
+    };
+  }
+
+  const { type, payload } = action;
+
   switch (type) {
     case FETCH_COLLECTION.SUCCESS: {
       const { organism = {}, subtrees, tree } = payload.result;
-
       const initialState = getInitialState();
 
       const nextState = {
         ...state,
-        ...subtrees.reduce((memo, subtree) => {
+        ...subtrees.reduce((memo, { newick, ...subtree }) => {
           memo[subtree.name] = {
             status: 'PENDING',
             progress: 0,
             lastStatus: 0,
             ...subtree,
             ...initialState,
+            phylocanvas: {
+              source: newick,
+            },
           };
           return memo;
         }, {}),
       };
 
       if (tree) {
+        const { newick, ...treeProps } = tree;
         nextState[COLLECTION] = {
-          newick: null,
           status: 'PENDING',
           progress: 0,
           lastStatus: 0,
-          ...tree,
+          ...treeProps,
           name: COLLECTION,
           ...initialState,
+          phylocanvas: {
+            source: newick,
+          },
         };
       }
 
@@ -93,9 +85,11 @@ function entities(state = {}, { type, payload }) {
         nextState[POPULATION] = {
           name: POPULATION,
           status: 'READY',
-          newick: organism.tree,
           leafIds: organism.references.map(_ => _.uuid),
           ...initialState,
+          phylocanvas: {
+            source: organism.tree,
+          },
         };
       }
 
@@ -166,9 +160,12 @@ function entities(state = {}, { type, payload }) {
         [payload.stateKey]: {
           ...state[payload.stateKey],
           name: payload.stateKey,
-          newick: payload.result.newick,
           status: payload.result.status,
           ...getInitialState(),
+          phylocanvas: {
+            ...state[payload.stateKey].phylocanvas,
+            source: payload.result.newick,
+          },
         },
       };
     case ACTIONS.SET_TREE:
@@ -187,46 +184,9 @@ function entities(state = {}, { type, payload }) {
           ...treeState,
           loaded: true,
           leafIds: treeState.leafIds || payload.leafIds,
-          root: payload.root,
-          nodeSize: setNodeSize(treeState.nodeSize, payload),
-          labelSize: setLabelSize(treeState.labelSize, payload),
         },
       };
     }
-    case ACTIONS.TREE_TYPE_CHANGED: {
-      const treeState = state[payload.stateKey];
-      return {
-        ...state,
-        [payload.stateKey]: {
-          ...treeState,
-          type: payload.type,
-          nodeSize: setNodeSize(treeState.nodeSize, payload),
-          labelSize: setLabelSize(treeState.labelSize, payload),
-        },
-      };
-    }
-    case ACTIONS.SET_NODE_SCALE:
-      return {
-        ...state,
-        [payload.stateKey]: {
-          ...state[payload.stateKey],
-          nodeSize: {
-            ...state[payload.stateKey].nodeSize,
-            scale: payload.scale,
-          },
-        },
-      };
-    case ACTIONS.SET_LABEL_SCALE:
-      return {
-        ...state,
-        [payload.stateKey]: {
-          ...state[payload.stateKey],
-          labelSize: {
-            ...state[payload.stateKey].labelSize,
-            scale: payload.scale,
-          },
-        },
-      };
     case ACTIONS.ADD_HISTORY_SNAPSHOT: {
       const treeState = state[payload.stateKey];
       return {
@@ -243,14 +203,6 @@ function entities(state = {}, { type, payload }) {
         [payload.stateKey]: {
           ...state[payload.stateKey],
           ...payload.snapshot,
-        },
-      };
-    case ACTIONS.RESET_TREE_ROOT:
-      return {
-        ...state,
-        [payload.stateKey]: {
-          ...state[payload.stateKey],
-          root: 'root',
         },
       };
     default:

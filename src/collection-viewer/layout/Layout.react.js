@@ -54,10 +54,9 @@ const Layout = React.createClass({
           resizerClassName="wgsa-resizer"
           onChange={verticalSize => this.setState({ verticalSize })}
         >
-          <Tree
-            height={this.state.horizontalSize}
-            width={this.state.verticalSize}
-          />
+          <AutoSizer>
+            {({ height, width }) => <Tree height={height} width={width} />}
+          </AutoSizer>
           <Map>
             <Summary />
           </Map>

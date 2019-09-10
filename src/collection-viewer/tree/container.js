@@ -1,8 +1,7 @@
+import React from 'react';
 import { connect } from 'react-redux';
 
-import Tree from './Tree.react';
-import PopulationStyler from './PopulationStyler.react';
-import StandardStyler from './StandardStyler.react';
+import Tree from '@cgps/libmicroreact/tree';
 
 import * as selectors from './selectors';
 
@@ -15,20 +14,32 @@ import {
   resetTreeRoot,
 } from './thunks';
 
-import { POPULATION } from '../../app/stateKeys/tree';
-
 function mapStateToProps(state) {
-  const { name, type, loaded, newick, root } = selectors.getVisibleTree(state);
+  const { name, loaded, phylocanvas } = selectors.getVisibleTree(state);
   return {
-    name, type, loaded, newick, root, status,
+    name, loaded,
+    phylocanvasState: phylocanvas,
     filenames: selectors.getFilenames(state),
     loading: selectors.isLoading(state),
-    Styler: name === POPULATION ? PopulationStyler : StandardStyler,
   };
 }
 
+const setPhylocanvasState = (state) =>
+  (dispatch, getState) =>
+    dispatch({
+      stateKey: selectors.getTreeStateKey(getState()),
+      type: 'SET PHYLOCANVAS STATE',
+      payload: state,
+    });
+
 function mapDispatchToProps(dispatch) {
   return {
+    onPhylocanvasInitialise: console.log, // (image) => dispatch(addInitialTreeHistory(image)),
+    onPhylocanvasStateChange: (state) => dispatch(setPhylocanvasState(state)),
+    setHighlightedIds: console.log, // (ids, merge) => dispatch(setHighlightedIds(ids, merge)),
+    onFilterChange: console.log, // (ids, path) => dispatch(setTreeFilter(ids, path)),
+    onAddHistoryEntry: console.log, // (image) => dispatch(addTreeHistory(image)),
+
     onLoaded: phylocanvas => dispatch(treeLoaded(phylocanvas)),
     onSubtree: phylocanvas => dispatch(subtreeLoaded(phylocanvas)),
     onUpdated: (event, phylocanvas) =>
@@ -39,4 +50,23 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Tree);
+const Component = (props) => {
+  const [ controls, toggleControls ] = React.useState(false);
+  const [ lasso, toggleLasso ] = React.useState(false);
+
+  if (props.width === 0 || props.height === 0) {
+    return null;
+  }
+
+  return (
+    <Tree
+      {...props}
+      controlsVisible={controls}
+      onControlsVisibleChange={toggleControls}
+      lasso={lasso}
+      onLassoChange={toggleLasso}
+    />
+  );
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Component);

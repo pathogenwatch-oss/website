@@ -35,9 +35,9 @@ export function displayTree(name) {
       return;
     }
 
-    dispatch(fetchTree(name)).
-      then(() => dispatch(actions.setTree(name))).
-      catch(() => dispatch(showToast(errorToast)));
+    dispatch(fetchTree(name))
+      .then(() => dispatch(actions.setTree(name)))
+      .catch(() => dispatch(showToast(errorToast)));
   };
 }
 
@@ -141,3 +141,4 @@ export function resetTreeRoot() {
     dispatch(actions.resetTreeRoot(stateKey));
   };
 }
+

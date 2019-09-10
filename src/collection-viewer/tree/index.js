@@ -1,3 +1,3 @@
 import './styles.css';
 
-export default from './container.js';
+export { default } from './container.js';
