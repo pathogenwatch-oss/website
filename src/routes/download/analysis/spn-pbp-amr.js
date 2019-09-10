@@ -8,7 +8,7 @@ const transformer = function (doc) {
     'Genome Name': doc.name,
   };
 
-  Object.keys(doc.analysis.kleborate).forEach(
+  Object.keys(doc.analysis.spn_pbp_amr).forEach(
     prop =>
       (record[prop.replace('__v', 'Version').replace(/_/g, ' ')] = doc.analysis.kleborate[prop])
   );
