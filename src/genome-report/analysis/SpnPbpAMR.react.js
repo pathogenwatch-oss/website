@@ -85,7 +85,7 @@ export default ({ result }) => (
             <td className="wgsa-genome-report-amr-state">
               {result.hasOwnProperty(agentKey) ?
                 result[agentKey] :
-                `(${result[`${agentKey}Meningitis`]} / ${result[`${agentKey}NonMeningitis`]})`
+                `(${result[`${agentKey}NonMeningitis`]} / ${result[`${agentKey}Meningitis`]})`
               }
             </td>
           </tr>
