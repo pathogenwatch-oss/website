@@ -40,6 +40,7 @@ const projection = {
   'analysis.poppunk.strain': 1,
   'analysis.serotype': 1,
   'analysis.speciator': 1,
+  'analysis.spn_pbp_amr': 1,
   'upload.type': 1,
 };
 

@@ -19,6 +19,7 @@ module.exports = async function ({ user, query }) {
     'analysis.speciator.organismId': 1,
     'analysis.speciator.organismName': 1,
     'analysis.speciator.speciesId': 1,
+    'analysis.spnResistancePbp.__v': 1,
     assembler: 1,
     errored: 1,
     name: 1,
