@@ -36,7 +36,6 @@ export default genome => {
     mlst,
     paarsnp,
     speciator,
-    spn_pbp_amr,
   } = analysis;
 
   const sections = [];
@@ -52,7 +51,7 @@ export default genome => {
       component: <MLST genome={genome} />,
     });
   }
-  if (paarsnp || kleborate || spn_pbp_amr) {
+  if (paarsnp || kleborate) {
     sections.push({
       key: 'AMR',
       component: <AMR genome={genome} />,
