@@ -30,6 +30,7 @@ function updateHistory(tree, { image }) {
 function getInitialState() {
   return {
     history: [],
+    ...treeReducer(undefined, {}),
   };
 }
 
@@ -59,6 +60,7 @@ function entities(state = {}, action) {
             ...subtree,
             ...initialState,
             phylocanvas: {
+              ...initialState.phylocanvas,
               source: newick,
             },
           };
@@ -76,6 +78,7 @@ function entities(state = {}, action) {
           name: COLLECTION,
           ...initialState,
           phylocanvas: {
+            ...initialState.phylocanvas,
             source: newick,
           },
         };
@@ -88,6 +91,7 @@ function entities(state = {}, action) {
           leafIds: organism.references.map(_ => _.uuid),
           ...initialState,
           phylocanvas: {
+            ...initialState.phylocanvas,
             source: organism.tree,
           },
         };
