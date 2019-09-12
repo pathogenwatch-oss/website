@@ -3,8 +3,8 @@ import { connect } from 'react-redux';
 
 import DownloadButton from './DownloadButton.react';
 
-import { getActiveGenomeIds, getCollection } from '../selectors';
-import { getGenomes, hasMetadata } from '../genomes/selectors';
+import { getCollection } from '../selectors';
+import { getGenomes, hasMetadata, getActiveGenomeIds } from '../genomes/selectors';
 import { getTables, hasTyping, hasAMR } from '../table/selectors';
 
 import { formatCollectionFilename } from './utils';

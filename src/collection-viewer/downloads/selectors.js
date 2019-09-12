@@ -1,8 +1,8 @@
 import { createSelector } from 'reselect';
 
 import { getServerPath } from '~/utils/Api';
-import { getViewer, getCollection, getActiveGenomeIds } from '../selectors';
-import { getGenomes } from '../genomes/selectors';
+import { getViewer, getCollection } from '../selectors';
+import { getGenomes, getActiveGenomeIds } from '../genomes/selectors';
 import { getVisibleTree } from '../tree/selectors';
 
 export const isMenuOpen = state =>

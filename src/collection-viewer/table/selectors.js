@@ -1,17 +1,50 @@
 import { createSelector } from 'reselect';
 
 import { getViewer, getCollection } from '../selectors';
-import { getMetadataColumns, getActiveMetadataColumn } from '../data-tables/selectors';
-import { hasMetadata } from '../genomes/selectors';
+import { getGenomeList, hasMetadata } from '../genomes/selectors';
 
 import { createColourGetter } from '../amr-utils';
 import Organisms from '~/organisms';
+import {
+  getColumnNames,
+  getLeadingSystemColumnProps,
+  getTrailingSystemColumnProps,
+  getUserDefinedColumnProps,
+} from '../data-tables/utils';
 
+import { nameColumnProps } from './constants';
 import { tableKeys } from '../constants';
 
 export const getTableState = state => getViewer(state).table;
 export const getAMRTableName = state => getTableState(state).activeAMR;
 export const getTableEntities = state => getTableState(state).entities;
+
+export const getMetadataColumns = createSelector(
+  getGenomeList,
+  (genomes) => {
+    const { leading, trailing, userDefined } = getColumnNames(genomes);
+    const leadingSystemColumnProps = getLeadingSystemColumnProps(leading);
+    const trailingSystemColumnProps = getTrailingSystemColumnProps(trailing);
+    return [
+      ...leadingSystemColumnProps,
+      ...getUserDefinedColumnProps(userDefined),
+      ...trailingSystemColumnProps,
+    ];
+  }
+);
+
+export const getActiveMetadataColumn = createSelector(
+  getMetadataColumns,
+  state => getTableEntities(state).metadata.activeColumn,
+  (columns, activeColumn) => {
+    for (const column of columns) {
+      if (column.columnKey === activeColumn.columnKey) {
+        return activeColumn;
+      }
+    }
+    return nameColumnProps;
+  }
+);
 
 const getMetadataTable = createSelector(
   getTableEntities,
@@ -121,4 +154,27 @@ export const getColourGetter = createSelector(
 export const getLabelGetter = createSelector(
   getActiveDataTable,
   activeTable => activeTable.activeColumn.valueGetter
+);
+
+function getShape(genome) {
+  if (genome.reference) return 'triangle';
+  if (genome.public) return 'square';
+  return 'circle';
+}
+
+export const getGenomeStyles = createSelector(
+  getGenomeList,
+  getLabelGetter,
+  getColourGetter,
+  (genomes, getLabel, getColour) => {
+    const styles = {};
+    for (const genome of genomes) {
+      styles[genome.id] = {
+        colour: getColour(genome),
+        label: getLabel(genome),
+        shape: getShape(genome),
+      };
+    }
+    return styles;
+  }
 );

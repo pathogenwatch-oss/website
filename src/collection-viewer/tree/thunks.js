@@ -1,4 +1,5 @@
-import { getCollection, getHighlightedIds } from '../../collection-viewer/selectors';
+import { getCollection } from '../selectors';
+import { getHighlightedIds } from '../highlight/selectors';
 import { getTrees, getVisibleTree, getLeafIds } from './selectors';
 
 import { showToast } from '../../toast';

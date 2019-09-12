@@ -7,7 +7,9 @@ import Network from '../clustering/Network.react';
 import ThresholdSlider from './ThresholdSlider.react';
 
 import { getLassoPath, isLassoActive, getLocationThreshold } from './selectors';
-import { getHighlightedIds, getFilter, getCollection, hasHighlightedIds } from '../collection-viewer/selectors';
+import { getCollection } from '../collection-viewer/selectors';
+import { getFilter } from '../collection-viewer/filter/selectors';
+import { getHighlightedIds, hasHighlightedIds } from '../collection-viewer/highlight/selectors';
 import { getGraph, getNodeData } from '../clustering/selectors';
 
 import { setLassoPath, toggleLassoActive, fetchCluster } from './actions';

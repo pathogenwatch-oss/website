@@ -1,7 +1,7 @@
 import { createSelector } from 'reselect';
 
-import { getUnfilteredGenomeIds } from '../filter/selectors';
-import { getColourGetter, getLabelGetter } from '../table/selectors';
+import { getHighlightedIds } from '../highlight/selectors';
+import { getUnfilteredGenomeIds, getFilteredGenomeIds } from '../filter/selectors';
 import { getPrivateMetadata } from '../private-metadata/selectors';
 
 export const getGenomes = createSelector(
@@ -42,25 +42,32 @@ export const hasMetadata = createSelector(
     ))
 );
 
-function getShape(genome) {
-  if (genome.reference) return 'triangle';
-  if (genome.public) return 'square';
-  return 'circle';
-}
+export const getActiveGenomeIds = createSelector(
+  getHighlightedIds,
+  getFilteredGenomeIds,
+  (highlighted, visible) => Array.from(highlighted.size ? highlighted : visible)
+);
 
-export const getGenomeStyles = createSelector(
-  getGenomeList,
-  getLabelGetter,
-  getColourGetter,
-  (genomes, getLabel, getColour) => {
-    const styles = {};
-    for (const genome of genomes) {
-      styles[genome.id] = {
-        colour: getColour(genome),
-        label: getLabel(genome),
-        shape: getShape(genome),
-      };
+export const getActiveGenomes = createSelector(
+  getGenomes,
+  getActiveGenomeIds,
+  (genomes, ids) => ids.map(id => genomes[id])
+);
+
+export const getCollectionGenomeIds = createSelector(
+  getGenomes,
+  genomes => {
+    const collectionGenomes = [];
+    for (const id of Object.keys(genomes)) {
+      if (genomes[id].__isCollection) {
+        collectionGenomes.push(id);
+      }
     }
-    return styles;
+    return collectionGenomes;
   }
+);
+
+export const getOwnGenomes = createSelector(
+  getActiveGenomes,
+  genomes => genomes.filter(_ => _.owner === 'me')
 );

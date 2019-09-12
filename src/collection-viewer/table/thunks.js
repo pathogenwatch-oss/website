@@ -1,4 +1,4 @@
-import { getHighlightedIds } from '../selectors';
+import { getHighlightedIds } from '../highlight/selectors';
 import { setHighlight, clearHighlight } from '../highlight/actions';
 
 export function onRowClick(genome) {

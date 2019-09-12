@@ -15,7 +15,7 @@ import { buttonClassname, activeButtonClassname } from '../../map/Map.react';
 
 import { COLLECTION as stateKey } from '../../app/stateKeys/map';
 
-import { hasHighlightedIds } from '../selectors';
+import { hasHighlightedIds } from '../highlight/selectors';
 import { removeFromHighlight, setHighlight, clearHighlight } from '../highlight/actions';
 
 function mapStateToProps(state) {

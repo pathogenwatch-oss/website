@@ -3,11 +3,14 @@ import { createSelector } from 'reselect';
 import {
   getCollection,
   getViewer,
+} from '../selectors';
+import {
+  getGenomes,
+  getGenomeList,
   getCollectionGenomeIds,
   getActiveGenomeIds,
-} from '../selectors';
-import { getGenomes, getGenomeList, getGenomeStyles } from '../genomes/selectors';
-import { getActiveDataTable } from '../table/selectors';
+} from '../genomes/selectors';
+import { getActiveDataTable, getGenomeStyles } from '../table/selectors';
 import { getHighlightedIds } from '../highlight/selectors';
 
 import { titles, simpleTrees } from './constants';
@@ -110,7 +113,7 @@ const getNodeStyles = createSelector(
     const styles = {};
 
     for (const genome of genomes) {
-      const isActive = activeIds.has(genome.id);
+      const isActive = activeIds.includes(genome.id);
       styles[genome.id] = {
         fillStyle: genomeStyles[genome.id].colour,
         strokeStyle: genomeStyles[genome.id].colour,
@@ -127,9 +130,9 @@ export const getPhylocanvasState = createSelector(
   getVisibleTree,
   getNodeStyles,
   getHighlightedIds,
-  ({ phylocanvas }, nodeStyles, selectedIds) => ({
+  ({ phylocanvas }, nodeStyles, highlightedIds) => ({
     ...phylocanvas,
-    selectedIds,
+    selectedIds: Array.from(highlightedIds),
     styles: nodeStyles,
   })
 );

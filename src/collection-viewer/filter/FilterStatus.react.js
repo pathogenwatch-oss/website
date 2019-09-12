@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { getFilter } from '../selectors';
+import { getFilter } from './selectors';
 
 import { clearFilters } from './actions';
 

@@ -2,7 +2,8 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import { getDownloadPrefix } from './selectors';
-import { getActiveGenomeIds, getCollection } from '../selectors';
+import { getCollection } from '../selectors';
+import { getActiveGenomeIds } from '../genomes/selectors';
 
 import { formatCollectionFilename } from './utils';
 

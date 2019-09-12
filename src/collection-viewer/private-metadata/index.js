@@ -6,7 +6,7 @@ import PrivateMetadata from './PrivateMetadata.react';
 
 import { addPrivateMetadata, clearPrivateMetadata } from './actions';
 import { numberOfMetadataRows } from './selectors';
-import { getOwnGenomes } from '../selectors';
+import { getOwnGenomes } from '../genomes/selectors';
 
 function mapStateToProps(state) {
   return {

@@ -4,10 +4,9 @@ import {
   changeSearchText,
   toggleSearchExactMatch,
 } from './actions';
-import { resetFilter } from '../filter/actions';
 
 import { getSearch, getItemAtCursor } from './selectors';
-import { getGenomeList } from '../selectors';
+import { getGenomeList } from '../genomes/selectors';
 import { getActiveDataTable, getDataTableName } from '../table/selectors';
 
 import { createSearchTerm, createBasicSearchTerm } from './utils';

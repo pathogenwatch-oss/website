@@ -5,8 +5,13 @@ import FixedTable from '../../fixed-table';
 import TableSwitcher from '../table/Switcher.react';
 import Fade from '~/components/fade';
 
-import { getCollection, getActiveGenomes } from '../selectors';
-import { getVisibleTable, getVisibleTableName, getFixedGroupWidth } from '../table/selectors';
+import { getCollection } from '../selectors';
+import { getActiveGenomes } from '../genomes/selectors';
+import {
+  getVisibleTable,
+  getVisibleTableName,
+  getFixedGroupWidth,
+} from '../table/selectors';
 
 import { onRowClick } from './thunks';
 

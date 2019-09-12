@@ -1,7 +1,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { getGenomes, getFilter, getHighlightedIds } from '../selectors';
+import { getGenomes } from '../genomes/selectors';
+import { getFilter } from '../filter/selectors';
+import { getHighlightedIds } from '../highlight/selectors';
 import { getTrees } from './selectors';
 
 import { leafStyles, defaultLeafStyle } from './constants';
