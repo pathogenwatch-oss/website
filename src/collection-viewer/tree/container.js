@@ -2,6 +2,8 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import Tree from '@cgps/libmicroreact/tree';
+import Fade from '~/components/fade';
+import Header from './Header.react';
 
 import * as selectors from './selectors';
 
@@ -67,7 +69,12 @@ const Component = (props) => {
       onControlsVisibleChange={toggleControls}
       lasso={lasso}
       onLassoChange={toggleLasso}
-    />
+    >
+      {!controls &&
+        <Fade in>
+          <Header />
+        </Fade>}
+    </Tree>
   );
 };
 

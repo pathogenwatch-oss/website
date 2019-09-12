@@ -48,7 +48,10 @@ export const getVisibleTree = createSelector(
   ({ visible, entities }) => (visible ? entities[visible] : null)
 );
 
-export const isLoaded = state => getVisibleTree(state).loaded;
+export const isLoaded = createSelector(
+  getVisibleTree,
+  tree => !!tree.phylocanvas.source
+);
 export const getTreeType = state => getVisibleTree(state).type;
 
 export const getSingleTree = createSelector(

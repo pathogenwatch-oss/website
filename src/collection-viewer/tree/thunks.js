@@ -31,7 +31,7 @@ export function displayTree(name) {
     const state = getState();
     const tree = getTrees(state)[name];
 
-    if (tree && tree.newick) {
+    if (tree && tree.phylocanvas.source) {
       dispatch(actions.setTree(name));
       return;
     }

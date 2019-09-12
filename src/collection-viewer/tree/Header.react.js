@@ -5,7 +5,7 @@ import classnames from 'classnames';
 import * as selectors from './selectors';
 import * as actions from './thunks';
 
-import { POPULATION, COLLECTION } from '../../app/stateKeys/tree';
+import { POPULATION, COLLECTION } from '~/app/stateKeys/tree';
 
 function mapStateToButtonProps(state) {
   return {
