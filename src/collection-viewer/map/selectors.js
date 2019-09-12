@@ -3,14 +3,11 @@ import { contains } from 'leaflet-lassoselect/utils';
 
 import { getCountryCentroid } from '~/utils/country';
 
-import {
-  getGenomeList,
-  getGenomes,
-  getFilteredGenomeIds,
-  getHighlightedIds,
-} from '../selectors';
-import { getLassoPath, getViewByCountry } from '~/map/selectors';
+import { getGenomeList, getGenomes } from '../genomes/selectors';
+import { getFilteredGenomeIds } from '../filter/selectors';
+import { getHighlightedIds } from '../highlight/selectors';
 import { getColourGetter } from '../table/selectors';
+import { getLassoPath, getViewByCountry } from '~/map/selectors';
 
 export const getGenomeIdsInPath = createSelector(
   getGenomeList,

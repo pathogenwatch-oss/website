@@ -36,9 +36,7 @@ const cssLoaders = [
             autoprefixer: {
               browsers: [ 'last 2 versions' ],
             },
-            customProperties: {
-              warnings: false,
-            },
+            customProperties: false,
           },
         }),
       ],

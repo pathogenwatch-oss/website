@@ -1,3 +1,5 @@
-export * as actions from './actions';
-export * as selectors from './selectors';
-export default from './Map.react';
+import * as actions from './actions';
+import * as selectors from './selectors';
+
+export { actions, selectors };
+export { default } from './Map.react';

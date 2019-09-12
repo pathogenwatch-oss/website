@@ -24,6 +24,7 @@ const PWMap = props => (
     className={props.className}
     cluster={props.cluster}
     clusterOptions={props.clusterOptions}
+    controls={props.controls}
     highlightedColour={CGPS.COLOURS.PURPLE}
     buttonClassname={buttonClassname}
     lassoPath={props.lassoPath}

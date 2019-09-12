@@ -5,7 +5,7 @@ import classnames from 'classnames';
 import Multi from './Multi.react';
 
 import { getVisibleTableName, hasTyping, hasAMR } from './selectors';
-import { hasMetadata } from '../selectors';
+import { hasMetadata } from '../genomes/selectors';
 
 import { setTable } from './actions';
 

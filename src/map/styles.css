@@ -9,22 +9,21 @@
   background: #cad2d3;
 }
 
-.cgps-leaflet-map .leaflet-map-lasso-button {
+.cgps-leaflet-map-controls {
   position: absolute;
-  top: 16px;
-  right: 16px;
+  top: 8px;
+  right: 8px;
   z-index: 1;
+  display: flex;
+  flex-direction: row-reverse;
+}
+
+.cgps-leaflet-map-controls > * + * {
+  margin-right: 4px;
 }
 
 .cgps-leaflet-map .leaflet-map-lasso-button.is-active {
   background-color: #a386bd;
-}
-
-.cgps-leaflet-map .leaflet-marker-controls-button {
-  position: absolute;
-  top: 16px;
-  right: 52px;
-  z-index: 1;
 }
 
 .cgps-leaflet-map .leaflet-marker-controls-button.is-active {

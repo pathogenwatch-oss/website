@@ -1,7 +1,7 @@
 import { combineReducers } from 'redux';
 
 import collection from './collection';
-import genomes from './genomes';
+import genomes from '../genomes/reducer';
 
 import aboutCollectionOpen from '../about-collection/reducer';
 import downloads from '../downloads/reducer';

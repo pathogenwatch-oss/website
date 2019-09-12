@@ -1,7 +1,8 @@
 import { createSelector } from 'reselect';
 
-import { getViewer, getCollection, hasMetadata } from '../selectors';
+import { getViewer, getCollection } from '../selectors';
 import { getMetadataColumns, getActiveMetadataColumn } from '../data-tables/selectors';
+import { hasMetadata } from '../genomes/selectors';
 
 import { createColourGetter } from '../amr-utils';
 import Organisms from '~/organisms';
@@ -115,4 +116,9 @@ export const getColourGetter = createSelector(
   getTableState,
   getAMRTableName,
   (tables, name) => createColourGetter(tables.entities[name], tables.multi)
+);
+
+export const getLabelGetter = createSelector(
+  getActiveDataTable,
+  activeTable => activeTable.activeColumn.valueGetter
 );

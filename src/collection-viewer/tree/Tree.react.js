@@ -189,7 +189,7 @@ export default React.createClass({
 
     return (
       <section className="wgsa-tree">
-        <div id="phylocanvas-container" style={fullWidthHeight}></div>
+        <div id="phylocanvas-container" style={fullWidthHeight} />
         <Styler phylocanvas={this.phylocanvas} />
         <Header />
         <button

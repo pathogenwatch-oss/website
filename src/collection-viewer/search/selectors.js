@@ -1,6 +1,8 @@
 import { createSelector } from 'reselect';
 
-import { getViewer, getGenomes, getGenomeList, getNonSearchFilterIntersections } from '../selectors';
+import { getViewer } from '../selectors';
+import { getGenomes, getGenomeList } from '../genomes/selectors';
+import { getNonSearchFilterIntersections } from '../filter/selectors';
 import {
   getTables,
   getActiveDataTable,

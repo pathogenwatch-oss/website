@@ -204,11 +204,14 @@ export default React.createClass({
             url={`https://api.mapbox.com/styles/v1/mapbox/${mapboxStyle}/tiles/{z}/{x}/{y}?access_token=${mapboxKey}`}
           />
           { this.renderMarkers() }
-          <Lasso
-            className={this.props.buttonClassname}
-            initialPath={this.props.lassoPath}
-            onPathChange={this.props.onLassoPathChange}
-          />
+          <div className="cgps-leaflet-map-controls">
+            {this.props.controls}
+            <Lasso
+              className={this.props.buttonClassname}
+              initialPath={this.props.lassoPath}
+              onPathChange={this.props.onLassoPathChange}
+            />
+          </div>
           <ZoomControl
             position="bottomright"
           />

@@ -78,15 +78,17 @@ export default connect(mapStateToProps, mapDispatchToProps, mergeProps)(
       onClick={props.onClick}
       onLassoPathChange={props.onLassoPathChange}
       onMarkerClick={props.onMarkerClick}
+      controls={
+        <MarkerControls
+          className={buttonClassname}
+          activeClassName={activeButtonClassname}
+          markerSize={props.markerSize}
+          onMarkerSizeChange={props.onMarkerSizeChange}
+          onViewByCountryChange={props.onViewByCountryChange}
+        />
+      }
     >
       {props.children}
-      <MarkerControls
-        className={buttonClassname}
-        activeClassName={activeButtonClassname}
-        markerSize={props.markerSize}
-        onMarkerSizeChange={props.onMarkerSizeChange}
-        onViewByCountryChange={props.onViewByCountryChange}
-      />
     </PWMap>
   )
 );

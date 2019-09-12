@@ -28,9 +28,17 @@ function updateHistory(tree, { image }) {
 }
 
 function getInitialState() {
+  const treeState = treeReducer(undefined, {});
   return {
     history: [],
-    ...treeReducer(undefined, {}),
+    ...treeState,
+    phylocanvas: {
+      ...treeState.phylocanvas,
+      scalebar: {
+        fontSize: 13,
+        position: { left: 8, bottom: 16 },
+      },
+    },
   };
 }
 

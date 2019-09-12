@@ -8,7 +8,6 @@ import * as table from '../table/constants';
 import { systemDataColumns } from './constants';
 import { getTableEntities } from '../table/selectors';
 
-
 function getColumnNames(genomes) {
   const leading = new Set();
   const userDefined = new Set();

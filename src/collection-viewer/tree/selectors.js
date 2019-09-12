@@ -2,11 +2,13 @@ import { createSelector } from 'reselect';
 
 import {
   getCollection,
-  getGenomes,
   getViewer,
   getCollectionGenomeIds,
+  getActiveGenomeIds,
 } from '../selectors';
+import { getGenomes, getGenomeList, getGenomeStyles } from '../genomes/selectors';
 import { getActiveDataTable } from '../table/selectors';
+import { getHighlightedIds } from '../highlight/selectors';
 
 import { titles, simpleTrees } from './constants';
 import * as utils from './utils';
@@ -98,4 +100,36 @@ export const areTreesComplete = createSelector(
     }
     return true;
   }
+);
+
+const getNodeStyles = createSelector(
+  getGenomeList,
+  getGenomeStyles,
+  getActiveGenomeIds,
+  (genomes, genomeStyles, activeIds) => {
+    const styles = {};
+
+    for (const genome of genomes) {
+      const isActive = activeIds.has(genome.id);
+      styles[genome.id] = {
+        fillStyle: genomeStyles[genome.id].colour,
+        strokeStyle: genomeStyles[genome.id].colour,
+        shape: isActive ? genomeStyles[genome.id].shape : 'none',
+        label: genomeStyles[genome.id].label,
+      };
+    }
+
+    return styles;
+  }
+);
+
+export const getPhylocanvasState = createSelector(
+  getVisibleTree,
+  getNodeStyles,
+  getHighlightedIds,
+  ({ phylocanvas }, nodeStyles, selectedIds) => ({
+    ...phylocanvas,
+    selectedIds,
+    styles: nodeStyles,
+  })
 );

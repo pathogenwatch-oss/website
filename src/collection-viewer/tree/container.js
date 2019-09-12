@@ -5,6 +5,8 @@ import Tree from '@cgps/libmicroreact/tree';
 
 import * as selectors from './selectors';
 
+import { setHighlight } from '../highlight/actions';
+
 import {
   treeLoaded,
   subtreeLoaded,
@@ -15,10 +17,10 @@ import {
 } from './thunks';
 
 function mapStateToProps(state) {
-  const { name, loaded, phylocanvas } = selectors.getVisibleTree(state);
+  const { name, loaded } = selectors.getVisibleTree(state);
   return {
     name, loaded,
-    phylocanvasState: phylocanvas,
+    phylocanvasState: selectors.getPhylocanvasState(state),
     filenames: selectors.getFilenames(state),
     loading: selectors.isLoading(state),
   };
@@ -36,7 +38,7 @@ function mapDispatchToProps(dispatch) {
   return {
     onPhylocanvasInitialise: console.log, // (image) => dispatch(addInitialTreeHistory(image)),
     onPhylocanvasStateChange: (state) => dispatch(setPhylocanvasState(state)),
-    setHighlightedIds: console.log, // (ids, merge) => dispatch(setHighlightedIds(ids, merge)),
+    setHighlightedIds: (ids, merge) => dispatch(setHighlight(ids, merge)),
     onFilterChange: console.log, // (ids, path) => dispatch(setTreeFilter(ids, path)),
     onAddHistoryEntry: console.log, // (image) => dispatch(addTreeHistory(image)),
 
