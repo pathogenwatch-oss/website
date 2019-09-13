@@ -1,27 +1,13 @@
 import React from 'react';
 import { readAsText } from 'promise-file-reader';
-import Menu from 'libmicroreact/menu';
+import Menu from '@cgps/libmicroreact/menu';
+import IconButton from '@cgps/libmicroreact/icon-button';
 
 import DropArea from '~/components/drop-area';
 import Fade from '~/components/fade';
 import DownloadButton from '../downloads/DownloadButton.react';
 
 import { CSV_FILENAME_REGEX, parseCsvToJson, parseMetadata } from '~/utils/Metadata';
-
-class Button extends React.Component {
-  render() {
-    return (
-      <button
-        className="mdl-button mdl-button--icon"
-        onClick={this.props.onClick}
-        ref={el => { this.el = el; }}
-        title="Private Metadata"
-      >
-        <i className="material-icons">note_add</i>
-      </button>
-    );
-  }
-}
 
 export default function ({ addMetadata, numberOfRows, clearMetadata, generateCSV }) {
   const [ isOpen, toggleIsOpen ] = React.useState(false);
@@ -58,7 +44,11 @@ export default function ({ addMetadata, numberOfRows, clearMetadata, generateCSV
   return (
     <Menu
       align="right"
-      button={<Button />}
+      button={
+        <IconButton title="Private metadata">
+          <i className="material-icons">note_add</i>
+        </IconButton>
+      }
       caret
       className="pw-viewer-add-metadata-menu"
       open={isOpen}

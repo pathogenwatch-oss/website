@@ -1,7 +1,8 @@
 import React from 'react';
 import Markdown from 'react-markdown';
 import dateSince from 'date-fns/distance_in_words';
-import Menu from 'libmicroreact/menu';
+import Menu from '@cgps/libmicroreact/menu';
+import IconButton from '@cgps/libmicroreact/icon-button';
 
 import { CardMetadata } from '~/card';
 import Access from '../access';
@@ -9,25 +10,14 @@ import MarkdownHeading from '~/components/MarkdownHeading.react';
 import PubMedLink from '~/components/PubMedLink.react';
 import SaveForOffline from '../offline';
 
-class Button extends React.Component {
-  render() {
-    return (
-      <button
-        className="mdl-button mdl-button--icon"
-        onClick={this.props.onClick}
-        ref={el => { this.el = el; }}
-        title="About Collection"
-      >
-        <i className="material-icons">info</i>
-      </button>
-    );
-  }
-}
-
 export default ({ organism, metadata, isOpen, onButtonClick }) => (
   <Menu
     align="right"
-    button={<Button />}
+    button={
+      <IconButton title="About collection">
+        <i className="material-icons">info</i>
+      </IconButton>
+    }
     caret
     className="wgsa-about-collection-dropdown"
     open={isOpen}

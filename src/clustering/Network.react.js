@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import Network from 'libmicroreact/network';
+import Network from '@cgps/libmicroreact/network';
 import ClusterDescription from './ClusterDescription.react';
 
 import * as selectors from './selectors';

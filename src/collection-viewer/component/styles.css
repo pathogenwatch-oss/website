@@ -85,7 +85,8 @@
   background-color: #673c90;
 }
 
-.wgsa-header-collection-options .mdl-button--icon {
+.wgsa-header-collection-options .mdl-button--icon,
+.wgsa-header-collection-options .mdc-icon-button {
   width: 40px;
   height: 40px;
 }

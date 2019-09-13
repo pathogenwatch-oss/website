@@ -2,7 +2,7 @@
 
 import React from 'react';
 
-import CookieConsent from 'libmicroreact/cookie-consent';
+import CookieConsent from '@cgps/libmicroreact/cookie-consent';
 
 const flag = 'cookie-consent-given';
 
