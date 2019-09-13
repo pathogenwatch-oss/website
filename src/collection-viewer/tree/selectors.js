@@ -10,8 +10,10 @@ import {
   getCollectionGenomeIds,
   getActiveGenomeIds,
 } from '../genomes/selectors';
-import { getActiveDataTable, getGenomeStyles } from '../table/selectors';
+import { getActiveDataTable } from '../table/selectors';
+import { getFilteredGenomeIds } from '../filter/selectors';
 import { getHighlightedIds } from '../highlight/selectors';
+import { getGenomeStyles } from '../styles/selectors';
 
 import { titles, simpleTrees } from './constants';
 import * as utils from './utils';
@@ -111,12 +113,12 @@ export const areTreesComplete = createSelector(
 const getNodeStyles = createSelector(
   getGenomeList,
   getGenomeStyles,
-  getActiveGenomeIds,
-  (genomes, genomeStyles, activeIds) => {
+  getFilteredGenomeIds,
+  (genomes, genomeStyles, ids) => {
     const styles = {};
 
     for (const genome of genomes) {
-      const isActive = activeIds.includes(genome.id);
+      const isActive = ids.includes(genome.id);
       styles[genome.id] = {
         fillStyle: genomeStyles[genome.id].colour,
         strokeStyle: genomeStyles[genome.id].colour,

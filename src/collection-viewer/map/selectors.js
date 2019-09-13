@@ -6,7 +6,7 @@ import { getCountryCentroid } from '~/utils/country';
 import { getGenomeList, getGenomes } from '../genomes/selectors';
 import { getFilteredGenomeIds } from '../filter/selectors';
 import { getHighlightedIds } from '../highlight/selectors';
-import { getColourGetter } from '../table/selectors';
+import { getGenomeStyles } from '../styles/selectors';
 import { getLassoPath, getViewByCountry } from '~/map/selectors';
 
 export const getGenomeIdsInPath = createSelector(
@@ -49,8 +49,8 @@ export const getMarkers = createSelector(
   getGenomes,
   getFilteredGenomeIds,
   getHighlightedIds,
-  getColourGetter,
-  (positionExtractor, genomes, visibleIds = [], filteredIds, colourGetter) => {
+  getGenomeStyles,
+  (positionExtractor, genomes, visibleIds = [], filteredIds, styles) => {
     if (!visibleIds || visibleIds.length === 0) return [];
 
     const markers = new Map();
@@ -59,7 +59,7 @@ export const getMarkers = createSelector(
       const genome = genomes[genomeId];
       const position = positionExtractor(genome);
       if (position) {
-        const colour = colourGetter(genome);
+        const colour = styles[genome.id].colour;
         const key = position.join('_');
         const marker = markers.get(key) ||
           { position, id: [], slices: new Map(), highlighted: false };

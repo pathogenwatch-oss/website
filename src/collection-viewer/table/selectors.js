@@ -3,7 +3,6 @@ import { createSelector } from 'reselect';
 import { getViewer, getCollection } from '../selectors';
 import { getGenomeList, hasMetadata } from '../genomes/selectors';
 
-import { createColourGetter } from '../amr-utils';
 import Organisms from '~/organisms';
 import {
   getColumnNames,
@@ -142,39 +141,5 @@ export const getFixedGroupWidth = createSelector(
     if (!metadata) width -= 68;
     if (!typing) width -= 53;
     return width;
-  }
-);
-
-export const getColourGetter = createSelector(
-  getTableState,
-  getAMRTableName,
-  (tables, name) => createColourGetter(tables.entities[name], tables.multi)
-);
-
-export const getLabelGetter = createSelector(
-  getActiveDataTable,
-  activeTable => activeTable.activeColumn.valueGetter
-);
-
-function getShape(genome) {
-  if (genome.reference) return 'triangle';
-  if (genome.public) return 'square';
-  return 'circle';
-}
-
-export const getGenomeStyles = createSelector(
-  getGenomeList,
-  getLabelGetter,
-  getColourGetter,
-  (genomes, getLabel, getColour) => {
-    const styles = {};
-    for (const genome of genomes) {
-      styles[genome.id] = {
-        colour: getColour(genome),
-        label: getLabel(genome),
-        shape: getShape(genome),
-      };
-    }
-    return styles;
   }
 );

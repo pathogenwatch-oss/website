@@ -2,24 +2,24 @@ import { createSelector } from 'reselect';
 
 import { getViewer } from '../selectors';
 import { getActiveGenomes } from '../genomes/selectors';
-import { getColourGetter } from '../table/selectors';
+import { getGenomeStyles } from '../styles/selectors';
 
 export const getColouredActiveGenomes = createSelector(
   getActiveGenomes,
-  getColourGetter,
-  (items, colourGetter) =>
+  getGenomeStyles,
+  (items, genomeStyles) =>
     items.map((genome) => ({
       genome,
-      colour: colourGetter(genome),
+      colour: genomeStyles[genome.id].colour,
     }))
 );
 
 export const getGenomeSummary = createSelector(
   getActiveGenomes,
-  getColourGetter,
-  (activeGenomes, colourGetter) => Array.from(
+  getGenomeStyles,
+  (activeGenomes, genomeStyles) => Array.from(
     activeGenomes.reduce((memo, genome) => {
-      const colour = colourGetter(genome);
+      const colour = genomeStyles[genome.id].colour;
       const genomes = memo.get(colour) || [];
       genomes.push(genome);
       return memo.set(colour, genomes);
