@@ -34,10 +34,6 @@ function getInitialState() {
     ...treeState,
     phylocanvas: {
       ...treeState.phylocanvas,
-      scalebar: {
-        fontSize: 13,
-        position: { left: 8, bottom: 16 },
-      },
     },
   };
 }

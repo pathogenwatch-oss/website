@@ -8,7 +8,6 @@ import {
   getGenomes,
   getGenomeList,
   getCollectionGenomeIds,
-  getActiveGenomeIds,
 } from '../genomes/selectors';
 import { getActiveDataTable } from '../table/selectors';
 import { getFilteredGenomeIds } from '../filter/selectors';
@@ -131,12 +130,24 @@ const getNodeStyles = createSelector(
   }
 );
 
+const scaleBarProps = {
+  fontSize: 13,
+  position: { left: 8, bottom: 16 },
+};
+
+const populationLeafNodeStyle = {
+  shape: 'triangle',
+  fillStyle: '#a386bd',
+};
+
 export const getPhylocanvasState = createSelector(
   getVisibleTree,
   getNodeStyles,
   getHighlightedIds,
-  ({ phylocanvas }, nodeStyles, highlightedIds) => ({
+  ({ phylocanvas, name }, nodeStyles, highlightedIds) => ({
     ...phylocanvas,
+    leafNodeStyle: name === 'POPULATION' ? populationLeafNodeStyle : phylocanvas.leafNodeStyle,
+    scalebar: scaleBarProps,
     selectedIds: Array.from(highlightedIds),
     styles: nodeStyles,
   })
