@@ -144,11 +144,13 @@ export const getPhylocanvasState = createSelector(
   getVisibleTree,
   getNodeStyles,
   getHighlightedIds,
-  ({ phylocanvas, name }, nodeStyles, highlightedIds) => ({
+  state => getTreeState(state).size,
+  ({ phylocanvas, name }, nodeStyles, highlightedIds, size) => ({
     ...phylocanvas,
     leafNodeStyle: name === 'POPULATION' ? populationLeafNodeStyle : phylocanvas.leafNodeStyle,
     scalebar: scaleBarProps,
     selectedIds: Array.from(highlightedIds),
+    size: size || phylocanvas.size,
     styles: nodeStyles,
   })
 );

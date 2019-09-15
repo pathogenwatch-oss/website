@@ -255,38 +255,12 @@ function lastSubtree(state = null, { type, payload }) {
   }
 }
 
-function clearSelected(state) {
-  return {
-    ...state,
-    trees: {
-      ...state.trees,
-      [state.active]: null,
-    },
-  };
-}
-
-function selectedInternalNode(state = { active: COLLECTION, trees: {} }, { type, payload }) {
+function size(state = null, { type, payload }) {
   switch (type) {
-    case ACTIONS.SET_TREE:
-      return {
-        ...state,
-        active: payload.name,
-      };
-    case ACTIONS.INTERNAL_NODE_SELECTED:
-      return {
-        ...state,
-        trees: {
-          ...state.trees,
-          [payload.stateKey]: payload.nodeId,
-        },
-      };
-    case ACTIVATE_FILTER:
-    case RESET_FILTER:
-    case CLEAR_FILTERS: {
-      if (payload.key && payload.key !== 'TREE') return state;
-      return clearSelected(state);
+    case 'SET PHYLOCANVAS STATE': {
+      if (payload.size) return payload.size;
+      return state;
     }
-
     default:
       return state;
   }
@@ -297,5 +271,5 @@ export default combineReducers({
   visible,
   loading,
   lastSubtree,
-  selectedInternalNode,
+  size,
 });
