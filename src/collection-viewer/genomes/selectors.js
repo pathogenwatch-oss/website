@@ -1,7 +1,6 @@
 import { createSelector } from 'reselect';
 
-import { getHighlightedIds } from '../highlight/selectors';
-import { getUnfilteredGenomeIds, getFilteredGenomeIds } from '../filter/selectors';
+import { getUnfilteredGenomeIds } from '../selectors';
 import { getPrivateMetadata } from '../private-metadata/selectors';
 
 export const getGenomes = createSelector(
@@ -42,18 +41,6 @@ export const hasMetadata = createSelector(
     ))
 );
 
-export const getActiveGenomeIds = createSelector(
-  getHighlightedIds,
-  getFilteredGenomeIds,
-  (highlighted, visible) => Array.from(highlighted.size ? highlighted : visible)
-);
-
-export const getActiveGenomes = createSelector(
-  getGenomes,
-  getActiveGenomeIds,
-  (genomes, ids) => ids.map(id => genomes[id])
-);
-
 export const getCollectionGenomeIds = createSelector(
   getGenomes,
   genomes => {
@@ -65,9 +52,4 @@ export const getCollectionGenomeIds = createSelector(
     }
     return collectionGenomes;
   }
-);
-
-export const getOwnGenomes = createSelector(
-  getActiveGenomes,
-  genomes => genomes.filter(_ => _.owner === 'me')
 );

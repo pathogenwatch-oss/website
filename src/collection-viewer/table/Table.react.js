@@ -6,7 +6,7 @@ import TableSwitcher from '../table/Switcher.react';
 import Fade from '~/components/fade';
 
 import { getCollection } from '../selectors';
-import { getActiveGenomes } from '../genomes/selectors';
+import { getActiveGenomes } from '../selectors/active';
 import {
   getVisibleTable,
   getVisibleTableName,

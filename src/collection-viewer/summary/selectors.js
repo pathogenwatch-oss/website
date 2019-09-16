@@ -1,8 +1,8 @@
 import { createSelector } from 'reselect';
 
 import { getViewer } from '../selectors';
-import { getActiveGenomes } from '../genomes/selectors';
-import { getGenomeStyles } from '../styles/selectors';
+import { getActiveGenomes } from '../selectors/active';
+import { getGenomeStyles } from '../selectors/styles';
 
 export const getColouredActiveGenomes = createSelector(
   getActiveGenomes,

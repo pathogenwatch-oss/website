@@ -1,24 +1,15 @@
 import { createSelector } from 'reselect';
 
-import {
-  getCollection,
-  getViewer,
-} from '../selectors';
-import {
-  getGenomes,
-  getGenomeList,
-  getCollectionGenomeIds,
-} from '../genomes/selectors';
-import { getActiveDataTable } from '../table/selectors';
-import { getFilteredGenomeIds } from '../filter/selectors';
+import { getCollection, getViewer } from '../selectors';
+import { getGenomeStyles } from '../selectors/styles';
+import { getCollectionGenomeIds } from '../genomes/selectors';
 import { getHighlightedIds } from '../highlight/selectors';
-import { getGenomeStyles } from '../styles/selectors';
+import { getFilteredGenomeIds } from '../filter/selectors';
 
-import { titles, simpleTrees } from './constants';
-import * as utils from './utils';
+import { simpleTrees } from './constants';
 
-import { POPULATION, COLLECTION } from '../../app/stateKeys/tree';
-import Organisms from '../../organisms';
+import { POPULATION, COLLECTION } from '~/app/stateKeys/tree';
+import Organisms from '~/organisms';
 
 export const getTreeState = state => getViewer(state).tree;
 
@@ -64,25 +55,18 @@ export const getSingleTree = createSelector(
   }
 );
 
-export const getTitle = createSelector(
-  getVisibleTree,
-  getGenomes,
-  (tree, genomes) => (tree ? (titles[tree.name] || genomes[tree.name].name) : null)
-);
-
-export const getFilenames = createSelector(
-  getTitle,
-  state => getCollection(state).uuid,
-  state => getActiveDataTable(state).activeColumn,
-  utils.getFilenames
-);
+// export const getFilenames = createSelector(
+//   state => getVisibleTree(state).name,
+//   state => getCollection(state).uuid,
+//   state => getActiveDataTable(state).activeColumn,
+//   utils.getFilenames
+// );
 
 export const getLastSubtree = createSelector(
   getTreeState,
-  getGenomes,
-  ({ lastSubtree }, genomes) => (
+  ({ lastSubtree }) => (
     lastSubtree ?
-      { name: lastSubtree, title: genomes[lastSubtree].name } :
+      { name: lastSubtree, title: lastSubtree } :
       null
   )
 );
@@ -110,22 +94,20 @@ export const areTreesComplete = createSelector(
 );
 
 const getNodeStyles = createSelector(
-  getGenomeList,
   getGenomeStyles,
-  getFilteredGenomeIds,
-  (genomes, genomeStyles, ids) => {
+  state => (getFilteredGenomeIds ? getFilteredGenomeIds(state) : []),
+  (genomeStyles, ids) => {
     const styles = {};
 
-    for (const genome of genomes) {
-      const isActive = ids.includes(genome.id);
-      styles[genome.id] = {
-        fillStyle: genomeStyles[genome.id].colour,
-        strokeStyle: genomeStyles[genome.id].colour,
-        shape: isActive ? genomeStyles[genome.id].shape : 'none',
-        label: genomeStyles[genome.id].label,
+    for (const genomeId of Object.keys(genomeStyles)) {
+      const isActive = ids.includes(genomeId);
+      styles[genomeId] = {
+        fillStyle: genomeStyles[genomeId].colour,
+        strokeStyle: genomeStyles[genomeId].colour,
+        shape: isActive ? genomeStyles[genomeId].shape : 'none',
+        label: genomeStyles[genomeId].label,
       };
     }
-
     return styles;
   }
 );

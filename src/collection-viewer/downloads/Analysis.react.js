@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 
 import { getDownloadPrefix } from './selectors';
 import { getCollection } from '../selectors';
-import { getActiveGenomeIds } from '../genomes/selectors';
+import { getActiveGenomeIds } from '../selectors/active';
 
 import { formatCollectionFilename } from './utils';
 

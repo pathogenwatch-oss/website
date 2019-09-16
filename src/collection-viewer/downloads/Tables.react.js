@@ -4,8 +4,9 @@ import { connect } from 'react-redux';
 import DownloadButton from './DownloadButton.react';
 
 import { getCollection } from '../selectors';
-import { getGenomes, hasMetadata, getActiveGenomeIds } from '../genomes/selectors';
+import { getGenomes, hasMetadata } from '../genomes/selectors';
 import { getTables, hasTyping, hasAMR } from '../table/selectors';
+import { getActiveGenomeIds } from '../selectors/active';
 
 import { formatCollectionFilename } from './utils';
 import {

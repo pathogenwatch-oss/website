@@ -25,7 +25,7 @@ function mapStateToProps(state) {
     name, loaded, lasso, path,
     highlightedIds: getHighlightedIdArray(state),
     phylocanvasState: selectors.getPhylocanvasState(state),
-    filenames: selectors.getFilenames(state),
+    // filenames: selectors.getFilenames(state),
     loading: selectors.isLoading(state),
   };
 }

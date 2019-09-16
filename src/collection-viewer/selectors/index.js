@@ -22,3 +22,5 @@ export const getCollectionMetadata = createSelector(
     access: collection.access,
   })
 );
+
+export const getUnfilteredGenomeIds = state => getViewer(state).unfiltered;

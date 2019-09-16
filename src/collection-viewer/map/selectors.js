@@ -6,7 +6,7 @@ import { getCountryCentroid } from '~/utils/country';
 import { getGenomeList, getGenomes } from '../genomes/selectors';
 import { getFilteredGenomeIds } from '../filter/selectors';
 import { getHighlightedIds } from '../highlight/selectors';
-import { getGenomeStyles } from '../styles/selectors';
+import { getGenomeStyles } from '../selectors/styles';
 import { getLassoPath, getViewByCountry } from '~/map/selectors';
 
 export const getGenomeIdsInPath = createSelector(

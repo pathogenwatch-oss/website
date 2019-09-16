@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 
 import { getDownloadPrefix, getTreeName } from './selectors';
 import { getCollection } from '../selectors';
-import { getActiveGenomeIds } from '../genomes/selectors';
+import { getActiveGenomeIds } from '../selectors/active';
 
 import { formatCollectionFilename } from './utils';
 import { isSubtree } from '../tree/utils';

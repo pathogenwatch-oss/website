@@ -1,12 +1,18 @@
 import './styles.css';
 
 import { connect } from 'react-redux';
+import { createSelector } from 'reselect';
 
 import PrivateMetadata from './PrivateMetadata.react';
 
 import { addPrivateMetadata, clearPrivateMetadata } from './actions';
 import { numberOfMetadataRows } from './selectors';
-import { getOwnGenomes } from '../genomes/selectors';
+import { getActiveGenomes } from '../selectors/active';
+
+export const getOwnGenomes = createSelector(
+  getActiveGenomes,
+  genomes => genomes.filter(_ => _.owner === 'me')
+);
 
 function mapStateToProps(state) {
   return {

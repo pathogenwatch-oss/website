@@ -13,9 +13,7 @@ import { filterKeys } from './constants';
 const emptySet = new Set();
 
 const initialState = {
-  unfilteredIds: [],
   [filterKeys.VISIBILITY]: {
-    unfilteredIds: [],
     ids: emptySet,
     active: false,
   },
@@ -33,17 +31,12 @@ export default function (state = initialState, { type, payload = {} }) {
   const { ids } = payload || {};
   switch (type) {
     case FETCH_COLLECTION.SUCCESS: {
-      const { genomes = [] } = payload.result;
-      const unfilteredIds = genomes.map(_ => _.uuid);
       return {
         ...state,
         [filterKeys.VISIBILITY]: {
-          unfilteredIds,
           ids: emptySet,
           active: false,
         },
-
-        unfilteredIds,
         [filterKeys.TREE]: {
           ids: emptySet,
           active: false,
@@ -72,12 +65,9 @@ export default function (state = initialState, { type, payload = {} }) {
       return {
         ...state,
         [filterKeys.VISIBILITY]: {
-          unfilteredIds: leafIds,
           ids: shouldClearFilter ? emptySet : state[filterKeys.VISIBILITY].ids,
           active: shouldClearFilter ? false : state[filterKeys.VISIBILITY].active,
         },
-
-        unfilteredIds: leafIds,
         [filterKeys.TREE]: {
           ids: shouldClearFilter ? emptySet : state[filterKeys.TREE].ids,
           active: shouldClearFilter ? false : state[filterKeys.TREE].active,
