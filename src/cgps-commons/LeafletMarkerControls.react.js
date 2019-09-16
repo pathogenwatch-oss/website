@@ -53,7 +53,7 @@ export default React.createClass({
               { [activeClassName]: isActive }
             )
           }
-          title={isActive ? 'Hide Map Controls' : 'Show Map Controls'}
+          title={isActive ? 'Hide map controls' : 'Show map controls'}
           onClick={() => this.setState({ isActive: !isActive })}
         >
           <i className="material-icons">tune</i>
