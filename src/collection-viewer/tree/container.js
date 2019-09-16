@@ -6,6 +6,7 @@ import Fade from '~/components/fade';
 import Header from './Header.react';
 
 import * as selectors from './selectors';
+import { getHighlightedIdArray } from '../highlight/selectors';
 
 import { setHighlight } from '../highlight/actions';
 
@@ -22,6 +23,7 @@ function mapStateToProps(state) {
   const { name, loaded } = selectors.getVisibleTree(state);
   return {
     name, loaded,
+    highlightedIds: getHighlightedIdArray(state),
     phylocanvasState: selectors.getPhylocanvasState(state),
     filenames: selectors.getFilenames(state),
     loading: selectors.isLoading(state),

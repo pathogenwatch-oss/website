@@ -7,6 +7,11 @@ export const getHighlightedIds = createSelector(
   highlight => highlight.ids
 );
 
+export const getHighlightedIdArray = createSelector(
+  getHighlightedIds,
+  Array.from
+);
+
 export const hasHighlightedIds = createSelector(
   getHighlightedIds,
   ids => ids.size > 0
