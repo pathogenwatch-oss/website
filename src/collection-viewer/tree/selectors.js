@@ -154,3 +154,8 @@ export const getPhylocanvasState = createSelector(
     styles: nodeStyles,
   })
 );
+
+export const getTreeFilteredIds = createSelector(
+  getVisibleTree,
+  tree => tree.ids
+);

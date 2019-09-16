@@ -1,6 +1,7 @@
 import { createSelector } from 'reselect';
 
 import { getNetworkFilteredIds } from '~/cluster-viewer/selectors';
+import { getTreeFilteredIds } from '../tree/selectors';
 
 import { filterKeys } from '../filter/constants';
 
@@ -22,20 +23,21 @@ export const getFilterState = state => getViewer(state).filter;
 export const getNonSearchFilterIntersections = createSelector(
   getFilterState,
   getNetworkFilteredIds,
-  (filterState, networkIds = []) => {
+  getTreeFilteredIds,
+  (filterState, networkIds = [], treeIds = []) => {
     const intersections = [];
 
-    if (filterState[filterKeys.VISIBILITY].active) {
-      intersections.push(filterState[filterKeys.VISIBILITY].ids);
-    }
-    if (filterState[filterKeys.TREE].active) {
-      intersections.push(filterState[filterKeys.TREE].ids);
-    }
     if (filterState[filterKeys.MAP].active) {
       intersections.push(filterState[filterKeys.MAP].ids);
     }
     if (networkIds.length) {
       intersections.push(new Set(networkIds));
+    }
+    if (treeIds.length) {
+      intersections.push(new Set(treeIds));
+    }
+    if (filterState[filterKeys.VISIBILITY].active) {
+      intersections.push(filterState[filterKeys.VISIBILITY].ids);
     }
 
     return intersections;

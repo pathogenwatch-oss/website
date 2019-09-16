@@ -20,9 +20,9 @@ import {
 } from './thunks';
 
 function mapStateToProps(state) {
-  const { name, loaded } = selectors.getVisibleTree(state);
+  const { name, loaded, lasso, path } = selectors.getVisibleTree(state);
   return {
-    name, loaded,
+    name, loaded, lasso, path,
     highlightedIds: getHighlightedIdArray(state),
     phylocanvasState: selectors.getPhylocanvasState(state),
     filenames: selectors.getFilenames(state),
@@ -30,20 +30,40 @@ function mapStateToProps(state) {
   };
 }
 
-const setPhylocanvasState = (state) =>
+const withStateKey = action =>
   (dispatch, getState) =>
     dispatch({
       stateKey: selectors.getTreeStateKey(getState()),
-      type: 'SET PHYLOCANVAS STATE',
-      payload: state,
+      ...action,
     });
+
+const setPhylocanvasState = (state) =>
+  withStateKey({
+    type: 'SET PHYLOCANVAS STATE',
+    payload: state,
+  });
+
+const setTreeFilter = (ids, path) =>
+  withStateKey({
+    type: 'SET TREE FILTER',
+    payload: { ids, path },
+  });
+
+const onLassoChange = (active) =>
+  withStateKey({
+    type: 'SET TREE LASSO',
+    payload: {
+      lasso: active,
+    },
+  });
 
 function mapDispatchToProps(dispatch) {
   return {
     onPhylocanvasInitialise: console.log, // (image) => dispatch(addInitialTreeHistory(image)),
     onPhylocanvasStateChange: (state) => dispatch(setPhylocanvasState(state)),
     setHighlightedIds: (ids, merge) => dispatch(setHighlight(ids, merge)),
-    onFilterChange: console.log, // (ids, path) => dispatch(setTreeFilter(ids, path)),
+    onFilterChange: (ids, path) => dispatch(setTreeFilter(ids, path)),
+    onLassoChange: active => dispatch(onLassoChange(active)),
     onAddHistoryEntry: console.log, // (image) => dispatch(addTreeHistory(image)),
 
     onLoaded: phylocanvas => dispatch(treeLoaded(phylocanvas)),
@@ -58,7 +78,6 @@ function mapDispatchToProps(dispatch) {
 
 const Component = (props) => {
   const [ controls, toggleControls ] = React.useState(false);
-  const [ lasso, toggleLasso ] = React.useState(false);
 
   if (props.width === 0 || props.height === 0) {
     return null;
@@ -69,8 +88,6 @@ const Component = (props) => {
       {...props}
       controlsVisible={controls}
       onControlsVisibleChange={toggleControls}
-      lasso={lasso}
-      onLassoChange={toggleLasso}
     >
       {!controls &&
         <Fade in>
