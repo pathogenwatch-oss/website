@@ -194,6 +194,25 @@ export default ({ deployedOrganisms }) => (
             </tr>
             <tr>
               <td>
+                <FormattedName organismId="573" />
+              </td>
+              <td>
+                <i className="material-icons">check</i>
+              </td>
+              <td>
+                {deployedOrganisms.has('573') && (
+                  <i className="material-icons">check</i>
+                )}
+              </td>
+              <td>
+                <i className="material-icons">check</i>
+              </td>
+              <td>
+                <small>Kleborate</small>
+              </td>
+            </tr>
+            <tr>
+              <td>
                 <FormattedName organismId="485" />
               </td>
               <td>
