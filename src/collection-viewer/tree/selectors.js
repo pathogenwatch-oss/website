@@ -113,6 +113,7 @@ const getNodeStyles = createSelector(
 );
 
 const scaleBarProps = {
+  digits: 0,
   fontSize: 13,
   position: { left: 8, bottom: 16 },
 };
