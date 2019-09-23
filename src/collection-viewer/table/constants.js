@@ -150,7 +150,7 @@ export const nameColumnProps = {
           { data.__isPublic && data.collectionId ?
             <a className="mdl-button mdl-button--icon"
               href={`/${Organisms.nickname}/collection/${data.collectionId}`}
-              title="View Original Collection"
+              title="View original collection"
               target="_blank" rel="noopener"
             >
               <i className="material-icons">open_in_new</i>

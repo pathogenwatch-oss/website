@@ -85,7 +85,8 @@ const Search = React.createClass({
     const { text, advanced, exact } = search;
     return (
       <div className="wgsa-search-box-container">
-        <div className={classnames(
+        <div
+          className={classnames(
             'wgsa-search-box',
             { 'wgsa-search-box--active': advanced }
           )}
@@ -98,7 +99,7 @@ const Search = React.createClass({
               { active: advanced }
             )}
             onClick={toggleMode}
-            title="Toggle Advanced Search"
+            title="Toggle advanced search"
           >
             <i className="material-icons">add_box</i>
           </button>
@@ -108,7 +109,7 @@ const Search = React.createClass({
               { active: exact }
             )}
             onClick={toggleExactMatch}
-            title="Toggle Exact Match"
+            title="Toggle exact match"
           >
             <i className="material-icons">explicit</i>
           </button>

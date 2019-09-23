@@ -12,7 +12,7 @@ const FilterStatus = ({ active, filteredAmount, totalAmount, clear, children }) 
     <button
       className="mdl-button mdl-button--icon"
       onClick={clear}
-      title="Clear Filter"
+      title="Clear filter"
       disabled={!active}
     >
       <i className="material-icons">backspace</i>

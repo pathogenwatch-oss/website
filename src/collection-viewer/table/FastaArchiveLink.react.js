@@ -9,7 +9,7 @@ const { COLOURS } = CGPS;
 export default ({ url, ids }) => (
   <DownloadLink
     action={url}
-    title="Download Genomes"
+    title="Download genomes"
     ids={ids}
   >
     <DownloadIcon isArchive color={COLOURS.PURPLE} />

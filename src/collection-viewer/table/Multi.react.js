@@ -26,7 +26,7 @@ const ButtonGroup = ({ visible, active, toggle }) => {
       <button
         className={classnames('wgsa-button-group__item', { active })}
         onClick={() => toggle()}
-        title={'Toggle Multiple Resistance'}
+        title="Toggle multiple resistance"
       >
         Multi
       </button>

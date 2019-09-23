@@ -39,7 +39,7 @@ const Summary = ({ summary, isExpanded, onClick, onSliceClick }) => (
           e.stopPropagation();
           onClick(false);
         }}
-        title="Close Summary"
+        title="Close summary"
       >
         <i className="material-icons">clear</i>
       </button>

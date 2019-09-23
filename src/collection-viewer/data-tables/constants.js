@@ -26,7 +26,7 @@ export const systemDataColumns = {
         <a
           href={`http://www.ncbi.nlm.nih.gov/pubmed/${pmid}`}
           target="_blank" rel="noopener"
-          title="View Publication"
+          title="View publication"
           style={{ color: '#369' }}
           onClick={e => e.stopPropagation()}
         >

@@ -10,7 +10,7 @@ export default ({ uuid, id, name }) => (
     href={getServerPath(`/download/collection/${uuid}/annotations?ids=${id}`)}
     download={`${name}.gff`}
     target="_blank" rel="noopener"
-    title="Download Annotations"
+    title="Download annotations"
     className="wgsa-download-button mdl-button mdl-button--icon"
   >
     <DownloadIcon color={CGPS.COLOURS.GREEN} label=".gff" />
