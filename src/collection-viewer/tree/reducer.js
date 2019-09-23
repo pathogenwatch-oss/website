@@ -4,10 +4,9 @@ import treeReducer from '@cgps/libmicroreact/tree/reducer';
 
 import { FETCH_COLLECTION, UPDATE_COLLECTION_PROGRESS }
   from '../actions';
-import { RESET_FILTER, ACTIVATE_FILTER, CLEAR_FILTERS } from '../filter/actions';
 import * as ACTIONS from './actions';
 
-import { simpleTrees } from './constants';
+import { topLevelTrees } from './constants';
 import { COLLECTION, POPULATION } from '../../app/stateKeys/tree';
 
 function updateHistory(tree, { image }) {
@@ -34,6 +33,7 @@ function getInitialState() {
     ...treeState,
     phylocanvas: {
       ...treeState.phylocanvas,
+      fontSize: 14,
     },
   };
 }
@@ -249,7 +249,7 @@ function loading(state = false, { type }) {
 function lastSubtree(state = null, { type, payload }) {
   switch (type) {
     case ACTIONS.SET_TREE:
-      return simpleTrees.has(payload.name) ? state : payload.name;
+      return topLevelTrees.has(payload.name) ? state : payload.name;
     default:
       return state;
   }

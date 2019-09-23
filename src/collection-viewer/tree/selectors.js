@@ -3,11 +3,11 @@ import { createSelector } from 'reselect';
 import { getCollection, getViewer } from '../selectors';
 import { getGenomeStyles } from '../selectors/styles';
 import { getCollectionGenomeIds } from '../genomes/selectors';
-import { getHighlightedIds } from '../highlight/selectors';
+import { getHighlightedIdArray } from '../highlight/selectors';
 import { getFilteredGenomeIds } from '../filter/selectors';
 
-import { simpleTrees } from './constants';
-
+import { topLevelTrees } from './constants';
+import { CGPS } from '~/app/constants';
 import { POPULATION, COLLECTION } from '~/app/stateKeys/tree';
 import Organisms from '~/organisms';
 
@@ -55,13 +55,6 @@ export const getSingleTree = createSelector(
   }
 );
 
-// export const getFilenames = createSelector(
-//   state => getVisibleTree(state).name,
-//   state => getCollection(state).uuid,
-//   state => getActiveDataTable(state).activeColumn,
-//   utils.getFilenames
-// );
-
 export const getLastSubtree = createSelector(
   getTreeState,
   ({ lastSubtree }) => (
@@ -73,7 +66,7 @@ export const getLastSubtree = createSelector(
 
 export const getSubtreeNames = createSelector(
   getTrees,
-  trees => Object.keys(trees).filter(name => !simpleTrees.has(name))
+  trees => Object.keys(trees).filter(name => !topLevelTrees.has(name))
 );
 
 export const getSelectedInternalNode = createSelector(
@@ -93,12 +86,11 @@ export const areTreesComplete = createSelector(
   }
 );
 
-const getNodeStyles = createSelector(
+const getStandardNodeStyles = createSelector(
   getGenomeStyles,
   state => (getFilteredGenomeIds ? getFilteredGenomeIds(state) : []),
   (genomeStyles, ids) => {
     const styles = {};
-
     for (const genomeId of Object.keys(genomeStyles)) {
       const isActive = ids.includes(genomeId);
       styles[genomeId] = {
@@ -112,6 +104,56 @@ const getNodeStyles = createSelector(
   }
 );
 
+const getPopulationLabel = ({ status, name, size, populationSize, progress }) => {
+  if (status === 'PENDING') {
+    return `${name}: Pending`;
+  } else if (status === 'IN PROGRESS') {
+    return `${name}: ${progress}%`;
+  } else if (status === 'ERROR') {
+    return `${name}: Error, awaiting retry`;
+  } else if (status === 'FAILED') {
+    return `${name}: Failed`;
+  } else if (status === 'READY') {
+    const totalCollection = size - populationSize;
+    if (populationSize > 0) {
+      return `${name} (${totalCollection}) [${populationSize}]`;
+    } else if (totalCollection > 0) {
+      return `${name} (${totalCollection})`;
+    }
+    return name;
+  }
+};
+
+const getPopulationNodeStyles = createSelector(
+  getTrees,
+  getSubtreeNames,
+  state => getTrees(state)[POPULATION].leafIds,
+  (trees, subtreeNames, treeIds) => {
+    const styles = {};
+    for (const id of treeIds) {
+      if (subtreeNames.includes(id)) {
+        styles[id] = {
+          fillStyle: CGPS.COLOURS.PURPLE_LIGHT,
+          label: getPopulationLabel(trees[id]),
+        };
+      } else {
+        styles[id] = {
+          fillStyle: CGPS.COLOURS.GREY,
+        };
+      }
+    }
+    return styles;
+  }
+);
+
+const getNodeStyles = state => {
+  const { name } = getVisibleTree(state);
+  return name === 'POPULATION' ?
+    getPopulationNodeStyles(state) :
+    getStandardNodeStyles(state);
+};
+
+
 const scaleBarProps = {
   digits: 0,
   fontSize: 13,
@@ -120,19 +162,19 @@ const scaleBarProps = {
 
 const populationLeafNodeStyle = {
   shape: 'triangle',
-  fillStyle: '#a386bd',
 };
 
 export const getPhylocanvasState = createSelector(
   getVisibleTree,
   getNodeStyles,
-  getHighlightedIds,
+  getHighlightedIdArray,
   state => getTreeState(state).size,
   ({ phylocanvas, name }, nodeStyles, highlightedIds, size) => ({
     ...phylocanvas,
     leafNodeStyle: name === 'POPULATION' ? populationLeafNodeStyle : phylocanvas.leafNodeStyle,
+    renderLeafLabels: name === 'POPULATION' || phylocanvas.renderLeafLabels,
     scalebar: scaleBarProps,
-    selectedIds: Array.from(highlightedIds),
+    selectedIds: highlightedIds,
     size: size || phylocanvas.size,
     styles: nodeStyles,
   })

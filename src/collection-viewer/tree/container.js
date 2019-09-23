@@ -89,10 +89,9 @@ const Component = (props) => {
       controlsVisible={controls}
       onControlsVisibleChange={toggleControls}
     >
-      {!controls &&
-        <Fade in>
-          <Header />
-        </Fade>}
+      <Fade in>
+        {!controls && <Header key="header" />}
+      </Fade>
     </Tree>
   );
 };
