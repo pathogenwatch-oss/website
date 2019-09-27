@@ -134,6 +134,7 @@ const getPopulationNodeStyles = createSelector(
       if (subtreeNames.includes(id)) {
         styles[id] = {
           fillStyle: CGPS.COLOURS.PURPLE_LIGHT,
+          fontStyle: 'bold',
           label: getPopulationLabel(trees[id]),
         };
       } else {
