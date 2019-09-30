@@ -1,7 +1,7 @@
 import { createSelector } from 'reselect';
 
 import { getPrivateMetadata } from '../private-metadata/selectors';
-import { getTreeStateKey, isTopLevelTree } from '../tree/selectors/visible';
+import { getTreeStateKey, isTopLevelTree } from '../tree/selectors';
 
 export const getGenomes = createSelector(
   state => state.viewer.entities.genomes,

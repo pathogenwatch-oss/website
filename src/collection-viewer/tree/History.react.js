@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import classnames from 'classnames';
 
-import { getVisibleTree } from './selectors';
+import { getVisibleTree } from './selectors/entities';
 import { timeTravel } from './actions';
 
 const History = React.createClass({

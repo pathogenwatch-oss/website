@@ -2,14 +2,15 @@ import React from 'react';
 import { connect } from 'react-redux';
 import classnames from 'classnames';
 
-import * as selectors from './selectors';
+import { getSingleTree, getLastSubtree } from './selectors';
+import { getVisibleTree } from './selectors/entities';
 import * as actions from './thunks';
 
 import { POPULATION, COLLECTION } from '~/app/stateKeys/tree';
 
 function mapStateToButtonProps(state) {
   return {
-    visibleTreeName: selectors.getVisibleTree(state).name,
+    visibleTreeName: getVisibleTree(state).name,
   };
 }
 
@@ -52,8 +53,8 @@ const Header = ({ singleTree, lastSubtree }) => (
 
 function mapStateToProps(state) {
   return {
-    singleTree: selectors.getSingleTree(state),
-    lastSubtree: selectors.getLastSubtree(state),
+    singleTree: getSingleTree(state),
+    lastSubtree: getLastSubtree(state),
   };
 }
 

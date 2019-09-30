@@ -3,7 +3,7 @@ import { createSelector } from 'reselect';
 import { getServerPath } from '~/utils/Api';
 import { getViewer, getCollection } from '../selectors';
 import { getGenomes } from '../genomes/selectors';
-import { getVisibleTree } from '../tree/selectors';
+import { getVisibleTree } from '../tree/selectors/entities';
 import { getActiveGenomeIds } from '../selectors/active';
 
 export const isMenuOpen = state =>

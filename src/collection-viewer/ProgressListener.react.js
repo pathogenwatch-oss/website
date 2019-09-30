@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { subscribe, unsubscribe } from '../utils/Notification';
 
 import { getCollection } from './selectors';
-import { areTreesComplete } from './tree/selectors';
+import { areTreesComplete } from './tree/selectors/entities';
 
 import { handleTreeProgress } from './tree/thunks';
 

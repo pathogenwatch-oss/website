@@ -12,7 +12,7 @@ import { showCounts } from '../../utils/genome';
 import Tables from './Tables.react';
 import Trees from './Trees.react';
 import Analysis from './Analysis.react';
-import { hasTrees } from '../tree/selectors';
+import { hasTrees } from '../tree/selectors/entities';
 
 const DownloadsMenu = ({ menuOpen, counts = {}, closeMenu, viewHasTrees }) => (
   <Overlay visible={menuOpen} hide={closeMenu}>

@@ -1,5 +1,5 @@
 import { getCollection } from '../selectors';
-import { getSubtreeNames } from '../tree/selectors';
+import { getSubtreeNames } from '../tree/selectors/entities';
 
 import { getServerPath } from '../../utils/Api.js';
 import { statuses } from './constants';

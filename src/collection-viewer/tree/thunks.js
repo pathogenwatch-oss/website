@@ -1,6 +1,6 @@
 import { getCollection } from '../selectors';
 import { getHighlightedIds } from '../highlight/selectors';
-import { getTrees, getVisibleTree } from './selectors';
+import { getTrees, getVisibleTree } from './selectors/entities';
 
 import { showToast } from '../../toast';
 import * as actions from './actions';
@@ -39,33 +39,6 @@ export function displayTree(name) {
     dispatch(fetchTree(name))
       .then(() => dispatch(actions.setTree(name)))
       .catch(() => dispatch(showToast(errorToast)));
-  };
-}
-
-export function treeLoaded(phylocanvas) {
-  return (dispatch, getState) => {
-    const state = getState();
-    const tree = getVisibleTree(state);
-    if (!tree) return;
-    const stateKey = tree.name;
-
-    if (stateKey === POPULATION) {
-      phylocanvas.root.cascadeFlag('interactive', false);
-    }
-
-    const leafIds = getLeafIds(state, { stateKey });
-    dispatch(actions.treeLoaded(stateKey, phylocanvas, leafIds));
-  };
-}
-
-export function subtreeLoaded(phylocanvas) {
-  return (dispatch, getState) => {
-    const state = getState();
-    const stateKey = getVisibleTree(state).name;
-
-    const leafIds = phylocanvas.leaves.map(_ => _.id);
-    dispatch(actions.treeLoaded(stateKey, phylocanvas, leafIds));
-    dispatch(actions.addHistorySnapshot(stateKey, phylocanvas));
   };
 }
 

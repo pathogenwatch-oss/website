@@ -5,7 +5,7 @@ import Poll from '../../components/Poller.react';
 import CircularProgress from '../../components/CircularProgress.react';
 import Fade from '../../components/fade';
 
-import { getTrees } from './selectors';
+import { getTrees } from './selectors/entities';
 
 import { fetchTreePosition, setTree } from './actions';
 import { COLLECTION } from '../../app/stateKeys/tree';

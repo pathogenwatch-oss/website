@@ -5,7 +5,8 @@ import Tree from '@cgps/libmicroreact/tree';
 import Fade from '~/components/fade';
 import Header from './Header.react';
 
-import * as selectors from './selectors';
+import { getTreeStateKey, isLoading } from './selectors';
+import { getVisibleTree, getPhylocanvasState } from './selectors/entities';
 import { getHighlightedIdArray } from '../highlight/selectors';
 
 import { setHighlight } from '../highlight/actions';
@@ -14,20 +15,19 @@ import { displayTree } from './thunks';
 import { POPULATION } from '~/app/stateKeys/tree';
 
 function mapStateToProps(state) {
-  const { name, loaded, lasso, path } = selectors.getVisibleTree(state);
+  const { name, loaded, lasso, path } = getVisibleTree(state);
   return {
     name, loaded, lasso, path,
     highlightedIds: getHighlightedIdArray(state),
-    phylocanvasState: selectors.getPhylocanvasState(state),
-    // filenames: selectors.getFilenames(state),
-    loading: selectors.isLoading(state),
+    phylocanvasState: getPhylocanvasState(state),
+    loading: isLoading(state),
   };
 }
 
 const withStateKey = action =>
   (dispatch, getState) =>
     dispatch({
-      stateKey: selectors.getTreeStateKey(getState()),
+      stateKey: getTreeStateKey(getState()),
       ...action,
     });
 
@@ -47,7 +47,7 @@ const onLassoChange = (active) =>
 
 const setTreeFilter = (ids, path) =>
   (dispatch, getState) => {
-    const stateKey = selectors.getTreeStateKey(getState());
+    const stateKey = getTreeStateKey(getState());
     if (stateKey !== POPULATION) {
       dispatch({
         stateKey,
@@ -59,7 +59,7 @@ const setTreeFilter = (ids, path) =>
 
 const setTreeHighlight = (ids, merge) =>
   (dispatch, getState) => {
-    const stateKey = selectors.getTreeStateKey(getState());
+    const stateKey = getTreeStateKey(getState());
     if (stateKey === POPULATION) {
       if (ids.length === 1) {
         dispatch(displayTree(ids[0]));

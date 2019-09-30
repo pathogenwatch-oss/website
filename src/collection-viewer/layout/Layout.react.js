@@ -13,7 +13,7 @@ import Table from '../table';
 
 import ClusterViewNetwork from '~/cluster-viewer/Network.react';
 
-import { getVisibleTree } from '../tree/selectors';
+import { getVisibleTree } from '../tree/selectors/entities';
 import { getCollection } from '../selectors';
 
 const Layout = React.createClass({
