@@ -9,15 +9,9 @@ import * as selectors from './selectors';
 import { getHighlightedIdArray } from '../highlight/selectors';
 
 import { setHighlight } from '../highlight/actions';
+import { displayTree } from './thunks';
 
-import {
-  treeLoaded,
-  subtreeLoaded,
-  treeClicked,
-  typeChanged,
-  internalNodeSelected,
-  resetTreeRoot,
-} from './thunks';
+import { POPULATION } from '~/app/stateKeys/tree';
 
 function mapStateToProps(state) {
   const { name, loaded, lasso, path } = selectors.getVisibleTree(state);
@@ -43,12 +37,6 @@ const setPhylocanvasState = (state) =>
     payload: state,
   });
 
-const setTreeFilter = (ids, path) =>
-  withStateKey({
-    type: 'SET TREE FILTER',
-    payload: { ids, path },
-  });
-
 const onLassoChange = (active) =>
   withStateKey({
     type: 'SET TREE LASSO',
@@ -57,22 +45,38 @@ const onLassoChange = (active) =>
     },
   });
 
+const setTreeFilter = (ids, path) =>
+  (dispatch, getState) => {
+    const stateKey = selectors.getTreeStateKey(getState());
+    if (stateKey !== POPULATION) {
+      dispatch({
+        stateKey,
+        type: 'SET TREE FILTER',
+        payload: { ids, path },
+      });
+    }
+  };
+
+const setTreeHighlight = (ids, merge) =>
+  (dispatch, getState) => {
+    const stateKey = selectors.getTreeStateKey(getState());
+    if (stateKey === POPULATION) {
+      if (ids.length === 1) {
+        dispatch(displayTree(ids[0]));
+      }
+    } else {
+      dispatch(setHighlight(ids, merge));
+    }
+  };
+
 function mapDispatchToProps(dispatch) {
   return {
     onPhylocanvasInitialise: console.log, // (image) => dispatch(addInitialTreeHistory(image)),
     onPhylocanvasStateChange: (state) => dispatch(setPhylocanvasState(state)),
-    setHighlightedIds: (ids, merge) => dispatch(setHighlight(ids, merge)),
+    setHighlightedIds: (ids, merge) => dispatch(setTreeHighlight(ids, merge)),
     onFilterChange: (ids, path) => dispatch(setTreeFilter(ids, path)),
     onLassoChange: active => dispatch(onLassoChange(active)),
     onAddHistoryEntry: console.log, // (image) => dispatch(addTreeHistory(image)),
-
-    onLoaded: phylocanvas => dispatch(treeLoaded(phylocanvas)),
-    onSubtree: phylocanvas => dispatch(subtreeLoaded(phylocanvas)),
-    onUpdated: (event, phylocanvas) =>
-      dispatch(treeClicked(event, phylocanvas)),
-    onTypeChanged: phylocanvas => dispatch(typeChanged(phylocanvas)),
-    onInternalNodeSelected: node => dispatch(internalNodeSelected(node)),
-    resetTreeRoot: () => dispatch(resetTreeRoot()),
   };
 }
 

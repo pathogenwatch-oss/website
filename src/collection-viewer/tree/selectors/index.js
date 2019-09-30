@@ -1,12 +1,11 @@
 import { createSelector } from 'reselect';
 
-import { getCollection, getViewer } from '../selectors';
-import { getGenomeStyles } from '../selectors/styles';
-import { getCollectionGenomeIds } from '../genomes/selectors';
-import { getHighlightedIdArray } from '../highlight/selectors';
-import { getFilteredGenomeIds } from '../filter/selectors';
+import { getCollection, getViewer } from '../../selectors';
+import { getGenomeStyles } from '../../selectors/styles';
+import { getHighlightedIdArray } from '../../highlight/selectors';
+import { getFilteredGenomeIds } from '../../filter/selectors';
 
-import { topLevelTrees } from './constants';
+import { topLevelTrees } from '../constants';
 import { CGPS } from '~/app/constants';
 import { POPULATION, COLLECTION } from '~/app/stateKeys/tree';
 import Organisms from '~/organisms';
@@ -16,24 +15,7 @@ export const getTreeState = state => getViewer(state).tree;
 export const getTrees = state => getTreeState(state).entities;
 export const hasTrees = state => Object.keys(getTrees(state)).length > 0;
 export const isLoading = state => getTreeState(state).loading;
-export const getTreeStateKey = state => getTreeState(state).visible;
-
-export const getLeafIds = (state, { stateKey }) => {
-  const trees = getTrees(state);
-
-  if (stateKey === POPULATION) {
-    if (COLLECTION in trees) {
-      return trees[COLLECTION].leafIds;
-    }
-    return getCollectionGenomeIds(state);
-  }
-
-  if (stateKey in trees) {
-    return trees[stateKey].leafIds;
-  }
-
-  return [];
-};
+export { getTreeStateKey } from './visible';
 
 export const getVisibleTree = createSelector(
   getTreeState,

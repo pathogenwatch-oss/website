@@ -1,8 +1,8 @@
 import { createSelector } from 'reselect';
 
 import { getNetworkFilteredIds } from '~/cluster-viewer/selectors';
+import { getUnfilteredGenomeIds } from '../genomes/selectors';
 import { getTreeFilteredIds } from '../tree/selectors';
-import { getUnfilteredGenomeIds } from '../selectors';
 
 import { filterKeys } from '../filter/constants';
 

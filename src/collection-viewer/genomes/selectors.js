@@ -1,7 +1,7 @@
 import { createSelector } from 'reselect';
 
-import { getUnfilteredGenomeIds } from '../selectors';
 import { getPrivateMetadata } from '../private-metadata/selectors';
+import { getTreeStateKey, isTopLevelTree } from '../tree/selectors/visible';
 
 export const getGenomes = createSelector(
   state => state.viewer.entities.genomes,
@@ -25,6 +25,25 @@ export const getGenomes = createSelector(
   }
 );
 
+export const getUnfilteredGenomeIds = createSelector(
+  getGenomes,
+  getTreeStateKey,
+  isTopLevelTree,
+  (genomes, tree, isTopLevel) => {
+    const ids = [];
+    for (const genome of Object.values(genomes)) {
+      if (isTopLevel) {
+        if (genome.__isCollection) {
+          ids.push(genome.uuid);
+        }
+      } else if (genome.analysis && genome.analysis.core.fp.reference === tree) {
+        ids.push(genome.uuid);
+      }
+    }
+    return ids;
+  }
+);
+
 export const getGenomeList = createSelector(
   getGenomes,
   getUnfilteredGenomeIds,
@@ -39,17 +58,4 @@ export const hasMetadata = createSelector(
       pmid ||
       (userDefined && Object.keys(userDefined).length)
     ))
-);
-
-export const getCollectionGenomeIds = createSelector(
-  getGenomes,
-  genomes => {
-    const collectionGenomes = [];
-    for (const id of Object.keys(genomes)) {
-      if (genomes[id].__isCollection) {
-        collectionGenomes.push(id);
-      }
-    }
-    return collectionGenomes;
-  }
 );
