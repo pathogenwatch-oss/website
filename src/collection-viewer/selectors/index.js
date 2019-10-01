@@ -1,6 +1,9 @@
 import { createSelector } from 'reselect';
 import removeMarkdown from 'remove-markdown';
 
+import { POPULATION, COLLECTION } from '~/app/stateKeys/tree';
+import Organisms from '~/organisms';
+
 export const getViewer = ({ viewer }) => viewer;
 
 export const getCollection = state => getViewer(state).entities.collection;
@@ -21,6 +24,15 @@ export const getCollectionMetadata = createSelector(
     owner: collection.owner,
     access: collection.access,
   })
+);
+
+export const getSingleTree = createSelector(
+  getCollection,
+  (collection) => {
+    if (collection.size < 3) return POPULATION;
+    if (Organisms.uiOptions.noPopulation) return COLLECTION;
+    return null;
+  }
 );
 
 export const getUnfilteredGenomeIds = state => getViewer(state).unfiltered;

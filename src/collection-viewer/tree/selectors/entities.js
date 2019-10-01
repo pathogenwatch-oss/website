@@ -1,9 +1,10 @@
 import { createSelector } from 'reselect';
 
-import { getTreeState } from './index';
+import { getTreeState, getTreeStateKey } from './index';
 import { getGenomeStyles } from '../../selectors/styles';
 import { getHighlightedIdArray } from '../../highlight/selectors';
 import { getFilteredGenomeIds } from '../../filter/selectors';
+import { getGenomes } from '../../genomes/selectors';
 
 import { topLevelTrees } from '../constants';
 import { CGPS } from '~/app/constants';
@@ -114,6 +115,23 @@ const getNodeStyles = state => {
     getStandardNodeStyles(state);
 };
 
+export const getHighlightedNodeIds = createSelector(
+  getTreeStateKey,
+  getHighlightedIdArray,
+  getGenomes,
+  (tree, highlightedIds, genomes) => {
+    if (tree === POPULATION) {
+      const ids = new Set();
+      for (const id of highlightedIds) {
+        if (genomes[id].analysis) {
+          ids.add(genomes[id].analysis.core.fp.reference);
+        }
+      }
+      return Array.from(ids);
+    }
+    return highlightedIds;
+  }
+);
 
 const scaleBarProps = {
   digits: 0,
@@ -128,7 +146,7 @@ const populationLeafNodeStyle = {
 export const getPhylocanvasState = createSelector(
   getVisibleTree,
   getNodeStyles,
-  getHighlightedIdArray,
+  getHighlightedNodeIds,
   state => getTreeState(state).size,
   ({ phylocanvas, name }, nodeStyles, highlightedIds, size) => ({
     ...phylocanvas,

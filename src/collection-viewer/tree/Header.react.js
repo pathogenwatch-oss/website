@@ -2,7 +2,8 @@ import React from 'react';
 import { connect } from 'react-redux';
 import classnames from 'classnames';
 
-import { getSingleTree, getLastSubtree } from './selectors';
+import { getSingleTree } from '../selectors';
+import { getLastSubtree } from './selectors';
 import { getVisibleTree } from './selectors/entities';
 import * as actions from './thunks';
 

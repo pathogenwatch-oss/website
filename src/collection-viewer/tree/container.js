@@ -7,8 +7,11 @@ import Spinner from '~/components/Spinner.react';
 import Header from './Header.react';
 
 import { getTreeStateKey, isLoading } from './selectors';
-import { getVisibleTree, getPhylocanvasState } from './selectors/entities';
-import { getHighlightedIdArray } from '../highlight/selectors';
+import {
+  getVisibleTree,
+  getPhylocanvasState,
+  getHighlightedNodeIds,
+} from './selectors/entities';
 
 import { setHighlight } from '../highlight/actions';
 import { displayTree } from './thunks';
@@ -19,7 +22,7 @@ function mapStateToProps(state) {
   const { name, loaded, lasso, path } = getVisibleTree(state);
   return {
     name, loaded, lasso, path,
-    highlightedIds: getHighlightedIdArray(state),
+    highlightedIds: getHighlightedNodeIds(state),
     phylocanvasState: getPhylocanvasState(state),
     loading: isLoading(state),
   };
