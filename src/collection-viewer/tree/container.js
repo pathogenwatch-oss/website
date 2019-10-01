@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 
 import Tree from '@cgps/libmicroreact/tree';
 import Fade from '~/components/fade';
+import Spinner from '~/components/Spinner.react';
 import Header from './Header.react';
 
 import { getTreeStateKey, isLoading } from './selectors';
@@ -95,6 +96,10 @@ const Component = (props) => {
     >
       <Fade in>
         {!controls && <Header key="header" />}
+        { props.loading ?
+          <div className="wgsa-loading-overlay" key="loading">
+            <Spinner />
+          </div> : null }
       </Fade>
     </Tree>
   );
