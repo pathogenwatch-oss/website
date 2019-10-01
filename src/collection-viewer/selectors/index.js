@@ -34,5 +34,3 @@ export const getSingleTree = createSelector(
     return null;
   }
 );
-
-export const getUnfilteredGenomeIds = state => getViewer(state).unfiltered;

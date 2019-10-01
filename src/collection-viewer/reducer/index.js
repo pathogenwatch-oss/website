@@ -13,7 +13,6 @@ import table from '../table/reducer';
 import offline from '../offline/reducer';
 import search from '../search/reducer';
 import metadata from '../private-metadata/reducer';
-import unfiltered from './unfiltered';
 
 import clusterView from '../../cluster-viewer/reducer';
 
@@ -35,7 +34,6 @@ const reducer = combineReducers({
   summary,
   table,
   tree,
-  unfiltered,
 });
 
 const initialState = reducer(undefined, {});
