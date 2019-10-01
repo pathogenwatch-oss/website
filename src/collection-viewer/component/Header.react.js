@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import IconButton from '@cgps/libmicroreact/icon-button';
 
 import Search from '../search/Search.react';
 import AddPrivateMetadata from '../private-metadata';
@@ -28,10 +29,10 @@ export default connect(mapStateToProps, null, mergeProps)(
     <span className="mdl-layout-spacer mdl-layout-spacer--flex">
       <Search />
       <nav className="wgsa-header-collection-options mdl-navigation" onClick={e => e.stopPropagation()}>
-        <button title="Downloads" className="mdl-button mdl-button--icon" onClick={downloadMenuButtonClick}>
+        <IconButton title="Downloads" onClick={downloadMenuButtonClick}>
           {/* hacking for alignment! */}
           <i className="material-icons" style={{ marginTop: '1px' }}>file_download</i>
-        </button>
+        </IconButton>
         <AddPrivateMetadata />
         { !clusterView && <AboutCollection /> }
       </nav>
