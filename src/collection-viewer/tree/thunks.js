@@ -31,7 +31,9 @@ export function displayTree(name) {
     const state = getState();
     const tree = getTrees(state)[name];
 
-    if (tree && tree.phylocanvas.source) {
+    if (!tree || tree.status !== 'READY') return;
+
+    if (tree.phylocanvas.source) {
       dispatch(actions.setTree(name));
       return;
     }
