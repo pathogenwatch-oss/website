@@ -85,19 +85,22 @@ const getInitialTable = createSelector(
 export const getVisibleTableName = createSelector(
   state => getTableState(state).visible,
   getInitialTable,
-  hasTyping,
-  (visible, initial) => {
-    if (visible !== null) return visible;
-    return initial;
+  state => !hasMetadata(state),
+  (visible, initial, noMetadata) => {
+    if (visible === null) return initial;
+    if (visible === tableKeys.metadata && noMetadata) return initial;
+    return visible;
   }
 );
 
 export const getDataTableName = createSelector(
   state => getTableState(state).activeData,
   getInitialTable,
-  (active, initial) => {
-    if (active !== null) return active;
-    return initial;
+  state => !hasMetadata(state),
+  (active, initial, noMetadata) => {
+    if (active === null) return initial;
+    if (active === tableKeys.metadata && noMetadata) return initial;
+    return active;
   }
 );
 
