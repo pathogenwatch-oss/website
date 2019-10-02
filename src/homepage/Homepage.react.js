@@ -185,7 +185,9 @@ export default ({ deployedOrganisms }) => (
               <td>
                 <em>Klebsiella</em>
               </td>
-              <td />
+              <td>
+                <i className="material-icons">check</i>
+              </td>
               <td />
               <td />
               <td>
@@ -205,7 +207,9 @@ export default ({ deployedOrganisms }) => (
                 )}
               </td>
               <td />
-              <td />
+              <td>
+                <small>Kleborate</small>
+              </td>
             </tr>
             <tr>
               <td>
