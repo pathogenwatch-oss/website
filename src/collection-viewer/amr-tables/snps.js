@@ -7,7 +7,7 @@ import { tableKeys } from '../constants';
 
 export const name = tableKeys.snps;
 
-export function buildColumns({ snp, antibiotics }, profiles) {
+export function buildColumns({ snp = {}, antibiotics }, profiles) {
   return antibiotics.reduce((groups, antibiotic) => {
     const { key, fullName } = antibiotic;
     if (key in snp) {
