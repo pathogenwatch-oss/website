@@ -204,12 +204,8 @@ export default ({ deployedOrganisms }) => (
                   <i className="material-icons">check</i>
                 )}
               </td>
-              <td>
-                <i className="material-icons">check</i>
-              </td>
-              <td>
-                <small>Kleborate</small>
-              </td>
+              <td />
+              <td />
             </tr>
             <tr>
               <td>
