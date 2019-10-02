@@ -32,7 +32,7 @@ export default {
   collections: [],
   uiOptions: {
     noPopulation: true,
-    noAmr: true,
+    noAMR: true,
     kleborate: true,
   },
 };
