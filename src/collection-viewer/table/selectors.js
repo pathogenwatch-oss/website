@@ -1,9 +1,8 @@
 import { createSelector } from 'reselect';
 
-import { getViewer, getCollection } from '../selectors';
-import { getGenomeList, hasMetadata } from '../genomes/selectors';
+import { getViewer } from '../selectors';
+import { getGenomeList, hasMetadata, hasAMR } from '../genomes/selectors';
 
-import Organisms from '~/organisms';
 import {
   getColumnNames,
   getLeadingSystemColumnProps,
@@ -119,12 +118,6 @@ export const getActiveAMRTable = createSelector(
   getTables,
   getAMRTableName,
   (tables, name) => tables[name]
-);
-
-export const hasAMR = createSelector(
-  // do not use `isClusterView` selector here, it will get stuck
-  state => (getCollection ? getCollection(state) : {}),
-  collection => !collection.isClusterView && !Organisms.uiOptions.noAMR
 );
 
 export const isAMRTable = createSelector(

@@ -1,5 +1,6 @@
 import { createSelector } from 'reselect';
 
+import { getCollection } from '../selectors';
 import { getPrivateMetadata } from '../private-metadata/selectors';
 import { getTreeStateKey, isTopLevelTree } from '../tree/selectors';
 
@@ -50,12 +51,42 @@ export const getGenomeList = createSelector(
   (genomes, ids) => Array.from(ids).map(id => genomes[id])
 );
 
-export const hasMetadata = createSelector(
+const getGenomeDatatypes = createSelector(
   getGenomeList,
-  genomes =>
-    genomes.some(({ year, pmid, userDefined }) => !!(
-      year ||
-      pmid ||
-      (userDefined && Object.keys(userDefined).length)
-    ))
+  getCollection,
+  (genomes, { isClusterView }) => {
+    let hasMetadata = false;
+    let hasAMR = !!isClusterView;
+
+    for (const genome of genomes) {
+      if (!hasMetadata) {
+        const { year, pmid, userDefined } = genome;
+        if (year || pmid || (userDefined && Object.keys(userDefined).length)) {
+          hasMetadata = true;
+        }
+      }
+
+      if (!genome.analysis) continue;
+      if (!hasAMR && genome.analysis.paarsnp) {
+        hasAMR = true;
+      }
+
+      if (hasMetadata && hasAMR) break;
+    }
+
+    return {
+      hasMetadata,
+      hasAMR: isClusterView ? false : hasAMR,
+    };
+  }
+);
+
+export const hasMetadata = createSelector(
+  getGenomeDatatypes,
+  datatypes => datatypes.hasMetadata
+);
+
+export const hasAMR = createSelector(
+  getGenomeDatatypes,
+  datatypes => datatypes.hasAMR
 );
