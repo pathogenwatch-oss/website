@@ -1,10 +1,10 @@
 import React from 'react';
 
 const name = 'Klebsiella pneumoniae';
-const formattedName = (<em>{name}</em>);
+const formattedName = <em>{name}</em>;
 
 const shortName = 'K. pneumoniae';
-const formattedShortName = (<em>{shortName}</em>);
+const formattedShortName = <em>{shortName}</em>;
 
 export default {
   name,
@@ -14,7 +14,8 @@ export default {
   maxGenomeSize: 4 * Math.pow(10, 6),
   desc: (
     <p>
-      <strong>{formattedName}</strong> https://en.wikipedia.org/wiki/Klebsiella_pneumoniae
+      <strong>{formattedName}</strong>{' '}
+      https://en.wikipedia.org/wiki/Klebsiella_pneumoniae
     </p>
   ),
   taxonomy: [
@@ -31,6 +32,7 @@ export default {
   collections: [],
   uiOptions: {
     noPopulation: true,
+    noAmr: true,
     kleborate: true,
   },
 };
