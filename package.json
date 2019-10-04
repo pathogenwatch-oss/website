@@ -28,6 +28,7 @@
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "babel-preset-env": "^1.6.1",
     "babel-preset-react": "^6.24.1",
+    "biojs-io-newick": "^1.5.0",
     "body-parser": "^1.14.1",
     "cgps-commons": "https://gitlab.com/cgps/commons",
     "cgps-user-accounts": "https://gitlab.com/cgps/cgps-user-accounts#v1.10.3",

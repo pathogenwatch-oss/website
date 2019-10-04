@@ -56,6 +56,7 @@ const commonRules = [
       path.join(__dirname, 'node_modules', 'promise-file-reader'),
       path.join(__dirname, 'node_modules', 'cgps-commons'),
       path.join(__dirname, 'node_modules', 'cgps-user-accounts', 'components'),
+      path.join(__dirname, 'node_modules', '@cgps', 'phylocanvas', 'utils'),
     ],
   },
   {

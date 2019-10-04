@@ -56,35 +56,26 @@ function entities(state = {}, action) {
 
       const nextState = {
         ...state,
-        ...subtrees.reduce((memo, { newick, ...subtree }) => {
+        ...subtrees.reduce((memo, subtree) => {
           memo[subtree.name] = {
             status: 'PENDING',
             progress: 0,
             lastStatus: 0,
             ...subtree,
             ...initialState,
-            phylocanvas: {
-              ...initialState.phylocanvas,
-              source: newick,
-            },
           };
           return memo;
         }, {}),
       };
 
       if (tree) {
-        const { newick, ...treeProps } = tree;
         nextState[COLLECTION] = {
           status: 'PENDING',
           progress: 0,
           lastStatus: 0,
-          ...treeProps,
+          ...tree,
           name: COLLECTION,
           ...initialState,
-          phylocanvas: {
-            ...initialState.phylocanvas,
-            source: newick,
-          },
         };
       }
 
@@ -93,11 +84,8 @@ function entities(state = {}, action) {
           name: POPULATION,
           status: 'READY',
           leafIds: organism.references.map(_ => _.uuid),
+          newick: organism.tree,
           ...initialState,
-          phylocanvas: {
-            ...initialState.phylocanvas,
-            source: organism.tree,
-          },
         };
       }
 

@@ -1,4 +1,5 @@
 import { createSelector } from 'reselect';
+import parse from '@cgps/phylocanvas/utils/parse';
 
 import { getTreeState, getTreeStateKey } from './index';
 import { getGenomeStyles } from '../../selectors/styles';
@@ -133,6 +134,22 @@ export const getHighlightedNodeIds = createSelector(
   }
 );
 
+const getParsedTree = createSelector(
+  state => getVisibleTree(state).newick,
+  (newick) => {
+    if (!newick) return null;
+    return parse(newick);
+  }
+);
+
+const getPhylocanvasSource = createSelector(
+  getParsedTree,
+  ({ rootNode }) => ({
+    type: 'biojs',
+    data: rootNode,
+  })
+);
+
 const scaleBarProps = {
   digits: 0,
   fontSize: 13,
@@ -148,8 +165,10 @@ export const getPhylocanvasState = createSelector(
   getNodeStyles,
   getHighlightedNodeIds,
   state => getTreeState(state).size,
-  ({ phylocanvas, name }, nodeStyles, highlightedIds, size) => ({
+  getPhylocanvasSource,
+  ({ phylocanvas, name }, nodeStyles, highlightedIds, size, source) => ({
     ...phylocanvas,
+    source,
     leafNodeStyle: name === POPULATION ? populationLeafNodeStyle : phylocanvas.leafNodeStyle,
     renderLeafLabels: name === POPULATION || phylocanvas.renderLeafLabels,
     scalebar: scaleBarProps,

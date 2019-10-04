@@ -33,7 +33,7 @@ export function displayTree(name) {
 
     if (!tree || tree.status !== 'READY') return;
 
-    if (tree.phylocanvas.source) {
+    if (tree.newick) {
       dispatch(actions.setTree(name));
       return;
     }
