@@ -7,11 +7,11 @@ import Spinner from '~/components/Spinner.react';
 import Header from './Header.react';
 
 import { getTreeStateKey, isLoading } from './selectors';
+import { getVisibleTree } from './selectors/entities';
 import {
-  getVisibleTree,
   getPhylocanvasState,
   getHighlightedNodeIds,
-} from './selectors/entities';
+} from './selectors/phylocanvas';
 
 import { setHighlight } from '../highlight/actions';
 import { displayTree } from './thunks';

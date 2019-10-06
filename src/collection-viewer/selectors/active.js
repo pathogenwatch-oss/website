@@ -3,7 +3,7 @@ import { createSelector } from 'reselect';
 import { getGenomes } from '../genomes/selectors';
 import { getHighlightedIds } from '../highlight/selectors';
 import { getFilteredGenomeIds } from '../filter/selectors';
-import { getTreeOrder } from '../tree/selectors/entities';
+import { getTreeOrder } from '../tree/selectors/phylocanvas';
 
 export const getActiveGenomeIds = createSelector(
   getHighlightedIds,
