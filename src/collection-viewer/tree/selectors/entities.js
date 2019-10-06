@@ -9,7 +9,7 @@ import { getGenomes } from '../../genomes/selectors';
 
 import { topLevelTrees } from '../constants';
 import { CGPS } from '~/app/constants';
-import { POPULATION } from '~/app/stateKeys/tree';
+import { POPULATION, COLLECTION } from '~/app/stateKeys/tree';
 
 export const getTrees = state => getTreeState(state).entities;
 export const hasTrees = state => Object.keys(getTrees(state)).length > 0;
@@ -134,22 +134,6 @@ export const getHighlightedNodeIds = createSelector(
   }
 );
 
-const getParsedTree = createSelector(
-  state => getVisibleTree(state).newick,
-  (newick) => {
-    if (!newick) return null;
-    return parse(newick);
-  }
-);
-
-const getPhylocanvasSource = createSelector(
-  getParsedTree,
-  ({ rootNode }) => ({
-    type: 'biojs',
-    data: rootNode,
-  })
-);
-
 const scaleBarProps = {
   digits: 0,
   fontSize: 13,
@@ -165,10 +149,8 @@ export const getPhylocanvasState = createSelector(
   getNodeStyles,
   getHighlightedNodeIds,
   state => getTreeState(state).size,
-  getPhylocanvasSource,
-  ({ phylocanvas, name }, nodeStyles, highlightedIds, size, source) => ({
+  ({ phylocanvas, name }, nodeStyles, highlightedIds, size) => ({
     ...phylocanvas,
-    source,
     leafNodeStyle: name === POPULATION ? populationLeafNodeStyle : phylocanvas.leafNodeStyle,
     renderLeafLabels: name === POPULATION || phylocanvas.renderLeafLabels,
     scalebar: scaleBarProps,
@@ -181,4 +163,27 @@ export const getPhylocanvasState = createSelector(
 export const getTreeFilteredIds = createSelector(
   getVisibleTree,
   tree => tree.ids
+);
+
+const getLeafNodeOrder = source => {
+  if (!source) return [];
+  const parsed = parse(source);
+  return parsed.leafNodes.map(_ => _.id);
+};
+
+const getCollectionTreeOrder = createSelector(
+  state => getTrees(state)[COLLECTION].phylocanvas.source,
+  getLeafNodeOrder
+);
+
+export const getTreeOrder = createSelector(
+  getTreeStateKey,
+  getCollectionTreeOrder,
+  state => getVisibleTree(state).phylocanvas.source,
+  (stateKey, collectionTreeOrder, source) => {
+    if (topLevelTrees.has(stateKey)) {
+      return collectionTreeOrder;
+    }
+    return getLeafNodeOrder(source);
+  }
 );

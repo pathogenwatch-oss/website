@@ -9,30 +9,13 @@ import * as ACTIONS from './actions';
 import { topLevelTrees } from './constants';
 import { COLLECTION, POPULATION } from '../../app/stateKeys/tree';
 
-function updateHistory(tree, { image }) {
-  const { history, type, root, nodeSize, labelSize } = tree;
-  const id = `${type}|${root}`;
-
-  if (history.find(snapshot => snapshot.id === id)) {
-    return history;
-  }
-
-  return [
-    { id,
-      image,
-      state: { type, root, nodeSize, labelSize },
-    },
-    ...history,
-  ];
-}
-
-function getInitialState() {
+function getInitialState(newick) {
   const treeState = treeReducer(undefined, {});
   return {
-    history: [],
     ...treeState,
     phylocanvas: {
       ...treeState.phylocanvas,
+      source: newick,
       fontSize: 14,
     },
   };
@@ -62,7 +45,7 @@ function entities(state = {}, action) {
             progress: 0,
             lastStatus: 0,
             ...subtree,
-            ...initialState,
+            ...getInitialState(subtree.newick),
           };
           return memo;
         }, {}),
@@ -75,7 +58,7 @@ function entities(state = {}, action) {
           lastStatus: 0,
           ...tree,
           name: COLLECTION,
-          ...initialState,
+          ...getInitialState(tree.newick),
         };
       }
 
@@ -84,8 +67,7 @@ function entities(state = {}, action) {
           name: POPULATION,
           status: 'READY',
           leafIds: organism.references.map(_ => _.uuid),
-          newick: organism.tree,
-          ...initialState,
+          ...getInitialState(organism.tree),
         };
       }
 
@@ -183,24 +165,6 @@ function entities(state = {}, action) {
         },
       };
     }
-    case ACTIONS.ADD_HISTORY_SNAPSHOT: {
-      const treeState = state[payload.stateKey];
-      return {
-        ...state,
-        [payload.stateKey]: {
-          ...treeState,
-          history: updateHistory(treeState, payload),
-        },
-      };
-    }
-    case ACTIONS.TIME_TRAVEL:
-      return {
-        ...state,
-        [payload.stateKey]: {
-          ...state[payload.stateKey],
-          ...payload.snapshot,
-        },
-      };
     default:
       return state;
   }

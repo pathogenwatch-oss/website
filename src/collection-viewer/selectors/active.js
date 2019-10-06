@@ -3,6 +3,7 @@ import { createSelector } from 'reselect';
 import { getGenomes } from '../genomes/selectors';
 import { getHighlightedIds } from '../highlight/selectors';
 import { getFilteredGenomeIds } from '../filter/selectors';
+import { getTreeOrder } from '../tree/selectors/entities';
 
 export const getActiveGenomeIds = createSelector(
   getHighlightedIds,
@@ -13,5 +14,14 @@ export const getActiveGenomeIds = createSelector(
 export const getActiveGenomes = createSelector(
   getGenomes,
   getActiveGenomeIds,
-  (genomes, ids) => ids.map(id => genomes[id])
+  getTreeOrder,
+  (genomes, active, order) => {
+    const sorted = [];
+    for (const id of order) {
+      if (active.includes(id)) {
+        sorted.push(genomes[id]);
+      }
+    }
+    return sorted;
+  }
 );
