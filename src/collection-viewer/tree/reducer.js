@@ -35,7 +35,6 @@ function entities(state = {}, action) {
   switch (type) {
     case FETCH_COLLECTION.SUCCESS: {
       const { organism = {}, subtrees, tree } = payload.result;
-      const initialState = getInitialState();
 
       const nextState = {
         ...state,
