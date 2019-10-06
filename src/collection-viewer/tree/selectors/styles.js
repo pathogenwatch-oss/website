@@ -29,7 +29,7 @@ const getStandardNodeStyles = createSelector(
   }
 );
 
-const getPopulationLabel = ({ status, name, size, populationSize, progress }) => {
+const getPopulationLabel = ({ status, size, populationSize, progress }, name) => {
   if (status === 'PENDING') {
     return `${name}: Pending`;
   } else if (status === 'IN PROGRESS') {
@@ -53,19 +53,22 @@ const getPopulationNodeStyles = createSelector(
   getTrees,
   getSubtreeNames,
   state => getTrees(state)[POPULATION].leafIds,
-  (trees, subtreeNames, treeIds) => {
+  getGenomes,
+  (trees, subtreeNames, treeIds, genomes) => {
     const styles = {};
     for (const id of treeIds) {
+      const name = genomes[id].name;
       if (subtreeNames.includes(id)) {
         styles[id] = {
           fillStyle: CGPS.COLOURS.PURPLE_LIGHT,
           fontStyle: '500',
-          label: getPopulationLabel(trees[id]),
+          label: getPopulationLabel(trees[id], name),
           labelFillStyle: CGPS.COLOURS.PURPLE,
         };
       } else {
         styles[id] = {
           fillStyle: CGPS.COLOURS.GREY,
+          label: name,
         };
       }
     }
