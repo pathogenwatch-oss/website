@@ -244,9 +244,6 @@ export default ({ deployedOrganisms }) => (
                 <td>
                   <i className="material-icons">check</i>
                 </td>
-                <td>
-                  <i className="material-icons">check</i>
-                </td>
                 <td />
               </tr>
             )}
@@ -299,7 +296,6 @@ export default ({ deployedOrganisms }) => (
                 <td>
                   <i className="material-icons">check</i>
                 </td>
-                <td />
                 <td />
               </tr>
             )}
