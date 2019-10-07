@@ -176,7 +176,7 @@ export default ({ deployedOrganisms }) => (
             <tr>
               <th>Organism</th>
               <th>AMR Prediction</th>
-              <th>Collections</th>
+              <th>Core SNP Trees</th>
               <th>Other</th>
             </tr>
           </thead>
