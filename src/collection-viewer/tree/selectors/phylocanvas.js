@@ -1,13 +1,16 @@
 import { createSelector } from 'reselect';
 import parse from '@cgps/phylocanvas/utils/parse';
 
-import { getTreeState, getTreeStateKey } from './index';
+import { getTreeState, getTreeStateKey, getTitles } from './index';
 import { getNodeStyles } from './styles';
 import { getTrees, getVisibleTree } from './entities';
 import { getHighlightedIdArray } from '../../highlight/selectors';
 import { getGenomes } from '../../genomes/selectors';
+import { getCollection } from '../../selectors';
 
-import { topLevelTrees } from '../constants';
+import Organisms from '~/organisms';
+
+import { topLevelTrees, titles } from '../constants';
 import { POPULATION, COLLECTION } from '~/app/stateKeys/tree';
 
 export const getHighlightedNodeIds = createSelector(
@@ -28,6 +31,26 @@ export const getHighlightedNodeIds = createSelector(
   }
 );
 
+export const getFilenamePrefix = createSelector(
+  getTreeStateKey,
+  getTitles,
+  state => getCollection(state).uuid,
+  (tree, subtreeTitles, collectionId) => {
+    const title = tree in titles ? titles[tree].toLowerCase() : subtreeTitles[tree];
+    return `pathogenwatch-${Organisms.nickname}-${collectionId}${title ? `-${title}` : ''}-tree`;
+  }
+);
+
+const getFilenames = createSelector(
+  getFilenamePrefix,
+  (prefix) => ({
+    image: `${prefix}.png`,
+    leafLabels: `${prefix}-labels.txt`,
+    newick: `${prefix}.nwk`,
+  })
+);
+
+
 const scaleBarProps = {
   digits: 0,
   fontSize: 13,
@@ -43,7 +66,8 @@ export const getPhylocanvasState = createSelector(
   getNodeStyles,
   getHighlightedNodeIds,
   state => getTreeState(state).size,
-  ({ phylocanvas, name }, nodeStyles, highlightedIds, size) => ({
+  getFilenames,
+  ({ phylocanvas, name }, nodeStyles, highlightedIds, size, filenames) => ({
     ...phylocanvas,
     leafNodeStyle: name === POPULATION ? populationLeafNodeStyle : phylocanvas.leafNodeStyle,
     renderLeafLabels: name === POPULATION || phylocanvas.renderLeafLabels,
@@ -51,6 +75,10 @@ export const getPhylocanvasState = createSelector(
     selectedIds: highlightedIds,
     size: size || phylocanvas.size,
     styles: nodeStyles,
+    contextMenu: {
+      ...phylocanvas.contextMenu,
+      filenames,
+    },
   })
 );
 

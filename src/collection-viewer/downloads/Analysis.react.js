@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { getDownloadPrefix } from './selectors';
+import { getDownloadPath } from './selectors';
 import { getCollection } from '../selectors';
 import { getActiveGenomeIds } from '../selectors/active';
 
@@ -41,7 +41,7 @@ function mapStateToProps(state) {
   return {
     collection: getCollection(state),
     genomeIds: getActiveGenomeIds(state),
-    prefix: getDownloadPrefix(state),
+    prefix: getDownloadPath(state),
   };
 }
 

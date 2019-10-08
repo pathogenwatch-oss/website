@@ -2,14 +2,16 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { exportFile } from '@cgps/libmicroreact/utils/downloads';
 
-import { getDownloadPrefix, getTreeName } from './selectors';
+import { getDownloadPath } from './selectors';
 import { getCollection } from '../selectors';
 import { getActiveGenomeIds } from '../selectors/active';
+import { getTreeStateKey } from '../tree/selectors';
 
 import { formatCollectionFilename } from './utils';
 import { isSubtree } from '../tree/utils';
 
 import { POPULATION } from '../../app/stateKeys/tree';
+import { getFilenamePrefix } from '../tree/selectors/phylocanvas';
 
 const DownloadForm = ({ link, filename, title, genomeIds, tree, children }) => (
   <form
@@ -40,21 +42,21 @@ const DownloadButton = ({ link, filename, title, children }) => (
   </a>
 );
 
-const DownloadsMenu = ({ collection, genomeIds, prefix, tree }) => (
+const DownloadsMenu = ({ collection, genomeIds, path, filename, tree }) => (
   tree ?
     <React.Fragment>
-      <button onClick={() => exportFile('tree-nwk')}>
+      <button onClick={() => exportFile('tree-nwk', filename)}>
         Tree (.nwk)
       </button>
-      <button onClick={() => exportFile('tree-png')}>
+      <button onClick={() => exportFile('tree-png', filename)}>
         Tree (.png)
       </button>
-      <button onClick={() => exportFile('tree-svg')}>
+      <button onClick={() => exportFile('tree-svg', filename)}>
         Tree (.svg)
       </button>
       <hr />
       <DownloadForm
-        link={`${prefix}/core-allele-distribution`}
+        link={`${path}/core-allele-distribution`}
         filename={formatCollectionFilename(collection, 'core-allele-distribution.csv')}
         genomeIds={genomeIds}
         tree={tree}
@@ -62,7 +64,7 @@ const DownloadsMenu = ({ collection, genomeIds, prefix, tree }) => (
         Core allele distribution
       </DownloadForm>
       <DownloadForm
-        link={`${prefix}/score-matrix`}
+        link={`${path}/score-matrix`}
         filename={formatCollectionFilename(collection, 'score-matrix.csv')}
         genomeIds={genomeIds}
         tree={tree}
@@ -70,7 +72,7 @@ const DownloadsMenu = ({ collection, genomeIds, prefix, tree }) => (
         Score matrix
       </DownloadForm>
       <DownloadForm
-        link={`${prefix}/difference-matrix`}
+        link={`${path}/difference-matrix`}
         filename={formatCollectionFilename(collection, 'difference-matrix.csv')}
         genomeIds={genomeIds}
         tree={tree}
@@ -78,7 +80,7 @@ const DownloadsMenu = ({ collection, genomeIds, prefix, tree }) => (
         Difference matrix
       </DownloadForm>
       <DownloadButton
-        link={`${prefix}/variance-summary`}
+        link={`${path}/variance-summary`}
         filename={formatCollectionFilename(collection, 'variance-summary.csv')}
       >
         Variance summary
@@ -97,9 +99,10 @@ DownloadsMenu.propTypes = {
 function mapStateToProps(state) {
   return {
     collection: getCollection(state),
+    filename: getFilenamePrefix(state),
     genomeIds: getActiveGenomeIds(state),
-    prefix: getDownloadPrefix(state),
-    tree: getTreeName(state),
+    path: getDownloadPath(state),
+    tree: getTreeStateKey(state),
   };
 }
 

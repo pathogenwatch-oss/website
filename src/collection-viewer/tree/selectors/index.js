@@ -14,11 +14,14 @@ export const isTopLevelTree = createSelector(
   tree => topLevelTrees.has(tree)
 );
 
+export const getTitles = state => getTreeState(state).titles;
+
 export const getLastSubtree = createSelector(
   getTreeState,
-  ({ lastSubtree }) => (
+  getTitles,
+  ({ lastSubtree }, titles) => (
     lastSubtree ?
-      { name: lastSubtree, title: lastSubtree } :
+      { name: lastSubtree, title: titles[lastSubtree] } :
       null
   )
 );

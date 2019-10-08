@@ -3,7 +3,6 @@ import { createSelector } from 'reselect';
 import { getServerPath } from '~/utils/Api';
 import { getViewer, getCollection } from '../selectors';
 import { getGenomes } from '../genomes/selectors';
-import { getVisibleTree } from '../tree/selectors/entities';
 import { getActiveGenomeIds } from '../selectors/active';
 
 export const isMenuOpen = state =>
@@ -17,8 +16,8 @@ export const getCounts = createSelector(
   getActiveGenomeIds,
   (genomes, ids) =>
     ids.reduce((memo, id) => {
-      const { __isReference, __isCollection } = genomes[id];
-      if (__isReference) {
+      const { reference, __isCollection } = genomes[id];
+      if (reference) {
         memo.reference++;
         return memo;
       }
@@ -31,12 +30,7 @@ export const getCounts = createSelector(
     }, { reference: 0, collection: 0, public: 0 })
 );
 
-export const getDownloadPrefix = createSelector(
+export const getDownloadPath = createSelector(
   getCollection,
   collection => getServerPath(`/download/collection/${collection.uuid}`)
-);
-
-export const getTreeName = createSelector(
-  getVisibleTree,
-  tree => (tree ? tree.name : null)
 );

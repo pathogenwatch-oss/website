@@ -217,10 +217,29 @@ function size(state = null, { type, payload }) {
   }
 }
 
+function titles(state = {}, { type, payload }) {
+  switch (type) {
+    case FETCH_COLLECTION.SUCCESS: {
+      const { organism = {}, subtrees } = payload.result;
+      const nextState = {};
+      for (const subtree of subtrees) {
+        const reference = organism.references.find(_ => _.uuid === subtree.name);
+        if (reference) {
+          nextState[subtree.name] = reference.name;
+        }
+      }
+      return nextState;
+    }
+    default:
+      return state;
+  }
+}
+
 export default combineReducers({
   entities,
   visible,
   loading,
   lastSubtree,
   size,
+  titles,
 });
