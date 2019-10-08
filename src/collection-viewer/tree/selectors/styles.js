@@ -1,6 +1,7 @@
 import { createSelector } from 'reselect';
 
 import { getTrees, getSubtreeNames, getVisibleTree } from './entities';
+import { getTitles } from './index';
 import { getGenomeStyles } from '../../selectors/styles';
 import { getFilteredGenomeIds } from '../../filter/selectors';
 import { getGenomes } from '../../genomes/selectors';
@@ -53,15 +54,15 @@ const getPopulationNodeStyles = createSelector(
   getTrees,
   getSubtreeNames,
   state => getTrees(state)[POPULATION].leafIds,
-  getGenomes,
-  (trees, subtreeNames, treeIds, genomes) => {
+  getTitles,
+  (trees, subtreeNames, treeIds, titles) => {
     const styles = {};
     for (const id of treeIds) {
-      const name = genomes[id].name;
+      const name = titles[id];
       if (subtreeNames.includes(id)) {
         styles[id] = {
           fillStyle: CGPS.COLOURS.PURPLE_LIGHT,
-          fontStyle: '500',
+          fontStyle: 'bold',
           label: getPopulationLabel(trees[id], name),
           labelFillStyle: CGPS.COLOURS.PURPLE,
         };
