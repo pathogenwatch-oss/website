@@ -1,32 +1,40 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import Menu from '@cgps/libmicroreact/dropdown-menu';
+import IconButton from '@cgps/libmicroreact/icon-button';
 
-import Overlay from '../../components/overlay';
-
-import { isMenuOpen, getCounts } from './selectors';
+import { isMenuOpen } from './selectors';
 
 import { setMenuActive } from './actions';
-
-import { showCounts } from '../../utils/genome';
 
 import Tables from './Tables.react';
 import Trees from './Trees.react';
 import Analysis from './Analysis.react';
 import { hasTrees } from '../tree/selectors/entities';
 
-const DownloadsMenu = ({ menuOpen, counts = {}, closeMenu, viewHasTrees }) => (
-  <Overlay visible={menuOpen} hide={closeMenu}>
-    <div className="wgsa-downloads mdl-shadow--4dp">
-      <h3 className="mdl-dialog__title">Downloads</h3>
-      {Object.keys(counts).length ? showCounts(counts) : null}
-      <ul className="wgsa-downloads-menu">
-        <Analysis />
-        <Tables />
-        {viewHasTrees && <Trees />}
-      </ul>
-    </div>
-  </Overlay>
-);
+const DownloadsMenu = ({ viewHasTrees }) => {
+  const [ isOpen, toggleIsOpen ] = React.useState(false);
+  return (
+    <Menu
+      align="right"
+      button={
+        <IconButton title="Downloads">
+          <i className="material-icons" style={{ marginTop: '1px' }}>file_download</i>
+        </IconButton>
+      }
+      className="pw-downloads-menu"
+      open={isOpen}
+      toggle={() => { toggleIsOpen(!isOpen); }}
+      toggleOnClick={false}
+    >
+      <Analysis />
+      <hr />
+      <Tables />
+      <hr />
+      {viewHasTrees && <Trees />}
+    </Menu>
+  );
+};
 
 DownloadsMenu.propTypes = {
   menuOpen: React.PropTypes.bool,
@@ -38,7 +46,6 @@ function mapStateToProps(state) {
   return {
     viewHasTrees: hasTrees(state),
     menuOpen: isMenuOpen(state),
-    counts: getCounts(state),
   };
 }
 

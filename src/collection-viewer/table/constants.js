@@ -121,7 +121,7 @@ function getNameText(data, valueGetter) {
     );
   }
 
-  if (data.__isReference) {
+  if (data.__isReference || data.reference) {
     return (
       <strong>{text}</strong>
     );

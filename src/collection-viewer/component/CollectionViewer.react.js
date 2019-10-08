@@ -2,7 +2,6 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import Layout from '../layout/Layout.react';
-import DownloadsMenu from '../downloads';
 import DocumentTitle from '~/branding/DocumentTitle.react';
 import ProgressListener from '../ProgressListener.react';
 
@@ -12,7 +11,6 @@ const CollectionViewer = ({ title }) => (
   <React.Fragment>
     <DocumentTitle>{title}</DocumentTitle>
     <Layout />
-    <DownloadsMenu />
     <ProgressListener />
   </React.Fragment>
 );

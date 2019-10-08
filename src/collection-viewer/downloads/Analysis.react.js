@@ -16,7 +16,6 @@ const DownloadForm = ({ link, filename, title, genomeIds, children }) => (
       type="submit"
       download={filename}
       title={title}
-      className="mdl-button"
     >
       {children}
     </button>
@@ -25,18 +24,11 @@ const DownloadForm = ({ link, filename, title, genomeIds, children }) => (
 );
 
 const DownloadsMenu = ({ collection, genomeIds, prefix }) => (
-  <li>
-    <h4>Analysis</h4>
-    <ul>
-      <li>
-        <DownloadForm
-          link={`${prefix}/speciator`}
-          filename={formatCollectionFilename(collection, 'speciator.csv')}
-          genomeIds={genomeIds}
-        >Speciation</DownloadForm>
-      </li>
-    </ul>
-  </li>
+  <DownloadForm
+    link={`${prefix}/speciator`}
+    filename={formatCollectionFilename(collection, 'species-prediction.csv')}
+    genomeIds={genomeIds}
+  >Species prediction</DownloadForm>
 );
 
 DownloadsMenu.propTypes = {

@@ -1,55 +1,5 @@
-.wgsa-downloads {
-  background-color: #fff;
-  background-image: url('/images/pathogenwatch-icon.svg');
-  background-position: calc(100% + 32px) -16px;
-  background-repeat: no-repeat;
-  background-size: calc(16px * 6);
-  min-width: 240px;
-  padding: 24px 32px;
-  position: relative;
-}
-
-.wgsa-downloads .mdl-dialog__title {
-  padding: 16px 0;
-}
-
-.wgsa-downloads-menu {
-  list-style: none;
-  margin: 0;
-  padding: 8px 0;
-  display: block;
-}
-
-.wgsa-menu-heading {
-  font-size: 14px;
-  font-weight: 500;
-  letter-spacing: 0;
-  line-height: inherit;
-  color: rgba(0, 0, 0, 0.54);
-  padding: 8px 32px 0;
-  margin: 0;
-  display: block;
-}
-
-.wgsa-downloads-menu a,
-.wgsa-downloads-menu button {
-  margin: 0;
-  padding: 0 16px;
-  box-sizing: border-box;
-}
-
-.wgsa-downloads > p {
-  margin: 0;
-}
-
-.wgsa-downloads-menu h4 {
-  margin-top: 16px;
-}
-
-.wgsa-menu-button {
-  color: #fff;
+.pw-downloads-menu button {
   padding: 0;
-  padding-left: 8px;
-  padding-right: 12px;
-  text-decoration: none;
+  color: inherit;
+  outline: none;
 }

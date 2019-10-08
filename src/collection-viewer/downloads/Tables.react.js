@@ -18,75 +18,60 @@ import {
   generateAMRGenes,
 } from './client-side';
 
-
-const items = [
-  {
-    description: 'Metadata',
-    filenameSegment: 'metadata.csv',
-    getFileContents: generateMetadataFile,
-    hideFromMenu({ hasMetadataTable }) {
-      return !hasMetadataTable;
-    },
-  },
-  {
-    description: 'Typing',
-    filenameSegment: 'typing.csv',
-    getFileContents: generateTypingFile,
-    hideFromMenu({ hasTypingTable }) {
-      return !hasTypingTable;
-    },
-  },
-  {
-    description: 'Stats',
-    filenameSegment: 'stats.csv',
-    getFileContents: generateStatsFile,
-    hideFromMenu: () => false,
-  },
-  {
-    description: 'AMR Profile',
-    filenameSegment: 'amr-profile.csv',
-    getFileContents: generateAMRProfile,
-    hideFromMenu({ hasAMRTables }) {
-      return !hasAMRTables;
-    },
-  },
-  {
-    description: 'AMR SNPs',
-    filenameSegment: 'amr-snps.csv',
-    getFileContents: generateAMRSNPs,
-    hideFromMenu({ hasAMRTables }) {
-      return !hasAMRTables;
-    },
-  },
-  {
-    description: 'AMR Genes',
-    filenameSegment: 'amr-genes.csv',
-    getFileContents: generateAMRGenes,
-    hideFromMenu({ hasAMRTables }) {
-      return !hasAMRTables;
-    },
-  },
-];
-
 const DownloadsMenu = (props) => {
   const { collection, genomes, genomeIds, tables } = props;
   return (
-    <li>
-      <h4>Tables</h4>
-      <ul>
-        { items.map(item => (item.hideFromMenu(props) ? null :
-          <li key={item.filenameSegment}>
-            <DownloadButton
-              className="mdl-button"
-              filename={formatCollectionFilename(collection, item.filenameSegment)}
-              genomeIds={genomeIds}
-              generateFile={() => item.getFileContents({ genomes, genomeIds, tables })}
-            >
-              {item.description}
-            </DownloadButton>
-          </li>)) }
-      </ul>
-    </li>
+    <React.Fragment>
+      { props.hasMetadataTable &&
+        <DownloadButton
+          filename={formatCollectionFilename(collection, 'metadata.csv')}
+          genomeIds={genomeIds}
+          generateFile={() => generateMetadataFile({ genomes, genomeIds, tables })}
+        >
+          Metadata table
+        </DownloadButton> }
+      { props.hasTypingTable &&
+        <DownloadButton
+          filename={formatCollectionFilename(collection, 'typing.csv')}
+          genomeIds={genomeIds}
+          generateFile={() => generateTypingFile({ genomes, genomeIds, tables })}
+        >
+          Typing table
+        </DownloadButton> }
+      <DownloadButton
+        filename={formatCollectionFilename(collection, 'stats.csv')}
+        genomeIds={genomeIds}
+        generateFile={() => generateStatsFile({ genomes, genomeIds, tables })}
+      >
+        Stats table
+      </DownloadButton>
+      { props.hasAMRTables &&
+        <React.Fragment>
+          <hr />
+          <DownloadButton
+            filename={formatCollectionFilename(collection, 'amr-profile.csv')}
+            genomeIds={genomeIds}
+            generateFile={() => generateAMRProfile({ genomes, genomeIds, tables })}
+          >
+            AMR Profile
+          </DownloadButton>
+          <DownloadButton
+            filename={formatCollectionFilename(collection, 'amr-snps.csv')}
+            genomeIds={genomeIds}
+            generateFile={() => generateAMRSNPs({ genomes, genomeIds, tables })}
+          >
+            AMR SNPs
+          </DownloadButton>
+          <DownloadButton
+            filename={formatCollectionFilename(collection, 'amr-genes.csv')}
+            genomeIds={genomeIds}
+            generateFile={() => generateAMRGenes({ genomes, genomeIds, tables })}
+          >
+            AMR Genes
+          </DownloadButton>
+        </React.Fragment>
+      }
+    </React.Fragment>
   );
 };
 
