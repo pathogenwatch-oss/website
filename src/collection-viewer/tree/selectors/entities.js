@@ -43,5 +43,5 @@ export const areTreesComplete = createSelector(
 
 export const getTreeFilteredIds = createSelector(
   getVisibleTree,
-  tree => tree.ids
+  tree => tree.subtreeIds || tree.ids
 );
