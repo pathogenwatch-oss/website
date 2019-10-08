@@ -54,7 +54,7 @@ export const systemDataColumns = {
     },
     display({ analysis }) {
       if (!analysis.mlst) return null;
-      return <ST id={analysis.mlst.st} textOnly />;
+      return <ST id={analysis.mlst.st} textOnly/>;
     },
   },
   __mlst_profile: {
@@ -71,7 +71,7 @@ export const systemDataColumns = {
       if (!analysis.mlst) return null;
       const { code, alleles } = analysis.mlst;
       if (code) return code;
-      return <Profile alleles={alleles} textOnly />;
+      return <Profile alleles={alleles} textOnly/>;
     },
   },
   __inc_types: {
@@ -80,10 +80,23 @@ export const systemDataColumns = {
     valueGetter({ analysis }) {
       if (!analysis.inctyper) return null;
       if (Object.keys(analysis.inctyper).length === 0 && analysis.inctyper.constructor === Object) return null;
-      return analysis.inctyper['Inc Matches']
-        .map(match => match['Inc Match'])
-        .map(fullName => fullName.split('_'))
-        .map(parts => `${parts[0]}_${parts[1]}`)
+
+      return Object.values(analysis.inctyper['Inc Matches']
+        .reduce((contigs, match) => {
+          if (!contigs.hasOwnProperty(match.Contig)) {
+            contigs[match.Contig] = [];
+          }
+          contigs[match.Contig].push(match);
+          return contigs;
+        }, {}))
+        .map(contigMatches => contigMatches.map(
+          match => (analysis.inctyper.Library === 'gram_negative' ?
+            match['Inc Match'].replace(/_\d+$/, '') :
+            match.Group))
+          .sort()
+          .join('/')
+        )
+        .sort()
         .join('; ');
     },
   },

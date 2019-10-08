@@ -8,6 +8,7 @@ import SignInLink from '../sign-in/SignInLink.react';
 
 import CONFIG from '../app/config';
 import DocumentTitle from '../branding/DocumentTitle.react';
+
 const { maxCollectionSize = 1000 } = CONFIG;
 
 export default ({ deployedOrganisms }) => (
@@ -175,18 +176,28 @@ export default ({ deployedOrganisms }) => (
             <tr>
               <th>Organism</th>
               <th>AMR Prediction</th>
-              <th>Collections</th>
-              <th>Population Search</th>
+              <th>Core SNP Trees</th>
               <th>Other</th>
             </tr>
           </thead>
           <tbody>
             <tr>
               <td>
-                <em>Klebsiella</em>
+                <em>Campylobacter</em>
+              </td>
+              <td>
+                <i className="material-icons">check</i>
               </td>
               <td />
               <td />
+            </tr>
+            <tr>
+              <td>
+                <em>Klebsiella</em>
+              </td>
+              <td>
+                <i className="material-icons">check</i>
+              </td>
               <td />
               <td>
                 <small>Kleborate</small>
@@ -205,9 +216,6 @@ export default ({ deployedOrganisms }) => (
                 )}
               </td>
               <td>
-                <i className="material-icons">check</i>
-              </td>
-              <td>
                 <small>Kleborate</small>
               </td>
             </tr>
@@ -223,7 +231,6 @@ export default ({ deployedOrganisms }) => (
                   <i className="material-icons">check</i>
                 )}
               </td>
-              <td />
               <td>
                 <small>NG-MAST</small>
               </td>
@@ -237,9 +244,6 @@ export default ({ deployedOrganisms }) => (
                 <td>
                   <i className="material-icons">check</i>
                 </td>
-                <td>
-                  <i className="material-icons">check</i>
-                </td>
                 <td />
               </tr>
             )}
@@ -247,7 +251,6 @@ export default ({ deployedOrganisms }) => (
               <td>
                 <em>Salmonella</em>
               </td>
-              <td />
               <td />
               <td />
               <td>
@@ -260,11 +263,6 @@ export default ({ deployedOrganisms }) => (
               </td>
               <td>
                 <i className="material-icons">check</i>
-              </td>
-              <td>
-                {deployedOrganisms.has('90370') && (
-                  <i className="material-icons">check</i>
-                )}
               </td>
               <td>
                 {deployedOrganisms.has('90370') && (
@@ -287,11 +285,6 @@ export default ({ deployedOrganisms }) => (
                   <i className="material-icons">check</i>
                 )}
               </td>
-              <td>
-                {deployedOrganisms.has('1280') && (
-                  <i className="material-icons">check</i>
-                )}
-              </td>
               <td />
             </tr>
             {deployedOrganisms.has('1336') && (
@@ -304,7 +297,6 @@ export default ({ deployedOrganisms }) => (
                   <i className="material-icons">check</i>
                 </td>
                 <td />
-                <td />
               </tr>
             )}
             <tr>
@@ -314,16 +306,7 @@ export default ({ deployedOrganisms }) => (
               <td>
                 <i className="material-icons">check</i>
               </td>
-              <td>
-                {deployedOrganisms.has('1313') && (
-                  <i className="material-icons">check</i>
-                )}
-              </td>
-              <td>
-                {deployedOrganisms.has('1313') && (
-                  <i className="material-icons">check</i>
-                )}
-              </td>
+              <td />
               <td>
                 <small>PopPUNK</small>
                 <br />
@@ -339,7 +322,6 @@ export default ({ deployedOrganisms }) => (
                 <td>
                   <i className="material-icons">check</i>
                 </td>
-                <td />
                 <td />
               </tr>
             )}
