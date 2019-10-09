@@ -21,4 +21,6 @@ router.use('/saureus/collection/:alias', (req, res) => {
   redirectFromAlias(res, alias);
 });
 
+router.use('/pneumococcus', (req, res) => res.redirect('/genomes/all?genusId=1301&speciesId=1313'));
+
 module.exports = router;
