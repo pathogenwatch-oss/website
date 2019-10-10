@@ -5,7 +5,6 @@ import {
   RESET_FILTER,
   CLEAR_FILTERS,
 } from './actions';
-import { TREE_LOADED } from '../tree/actions';
 import { FETCH_COLLECTION } from '../actions';
 
 import { filterKeys } from './constants';
@@ -44,37 +43,6 @@ export default function (state = initialState, { type, payload = {} }) {
         [filterKeys.MAP]: {
           ids: emptySet,
           active: false,
-        },
-      };
-    }
-    case TREE_LOADED: {
-      const { leafIds } = payload;
-
-      const isActive =
-        state[filterKeys.VISIBILITY].isActive ||
-        state[filterKeys.TREE].isActive ||
-        state[filterKeys.MAP].isActive;
-
-      const existingIds = new Set([
-        ...state[filterKeys.VISIBILITY].ids,
-        ...state[filterKeys.TREE].ids,
-        ...state[filterKeys.MAP].ids,
-      ]);
-
-      const shouldClearFilter = isActive && !leafIds.some(id => existingIds.has(id));
-      return {
-        ...state,
-        [filterKeys.VISIBILITY]: {
-          ids: shouldClearFilter ? emptySet : state[filterKeys.VISIBILITY].ids,
-          active: shouldClearFilter ? false : state[filterKeys.VISIBILITY].active,
-        },
-        [filterKeys.TREE]: {
-          ids: shouldClearFilter ? emptySet : state[filterKeys.TREE].ids,
-          active: shouldClearFilter ? false : state[filterKeys.TREE].active,
-        },
-        [filterKeys.MAP]: {
-          ids: shouldClearFilter ? emptySet : state[filterKeys.MAP].ids,
-          active: shouldClearFilter ? false : state[filterKeys.MAP].active,
         },
       };
     }

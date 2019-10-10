@@ -8,7 +8,7 @@ import { getActiveGenomeIds } from '../selectors/active';
 import { getTreeStateKey } from '../tree/selectors';
 
 import { formatCollectionFilename } from './utils';
-import { isSubtree } from '../tree/utils';
+import { topLevelTrees } from '../tree/constants';
 
 import { POPULATION } from '../../app/stateKeys/tree';
 import { getFilenamePrefix } from '../tree/selectors/phylocanvas';
@@ -27,7 +27,7 @@ const DownloadForm = ({ link, filename, title, genomeIds, tree, children }) => (
       {children}
     </button>
     { genomeIds && <input type="hidden" name="ids" value={genomeIds} /> }
-    { isSubtree(tree) && <input type="hidden" name="subtree" value={tree} /> }
+    { !topLevelTrees.has(tree) && <input type="hidden" name="subtree" value={tree} /> }
   </form>
 );
 

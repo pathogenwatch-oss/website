@@ -145,25 +145,14 @@ function entities(state = {}, action) {
           },
         },
       };
-    case ACTIONS.SET_TREE:
-      return {
-        ...state,
-        [payload.name]: {
-          ...state[payload.name],
-          loaded: false,
-        },
-      };
-    case ACTIONS.TREE_LOADED: {
-      const treeState = state[payload.stateKey];
-      return {
-        ...state,
-        [payload.stateKey]: {
-          ...treeState,
-          loaded: true,
-          leafIds: treeState.leafIds || payload.leafIds,
-        },
-      };
-    }
+    // case ACTIONS.SET_TREE:
+    //   return {
+    //     ...state,
+    //     [payload.name]: {
+    //       ...state[payload.name],
+    //       loaded: false,
+    //     },
+    //   };
     default:
       return state;
   }

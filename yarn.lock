@@ -774,35 +774,51 @@
     lodash "^4.17.13"
     to-fast-properties "^2.0.0"
 
-"@cgps/phylocanvas-plugin-context-menu@^3.0.0-beta.11":
-  version "3.0.0-beta.11"
-  resolved "https://registry.yarnpkg.com/@cgps/phylocanvas-plugin-context-menu/-/phylocanvas-plugin-context-menu-3.0.0-beta.11.tgz#fe0815c2eb9d65670130f857dacb2d064fb094c0"
-  integrity sha512-OwoPJmozuFtuhnGXcJq+cpvVI1Vx4bA9y5T3Xz7VlKaV/KzigAHEYCntJFBDc8Xi4HMupzpkMypfXdQ3+mguIg==
+"@cgps/libmicroreact@https://gitlab.com/cgps/libmicroreact#d1dd96bb15d7112563930a4d05972f0edc11e4d5":
+  version "2.0.1"
+  resolved "https://gitlab.com/cgps/libmicroreact#d1dd96bb15d7112563930a4d05972f0edc11e4d5"
+  dependencies:
+    "@cgps/phylocanvas" "^3.0.0-beta.12"
+    "@cgps/phylocanvas-plugin-context-menu" "^3.0.0-beta.12"
+    "@cgps/phylocanvas-plugin-interactions" "^3.0.0-beta.12"
+    "@cgps/phylocanvas-plugin-metadata" "^3.0.0-beta.12"
+    "@cgps/phylocanvas-plugin-scalebar" "^3.0.0-beta.12"
+    "@cgps/phylocanvas-plugin-svg-export" "^3.0.0-beta.12"
+    "@material/icon-button" "^3.1.0"
+    lodash.debounce "^4.0.8"
+    rc-animate "2.5.4"
+    react-mdc-web "^0.17.0"
+    react-relative-portal "^1.5.1"
 
-"@cgps/phylocanvas-plugin-interactions@^3.0.0-beta.11":
-  version "3.0.0-beta.11"
-  resolved "https://registry.yarnpkg.com/@cgps/phylocanvas-plugin-interactions/-/phylocanvas-plugin-interactions-3.0.0-beta.11.tgz#d7d8d983dbad3330d1baf8c7cb0fc788038538ce"
-  integrity sha512-u87HhL8wO5pWp8fiO0suE022Rws2qPeWJPxkuxxneG1VYZsV//Bcbh2bugoYs7FpsvkDrKCbsjcgcOHOQk4Lyg==
+"@cgps/phylocanvas-plugin-context-menu@^3.0.0-beta.12":
+  version "3.0.0-beta.12"
+  resolved "https://registry.yarnpkg.com/@cgps/phylocanvas-plugin-context-menu/-/phylocanvas-plugin-context-menu-3.0.0-beta.12.tgz#31061a2b301b1e8a2846c0c65383ee8e3a620aa0"
+  integrity sha512-T3yUeo197bsQxjVpyMmDvsfkVw9QAEOzU2iekPm8ghHJxpA6iBXabzd2yl19xlyCNSWotzucQoYevk9QxOj3fQ==
 
-"@cgps/phylocanvas-plugin-metadata@^3.0.0-beta.11":
-  version "3.0.0-beta.11"
-  resolved "https://registry.yarnpkg.com/@cgps/phylocanvas-plugin-metadata/-/phylocanvas-plugin-metadata-3.0.0-beta.11.tgz#6e14a537eb2dedfb84c549f5d08c0dd5efd9b705"
-  integrity sha512-Hri/kxTG9waD3ScWQMSljxACjWcC4vaDvXE+nYudvkLLsIb0GPChb62Ccw75oFBWj3FfY4WK3mOOl8k3BbSylA==
+"@cgps/phylocanvas-plugin-interactions@^3.0.0-beta.12":
+  version "3.0.0-beta.12"
+  resolved "https://registry.yarnpkg.com/@cgps/phylocanvas-plugin-interactions/-/phylocanvas-plugin-interactions-3.0.0-beta.12.tgz#797c31957f1694b83f390440f9b14c71d0c6c81d"
+  integrity sha512-ZSxWYT2uza8iVLZWA5X5V+QbvbtjxLp4xFEmYFIjSiIQmwfh7FIV6n6hRqWfMq9AFI+TXOubMQO9BFUk3W1bKA==
 
-"@cgps/phylocanvas-plugin-scalebar@^3.0.0-beta.11":
-  version "3.0.0-beta.11"
-  resolved "https://registry.yarnpkg.com/@cgps/phylocanvas-plugin-scalebar/-/phylocanvas-plugin-scalebar-3.0.0-beta.11.tgz#cf7265f17065ad4a86640c736cad4968171ad406"
-  integrity sha512-3n6cBFpDGseyhMIlpqxYngsrpAMFkKgxRvcy9VzH0WYw/qd5GCSFd2ziK+bIIOZ7ISnfYDcTXUhsgRegwgheJg==
+"@cgps/phylocanvas-plugin-metadata@^3.0.0-beta.12":
+  version "3.0.0-beta.12"
+  resolved "https://registry.yarnpkg.com/@cgps/phylocanvas-plugin-metadata/-/phylocanvas-plugin-metadata-3.0.0-beta.12.tgz#2ef1e4259d7e7f59f705a72b830eab672d054261"
+  integrity sha512-A/OukP8OTuuTc2UvAlk/+nJdBfUzfrgkcC357LIa2XwIR6MwWQOxh6p6+7+PUt3CNNed7pwjbbQNXXYLfX2njA==
 
-"@cgps/phylocanvas-plugin-svg-export@^3.0.0-beta.11":
-  version "3.0.0-beta.11"
-  resolved "https://registry.yarnpkg.com/@cgps/phylocanvas-plugin-svg-export/-/phylocanvas-plugin-svg-export-3.0.0-beta.11.tgz#2dd3c3862fe27598a5db100254d04a1804cf5dbe"
-  integrity sha512-VMeiTRnQa1gQTWUjWND8tTQ2qX92OMPYajRfOxmRuMNXbJnrmH3kdKg9i96Xx1qN/6Nnis2ktewR2qS9UxHkLA==
+"@cgps/phylocanvas-plugin-scalebar@^3.0.0-beta.12":
+  version "3.0.0-beta.12"
+  resolved "https://registry.yarnpkg.com/@cgps/phylocanvas-plugin-scalebar/-/phylocanvas-plugin-scalebar-3.0.0-beta.12.tgz#0557dd7bdfc80be5518f77cf16cdcba8bec0a53d"
+  integrity sha512-v52+r0EMfD6fM2+kvEQTBA4B35yhpWzip4LFU5sGylx+MaukwEPnVFTFracgGJAph5qlBdbTZHa634GWdF/ZIw==
 
-"@cgps/phylocanvas@^3.0.0-beta.11":
-  version "3.0.0-beta.11"
-  resolved "https://registry.yarnpkg.com/@cgps/phylocanvas/-/phylocanvas-3.0.0-beta.11.tgz#d1c5cc91d5b6068e0008465102f8b0d1f5bc63ab"
-  integrity sha512-Lsyo+7Flhro3pT45VOcS9DWHNKurv+UYsVS4UpOtJWzeIc8GJw8u3PqV3wzJGlyQpWx6yTh69U+Rz+fAmQr/QQ==
+"@cgps/phylocanvas-plugin-svg-export@^3.0.0-beta.12":
+  version "3.0.0-beta.12"
+  resolved "https://registry.yarnpkg.com/@cgps/phylocanvas-plugin-svg-export/-/phylocanvas-plugin-svg-export-3.0.0-beta.12.tgz#faea123424ef36706238b8917fa32ca2ef8ee68c"
+  integrity sha512-itGXmn+yIbotNEzNwzb9EFy+KOji23TIgsc0461LxOCUeI/9xQsz97E6acRmFrYVOOJFgHHsEbfKBrSEfav9Yw==
+
+"@cgps/phylocanvas@^3.0.0-beta.12":
+  version "3.0.0-beta.12"
+  resolved "https://registry.yarnpkg.com/@cgps/phylocanvas/-/phylocanvas-3.0.0-beta.12.tgz#cc43cd27de21e0f3c0d6a3c0797e3f3aa672a654"
+  integrity sha512-Kp8gCDEDmvcG/22mQD4QvcBmf6WK9VcfTVBiM4aJ1szSVkD9EHJ71EQA377zGq+wNgHoACN6KrL9mq0FE+AO1Q==
 
 "@material/animation@^0.25.0":
   version "0.25.0"
@@ -5290,22 +5306,6 @@ levn@^0.3.0, levn@~0.3.0:
     prelude-ls "~1.1.2"
     type-check "~0.3.2"
 
-"libmicroreact@https://gitlab.com/cgps/libmicroreact#2f0c7219e455a515e3ea0a8621dbab6f813d6f20":
-  version "2.0.1"
-  resolved "https://gitlab.com/cgps/libmicroreact#2f0c7219e455a515e3ea0a8621dbab6f813d6f20"
-  dependencies:
-    "@cgps/phylocanvas" "^3.0.0-beta.11"
-    "@cgps/phylocanvas-plugin-context-menu" "^3.0.0-beta.11"
-    "@cgps/phylocanvas-plugin-interactions" "^3.0.0-beta.11"
-    "@cgps/phylocanvas-plugin-metadata" "^3.0.0-beta.11"
-    "@cgps/phylocanvas-plugin-scalebar" "^3.0.0-beta.11"
-    "@cgps/phylocanvas-plugin-svg-export" "^3.0.0-beta.11"
-    "@material/icon-button" "^3.1.0"
-    lodash.debounce "^4.0.8"
-    rc-animate "2.5.4"
-    react-mdc-web "^0.17.0"
-    react-relative-portal "^1.5.1"
-
 lie@^3.0.2:
   version "3.3.0"
   resolved "https://registry.yarnpkg.com/lie/-/lie-3.3.0.tgz#dcf82dee545f46074daf200c7c1c5a08e0f40f6a"
@@ -6501,16 +6501,6 @@ performance-now@^2.1.0:
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/performance-now/-/performance-now-2.1.0.tgz#6309f4e0e5fa913ec1c69307ae364b4b377c9e7b"
   integrity sha1-Ywn04OX6kT7BxpMHrjZLSzd8nns=
-
-phylocanvas-plugin-context-menu@^3.10.1:
-  version "3.11.0"
-  resolved "https://registry.yarnpkg.com/phylocanvas-plugin-context-menu/-/phylocanvas-plugin-context-menu-3.11.0.tgz#a1ed5f6d062ac91ceec686e1f05a9b3e74553adc"
-  integrity sha512-mVsZRD6YCGx/RutPmy5NCgUOJhRxwF3A6eVbCCCQygQq4eEv83kWdLRhZnNn48kG8CMqfQDT0Vyn6dwvcdbKCw==
-
-phylocanvas@^2.8.1:
-  version "2.8.1"
-  resolved "https://registry.yarnpkg.com/phylocanvas/-/phylocanvas-2.8.1.tgz#8314d6b9b6a1b0cbd6c593a96f069354f80ec56d"
-  integrity sha1-gxTWubahsMvWxZOpbwaTVPgOxW0=
 
 pify@^2.0.0:
   version "2.3.0"

@@ -1,7 +1,6 @@
 import { createAsyncConstants } from '../../actions';
 
 import * as api from './api';
-import { takeSnapshot, getLinearStep } from './utils';
 
 export const SET_TREE = 'SET_TREE';
 
@@ -26,33 +25,6 @@ export function fetchTree(stateKey, promise) {
   };
 }
 
-export const TREE_LOADED = 'TREE_LOADED';
-
-export function treeLoaded(stateKey, phylocanvas, leafIds) {
-  return {
-    type: TREE_LOADED,
-    payload: {
-      stateKey,
-      root: phylocanvas.root.id,
-      step: getLinearStep(phylocanvas),
-      leafIds: leafIds || phylocanvas.leaves.map(_ => _.id),
-    },
-  };
-}
-
-export const TREE_TYPE_CHANGED = 'TREE_TYPE_CHANGED';
-
-export function typeChanged(stateKey, phylocanvas) {
-  return {
-    type: TREE_TYPE_CHANGED,
-    payload: {
-      stateKey,
-      type: phylocanvas.treeType,
-      step: getLinearStep(phylocanvas),
-    },
-  };
-}
-
 export const SET_NODE_SCALE = 'SET_NODE_SCALE';
 
 export function setNodeScale(stateKey, scale) {
@@ -73,18 +45,6 @@ export function setLabelScale(stateKey, scale) {
     payload: {
       stateKey,
       scale: parseFloat(scale),
-    },
-  };
-}
-
-export const ADD_HISTORY_SNAPSHOT = 'ADD_HISTORY_SNAPSHOT';
-
-export function addHistorySnapshot(stateKey, phylocanvas) {
-  return {
-    type: ADD_HISTORY_SNAPSHOT,
-    payload: {
-      stateKey,
-      image: takeSnapshot(phylocanvas),
     },
   };
 }

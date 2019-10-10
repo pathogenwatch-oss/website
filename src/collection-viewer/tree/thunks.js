@@ -84,15 +84,6 @@ export function treeClicked(event, phylocanvas) {
   };
 }
 
-export function typeChanged(phylocanvas) {
-  return (dispatch, getState) => {
-    const state = getState();
-    const stateKey = getVisibleTree(state).name;
-    dispatch(actions.typeChanged(stateKey, phylocanvas));
-    dispatch(actions.addHistorySnapshot(stateKey, phylocanvas));
-  };
-}
-
 export function internalNodeSelected(node) {
   return (dispatch, getState) => {
     const state = getState();
