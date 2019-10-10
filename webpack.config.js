@@ -1,8 +1,6 @@
 const path = require('path');
 const webpack = require('webpack');
 const WebpackAssetsManifest = require('webpack-assets-manifest');
-const WebpackMonitor = require('webpack-monitor');
-const NameAllModulesPlugin = require('name-all-modules-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 

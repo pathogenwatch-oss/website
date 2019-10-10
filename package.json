@@ -93,7 +93,6 @@
     "webpack-cli": "^3.3.9",
     "webpack-dev-middleware": "^3.7.2",
     "webpack-hot-middleware": "^2.20.0",
-    "webpack-monitor": "^1.0.13",
     "why-did-you-update": "^0.1.1",
     "worker-loader": "^2.0.0",
     "workerize-loader": "^1.0.4"
