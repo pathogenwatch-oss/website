@@ -23,7 +23,6 @@ function shouldIgnoreLocation(loc) {
 }
 
 export default class MarkerLayer extends MapLayer {
-
   constructor(props, context) {
     super(props, context);
     this.map = (undefined !== props.map) ? props.map : context.map;
@@ -123,18 +122,18 @@ export default class MarkerLayer extends MapLayer {
 
   render() {
     return (
-    <div ref={(c) => { this.container = c; }}
-      className="leaflet-objects-pane leaflet-marker-pane leaflet-zoom-hide react-leaflet-marker-layer"
-    >
-      {this.renderMarkers()}
-    </div>
+      <div ref={(c) => { this.container = c; }}
+        className="leaflet-objects-pane leaflet-marker-pane leaflet-zoom-hide react-leaflet-marker-layer"
+      >
+        {this.renderMarkers()}
+      </div>
     );
   }
 
   renderMarkers() {
     const style = { position: 'absolute' };
     const MarkerComponent = this.props.markerComponent;
-    return map(this.props.markers, (marker, index: number) => {
+    return map(this.props.markers, (marker, index) => {
       if (shouldIgnoreLocation(this.getLocationForMarker(marker))) {
         return null;
       }
@@ -155,7 +154,6 @@ export default class MarkerLayer extends MapLayer {
   getMarkerRefName(index) {
     return `marker-${index}`;
   }
-
 }
 
 MarkerLayer.prototype.createLeafletElement = () => {};

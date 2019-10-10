@@ -14,10 +14,11 @@ app.use(
     contentBase: '/public',
     publicPath: config.output.publicPath,
     stats: { colors: true, cached: false },
+    hot: true,
   })
 );
 
-app.use(require('webpack-hot-middleware')(compiler));
+// app.use(require('webpack-hot-middleware')(compiler));
 
 app.use(bodyParser.json());
 

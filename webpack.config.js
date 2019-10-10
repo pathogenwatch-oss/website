@@ -31,11 +31,8 @@ const cssLoaders = [
       ident: 'postcss',
       plugins: () => [
         require('postcss-input-style')(),
-        require('postcss-cssnext')({
+        require('postcss-preset-env')({
           features: {
-            autoprefixer: {
-              browsers: [ 'last 2 versions' ],
-            },
             customProperties: false,
           },
         }),
@@ -45,7 +42,6 @@ const cssLoaders = [
 ];
 
 const commonRules = [
-  { test: /\.json$/, use: [ 'json-loader' ] },
   { test: /\.(png|jpg|jpeg|gif)$/, use: 'file' },
   {
     test: /\.js$/,
@@ -70,9 +66,13 @@ const commonRules = [
   },
 ];
 
-const commonPlugins = [ new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/) ];
+const commonPlugins = [
+  new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
+];
 
 const devConfig = {
+  mode: 'development',
+  devServer: { hot: true },
   devtool: '#eval-source-map',
   entry: [ 'react-hot-loader/patch', 'webpack-hot-middleware/client', './src' ],
   output: {
@@ -84,7 +84,6 @@ const devConfig = {
   plugins: [
     ...commonPlugins,
     new webpack.HotModuleReplacementPlugin(),
-    new webpack.NoEmitOnErrorsPlugin(),
   ],
   module: {
     rules: [
@@ -95,6 +94,7 @@ const devConfig = {
 };
 
 const prodConfig = {
+  mode: 'production',
   entry: {
     main: './src',
     vendor: [
@@ -112,6 +112,9 @@ const prodConfig = {
       'react-dom',
     ],
   },
+  optimization: {
+    runtimeChunk: 'single',
+  },
   output: {
     path: path.join(__dirname, 'public', 'app'),
     filename: '[name].[chunkhash].js',
@@ -120,48 +123,12 @@ const prodConfig = {
   resolve,
   plugins: [
     ...commonPlugins,
-    new webpack.LoaderOptionsPlugin({
-      minimize: true,
-      debug: false,
-    }),
-    new webpack.optimize.UglifyJsPlugin({
-      compressor: {
-        warnings: false,
-      },
-    }),
-    new webpack.DefinePlugin({
-      'process.env': {
-        NODE_ENV: JSON.stringify('production'),
-      },
-    }),
-    new webpack.optimize.CommonsChunkPlugin({
-      name: 'vendor',
-      minChunks: Infinity,
-    }),
-    new webpack.optimize.CommonsChunkPlugin({
-      name: 'manifest',
-    }),
-    new webpack.NamedModulesPlugin(),
-    new webpack.NamedChunksPlugin(chunk => {
-      if (chunk.name) {
-        return chunk.name;
-      }
-      return chunk
-        .mapModules(m => path.relative(m.context, m.request))
-        .join('_');
-    }),
-    new NameAllModulesPlugin(),
-    new WebpackMonitor({
-      capture: true,
-      target: '../monitor.json',
-      // launch: true,
-    }),
     new WebpackAssetsManifest({
       output: '../../assets.json', // relative to output.path
       publicPath: true,
     }),
     new CleanWebpackPlugin([ 'public/app', 'assets.json' ]),
-    new ExtractTextPlugin('styles.[contenthash].css'),
+    new ExtractTextPlugin('styles.[hash].css'),
   ],
   module: {
     rules: [
