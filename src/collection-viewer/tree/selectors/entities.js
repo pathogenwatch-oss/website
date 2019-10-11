@@ -42,6 +42,15 @@ export const areTreesComplete = createSelector(
 );
 
 export const getTreeFilteredIds = createSelector(
-  getVisibleTree,
-  tree => tree.subtreeIds || tree.ids
+  state => getVisibleTree(state).ids,
+  state => getVisibleTree(state).subtreeIds,
+  (ids, subtreeIds) => {
+    if (ids !== null) {
+      return ids;
+    }
+    if (subtreeIds !== null) {
+      return subtreeIds;
+    }
+    return [];
+  }
 );
