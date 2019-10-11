@@ -57,6 +57,7 @@
     "lodash.sortby": "^4.7.0",
     "name-all-modules-plugin": "^1.0.1",
     "node-forge": "^0.8.0",
+    "optimize-css-assets-webpack-plugin": "^5.0.3",
     "pako": "^1.0.5",
     "papaparse": "^4.1.1",
     "postcss-input-style": "^1.0.0",

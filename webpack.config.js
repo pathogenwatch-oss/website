@@ -3,6 +3,7 @@ const webpack = require('webpack');
 const WebpackAssetsManifest = require('webpack-assets-manifest');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 
 const srcFolder = path.join(__dirname, 'src');
 
@@ -91,27 +92,38 @@ const devConfig = {
   },
 };
 
+const vendorModules = [
+  'commonmark',
+  'leaflet',
+  'leaflet.markercluster',
+  'papaparse',
+  '@cgps/phylocanvas',
+  '@cgps/phylocanvas-plugin-context-menu',
+  '@cgps/phylocanvas-plugin-interactions',
+  '@cgps/phylocanvas-plugin-metadata',
+  '@cgps/phylocanvas-plugin-scalebar',
+  '@cgps/phylocanvas-plugin-svg-export',
+  'react',
+  'react-dom',
+];
+
 const prodConfig = {
   mode: 'production',
-  entry: {
-    main: './src',
-    vendor: [
-      'commonmark',
-      'leaflet',
-      'leaflet.markercluster',
-      'papaparse',
-      '@cgps/phylocanvas',
-      '@cgps/phylocanvas-plugin-context-menu',
-      '@cgps/phylocanvas-plugin-interactions',
-      '@cgps/phylocanvas-plugin-metadata',
-      '@cgps/phylocanvas-plugin-scalebar',
-      '@cgps/phylocanvas-plugin-svg-export',
-      'react',
-      'react-dom',
-    ],
-  },
+  entry: './src',
   optimization: {
     runtimeChunk: 'single',
+    splitChunks: {
+      cacheGroups: {
+        vendor: {
+          // test: /node_modules/,
+          test: module => vendorModules.includes(module.rawRequest),
+          chunks: 'initial',
+          name: 'vendor',
+          priority: 10,
+          enforce: true,
+        },
+      },
+    },
   },
   output: {
     path: path.join(__dirname, 'public', 'app'),
@@ -127,6 +139,13 @@ const prodConfig = {
     }),
     new CleanWebpackPlugin([ 'public/app', 'assets.json' ]),
     new ExtractTextPlugin('styles.[hash].css'),
+    new OptimizeCssAssetsPlugin({
+      cssProcessor: require('cssnano'),
+      cssProcessorPluginOptions: {
+        preset: [ 'default', { discardComments: { removeAll: true } } ],
+      },
+      canPrint: true,
+    }),
   ],
   module: {
     rules: [
