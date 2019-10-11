@@ -140,7 +140,7 @@ const prodConfig = {
       publicPath: true,
     }),
     new CleanWebpackPlugin([ 'public/app', 'assets.json' ]),
-    new ExtractTextPlugin('styles.[hash].css'),
+    new ExtractTextPlugin('styles.[md5:contenthash:hex:20].css'),
     new OptimizeCssAssetsPlugin({
       cssProcessor: require('cssnano'),
       cssProcessorPluginOptions: {
