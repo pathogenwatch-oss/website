@@ -35,6 +35,8 @@ const cssLoaders = [
             customProperties: false,
           },
         }),
+        require('postcss-color-function'),
+        require('postcss-nesting'),
       ],
     },
   },
