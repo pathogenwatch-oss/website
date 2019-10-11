@@ -50,7 +50,6 @@
     "file-loader": "^0.10.0",
     "fixed-data-table": "^0.6.0",
     "geocoding": "https://gitlab.com/cgps/geocoding",
-    "json-loader": "^0.5.3",
     "leaflet": "^1.2.0",
     "leaflet-lassoselect": "https://gitlab.com/cgps/leaflet-lassoselect#leaflet-1.x",
     "leaflet.markercluster": "^1.2.0",
