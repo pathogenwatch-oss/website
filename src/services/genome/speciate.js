@@ -4,7 +4,6 @@ const User = require('models/user');
 
 const { request } = require('services');
 const { getSpeciatorTask, getTasksByOrganism } = require('manifest');
-
 const notify = require('services/genome/notify');
 const { summariseAnalysis } = require('../../utils/analysis');
 
@@ -56,13 +55,13 @@ module.exports = async function findTask(message, retries = 0) {
   const { task, version, timeout = defaultTimeout } = speciatorTask;
 
   const doc = await Analysis.findOne({ fileId, task, version }).lean();
-
-  if (doc) {
+  const { precache = false } = message;
+  if (doc && !precache) {
     return submitTasks(message.metadata, doc);
   }
 
   const metadata = { genomeId, fileId, uploadedAt, clientId };
-  await request('tasks', 'run', { task, version, timeout$: timeout * 1000, metadata });
+  await request('tasks', 'run', { task, version, timeout$: timeout * 1000, metadata, precache });
 
   if (retries === maxRetries) return null;
   return findTask(message, retries + 1);

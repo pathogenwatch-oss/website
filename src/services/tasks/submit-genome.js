@@ -2,7 +2,7 @@ const { enqueue, queues } = require('../taskQueue');
 
 const { getSpeciatorTask } = require('../../manifest');
 
-module.exports = function ({ genomeId, fileId, uploadedAt, clientId, userId }) {
+module.exports = function ({ genomeId, fileId, uploadedAt, clientId, userId, queue = queues.genome }) {
   const speciatorTask = getSpeciatorTask();
   const { task, version } = speciatorTask;
   const metadata = {
@@ -12,5 +12,5 @@ module.exports = function ({ genomeId, fileId, uploadedAt, clientId, userId }) {
     clientId,
     userId,
   };
-  return enqueue(queues.genome, { task, version, metadata });
+  return enqueue(queue, { task, version, metadata }, queues.genome);
 };

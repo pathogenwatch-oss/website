@@ -22,7 +22,7 @@ function subscribeToQueue(queueName, queueType = queueName) {
   if (queueType === queues.genome) {
     taskQueue.dequeue(
       queueName,
-      ({ metadata, timeout }) => request('genome', 'speciate', { timeout$: timeout * 1000, metadata }),
+      ({ metadata, timeout }) => request('genome', 'speciate', { timeout$: timeout * 1000, metadata, precache }),
       message => request('genome', 'add-error', message)
     );
   }
