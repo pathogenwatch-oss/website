@@ -25,6 +25,7 @@ async function cleanGenome(genome, userId) {
   const { analysis = {} } = genome;
   const { speciator = {} } = analysis;
   const user = await User.findById(userId, { flags: 1 });
+  if (!user) return;
   const tasks = getTasksByOrganism(speciator, user);
   const expectedTasks = new Set([ ...tasks.map(_ => _.task), 'speciator' ]);
   const unset = {};
