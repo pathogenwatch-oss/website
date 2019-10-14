@@ -10,7 +10,7 @@ const { enqueue } = require('services/taskQueue');
 
 const limit = 1;
 
-const { task } = argv.opts;
+const { task, queue = 'reprocessing' } = argv.opts;
 if (!task) {
   throw new Error('--task not provided');
 }
@@ -47,7 +47,7 @@ function submitTasks(genomes) {
         superkingdomId,
         uploadedAt: new Date(uploadedAt),
       };
-      return enqueue('reprocessing', { task, version, retries, timeout, metadata }, 'task');
+      return enqueue(queue, { task, version, retries, timeout, metadata }, 'task');
     }
   });
 }

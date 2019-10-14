@@ -1,11 +1,14 @@
 const mongoConnection = require('utils/mongoConnection');
+const argv = require('named-argv');
 
 const { request } = require('services');
 const Collection = require('models/collection');
 
+const { query = { 'tree.versions': { $exists: false } } } = argv.opts;
+
 async function run() {
   const collections = await Collection.find(
-    { 'tree.versions': { $exists: false } },
+    query,
     { token: 1, organismId: 1, tree: 1, subtrees: 1 },
     { lean: true }
   );
@@ -32,7 +35,7 @@ async function run() {
   }
 }
 
-(async function() {
+(async function () {
   try {
     await mongoConnection.connect();
     await run();

@@ -37,10 +37,10 @@ async function cleanGenome(genome, userId) {
   }
 }
 
-const { queue } = argv.opts;
+const { queue = 'reprocessing' } = argv.opts;
 
 async function updateGenome({ _id, fileId, _user }, clean) {
-  await submit(queue, { genomeId: _id, fileId, userId: _user });
+  await submit({ genomeId: _id, fileId, userId: _user, queue });
   const genome = await Genome.findById(_id);
   if (genome && clean) {
     await cleanGenome(genome, _user);
