@@ -96,7 +96,7 @@ export function getTypingColumnGroups({ isClusterView }, uiOptions) {
     uiOptions.inctyper ? inctyperGroup : null,
     uiOptions.kleborate ? kleborateGroup : null,
   ]
-    .filter(_ => _)
+    .filter(_ => _) // removes the nulls
     .map(fillColumnDefs);
 }
 

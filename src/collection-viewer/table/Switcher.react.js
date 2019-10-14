@@ -11,6 +11,8 @@ import { setTable } from './actions';
 
 import { tableKeys, tableDisplayNames } from '../constants';
 
+import Organisms from '~/organisms';
+
 function mapStateToProps(state, { table }) {
   return {
     displayName: tableDisplayNames[table],
@@ -61,6 +63,11 @@ const TableSwitcher = props => (
         <Button table={tableKeys.snps} />
         <Button table={tableKeys.genes} />
       </ButtonGroup> }
+    { props.hasKleborate &&
+      <ButtonGroup>
+        <i className="material-icons" title="AMR">local_pharmacy</i>
+        <Button table={tableKeys.kleborateAMR} />
+      </ButtonGroup> }
     <Multi />
   </div>
 );
@@ -68,10 +75,12 @@ const TableSwitcher = props => (
 TableSwitcher.displayName = 'TableSwitcher';
 
 function mapSwitcherStateToProps(state) {
+  const hasKleborate = Organisms.uiOptions && Organisms.uiOptions.kleborate;
   return {
     hasMetadata: hasMetadata(state),
     hasTyping: hasTyping(state),
-    hasAMR: hasAMR(state),
+    hasKleborate,
+    hasAMR: hasAMR(state) && !hasKleborate,
   };
 }
 
