@@ -77,18 +77,19 @@ export const systemDataColumns = {
   __inc_types: {
     columnKey: '__inc_types',
     displayName: 'Inc Types',
-    addState({ data }) {
-      if (!data.length) return this;
-      let hidden = true;
-      for (const row of data) {
-        if (row.analysis && row.analysis.inctyper) {
-          hidden = false;
-          break;
-        }
-      }
-      this.hidden = hidden;
-      return this;
-    },
+    // TODO: add width without breaking everything here
+    // addState({ data }) {
+    //   if (!data.length) return this;
+    //   let hidden = true;
+    //   for (const row of data) {
+    //     if (row.analysis && row.analysis.inctyper) {
+    //       hidden = false;
+    //       break;
+    //     }
+    //   }
+    //   this.hidden = hidden;
+    //   return this;
+    // },
     valueGetter({ analysis }) {
       if (!analysis.inctyper) return null;
       if (Object.keys(analysis.inctyper).length === 0 && analysis.inctyper.constructor === Object) return null;
