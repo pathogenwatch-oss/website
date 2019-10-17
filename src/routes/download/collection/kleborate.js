@@ -23,7 +23,8 @@ module.exports = (req, res, next) => {
   request('collection', 'authorise', { user, token, projection: { genomes: 1 } })
     .then(collection => {
       const query = {
-        _id: { $in: genomeIds, 'analysis.kleborate': { $exists: true } },
+        _id: { $in: genomeIds },
+        'analysis.kleborate': { $exists: true },
         $or: [
           { _id: { $in: collection.genomes } },
           { public: true },
