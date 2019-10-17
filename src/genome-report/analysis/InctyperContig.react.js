@@ -19,7 +19,8 @@ export default ({ matches, amrMatches = [], library, setBackground = false, disp
           (index === 0 ? (
             <tr className={classnames({ 'pw-intyper-alt-background': setBackground })}>
               <td rowSpan={matches.length}>{typeList.join('/')}</td>
-              {displayAmr && <td rowSpan={matches.length}>{amrMatches.join(', ')}</td>}
+              {displayAmr &&
+              <td rowSpan={matches.length}>{amrMatches.length === 0 ? '-' : amrMatches.join(', ')}</td>}
               <td>{match['Inc Match']}</td>
               <td>{match['Percent Identity']}</td>
               <td>{match['Match Coverage']}</td>

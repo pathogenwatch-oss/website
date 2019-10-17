@@ -100,6 +100,15 @@ export const systemDataColumns = {
         .join('; ');
     },
   },
+  __Virulence_Score: {
+    columnKey: '__Virulence_Score',
+    displayName: 'Virulence Score',
+    label: 'Virulence Score',
+    valueGetter({ analysis }) {
+      if (!analysis.kleborate) return null;
+      return `${analysis.kleborate.virulence_score}`;
+    },
+  },
   __K_locus: {
     columnKey: '__K_locus',
     displayName: 'K LOCUS (wzi)',
