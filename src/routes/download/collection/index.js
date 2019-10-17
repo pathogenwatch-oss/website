@@ -43,5 +43,6 @@ router.post('/:token/core-allele-distribution', require('./core-allele-distribut
 router.get('/:token/variance-summary', require('./variance-summary'));
 
 router.post('/:token/speciator', require('./speciator'));
+router.post('/:token/kleborate', require('./kleborate'));
 
 module.exports = router;
