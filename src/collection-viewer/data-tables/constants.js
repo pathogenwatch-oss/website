@@ -54,7 +54,7 @@ export const systemDataColumns = {
     },
     display({ analysis }) {
       if (!analysis.mlst) return null;
-      return <ST id={analysis.mlst.st} textOnly/>;
+      return <ST id={analysis.mlst.st} textOnly />;
     },
   },
   __mlst_profile: {
@@ -71,12 +71,24 @@ export const systemDataColumns = {
       if (!analysis.mlst) return null;
       const { code, alleles } = analysis.mlst;
       if (code) return code;
-      return <Profile alleles={alleles} textOnly/>;
+      return <Profile alleles={alleles} textOnly />;
     },
   },
   __inc_types: {
     columnKey: '__inc_types',
     displayName: 'Inc Types',
+    addState({ data }) {
+      if (!data.length) return this;
+      let hidden = true;
+      for (const row of data) {
+        if (row.analysis && row.analysis.inctyper) {
+          hidden = false;
+          break;
+        }
+      }
+      this.hidden = hidden;
+      return this;
+    },
     valueGetter({ analysis }) {
       if (!analysis.inctyper) return null;
       if (Object.keys(analysis.inctyper).length === 0 && analysis.inctyper.constructor === Object) return null;
