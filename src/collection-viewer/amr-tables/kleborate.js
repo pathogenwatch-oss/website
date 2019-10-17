@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { FETCH_COLLECTION } from '../../collection-viewer/actions';
+import { FETCH_COLLECTION } from '../actions';
 import { SET_COLOUR_COLUMNS } from '../table/actions';
 import { onHeaderClick } from './thunks';
 
@@ -9,7 +9,7 @@ import { measureText } from '../table/columnWidth';
 import { systemGroup, spacerGroup } from './utils';
 import Organism from '~/organisms';
 
-import { statuses } from '../../collection-viewer/constants';
+import { statuses } from '../constants';
 import { tableKeys } from '../constants';
 
 export const name = tableKeys.kleborateAMR;
@@ -35,83 +35,61 @@ const agents = [
   { field: 'Bla_broad_inhR', name: 'BSBL Inhibitors', key: 'BBI', type: 'Broad-Spectrum Beta-Lactam Inhibitors' },
 ];
 
-function hasElement(genome, field, value) {
+function hasElement(genome, field) {
   return (
     genome.analysis.kleborate &&
     genome.analysis.kleborate[field] &&
-    genome.analysis.kleborate[field].includes(value)
+    genome.analysis.kleborate[field] !== '-'
   );
 }
 
 const effectColour = amr.getEffectColour('RESISTANT');
 
-function createColumn(value, agent) {
-  const { field } = agent;
-  return {
-    addState({ data }) {
-      if (!data.length) return this;
-      // this.hidden = data.every(({ analysis }) =>
-      //   !analysis.paarsnp || notPresent(analysis.paarsnp[profileKey], key)
-      // );
-      this.width = this.getWidth() + 16;
-      return this;
-    },
-    columnKey: `${field}_${value}`,
-    displayName: value,
-    label: value,
-    cellClasses: 'wgsa-table-cell--resistance',
-    cellPadding: 16,
-    flexGrow: 0,
-    getWidth() {
-      return measureText(value, true) + 4;
-    },
-    getCellContents(props, genome) {
-      return hasElement(genome, agent.field, value) ? (
-        <i
-          className="material-icons wgsa-resistance-icon"
-          style={{ color: effectColour }}
-        >
-          lens
-        </i>
-      ) : null;
-    },
-    headerClasses: 'wgsa-table-header--expanded',
-    valueGetter: genome => (hasElement(genome, field, value) ? effectColour : amr.nonResistantColour),
-    onHeaderClick,
-  };
-}
+const isMac =
+  (navigator && navigator.platform &&
+    navigator.platform.toUpperCase().indexOf('MAC') >= 0);
+const modifierKey = isMac ? 'Cmd' : 'Ctrl';
 
-function buildColumns(genomes) {
-  const values = {};
-  for (const genome of genomes) {
-    if (!genome.analysis.kleborate) continue;
-    for (const agent of agents) {
-      const valuesSet = values[agent.field] || new Set();
-      for (const value of genome.analysis.kleborate[agent.field].split(';')) {
-        if (value !== '-') valuesSet.add(value.replace(/(\*|\?)/g, ''));
-      }
-      values[agent.field] = valuesSet;
-    }
-  }
-
-  const groups = [];
+function buildColumns() {
+  const columns = [];
   for (const agent of agents) {
-    if (!(agent.field in values)) continue;
-    groups.push({
-      group: true,
-      columnKey: `kleborate_${agent.key}`,
-      label: agent.name,
+    columns.push({
+      columnKey: `kleborate_${agent.field}`,
+      addState({ data }) {
+        if (!data.length) return this;
+        // this.hidden = data.every(({ analysis }) =>
+        //   !analysis.paarsnp || notPresent(analysis.paarsnp[profileKey], key)
+        // );
+        this.width = this.getWidth() + 16;
+        return this;
+      },
       headerClasses: 'wgsa-table-header--expanded',
-      headerTitle: agent.type,
+      headerTitle: `${agent.name} - ${modifierKey} + click to select multiple`,
+      cellClasses: 'wgsa-table-cell--resistance',
+      cellPadding: 16,
+      // flexGrow: 0,
+      // displayName: agent.name,
+      label: agent.field,
+      getWidth() {
+        return measureText(agent.field, true);
+      },
+      getCellContents(props, genome) {
+        return hasElement(genome, agent.field) ? (
+          <i
+            className="material-icons wgsa-resistance-icon"
+            style={{ color: effectColour }}
+            title={genome.analysis.kleborate[agent.field]}
+          >
+            lens
+          </i>
+        ) : null;
+      },
+      valueGetter: genome => (hasElement(genome, agent.field) ? effectColour : amr.nonResistantColour),
       onHeaderClick,
-      columns:
-        Array.from(values[agent.field])
-          .sort()
-          .map(value => createColumn(value, agent)),
     });
   }
 
-  return groups;
+  return columns;
 }
 
 const initialState = {
@@ -125,10 +103,15 @@ export function createReducer() {
       case FETCH_COLLECTION.SUCCESS: {
         const { genomes, status, isClusterView } = payload.result;
         if (status !== statuses.READY || isClusterView || !Organism.uiOptions.kleborate) return state;
-        const columns = buildColumns(genomes);
+        const group = {
+          group: true,
+          columnKey: 'dynamicGroup',
+          getHeaderContent() {},
+          columns: buildColumns(genomes),
+        };
         return {
           ...state,
-          columns: [ systemGroup, ...columns, spacerGroup ],
+          columns: [ systemGroup, group, spacerGroup ],
         };
       }
       case SET_COLOUR_COLUMNS:
