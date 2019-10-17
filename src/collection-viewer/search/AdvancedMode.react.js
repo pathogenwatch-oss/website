@@ -35,9 +35,9 @@ const AdvancedMode = React.createClass({
       <section>
         <h2 className="wgsa-search-dropdown__heading">Current Filter</h2>
         {current.map((terms, index) =>
-          <ul key={index}>
+          (<ul key={index}>
             {terms.map((term, termIndex) =>
-              <li key={term.key}>
+              (<li key={term.key}>
                 <span className="mdl-chip mdl-chip--deletable mdl-chip--contact mdl-chip--alt">
                   <span className="mdl-chip__contact">{term.value.ids.length}</span>
                   <span className="mdl-chip__text">
@@ -49,19 +49,19 @@ const AdvancedMode = React.createClass({
                   </button>
                 </span>
                 { termIndex < terms.length - 1 && <span className="wgsa-search-operator">AND</span> }
-              </li>)}
-              <li>
-                <LogicalOperator operator="AND" index={index} />
-              </li>
-              { index < current.length - 1 &&
+              </li>))}
+            <li>
+              <LogicalOperator operator="AND" index={index} />
+            </li>
+            { index < current.length - 1 &&
                 <li className="wgsa-search-operator">
                   <span>OR</span>
                 </li> }
-              { index === current.length - 1 &&
+            { index === current.length - 1 &&
                 <li className="wgsa-search-operator">
                   <LogicalOperator operator="OR" index={current.length} />
                 </li> }
-          </ul>
+          </ul>)
         )}
         <hr />
       </section>
@@ -76,7 +76,7 @@ const AdvancedMode = React.createClass({
         <h2 className="wgsa-search-dropdown__heading">Recently Used</h2>
         <ul>
           {recent.map(term =>
-            <li key={term.key}>
+            (<li key={term.key}>
               <button
                 className="mdl-chip mdl-chip--contact"
                 onClick={() => selectItem(term)}
@@ -87,7 +87,7 @@ const AdvancedMode = React.createClass({
                   <strong>{term.value.label}</strong>
                 </span>
               </button>
-            </li>
+            </li>)
           )}
         </ul>
         <hr />
@@ -134,13 +134,13 @@ const AdvancedMode = React.createClass({
         </section>
         <div className="wgsa-search-dropdown__values">
           { sections.map(({ heading, items, placeholder, sort }) =>
-            <section key={heading}>
+            (<section key={heading}>
               { sort && <SortSelect /> }
               <h3 className="wgsa-search-dropdown__heading">{heading}</h3>
               {(placeholder && !items.length) && <p>({placeholder})</p>}
               <ul>
                 { items.map(item =>
-                  <li key={item.key}>
+                  (<li key={item.key}>
                     <button
                       className={classnames(
                         'mdl-chip',
@@ -152,10 +152,10 @@ const AdvancedMode = React.createClass({
                       {item.ids && <span className="mdl-chip__contact">{item.ids.length}</span>}
                       <span className="mdl-chip__text">{item.label}</span>
                     </button>
-                  </li>
+                  </li>)
                 )}
               </ul>
-            </section>
+            </section>)
           )}
         </div>
       </div>
