@@ -30,9 +30,20 @@ const DownloadsMenu = ({ collection, genomeIds, prefix }) => (
       <li>
         <DownloadForm
           link={`${prefix}/speciator`}
-          filename={formatCollectionFilename(collection, 'speciator.csv')}
+          filename={formatCollectionFilename(collection, 'species-prediction.csv')}
           genomeIds={genomeIds}
-        >Speciation</DownloadForm>
+        >
+          Species Prediction
+        </DownloadForm>
+      </li>
+      <li>
+        <DownloadForm
+          link={`${prefix}/kleborate`}
+          filename={formatCollectionFilename(collection, 'kleborate.csv')}
+          genomeIds={genomeIds}
+        >
+          Kleborate
+        </DownloadForm>
       </li>
     </ul>
   </li>
