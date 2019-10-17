@@ -40,7 +40,7 @@ function defaultView(message) {
 }
 
 export default ({ analysis }) => {
-  const { inctyper, paarsnp = { matches: [] } } = analysis;
+  const { inctyper, paarsnp = { matches: [], library: '' } } = analysis;
 
   if (!inctyper.hasOwnProperty('Inc Matches')) {
     return defaultView('Inctyper was not run for this assembly.');
@@ -97,7 +97,7 @@ export default ({ analysis }) => {
         <thead>
           <tr>
             <th>Contig Inc Type</th>
-            {paarsnp.matches.length !== 0 && <th>Contig AMR Genes</th>}
+            {paarsnp.library !== '' && <th>Contig AMR Genes</th>}
             <th>Match ID</th>
             <th>% Identity</th>
             <th>% Coverage</th>
@@ -111,7 +111,7 @@ export default ({ analysis }) => {
                 library={inctyper.Library}
                 matches={groupedMatches[contigId]}
                 setBackground={index % 2 === 0}
-                displayAmr={paarsnp.matches.length !== 0}
+                displayAmr={paarsnp.library !== ''}
               />
             ))
           ) : (
