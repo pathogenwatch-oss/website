@@ -8,22 +8,24 @@ const transformer = (versions) => (doc, callback) => {
   const { fileId, version, results: cgmlst } = doc;
   const genomes = (versions[fileId] || {})[version] || [];
   for (const { _id, name } of genomes) {
-    for (const { gene, id, start, end, contig } of cgmlst.matches) {
-      result.push({
-        'Genome ID': _id.toString(),
-        'Genome Name': name,
-        Version: version,
-        Gene: gene,
-        'Allele ID': id,
-        Start: start,
-        End: end,
-        Contig: contig,
-        Direction: start > end ? 'reverse' : 'forwards',
-      });
+    const row = {
+      'Genome ID': _id.toString(),
+      'Genome Name': name,
+      Version: version,
+    };
+    for (const { gene, id } of cgmlst.matches) {
+      row[gene] = id;
     }
+    result.push(row);
   }
   callback(null, ...result);
 };
+
+const standardColumns = [
+  'Genome ID',
+  'Genome Name',
+  'Version',
+];
 
 module.exports = async (req, res) => {
   const { user } = req;
@@ -64,9 +66,13 @@ module.exports = async (req, res) => {
     task: 'cgmlst',
   };
 
+  const genes = await Genome.distinct('analysis.cgmlst.matches.gene', query);
+  genes.sort();
+  const columns = [ ...standardColumns, ...genes ];
+
   return Analysis.find(analysisQuery)
     .cursor()
     .pipe(csv.transform(transformer(versions)))
-    .pipe(csv.stringify({ header: true, quotedString: true }))
+    .pipe(csv.stringify({ header: true, quotedString: true, columns }))
     .pipe(res);
 };
