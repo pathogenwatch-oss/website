@@ -2,7 +2,6 @@ const sanitize = require('sanitize-filename');
 const csv = require('csv');
 const Genome = require('models/genome');
 const Analysis = require('models/analysis');
-const { NotFoundError } = require('utils/errors');
 
 const transformer = (versions) => (doc, callback) => {
   const result = [];
@@ -28,10 +27,10 @@ const standardColumns = [
   'Version',
 ];
 
-module.exports = async (req, res, next) => {
+module.exports = async (req, res) => {
   const { user } = req;
   const { filename: rawFilename = '' } = req.query;
-  const filename = sanitize(rawFilename) || 'cgmlst-profile.csv';
+  const filename = sanitize(rawFilename) || 'cgmlst.csv';
   const { ids } = req.body;
 
   res.setHeader('Content-Disposition', `attachment; filename=${filename}`);
@@ -49,11 +48,6 @@ module.exports = async (req, res, next) => {
   };
 
   const genomeDetails = await Genome.find(query, projection).lean();
-
-  if (genomeDetails.length === 0) {
-    return next(new NotFoundError('Query did not return any results'));
-  }
-
   const $or = [];
   const versions = genomeDetails.reduce((acc, details) => {
     const version = details.analysis.cgmlst.__v;
@@ -72,7 +66,7 @@ module.exports = async (req, res, next) => {
     task: 'cgmlst',
   };
 
-  const genes = await Analysis.distinct('results.matches.gene', analysisQuery);
+  const genes = await Genome.distinct('analysis.cgmlst.matches.gene', query);
   genes.sort();
   const columns = [ ...standardColumns, ...genes ];
 
