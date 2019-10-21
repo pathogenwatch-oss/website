@@ -94,6 +94,12 @@ export const hasAMR = createSelector(
   collection => !collection.isClusterView && !Organisms.uiOptions.noAMR
 );
 
+export const hasKleborateAMR = createSelector(
+  // do not use `isClusterView` selector here, it will get stuck
+  state => (getCollection ? getCollection(state) : {}),
+  (collection) => !collection.isClusterView && Organisms.uiOptions.kleborate
+);
+
 export const isAMRTable = createSelector(
   getVisibleTableName,
   getAMRTableName,

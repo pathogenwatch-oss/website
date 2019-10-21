@@ -4,14 +4,12 @@ import classnames from 'classnames';
 
 import Multi from './Multi.react';
 
-import { getVisibleTableName, hasTyping, hasAMR } from './selectors';
+import { getVisibleTableName, hasTyping, hasAMR, hasKleborateAMR } from './selectors';
 import { hasMetadata } from '../selectors';
 
 import { setTable } from './actions';
 
 import { tableKeys, tableDisplayNames } from '../constants';
-
-import Organisms from '~/organisms';
 
 function mapStateToProps(state, { table }) {
   return {
@@ -75,7 +73,7 @@ const TableSwitcher = props => (
 TableSwitcher.displayName = 'TableSwitcher';
 
 function mapSwitcherStateToProps(state) {
-  const hasKleborate = Organisms.uiOptions && Organisms.uiOptions.kleborate;
+  const hasKleborate = hasKleborateAMR(state);
   return {
     hasMetadata: hasMetadata(state),
     hasTyping: hasTyping(state),
