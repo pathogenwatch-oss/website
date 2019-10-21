@@ -2,18 +2,7 @@ const sanitize = require('sanitize-filename');
 const csv = require('csv');
 const Genome = require('models/genome');
 
-const transformer = function (doc) {
-  const record = {
-    'Genome ID': doc._id.toString(),
-    'Genome Name': doc.name,
-  };
-
-  Object.keys(doc.analysis.kleborate).forEach(
-    prop =>
-      (record[prop.replace('__v', 'Version').replace(/_/g, ' ')] = doc.analysis.kleborate[prop])
-  );
-  return record;
-};
+const { transformer } = require('../utils/kleborate');
 
 module.exports = (req, res) => {
   const { user } = req;
