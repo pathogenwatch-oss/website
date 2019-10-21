@@ -46,21 +46,18 @@ module.exports = async (req, res) => {
   };
 
   const genomeDetails = await Genome.find(query, projection).lean();
-  const $or = [];
   const versions = genomeDetails.reduce((acc, details) => {
     const version = details.analysis.cgmlst.__v;
     const { fileId } = details;
     acc[fileId] = acc[fileId] || {};
     acc[fileId][version] = acc[fileId][version] || [];
     acc[fileId][version].push(details);
-
-    $or.push({ fileId, version });
-
     return acc;
   }, {});
+  const fileIds = Object.keys(versions);
 
   const analysisQuery = {
-    $or,
+    fileId: { $in: fileIds },
     task: 'cgmlst',
   };
 
