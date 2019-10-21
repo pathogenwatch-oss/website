@@ -57,7 +57,7 @@ export const analysisLabels = {
   cgmlst: 'cgMLST',
   core: 'Core SNPs',
   genotyphi: 'Genotyphi',
-  inctyper: 'IncTyper',
+  inctyper: 'Inctyper',
   kleborate: 'Kleborate',
   metrics: 'Stats',
   mlst: 'MLST',

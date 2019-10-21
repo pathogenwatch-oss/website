@@ -1,3 +1,7 @@
-.pw-intyper-alt-background {
-    background-color: rgb(242,242,242)
+.pw-inctyper-contig tr:hover > td {
+  background-color: unset;
+}
+
+.pw-inctyper-contig:hover tr {
+  background-color: rgba(0, 0, 0, 0.07);
 }
