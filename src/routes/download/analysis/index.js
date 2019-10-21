@@ -13,6 +13,7 @@ router.post('/:task', (req, res, next) => {
 });
 
 router.post('/cgmlst', require('./cgmlst'));
+router.post('/cgmlst-profile', require('./cgmlst-profile'));
 router.post('/genotyphi', require('./genotyphi'));
 router.post('/inctyper', require('./inctyper'));
 router.post('/kleborate', require('./kleborate'));

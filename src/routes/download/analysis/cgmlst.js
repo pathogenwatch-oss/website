@@ -2,6 +2,7 @@ const sanitize = require('sanitize-filename');
 const csv = require('csv');
 const Genome = require('models/genome');
 const Analysis = require('models/analysis');
+const { NotFoundError } = require('utils/errors');
 
 const transformer = (versions) => (doc, callback) => {
   const result = [];
@@ -25,7 +26,7 @@ const transformer = (versions) => (doc, callback) => {
   callback(null, ...result);
 };
 
-module.exports = async (req, res) => {
+module.exports = async (req, res, next) => {
   const { user } = req;
   const { filename: rawFilename = '' } = req.query;
   const filename = sanitize(rawFilename) || 'cgmlst.csv';
@@ -46,6 +47,11 @@ module.exports = async (req, res) => {
   };
 
   const genomeDetails = await Genome.find(query, projection).lean();
+
+  if (genomeDetails.length === 0) {
+    return next(new NotFoundError('Query did not return any results'));
+  }
+
   const $or = [];
   const versions = genomeDetails.reduce((acc, details) => {
     const version = details.analysis.cgmlst.__v;
