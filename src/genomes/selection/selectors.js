@@ -87,6 +87,21 @@ export const getDownloadSummary = createSelector(
               label: 'AMR SNPs/genes',
             }
           );
+        } else if (task === 'cgmlst') {
+          tasks.push(
+            {
+              ids,
+              sources,
+              name: 'cgmlst',
+              label: 'cgMLST matches',
+            },
+            {
+              ids,
+              sources,
+              name: 'cgmlst-profile',
+              label: 'cgMLST profiles',
+            }
+          );
         } else {
           tasks.push({
             ids,
