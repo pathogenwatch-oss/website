@@ -1,5 +1,4 @@
 import React from 'react';
-import classnames from 'classnames';
 
 export default ({ matches, amrMatches = [], library, setBackground = false, displayAmr = false }) => {
   const isBasicLayout = library === 'gram_negative';
@@ -14,26 +13,28 @@ export default ({ matches, amrMatches = [], library, setBackground = false, disp
 
   return (
     <React.Fragment>
-      {
-        matches.map((match, index) =>
-          (index === 0 ? (
-            <tr className={classnames({ 'pw-intyper-alt-background': setBackground })}>
-              <td rowSpan={matches.length}>{typeList.join('/')}</td>
-              {displayAmr &&
-              <td rowSpan={matches.length}>{amrMatches.length === 0 ? '-' : amrMatches.join(', ')}</td>}
-              <td>{match['Inc Match']}</td>
-              <td>{match['Percent Identity']}</td>
-              <td>{match['Match Coverage']}</td>
-            </tr>
-          ) : (
-            <tr className={classnames({ 'pw-intyper-alt-background': setBackground })}>
-              <td>{match['Inc Match']}</td>
-              <td>{match['Percent Identity']}</td>
-              <td>{match['Match Coverage']}</td>
-            </tr>
-          ))
-        )
-      }
+      <tbody className={'pw-inctyper-contig'}>
+        {
+          matches.map((match, index) =>
+            (index === 0 ? (
+              <tr>
+                <td rowSpan={matches.length}>{typeList.join('/')}</td>
+                {displayAmr &&
+                <td rowSpan={matches.length}>{amrMatches.length === 0 ? '-' : amrMatches.join(', ')}</td>}
+                <td>{match['Inc Match']}</td>
+                <td>{match['Percent Identity']}</td>
+                <td>{match['Match Coverage']}</td>
+              </tr>
+            ) : (
+              <tr>
+                <td>{match['Inc Match']}</td>
+                <td>{match['Percent Identity']}</td>
+                <td>{match['Match Coverage']}</td>
+              </tr>
+            ))
+          )
+        }
+      </tbody>
     </React.Fragment>
   );
 };

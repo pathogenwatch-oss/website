@@ -103,25 +103,25 @@ export default ({ analysis }) => {
             <th>% Coverage</th>
           </tr>
         </thead>
-        <tbody>
-          {Object.keys(groupedMatches).length ? (
-            contigOrder.map((contigId, index) => (
-              <InctyperContig
-                amrMatches={amrMatches[contigId]}
-                library={inctyper.Library}
-                matches={groupedMatches[contigId]}
-                setBackground={index % 2 === 0}
-                displayAmr={paarsnp.library !== ''}
-              />
-            ))
-          ) : (
+        {Object.keys(groupedMatches).length ? (
+          contigOrder.map((contigId, index) => (
+            <InctyperContig
+              amrMatches={amrMatches[contigId]}
+              library={inctyper.Library}
+              matches={groupedMatches[contigId]}
+              setBackground={index % 2 === 0}
+              displayAmr={paarsnp.library !== ''}
+            />
+          ))
+        ) : (
+          <tbody>
             <tr>
               <td colSpan="5" className="muted">
                 No matches
               </td>
             </tr>
-          )}
-        </tbody>
+          </tbody>
+        )}
       </table>
     </React.Fragment>
   );
