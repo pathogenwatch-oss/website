@@ -1,7 +1,10 @@
 import { createSelector } from 'reselect';
 
 import { getViewer, getCollection, hasMetadata } from '../selectors';
-import { getMetadataColumns, getActiveMetadataColumn } from '../data-tables/selectors';
+import {
+  getMetadataColumns,
+  getActiveMetadataColumn,
+} from '../data-tables/selectors';
 
 import { createColourGetter } from '../amr-utils';
 import Organisms from '~/organisms';
@@ -31,7 +34,7 @@ export const getTables = createSelector(
   (tables, metadata) => ({
     ...tables,
     metadata,
-  }),
+  })
 );
 
 export const hasTyping = createSelector(
@@ -102,9 +105,11 @@ export const getFixedGroupWidth = createSelector(
   hasMetadata,
   hasTyping,
   isAMRTable,
-  (amr, metadata, typing, amrVisible) => {
-    if (!amr) return null; // no need for fixed width without AMR tables
-    let width = amrVisible ? 404 : 348; // acount for multi button
+  () => Organisms.uiOptions && Organisms.uiOptions.kleborate,
+  (amr, metadata, typing, amrVisible, kleborate) => {
+    if (!amr && !kleborate) return null;
+    let width = kleborate ? 274 : 404;
+    if (amrVisible) width += 56; // account for multi button
     if (!metadata) width -= 68;
     if (!typing) width -= 53;
     return width;

@@ -71,7 +71,11 @@ export function getValueLabel(value, table) {
   if (table === tableKeys.antibiotics) {
     return getColourState(value);
   }
-  if (table === tableKeys.snps || table === tableKeys.genes) {
+  if (
+    table === tableKeys.snps ||
+    table === tableKeys.genes ||
+    table === tableKeys.kleborateAMR
+  ) {
     return value === nonResistantColour ? 'ABSENT' : 'PRESENT';
   }
   return String(value);

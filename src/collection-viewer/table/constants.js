@@ -6,7 +6,6 @@ import AnnotationFileLink from './AnnotationFileLink.react';
 import AnnotationArchiveLink from './AnnotationArchiveLink.react';
 
 import { formatCollectionFilename } from '../downloads/utils';
-import { defaultWidthGetter } from './columnWidth';
 import { getServerPath } from '../../utils/Api';
 
 import { tableKeys } from '../constants';
@@ -23,6 +22,7 @@ export const amrTables = new Set([
   tableKeys.antibiotics,
   tableKeys.snps,
   tableKeys.genes,
+  tableKeys.kleborateAMR,
 ]);
 
 export const leftSpacerColumn = {
@@ -133,15 +133,6 @@ function getNameText(data, valueGetter) {
 export const nameColumnProps = {
   ...nameColumnData,
   fixed: true,
-  getWidth(row, props) {
-    let width = defaultWidthGetter(row, props, true);
-
-    if (row.__isPublic && row.collectionId) {
-      width += 32;
-    }
-
-    return width;
-  },
   getCellContents({ valueGetter }, data) {
     return (
       <div className="wgsa-genome-name-cell">

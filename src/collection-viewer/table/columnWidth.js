@@ -3,16 +3,12 @@ import { getColumnLabel } from './utils';
 export const canvas = document.createElement('canvas').getContext('2d');
 
 const getFontString =
-  (weight = 'normal') => `${weight} 13px "Helvetica","Arial",sans-serif`;
-
-canvas.font = getFontString();
-const emWidth = canvas.measureText('m').width * 0.7;
-canvas.font = getFontString('bold');
-const emBoldWidth = canvas.measureText('m').width * 0.7;
+  (weight = 'normal') => `${weight} 13px "Roboto", "Helvetica", "Arial", sans-serif`;
 
 const maxChars = 100;
 export function measureText(text, isBold) {
-  return Math.min(text.length, maxChars) * (isBold ? emBoldWidth : emWidth);
+  canvas.font = getFontString(isBold ? 'bold' : 'normal');
+  return canvas.measureText(text.slice(0, maxChars)).width;
 }
 
 export function defaultWidthGetter(row, column, isBold) {
@@ -29,17 +25,29 @@ export function addColumnWidth(column, { data }) {
     return column;
   }
 
-  const { getWidth = defaultWidthGetter, cellPadding = 12 } = column;
+  const { cellPadding = 24 } = column;
   const columnHeaderWidth = measureText(getColumnLabel(column), true) + cellPadding;
 
-  column.width = data.length ? data.reduce((maxWidth, row) =>
+  let longestValue = '';
+  let isBold = false;
+  const { valueGetter, getTextToMeasure = valueGetter } = column;
+  for (const row of data) {
+    let value = getTextToMeasure(row);
+    if (value === null || typeof value === 'undefined') continue;
+    value = String(value);
+    if (value.length > longestValue.length) {
+      longestValue = value;
+      isBold = column.columnKey === '__name' && (row.__isCollection || row.__isReference);
+    }
+  }
+
+  column.width = longestValue.length ?
     Math.max(
-      maxWidth,
       column.getMinWidth ? column.getMinWidth() : column.minWidth || 0,
       columnHeaderWidth,
-      getWidth(row, column, row.__isCollection || row.__isReference) + cellPadding,
-    ), 0
-  ) : columnHeaderWidth;
+      measureText(longestValue, isBold) + cellPadding,
+    )
+    : columnHeaderWidth;
 
   return column;
 }

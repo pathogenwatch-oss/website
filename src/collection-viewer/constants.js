@@ -13,6 +13,7 @@ export const tableKeys = {
   antibiotics: 'antibiotics',
   snps: 'snps',
   genes: 'genes',
+  kleborateAMR: 'kleborateAMR',
 };
 
 export const tableDisplayNames = {
@@ -22,4 +23,5 @@ export const tableDisplayNames = {
   [tableKeys.antibiotics]: 'Antibiotics',
   [tableKeys.snps]: 'SNPs',
   [tableKeys.genes]: 'Genes',
+  [tableKeys.kleborateAMR]: 'Kleborate AMR',
 };

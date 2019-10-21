@@ -11,7 +11,7 @@ import { statuses } from '../../collection-viewer/constants';
 
 import Organisms from '../../organisms';
 
-const systemGroup = {
+export const systemGroup = {
   group: true,
   system: true,
   fixed: true,
@@ -28,7 +28,7 @@ const systemGroup = {
   ],
 };
 
-const spacerGroup = {
+export const spacerGroup = {
   group: true,
   system: true,
   columnKey: 'spacer',
