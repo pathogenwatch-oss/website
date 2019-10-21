@@ -25,6 +25,7 @@ async function cleanGenome(genome, userId) {
   const { analysis = {} } = genome;
   const { speciator = {} } = analysis;
   const user = await User.findById(userId, { flags: 1 });
+  if (!user) return;
   const tasks = getTasksByOrganism(speciator, user);
   const expectedTasks = new Set([ ...tasks.map(_ => _.task), 'speciator' ]);
   const unset = {};
@@ -37,8 +38,10 @@ async function cleanGenome(genome, userId) {
   }
 }
 
+const { queue = 'reprocessing' } = argv.opts;
+
 async function updateGenome({ _id, fileId, _user }, clean) {
-  await submit({ genomeId: _id, fileId, userId: _user });
+  await submit({ genomeId: _id, fileId, userId: _user, queue });
   const genome = await Genome.findById(_id);
   if (genome && clean) {
     await cleanGenome(genome, _user);
