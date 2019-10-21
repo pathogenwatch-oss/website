@@ -24,8 +24,9 @@ function createColumn(antibiotic) {
     cellPadding: 16,
     flexGrow: 0,
     label: getAntibioticLabel(antibiotic),
-    getWidth() {
-      return 32;
+    addState() {
+      this.width = 48;
+      return this;
     },
     getCellContents(props, { analysis }) {
       if (!analysis.paarsnp) return null;
