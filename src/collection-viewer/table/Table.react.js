@@ -6,7 +6,12 @@ import TableSwitcher from '../table/Switcher.react';
 import Fade from '~/components/fade';
 
 import { getCollection, getActiveGenomes } from '../selectors';
-import { getVisibleTable, getVisibleTableName, getFixedGroupWidth } from '../table/selectors';
+import {
+  getActiveColumns,
+  getVisibleTable,
+  getVisibleTableName,
+  getFixedGroupWidth,
+} from '../table/selectors';
 
 import { onRowClick } from './thunks';
 
@@ -86,12 +91,9 @@ const DefaultColumnHeader =
 
 function mapStateToProps(state) {
   const table = getVisibleTable(state);
-  const { activeColumn, activeColumns, ...tableState } = table;
-
   return {
-    ...tableState,
-    activeColumns:
-      activeColumn ? new Set([ activeColumn ]) : activeColumns,
+    ...table,
+    activeColumns: getActiveColumns(state),
     collection: getCollection(state),
     data: getActiveGenomes(state),
     fixedGroupWidth: getFixedGroupWidth(state),
@@ -100,7 +102,7 @@ function mapStateToProps(state) {
 }
 
 function mapStateToColumn(column, state, dispatch) {
-  column.isSelected = state.activeColumns.has(column);
+  column.isSelected = state.activeColumns.has(column.columnKey);
 
   if (column.group) {
     for (let i = 0; i < column.columns.length; i++) {
