@@ -103,15 +103,13 @@ export function createReducer() {
       case FETCH_COLLECTION.SUCCESS: {
         const { genomes, status, isClusterView } = payload.result;
         if (status !== statuses.READY || isClusterView || !Organism.uiOptions.kleborate) return state;
-        const group = {
-          group: true,
-          columnKey: 'dynamicGroup',
-          getHeaderContent() {},
-          columns: buildColumns(genomes),
-        };
         return {
           ...state,
-          columns: [ systemGroup, group, spacerGroup ],
+          columns: [
+            ...systemGroup.columns,
+            ...buildColumns(genomes),
+            ...spacerGroup.columns,
+          ],
         };
       }
       case SET_COLOUR_COLUMNS:

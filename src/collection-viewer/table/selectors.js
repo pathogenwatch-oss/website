@@ -127,7 +127,7 @@ export const getFixedGroupWidth = createSelector(
   () => Organisms.uiOptions && Organisms.uiOptions.kleborate,
   (amr, metadata, typing, amrVisible, kleborate) => {
     if (!amr && !kleborate) return null;
-    let width = kleborate ? 274 : 348;
+    let width = kleborate ? 333 : 408;
     if (amrVisible) width += 56; // account for multi button
     if (!metadata) width -= 68;
     if (!typing) width -= 53;

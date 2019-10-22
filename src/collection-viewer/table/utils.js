@@ -25,18 +25,36 @@ function getTotalWidth(columns) {
     if (col.hidden) {
       return memo;
     }
-    return memo + (col.fixedWidth || col.width) + (col.cellPadding || 0);
+    if (col.width) {
+      return memo + col.width;
+    }
+    if (col.fixedWidth) {
+      return memo + col.fixedWidth + (col.cellPadding || 0);
+    }
+    return memo;
   }, 0);
 }
 
+// TODO: stop hacking
 export function setFixedGroupMinWidth(columns, tableWidth, magicWidth) {
   if (!tableWidth) return;
-  const fixedGroup =
-    columns[0].group ? columns[0].columns : columns.slice(0, 3);
-  const fixedGroupWidth = getTotalWidth(fixedGroup);
-  const columnsWidth = getTotalWidth(columns);
+
+  if (!columns[0].group) {
+    columns[0].flexGrow = 1;
+    columns[0].width = null;
+    return;
+  }
+
+  const [ spacer, downloads, name ] = columns[0].columns;
+  const fixedGroupWidth = downloads.width + name.width;
+  const columnsWidth = getTotalWidth(columns.slice(1)) + fixedGroupWidth;
   const space = Math.max(tableWidth - columnsWidth, 0);
-  if (space / 2 + fixedGroupWidth < magicWidth) {
-    fixedGroup[2].width = magicWidth;
+
+  if (space / 2 + fixedGroupWidth < magicWidth + 8) {
+    spacer.flexGrow = 0;
+    spacer.width = magicWidth - fixedGroupWidth + 8;
+  } else {
+    spacer.flexGrow = 1;
+    spacer.width = null;
   }
 }
