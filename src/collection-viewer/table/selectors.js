@@ -76,17 +76,6 @@ export const getVisibleTable = state => {
   return getTables(state)[name];
 };
 
-export const getActiveColumns = createSelector(
-  getVisibleTable,
-  ({ activeColumn, activeColumns }) => (
-    new Set([
-      activeColumn ?
-        activeColumn.columnKey :
-        Array.from(activeColumns).map(_ => _.columnKey),
-    ])
-  ),
-);
-
 export const getActiveDataTable = createSelector(
   getTables,
   getDataTableName,

@@ -57,11 +57,11 @@ export default React.createClass({
     if (column.system) return false;
 
     const columns =
-      (column.group ? column.columns : [ column ])
-        .filter(c => isVisible(c) && c.valueGetter);
+      (column.group ? column.columns : [ column ]).
+        filter(_ => isVisible(_) && _.valueGetter);
 
     return columns.length ?
-      columns.every(_ => this.props.activeColumns.has(_.columnKey)) :
+      columns.every(c => this.props.activeColumns.has(c)) :
       false;
   },
 
