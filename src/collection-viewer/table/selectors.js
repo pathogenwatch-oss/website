@@ -79,11 +79,13 @@ export const getVisibleTable = state => {
 export const getActiveColumns = createSelector(
   getVisibleTable,
   ({ activeColumn, activeColumns }) => (
-    new Set([
+    new Set(
       activeColumn ?
-        activeColumn.columnKey :
-        Array.from(activeColumns).map(_ => _.columnKey),
-    ])
+        [ activeColumn.columnKey ] :
+        Array.from(activeColumns)
+          .filter(_ => _) // columns are sometimes undefined, not sure why
+          .map(_ => _.columnKey),
+    )
   ),
 );
 
