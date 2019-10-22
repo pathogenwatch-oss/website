@@ -76,8 +76,6 @@ export const getVisibleTable = state => {
   return getTables(state)[name];
 };
 
-<<<<<<< HEAD
-=======
 export const getActiveColumns = createSelector(
   getVisibleTable,
   ({ activeColumn, activeColumns }) => (
@@ -91,7 +89,6 @@ export const getActiveColumns = createSelector(
   ),
 );
 
->>>>>>> active-column-bug
 export const getActiveDataTable = createSelector(
   getTables,
   getDataTableName,
