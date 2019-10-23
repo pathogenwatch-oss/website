@@ -16,12 +16,13 @@ import Virulence from './Virulence.react';
 
 function hasSpeciesTypingResult(analysis) {
   return (
-    analysis.mlst &&
-    (analysis.genotyphi ||
-      analysis.ngmast ||
-      analysis.serotype ||
-      analysis.poppunk ||
-      analysis.kleborate)
+    analysis.mlst ||
+    'mlst-alt' in analysis ||
+    analysis.genotyphi ||
+    analysis.ngmast ||
+    analysis.serotype ||
+    analysis.poppunk ||
+    analysis.kleborate
   );
 }
 
@@ -33,7 +34,6 @@ export default genome => {
     inctyper,
     kleborate,
     metrics,
-    mlst,
     paarsnp,
     speciator,
   } = analysis;
@@ -44,11 +44,6 @@ export default genome => {
     sections.push({
       key: 'Typing',
       component: <Typing genome={genome} />,
-    });
-  } else if (mlst) {
-    sections.push({
-      key: 'MLST',
-      component: <MLST genome={genome} />,
     });
   }
   if (paarsnp || kleborate) {

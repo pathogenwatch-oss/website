@@ -4,9 +4,8 @@ import ExternalLink from '../ExternalLink.react';
 import { Metadata } from '../components';
 import { ST, Hit } from '../../mlst';
 
-export default ({ genome }) => {
-  const { mlst, speciator } = genome.analysis;
-  const alleles = mlst.alleles.map(_ => {
+export default ({ result, speciator, filterKey = 'sequenceType', heading }) => {
+  const alleles = result.alleles.map(_ => {
     const split = _.gene.split('_');
     return {
       gene: split[1] || split[0],
@@ -16,28 +15,28 @@ export default ({ genome }) => {
   return (
     <React.Fragment>
       <header className="pw-genome-report-section-header">
-        <h2>Multilocus Sequence Typing (MLST)</h2>
+        <h2>{heading || 'Multilocus Sequence Typing (MLST)'}</h2>
         <p>
-          <a href={mlst.url} target="_blank" rel="noopener">
-            {mlst.url}
+          <a href={result.url} target="_blank" rel="noopener">
+            {result.url}
           </a>
         </p>
       </header>
-      <div className="pw-genome-report-column">
+      <div className="pw-genome-report-column one third">
         <dl>
           <Metadata label="Sequence Type">
-            <ST id={mlst.st} />
+            <ST id={result.st} />
           </Metadata>
         </dl>
         <ExternalLink
           to={`/genomes/all?genusId=${speciator.genusId}&speciesId=${
             speciator.speciesId
-          }&sequenceType=${mlst.st}`}
+          }&${filterKey}=${result.st}`}
         >
-          View all ST <ST id={mlst.st} textOnly />
+          View all ST <ST id={result.st} textOnly />
         </ExternalLink>
       </div>
-      <div className="pw-genome-report-column">
+      <div className="pw-genome-report-column two thirds">
         <table className="pw-mlst-profile" cellSpacing="0">
           <caption>Profile</caption>
           <thead>
