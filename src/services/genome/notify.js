@@ -8,7 +8,10 @@ function getNotification(analysis) {
     case 'speciator':
       return { task, version, result: summariseAnalysis(analysis), error };
     case 'mlst':
-      return { task, version, result: { st: results.st }, error };
+    case 'mlst-alt':
+      return { task, version, result: { st: results.st, source: results.source }, error };
+    case 'cgmlst':
+      return { task, version, result: { source: results.source }, error };
     default:
       return { task, version, error };
   }

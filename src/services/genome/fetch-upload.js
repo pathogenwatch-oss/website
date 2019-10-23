@@ -3,6 +3,7 @@ const Genome = require('models/genome');
 module.exports = async function ({ user, query }) {
   const projection = {
     'analysis.cgmlst.__v': 1,
+    'analysis.cgmlst.source': 1,
     'analysis.core.__v': 1,
     'analysis.genotyphi.__v': 1,
     'analysis.inctyper.__v': 1,
@@ -10,6 +11,9 @@ module.exports = async function ({ user, query }) {
     'analysis.metrics.__v': 1,
     'analysis.mlst.__v': 1,
     'analysis.mlst.st': 1,
+    'analysis.mlst.source': 1,
+    'analysis.mlst-alt.__v': 1,
+    'analysis.mlst-alt.source': 1,
     'analysis.ngmast.__v': 1,
     'analysis.paarsnp.__v': 1,
     'analysis.poppunk.__v': 1,
