@@ -61,7 +61,7 @@ export const analysisLabels = {
   kleborate: 'Kleborate',
   metrics: 'Stats',
   mlst: 'MLST',
-  'mlst-alt': 'MLST',
+  mlst2: 'MLST',
   ngmast: 'NG-MAST',
   paarsnp: 'AMR',
   poppunk: 'Strain',

@@ -37,14 +37,13 @@ function getSecondaryTyping(genome) {
 }
 
 export default ({ genome }) => {
-  const { speciator, mlst } = genome.analysis;
-  const mlstAlt = genome.analysis['mlst-alt'];
+  const { speciator, mlst, mlst2 } = genome.analysis;
   return (
     <React.Fragment>
       {mlst &&
         <div id="mlst">
           <MLST result={mlst} speciator={speciator} />
-          {mlstAlt && <MLST heading="Alternative MLST" result={mlstAlt} speciator={speciator} filterKey="sequenceTypeAlt" />}
+          {mlst2 && <MLST heading="Alternative MLST" result={mlst2} speciator={speciator} filterKey="sequenceType2" />}
         </div>}
       {getSecondaryTyping(genome)}
     </React.Fragment>

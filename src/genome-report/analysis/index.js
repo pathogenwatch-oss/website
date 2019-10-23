@@ -6,7 +6,6 @@ import Clustering from './Clustering.react';
 import Core from './Core.react';
 import Inctyper from './Inctyper.react';
 import Metrics from './Metrics.react';
-import MLST from './MLST.react';
 import AMR from './AMR.react';
 import Speciator from './Speciator.react';
 import Typing from './Typing.react';
@@ -17,7 +16,7 @@ import Virulence from './Virulence.react';
 function hasSpeciesTypingResult(analysis) {
   return (
     analysis.mlst ||
-    'mlst-alt' in analysis ||
+    analysis.mlst2 ||
     analysis.genotyphi ||
     analysis.ngmast ||
     analysis.serotype ||
