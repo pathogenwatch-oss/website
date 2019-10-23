@@ -36,7 +36,7 @@ function getAnalysisBreakdown(analysis) {
         const { st } = analyses.mlst;
         sts[st] = (sts[st] || 0) + 1;
       }
-      if (analyses[key].source) {
+      if (analyses[key] && analyses[key].source) {
         breakdown[key].source = analyses[key].source;
       }
     }
