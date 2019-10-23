@@ -25,6 +25,7 @@ const SpeciesBreakdown = ({ data, speciesPredictionComplete }) => (
               return (
                 <li key={analysis.key} className="pw-with-icon">
                   {analysis.label}
+                  {!!analysis.source && <React.Fragment>&nbsp;<small>({analysis.source})</small></React.Fragment>}
                   <span className="wgsa-upload-legend-count aligned">
                     {analysis.errors > 0 && (
                       <span className="wgsa-upload-legend-count-errors">

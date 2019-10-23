@@ -36,6 +36,9 @@ function getAnalysisBreakdown(analysis) {
         const { st } = analyses.mlst;
         sts[st] = (sts[st] || 0) + 1;
       }
+      if (analyses[key].source) {
+        breakdown[key].source = analyses[key].source;
+      }
     }
   }
 
@@ -124,7 +127,7 @@ export const getSpeciesBreakdown = createSelector(
 
         return {
           ...section,
-          analyses: sortBy(analysesList, _ => _.label.toUpperCase()),
+          analyses: sortBy(analysesList, _ => `${_.label.toUpperCase()}-${_.key}`), // key sorts duplicated MLST labels
         };
       }
       return section;
