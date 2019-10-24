@@ -14,6 +14,7 @@ module.exports = function (props) {
       'analysis.speciator.organismId': 1,
       'analysis.speciator.speciesName': 1,
       'analysis.mlst.st': 1,
+      'analysis.mlst2.st': 1,
       'analysis.serotype.subspecies': 1,
       'analysis.serotype.value': 1,
       date: 1,
@@ -35,8 +36,9 @@ module.exports = function (props) {
       genomes.map(genome => {
         const formattedGenome = Genome.toObject(genome, user);
         const { analysis = {} } = genome;
-        const { mlst = {}, speciator = {}, serotype = {} } = analysis;
+        const { mlst = {}, mlst2 = {}, speciator = {}, serotype = {} } = analysis;
         formattedGenome.st = mlst.st;
+        formattedGenome.st2 = mlst2.st;
         formattedGenome.organismId = speciator.organismId;
         formattedGenome.speciesName = speciator.speciesName;
         formattedGenome.subspecies = serotype.subspecies;

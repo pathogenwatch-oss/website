@@ -1,7 +1,7 @@
 const Genome = require('models/genome');
 const Organism = require('models/organism');
 
-const { getCollectionSchemes } = require('manifest');
+const { getCollectionSchemes, organismHasTask } = require('manifest');
 
 function getSummaryFields(deployedOrganisms) {
   return [
@@ -90,8 +90,15 @@ function getSummaryFields(deployedOrganisms) {
     {
       field: 'st',
       aggregation: ({ query = {} }) => {
-        if (!query.organismId && !query.speciesId && !query.genusId) return null;
+        if (!organismHasTask('mlst', query.organismId, query.speciesId, query.genusId)) return null;
         return [ { $group: { _id: '$analysis.mlst.st', count: { $sum: 1 } } } ];
+      },
+    },
+    {
+      field: 'st2',
+      aggregation: ({ query = {} }) => {
+        if (!organismHasTask('mlst2', query.organismId, query.speciesId, query.genusId)) return null;
+        return [ { $group: { _id: '$analysis.mlst2.st', count: { $sum: 1 } } } ];
       },
     },
     {
@@ -106,52 +113,46 @@ function getSummaryFields(deployedOrganisms) {
     {
       field: 'subspecies',
       aggregation: ({ query }) => {
-        if (query.genusId) {
-          return [
-            { $match: { 'analysis.serotype': { $exists: true } } },
-            {
-              $group: {
-                _id: '$analysis.serotype.subspecies',
-                count: { $sum: 1 },
-              },
+        if (!organismHasTask('serotype', query.organismId, query.speciesId, query.genusId)) return null;
+        return [
+          { $match: { 'analysis.serotype': { $exists: true } } },
+          {
+            $group: {
+              _id: '$analysis.serotype.subspecies',
+              count: { $sum: 1 },
             },
-          ];
-        }
-        return null;
+          },
+        ];
       },
     },
     {
       field: 'serotype',
       aggregation: ({ query }) => {
-        if (query.genusId) {
-          return [
-            { $match: { 'analysis.serotype': { $exists: true } } },
-            {
-              $group: {
-                _id: '$analysis.serotype.value',
-                count: { $sum: 1 },
-              },
+        if (!organismHasTask('serotype', query.organismId, query.speciesId, query.genusId)) return null;
+        return [
+          { $match: { 'analysis.serotype': { $exists: true } } },
+          {
+            $group: {
+              _id: '$analysis.serotype.value',
+              count: { $sum: 1 },
             },
-          ];
-        }
-        return null;
+          },
+        ];
       },
     },
     {
       field: 'poppunk',
       aggregation: ({ query }) => {
-        if (query.speciesId) {
-          return [
-            { $match: { 'analysis.poppunk': { $exists: true } } },
-            {
-              $group: {
-                _id: '$analysis.poppunk.strain',
-                count: { $sum: 1 },
-              },
+        if (!organismHasTask('poppunk', query.organismId, query.speciesId, query.genusId)) return null;
+        return [
+          { $match: { 'analysis.poppunk': { $exists: true } } },
+          {
+            $group: {
+              _id: '$analysis.poppunk.strain',
+              count: { $sum: 1 },
             },
-          ];
-        }
-        return null;
+          },
+        ];
       },
     },
   ];

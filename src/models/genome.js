@@ -59,6 +59,11 @@ schema.index({ name: 1 });
 schema.index({ public: 1, reference: 1 });
 schema.index({ _user: 1, binned: 1 });
 schema.index({ 'analysis.mlst.st': 1 });
+schema.index({ 'analysis.mlst2.st': 1 });
+schema.index({
+  'analysis.mlst.st': 1,
+  'analysis.mlst2.st': 1,
+});
 schema.index({ 'analysis.cgmlst.st': 1 });
 schema.index({ 'analysis.paarsnp.antibiotics.state': 1 });
 schema.index({ 'analysis.speciator.organismId': 1 });
@@ -219,6 +224,9 @@ schema.statics.getFilterQuery = function (props) {
     searchText,
     serotype,
     sequenceType,
+    st = sequenceType,
+    sequenceType2,
+    st2 = sequenceType2,
     speciesId,
     strain,
     subspecies,
@@ -274,8 +282,12 @@ schema.statics.getFilterQuery = function (props) {
   }
 
   if (organismId || speciesId || genusId) {
-    if (sequenceType) {
-      findQuery['analysis.mlst.st'] = sequenceType;
+    if (st) {
+      findQuery['analysis.mlst.st'] = st;
+    }
+
+    if (st2) {
+      findQuery['analysis.mlst2.st'] = st2;
     }
 
     if (subspecies) {
@@ -318,7 +330,10 @@ schema.statics.getSort = function (sort = 'createdAt-') {
   }
 
   if (sortKey === 'st') {
-    return { 'analysis.mlst.st': sortOrder };
+    return {
+      'analysis.mlst.st': sortOrder,
+      'analysis.mlst2.st': sortOrder,
+    };
   }
 
   if (sortKey === 'organism') {

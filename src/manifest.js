@@ -101,3 +101,13 @@ module.exports.getCollectionSchemes = function (user = defaultUser) {
   }
   return schemes;
 };
+
+module.exports.organismHasTask = function (task, ...taxIds) {
+  for (const taxId of taxIds) {
+    const tasksForTaxId = tasks.genome[taxId];
+    if (tasksForTaxId && tasksForTaxId.find(_ => _.task === task)) {
+      return true;
+    }
+  }
+  return false;
+};
