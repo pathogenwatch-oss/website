@@ -9,6 +9,7 @@ module.exports = function ({ user, ids }) {
     'kleborate',
     'metrics',
     'mlst',
+    'mlst2',
     'ngmast',
     'paarsnp',
     'poppunk',
