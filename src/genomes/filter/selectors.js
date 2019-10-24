@@ -40,10 +40,11 @@ export const getFilterSummary = createSelector(
       uploadedAt,
       date,
       serotype = {},
+      st = {},
+      st2 = {},
       subspecies = {},
       poppunk = {},
     } = summary;
-    const sequenceType = summary.st || {};
     const antibiotics = summary.amr || {};
 
     const supportedOrganisms = [];
@@ -71,16 +72,31 @@ export const getFilterSummary = createSelector(
           }
           : null,
       supportedOrganisms: sortBy(supportedOrganisms, 'title'),
-      sequenceTypes: sortBy(
-        Object.keys(sequenceType).map(value => {
-          const active = filterState.sequenceType === value;
+      sts: sortBy(
+        Object.keys(st).map(value => {
+          const active = filterState.st === value;
           return {
             value,
             active,
             novel: isNovel(value),
             label: <ST id={value} prefixed />,
             title: active ? value : `ST ${value}`,
-            count: sequenceType[value].count,
+            count: st[value].count,
+          };
+        }),
+        'novel',
+        item => Number(item.value)
+      ),
+      st2s: sortBy(
+        Object.keys(st2).map(value => {
+          const active = filterState.st2 === value;
+          return {
+            value,
+            active,
+            novel: isNovel(value),
+            label: <ST id={value} prefixed />,
+            title: active ? value : `ST ${value}`,
+            count: st2[value].count,
           };
         }),
         'novel',

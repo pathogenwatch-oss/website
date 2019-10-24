@@ -106,14 +106,22 @@ const Filter = ({
       hidden={!filterSummary.strain.length}
     />
     <FilterSection
-      filterKey="sequenceType"
+      filterKey="st"
       heading="Sequence Type"
       icon="new_releases"
-      summary={filterSummary.sequenceTypes}
+      summary={filterSummary.sts}
       updateFilter={updateFilter}
       hidden={!filterSummary.genusId.length}
-      disabled={!filterSummary.sequenceTypes.length}
+      disabled={!filterSummary.sts.length}
       disabledText="Select an organism, species, or genus to filter by sequence type."
+    />
+    <FilterSection
+      filterKey="st2"
+      heading="Sequence Type 2"
+      icon="new_releases"
+      summary={filterSummary.st2s}
+      updateFilter={updateFilter}
+      hidden={!filterSummary.st2s.length}
     />
     <FilterSection
       filterKey="resistance"
