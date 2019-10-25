@@ -31,19 +31,20 @@ export const getFilterSummary = createSelector(
   getDeployedOrganismIds,
   (summary, filterState, deployedOrganisms) => {
     const {
+      country,
+      date,
+      genusId,
       loading,
       organismId,
-      speciesId,
-      genusId,
-      country,
-      type,
-      uploadedAt,
-      date,
+      poppunk = {},
       serotype = {},
+      sources = {},
+      speciesId,
       st = {},
       st2 = {},
       subspecies = {},
-      poppunk = {},
+      type,
+      uploadedAt,
     } = summary;
     const antibiotics = summary.amr || {};
 
@@ -64,6 +65,7 @@ export const getFilterSummary = createSelector(
 
     return {
       loading,
+      sources,
       date:
         date.min && date.max
           ? {

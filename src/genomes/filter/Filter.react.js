@@ -107,17 +107,23 @@ const Filter = ({
     />
     <FilterSection
       filterKey="st"
-      heading="Sequence Type"
+      heading={
+        <React.Fragment>
+          ST - {filterSummary.sources.st}
+        </React.Fragment>
+      }
       icon="new_releases"
       summary={filterSummary.sts}
       updateFilter={updateFilter}
-      hidden={!filterSummary.genusId.length}
-      disabled={!filterSummary.sts.length}
-      disabledText="Select an organism, species, or genus to filter by sequence type."
+      hidden={!filterSummary.sts.length}
     />
     <FilterSection
       filterKey="st2"
-      heading="Sequence Type 2"
+      heading={
+        <React.Fragment>
+          ST - {filterSummary.sources.st2}
+        </React.Fragment>
+      }
       icon="new_releases"
       summary={filterSummary.st2s}
       updateFilter={updateFilter}
