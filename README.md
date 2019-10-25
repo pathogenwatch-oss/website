@@ -1,21 +1,11 @@
 # Pathogenwatch Middle End
 
-## Entities
+## Development
 
+Needs a couple of json files:
 
-```
-               1 +------------+
-      +----------|    User    |----------+
-      | N        +------------+ 1        | N
- +----------+                      +------------+   1 +------------+
- |  Genome  |                      | Collection |-----|  Organism  |
- +----------+                      +------------+ N   +------------+
-    N |                                1 |
-      | 1                                | N
-+-------------+                +-------------------+
-| Genome File |                | Collection Genome |
-+-------------+                +-------------------+
-```
+* config.json - copy this from cgps-secrets
+* tasks.json - copy this from pathogenwatch-central
 
 ## Scripts
 

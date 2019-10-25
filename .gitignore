@@ -3,6 +3,7 @@
 ###################
 config.json
 version.json
+tasks.json
 
 ###################
 # SSL
