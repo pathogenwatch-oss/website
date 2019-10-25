@@ -92,13 +92,16 @@ function reduceResult(result) {
 exports.getSummary = function (model, summaryFields, props) {
   return aggregateSummaryFields(model, summaryFields, props)
     .then(([ total, visible, ...results ]) => {
-      const summary = { total, visible };
+      const summary = { total, visible, sources: {} };
       results.forEach((result, index) => {
         const { field, range } = summaryFields[index];
         if (range) {
           summary[field] = result[0];
         } else {
           summary[field] = reduceResult(result);
+          if (result.length && result[0].sources) {
+            summary.sources[field] = result[0].sources[0];
+          }
         }
       });
 
