@@ -1,5 +1,6 @@
 import { createSelector } from 'reselect';
 import sortBy from 'lodash.sortby';
+import queryString from 'query-string';
 
 import { getGenomeList } from '../selectors';
 import { getVisible, getSummary } from '../summary/selectors';
@@ -7,6 +8,7 @@ import { getDeployedOrganismIds } from '../../summary/selectors';
 import { getPrefilter } from '../filter/selectors';
 
 import { isOverSelectionLimit } from './utils';
+import { getServerPath } from '~/utils/Api';
 
 import { analysisLabels } from '../../app/constants';
 
@@ -63,6 +65,25 @@ export const getSelectionStatus = createSelector(
   }
 );
 
+function getTaskLink(name, sources, item) {
+  const link = getServerPath(`/download/analysis/${name}`);
+  const queryParams = {};
+  if (name === 'serotype') {
+    queryParams.speciesId = item.speciesId;
+  }
+  if (name === 'mlst') {
+    queryParams.filename = `mlst-${sources[0]}.csv`;
+  }
+  if (name === 'mlst2') {
+    queryParams.filename = `mlst-${sources[0]}.csv`;
+  }
+  const query = queryString.stringify(queryParams);
+  if (query) {
+    return `${link}?${query}`;
+  }
+  return link;
+}
+
 export const getDownloadSummary = createSelector(
   getSelectionDownloads,
   ({ summary }) => {
@@ -79,12 +100,14 @@ export const getDownloadSummary = createSelector(
               sources,
               name: 'paarsnp',
               label: 'AMR antibiogram',
+              link: getTaskLink('paarsnp'),
             },
             {
               ids,
               sources,
               name: 'paarsnp-snps-genes',
               label: 'AMR SNPs/genes',
+              link: getTaskLink('paarsnp-snps-genes'),
             }
           );
         } else {
@@ -93,6 +116,7 @@ export const getDownloadSummary = createSelector(
             sources,
             name: task,
             label: analysisLabels[task] || task,
+            link: getTaskLink(task, sources, item),
           });
         }
         for (const id of ids) {

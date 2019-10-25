@@ -37,5 +37,5 @@ export function locationChange(location) {
   };
 }
 
-export LocationListener from './LocationListener.react';
-export default from './NavLink.react';
+export { default as LocationListener } from './LocationListener.react';
+export { default } from './NavLink.react';
