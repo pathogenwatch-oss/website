@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { FormattedName } from '../../organisms';
+import { FormattedName } from '~/organisms';
 
 export default () => (
   <React.Fragment>
