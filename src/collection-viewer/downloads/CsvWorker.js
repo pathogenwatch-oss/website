@@ -1,4 +1,3 @@
-import registerPromiseWorker from 'promise-worker/register';
 import Papa from 'papaparse';
 
 import { getUserDefinedValue } from '../table/utils';
@@ -61,7 +60,7 @@ const valueGettersByTable = {
   typing: getUserDefinedValue,
   stats: getUserDefinedValue,
   antibiotics: (antibiotic, { analysis: { paarsnp } }) =>
-      (isResistant(paarsnp, antibiotic) ? 1 : 0),
+    (isResistant(paarsnp, antibiotic) ? 1 : 0),
   snps: (snp, genome) => (hasElement(genome, 'snp', snp) ? 1 : 0),
   genes: (gene, genome) => (hasElement(genome, 'paar', gene) ? 1 : 0),
 };
@@ -76,11 +75,10 @@ function mapToGetters(columns, table) {
   });
 }
 
-registerPromiseWorker((message) => {
-  const { table, columns, rows } = message;
+export function createCSV(table, columns, rows) {
   const valueGetters = mapToGetters(columns, table);
   return Papa.unparse({
     fields: columns.map(_ => _.label),
     data: rows.map(row => valueGetters.map(getter => getter(row))),
   });
-});
+}
