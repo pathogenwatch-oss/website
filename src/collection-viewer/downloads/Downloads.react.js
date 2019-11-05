@@ -19,7 +19,7 @@ const DownloadsMenu = ({ menuOpen, counts = {}, closeMenu, viewHasTrees }) => (
     <div className="wgsa-downloads mdl-shadow--4dp">
       <h3 className="mdl-dialog__title">Downloads</h3>
       {Object.keys(counts).length ? showCounts(counts) : null}
-      <ul className="wgsa-downloads-menu">
+      <ul className="wgsa-downloads-menu" onClick={e => e.stopPropagation()}>
         <Analysis />
         <Tables />
         {viewHasTrees && <Trees />}
