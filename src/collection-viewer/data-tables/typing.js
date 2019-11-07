@@ -7,6 +7,7 @@ import * as constants from '../table/constants';
 import { tableKeys } from '../constants';
 
 import Organisms from '~/organisms';
+import { sources, resetSources } from './utils';
 
 const initialState = {
   name: tableKeys.typing,
@@ -52,6 +53,18 @@ const mlstGroup = {
   group: true,
   columnKey: 'mlst',
   columns: [ '__mlst', '__mlst_profile' ],
+  get label() {
+    return `MLST - ${sources.mlst}`;
+  },
+};
+
+const mlst2Group = {
+  group: true,
+  columnKey: 'mlst2',
+  columns: [ '__mlst2', '__mlst2_profile' ],
+  get label() {
+    return `MLST - ${sources.mlst2}`;
+  },
 };
 
 const ngMastGroup = {
@@ -87,10 +100,11 @@ function fillColumnDefs({ columns, ...group }) {
   };
 }
 
-export function getTypingColumnGroups({ isClusterView }, uiOptions) {
+function getTypingColumnGroups({ isClusterView }, uiOptions, hasAltMLST) {
   return [
     isClusterView || uiOptions.noPopulation ? null : referenceGroup,
     uiOptions.noMLST ? null : mlstGroup,
+    hasAltMLST ? mlst2Group : null,
     uiOptions.ngMast ? ngMastGroup : null,
     uiOptions.genotyphi ? genotyphiGroup : null,
     uiOptions.inctyper ? inctyperGroup : null,
@@ -105,6 +119,22 @@ export function hasTyping({ noPopulation, noMLST, ngMast, genotyphi }) {
   return true;
 }
 
+function updateTypingSettings({ genomes }) {
+  resetSources();
+  const sourceTasks = new Set([ 'mlst', 'mlst2' ]);
+  for (const { analysis } of genomes) {
+    for (const task of sourceTasks) {
+      if (task in analysis) {
+        sources[task] = analysis[task].source;
+        sourceTasks.delete(task);
+      }
+    }
+    // genome assumed to have mlst(1), which means sources are complete
+    if (analysis.mlst2) return true;
+  }
+  return false;
+}
+
 export default function (state = initialState, { type, payload }) {
   switch (type) {
     case FETCH_COLLECTION.SUCCESS: {
@@ -117,12 +147,14 @@ export default function (state = initialState, { type, payload }) {
         };
       }
 
+      const hasAltMLST = updateTypingSettings(payload.result);
+
       return {
         ...state,
         active,
         columns: [
           leadingSystemGroup,
-          ...getTypingColumnGroups(payload.result, Organisms.uiOptions),
+          ...getTypingColumnGroups(payload.result, Organisms.uiOptions, hasAltMLST),
           trailingSystemGroup,
         ],
       };

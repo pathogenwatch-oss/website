@@ -1,11 +1,12 @@
 import React from 'react';
 
 // imports must not include css to remain compatible with csv generator
-import ST from '../../mlst/ST.react';
-import Profile from '../../mlst/Profile.react';
+import ST from '~/mlst/ST.react';
+import Profile from '~/mlst/Profile.react';
 
-import { isNovel, createCode } from '../../mlst/utils';
+import { isNovel, createCode } from '~/mlst/utils';
 import { getFormattedDateString } from '../table/utils';
+import { sources } from './utils';
 
 export const systemDataColumns = {
   __date: {
@@ -45,7 +46,12 @@ export const systemDataColumns = {
   __mlst: {
     columnKey: '__mlst',
     label: 'ST',
-    displayName: 'MLST ST',
+    get displayName() {
+      if (sources.mlst) {
+        return `MLST ST (${sources.mlst})`;
+      }
+      return 'MLST ST';
+    },
     valueGetter({ analysis }) {
       if (!analysis.mlst) return 0;
       const { st } = analysis.mlst;
@@ -60,18 +66,57 @@ export const systemDataColumns = {
   __mlst_profile: {
     columnKey: '__mlst_profile',
     label: 'PROFILE',
-    displayName: 'MLST PROFILE',
+    get displayName() {
+      if (sources.mlst) {
+        return `MLST PROFILE (${sources.mlst})`;
+      }
+      return 'MLST PROFILE';
+    },
     valueGetter({ analysis }) {
       if (!analysis.mlst) return null;
-      const { code, alleles } = analysis.mlst;
-      if (code) return code;
-      return createCode(alleles, 4);
+      return createCode(analysis.mlst.alleles, 4);
     },
     display({ analysis }) {
       if (!analysis.mlst) return null;
-      const { code, alleles } = analysis.mlst;
-      if (code) return code;
-      return <Profile alleles={alleles} textOnly />;
+      return <Profile alleles={analysis.mlst.alleles} textOnly />;
+    },
+  },
+  __mlst2: {
+    columnKey: '__mlst2',
+    label: 'ST',
+    get displayName() {
+      if (sources.mlst2) {
+        return `MLST ST (${sources.mlst2})`;
+      }
+      return 'MLST ST';
+    },
+    valueGetter({ analysis }) {
+      if (!analysis.mlst2) return 0;
+      const { st } = analysis.mlst2;
+      if (isNovel(st)) return `(${st.slice(0, 4)})`;
+      return st;
+    },
+    display({ analysis }) {
+      if (!analysis.mlst2) return null;
+      return <ST id={analysis.mlst2.st} textOnly />;
+    },
+  },
+  __mlst2_profile: {
+    columnKey: '__mlst2_profile',
+    label: 'PROFILE',
+    get displayName() {
+      if (sources.mlst2) {
+        return `MLST PROFILE (${sources.mlst2})`;
+      }
+      return 'MLST PROFILE';
+    },
+    valueGetter({ analysis }) {
+      if (!analysis.mlst2) return null;
+      return createCode(analysis.mlst2.alleles, 4);
+    },
+    display({ analysis }) {
+      if (!analysis.mlst2) return null;
+      return <Profile alleles={analysis.mlst2.alleles} textOnly />;
     },
   },
   __inc_types: {
