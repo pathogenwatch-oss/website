@@ -6,6 +6,8 @@ import { getActiveGenomeIds, getCollection } from '../selectors';
 
 import { formatCollectionFilename } from './utils';
 
+import Organisms from '~/organisms';
+
 const DownloadForm = ({ link, filename, title, genomeIds, children }) => (
   <form
     action={`${link}?filename=${filename}`}
@@ -36,15 +38,16 @@ const DownloadsMenu = ({ collection, genomeIds, prefix }) => (
           Species Prediction
         </DownloadForm>
       </li>
-      <li>
-        <DownloadForm
-          link={`${prefix}/kleborate`}
-          filename={formatCollectionFilename(collection, 'kleborate.csv')}
-          genomeIds={genomeIds}
-        >
-          Kleborate
-        </DownloadForm>
-      </li>
+      { Organisms.uiOptions.kleborate &&
+        <li>
+          <DownloadForm
+            link={`${prefix}/kleborate`}
+            filename={formatCollectionFilename(collection, 'kleborate.csv')}
+            genomeIds={genomeIds}
+          >
+            Kleborate
+          </DownloadForm>
+        </li> }
     </ul>
   </li>
 );
