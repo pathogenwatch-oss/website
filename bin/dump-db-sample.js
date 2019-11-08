@@ -10,7 +10,7 @@ const Collection = require('models/collection');
 const Analysis = require('models/analysis')
 
 function append(path, type, ...docs) {
-  docs.forEach(doc => fs.appendFileSync(path, JSON.stringify({ type, doc })))
+  docs.forEach(doc => fs.appendFileSync(path, JSON.stringify({ type, doc })+'\n'))
 }
 
 async function main() {
