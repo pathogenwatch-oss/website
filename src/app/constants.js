@@ -63,6 +63,7 @@ export const analysisLabels = {
   mlst: 'MLST',
   mlst2: 'MLST',
   ngmast: 'NG-MAST',
+  ngstar: 'NG-STAR',
   paarsnp: 'AMR',
   poppunk: 'Strain',
   serotype: 'Serotype',

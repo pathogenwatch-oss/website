@@ -21,7 +21,8 @@ function hasSpeciesTypingResult(analysis) {
     analysis.ngmast ||
     analysis.serotype ||
     analysis.poppunk ||
-    analysis.kleborate
+    analysis.kleborate ||
+    analysis.ngstar
   );
 }
 
