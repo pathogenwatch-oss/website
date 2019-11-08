@@ -79,6 +79,7 @@ schema.index({
 schema.index({ 'analysis.speciator.organismId': 1, 'analysis.speciator.organismName': 1 });
 schema.index({ 'upload.type': 1, 'upload.completed': 1 });
 schema.index({ 'analysis.poppunk.strain': 1 });
+schema.index({ 'analysis.ngstar.st': 1 });
 
 schema.statics.uploadTypes = uploadTypes;
 
