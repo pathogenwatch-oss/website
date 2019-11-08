@@ -35,6 +35,15 @@ async function main() {
     }
   }
 
+  await Genome.find({ reference: true })
+    .lean()
+    .cursor()
+    .eachAsync(doc => {
+      if (fileIds.has(doc.fileId)) return;
+      fileIds.add(doc.fileId);
+      append(output, 'genome', doc);
+    })
+
   const collection = await Collection.findOne({ 
     access: "public",
     organismId: "1280",
