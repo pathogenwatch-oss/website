@@ -55,6 +55,7 @@ async function main() {
     .lean()
     .cursor()
     .eachAsync(doc => {
+      if (fileIds.has(doc.fileId)) return;
       fileIds.add(doc.fileId);
       append(output, 'genome', doc);
     })
@@ -63,6 +64,7 @@ async function main() {
     .lean()
     .cursor()
     .eachAsync(doc => {
+      if (fileIds.has(doc.fileId)) return;
       fileIds.add(doc.fileId);
       append(output, 'genome', doc);
     })
@@ -71,6 +73,7 @@ async function main() {
     .lean()
     .cursor()
     .eachAsync(doc => {
+      if (fileIds.has(doc.fileId)) return;
       fileIds.add(doc.fileId);
       append(output, 'genome', doc);
     })
