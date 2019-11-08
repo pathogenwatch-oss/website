@@ -7,7 +7,8 @@ const mongoConnection = require('utils/mongoConnection');
 
 const Genome = require('models/genome');
 const Collection = require('models/collection');
-const Analysis = require('models/analysis')
+const Analysis = require('models/analysis');
+const Organism = require('models/organism');
 
 function append(path, type, ...docs) {
   docs.forEach(doc => fs.appendFileSync(path, JSON.stringify({ type, doc })+'\n'))
@@ -27,9 +28,11 @@ async function main() {
 
   const taxids = await Genome.distinct('analysis.speciator.speciesId', { public: true })
   for (let taxid of taxids) {
-    const doc = await Genome.findOne({'analysis.speciator.speciesId': taxid, public: true }).lean()
-    append(output, 'genome', doc)
-    fileIds.add(doc.fileId)
+    const docs = await Genome.find({'analysis.speciator.speciesId': taxid, public: true }, { limit: 4 }).lean()
+    append(output, 'genome', ...docs)
+    for (let doc of docs) {
+      fileIds.add(doc.fileId)
+    }
   }
 
   const collection = await Collection.findOne({ 
@@ -61,6 +64,16 @@ async function main() {
     .eachAsync(doc => {
       fileIds.add(doc.fileId);
       append(output, 'genome', doc);
+    })
+
+  append(output, '__fileIds', { fileIds })
+
+  await Organism.find({})
+    .lean()
+    .cursor()
+    .eachAsync(doc => {
+      fileIds.add(doc.fileId);
+      append(output, 'organisms', doc);
     })
 
   console.log("Done")
