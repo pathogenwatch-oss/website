@@ -155,6 +155,51 @@ function getSummaryFields(deployedOrganisms) {
         ];
       },
     },
+    {
+      field: 'ngmast',
+      aggregation: ({ query }) => {
+        if (!organismHasTask('ngmast', query.organismId, query.speciesId, query.genusId)) return null;
+        return [
+          { $match: { 'analysis.ngmast': { $exists: true } } },
+          {
+            $group: {
+              _id: '$analysis.ngmast.ngmast',
+              count: { $sum: 1 },
+            },
+          },
+        ];
+      },
+    },
+    {
+      field: 'ngstar',
+      aggregation: ({ query }) => {
+        if (!organismHasTask('ngstar', query.organismId, query.speciesId, query.genusId)) return null;
+        return [
+          { $match: { 'analysis.ngstar': { $exists: true } } },
+          {
+            $group: {
+              _id: '$analysis.ngstar.st',
+              count: { $sum: 1 },
+            },
+          },
+        ];
+      },
+    },
+    {
+      field: 'genotyphi',
+      aggregation: ({ query }) => {
+        if (!organismHasTask('genotyphi', query.organismId, query.speciesId, query.genusId)) return null;
+        return [
+          { $match: { 'analysis.genotyphi': { $exists: true } } },
+          {
+            $group: {
+              _id: '$analysis.genotyphi.genotype',
+              count: { $sum: 1 },
+            },
+          },
+        ];
+      },
+    },
   ];
 }
 
