@@ -11,6 +11,7 @@ module.exports = function ({ user, ids }) {
     'mlst',
     'mlst2',
     'ngmast',
+    'ngstar',
     'paarsnp',
     'poppunk',
     'serotype',

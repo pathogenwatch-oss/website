@@ -20,6 +20,7 @@ router.post('/metrics', require('./metrics'));
 router.post('/mlst', require('./mlst')('mlst'));
 router.post('/mlst2', require('./mlst')('mlst2'));
 router.post('/ngmast', require('./ngmast'));
+router.post('/ngstar', require('./mlst')('ngstar'));
 router.post('/paarsnp', require('./paarsnp'));
 router.post('/paarsnp-snps-genes', require('./paarsnp-snps-genes'));
 router.post('/poppunk', require('./poppunk'));
