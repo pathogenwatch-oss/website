@@ -35,12 +35,12 @@ async function main() {
   await mongoConnection.connect();
 
   const fileIds = new Set()
-  const genomeIds = new Set()
+  const genomeIds = {}
 
   async function addGenome(doc) {
-    if (genomeIds.has(doc._id)) return;
+    if (genomeIds[doc._id]) return;
     append(output, 'genome', doc)
-    genomeIds.add(doc._id)
+    genomeIds[doc._id] = doc.fileId;
     if (!doc.fileId || fileIds.has(doc.fileId)) return;
     await addAnalysis(output, doc);
     fileIds.add(doc.fileId)
@@ -84,7 +84,7 @@ async function main() {
       append(output, 'organisms', doc);
     })
 
-  append(output, '__ids', { fileIds: [...fileIds], genomeIds: [...genomeIds] })
+  append(output, '__ids', genomeIds)
 
   console.log("Done")
   await mongoConnection.close()
