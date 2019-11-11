@@ -33,8 +33,11 @@ export const getFilterSummary = createSelector(
     const {
       country,
       date,
+      genotyphi = {},
       genusId,
       loading,
+      ngmast = {},
+      ngstar = {},
       organismId,
       poppunk = {},
       serotype = {},
@@ -186,6 +189,39 @@ export const getFilterSummary = createSelector(
           active: filterState.strain === value,
         })),
         item => Number(item.value)
+      ),
+      ngmast: sortBy(
+        Object.keys(ngmast).map(value => ({
+          value,
+          label: `ST ${value}`,
+          count: ngmast[value].count,
+          active: filterState.ngmast === value,
+        })),
+        'label'
+      ),
+      ngstar: sortBy(
+        Object.keys(ngstar).map(value => {
+          const active = filterState.ngstar === value;
+          return {
+            value,
+            active,
+            novel: isNovel(value),
+            label: <ST id={value} prefixed />,
+            title: active ? value : `ST ${value}`,
+            count: ngstar[value].count,
+          };
+        }),
+        'novel',
+        item => Number(item.value)
+      ),
+      genotyphi: sortBy(
+        Object.keys(genotyphi).map(value => ({
+          value,
+          label: value,
+          count: genotyphi[value].count,
+          active: filterState.genotyphi === value,
+        })),
+        'label'
       ),
     };
   }

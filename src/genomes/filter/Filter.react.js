@@ -109,7 +109,7 @@ const Filter = ({
       filterKey="st"
       heading={
         <React.Fragment>
-          ST - {filterSummary.sources.st}
+          MLST - {filterSummary.sources.st}
         </React.Fragment>
       }
       icon="new_releases"
@@ -121,13 +121,37 @@ const Filter = ({
       filterKey="st2"
       heading={
         <React.Fragment>
-          ST - {filterSummary.sources.st2}
+          MLST - {filterSummary.sources.st2}
         </React.Fragment>
       }
       icon="new_releases"
       summary={filterSummary.st2s}
       updateFilter={updateFilter}
       hidden={!filterSummary.st2s.length}
+    />
+    <FilterSection
+      filterKey="ngmast"
+      heading="NG-MAST"
+      icon="new_releases"
+      summary={filterSummary.ngmast}
+      updateFilter={updateFilter}
+      hidden={!filterSummary.ngmast.length}
+    />
+    <FilterSection
+      filterKey="ngstar"
+      heading="NG-STAR"
+      icon="new_releases"
+      summary={filterSummary.ngstar}
+      updateFilter={updateFilter}
+      hidden={!filterSummary.ngstar.length}
+    />
+    <FilterSection
+      filterKey="genotyphi"
+      heading="Genotyphi"
+      icon="new_releases"
+      summary={filterSummary.genotyphi}
+      updateFilter={updateFilter}
+      hidden={!filterSummary.genotyphi.length}
     />
     <FilterSection
       filterKey="resistance"

@@ -29,6 +29,7 @@
   height: 40px;
   align-items: center;
   cursor: pointer;
+  user-select: none;
 }
 
 .wgsa-filter-section > h3 > i:first-child {
