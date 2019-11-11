@@ -53,7 +53,7 @@ export default ({ result, speciator, filterKey = 'sequenceType', heading }) => {
                   {hits.length ? (
                     hits.map(id => <Hit key={id} id={id} />)
                   ) : (
-                    <span title="Not Found">&mdash;</span>
+                    <span title="Not found">?</span>
                   )}
                 </td>
               ))}

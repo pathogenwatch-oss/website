@@ -84,8 +84,8 @@ export const getFilterSummary = createSelector(
             value,
             active,
             novel: isNovel(value),
-            label: <ST id={value} prefixed />,
-            title: active ? value : `ST ${value}`,
+            label: <React.Fragment>ST <ST id={value} /></React.Fragment>,
+            title: `ST ${value}`,
             count: st[value].count,
           };
         }),
@@ -99,8 +99,8 @@ export const getFilterSummary = createSelector(
             value,
             active,
             novel: isNovel(value),
-            label: <ST id={value} prefixed />,
-            title: active ? value : `ST ${value}`,
+            label: <React.Fragment>ST <ST id={value} /></React.Fragment>,
+            title: `ST ${value}`,
             count: st2[value].count,
           };
         }),
@@ -193,7 +193,7 @@ export const getFilterSummary = createSelector(
       ngmast: sortBy(
         Object.keys(ngmast).map(value => ({
           value,
-          label: `ST ${value}`,
+          label: `NG_MAST ${value}`,
           count: ngmast[value].count,
           active: filterState.ngmast === value,
         })),
@@ -206,8 +206,8 @@ export const getFilterSummary = createSelector(
             value,
             active,
             novel: isNovel(value),
-            label: <ST id={value} prefixed />,
-            title: active ? value : `ST ${value}`,
+            label: <React.Fragment>NG-STAR <ST id={value} /></React.Fragment>,
+            title: `NG-STAR ${value}`,
             count: ngstar[value].count,
           };
         }),

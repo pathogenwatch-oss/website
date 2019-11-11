@@ -87,32 +87,15 @@
   font-weight: 500;
 }
 
-@media (max-width: 1024px) {
-  .wgsa-genome-list-cell:nth-child(1) {
-    width: 40%;
-  }
-  .wgsa-genome-list-cell:nth-child(2) {
-    width: 45%;
-  }
-  .wgsa-genome-list-cell:nth-child(3) {
-    width: 15%;
-  }
-  .wgsa-genome-list-cell:nth-child(4),
-  .wgsa-genome-list-cell:nth-child(5),
-  .wgsa-genome-list-cell:nth-child(6) {
-    display: none;
-  }
-}
-
 @media (max-width: 1279px) {
   .has-filter .wgsa-genome-list-cell:nth-child(1) {
     width: 40%;
   }
   .has-filter .wgsa-genome-list-cell:nth-child(2) {
-    width: 45%;
+    width: 40%;
   }
   .has-filter .wgsa-genome-list-cell:nth-child(3) {
-    width: 15%;
+    width: 20%;
   }
   .has-filter .wgsa-genome-list-cell:nth-child(4),
   .has-filter .wgsa-genome-list-cell:nth-child(5),

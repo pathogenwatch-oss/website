@@ -55,12 +55,12 @@ export const systemDataColumns = {
     valueGetter({ analysis }) {
       if (!analysis.mlst) return 0;
       const { st } = analysis.mlst;
-      if (isNovel(st)) return `(${st.slice(0, 4)})`;
+      if (isNovel(st)) return `*${st.slice(0, 4)}`;
       return st;
     },
     display({ analysis }) {
       if (!analysis.mlst) return null;
-      return <ST id={analysis.mlst.st} textOnly />;
+      return <ST id={analysis.mlst.st} />;
     },
   },
   __mlst_profile: {
@@ -78,7 +78,7 @@ export const systemDataColumns = {
     },
     display({ analysis }) {
       if (!analysis.mlst) return null;
-      return <Profile alleles={analysis.mlst.alleles} textOnly />;
+      return <Profile alleles={analysis.mlst.alleles} />;
     },
   },
   __mlst2: {
@@ -93,12 +93,12 @@ export const systemDataColumns = {
     valueGetter({ analysis }) {
       if (!analysis.mlst2) return 0;
       const { st } = analysis.mlst2;
-      if (isNovel(st)) return `(${st.slice(0, 4)})`;
+      if (isNovel(st)) return `*${st.slice(0, 4)}`;
       return st;
     },
     display({ analysis }) {
       if (!analysis.mlst2) return null;
-      return <ST id={analysis.mlst2.st} textOnly />;
+      return <ST id={analysis.mlst2.st} />;
     },
   },
   __mlst2_profile: {
@@ -116,7 +116,7 @@ export const systemDataColumns = {
     },
     display({ analysis }) {
       if (!analysis.mlst2) return null;
-      return <Profile alleles={analysis.mlst2.alleles} textOnly />;
+      return <Profile alleles={analysis.mlst2.alleles} />;
     },
   },
   __inc_types: {
