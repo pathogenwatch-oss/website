@@ -80,6 +80,8 @@ schema.index({ 'analysis.speciator.organismId': 1, 'analysis.speciator.organismN
 schema.index({ 'upload.type': 1, 'upload.completed': 1 });
 schema.index({ 'analysis.poppunk.strain': 1 });
 schema.index({ 'analysis.ngstar.st': 1 });
+schema.index({ 'analysis.ngmast.ngmast': 1 });
+schema.index({ 'analysis.genotyphi.genotype': 1 });
 
 schema.statics.uploadTypes = uploadTypes;
 
@@ -217,9 +219,12 @@ schema.statics.getFilterQuery = function (props) {
   const { user, query = {} } = props;
   const {
     country,
+    genotyphi,
     genusId,
     maxDate,
     minDate,
+    ngmast,
+    ngstar,
     organismId,
     resistance,
     searchText,
@@ -303,6 +308,18 @@ schema.statics.getFilterQuery = function (props) {
   if (organismId || speciesId) {
     if (strain) {
       findQuery['analysis.poppunk.strain'] = strain;
+    }
+
+    if (ngmast) {
+      findQuery['analysis.ngmast.ngmast'] = ngmast;
+    }
+
+    if (ngstar) {
+      findQuery['analysis.ngstar.st'] = ngstar;
+    }
+
+    if (genotyphi) {
+      findQuery['analysis.genotyphi.genotype'] = genotyphi;
     }
   }
 
