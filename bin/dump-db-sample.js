@@ -14,6 +14,16 @@ function append(path, type, ...docs) {
   docs.forEach(doc => fs.appendFileSync(path, JSON.stringify({ type, doc })+'\n'))
 }
 
+async function addAnalysis(path, genome) {
+  const tasks = Object.keys(genome.analysis || {})
+  const { fileId } = genome;
+  for (let task of tasks) {
+    const { __v: version } = genome.analysis[task];
+    const doc = await Analysis.findOne({ fileId, task, version }).lean();
+    append(path, 'analyses', doc)
+  }
+}
+
 async function main() {
   const { output } = argv.opts;
   if (!output || output == true ) {
@@ -32,16 +42,18 @@ async function main() {
     append(output, 'genome', ...docs)
     for (let doc of docs) {
       fileIds.add(doc.fileId)
+      await addAnalysis(output, doc)
     }
   }
 
   await Genome.find({ reference: true })
     .lean()
     .cursor()
-    .eachAsync(doc => {
+    .eachAsync(async doc => {
       if (fileIds.has(doc.fileId)) return;
       fileIds.add(doc.fileId);
       append(output, 'genome', doc);
+      await addAnalysis(output, doc)
     })
 
   const collection = await Collection.findOne({ 
@@ -54,28 +66,21 @@ async function main() {
   await Genome.find({ _id: { $in: collection.genomes }, public: true })
     .lean()
     .cursor()
-    .eachAsync(doc => {
+    .eachAsync(async doc => {
       if (fileIds.has(doc.fileId)) return;
       fileIds.add(doc.fileId);
       append(output, 'genome', doc);
+      await addAnalysis(output, doc)
     })
 
   await Genome.find({'analysis.speciator.speciesId': "485", public: true })
     .lean()
     .cursor()
-    .eachAsync(doc => {
+    .eachAsync(async doc => {
       if (fileIds.has(doc.fileId)) return;
       fileIds.add(doc.fileId);
       append(output, 'genome', doc);
-    })
-
-  await Analysis.find({ fileId: { $in: [...fileIds] }})
-    .lean()
-    .cursor()
-    .eachAsync(doc => {
-      if (fileIds.has(doc.fileId)) return;
-      fileIds.add(doc.fileId);
-      append(output, 'genome', doc);
+      await addAnalysis(output, doc)
     })
 
   append(output, '__fileIds', { fileIds })
@@ -83,12 +88,13 @@ async function main() {
   await Organism.find({})
     .lean()
     .cursor()
-    .eachAsync(doc => {
+    .eachAsync(async doc => {
       fileIds.add(doc.fileId);
       append(output, 'organisms', doc);
     })
 
   console.log("Done")
+  await mongoConnection.close()
 
   return
 }
