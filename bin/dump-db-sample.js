@@ -1,5 +1,6 @@
 // Dumps genomes and analysis data for a development environment.
 // Also dumps a collection
+// Records should be dumped with dump-db-sample.js
 
 const fs = require('fs');
 const argv = require('named-argv');
@@ -14,16 +15,6 @@ function append(path, type, ...docs) {
   docs.forEach(doc => fs.appendFileSync(path, JSON.stringify({ type, doc })+'\n'))
 }
 
-async function addAnalysis(path, genome) {
-  const tasks = Object.keys(genome.analysis || {})
-  const { fileId } = genome;
-  for (let task of tasks) {
-    const { __v: version } = genome.analysis[task];
-    const doc = await Analysis.findOne({ fileId, task, version }).lean();
-    append(path, 'analyses', doc)
-  }
-}
-
 async function main() {
   const { output } = argv.opts;
   if (!output || output == true ) {
@@ -34,16 +25,27 @@ async function main() {
   fs.writeFileSync(output, '') // clear the document
   await mongoConnection.connect();
 
-  const fileIds = new Set()
+  const seenAnalysis = new Set()
   const genomeIds = {}
+
+  async function addAnalysis(genome) {
+    const tasks = Object.keys(genome.analysis || {})
+    const { fileId } = genome;
+    for (let task of tasks) {
+      const { __v: version } = genome.analysis[task];
+      const key = `${fileId}|${task}|${version}`
+      if (seenAnalysis.has(key)) continue;
+      const doc = await Analysis.findOne({ fileId, task, version }).lean();
+      append(output, 'analyses', doc)
+      seenAnalysis.add(key)
+    }
+  }
 
   async function addGenome(doc) {
     if (genomeIds[doc._id]) return;
     append(output, 'genome', doc)
     genomeIds[doc._id] = doc.fileId;
-    if (!doc.fileId || fileIds.has(doc.fileId)) return;
-    await addAnalysis(output, doc);
-    fileIds.add(doc.fileId)
+    await addAnalysis(doc);
   }
 
   const taxids = await Genome.distinct('analysis.speciator.speciesId', { public: true })
@@ -80,7 +82,6 @@ async function main() {
     .lean()
     .cursor()
     .eachAsync(async doc => {
-      fileIds.add(doc.fileId);
       append(output, 'organisms', doc);
     })
 
