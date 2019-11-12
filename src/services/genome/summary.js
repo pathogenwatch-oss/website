@@ -88,14 +88,14 @@ function getSummaryFields(deployedOrganisms) {
     },
     { field: 'date', range: true, queryKeys: [ 'minDate', 'maxDate' ] },
     {
-      field: 'st',
+      field: 'mlst',
       aggregation: ({ query = {} }) => {
         if (!organismHasTask('mlst', query.organismId, query.speciesId, query.genusId)) return null;
         return [ { $group: { _id: '$analysis.mlst.st', count: { $sum: 1 }, sources: { $addToSet: '$analysis.mlst.source' } } } ];
       },
     },
     {
-      field: 'st2',
+      field: 'mlst2',
       aggregation: ({ query = {} }) => {
         if (!organismHasTask('mlst2', query.organismId, query.speciesId, query.genusId)) return null;
         return [ { $group: { _id: '$analysis.mlst2.st', count: { $sum: 1 }, sources: { $addToSet: '$analysis.mlst2.source' } } } ];

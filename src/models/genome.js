@@ -230,9 +230,9 @@ schema.statics.getFilterQuery = function (props) {
     searchText,
     serotype,
     sequenceType,
-    st = sequenceType,
+    mlst = sequenceType,
     sequenceType2,
-    st2 = sequenceType2,
+    mlst2 = sequenceType2,
     speciesId,
     strain,
     subspecies,
@@ -288,12 +288,12 @@ schema.statics.getFilterQuery = function (props) {
   }
 
   if (organismId || speciesId || genusId) {
-    if (st) {
-      findQuery['analysis.mlst.st'] = st;
+    if (mlst) {
+      findQuery['analysis.mlst.st'] = mlst;
     }
 
-    if (st2) {
-      findQuery['analysis.mlst2.st'] = st2;
+    if (mlst2) {
+      findQuery['analysis.mlst2.st'] = mlst2;
     }
 
     if (subspecies) {
