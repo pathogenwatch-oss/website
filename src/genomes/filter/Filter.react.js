@@ -26,17 +26,30 @@ function getSerotypeHeading(genusId) {
   return 'Serotype';
 }
 
+const speciesDependants = [
+  'subspecies',
+  'serotype',
+  'strain',
+  'st',
+  'st2',
+  'ngmast',
+  'ngstar',
+  'genotyphi',
+];
+
+const genusDependants = speciesDependants.concat('speciesId');
+
 const Filter = ({
   applyFilter,
   clearFilter,
   filterSummary,
+  filterState,
   isActive,
   prefilter,
-  genusId,
   textValue,
   updateFilter,
   updateFilterValue,
-  updateMulti,
+  clearDependants,
 }) => (
   <FilterAside
     loading={filterSummary.loading}
@@ -59,24 +72,14 @@ const Filter = ({
       heading="Genus"
       icon="bug_report"
       summary={filterSummary.genusId}
-      updateFilter={(key, value) => {
-        const speciesItem = filterSummary.speciesId.find(_ => _.active);
-        if (speciesItem) {
-          updateMulti({
-            genusId: value,
-            speciesId: speciesItem.value,
-          });
-        } else {
-          updateFilter('genusId', value);
-        }
-      }}
+      updateFilter={clearDependants(filterState, genusDependants)}
     />
     <FilterSection
       filterKey="speciesId"
       heading="Species"
       icon="bug_report"
       summary={filterSummary.speciesId}
-      updateFilter={updateFilter}
+      updateFilter={clearDependants(filterState, speciesDependants)}
       hidden={!filterSummary.genusId.length}
       disabled={!filterSummary.speciesId.length}
       disabledText="Select a genus to filter by species."
@@ -86,12 +89,12 @@ const Filter = ({
       heading="Subspecies"
       icon="bug_report"
       summary={filterSummary.subspecies}
-      updateFilter={updateFilter}
+      updateFilter={clearDependants(filterState, [ 'serotype' ])}
       hidden={!filterSummary.subspecies.length}
     />
     <FilterSection
       filterKey="serotype"
-      heading={getSerotypeHeading(genusId)}
+      heading={getSerotypeHeading(filterState.genusId)}
       icon="bug_report"
       summary={filterSummary.serotype}
       updateFilter={updateFilter}
@@ -194,7 +197,7 @@ function mapStateToProps(state) {
     textValue: getSearchText(state),
     isOpen: isFilterOpen(state),
     prefilter: getPrefilter(state),
-    genusId: getFilter(state, { stateKey }).genusId,
+    filterState: getFilter(state, { stateKey }),
   };
 }
 
@@ -206,7 +209,16 @@ function mapDispatchToProps(dispatch) {
     applyFilter: () => dispatch(actions.applyFilter()),
     updateFilter: (filterKey, value) =>
       dispatch(actions.updateFilter({ [filterKey]: value })),
-    updateMulti: filterMap => dispatch(actions.updateFilter(filterMap)),
+    clearDependants: (filterState, dependants) =>
+      (key, value) => {
+        const update = { [key]: value };
+        for (const [ k, v ] of Object.entries(filterState)) {
+          if (dependants.includes(k)) {
+            update[k] = v;
+          }
+        }
+        dispatch(actions.updateFilter(update));
+      },
   };
 }
 
