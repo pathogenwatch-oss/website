@@ -43,7 +43,7 @@ export default ({ genome }) => {
       {mlst &&
         <div id="mlst">
           <MLST result={mlst} speciator={speciator} />
-          {mlst2 && <MLST heading="Alternative MLST" result={mlst2} speciator={speciator} filterKey="sequenceType2" />}
+          {mlst2 && <MLST heading="Alternative MLST" result={mlst2} speciator={speciator} filterKey="mlst2" />}
           {ngstar && <MLST heading="NG-STAR" result={ngstar} speciator={speciator} filterKey="ngstar" />}
         </div>}
       {getSecondaryTyping(genome)}

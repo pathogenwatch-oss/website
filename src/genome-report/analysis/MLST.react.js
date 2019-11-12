@@ -4,7 +4,7 @@ import ExternalLink from '../ExternalLink.react';
 import { Metadata } from '../components';
 import { ST, Hit } from '../../mlst';
 
-export default ({ result, speciator, filterKey = 'sequenceType', heading }) => {
+export default ({ result, speciator, filterKey = 'mlst', heading }) => {
   const alleles = result.alleles.map(_ => {
     const split = _.gene.split('_');
     return {
