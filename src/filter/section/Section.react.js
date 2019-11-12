@@ -77,7 +77,7 @@ const FilterSection = React.createClass({
       return (
         <section className="wgsa-filter-section is-active">
           <h3
-            title={`${heading}: ${title || label}`}
+            title={title || `${heading}: ${label}`}
             onClick={() => onClick(value)}
           >
             <i className="material-icons">{icon}</i>

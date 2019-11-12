@@ -30,8 +30,8 @@ const speciesDependants = [
   'subspecies',
   'serotype',
   'strain',
-  'st',
-  'st2',
+  'mlst',
+  'mlst2',
   'ngmast',
   'ngstar',
   'genotyphi',
@@ -109,49 +109,49 @@ const Filter = ({
       hidden={!filterSummary.strain.length}
     />
     <FilterSection
-      filterKey="st"
+      filterKey="mlst"
       heading={
         <React.Fragment>
-          MLST - {filterSummary.sources.st}
+          MLST - {filterSummary.sources.mlst}
         </React.Fragment>
       }
-      icon="new_releases"
+      icon="label"
       summary={filterSummary.sts}
       updateFilter={updateFilter}
       hidden={!filterSummary.sts.length}
     />
     <FilterSection
-      filterKey="st2"
+      filterKey="mlst2"
       heading={
         <React.Fragment>
-          MLST - {filterSummary.sources.st2}
+          MLST - {filterSummary.sources.mlst2}
         </React.Fragment>
       }
-      icon="new_releases"
+      icon="label"
       summary={filterSummary.st2s}
       updateFilter={updateFilter}
       hidden={!filterSummary.st2s.length}
     />
     <FilterSection
-      filterKey="ngmast"
-      heading="NG-MAST"
-      icon="new_releases"
-      summary={filterSummary.ngmast}
-      updateFilter={updateFilter}
-      hidden={!filterSummary.ngmast.length}
-    />
-    <FilterSection
       filterKey="ngstar"
       heading="NG-STAR"
-      icon="new_releases"
+      icon="label"
       summary={filterSummary.ngstar}
       updateFilter={updateFilter}
       hidden={!filterSummary.ngstar.length}
     />
     <FilterSection
+      filterKey="ngmast"
+      heading="NG-MAST"
+      icon="label"
+      summary={filterSummary.ngmast}
+      updateFilter={updateFilter}
+      hidden={!filterSummary.ngmast.length}
+    />
+    <FilterSection
       filterKey="genotyphi"
       heading="Genotyphi"
-      icon="new_releases"
+      icon="label"
       summary={filterSummary.genotyphi}
       updateFilter={updateFilter}
       hidden={!filterSummary.genotyphi.length}
@@ -174,8 +174,8 @@ const Filter = ({
     <FilterSection
       className="capitalised"
       filterKey="type"
-      heading="Type"
-      icon="label"
+      heading="Access"
+      icon="person"
       summary={filterSummary.type}
       updateFilter={updateFilter}
     />

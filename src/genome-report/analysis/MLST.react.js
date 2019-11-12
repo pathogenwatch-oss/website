@@ -4,7 +4,7 @@ import ExternalLink from '../ExternalLink.react';
 import { Metadata } from '../components';
 import { ST, Hit } from '../../mlst';
 
-export default ({ result, speciator, filterKey = 'mlst', heading }) => {
+export default ({ result, speciator, filterKey = 'mlst', heading, label }) => {
   const alleles = result.alleles.map(_ => {
     const split = _.gene.split('_');
     return {
@@ -24,7 +24,7 @@ export default ({ result, speciator, filterKey = 'mlst', heading }) => {
       </header>
       <div className="pw-genome-report-column one third">
         <dl>
-          <Metadata label="Sequence Type">
+          <Metadata label={label || 'Sequence Type'}>
             <ST id={result.st} />
           </Metadata>
         </dl>
@@ -33,7 +33,7 @@ export default ({ result, speciator, filterKey = 'mlst', heading }) => {
             speciator.speciesId
           }&${filterKey}=${result.st}`}
         >
-          View all ST <ST id={result.st} textOnly />
+          View all {label || 'ST'} <ST id={result.st} textOnly />
         </ExternalLink>
       </div>
       <div className="pw-genome-report-column two thirds">

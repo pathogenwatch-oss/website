@@ -43,8 +43,8 @@ export const getFilterSummary = createSelector(
       serotype = {},
       sources = {},
       speciesId,
-      st = {},
-      st2 = {},
+      mlst = {},
+      mlst2 = {},
       subspecies = {},
       type,
       uploadedAt,
@@ -78,30 +78,30 @@ export const getFilterSummary = createSelector(
           : null,
       supportedOrganisms: sortBy(supportedOrganisms, 'title'),
       sts: sortBy(
-        Object.keys(st).map(value => {
-          const active = filterState.st === value;
+        Object.keys(mlst).map(value => {
+          const active = filterState.mlst === value;
           return {
             value,
             active,
             novel: isNovel(value),
-            label: <React.Fragment>ST <ST id={value} /></React.Fragment>,
-            title: `ST ${value}`,
-            count: st[value].count,
+            label: <React.Fragment>{active ? `MLST - ${sources.mlst}:` : 'ST'} <ST id={value} /></React.Fragment>,
+            title: active ? `MLST - ${sources.mlst}: ${value}` : `ST ${value}`,
+            count: mlst[value].count,
           };
         }),
         'novel',
         item => Number(item.value)
       ),
       st2s: sortBy(
-        Object.keys(st2).map(value => {
-          const active = filterState.st2 === value;
+        Object.keys(mlst2).map(value => {
+          const active = filterState.mlst2 === value;
           return {
             value,
             active,
             novel: isNovel(value),
-            label: <React.Fragment>ST <ST id={value} /></React.Fragment>,
-            title: `ST ${value}`,
-            count: st2[value].count,
+            label: <React.Fragment>{active ? `MLST - ${sources.mlst2}:` : 'ST'} <ST id={value} /></React.Fragment>,
+            title: active ? `MLST - ${sources.mlst2}: ${value}` : `ST ${value}`,
+            count: mlst2[value].count,
           };
         }),
         'novel',
@@ -191,12 +191,17 @@ export const getFilterSummary = createSelector(
         item => Number(item.value)
       ),
       ngmast: sortBy(
-        Object.keys(ngmast).map(value => ({
-          value,
-          label: `NG_MAST ${value}`,
-          count: ngmast[value].count,
-          active: filterState.ngmast === value,
-        })),
+        Object.keys(ngmast).map(value => {
+          const active = filterState.ngmast === value;
+          const label = active ? `NG-MAST: ${value}` : `Type ${value}`;
+          return {
+            value,
+            active,
+            label,
+            title: label,
+            count: ngmast[value].count,
+          };
+        }),
         'label'
       ),
       ngstar: sortBy(
@@ -206,8 +211,8 @@ export const getFilterSummary = createSelector(
             value,
             active,
             novel: isNovel(value),
-            label: <React.Fragment>NG-STAR <ST id={value} /></React.Fragment>,
-            title: `NG-STAR ${value}`,
+            label: <React.Fragment>{active ? 'NG-STAR:' : 'Type'} <ST id={value} /></React.Fragment>,
+            title: active ? `NG-STAR: ${value}` : `Type ${value}`,
             count: ngstar[value].count,
           };
         }),
