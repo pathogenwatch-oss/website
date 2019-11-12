@@ -20,7 +20,7 @@ export default React.createClass({
             this.el = el;
           }}
           className="wgsa-mlst-st is-novel"
-          title={`Novel ST: ${id}\n(Click to Copy)`}
+          title={`Novel ST: ${id}\n(Click to copy)`}
           onClick={e => e.stopPropagation()}
         >
           {abbreviatedId}

@@ -3,6 +3,10 @@
   line-height: 16px;
 }
 
+.wgsa-genome-report .baseline-grid {
+  background-size: 100% 16px;
+}
+
 .wgsa-genome-report strong {
   font-weight: 500;
 }
