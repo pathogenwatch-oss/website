@@ -84,7 +84,7 @@ export const getFilterSummary = createSelector(
             value,
             active,
             novel: isNovel(value),
-            label: <React.Fragment>{active ? `MLST - ${sources.mlst}:` : 'ST'} <ST id={value} /></React.Fragment>,
+            label: <React.Fragment>{active ? `${sources.mlst}: ST` : 'ST'} <ST id={value} /></React.Fragment>,
             title: active ? `MLST - ${sources.mlst}: ${value}` : `ST ${value}`,
             count: mlst[value].count,
           };
@@ -99,7 +99,7 @@ export const getFilterSummary = createSelector(
             value,
             active,
             novel: isNovel(value),
-            label: <React.Fragment>{active ? `MLST - ${sources.mlst2}:` : 'ST'} <ST id={value} /></React.Fragment>,
+            label: <React.Fragment>{active ? `${sources.mlst2}: ST` : 'ST'} <ST id={value} /></React.Fragment>,
             title: active ? `MLST - ${sources.mlst2}: ${value}` : `ST ${value}`,
             count: mlst2[value].count,
           };
