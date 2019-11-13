@@ -1,5 +1,6 @@
 import React from 'react';
 import classnames from 'classnames';
+import queryString from 'query-string';
 
 function formatCount(count) {
   if (count > 9999) {
@@ -23,32 +24,24 @@ const FilterItem = ({ value, title, label, count, active, onClick }) => (
 
 const FilterSection = React.createClass({
   getInitialState() {
-    const { summary, expanded = summary.some(_ => _.active) } = this.props;
     return {
-      isOpen: expanded,
-      isActive: expanded,
+      isOpen: false,
+      clicked: false,
     };
   },
 
   componentWillReceiveProps(nextProps) {
-    const activeItem =
-      nextProps.summary && nextProps.summary.find(_ => _.active);
-
-    if (activeItem) {
-      this.setState({
-        isActive: true, // caches fact that we had an active item
-      });
-    } else if (this.state.isActive && nextProps.isLoading) {
+    if (nextProps.isLoading) {
       this.setState({
         isOpen: false,
       });
     } else if (
-      this.state.isActive &&
+      this.state.clicked &&
       this.props.isLoading &&
       !nextProps.isLoading
     ) {
       this.setState({
-        isActive: false,
+        clicked: false,
         isOpen: true,
       });
     }
@@ -60,12 +53,12 @@ const FilterSection = React.createClass({
 
   render() {
     const {
+      children,
+      filterKey,
       heading,
       icon,
       summary = [],
       updateFilter,
-      filterKey,
-      children,
     } = this.props;
     const { isOpen } = this.state;
 
@@ -74,15 +67,24 @@ const FilterSection = React.createClass({
 
     if (activeItem) {
       const { title, label, value } = activeItem;
+
+      const query = queryString.parse(location.search);
+      const autoSelected = !(filterKey in query);
+
+      let titleAttr = title || `${heading}: ${label}`;
+      if (autoSelected) titleAttr += ' (automatically selected)';
+
+      const clickHandler = () => { this.setState({ clicked: true }); onClick(value); };
+
       return (
         <section className="wgsa-filter-section is-active">
           <h3
-            title={title || `${heading}: ${label}`}
-            onClick={() => onClick(value)}
+            title={titleAttr}
+            onClick={autoSelected ? null : clickHandler}
           >
             <i className="material-icons">{icon}</i>
             <span>{label}</span>
-            <i className="material-icons">filter_list</i>
+            {!autoSelected && <i className="material-icons">filter_list</i>}
           </h3>
         </section>
       );
@@ -96,7 +98,6 @@ const FilterSection = React.createClass({
           <h3 title={disabledText}>
             <i className="material-icons">{icon}</i>
             <span>{heading}</span>
-            {/* <i className="material-icons">{isOpen ? 'expand_less' : 'expand_more'}</i> */}
           </h3>
         </section>
       );

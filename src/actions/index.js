@@ -17,7 +17,7 @@ export function checkStale(actionCreator, selector) {
     const action = actionCreator(value);
     const { promise, ...payload } = action.payload;
 
-    dispatch({
+    return dispatch({
       type: action.type,
       payload: {
         ...payload,

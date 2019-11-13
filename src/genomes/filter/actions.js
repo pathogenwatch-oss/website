@@ -1,18 +1,35 @@
 import { stateKey } from './index';
 
-import { actions } from '../../filter';
+import { actions } from '~/filter';
 import { fetchGenomeSummary, fetchGenomeList } from '../actions';
+import { checkStale } from '~/actions';
 
 import { getFilter } from './selectors';
-
-import { checkStale } from '../../actions';
 
 export function updateFilterValue(filterMap) {
   return actions.update(stateKey, filterMap);
 }
 
 export function applyFilter() {
-  return checkStale(fetchGenomeSummary, getFilter);
+  return (dispatch, getState) => {
+    dispatch(checkStale(fetchGenomeSummary, getFilter))
+      .then(result => {
+        const filter = getFilter(getState());
+        if (filter.speciesId) {
+          return;
+        }
+        const updatedFilter = { ...filter };
+        const genera = Object.keys(result.summary.genusId);
+        if (genera.length === 1) {
+          updatedFilter.genusId = genera[0];
+        }
+        const species = Object.keys(result.summary.speciesId);
+        if (species.length === 1) {
+          updatedFilter.speciesId = species[0];
+        }
+        dispatch(actions.setFilter(stateKey, updatedFilter));
+      });
+  };
 }
 
 export function updateFilter(query, updateQueryString = true) {
