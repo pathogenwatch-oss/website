@@ -1,6 +1,5 @@
 import React from 'react';
 import classnames from 'classnames';
-import queryString from 'query-string';
 
 function formatCount(count) {
   if (count > 9999) {
@@ -54,6 +53,8 @@ const FilterSection = React.createClass({
   render() {
     const {
       children,
+      isActive,
+      isLoading,
       filterKey,
       heading,
       icon,
@@ -62,14 +63,12 @@ const FilterSection = React.createClass({
     } = this.props;
     const { isOpen } = this.state;
 
-    const activeItem = summary.find(_ => _.active);
+    const activeItem = isActive && !isLoading && summary.length === 1 ? summary[0] : null;
     const onClick = value => updateFilter(filterKey, value);
 
     if (activeItem) {
       const { title, label, value } = activeItem;
-
-      const query = queryString.parse(location.search);
-      const autoSelected = !(filterKey in query);
+      const autoSelected = !activeItem.active;
 
       let titleAttr = title || `${heading}: ${label}`;
       if (autoSelected) titleAttr += ' (automatically selected)';

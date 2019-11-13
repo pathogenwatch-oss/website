@@ -1,3 +1,3 @@
 import './styles.css';
 
-export default from './FilterAside.react';
+export { default } from './FilterAside.react';

@@ -11,25 +11,7 @@ export function updateFilterValue(filterMap) {
 }
 
 export function applyFilter() {
-  return (dispatch, getState) => {
-    dispatch(checkStale(fetchGenomeSummary, getFilter))
-      .then(result => {
-        const filter = getFilter(getState());
-        if (filter.speciesId) {
-          return;
-        }
-        const updatedFilter = { ...filter };
-        const genera = Object.keys(result.summary.genusId);
-        if (genera.length === 1) {
-          updatedFilter.genusId = genera[0];
-        }
-        const species = Object.keys(result.summary.speciesId);
-        if (species.length === 1) {
-          updatedFilter.speciesId = species[0];
-        }
-        dispatch(actions.setFilter(stateKey, updatedFilter));
-      });
-  };
+  return checkStale(fetchGenomeSummary, getFilter);
 }
 
 export function updateFilter(query, updateQueryString = true) {

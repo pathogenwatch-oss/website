@@ -23,6 +23,7 @@ class FilterAside extends React.Component {
       loading,
       prefilter,
       textValue,
+      updateFilter,
     } = this.props;
 
     return (
@@ -41,8 +42,14 @@ class FilterAside extends React.Component {
           </label>
         </header>
         <div className="wgsa-filter__content">
-          {children.map(c => {
-            if (c) return React.cloneElement(c, { isLoading: loading });
+          {children.map(child => {
+            if (child) {
+              return React.cloneElement(child, {
+                isLoading: loading,
+                isActive: active,
+                updateFilter: child.props.updateFilter || updateFilter,
+              });
+            }
             return null;
           })}
           {prefilter === 'bin' && (

@@ -52,20 +52,20 @@ const Filter = ({
   clearDependants,
 }) => (
   <FilterAside
-    loading={filterSummary.loading}
     active={isActive}
     clear={clearFilter}
-    textValue={textValue}
+    loading={filterSummary.loading}
+    prefilter={prefilter}
     textOnChange={value => updateFilterValue('searchText', value)}
     textOnChangeEffect={applyFilter}
-    prefilter={prefilter}
+    textValue={textValue}
+    updateFilter={updateFilter}
   >
     <FilterSection
       filterKey="organismId"
       heading="Supported Organism"
       icon="bug_report"
       summary={filterSummary.supportedOrganisms}
-      updateFilter={updateFilter}
     />
     <FilterSection
       filterKey="genusId"
@@ -97,7 +97,6 @@ const Filter = ({
       heading={getSerotypeHeading(filterState.genusId)}
       icon="bug_report"
       summary={filterSummary.serotype}
-      updateFilter={updateFilter}
       hidden={!filterSummary.serotype.length}
     />
     <FilterSection
@@ -105,7 +104,6 @@ const Filter = ({
       heading="Strain"
       icon="scatter_plot"
       summary={filterSummary.strain}
-      updateFilter={updateFilter}
       hidden={!filterSummary.strain.length}
     />
     <FilterSection
@@ -117,7 +115,6 @@ const Filter = ({
       }
       icon="label"
       summary={filterSummary.sts}
-      updateFilter={updateFilter}
       hidden={!filterSummary.sts.length}
     />
     <FilterSection
@@ -129,7 +126,6 @@ const Filter = ({
       }
       icon="label"
       summary={filterSummary.st2s}
-      updateFilter={updateFilter}
       hidden={!filterSummary.st2s.length}
     />
     <FilterSection
@@ -137,7 +133,6 @@ const Filter = ({
       heading="NG-STAR"
       icon="label"
       summary={filterSummary.ngstar}
-      updateFilter={updateFilter}
       hidden={!filterSummary.ngstar.length}
     />
     <FilterSection
@@ -145,7 +140,6 @@ const Filter = ({
       heading="NG-MAST"
       icon="label"
       summary={filterSummary.ngmast}
-      updateFilter={updateFilter}
       hidden={!filterSummary.ngmast.length}
     />
     <FilterSection
@@ -153,7 +147,6 @@ const Filter = ({
       heading="Genotyphi"
       icon="label"
       summary={filterSummary.genotyphi}
-      updateFilter={updateFilter}
       hidden={!filterSummary.genotyphi.length}
     />
     <FilterSection
@@ -161,30 +154,26 @@ const Filter = ({
       heading="Resistance"
       icon="local_pharmacy"
       summary={filterSummary.antibiotics}
-      updateFilter={updateFilter}
     />
     <FilterSection
       filterKey="country"
       heading="Country"
       icon="language"
       summary={filterSummary.country}
-      updateFilter={updateFilter}
     />
-    <DateSection summary={filterSummary.date} updateFilter={updateFilter} />
+    <DateSection summary={filterSummary.date} />
     <FilterSection
       className="capitalised"
       filterKey="type"
       heading="Access"
       icon="person"
       summary={filterSummary.type}
-      updateFilter={updateFilter}
     />
     <FilterSection
       filterKey="uploadedAt"
       heading="Uploaded At"
       icon="cloud_upload"
       summary={filterSummary.uploadedAt}
-      updateFilter={updateFilter}
     />
     <LocationListener update={updateFilter} />
   </FilterAside>
