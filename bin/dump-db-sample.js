@@ -36,7 +36,7 @@ async function main() {
       const key = `${fileId}|${task}|${version}`
       if (seenAnalysis.has(key)) continue;
       const doc = await Analysis.findOne({ fileId, task, version }).lean();
-      append(output, 'analyses', doc)
+      append(output, 'analysis', doc)
       seenAnalysis.add(key)
     }
   }
@@ -50,7 +50,7 @@ async function main() {
 
   const taxids = await Genome.distinct('analysis.speciator.speciesId', { public: true })
   for (let taxid of taxids) {
-    await Genome.find({'analysis.speciator.speciesId': taxid, public: true }, { limit: 4 })
+    await Genome.find({'analysis.speciator.speciesId': taxid, public: true }, {}, { limit: 4 })
       .lean()
       .cursor()
       .eachAsync(async doc => addGenome(doc))
@@ -73,7 +73,7 @@ async function main() {
     .cursor()
     .eachAsync(async doc => addGenome(doc))
 
-  await Genome.find({'analysis.speciator.speciesId': "485", public: true }, { limit: 1000 })
+  await Genome.find({'analysis.speciator.speciesId': "485", public: true }, {}, { limit: 1000 })
     .lean()
     .cursor()
     .eachAsync(async doc => addGenome(doc))
@@ -82,17 +82,17 @@ async function main() {
     .lean()
     .cursor()
     .eachAsync(async doc => {
-      append(output, 'organisms', doc);
+      append(output, 'organism', doc);
     })
 
   append(output, '__ids', genomeIds)
 
   console.log("Done")
-  await mongoConnection.close()
 
-  return
+  return mongoConnection.close()
 }
 
 main().catch(err => {
-  throw err;
+  console.log(err);
+  process.exit(1);
 })
