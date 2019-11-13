@@ -23,21 +23,19 @@ function getSummaryFields(deployedOrganisms) {
     {
       field: 'speciesId',
       aggregation: ({ query }) => {
-        if (query.genusId || query.organismId) {
-          return [
-            { $match: { 'analysis.speciator.speciesId': { $exists: true } } },
-            {
-              $group: {
-                _id: {
-                  label: '$analysis.speciator.speciesName',
-                  key: '$analysis.speciator.speciesId',
-                },
-                count: { $sum: 1 },
+        if (Object.keys(query) === 0) return null;
+        return [
+          { $match: { 'analysis.speciator.speciesId': { $exists: true } } },
+          {
+            $group: {
+              _id: {
+                label: '$analysis.speciator.speciesName',
+                key: '$analysis.speciator.speciesId',
               },
+              count: { $sum: 1 },
             },
-          ];
-        }
-        return null;
+          },
+        ];
       },
     },
     {
@@ -206,7 +204,27 @@ function getSummaryFields(deployedOrganisms) {
 module.exports = async function (props) {
   const deployedOrganisms = await Organism.deployedOrganismIds(props.user);
   const summaryFields = getSummaryFields(deployedOrganisms);
-  const summary = await Genome.getSummary(summaryFields, props);
+  let summary = await Genome.getSummary(summaryFields, props);
+
+  // auto-taxonomy
+  const genera = Object.keys(summary.genusId);
+  const species = Object.keys(summary.speciesId);
+  if (!props.query.genusId) {
+    // species should not be returned unless genus selected
+    summary.speciesId = {};
+  }
+  const taxQuery = {};
+  if (genera.length === 1) {
+    taxQuery.genusId = genera[0];
+  }
+  if (species.length === 1) {
+    taxQuery.speciesId = species[0];
+  }
+  if (Object.keys(taxQuery).length > 0) {
+    const query = { ...props.query, ...taxQuery };
+    // this will add genus/species-specific analysis
+    summary = await Genome.getSummary(summaryFields, { ...props, query });
+  }
 
   return summary;
 };
