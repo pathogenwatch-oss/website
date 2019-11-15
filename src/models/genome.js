@@ -219,7 +219,7 @@ schema.statics.getFilterQuery = function (props) {
   const { user, query = {} } = props;
   const {
     country,
-    genotyphi,
+    genotype,
     genusId,
     maxDate,
     minDate,
@@ -237,6 +237,8 @@ schema.statics.getFilterQuery = function (props) {
     strain,
     subspecies,
     type,
+    access = type,
+    reference = type === 'reference' ? 'true' : undefined,
     uploadedAt,
   } = query;
 
@@ -250,14 +252,14 @@ schema.statics.getFilterQuery = function (props) {
     findQuery.country = country;
   }
 
-  if (type === 'reference') {
+  if (reference === 'true') {
     findQuery.reference = true;
-  } else if (type === 'public') {
+  }
+
+  if (access === 'public') {
     findQuery.public = true;
-    findQuery.reference = false;
-  } else if (type === 'private') {
+  } else if (access === 'private') {
     findQuery.public = false;
-    findQuery.reference = false;
   }
 
   if (uploadedAt && (user && user._id)) {
@@ -318,8 +320,8 @@ schema.statics.getFilterQuery = function (props) {
       findQuery['analysis.ngstar.st'] = ngstar;
     }
 
-    if (genotyphi) {
-      findQuery['analysis.genotyphi.genotype'] = genotyphi;
+    if (genotype) {
+      findQuery['analysis.genotyphi.genotype'] = genotype;
     }
   }
 

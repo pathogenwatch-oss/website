@@ -52,26 +52,40 @@ function getSummaryFields(deployedOrganisms) {
     },
     { field: 'country' },
     {
-      field: 'type',
-      aggregation: ({ user }) => {
-        const schemes = getCollectionSchemes(user);
-        return [
-          {
-            $group: {
-              _id: {
-                $cond: [
-                  {
-                    $and: [
-                      { $eq: [ '$reference', true ] },
-                      { $in: [ '$analysis.speciator.organismId', schemes ] },
-                    ],
-                  },
-                  'reference',
-                  { $cond: [ { $eq: [ '$public', true ] }, 'public', 'private' ] },
-                ],
-              },
-              count: { $sum: 1 },
+      field: 'access',
+      aggregation: () => [
+        {
+          $group: {
+            _id: {
+              $cond: [ { $eq: [ '$public', true ] }, 'public', 'private' ],
             },
+            count: { $sum: 1 },
+          },
+        },
+      ],
+    },
+    {
+      field: 'reference',
+      aggregation: ({ query }) => {
+        if (!query.organismId) return null;
+        if (query.reference) {
+          return [
+            { $match: { 'analysis.speciator.organismId': query.organismId, reference: query.reference === 'true' } },
+            { $group: { _id: query.reference, count: { $sum: 1 } } },
+          ];
+        }
+        return [
+          { $match: { 'analysis.speciator.organismId': query.organismId } },
+          { $group: {
+            _id: {
+              $cond: [
+                { $eq: [ '$reference', true ] },
+                'true',
+                'false',
+              ],
+            },
+            count: { $sum: 1 },
+          },
           },
         ];
       },
@@ -100,13 +114,23 @@ function getSummaryFields(deployedOrganisms) {
       },
     },
     {
-      field: 'amr',
-      aggregation: () => [
-        { $project: { 'analysis.paarsnp.antibiotics': 1 } },
-        { $unwind: '$analysis.paarsnp.antibiotics' },
-        { $match: { 'analysis.paarsnp.antibiotics.state': 'RESISTANT' } },
-        { $group: { _id: '$analysis.paarsnp.antibiotics.fullName', count: { $sum: 1 } } },
-      ],
+      field: 'resistance',
+      aggregation: ({ query }) => {
+        const pipeline = [
+          { $project: { 'analysis.paarsnp.antibiotics': 1 } },
+          { $unwind: '$analysis.paarsnp.antibiotics' },
+          { $match: { 'analysis.paarsnp.antibiotics.state': 'RESISTANT' } },
+          { $group: { _id: '$analysis.paarsnp.antibiotics.fullName', count: { $sum: 1 } } },
+        ];
+        if (query.resistance) {
+          // return selected antibiotic only, required to show as "active"
+          return [
+            ...pipeline,
+            { $match: { _id: query.resistance } },
+          ];
+        }
+        return pipeline;
+      },
     },
     {
       field: 'subspecies',
@@ -184,9 +208,10 @@ function getSummaryFields(deployedOrganisms) {
       },
     },
     {
-      field: 'genotyphi',
+      field: 'genotype',
       aggregation: ({ query }) => {
-        if (!organismHasTask('genotyphi', query.organismId, query.speciesId, query.genusId)) return null;
+        // organism level currently requires being "deployed", hard-coding this for now.
+        if (query.genusId !== '590' && query.speciesId !== '28901') return null;
         return [
           { $match: { 'analysis.genotyphi': { $exists: true } } },
           {
@@ -204,26 +229,30 @@ function getSummaryFields(deployedOrganisms) {
 module.exports = async function (props) {
   const deployedOrganisms = await Organism.deployedOrganismIds(props.user);
   const summaryFields = getSummaryFields(deployedOrganisms);
-  let summary = await Genome.getSummary(summaryFields, props);
+  const summary = await Genome.getSummary(summaryFields, props);
 
-  // auto-taxonomy
+  // begin auto-taxonomy
   const genera = Object.keys(summary.genusId);
   const species = Object.keys(summary.speciesId);
+  const organisms = Object.keys(summary.organismId);
   if (!props.query.genusId) {
     // species should not be returned unless genus selected
     summary.speciesId = {};
   }
   const taxQuery = {};
-  if (genera.length === 1) {
+  if (!props.query.genusId && genera.length === 1) {
     taxQuery.genusId = genera[0];
   }
-  if (species.length === 1) {
+  if (!props.query.speciesId && species.length === 1) {
     taxQuery.speciesId = species[0];
+  }
+  if (!props.query.organismId && organisms.length === 1) {
+    taxQuery.organismId = organisms[0];
   }
   if (Object.keys(taxQuery).length > 0) {
     const query = { ...props.query, ...taxQuery };
-    // this will add genus/species-specific analysis
-    summary = await Genome.getSummary(summaryFields, { ...props, query });
+    // this will add taxonomy-specific analysis
+    return Genome.getSummary(summaryFields, { ...props, query });
   }
 
   return summary;
