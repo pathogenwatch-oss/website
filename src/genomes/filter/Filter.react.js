@@ -36,7 +36,7 @@ const speciesDependants = [
   'mlst2',
   'ngmast',
   'ngstar',
-  'genotyphi',
+  'genotype',
 ];
 
 const genusDependants = speciesDependants.concat('speciesId');
@@ -68,6 +68,7 @@ const Filter = ({
       heading="Supported Organism"
       icon="bug_report"
       summary={filterSummary.supportedOrganisms}
+      updateFilter={clearDependants(filterState, 'genotype')}
     />
     <FilterSection
       filterKey="genusId"
@@ -124,7 +125,7 @@ const Filter = ({
       hidden={!filterSummary.mlst.length}
       renderLabel={({ active, value }) => (
         <React.Fragment>
-          {active ? `${filterSummary.sources.mlst}: ST` : 'ST'} <ST id={value} />
+          {active && filterSummary.mlst2.length ? `${filterSummary.sources.mlst}: ST` : 'ST'} <ST id={value} />
         </React.Fragment>
       )}
     />
@@ -140,7 +141,7 @@ const Filter = ({
       hidden={!filterSummary.mlst2.length}
       renderLabel={({ active, value }) => (
         <React.Fragment>
-          {active ? `${filterSummary.sources.mlst2}: ST` : 'ST'} <ST id={value} />
+          {active && filterSummary.mlst.length ? `${filterSummary.sources.mlst2}: ST` : 'ST'} <ST id={value} />
         </React.Fragment>
       )}
     />
@@ -169,17 +170,18 @@ const Filter = ({
       )}
     />
     <FilterSection
-      filterKey="genotyphi"
-      heading="Genotyphi"
+      filterKey="genotype"
+      heading="Genotype"
       icon="label"
-      summary={filterSummary.genotyphi}
-      hidden={!filterSummary.genotyphi.length}
+      summary={filterSummary.genotype}
+      hidden={!filterSummary.genotype.length}
+      renderLabel={({ value, active }) => (active ? `Genotype ${value}` : value)}
     />
     <FilterSection
       filterKey="resistance"
       heading="Resistance"
       icon="local_pharmacy"
-      summary={filterSummary.antibiotics}
+      summary={filterSummary.resistance}
     />
     <FilterSection
       filterKey="country"
@@ -189,11 +191,16 @@ const Filter = ({
     />
     <DateSection summary={filterSummary.date} />
     <FilterSection
-      className="capitalised"
-      filterKey="type"
+      filterKey="access"
       heading="Access"
       icon="person"
-      summary={filterSummary.type}
+      summary={filterSummary.access}
+    />
+    <FilterSection
+      filterKey="reference"
+      heading="Reference"
+      icon="book"
+      summary={filterSummary.reference}
     />
     <FilterSection
       filterKey="uploadedAt"

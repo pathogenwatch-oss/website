@@ -57,7 +57,6 @@ const FilterSection = React.createClass({
     const {
       children,
       isActive,
-      isLoading,
       filterKey,
       heading,
       icon,
@@ -67,7 +66,7 @@ const FilterSection = React.createClass({
     } = this.props;
     const { isOpen } = this.state;
 
-    const activeItem = isActive && !isLoading && summary.length === 1 ? summary[0] : null;
+    const activeItem = isActive && summary.length === 1 ? summary[0] : null;
     const onClick = value => updateFilter(filterKey, value);
 
     if (activeItem) {

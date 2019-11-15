@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { createSelector } from 'reselect';
 import sortBy from 'lodash.sortby';
 
@@ -11,6 +9,7 @@ import { getCountryName } from '../../utils/country';
 
 import { taxIdMap } from '../../organisms';
 import { formatDateTime } from '../../utils/Date';
+import { isNovel } from '~/mlst';
 
 export const getFilter = state => filter.getFilter(state, { stateKey });
 export const isActive = state => filter.isActive(state, { stateKey });
@@ -29,11 +28,14 @@ export const getFilterSummary = createSelector(
   getDeployedOrganismIds,
   (summary, filterState, deployedOrganisms) => {
     const {
+      access = {},
       country,
       date,
-      genotyphi = {},
+      genotype = {},
       genusId,
       loading,
+      mlst = {},
+      mlst2 = {},
       ngmast = {},
       ngstar = {},
       organismId,
@@ -41,13 +43,11 @@ export const getFilterSummary = createSelector(
       serotype = {},
       sources = {},
       speciesId,
-      mlst = {},
-      mlst2 = {},
+      reference = {},
+      resistance = {},
       subspecies = {},
-      type,
       uploadedAt,
     } = summary;
-    const antibiotics = summary.amr || {};
 
     const supportedOrganisms = [];
 
@@ -83,6 +83,7 @@ export const getFilterSummary = createSelector(
           activeTitle: `MLST - ${sources.mlst}: ST ${value}`,
           title: `ST ${value}`,
           count: mlst[value].count,
+          novel: isNovel(value),
         })),
         'novel',
         item => Number(item.value)
@@ -95,6 +96,7 @@ export const getFilterSummary = createSelector(
           activeTitle: `MLST - ${sources.mlst2}: ST ${value}`,
           title: `ST ${value}`,
           count: mlst2[value].count,
+          novel: isNovel(value),
         })),
         'novel',
         item => Number(item.value)
@@ -126,12 +128,12 @@ export const getFilterSummary = createSelector(
         })),
         'label'
       ),
-      type: sortBy(
-        Object.keys(type).map(value => ({
+      access: sortBy(
+        Object.keys(access).map(value => ({
           value,
           label: `${value[0].toUpperCase()}${value.slice(1)}`,
-          count: type[value].count,
-          active: filterState.type === value,
+          count: access[value].count,
+          active: filterState.access === value,
         })),
         'label'
       ),
@@ -146,13 +148,13 @@ export const getFilterSummary = createSelector(
             active: filterState.uploadedAt === value,
           };
         }),
-      antibiotics: sortBy(
-        Object.keys(antibiotics).map(value => ({
+      resistance: sortBy(
+        Object.keys(resistance).map(value => ({
           value,
-          count: antibiotics[value].count,
+          count: resistance[value].count,
           active: filterState.resistance === value,
         })),
-        'label'
+        'value'
       ),
       subspecies: sortBy(
         Object.keys(subspecies).map(value => ({
@@ -160,7 +162,7 @@ export const getFilterSummary = createSelector(
           count: subspecies[value].count,
           active: filterState.subspecies === value,
         })),
-        'label'
+        'value'
       ),
       serotype: sortBy(
         Object.keys(serotype).map(value => ({
@@ -168,7 +170,7 @@ export const getFilterSummary = createSelector(
           count: serotype[value].count,
           active: filterState.serotype === value,
         })),
-        'label'
+        'value'
       ),
       strain: sortBy(
         Object.keys(poppunk).map(value => ({
@@ -183,27 +185,34 @@ export const getFilterSummary = createSelector(
         Object.keys(ngmast).map(value => ({
           value,
           active: filterState.ngmast === value,
-          label: `Type ${value}`,
           count: ngmast[value].count,
         })),
-        'label'
+        'value'
       ),
       ngstar: sortBy(
         Object.keys(ngstar).map(value => ({
           value,
           active: filterState.ngstar === value,
-          label: `Type ${value}`,
           count: ngstar[value].count,
+          novel: isNovel(value),
         })),
         'novel',
         item => Number(item.value)
       ),
-      genotyphi: sortBy(
-        Object.keys(genotyphi).map(value => ({
+      genotype: sortBy(
+        Object.keys(genotype).map(value => ({
           value,
-          active: filterState.genotyphi === value,
-          label: value,
-          count: genotyphi[value].count,
+          active: filterState.genotype === value,
+          count: genotype[value].count,
+        })),
+        'value'
+      ),
+      reference: sortBy(
+        Object.keys(reference).map(value => ({
+          value,
+          label: `${value[0].toUpperCase()}${value.slice(1)}`,
+          active: filterState.reference === value,
+          count: reference[value].count,
         })),
         'label'
       ),
