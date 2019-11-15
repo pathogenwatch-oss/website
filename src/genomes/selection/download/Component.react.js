@@ -1,8 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import Spinner from '../../../components/Spinner.react';
-import OrganismName from '../../../organisms/OrganismName.react';
+import Spinner from '~/components/Spinner.react';
+import OrganismName from '~/organisms/OrganismName.react';
 import Limiter from '../Limiter.react';
 import DownloadLink from './DownloadLink.react';
 

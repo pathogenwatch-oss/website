@@ -1,6 +1,6 @@
 import React from 'react';
 
-import OrganismName from '../../organisms/OrganismName.react';
+import OrganismName from '~/organisms/OrganismName.react';
 
 export default ({ genome }) => {
   const { speciesName, subspecies, serotype } = genome;
