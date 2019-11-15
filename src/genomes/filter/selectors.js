@@ -149,27 +149,24 @@ export const getFilterSummary = createSelector(
       antibiotics: sortBy(
         Object.keys(antibiotics).map(value => ({
           value,
-          label: value,
           count: antibiotics[value].count,
           active: filterState.resistance === value,
-        })),
-        'label'
-      ),
-      serotype: sortBy(
-        Object.keys(serotype).map(value => ({
-          value,
-          label: value,
-          count: serotype[value].count,
-          active: filterState.serotype === value,
         })),
         'label'
       ),
       subspecies: sortBy(
         Object.keys(subspecies).map(value => ({
           value,
-          label: value,
           count: subspecies[value].count,
           active: filterState.subspecies === value,
+        })),
+        'label'
+      ),
+      serotype: sortBy(
+        Object.keys(serotype).map(value => ({
+          value,
+          count: serotype[value].count,
+          active: filterState.serotype === value,
         })),
         'label'
       ),

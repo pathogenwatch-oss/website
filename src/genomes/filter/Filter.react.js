@@ -95,7 +95,7 @@ const Filter = ({
       summary={filterSummary.subspecies}
       updateFilter={clearDependants(filterState, [ 'serotype' ])}
       hidden={!filterSummary.subspecies.length}
-      renderLabel={({ label }) => <em>{label}</em>}
+      renderLabel={({ value }) => <React.Fragment>subsp. <em>{value}</em></React.Fragment>}
     />
     <FilterSection
       filterKey="serotype"
@@ -103,6 +103,7 @@ const Filter = ({
       icon="bug_report"
       summary={filterSummary.serotype}
       hidden={!filterSummary.serotype.length}
+      renderLabel={({ value }) => `ser. ${value}`}
     />
     <FilterSection
       filterKey="strain"

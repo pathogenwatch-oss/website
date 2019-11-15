@@ -63,7 +63,7 @@ const FilterSection = React.createClass({
       icon,
       summary = [],
       updateFilter,
-      renderLabel = ({ label }) => label,
+      renderLabel = ({ value, label = value }) => label,
     } = this.props;
     const { isOpen } = this.state;
 
@@ -71,7 +71,7 @@ const FilterSection = React.createClass({
     const onClick = value => updateFilter(filterKey, value);
 
     if (activeItem) {
-      const { label, value, title, activeTitle = title } = activeItem;
+      const { value, label = value, title, activeTitle = title } = activeItem;
       const autoSelected = !activeItem.active;
 
       let titleAttr = activeTitle || `${heading}: ${label}`;
