@@ -8,18 +8,21 @@ function formatCount(count) {
   return count;
 }
 
-const FilterItem = ({ value, title, label, count, active, onClick }) => (
-  <button
-    title={title || label}
-    className={classnames('mdl-chip mdl-chip--contact', {
-      'mdl-chip--active': active,
-    })}
-    onClick={() => onClick(value)}
-  >
-    <span className="mdl-chip__contact">{formatCount(count)}</span>
-    <span className="mdl-chip__text">{label || value}</span>
-  </button>
-);
+const FilterItem = ({ item, onClick, renderLabel }) => {
+  const { value, label = value, title = label, count, active } = item;
+  return (
+    <button
+      title={title}
+      className={classnames('mdl-chip mdl-chip--contact', {
+        'mdl-chip--active': active,
+      })}
+      onClick={() => onClick(value)}
+    >
+      <span className="mdl-chip__contact">{formatCount(count)}</span>
+      <span className="mdl-chip__text">{renderLabel(item)}</span>
+    </button>
+  );
+};
 
 const FilterSection = React.createClass({
   getInitialState() {
@@ -60,6 +63,7 @@ const FilterSection = React.createClass({
       icon,
       summary = [],
       updateFilter,
+      renderLabel = ({ label }) => label,
     } = this.props;
     const { isOpen } = this.state;
 
@@ -67,10 +71,10 @@ const FilterSection = React.createClass({
     const onClick = value => updateFilter(filterKey, value);
 
     if (activeItem) {
-      const { title, label, value } = activeItem;
+      const { label, value, title, activeTitle = title } = activeItem;
       const autoSelected = !activeItem.active;
 
-      let titleAttr = title || `${heading}: ${label}`;
+      let titleAttr = activeTitle || `${heading}: ${label}`;
       if (autoSelected) titleAttr += ' (automatically selected)';
 
       const clickHandler = () => { this.setState({ clicked: true }); onClick(value); };
@@ -82,7 +86,7 @@ const FilterSection = React.createClass({
             onClick={autoSelected ? null : clickHandler}
           >
             <i className="material-icons">{icon}</i>
-            <span>{label}</span>
+            <span>{renderLabel({ ...activeItem, active: true })}</span>
             {!autoSelected && <i className="material-icons">filter_list</i>}
           </h3>
         </section>
@@ -118,10 +122,15 @@ const FilterSection = React.createClass({
         {isOpen && (
           <React.Fragment>
             {children ||
-              summary.map(props => {
-                if (props.active) return null;
+              summary.map(item => {
+                if (item.active) return null;
                 return (
-                  <FilterItem key={props.value} {...props} onClick={onClick} />
+                  <FilterItem
+                    key={item.value}
+                    item={item}
+                    onClick={onClick}
+                    renderLabel={renderLabel}
+                  />
                 );
               })}
           </React.Fragment>

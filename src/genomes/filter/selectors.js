@@ -12,8 +12,6 @@ import { getCountryName } from '../../utils/country';
 import { taxIdMap } from '../../organisms';
 import { formatDateTime } from '../../utils/Date';
 
-import { ST, isNovel } from '../../mlst';
-
 export const getFilter = state => filter.getFilter(state, { stateKey });
 export const isActive = state => filter.isActive(state, { stateKey });
 
@@ -77,33 +75,27 @@ export const getFilterSummary = createSelector(
           }
           : null,
       supportedOrganisms: sortBy(supportedOrganisms, 'title'),
-      sts: sortBy(
-        Object.keys(mlst).map(value => {
-          const active = filterState.mlst === value;
-          return {
-            value,
-            active,
-            novel: isNovel(value),
-            label: <React.Fragment>{active ? `${sources.mlst}: ST` : 'ST'} <ST id={value} /></React.Fragment>,
-            title: active ? `MLST - ${sources.mlst}: ${value}` : `ST ${value}`,
-            count: mlst[value].count,
-          };
-        }),
+      mlst: sortBy(
+        Object.keys(mlst).map(value => ({
+          value,
+          active: filterState.mlst === value,
+          label: `ST ${value}`,
+          activeTitle: `MLST - ${sources.mlst}: ST ${value}`,
+          title: `ST ${value}`,
+          count: mlst[value].count,
+        })),
         'novel',
         item => Number(item.value)
       ),
-      st2s: sortBy(
-        Object.keys(mlst2).map(value => {
-          const active = filterState.mlst2 === value;
-          return {
-            value,
-            active,
-            novel: isNovel(value),
-            label: <React.Fragment>{active ? `${sources.mlst2}: ST` : 'ST'} <ST id={value} /></React.Fragment>,
-            title: active ? `MLST - ${sources.mlst2}: ${value}` : `ST ${value}`,
-            count: mlst2[value].count,
-          };
-        }),
+      mlst2: sortBy(
+        Object.keys(mlst2).map(value => ({
+          value,
+          active: filterState.mlst2 === value,
+          label: `ST ${value}`,
+          activeTitle: `MLST - ${sources.mlst2}: ST ${value}`,
+          title: `ST ${value}`,
+          count: mlst2[value].count,
+        })),
         'novel',
         item => Number(item.value)
       ),
@@ -191,40 +183,30 @@ export const getFilterSummary = createSelector(
         item => Number(item.value)
       ),
       ngmast: sortBy(
-        Object.keys(ngmast).map(value => {
-          const active = filterState.ngmast === value;
-          const label = active ? `NG-MAST: ${value}` : `Type ${value}`;
-          return {
-            value,
-            active,
-            label,
-            title: label,
-            count: ngmast[value].count,
-          };
-        }),
+        Object.keys(ngmast).map(value => ({
+          value,
+          active: filterState.ngmast === value,
+          label: `Type ${value}`,
+          count: ngmast[value].count,
+        })),
         'label'
       ),
       ngstar: sortBy(
-        Object.keys(ngstar).map(value => {
-          const active = filterState.ngstar === value;
-          return {
-            value,
-            active,
-            novel: isNovel(value),
-            label: <React.Fragment>{active ? 'NG-STAR:' : 'Type'} <ST id={value} /></React.Fragment>,
-            title: active ? `NG-STAR: ${value}` : `Type ${value}`,
-            count: ngstar[value].count,
-          };
-        }),
+        Object.keys(ngstar).map(value => ({
+          value,
+          active: filterState.ngstar === value,
+          label: `Type ${value}`,
+          count: ngstar[value].count,
+        })),
         'novel',
         item => Number(item.value)
       ),
       genotyphi: sortBy(
         Object.keys(genotyphi).map(value => ({
           value,
+          active: filterState.genotyphi === value,
           label: value,
           count: genotyphi[value].count,
-          active: filterState.genotyphi === value,
         })),
         'label'
       ),

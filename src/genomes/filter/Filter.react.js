@@ -1,12 +1,14 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { LocationListener } from '../../location';
-import FilterAside from '../../filter/aside';
-import FilterSection from '../../filter/section';
-import DateSection from '../../filter/date-section';
+import { ST } from '../../mlst';
 
-import { selectors } from '../../filter';
+import { LocationListener } from '~/location';
+import FilterAside from '~/filter/aside';
+import FilterSection from '~/filter/section';
+import DateSection from '~/filter/date-section';
+
+import { selectors } from '~/filter';
 
 import {
   getFilter,
@@ -73,6 +75,7 @@ const Filter = ({
       icon="bug_report"
       summary={filterSummary.genusId}
       updateFilter={clearDependants(filterState, genusDependants)}
+      renderLabel={({ label }) => <em>{label}</em>}
     />
     <FilterSection
       filterKey="speciesId"
@@ -83,6 +86,7 @@ const Filter = ({
       hidden={!filterSummary.genusId.length}
       disabled={!filterSummary.speciesId.length}
       disabledText="Select a genus to filter by species."
+      renderLabel={({ label }) => <em>{label}</em>}
     />
     <FilterSection
       filterKey="subspecies"
@@ -91,6 +95,7 @@ const Filter = ({
       summary={filterSummary.subspecies}
       updateFilter={clearDependants(filterState, [ 'serotype' ])}
       hidden={!filterSummary.subspecies.length}
+      renderLabel={({ label }) => <em>{label}</em>}
     />
     <FilterSection
       filterKey="serotype"
@@ -114,8 +119,13 @@ const Filter = ({
         </React.Fragment>
       }
       icon="label"
-      summary={filterSummary.sts}
-      hidden={!filterSummary.sts.length}
+      summary={filterSummary.mlst}
+      hidden={!filterSummary.mlst.length}
+      renderLabel={({ active, value }) => (
+        <React.Fragment>
+          {active ? `${filterSummary.sources.mlst}: ST` : 'ST'} <ST id={value} />
+        </React.Fragment>
+      )}
     />
     <FilterSection
       filterKey="mlst2"
@@ -125,8 +135,13 @@ const Filter = ({
         </React.Fragment>
       }
       icon="label"
-      summary={filterSummary.st2s}
-      hidden={!filterSummary.st2s.length}
+      summary={filterSummary.mlst2}
+      hidden={!filterSummary.mlst2.length}
+      renderLabel={({ active, value }) => (
+        <React.Fragment>
+          {active ? `${filterSummary.sources.mlst2}: ST` : 'ST'} <ST id={value} />
+        </React.Fragment>
+      )}
     />
     <FilterSection
       filterKey="ngstar"
@@ -134,6 +149,11 @@ const Filter = ({
       icon="label"
       summary={filterSummary.ngstar}
       hidden={!filterSummary.ngstar.length}
+      renderLabel={({ active, value }) => (
+        <React.Fragment>
+          {active ? 'NG-STAR:' : 'Type'} <ST id={value} />
+        </React.Fragment>
+      )}
     />
     <FilterSection
       filterKey="ngmast"
@@ -141,6 +161,11 @@ const Filter = ({
       icon="label"
       summary={filterSummary.ngmast}
       hidden={!filterSummary.ngmast.length}
+      renderLabel={({ active, value }) => (
+        <React.Fragment>
+          {active ? 'NG-MAST:' : 'Type'} <ST id={value} />
+        </React.Fragment>
+      )}
     />
     <FilterSection
       filterKey="genotyphi"
