@@ -24,9 +24,6 @@ function deserialize(rawDoc) {
 async function process(line) {
   const data = JSON.parse(line);
   const { doc: rawDoc, type } = data;
-  const doc = deserialize(rawDoc);
-  const { _id, ...rest } = doc;
-  if (!_id) return; // not sure why this happened but it's not good
   let model
   switch (type) {
     case 'genome':
@@ -44,6 +41,17 @@ async function process(line) {
     default:
      return
   }
+
+  let doc
+  try {
+    doc = deserialize(rawDoc);
+  } catch (err) {
+    err.doc = { _id: `like ${rawDoc.slice(0, 100)}`, type: type || "unknown" }
+    throw err
+  }
+  const { _id, ...rest } = doc;
+  if (!_id) return; // not sure why this happened but it's not good
+
   // I tried doing a traditional "upsert" but had a problem with some documents
   // and a date field.  This seems to be quick and actually work.
   try {
@@ -62,7 +70,7 @@ async function main() {
   }
 
   await mongoConnection.connect();
-   
+
   const output = Writable({
     write: function (line, _, cb) {
       if (!line || line.length < 2) return cb()
@@ -76,11 +84,11 @@ async function main() {
         })
     }
   })
-    
+
   fs.createReadStream(input)
     .pipe(es.split())
     .pipe(output)
-  
+
   await new Promise((resolve, reject) => {
     output.on('finish', () => resolve())
     output.on('error', err => reject(err))
@@ -93,8 +101,8 @@ async function main() {
     console.log(`Problem with ${doc.type} doc ${doc._id}`);
     throw output.lastError;
   };
-  
-  return   
+
+  return
 }
 
 main().catch(err => {
