@@ -4,15 +4,17 @@
 
 const fs = require('fs');
 const argv = require('named-argv');
+const bson = require('bson');
 const mongoConnection = require('utils/mongoConnection');
 
+const BSON = new bson();
 const Genome = require('models/genome');
 const Collection = require('models/collection');
 const Analysis = require('models/analysis');
 const Organism = require('models/organism');
 
 function append(path, type, ...docs) {
-  docs.forEach(doc => fs.appendFileSync(path, JSON.stringify({ type, doc })+'\n'))
+  docs.forEach(doc => fs.appendFileSync(path, JSON.stringify({ type, doc: doc.toString('base64') })+'\n'))
 }
 
 async function main() {
@@ -35,55 +37,60 @@ async function main() {
       const { __v: version } = genome.analysis[task];
       const key = `${fileId}|${task}|${version}`
       if (seenAnalysis.has(key)) continue;
-      const doc = await Analysis.findOne({ fileId, task, version }).lean();
+      const doc = await Analysis.collection.findOne({ fileId, task, version }, { raw: true });
       append(output, 'analysis', doc)
       seenAnalysis.add(key)
     }
   }
 
-  async function addGenome(doc) {
+  async function addGenome(rawDoc) {
+    const doc = BSON.deserialize(rawDoc)
     if (genomeIds[doc._id]) return;
-    append(output, 'genome', doc)
+    append(output, 'genome', rawDoc)
     genomeIds[doc._id] = doc.fileId;
     await addAnalysis(doc);
   }
 
   const taxids = await Genome.distinct('analysis.speciator.speciesId', { public: true })
   for (let taxid of taxids) {
-    await Genome.find({'analysis.speciator.speciesId': taxid, public: true }, {}, { limit: 4 })
-      .lean()
-      .cursor()
-      .eachAsync(async doc => addGenome(doc))
+    const taxidGenomes = Genome.collection.find({'analysis.speciator.speciesId': taxid, public: true }, { limit: 4, raw: true });
+    while (await taxidGenomes.hasNext()) {
+      const doc = await taxidGenomes.next();
+      await addGenome(doc)
+    }
   }
 
-  await Genome.find({ reference: true })
-    .lean()
-    .cursor()
-    .eachAsync(async doc => addGenome(doc))
+  const references = Genome.collection.find({ reference: true }, { raw: true })
+  while (await references.hasNext()) {
+    const doc = await references.next();
+    await addGenome(doc)
+  }
 
-  const collection = await Collection.findOne({
+  const rawCollection = await Collection.collection.findOne({
     access: "public",
     organismId: "1280",
     token: "gn1lxjtquy8s-harris-et-al-2013" // https://pathogen.watch/collection/gn1lxjtquy8s-harris-et-al-2013
-  }).lean()
-  append(output, 'collection', collection)
+  }, { raw: true })
+  append(output, 'collection', rawCollection)
+  const collection = BSON.deserialize(rawCollection);
 
-  await Genome.find({ _id: { $in: collection.genomes }, public: true })
-    .lean()
-    .cursor()
-    .eachAsync(async doc => addGenome(doc))
+  const collectionGenomes = Genome.collection.find({ _id: { $in: collection.genomes }, public: true }, { raw: true })
+  while (await collectionGenomes.hasNext()) {
+    const doc = await collectionGenomes.next();
+    await addGenome(doc)
+  }
 
-  await Genome.find({'analysis.speciator.speciesId': "485", public: true }, {}, { limit: 1000 })
-    .lean()
-    .cursor()
-    .eachAsync(async doc => addGenome(doc))
+  const gonoGenomes = Genome.collection.find({'analysis.speciator.speciesId': "485", public: true }, {}, { limit: 1000, raw: true })
+  while (await gonoGenomes.hasNext()) {
+    const doc = await gonoGenomes.next();
+    await addGenome(doc)
+  }
 
-  await Organism.find({})
-    .lean()
-    .cursor()
-    .eachAsync(async doc => {
-      append(output, 'organism', doc);
-    })
+  const organisms = Organism.collection.find({}, { raw: true })
+  while (await organisms.hasNext()) {
+    const doc = await organisms.next();
+    append(output, 'organism', doc);
+  }
 
   append(output, '__ids', genomeIds)
 

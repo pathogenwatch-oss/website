@@ -1,11 +1,13 @@
 // Loads DB records into a test environment
 // Records should be dumped with dump-db-sample.js
 
+const bson = require('bson');
 const fs = require('fs');
 const argv = require('named-argv');
 const es = require('event-stream');
 const { Writable } = require('stream');
 
+const BSON = new bson();
 const mongoConnection = require('utils/mongoConnection');
 
 const Genome = require('models/genome');
@@ -13,10 +15,17 @@ const Collection = require('models/collection');
 const Analysis = require('models/analysis');
 const Organism = require('models/organism');
 
+const { ObjectId } = require('mongoose').Types
+
+function deserialize(rawDoc) {
+  return BSON.deserialize(Buffer.from(rawDoc, 'base64'))
+}
+
 async function process(line) {
   const data = JSON.parse(line);
-  const { doc, type } = data;
-  const { _id, __v, ...rest } = doc;
+  const { doc: rawDoc, type } = data;
+  const doc = deserialize(rawDoc);
+  const { _id, ...rest } = doc;
   if (!_id) return; // not sure why this happened but it's not good
   let model
   switch (type) {
@@ -38,12 +47,7 @@ async function process(line) {
   // I tried doing a traditional "upsert" but had a problem with some documents
   // and a date field.  This seems to be quick and actually work.
   try {
-    return await model.create({ _id, ...rest })
-  } catch (_) {
-    // pass
-  }
-  try {
-    return await model.findByIdAndUpdate(_id, rest);
+    return await model.collection.findOneAndReplace({_id: ObjectId(_id)}, rest, { upsert: true })
   } catch (err) {
     err.doc = { _id, type }
     throw err
