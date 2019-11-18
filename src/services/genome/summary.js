@@ -1,7 +1,7 @@
 const Genome = require('models/genome');
 const Organism = require('models/organism');
 
-const { getCollectionSchemes, organismHasTask } = require('manifest');
+const { organismHasTask } = require('manifest');
 
 function getSummaryFields(deployedOrganisms) {
   return [
@@ -235,20 +235,24 @@ module.exports = async function (props) {
   const genera = Object.keys(summary.genusId);
   const species = Object.keys(summary.speciesId);
   const organisms = Object.keys(summary.organismId);
-  if (!props.query.genusId) {
+
+  const { genusId, speciesId, organismId } = props.query;
+  if (!genusId) {
     // species should not be returned unless genus selected
     summary.speciesId = {};
   }
   const taxQuery = {};
-  if (!props.query.genusId && genera.length === 1) {
+  if (!genusId && genera.length === 1) {
     taxQuery.genusId = genera[0];
   }
-  if (!props.query.speciesId && species.length === 1) {
+  if (!speciesId && (genusId || taxQuery.genusId) && species.length === 1) {
     taxQuery.speciesId = species[0];
   }
-  if (!props.query.organismId && organisms.length === 1) {
+
+  if (!organismId && (speciesId || taxQuery.speciesId) && organisms.length === 1) {
     taxQuery.organismId = organisms[0];
   }
+
   if (Object.keys(taxQuery).length > 0) {
     const query = { ...props.query, ...taxQuery };
     // this will add taxonomy-specific analysis
