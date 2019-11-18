@@ -9,11 +9,11 @@ import { getLastSelectedIndex } from '../selection/selectors';
 
 import { toggleSelection, selectRange } from '../selection/actions';
 
-import { formatDate } from '../../utils/Date';
-import { getCountryName } from '../../utils/country';
+import { getFormattedDateString } from '~/utils/Date';
+import { getCountryName } from '~/utils/country';
 
-import { showGenomeReport } from '../../genome-report';
-import { ST } from '../../mlst';
+import { showGenomeReport } from '~/genome-report';
+import { ST } from '~/mlst';
 
 const Cell = ({ title, icon, children, onClick }) => (
   <span
@@ -67,7 +67,7 @@ const ListItem = ({
 }) => {
   const { name, st, st2, country } = genome;
   const countryName = country ? getCountryName(country) : null;
-  const date = genome.date ? formatDate(genome.date) : null;
+  const date = genome.year ? getFormattedDateString(genome) : null;
 
   return (
     <div
@@ -82,7 +82,7 @@ const ListItem = ({
       <Cell title={name}>
         <AddToSelection genomes={[ genome ]} index={index} onClick={onClick} />
         <button
-          title="View Details"
+          title="View details"
           className="wgsa-link-button"
           onClick={onViewGenome}
         >

@@ -55,18 +55,18 @@
 }
 
 .wgsa-genome-list-cell:nth-child(2) {
-  width: 30%;
+  width: 25%;
 }
 
 .wgsa-genome-list-cell:nth-child(3) {
   width: 10%;
 }
 
-.wgsa-genome-list-cell:nth-child(4) {
+.wgsa-genome-list-cell:nth-child(4),
+.wgsa-genome-list-cell:nth-child(5) {
   width: 15%;
 }
 
-.wgsa-genome-list-cell:nth-child(5),
 .wgsa-genome-list-cell:nth-child(6) {
   width: 10%;
 }
