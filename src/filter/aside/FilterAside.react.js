@@ -45,8 +45,8 @@ class FilterAside extends React.Component {
           {children.map(child => {
             if (child) {
               return React.cloneElement(child, {
+                filterActive: active,
                 isLoading: loading,
-                isActive: active,
                 updateFilter: child.props.updateFilter || updateFilter,
               });
             }

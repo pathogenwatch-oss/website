@@ -1,14 +1,14 @@
 import { createSelector } from 'reselect';
 import sortBy from 'lodash.sortby';
 
-import { selectors as filter } from '../../filter';
-import { getDeployedOrganismIds } from '../../summary/selectors';
+import { selectors as filter } from '~/filter';
+import { getDeployedOrganismIds } from '~/summary/selectors';
 
 import { stateKey } from './index';
-import { getCountryName } from '../../utils/country';
-
-import { taxIdMap } from '../../organisms';
-import { formatDateTime } from '../../utils/Date';
+import { getCountryName } from '~/utils/country';
+import { taxIdMap } from '~/organisms';
+import { getSeroName } from '~/organisms/OrganismName.react';
+import { formatDateTime } from '~/utils/Date';
 import { isNovel } from '~/mlst';
 
 export const getFilter = state => filter.getFilter(state, { stateKey });
@@ -22,11 +22,39 @@ export const getSearchText = createSelector(
   ({ searchText }) => searchText || ''
 );
 
-export const getFilterSummary = createSelector(
+const getOrganismSummary = createSelector(
   ({ genomes }) => genomes.summary,
   filter.getFilter,
   getDeployedOrganismIds,
-  (summary, filterState, deployedOrganisms) => {
+  ({ organismId = {}, genusId = {} }, filterState, deployedOrganisms) => {
+    const organisms = [];
+
+    // hide organism if genus will be active
+    if (!filterState.organismId && Object.keys(genusId).length === 1) {
+      return organisms;
+    }
+
+    for (const value of Object.keys(organismId)) {
+      if (deployedOrganisms.has(value)) {
+        const organism = taxIdMap.get(value);
+        organisms.push({
+          value,
+          label: organism.formattedName,
+          title: organism.name,
+          count: organismId[value].count,
+          active: filterState.organismId === value,
+        });
+      }
+    }
+    return organisms;
+  }
+);
+
+export const getFilterSummary = createSelector(
+  ({ genomes }) => genomes.summary,
+  filter.getFilter,
+  getOrganismSummary,
+  (summary, filterState, supportedOrganisms) => {
     const {
       access = {},
       country,
@@ -38,7 +66,6 @@ export const getFilterSummary = createSelector(
       mlst2 = {},
       ngmast = {},
       ngstar = {},
-      organismId,
       poppunk = {},
       serotype = {},
       sources = {},
@@ -49,20 +76,10 @@ export const getFilterSummary = createSelector(
       uploadedAt,
     } = summary;
 
-    const supportedOrganisms = [];
-
-    for (const value of Object.keys(organismId)) {
-      if (deployedOrganisms.has(value)) {
-        const organism = taxIdMap.get(value);
-        supportedOrganisms.push({
-          value,
-          label: organism.formattedName,
-          title: organism.name,
-          count: organismId[value].count,
-          active: filterState.organismId === value,
-        });
-      }
-    }
+    const speciesIds = Object.keys(speciesId);
+    const seroname = speciesIds.length === 1 ?
+      getSeroName(speciesId[speciesIds[0]].label) :
+      'serotype';
 
     return {
       loading,
@@ -169,6 +186,7 @@ export const getFilterSummary = createSelector(
           value,
           count: serotype[value].count,
           active: filterState.serotype === value,
+          activeTitle: `${seroname[0].toUpperCase()}${seroname.slice(1)}: ${value}`,
         })),
         'value'
       ),
@@ -210,7 +228,7 @@ export const getFilterSummary = createSelector(
       reference: sortBy(
         Object.keys(reference).map(value => ({
           value,
-          label: `${value[0].toUpperCase()}${value.slice(1)}`,
+          label: value === 'true' ? 'Reference' : 'Non-reference',
           active: filterState.reference === value,
           count: reference[value].count,
         })),

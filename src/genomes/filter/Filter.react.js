@@ -64,16 +64,18 @@ const Filter = ({
     updateFilter={updateFilter}
   >
     <FilterSection
+      autoSelect={false}
       filterKey="organismId"
       heading="Supported Organism"
       icon="bug_report"
       summary={filterSummary.supportedOrganisms}
-      updateFilter={clearDependants(filterState, 'genotype')}
+      updateFilter={clearDependants(filterState, speciesDependants)}
     />
     <FilterSection
       filterKey="genusId"
       heading="Genus"
       icon="bug_report"
+      hidden={filterState.organismId}
       summary={filterSummary.genusId}
       updateFilter={clearDependants(filterState, genusDependants)}
       renderLabel={({ label }) => <em>{label}</em>}
@@ -84,7 +86,7 @@ const Filter = ({
       icon="bug_report"
       summary={filterSummary.speciesId}
       updateFilter={clearDependants(filterState, speciesDependants)}
-      hidden={!filterSummary.genusId.length}
+      hidden={!filterSummary.genusId.length || filterState.organismId}
       disabled={!filterSummary.speciesId.length}
       disabledText="Select a genus to filter by species."
       renderLabel={({ label }) => <em>{label}</em>}
@@ -95,7 +97,7 @@ const Filter = ({
       icon="bug_report"
       summary={filterSummary.subspecies}
       updateFilter={clearDependants(filterState, [ 'serotype' ])}
-      hidden={!filterSummary.subspecies.length}
+      hidden={!filterSummary.subspecies.length || filterState.organismId}
       renderLabel={({ value }) => <React.Fragment>subsp. <em>{value}</em></React.Fragment>}
     />
     <FilterSection
@@ -103,7 +105,7 @@ const Filter = ({
       heading={getSerotypeHeading(filterState.genusId)}
       icon="bug_report"
       summary={filterSummary.serotype}
-      hidden={!filterSummary.serotype.length}
+      hidden={!filterSummary.serotype.length || filterState.organismId}
       renderLabel={({ value }) => `ser. ${value}`}
     />
     <FilterSection
@@ -195,12 +197,14 @@ const Filter = ({
       heading="Access"
       icon="person"
       summary={filterSummary.access}
+      hidden={filterState.access === undefined && filterSummary.access.length === 1}
     />
     <FilterSection
       filterKey="reference"
       heading="Reference"
       icon="book"
       summary={filterSummary.reference}
+      hidden={filterState.reference === undefined && filterSummary.reference.length === 1}
     />
     <FilterSection
       filterKey="uploadedAt"

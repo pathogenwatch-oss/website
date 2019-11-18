@@ -24,29 +24,34 @@ const FilterItem = ({ item, onClick, renderLabel }) => {
   );
 };
 
+function getActiveItem({ autoSelect = true, filterActive, summary = [] }) {
+  if (filterActive && summary.length === 1 && (autoSelect || summary[0].active)) {
+    return summary[0];
+  }
+  return null;
+}
+
+function isSectionHidden({ children, disabled, hidden, summary = [] }) {
+  if (children) return false;
+  return !!hidden || !disabled && summary.length === 0;
+}
+
 const FilterSection = React.createClass({
   getInitialState() {
     return {
+      activeItem: getActiveItem(this.props),
+      isHidden: isSectionHidden(this.props),
       isOpen: false,
-      clicked: false,
     };
   },
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.isLoading) {
-      this.setState({
-        isOpen: false,
-      });
-    } else if (
-      this.state.clicked &&
-      this.props.isLoading &&
-      !nextProps.isLoading
-    ) {
-      this.setState({
-        clicked: false,
-        isOpen: true,
-      });
-    }
+    const { activeItem, isHidden, isOpen } = this.state;
+    this.setState({
+      activeItem: nextProps.isLoading && !activeItem ? activeItem : getActiveItem(nextProps),
+      isHidden: nextProps.isLoading ? isHidden : isSectionHidden(nextProps),
+      isOpen: nextProps.isLoading ? false : isOpen,
+    });
   },
 
   toggle(isOpen) {
@@ -54,9 +59,12 @@ const FilterSection = React.createClass({
   },
 
   render() {
+    if (this.state.isHidden) {
+      return null;
+    }
+
     const {
       children,
-      isActive,
       filterKey,
       heading,
       icon,
@@ -64,9 +72,8 @@ const FilterSection = React.createClass({
       updateFilter,
       renderLabel = ({ value, label = value }) => label,
     } = this.props;
-    const { isOpen } = this.state;
+    const { activeItem, isOpen } = this.state;
 
-    const activeItem = isActive && summary.length === 1 ? summary[0] : null;
     const onClick = value => updateFilter(filterKey, value);
 
     if (activeItem) {
@@ -76,13 +83,11 @@ const FilterSection = React.createClass({
       let titleAttr = activeTitle || `${heading}: ${label}`;
       if (autoSelected) titleAttr += ' (automatically selected)';
 
-      const clickHandler = () => { this.setState({ clicked: true }); onClick(value); };
-
       return (
         <section className="wgsa-filter-section is-active">
           <h3
             title={titleAttr}
-            onClick={autoSelected ? null : clickHandler}
+            onClick={autoSelected ? null : () => onClick(value)}
           >
             <i className="material-icons">{icon}</i>
             <span>{renderLabel({ ...activeItem, active: true })}</span>
@@ -139,13 +144,4 @@ const FilterSection = React.createClass({
   },
 });
 
-export default props => {
-  if (
-    props.children ||
-    (props.disabled && !props.hidden) ||
-    (props.summary && props.summary.length)
-  ) {
-    return <FilterSection {...props} />;
-  }
-  return null;
-};
+export default FilterSection;

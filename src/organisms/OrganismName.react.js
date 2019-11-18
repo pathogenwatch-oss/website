@@ -2,9 +2,10 @@ import React from 'react';
 
 const callsItSerovar = new Set([
   'Salmonella enterica',
+  'Salmonella bongori',
 ]);
 
-function getSeroName(speciesName) {
+export function getSeroName(speciesName) {
   if (callsItSerovar.has(speciesName)) {
     return 'serovar';
   }
