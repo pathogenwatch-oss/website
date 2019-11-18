@@ -223,6 +223,21 @@ function getSummaryFields(deployedOrganisms) {
         ];
       },
     },
+    {
+      field: 'klocus',
+      aggregation: ({ query }) => {
+        if (!organismHasTask('kleborate', query.organismId, query.speciesId, query.genusId)) return null;
+        return [
+          { $match: { 'analysis.kleborate': { $exists: true } } },
+          {
+            $group: {
+              _id: '$analysis.kleborate.K_locus',
+              count: { $sum: 1 },
+            },
+          },
+        ];
+      },
+    },
   ];
 }
 

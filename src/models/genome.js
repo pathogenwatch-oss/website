@@ -221,6 +221,7 @@ schema.statics.getFilterQuery = function (props) {
     country,
     genotype,
     genusId,
+    klocus,
     maxDate,
     minDate,
     ngmast,
@@ -306,6 +307,10 @@ schema.statics.getFilterQuery = function (props) {
 
     if (serotype) {
       findQuery['analysis.serotype.value'] = serotype;
+    }
+
+    if (klocus) {
+      findQuery['analysis.kleborate.K_locus'] = klocus;
     }
   }
 
