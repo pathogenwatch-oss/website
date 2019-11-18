@@ -39,7 +39,7 @@ const speciesDependants = [
   'genotype',
 ];
 
-const genusDependants = speciesDependants.concat('speciesId');
+const genusDependants = speciesDependants.concat([ 'speciesId', 'klocus' ]);
 
 const Filter = ({
   applyFilter,
@@ -69,7 +69,7 @@ const Filter = ({
       heading="Supported Organism"
       icon="bug_report"
       summary={filterSummary.supportedOrganisms}
-      updateFilter={clearDependants(filterState, speciesDependants)}
+      updateFilter={clearDependants(filterState, genusDependants)}
     />
     <FilterSection
       filterKey="genusId"
@@ -97,7 +97,7 @@ const Filter = ({
       icon="bug_report"
       summary={filterSummary.subspecies}
       updateFilter={clearDependants(filterState, [ 'serotype' ])}
-      hidden={!filterSummary.subspecies.length || filterState.organismId}
+      hidden={filterState.organismId}
       renderLabel={({ value }) => <React.Fragment>subsp. <em>{value}</em></React.Fragment>}
     />
     <FilterSection
@@ -105,7 +105,7 @@ const Filter = ({
       heading={getSerotypeHeading(filterState.genusId)}
       icon="bug_report"
       summary={filterSummary.serotype}
-      hidden={!filterSummary.serotype.length || filterState.organismId}
+      hidden={filterState.organismId}
       renderLabel={({ value }) => `ser. ${value}`}
     />
     <FilterSection
@@ -113,7 +113,6 @@ const Filter = ({
       heading="Strain"
       icon="scatter_plot"
       summary={filterSummary.strain}
-      hidden={!filterSummary.strain.length}
     />
     <FilterSection
       filterKey="mlst"
@@ -124,7 +123,6 @@ const Filter = ({
       }
       icon="label"
       summary={filterSummary.mlst}
-      hidden={!filterSummary.mlst.length}
       renderLabel={({ active, value }) => (
         <React.Fragment>
           {active && filterSummary.mlst2.length ? `${filterSummary.sources.mlst}: ST` : 'ST'} <ST id={value} />
@@ -140,7 +138,6 @@ const Filter = ({
       }
       icon="label"
       summary={filterSummary.mlst2}
-      hidden={!filterSummary.mlst2.length}
       renderLabel={({ active, value }) => (
         <React.Fragment>
           {active && filterSummary.mlst.length ? `${filterSummary.sources.mlst2}: ST` : 'ST'} <ST id={value} />
@@ -152,7 +149,6 @@ const Filter = ({
       heading="NG-STAR"
       icon="label"
       summary={filterSummary.ngstar}
-      hidden={!filterSummary.ngstar.length}
       renderLabel={({ active, value }) => (
         <React.Fragment>
           {active ? 'NG-STAR:' : 'Type'} <ST id={value} />
@@ -164,7 +160,6 @@ const Filter = ({
       heading="NG-MAST"
       icon="label"
       summary={filterSummary.ngmast}
-      hidden={!filterSummary.ngmast.length}
       renderLabel={({ active, value }) => (
         <React.Fragment>
           {active ? 'NG-MAST:' : 'Type'} <ST id={value} />
@@ -176,8 +171,13 @@ const Filter = ({
       heading="Genotype"
       icon="label"
       summary={filterSummary.genotype}
-      hidden={!filterSummary.genotype.length}
       renderLabel={({ value, active }) => (active ? `Genotype ${value}` : value)}
+    />
+    <FilterSection
+      filterKey="klocus"
+      heading="K Locus"
+      icon="label"
+      summary={filterSummary.klocus}
     />
     <FilterSection
       filterKey="resistance"

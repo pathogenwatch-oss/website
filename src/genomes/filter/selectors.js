@@ -62,6 +62,7 @@ export const getFilterSummary = createSelector(
       date,
       genotype = {},
       genusId,
+      klocus = {},
       loading,
       mlst = {},
       mlst2 = {},
@@ -232,6 +233,14 @@ export const getFilterSummary = createSelector(
           label: value === 'true' ? 'Reference' : 'Non-reference',
           active: filterState.reference === value,
           count: reference[value].count,
+        })),
+        'label'
+      ),
+      klocus: sortBy(
+        Object.keys(klocus).map(value => ({
+          value,
+          active: filterState.klocus === value,
+          count: klocus[value].count,
         })),
         'label'
       ),
