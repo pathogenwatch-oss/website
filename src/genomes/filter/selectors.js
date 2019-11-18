@@ -37,12 +37,13 @@ const getOrganismSummary = createSelector(
     for (const value of Object.keys(organismId)) {
       if (deployedOrganisms.has(value)) {
         const organism = taxIdMap.get(value);
+        const active = filterState.organismId === value;
         organisms.push({
           value,
+          active,
           label: organism.formattedName,
-          title: organism.name,
+          title: active ? `Organism: ${organism.name}` : organism.name,
           count: organismId[value].count,
-          active: filterState.organismId === value,
         });
       }
     }
