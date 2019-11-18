@@ -254,6 +254,8 @@ schema.statics.getFilterQuery = function (props) {
 
   if (reference === 'true') {
     findQuery.reference = true;
+  } else if (reference === 'false') {
+    findQuery.reference = false;
   }
 
   if (access === 'public') {
