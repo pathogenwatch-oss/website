@@ -64,7 +64,7 @@ const Popup = ({ list, onItemClick, close }) =>
             <AddToSelection genomes={[ genome ]} />
             <span className="wgsa-checklist-content">
               <button
-                title={`${genome.name} - View Report`}
+                title={`${genome.name} - view report`}
                 className="wgsa-link-button"
                 onClick={() => onItemClick(genome.id)}
               >

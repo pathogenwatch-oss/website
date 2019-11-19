@@ -82,7 +82,7 @@ const ListItem = ({
       <Cell title={name}>
         <AddToSelection genomes={[ genome ]} index={index} onClick={onClick} />
         <button
-          title="View details"
+          title="View report"
           className="wgsa-link-button"
           onClick={onViewGenome}
         >
