@@ -81,10 +81,13 @@ const FilterSection = React.createClass({
       const autoSelected = !activeItem.active;
 
       let titleAttr = activeTitle || `${heading}: ${label}`;
-      if (autoSelected) titleAttr += ' (automatically selected)';
+      if (autoSelected) titleAttr += ' (selected automatically)';
 
       return (
-        <section className="wgsa-filter-section is-active">
+        <section
+          className="wgsa-filter-section is-active"
+          style={!autoSelected ? { cursor: 'pointer' } : undefined}
+        >
           <h3
             title={titleAttr}
             onClick={autoSelected ? null : () => onClick(value)}
