@@ -230,11 +230,10 @@ export const getFilterSummary = createSelector(
       reference: sortBy(
         Object.keys(reference).map(value => ({
           value,
-          label: value === 'true' ? 'Reference' : 'Non-reference',
           active: filterState.reference === value,
           count: reference[value].count,
         })),
-        'label'
+        'value'
       ),
       klocus: sortBy(
         Object.keys(klocus).map(value => ({
@@ -242,7 +241,7 @@ export const getFilterSummary = createSelector(
           active: filterState.klocus === value,
           count: klocus[value].count,
         })),
-        'label'
+        'value'
       ),
     };
   }

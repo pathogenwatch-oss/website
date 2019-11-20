@@ -37,6 +37,7 @@ const speciesDependants = [
   'ngmast',
   'ngstar',
   'genotype',
+  'reference',
 ];
 
 const genusDependants = speciesDependants.concat([ 'speciesId', 'klocus' ]);
@@ -180,6 +181,12 @@ const Filter = ({
       summary={filterSummary.klocus}
     />
     <FilterSection
+      filterKey="reference"
+      heading="PW Reference"
+      icon="book"
+      summary={filterSummary.reference}
+    />
+    <FilterSection
       filterKey="resistance"
       heading="Resistance"
       icon="local_pharmacy"
@@ -198,13 +205,6 @@ const Filter = ({
       icon="person"
       summary={filterSummary.access}
       hidden={filterState.access === undefined && filterSummary.access.length === 1}
-    />
-    <FilterSection
-      filterKey="reference"
-      heading="Reference"
-      icon="book"
-      summary={filterSummary.reference}
-      hidden={filterState.reference === undefined && filterSummary.reference.length === 1}
     />
     <FilterSection
       filterKey="uploadedAt"
