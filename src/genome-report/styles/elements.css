@@ -171,6 +171,12 @@
 .pw-genome-report-external-link {
   align-items: center;
   display: flex;
+  margin-top: 4px;
+  margin-bottom: 12px;
+}
+
+.wgsa-genome-report dl .pw-genome-report-external-link {
+  margin-bottom: -4px;
 }
 
 .pw-genome-report-external-link a {

@@ -125,7 +125,7 @@ const Report = ({ name, genome, status, close }) => {
       title={
         <span className="wgsa-genome-report-title">
           <div className="pw-genome-report-print-button" onClick={e => e.stopPropagation()}>
-            <button className="mdl-button mdl-button--icon" title="Print Report" onClick={() => window.print()}>
+            <button className="mdl-button mdl-button--icon" title="Print report" onClick={() => window.print()}>
               <i className="material-icons">print</i>
             </button>
           </div>

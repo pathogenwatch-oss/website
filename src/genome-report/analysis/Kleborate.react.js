@@ -1,5 +1,7 @@
 import React from 'react';
 
+import ExternalLink from '../ExternalLink.react';
+
 // const kleborateTypingFields1 = [
 //   'species',
 //   'virulence_score',
@@ -19,14 +21,19 @@ export default ({ genome }) => {
     <React.Fragment>
       <header className="pw-genome-report-section-header">
         <h2>Kleborate</h2>
-        <a href="https://github.com/katholt/Kleborate" target="_blank"
-          rel="noopener"
-        >https://github.com/katholt/Kleborate</a>
+        <p>
+          <a href="https://github.com/katholt/Kleborate" target="_blank" rel="noopener">
+            https://github.com/katholt/Kleborate
+          </a>
+        </p>
       </header>
       <dl className="grid">
         <div className="pw-genome-report-metadata">
           <dt>K Locus</dt>
           <dd>{kleborate.K_locus}</dd>
+          <ExternalLink to={`/genomes/all?genusId=570&klocus=${kleborate.K_locus}`}>
+            View all {kleborate.K_locus}
+          </ExternalLink>
         </div>
         <div className="pw-genome-report-metadata">
           <dt>Confidence</dt>

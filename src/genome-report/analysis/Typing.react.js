@@ -44,7 +44,7 @@ export default ({ genome }) => {
         <div id="mlst">
           <MLST result={mlst} speciator={speciator} />
           {mlst2 && <MLST heading="Alternative MLST" result={mlst2} speciator={speciator} filterKey="mlst2" />}
-          {ngstar && <MLST heading="NG-STAR" result={ngstar} speciator={speciator} filterKey="ngstar" label="Type" />}
+          {ngstar && <MLST heading="NG-STAR" result={ngstar} speciator={speciator} filterKey="ngstar" label="type" />}
         </div>}
       {getSecondaryTyping(genome)}
     </React.Fragment>

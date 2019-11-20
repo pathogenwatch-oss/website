@@ -21,9 +21,9 @@ function formatValue(value) {
   return value;
 }
 
-export const Metadata = ({ label, children, inline }) => (
+export const Metadata = ({ label, children, inline, className }) => (
   hasValue(children) ?
-    <div className={classnames('pw-genome-report-metadata', { inline })}>
+    <div className={classnames('pw-genome-report-metadata', className, { inline })}>
       <dt>{label}</dt>
       <dd>{formatValue(children)}</dd>
     </div> :

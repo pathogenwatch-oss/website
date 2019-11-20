@@ -6,6 +6,10 @@
   content: "_";
 }
 
+.wgsa-mlst-st {
+  text-transform: none;
+}
+
 .wgsa-mlst-st[title],
 .wgsa-mlst-profile-hit[title] {
   cursor: help;

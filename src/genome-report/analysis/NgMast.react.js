@@ -6,9 +6,11 @@ export default ({ result }) => (
   <React.Fragment>
     <header className="pw-genome-report-section-header">
       <h2>NG-MAST</h2>
-      <a href="https://github.com/MDU-PHL/ngmaster" target="_blank" rel="noopener">
-        https://github.com/MDU-PHL/ngmaster
-      </a>
+      <p>
+        <a href="https://github.com/MDU-PHL/ngmaster" target="_blank" rel="noopener">
+          https://github.com/MDU-PHL/ngmaster
+        </a>
+      </p>
     </header>
     <div>
       <dl className="flex">
@@ -28,7 +30,7 @@ export default ({ result }) => (
       <ExternalLink
         to={`/genomes/all?genusId=482&speciesId=485&ngmast=${result.ngmast}`}
       >
-        View all Type {result.ngmast}
+        View all type {result.ngmast}
       </ExternalLink>
     </div>
   </React.Fragment>

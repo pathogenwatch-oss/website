@@ -24,7 +24,7 @@ export default ({ result, speciator, filterKey = 'mlst', heading, label }) => {
       </header>
       <div className="pw-genome-report-column one third">
         <dl>
-          <Metadata label={label || 'Sequence Type'}>
+          <Metadata label={label || 'Sequence Type'} className="pw-capitalise">
             <ST id={result.st} />
           </Metadata>
         </dl>
