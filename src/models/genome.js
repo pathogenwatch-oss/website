@@ -82,6 +82,8 @@ schema.index({ 'analysis.poppunk.strain': 1 });
 schema.index({ 'analysis.ngstar.st': 1 });
 schema.index({ 'analysis.ngmast.ngmast': 1 });
 schema.index({ 'analysis.genotyphi.genotype': 1 });
+schema.index({ 'analysis.core.fp.reference': 1 });
+schema.index({ 'analysis.kleborate.K_locus': 1 });
 
 schema.statics.uploadTypes = uploadTypes;
 
@@ -253,16 +255,16 @@ schema.statics.getFilterQuery = function (props) {
     findQuery.country = country;
   }
 
-  if (reference === 'true') {
-    findQuery.reference = true;
-  } else if (reference === 'false') {
-    findQuery.reference = false;
+  if (reference) {
+    findQuery['analysis.core.fp.reference'] = reference;
   }
 
   if (access === 'public') {
     findQuery.public = true;
   } else if (access === 'private') {
     findQuery.public = false;
+  } else if (access === 'reference') {
+    findQuery.reference = true;
   }
 
   if (uploadedAt && (user && user._id)) {
@@ -352,7 +354,7 @@ schema.statics.getSort = function (sort = 'createdAt-') {
 
   if (!sortKeys.has(sortKey)) return null;
 
-  if (sortKey === 'type') {
+  if (sortKey === 'access') {
     return { public: sortOrder, reference: sortOrder };
   }
 

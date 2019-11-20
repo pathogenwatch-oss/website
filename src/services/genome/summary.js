@@ -1,7 +1,11 @@
 const Genome = require('models/genome');
 const Organism = require('models/organism');
 
-const { organismHasTask } = require('manifest');
+const {
+  organismHasTask,
+  organismHasPopulation,
+  getCollectionSchemes,
+} = require('manifest');
 
 function getSummaryFields(deployedOrganisms) {
   return [
@@ -53,40 +57,36 @@ function getSummaryFields(deployedOrganisms) {
     { field: 'country' },
     {
       field: 'access',
-      aggregation: () => [
-        {
-          $group: {
-            _id: {
-              $cond: [ { $eq: [ '$public', true ] }, 'public', 'private' ],
+      aggregation: ({ user }) => {
+        const schemes = getCollectionSchemes(user);
+        return [
+          {
+            $group: {
+              _id: {
+                $cond: [
+                  {
+                    $and: [
+                      { $eq: [ '$reference', true ] },
+                      { $in: [ '$analysis.speciator.organismId', schemes ] },
+                    ],
+                  },
+                  'reference',
+                  { $cond: [ { $eq: [ '$public', true ] }, 'public', 'private' ] },
+                ],
+              },
+              count: { $sum: 1 },
             },
-            count: { $sum: 1 },
           },
-        },
-      ],
+        ];
+      },
     },
     {
       field: 'reference',
-      aggregation: ({ query }) => {
-        if (!query.organismId) return null;
-        if (query.reference) {
-          return [
-            { $match: { 'analysis.speciator.organismId': query.organismId, reference: query.reference === 'true' } },
-            { $group: { _id: query.reference, count: { $sum: 1 } } },
-          ];
-        }
+      aggregation: ({ query, user }) => {
+        if (!organismHasPopulation([ query.organismId, query.speciesId, query.genusId ], user)) return null;
         return [
-          { $match: { 'analysis.speciator.organismId': query.organismId } },
-          { $group: {
-            _id: {
-              $cond: [
-                { $eq: [ '$reference', true ] },
-                'true',
-                'false',
-              ],
-            },
-            count: { $sum: 1 },
-          },
-          },
+          { $match: { 'analysis.core.fp.reference': { $exists: true } } },
+          { $group: { _id: '$analysis.core.fp.reference', count: { $sum: 1 } } },
         ];
       },
     },
@@ -101,15 +101,15 @@ function getSummaryFields(deployedOrganisms) {
     { field: 'date', range: true, queryKeys: [ 'minDate', 'maxDate' ] },
     {
       field: 'mlst',
-      aggregation: ({ query = {} }) => {
-        if (!organismHasTask('mlst', query.organismId, query.speciesId, query.genusId)) return null;
+      aggregation: ({ query = {}, user }) => {
+        if (!organismHasTask('mlst', [ query.organismId, query.speciesId, query.genusId ], user)) return null;
         return [ { $group: { _id: '$analysis.mlst.st', count: { $sum: 1 }, sources: { $addToSet: '$analysis.mlst.source' } } } ];
       },
     },
     {
       field: 'mlst2',
-      aggregation: ({ query = {} }) => {
-        if (!organismHasTask('mlst2', query.organismId, query.speciesId, query.genusId)) return null;
+      aggregation: ({ query = {}, user }) => {
+        if (!organismHasTask('mlst2', [ query.organismId, query.speciesId, query.genusId ], user)) return null;
         return [ { $group: { _id: '$analysis.mlst2.st', count: { $sum: 1 }, sources: { $addToSet: '$analysis.mlst2.source' } } } ];
       },
     },
@@ -134,8 +134,8 @@ function getSummaryFields(deployedOrganisms) {
     },
     {
       field: 'subspecies',
-      aggregation: ({ query }) => {
-        if (!organismHasTask('serotype', query.organismId, query.speciesId, query.genusId)) return null;
+      aggregation: ({ query, user }) => {
+        if (!organismHasTask('serotype', [ query.organismId, query.speciesId, query.genusId ], user)) return null;
         return [
           { $match: { 'analysis.serotype': { $exists: true } } },
           {
@@ -149,8 +149,8 @@ function getSummaryFields(deployedOrganisms) {
     },
     {
       field: 'serotype',
-      aggregation: ({ query }) => {
-        if (!organismHasTask('serotype', query.organismId, query.speciesId, query.genusId)) return null;
+      aggregation: ({ query, user }) => {
+        if (!organismHasTask('serotype', [ query.organismId, query.speciesId, query.genusId ], user)) return null;
         return [
           { $match: { 'analysis.serotype': { $exists: true } } },
           {
@@ -164,8 +164,8 @@ function getSummaryFields(deployedOrganisms) {
     },
     {
       field: 'poppunk',
-      aggregation: ({ query }) => {
-        if (!organismHasTask('poppunk', query.organismId, query.speciesId, query.genusId)) return null;
+      aggregation: ({ query, user }) => {
+        if (!organismHasTask('poppunk', [ query.organismId, query.speciesId, query.genusId ], user)) return null;
         return [
           { $match: { 'analysis.poppunk': { $exists: true } } },
           {
@@ -179,8 +179,8 @@ function getSummaryFields(deployedOrganisms) {
     },
     {
       field: 'ngmast',
-      aggregation: ({ query }) => {
-        if (!organismHasTask('ngmast', query.organismId, query.speciesId, query.genusId)) return null;
+      aggregation: ({ query, user }) => {
+        if (!organismHasTask('ngmast', [ query.organismId, query.speciesId, query.genusId ], user)) return null;
         return [
           { $match: { 'analysis.ngmast': { $exists: true } } },
           {
@@ -194,8 +194,8 @@ function getSummaryFields(deployedOrganisms) {
     },
     {
       field: 'ngstar',
-      aggregation: ({ query }) => {
-        if (!organismHasTask('ngstar', query.organismId, query.speciesId, query.genusId)) return null;
+      aggregation: ({ query, user }) => {
+        if (!organismHasTask('ngstar', [ query.organismId, query.speciesId, query.genusId ], user)) return null;
         return [
           { $match: { 'analysis.ngstar': { $exists: true } } },
           {
@@ -225,8 +225,8 @@ function getSummaryFields(deployedOrganisms) {
     },
     {
       field: 'klocus',
-      aggregation: ({ query }) => {
-        if (!organismHasTask('kleborate', query.organismId, query.speciesId, query.genusId)) return null;
+      aggregation: ({ query, user }) => {
+        if (!organismHasTask('kleborate', [ query.organismId, query.speciesId, query.genusId ], user)) return null;
         return [
           { $match: { 'analysis.kleborate': { $exists: true } } },
           {

@@ -102,11 +102,25 @@ module.exports.getCollectionSchemes = function (user = defaultUser) {
   return schemes;
 };
 
-module.exports.organismHasTask = function (task, ...taxIds) {
+module.exports.organismHasTask = function (taskname, taxIds, user = defaultUser) {
   for (const taxId of taxIds) {
-    const tasksForTaxId = tasks.genome[taxId];
-    if (tasksForTaxId && tasksForTaxId.find(_ => _.task === task)) {
-      return true;
+    if (taxId in tasks.genome) {
+      const task = tasks.genome[taxId].find(_ => _.task === taskname);
+      if (task) {
+        return user.canRun(task);
+      }
+    }
+  }
+  return false;
+};
+
+module.exports.organismHasPopulation = function (taxIds, user = defaultUser) {
+  for (const taxId of taxIds) {
+    if (taxId in tasks.collection) {
+      const task = tasks.collection[taxId].find(_ => _.task === 'subtree');
+      if (task) {
+        return user.canRun(task);
+      }
     }
   }
   return false;
