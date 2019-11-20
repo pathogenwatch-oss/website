@@ -23,9 +23,9 @@ export default ({ hasScrollbar = true }) => (
       <Sort sortKey="st">ST</Sort>
       <Sort sortKey="country">Country</Sort>
       <Sort sortKey="date">Date</Sort>
-      <Sort sortKey="type">Type</Sort>
+      <Sort sortKey="access">Access</Sort>
     </div>
     { hasScrollbar &&
-      <div style={{ overflowY: 'scroll', visibility: 'hidden', height: 0 }}></div> }
+      <div style={{ overflowY: 'scroll', visibility: 'hidden', height: 0 }} /> }
   </div>
 );
