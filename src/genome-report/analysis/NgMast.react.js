@@ -5,7 +5,7 @@ import ExternalLink from '../ExternalLink.react';
 export default ({ result }) => (
   <React.Fragment>
     <header className="pw-genome-report-section-header">
-      <h2>NG-MAST</h2>
+      <h2>NG-MAST – Multi-antigen sequence typing</h2>
       <p>
         <a href="https://github.com/MDU-PHL/ngmaster" target="_blank" rel="noopener">
           https://github.com/MDU-PHL/ngmaster

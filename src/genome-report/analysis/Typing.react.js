@@ -24,7 +24,7 @@ function getSecondaryTyping(genome) {
           <Genotyphi result={genotyphi} />
         </div>}
       {!!ngmast &&
-        <div className="pw-genome-report-column one half">
+        <div>
           <NgMast result={ngmast} />
         </div>}
       {!!kleborate &&
@@ -40,11 +40,11 @@ export default ({ genome }) => {
   const { speciator, mlst, mlst2, ngstar } = genome.analysis;
   return (
     <React.Fragment>
-      {mlst &&
+      {(mlst || ngstar) &&
         <div id="mlst">
-          <MLST result={mlst} speciator={speciator} />
+          {mlst && <MLST result={mlst} speciator={speciator} />}
           {mlst2 && <MLST heading="Alternative MLST" result={mlst2} speciator={speciator} filterKey="mlst2" />}
-          {ngstar && <MLST heading="NG-STAR" result={ngstar} speciator={speciator} filterKey="ngstar" label="type" />}
+          {ngstar && <MLST heading="NG-STAR – Sequence typing for antimicrobial resistance" result={ngstar} speciator={speciator} filterKey="ngstar" label="type" />}
         </div>}
       {getSecondaryTyping(genome)}
     </React.Fragment>
