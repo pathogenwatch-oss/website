@@ -53,11 +53,11 @@ export default ({ result }) => (
       </a>
     </p>
     <table cellSpacing="0" className="wgsa-genome-report-amr wide bordered">
-      <caption>Resistance Profile</caption>
+      <caption>Resistance profile</caption>
       <thead>
         <tr>
           <th>Agent</th>
-          <th>Variants/Genes</th>
+          <th>Variants/genes</th>
         </tr>
       </thead>
       <tbody>

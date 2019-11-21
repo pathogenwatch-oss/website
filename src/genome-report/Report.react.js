@@ -61,7 +61,7 @@ const Content = React.createClass({
     // Extraneous wrapping div smooths out the animation
     return (
       <div>
-        <DocumentTitle>{`Genome Report: ${genome.name}`}</DocumentTitle>
+        <DocumentTitle>{`Genome report: ${genome.name}`}</DocumentTitle>
         <style>{printStyles}</style>
         <nav onClick={e => e.stopPropagation()}>
           <ScrollSpy
@@ -129,7 +129,7 @@ const Report = ({ name, genome, status, close }) => {
               <i className="material-icons">print</i>
             </button>
           </div>
-          Genome Report: {genome ? genome.name : name}{' '}
+          Genome report: {genome ? genome.name : name}{' '}
           {genome && genome.fileId && (
             <DownloadLink key="download" id={genome.id} name={genome.name} />
           )}

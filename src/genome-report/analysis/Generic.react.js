@@ -9,9 +9,9 @@ export default (results = {}) => (
       <Section key={key} heading={key} version={results[key].__v}>
         <dl>
           { props && Object.keys(props).map(prop =>
-            <Metadata key={prop} label={prop}>
+            (<Metadata key={prop} label={prop}>
               {props[prop]}
-            </Metadata>
+            </Metadata>)
           )}
         </dl>
       </Section>

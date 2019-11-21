@@ -18,7 +18,7 @@ export default ({ result }) => (
         <dd>{result.genotype}</dd>
       </div>
       <div>
-        <dt>SNPs Called</dt>
+        <dt>SNPs called</dt>
         <dd>{result.foundLoci}</dd>
       </div>
     </dl>

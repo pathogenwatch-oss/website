@@ -24,7 +24,7 @@ function defaultView(message) {
   return (
     <React.Fragment>
       <header className="pw-genome-report-section-header">
-        <h2>Plasmid Inc Types</h2>
+        <h2>Plasmid Inc types</h2>
         <p>
           <a
             href="https://cge.cbs.dtu.dk/services/PlasmidFinder/"
@@ -82,7 +82,7 @@ export default ({ analysis }) => {
   return (
     <React.Fragment>
       <header className="pw-genome-report-section-header">
-        <h2>Plasmid Inc Types</h2>
+        <h2>Plasmid Inc types</h2>
         <p>
           <a
             href="https://cge.cbs.dtu.dk/services/PlasmidFinder/"
@@ -96,8 +96,8 @@ export default ({ analysis }) => {
       <table className="bordered wide" cellSpacing="0">
         <thead>
           <tr>
-            <th>Contig Inc Type</th>
-            {paarsnp.library !== '' && <th>Contig AMR Genes</th>}
+            <th>Contig Inc type</th>
+            {paarsnp.library !== '' && <th>Contig AMR genes</th>}
             <th>Match ID</th>
             <th>% Identity</th>
             <th>% Coverage</th>

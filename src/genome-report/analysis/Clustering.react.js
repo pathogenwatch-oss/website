@@ -25,7 +25,7 @@ const ClusteringSection = ({
 }) => (
   <div className={classnames({ 'pw-genome-report-noprint': status !== 'COMPLETED_LAYOUT' })}>
     <header className="pw-genome-report-section-header">
-      <h2>Core Genome Clustering</h2>
+      <h2>Core genome clustering</h2>
       <p>
         <a href={result.scheme} target="_blank" rel="noopener">
           {result.scheme}
@@ -45,7 +45,7 @@ const ClusteringSection = ({
             to={`/clustering/${selectedGenomeId}?threshold=${threshold}`}
             className="mdl-button mdl-button--raised mdl-button--colored pw-cluster-buttons-view"
           >
-            View Cluster
+            View cluster
           </Link>
         </div>
       </div>

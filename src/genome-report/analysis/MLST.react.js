@@ -15,7 +15,7 @@ export default ({ result, speciator, filterKey = 'mlst', heading, label }) => {
   return (
     <React.Fragment>
       <header className="pw-genome-report-section-header">
-        <h2>{heading || 'Multilocus Sequence Typing (MLST)'}</h2>
+        <h2>{heading || 'Multilocus sequence typing (MLST)'}</h2>
         <p>
           <a href={result.url} target="_blank" rel="noopener">
             {result.url}
@@ -24,7 +24,7 @@ export default ({ result, speciator, filterKey = 'mlst', heading, label }) => {
       </header>
       <div className="pw-genome-report-column one third">
         <dl>
-          <Metadata label={label || 'Sequence Type'} className="pw-capitalise">
+          <Metadata label={label || 'Sequence type'} className={label ? 'pw-capitalise' : null}>
             <ST id={result.st} />
           </Metadata>
         </dl>
