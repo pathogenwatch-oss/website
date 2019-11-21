@@ -73,6 +73,12 @@ const ngMastGroup = {
   columns: [ '__ng-mast', '__por', '__tbpb' ],
 };
 
+const ngStarGroup = {
+  group: true,
+  columnKey: 'ng-star',
+  columns: [ '__ngstar', '__ngstar_profile' ],
+};
+
 const genotyphiGroup = {
   group: true,
   columnKey: 'genotyphi',
@@ -105,6 +111,7 @@ function getTypingColumnGroups({ isClusterView }, uiOptions, hasAltMLST) {
     isClusterView || uiOptions.noPopulation ? null : referenceGroup,
     uiOptions.noMLST ? null : mlstGroup,
     hasAltMLST ? mlst2Group : null,
+    uiOptions.ngMast ? ngStarGroup : null,
     uiOptions.ngMast ? ngMastGroup : null,
     uiOptions.genotyphi ? genotyphiGroup : null,
     uiOptions.inctyper ? inctyperGroup : null,

@@ -53,7 +53,7 @@ export const systemDataColumns = {
       return 'MLST ST';
     },
     valueGetter({ analysis }) {
-      if (!analysis.mlst) return 0;
+      if (!analysis.mlst) return null;
       const { st } = analysis.mlst;
       if (isNovel(st)) return `*${st.slice(0, 4)}`;
       return st;
@@ -91,7 +91,7 @@ export const systemDataColumns = {
       return 'MLST ST';
     },
     valueGetter({ analysis }) {
-      if (!analysis.mlst2) return 0;
+      if (!analysis.mlst2) return null;
       const { st } = analysis.mlst2;
       if (isNovel(st)) return `*${st.slice(0, 4)}`;
       return st;
@@ -117,6 +117,38 @@ export const systemDataColumns = {
     display({ analysis }) {
       if (!analysis.mlst2) return null;
       return <Profile alleles={analysis.mlst2.alleles} />;
+    },
+  },
+  __ngstar: {
+    columnKey: '__ngstar',
+    label: 'TYPE',
+    get displayName() {
+      return 'NG-STAR TYPE';
+    },
+    valueGetter({ analysis }) {
+      if (!analysis.ngstar) return null;
+      const { st } = analysis.ngstar;
+      if (isNovel(st)) return `*${st.slice(0, 4)}`;
+      return st;
+    },
+    display({ analysis }) {
+      if (!analysis.ngstar) return null;
+      return <ST id={analysis.ngstar.st} />;
+    },
+  },
+  __ngstar_profile: {
+    columnKey: '__ngstar_profile',
+    label: 'PROFILE',
+    get displayName() {
+      return 'NG-STAR PROFILE';
+    },
+    valueGetter({ analysis }) {
+      if (!analysis.ngstar) return null;
+      return createCode(analysis.ngstar.alleles, 4);
+    },
+    display({ analysis }) {
+      if (!analysis.ngstar) return null;
+      return <Profile alleles={analysis.ngstar.alleles} />;
     },
   },
   __inc_types: {
