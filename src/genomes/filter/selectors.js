@@ -26,14 +26,8 @@ const getOrganismSummary = createSelector(
   ({ genomes }) => genomes.summary,
   filter.getFilter,
   getDeployedOrganismIds,
-  ({ organismId = {}, genusId = {} }, filterState, deployedOrganisms) => {
+  ({ organismId = {} }, filterState, deployedOrganisms) => {
     const organisms = [];
-
-    // hide organism if genus will be active
-    if (!filterState.organismId && Object.keys(genusId).length === 1) {
-      return organisms;
-    }
-
     for (const value of Object.keys(organismId)) {
       if (deployedOrganisms.has(value)) {
         const organism = taxIdMap.get(value);

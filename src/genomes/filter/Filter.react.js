@@ -71,6 +71,9 @@ const Filter = ({
       icon="bug_report"
       summary={filterSummary.supportedOrganisms}
       updateFilter={clearDependants(filterState, genusDependants)}
+      hidden={!filterSummary.genusId.length}
+      disabled={!filterSummary.supportedOrganisms.length}
+      disabledText="No supported organisms in current filter."
     />
     <FilterSection
       filterKey="genusId"
