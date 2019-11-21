@@ -9,7 +9,7 @@ export default ({ moveToBin, restoreFromBin, primary, className, item = {} }) =>
       <button
         className="mdl-button mdl-button--icon"
         onClick={restoreFromBin}
-        title="Restore from Bin"
+        title="Restore from bin"
       >
         <i className="material-icons">restore</i>
       </button>
@@ -20,7 +20,7 @@ export default ({ moveToBin, restoreFromBin, primary, className, item = {} }) =>
     <button
       className="mdl-button mdl-button--primary wgsa-button--text"
       onClick={moveToBin}
-      title="Move to Bin"
+      title="Move to bin"
     >
       Move to Bin
     </button>
@@ -28,7 +28,7 @@ export default ({ moveToBin, restoreFromBin, primary, className, item = {} }) =>
     <button
       className={classnames('mdl-button mdl-button--icon', className)}
       onClick={moveToBin}
-      title="Move to Bin"
+      title="Move to bin"
     >
       <i className="material-icons">delete</i>
     </button>
