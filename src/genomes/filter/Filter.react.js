@@ -207,7 +207,6 @@ const Filter = ({
       heading="Access"
       icon="person"
       summary={filterSummary.access}
-      hidden={filterState.access === undefined && filterSummary.access.length === 1}
     />
     <FilterSection
       filterKey="uploadedAt"
