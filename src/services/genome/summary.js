@@ -54,7 +54,12 @@ function getSummaryFields(deployedOrganisms) {
         },
       ],
     },
-    { field: 'country' },
+    {
+      field: 'country',
+      aggregation: () => [
+        { $group: { _id: { $ifNull: [ '$country', '(unspecified)' ] }, count: { $sum: 1 } } },
+      ],
+    },
     {
       field: 'access',
       aggregation: ({ user }) => {
@@ -94,8 +99,10 @@ function getSummaryFields(deployedOrganisms) {
       field: 'uploadedAt',
       aggregation: ({ user }) => {
         if (!user) return null;
-        const $match = { _user: user._id };
-        return [ { $match }, { $group: { _id: '$uploadedAt', count: { $sum: 1 } } } ];
+        return [
+          { $match: { _user: user._id } },
+          { $group: { _id: '$uploadedAt', count: { $sum: 1 } } },
+        ];
       },
     },
     { field: 'date', range: true, queryKeys: [ 'minDate', 'maxDate' ] },
