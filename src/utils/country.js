@@ -1,7 +1,7 @@
 const centroids = require('geocoding/centroids.json');
 
 export function getCountryName(code) {
-  if (code) {
+  if (code && code.toLowerCase() in centroids) {
     const [ name ] = centroids[code.toLowerCase()];
     return name || code;
   }
