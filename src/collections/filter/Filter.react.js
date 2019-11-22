@@ -52,10 +52,10 @@ export default connect(mapStateToProps, mapDispatchToProps)(
       />
       <FilterSection
         className="capitalised"
-        filterKey="type"
-        heading="Type"
-        icon="label"
-        summary={filterSummary.type}
+        filterKey="access"
+        heading="Access"
+        icon="person"
+        summary={filterSummary.access}
         updateFilter={updateFilter}
       />
       <DateSection summary={filterSummary.date} updateFilter={updateFilter} />
