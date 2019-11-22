@@ -213,6 +213,7 @@ const Filter = ({
       heading="Uploaded At"
       icon="cloud_upload"
       summary={filterSummary.uploadedAt}
+      autoSelect={filterSummary.access.length === 1}
     />
     <LocationListener update={updateFilter} />
   </FilterAside>
