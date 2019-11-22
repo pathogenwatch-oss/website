@@ -181,7 +181,7 @@ function convertDocumentToGFF(doc, stream) {
           type: match.type,
           start: match.query.start,
           end: match.query.stop,
-          score: match.identity,
+          score: match.identity || match.percentIdentity,
           reversed: match.reversed,
           phase: (match.query.start - 1) % 3,
           attributes: {
@@ -218,7 +218,7 @@ function convertDocumentToGFF(doc, stream) {
           type: match.type,
           start: match.query.start,
           end: match.query.stop,
-          score: match.identity,
+          score: match.identity || match.percentIdentity,
           reversed: match.reversed,
           phase: (match.query.start - 1) % 3,
           attributes: {
