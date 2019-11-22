@@ -2,7 +2,7 @@ const Collection = require('models/collection');
 
 const summaryFields = [
   { field: 'organismId' },
-  { field: 'type',
+  { field: 'access',
     aggregation: () => [
       {
         $group: {
