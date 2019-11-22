@@ -54,12 +54,7 @@ function getSummaryFields(deployedOrganisms) {
         },
       ],
     },
-    {
-      field: 'country',
-      aggregation: () => [
-        { $group: { _id: { $ifNull: [ '$country', '(unspecified)' ] }, count: { $sum: 1 } } },
-      ],
-    },
+    { field: 'country' },
     {
       field: 'access',
       aggregation: ({ user }) => {
