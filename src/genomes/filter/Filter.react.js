@@ -200,6 +200,7 @@ const Filter = ({
       heading="Country"
       icon="language"
       summary={filterSummary.country}
+      autoSelect={filterSummary.country[0] && filterSummary.country[0].autoSelect}
     />
     <DateSection summary={filterSummary.date} />
     <FilterSection

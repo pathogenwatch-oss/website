@@ -70,6 +70,7 @@ export const getFilterSummary = createSelector(
       resistance = {},
       subspecies = {},
       uploadedAt,
+      visible,
     } = summary;
 
     const speciesIds = Object.keys(speciesId);
@@ -138,6 +139,7 @@ export const getFilterSummary = createSelector(
           label: getCountryName(value),
           count: country[value].count,
           active: filterState.country === value,
+          autoSelect: country[value].count === visible,
         })),
         'label'
       ),
