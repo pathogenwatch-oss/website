@@ -7,7 +7,6 @@ import RemoveButton from './RemoveButton.react';
 import DownloadLink from '../downloads/GenomeFileLink.react';
 import Spinner from '../components/Spinner.react';
 import Loading from '../components/Loading.react';
-import DocumentTitle from '../branding/DocumentTitle.react';
 
 import Overview from './Overview.react';
 import Metadata from './Metadata.react';
@@ -61,7 +60,6 @@ const Content = React.createClass({
     // Extraneous wrapping div smooths out the animation
     return (
       <div>
-        <DocumentTitle>{`Genome report: ${genome.name}`}</DocumentTitle>
         <style>{printStyles}</style>
         <nav onClick={e => e.stopPropagation()}>
           <ScrollSpy
@@ -118,18 +116,26 @@ const Content = React.createClass({
 
 const openStatuses = new Set([ 'LOADING', 'READY' ]);
 
+const print = (name) => {
+  const existingTitle = document.title;
+  document.title = `Pathogenwatch genome report ${name}`; // creates a nice file name when printing to PDF
+  window.print();
+  document.title = existingTitle;
+};
+
 const Report = ({ name, genome, status, close }) => {
   const isOpen = openStatuses.has(status);
+  const genomeName = genome ? genome.name : name;
   return (
     <Modal
       title={
         <span className="wgsa-genome-report-title">
           <div className="pw-genome-report-print-button" onClick={e => e.stopPropagation()}>
-            <button className="mdl-button mdl-button--icon" title="Print report" onClick={() => window.print()}>
+            <button className="mdl-button mdl-button--icon" title="Print report" onClick={() => print(genomeName)}>
               <i className="material-icons">print</i>
             </button>
           </div>
-          Genome report: {genome ? genome.name : name}{' '}
+          Genome report: {genomeName}{' '}
           {genome && genome.fileId && (
             <DownloadLink key="download" id={genome.id} name={genome.name} />
           )}
