@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { ST } from '../../mlst';
+import { ST } from '~/mlst';
 
 import { LocationListener } from '~/location';
 import FilterAside from '~/filter/aside';
@@ -57,8 +57,8 @@ const Filter = ({
   <FilterAside
     active={isActive}
     clear={clearFilter}
-    loading={filterSummary.loading}
     prefilter={prefilter}
+    summary={filterSummary}
     textOnChange={value => updateFilterValue('searchText', value)}
     textOnChangeEffect={applyFilter}
     textValue={textValue}
@@ -80,7 +80,6 @@ const Filter = ({
       heading="Genus"
       icon="bug_report"
       hidden={filterState.organismId}
-      summary={filterSummary.genusId}
       updateFilter={clearDependants(filterState, genusDependants)}
       renderLabel={({ label }) => <em>{label}</em>}
     />
@@ -88,7 +87,6 @@ const Filter = ({
       filterKey="speciesId"
       heading="Species"
       icon="bug_report"
-      summary={filterSummary.speciesId}
       updateFilter={clearDependants(filterState, speciesDependants)}
       hidden={!filterSummary.genusId.length || filterState.organismId}
       disabled={!filterSummary.speciesId.length}
@@ -99,7 +97,6 @@ const Filter = ({
       filterKey="subspecies"
       heading="Subspecies"
       icon="bug_report"
-      summary={filterSummary.subspecies}
       updateFilter={clearDependants(filterState, [ 'serotype' ])}
       hidden={filterState.organismId}
       renderLabel={({ value }) => <React.Fragment>subsp. <em>{value}</em></React.Fragment>}
@@ -108,7 +105,6 @@ const Filter = ({
       filterKey="serotype"
       heading={getSerotypeHeading(filterState.genusId)}
       icon="bug_report"
-      summary={filterSummary.serotype}
       hidden={filterState.organismId}
       renderLabel={({ value }) => `ser. ${value}`}
     />
@@ -116,7 +112,6 @@ const Filter = ({
       filterKey="strain"
       heading="Strain"
       icon="scatter_plot"
-      summary={filterSummary.strain}
     />
     <FilterSection
       filterKey="mlst"
@@ -126,7 +121,6 @@ const Filter = ({
         </React.Fragment>
       }
       icon="label"
-      summary={filterSummary.mlst}
       renderLabel={({ active, value }) => (
         <React.Fragment>
           {active && filterSummary.mlst2.length ? `${filterSummary.sources.mlst}: ST` : 'ST'} <ST id={value} />
@@ -141,7 +135,6 @@ const Filter = ({
         </React.Fragment>
       }
       icon="label"
-      summary={filterSummary.mlst2}
       renderLabel={({ active, value }) => (
         <React.Fragment>
           {active && filterSummary.mlst.length ? `${filterSummary.sources.mlst2}: ST` : 'ST'} <ST id={value} />
@@ -152,7 +145,6 @@ const Filter = ({
       filterKey="ngstar"
       heading="NG-STAR"
       icon="label"
-      summary={filterSummary.ngstar}
       renderLabel={({ active, value }) => (
         <React.Fragment>
           {active ? 'NG-STAR:' : 'Type'} <ST id={value} />
@@ -163,7 +155,6 @@ const Filter = ({
       filterKey="ngmast"
       heading="NG-MAST"
       icon="label"
-      summary={filterSummary.ngmast}
       renderLabel={({ active, value }) => (
         <React.Fragment>
           {active ? 'NG-MAST:' : 'Type'} <ST id={value} />
@@ -174,46 +165,38 @@ const Filter = ({
       filterKey="genotype"
       heading="Genotype"
       icon="label"
-      summary={filterSummary.genotype}
       renderLabel={({ value, active }) => (active ? `Genotype ${value}` : value)}
     />
     <FilterSection
       filterKey="klocus"
       heading="K Locus"
       icon="label"
-      summary={filterSummary.klocus}
     />
     <FilterSection
       filterKey="reference"
       heading="PW Reference"
       icon="book"
-      summary={filterSummary.reference}
     />
     <FilterSection
       filterKey="resistance"
       heading="Resistance"
       icon="local_pharmacy"
-      summary={filterSummary.resistance}
     />
     <FilterSection
       filterKey="country"
       heading="Country"
       icon="language"
-      summary={filterSummary.country}
-      autoSelect={filterSummary.country[0] && filterSummary.country[0].autoSelect}
     />
     <DateSection summary={filterSummary.date} />
     <FilterSection
       filterKey="access"
       heading="Access"
       icon="person"
-      summary={filterSummary.access}
     />
     <FilterSection
       filterKey="uploadedAt"
       heading="Uploaded At"
       icon="cloud_upload"
-      summary={filterSummary.uploadedAt}
       autoSelect={filterSummary.access.length === 1}
     />
     <LocationListener update={updateFilter} />

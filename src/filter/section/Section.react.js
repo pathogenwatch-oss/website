@@ -24,8 +24,8 @@ const FilterItem = ({ item, onClick, renderLabel }) => {
   );
 };
 
-function getActiveItem({ autoSelect = true, filterActive, summary = [] }) {
-  if (filterActive && summary.length === 1 && (autoSelect || summary[0].active)) {
+function getActiveItem({ autoSelect = true, filterActive, summary = [], totalVisible }) {
+  if (filterActive && summary.length === 1 && summary[0].count === totalVisible && autoSelect) {
     return summary[0];
   }
   return null;

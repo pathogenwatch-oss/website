@@ -80,6 +80,7 @@ export const getFilterSummary = createSelector(
 
     return {
       loading,
+      visible,
       sources,
       date:
         date.min && date.max
@@ -139,7 +140,6 @@ export const getFilterSummary = createSelector(
           label: getCountryName(value),
           count: country[value].count,
           active: filterState.country === value,
-          autoSelect: country[value].count === visible,
         })),
         'label'
       ),

@@ -21,8 +21,9 @@ export const getSearchText = createSelector(
 export const getFilterSummary = createSelector(
   ({ collections }) => collections.summary,
   getFilter,
-  ({ loading, organismId, access = {}, publicationYear, createdAt }, filterState) => ({
+  ({ loading, visible, organismId, access = {}, publicationYear, createdAt }, filterState) => ({
     loading,
+    visible,
     organism: sortBy(
       Object.keys(organismId).map(value => {
         const organism = taxIdMap.get(value);

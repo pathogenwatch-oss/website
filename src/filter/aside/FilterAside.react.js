@@ -20,8 +20,8 @@ class FilterAside extends React.Component {
       active,
       children,
       clear,
-      loading,
       prefilter,
+      summary,
       textValue,
       updateFilter,
     } = this.props;
@@ -46,7 +46,9 @@ class FilterAside extends React.Component {
             if (child) {
               return React.cloneElement(child, {
                 filterActive: active,
-                isLoading: loading,
+                isLoading: summary.loading,
+                summary: child.props.summary || summary[child.props.filterKey],
+                totalVisible: summary.visible,
                 updateFilter: child.props.updateFilter || updateFilter,
               });
             }
