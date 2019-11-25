@@ -254,26 +254,36 @@ module.exports = async function (props) {
   const organisms = Object.keys(summary.organismId);
 
   const { genusId, speciesId, organismId } = props.query;
-  if (!genusId) {
-    // species should not be returned unless genus selected
-    summary.speciesId = {};
-  }
+
   const taxQuery = {};
   if (!genusId && genera.length === 1) {
-    taxQuery.genusId = genera[0];
+    const { count } = summary.genusId[genera[0]];
+    if (count === summary.visible) {
+      taxQuery.genusId = genera[0];
+    }
   }
   if (!speciesId && (genusId || taxQuery.genusId) && species.length === 1) {
-    taxQuery.speciesId = species[0];
+    const { count } = summary.speciesId[species[0]];
+    if (count === summary.visible) {
+      taxQuery.speciesId = species[0];
+    }
   }
-
   if (!organismId && (speciesId || taxQuery.speciesId) && organisms.length === 1) {
-    taxQuery.organismId = organisms[0];
+    const { count } = summary.organismId[organisms[0]];
+    if (count === summary.visible) {
+      taxQuery.organismId = organisms[0];
+    }
   }
 
   if (Object.keys(taxQuery).length > 0) {
     const query = { ...props.query, ...taxQuery };
     // this will add taxonomy-specific analysis
     return Genome.getSummary(summaryFields, { ...props, query });
+  }
+
+  // species should not be returned unless genus selected
+  if (!genusId) {
+    summary.speciesId = {};
   }
 
   return summary;
