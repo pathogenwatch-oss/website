@@ -20,6 +20,7 @@ class FilterAside extends React.Component {
       active,
       children,
       clear,
+      headerComponent,
       prefilter,
       summary,
       textValue,
@@ -46,6 +47,7 @@ class FilterAside extends React.Component {
             if (child) {
               return React.cloneElement(child, {
                 filterActive: active,
+                headerComponent,
                 isLoading: summary.loading,
                 summary: child.props.summary || summary[child.props.filterKey],
                 totalVisible: summary.visible,

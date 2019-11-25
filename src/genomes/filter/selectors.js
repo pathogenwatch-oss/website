@@ -245,3 +245,4 @@ export const getFilterSummary = createSelector(
 
 export const getGenomeFilter = ({ genomes }) => genomes.filter;
 export const isFilterOpen = state => getGenomeFilter(state).isOpen;
+export const getListFilters = state => getGenomeFilter(state).listFilters;

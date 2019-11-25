@@ -1,12 +1,13 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { ST } from '~/mlst';
 
 import { LocationListener } from '~/location';
 import FilterAside from '~/filter/aside';
 import FilterSection from '~/filter/section';
 import DateSection from '~/filter/date-section';
+import { ST } from '~/mlst';
+import SectionHeader from './SectionHeader.react';
 
 import { selectors } from '~/filter';
 
@@ -63,11 +64,12 @@ const Filter = ({
     textOnChangeEffect={applyFilter}
     textValue={textValue}
     updateFilter={updateFilter}
+    headerComponent={SectionHeader}
   >
     <FilterSection
       autoSelect={false}
       filterKey="organismId"
-      heading="Supported Organism"
+      heading="Supported organism"
       icon="bug_report"
       summary={filterSummary.supportedOrganisms}
       updateFilter={clearDependants(filterState, genusDependants)}
@@ -195,7 +197,7 @@ const Filter = ({
     />
     <FilterSection
       filterKey="uploadedAt"
-      heading="Uploaded At"
+      heading="Uploaded at"
       icon="cloud_upload"
       autoSelect={filterSummary.access.length === 1}
     />

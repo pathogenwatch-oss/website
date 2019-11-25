@@ -54,6 +54,13 @@ const FilterSection = React.createClass({
     });
   },
 
+  componentDidUpdate(_, previous) {
+    if (!previous.isOpen && this.state.isOpen && this.itemFilterInput) {
+      componentHandler.upgradeElement(this.itemFilterInput.parentElement);
+      this.itemFilterInput.focus();
+    }
+  },
+
   toggle(isOpen) {
     this.setState({ isOpen: !isOpen });
   },
@@ -88,27 +95,27 @@ const FilterSection = React.createClass({
           className="wgsa-filter-section is-active"
           style={!autoSelected ? { cursor: 'pointer' } : undefined}
         >
-          <h3
+          <header
             title={titleAttr}
             onClick={autoSelected ? null : () => onClick(value)}
           >
             <i className="material-icons">{icon}</i>
             <span>{renderLabel({ ...activeItem, active: true })}</span>
             {!autoSelected && <i className="material-icons">filter_list</i>}
-          </h3>
+          </header>
         </section>
       );
     }
 
-    const { disabled, disabledText, className } = this.props;
+    const { disabled, disabledText, className, headerComponent } = this.props;
 
     if (disabled) {
       return (
         <section className="wgsa-filter-section is-disabled">
-          <h3 title={disabledText}>
+          <header title={disabledText}>
             <i className="material-icons">{icon}</i>
             <span>{heading}</span>
-          </h3>
+          </header>
         </section>
       );
     }
@@ -119,13 +126,17 @@ const FilterSection = React.createClass({
           'is-open': isOpen,
         })}
       >
-        <h3 onClick={() => this.toggle(isOpen)}>
+        <header onClick={() => this.toggle(isOpen)}>
           <i className="material-icons">{icon}</i>
-          <span>{heading}</span>
-          <i className="material-icons">
-            {isOpen ? 'expand_less' : 'expand_more'}
-          </i>
-        </h3>
+          { headerComponent ?
+            React.createElement(headerComponent, { filterKey, heading, isOpen, summary }) :
+            <span>{heading}</span> }
+          <button className="wgsa-filter-section-toggle">
+            <i className="material-icons">
+              {isOpen ? 'expand_less' : 'expand_more'}
+            </i>
+          </button>
+        </header>
         {isOpen && (
           <React.Fragment>
             {children ||

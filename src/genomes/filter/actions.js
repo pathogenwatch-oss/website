@@ -47,3 +47,15 @@ export function toggleFilter() {
     type: GENOMES_FILTER_OPENED,
   };
 }
+
+export const GENOMES_FILTER_SUMMARY_LIST = 'GENOMES_FILTER_SUMMARY_LIST';
+
+export function filterSummaryList(filterKey, text) {
+  return {
+    type: GENOMES_FILTER_SUMMARY_LIST,
+    payload: {
+      filterKey,
+      text,
+    },
+  };
+}

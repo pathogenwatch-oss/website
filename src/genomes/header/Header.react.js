@@ -3,17 +3,17 @@ import { connect } from 'react-redux';
 
 import { Totals } from '../../filter/summary';
 import ViewSwitcher from './ViewSwitcher.react';
-import FilterHeader from '../filter/Header.react';
+import FilterToggle from '../filter/Toggle.react';
 import SelectionSummary from '../selection';
 import RestoreFromBin from '../bin/RestoreFromBin.react';
 
 import { getVisible, getTotal } from './selectors';
 
 const Header = ({ visibleGenomes, totalGenomes, prefilter }) => {
-  if (totalGenomes === 0) return <header></header>;
+  if (totalGenomes === 0) return <header />;
   return (
     <header>
-      <FilterHeader />
+      <FilterToggle />
       <div className="wgsa-button-group">
         <i className="material-icons" title="View">visibility</i>
         <ViewSwitcher title="List" />

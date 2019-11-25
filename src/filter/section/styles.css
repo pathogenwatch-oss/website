@@ -19,7 +19,7 @@
   border-bottom-color: transparent;
 }
 
-.wgsa-filter-section > h3 {
+.wgsa-filter-section > header {
   display: flex;
   font-size: 14px;
   font-family: "Roboto", "Helvetica", "Arial", sans-serif !important;
@@ -32,28 +32,37 @@
   user-select: none;
 }
 
-.wgsa-filter-section > h3 > i:first-child {
+.wgsa-filter-section > header > :first-child {
   margin-right: 16px;
   font-size: 20px;
   height: 22px;
 }
 
-.wgsa-filter-section > h3 > i:last-child {
-  margin-left: auto;
-}
-
-.wgsa-filter-section > h3 > span {
+.wgsa-filter-section > header > span {
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
 }
 
-.wgsa-filter-section.is-active > h3 {
+.wgsa-filter-section > header .mdl-textfield {
+  width: calc(100% - 8px);
+}
+
+.wgsa-filter-section > header .mdl-textfield__input {
+  font-size: 14px;
+  line-height: 20px;
+}
+
+.wgsa-filter-section > header .mdl-textfield__label {
+  font-size: 14px;
+}
+
+.wgsa-filter-section.is-active > header {
   color: #673c90;
   cursor: unset; /* cursor is conditionally set in style */
 }
 
-.wgsa-filter-section.is-disabled > h3 {
+.wgsa-filter-section.is-disabled > header {
   color: rgba(0, 0, 0, 0.36); /* 0.54 * 0.666 */
   cursor: help;
 }
@@ -61,6 +70,20 @@
 .wgsa-filter-section p {
   font-size: 13px;
   line-height: 1.5;
+}
+
+.wgsa-filter-section-toggle {
+  color: inherit;
+  height: 24px;
+  margin-left: auto;
+  outline: none;
+  padding: 0;
+}
+
+.wgsa-filter-section-toggle:focus,
+.wgsa-filter-section-toggle:active {
+  outline: 2px dotted #a386bd;
+  color: #a386bd;
 }
 
 .wgsa-filter .mdl-chip {
