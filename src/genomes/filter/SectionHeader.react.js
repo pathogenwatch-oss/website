@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 
-import FilterHeader from '~/filter/section/FilterHeader.react';
+import Listbuster from '~/filter/section/Listbuster.react';
 
 import { getListFilters } from './selectors';
 
@@ -24,4 +24,4 @@ function mapDispatchToProps(dispatch, { filterKey, summary }) {
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(FilterHeader);
+export default connect(mapStateToProps, mapDispatchToProps)(Listbuster);
