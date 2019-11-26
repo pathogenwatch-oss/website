@@ -22,227 +22,408 @@ export const getSearchText = createSelector(
   ({ searchText }) => searchText || ''
 );
 
+export const getGenomeFilter = ({ genomes }) => genomes.filter;
+export const isFilterOpen = state => getGenomeFilter(state).isOpen;
+
+export const getListFilters = state => getGenomeFilter(state).listFilters;
+
+const getFilterFn = (filterKey, property) => createSelector(
+  state => getListFilters(state)[filterKey],
+  filterText => {
+    const regex = new RegExp(filterText, 'i');
+    return input => regex.test(property ? input[property] : input);
+  }
+);
+
+const getFilterSummaries = ({ genomes }) => genomes.summary;
+
 const getOrganismSummary = createSelector(
-  ({ genomes }) => genomes.summary,
-  filter.getFilter,
+  getFilterSummaries,
+  state => getFilter(state).organismId,
   getDeployedOrganismIds,
-  ({ organismId = {} }, filterState, deployedOrganisms) => {
-    const organisms = [];
-    for (const value of Object.keys(organismId)) {
-      if (deployedOrganisms.has(value)) {
+  getFilterFn('organismId', 'title'),
+  ({ organismId = {} }, filterValue, deployedOrganisms, filterFn) => sortBy(
+    Object.keys(organismId)
+      .filter(value => deployedOrganisms.has(value))
+      .map(value => {
         const organism = taxIdMap.get(value);
-        const active = filterState.organismId === value;
-        organisms.push({
+        const active = filterValue === value;
+        return {
           value,
           active,
           label: organism.formattedName,
           title: active ? `Organism: ${organism.name}` : organism.name,
           count: organismId[value].count,
-        });
-      }
-    }
-    return organisms;
+        };
+      })
+      .filter(filterFn),
+    'title'
+  )
+);
+
+const getMlstSummary = createSelector(
+  getFilterSummaries,
+  state => getFilter(state).mlst,
+  getFilterFn('mlst'),
+  ({ mlst = {}, sources }, filterValue, filterFn) => sortBy(
+    Object.keys(mlst)
+      .filter(filterFn)
+      .map(value => ({
+        value,
+        active: filterValue === value,
+        label: `ST ${value}`,
+        activeTitle: `MLST - ${sources.mlst}: ST ${value}`,
+        title: `ST ${value}`,
+        count: mlst[value].count,
+        novel: isNovel(value),
+      })),
+    'novel',
+    item => Number(item.value)
+  )
+);
+
+const getMlst2Summary = createSelector(
+  getFilterSummaries,
+  state => getFilter(state).mlst2,
+  getFilterFn('mlst2'),
+  ({ mlst2 = {}, sources }, filterValue, filterFn) => sortBy(
+    Object.keys(mlst2)
+      .filter(filterFn)
+      .map(value => ({
+        value,
+        active: filterValue === value,
+        label: `ST ${value}`,
+        activeTitle: `MLST - ${sources.mlst2}: ST ${value}`,
+        title: `ST ${value}`,
+        count: mlst2[value].count,
+        novel: isNovel(value),
+      })),
+    'novel',
+    item => Number(item.value)
+  )
+);
+
+const getSpeciesIdSummary = createSelector(
+  getFilterSummaries,
+  state => getFilter(state).speciesId,
+  getFilterFn('speciesId', 'label'),
+  ({ speciesId = {} }, filterValue, filterFn) => sortBy(
+    Object.keys(speciesId)
+      .map(value => ({
+        value,
+        label: speciesId[value].label,
+        count: speciesId[value].count,
+        active: filterValue === value,
+      }))
+      .filter(filterFn),
+    'label'
+  )
+);
+
+const getGenusIdSummary = createSelector(
+  getFilterSummaries,
+  state => getFilter(state).genusId,
+  getFilterFn('genusId', 'label'),
+  ({ genusId = {} }, filterValue, filterFn) => sortBy(
+    Object.keys(genusId)
+      .map(value => ({
+        value,
+        label: genusId[value].label,
+        count: genusId[value].count,
+        active: filterValue === value,
+      }))
+      .filter(filterFn),
+    'label'
+  )
+);
+
+const getCountrySummary = createSelector(
+  getFilterSummaries,
+  state => getFilter(state).country,
+  getFilterFn('country', 'label'),
+  ({ country = {} }, filterValue, filterFn) => sortBy(
+    Object.keys(country)
+      .map(value => ({
+        value,
+        label: getCountryName(value),
+        count: country[value].count,
+        active: filterValue === value,
+      }))
+      .filter(filterFn),
+    'label'
+  )
+);
+
+const getAccessSummary = createSelector(
+  getFilterSummaries,
+  state => getFilter(state).access,
+  ({ access = {} }, filterValue) => sortBy(
+    Object.keys(access)
+      .map(value => ({
+        value,
+        label: `${value[0].toUpperCase()}${value.slice(1)}`,
+        count: access[value].count,
+        active: filterValue === value,
+      })),
+    'label'
+  )
+);
+
+const getUploadedAtSummary = createSelector(
+  getFilterSummaries,
+  state => getFilter(state).uploadedAt,
+  getFilterFn('uploadedAt', 'label'),
+  ({ uploadedAt = {} }, filterValue, filterFn) =>
+    Object.keys(uploadedAt)
+      .sort((a, b) => new Date(b) - new Date(a))
+      .map(value => {
+        const dateValue = new Date(value);
+        return {
+          value,
+          label: formatDateTime(dateValue),
+          count: uploadedAt[value].count,
+          active: filterValue === value,
+        };
+      })
+      .filter(filterFn)
+);
+
+const getResistanceSummary = createSelector(
+  getFilterSummaries,
+  state => getFilter(state).resistance,
+  getFilterFn('resistance'),
+  ({ resistance = {} }, filterValue, filterFn) => sortBy(
+    Object.keys(resistance)
+      .filter(filterFn)
+      .map(value => ({
+        value,
+        count: resistance[value].count,
+        active: filterValue === value,
+      })),
+    'value'
+  )
+);
+
+const getSubspeciesSummary = createSelector(
+  getFilterSummaries,
+  state => getFilter(state).subspecies,
+  getFilterFn('subspecies'),
+  ({ subspecies = {} }, filterValue, filterFn) => sortBy(
+    Object.keys(subspecies)
+      .filter(filterFn)
+      .map(value => ({
+        value,
+        count: subspecies[value].count,
+        active: filterValue === value,
+      })),
+    'value'
+  )
+);
+
+const getSeroname = createSelector(
+  state => getFilterSummaries(state).speciesId,
+  (speciesIdSummary) => {
+    const speciesIds = Object.keys(speciesIdSummary);
+    return speciesIds.length === 1 ?
+      getSeroName(speciesIdSummary[speciesIds[0]].label) :
+      'serotype';
   }
+);
+
+const getSerotypeSummary = createSelector(
+  getFilterSummaries,
+  state => getFilter(state).serotype,
+  getFilterFn('serotype'),
+  getSeroname,
+  ({ serotype = {} }, filterValue, filterFn, seroname) => sortBy(
+    Object.keys(serotype)
+      .filter(filterFn)
+      .map(value => ({
+        value,
+        count: serotype[value].count,
+        active: filterValue === value,
+        activeTitle: `${seroname[0].toUpperCase()}${seroname.slice(1)}: ${value}`,
+      })),
+    'value'
+  )
+);
+
+const getStrainSummary = createSelector(
+  getFilterSummaries,
+  state => getFilter(state).strain,
+  getFilterFn('strain'),
+  ({ strain = {} }, filterValue, filterFn) => sortBy(
+    Object.keys(strain)
+      .filter(filterFn)
+      .map(value => ({
+        value,
+        label: `GPSC ${value}`,
+        count: strain[value].count,
+        active: filterValue === value,
+      })),
+    item => Number(item.value)
+  )
+);
+
+const getNgmastSummary = createSelector(
+  getFilterSummaries,
+  state => getFilter(state).ngmast,
+  getFilterFn('ngmast'),
+  ({ ngmast = {} }, filterValue, filterFn) => sortBy(
+    Object.keys(ngmast)
+      .filter(filterFn)
+      .map(value => ({
+        value,
+        active: filterValue === value,
+        count: ngmast[value].count,
+      })),
+    'value'
+  )
+);
+
+const getNgstarSummary = createSelector(
+  getFilterSummaries,
+  state => getFilter(state).ngstar,
+  getFilterFn('ngstar'),
+  ({ ngstar = {} }, filterValue, filterFn) => sortBy(
+    Object.keys(ngstar)
+      .filter(filterFn)
+      .map(value => ({
+        value,
+        active: filterValue === value,
+        count: ngstar[value].count,
+        novel: isNovel(value),
+      })),
+    'novel',
+    item => Number(item.value)
+  )
+);
+
+const getGenotypeSummary = createSelector(
+  getFilterSummaries,
+  state => getFilter(state).genotype,
+  getFilterFn('genotype'),
+  ({ genotype = {} }, filterValue, filterFn) => sortBy(
+    Object.keys(genotype)
+      .filter(filterFn)
+      .map(value => ({
+        value,
+        active: filterValue === value,
+        count: genotype[value].count,
+      })),
+    'value'
+  )
+);
+
+const getReferenceSummary = createSelector(
+  getFilterSummaries,
+  state => getFilter(state).reference,
+  ({ reference = {} }, filterValue) => sortBy(
+    Object.keys(reference)
+      .map(value => ({
+        value,
+        active: filterValue === value,
+        count: reference[value].count,
+      })),
+    'value'
+  )
+);
+
+const getKlocusSummary = createSelector(
+  getFilterSummaries,
+  state => getFilter(state).klocus,
+  getFilterFn('klocus'),
+  ({ klocus = {} }, filterValue, filterFn) => sortBy(
+    Object.keys(klocus)
+      .filter(filterFn)
+      .map(value => ({
+        value,
+        active: filterValue === value,
+        count: klocus[value].count,
+      })),
+    'value'
+  )
+);
+
+const getDateSummary = createSelector(
+  getFilterSummaries,
+  state => getFilter(state).minDate,
+  state => getFilter(state).maxDate,
+  ({ date }, minDate, maxDate) => (
+    date.min && date.max ?
+      {
+        bounds: [ date.min, date.max ],
+        values: [ minDate, maxDate ],
+      } :
+      null
+  )
 );
 
 export const getFilterSummary = createSelector(
   ({ genomes }) => genomes.summary,
-  filter.getFilter,
+  getAccessSummary,
+  getCountrySummary,
+  getDateSummary,
+  getGenotypeSummary,
+  getGenusIdSummary,
+  getKlocusSummary,
+  getMlst2Summary,
+  getMlstSummary,
+  getNgmastSummary,
+  getNgstarSummary,
   getOrganismSummary,
-  (summary, filterState, supportedOrganisms) => {
-    const {
-      access = {},
+  getReferenceSummary,
+  getResistanceSummary,
+  getSerotypeSummary,
+  getSpeciesIdSummary,
+  getStrainSummary,
+  getSubspeciesSummary,
+  getUploadedAtSummary,
+  ({ loading, sources = {}, visible }, ...summaries) => {
+    const [
+      access,
       country,
       date,
-      genotype = {},
+      genotype,
       genusId,
-      klocus = {},
-      loading,
-      mlst = {},
-      mlst2 = {},
-      ngmast = {},
-      ngstar = {},
-      poppunk = {},
-      serotype = {},
-      sources = {},
+      klocus,
+      mlst2,
+      mlst,
+      ngmast,
+      ngstar,
+      organismId,
+      reference,
+      resistance,
+      serotype,
       speciesId,
-      reference = {},
-      resistance = {},
-      subspecies = {},
+      strain,
+      subspecies,
       uploadedAt,
-      visible,
-    } = summary;
-
-    const speciesIds = Object.keys(speciesId);
-    const seroname = speciesIds.length === 1 ?
-      getSeroName(speciesId[speciesIds[0]].label) :
-      'serotype';
+    ] = summaries; // order is important!
 
     return {
       loading,
-      visible,
       sources,
-      date:
-        date.min && date.max
-          ? {
-            bounds: [ date.min, date.max ],
-            values: [ filterState.minDate, filterState.maxDate ],
-          }
-          : null,
-      supportedOrganisms: sortBy(supportedOrganisms, 'title'),
-      mlst: sortBy(
-        Object.keys(mlst).map(value => ({
-          value,
-          active: filterState.mlst === value,
-          label: `ST ${value}`,
-          activeTitle: `MLST - ${sources.mlst}: ST ${value}`,
-          title: `ST ${value}`,
-          count: mlst[value].count,
-          novel: isNovel(value),
-        })),
-        'novel',
-        item => Number(item.value)
-      ),
-      mlst2: sortBy(
-        Object.keys(mlst2).map(value => ({
-          value,
-          active: filterState.mlst2 === value,
-          label: `ST ${value}`,
-          activeTitle: `MLST - ${sources.mlst2}: ST ${value}`,
-          title: `ST ${value}`,
-          count: mlst2[value].count,
-          novel: isNovel(value),
-        })),
-        'novel',
-        item => Number(item.value)
-      ),
-      speciesId: sortBy(
-        Object.keys(speciesId).map(value => ({
-          value,
-          label: speciesId[value].label,
-          count: speciesId[value].count,
-          active: filterState.speciesId === value,
-        })),
-        'label'
-      ),
-      genusId: sortBy(
-        Object.keys(genusId).map(value => ({
-          value,
-          label: genusId[value].label,
-          count: genusId[value].count,
-          active: filterState.genusId === value,
-        })),
-        'label'
-      ),
-      country: sortBy(
-        Object.keys(country).map(value => ({
-          value,
-          label: getCountryName(value),
-          count: country[value].count,
-          active: filterState.country === value,
-        })),
-        'label'
-      ),
-      access: sortBy(
-        Object.keys(access).map(value => ({
-          value,
-          label: `${value[0].toUpperCase()}${value.slice(1)}`,
-          count: access[value].count,
-          active: filterState.access === value,
-        })),
-        'label'
-      ),
-      uploadedAt: Object.keys(uploadedAt)
-        .sort((a, b) => new Date(b) - new Date(a))
-        .map(value => {
-          const dateValue = new Date(value);
-          return {
-            value,
-            label: formatDateTime(dateValue),
-            count: uploadedAt[value].count,
-            active: filterState.uploadedAt === value,
-          };
-        }),
-      resistance: sortBy(
-        Object.keys(resistance).map(value => ({
-          value,
-          count: resistance[value].count,
-          active: filterState.resistance === value,
-        })),
-        'value'
-      ),
-      subspecies: sortBy(
-        Object.keys(subspecies).map(value => ({
-          value,
-          count: subspecies[value].count,
-          active: filterState.subspecies === value,
-        })),
-        'value'
-      ),
-      serotype: sortBy(
-        Object.keys(serotype).map(value => ({
-          value,
-          count: serotype[value].count,
-          active: filterState.serotype === value,
-          activeTitle: `${seroname[0].toUpperCase()}${seroname.slice(1)}: ${value}`,
-        })),
-        'value'
-      ),
-      strain: sortBy(
-        Object.keys(poppunk).map(value => ({
-          value,
-          label: `GPSC ${value}`,
-          count: poppunk[value].count,
-          active: filterState.strain === value,
-        })),
-        item => Number(item.value)
-      ),
-      ngmast: sortBy(
-        Object.keys(ngmast).map(value => ({
-          value,
-          active: filterState.ngmast === value,
-          count: ngmast[value].count,
-        })),
-        'value'
-      ),
-      ngstar: sortBy(
-        Object.keys(ngstar).map(value => ({
-          value,
-          active: filterState.ngstar === value,
-          count: ngstar[value].count,
-          novel: isNovel(value),
-        })),
-        'novel',
-        item => Number(item.value)
-      ),
-      genotype: sortBy(
-        Object.keys(genotype).map(value => ({
-          value,
-          active: filterState.genotype === value,
-          count: genotype[value].count,
-        })),
-        'value'
-      ),
-      reference: sortBy(
-        Object.keys(reference).map(value => ({
-          value,
-          active: filterState.reference === value,
-          count: reference[value].count,
-        })),
-        'value'
-      ),
-      klocus: sortBy(
-        Object.keys(klocus).map(value => ({
-          value,
-          active: filterState.klocus === value,
-          count: klocus[value].count,
-        })),
-        'value'
-      ),
+      visible,
+
+      access,
+      country,
+      date,
+      genotype,
+      genusId,
+      klocus,
+      mlst,
+      mlst2,
+      ngmast,
+      ngstar,
+      organismId,
+      reference,
+      resistance,
+      serotype,
+      speciesId,
+      strain,
+      subspecies,
+      uploadedAt,
     };
   }
 );
-
-export const getGenomeFilter = ({ genomes }) => genomes.filter;
-export const isFilterOpen = state => getGenomeFilter(state).isOpen;
-export const getListFilters = state => getGenomeFilter(state).listFilters;

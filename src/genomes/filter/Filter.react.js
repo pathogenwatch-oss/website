@@ -4,20 +4,13 @@ import { connect } from 'react-redux';
 
 import { LocationListener } from '~/location';
 import FilterAside from '~/filter/aside';
-import FilterSection from '~/filter/section';
+import Section from '~/filter/section';
 import DateSection from '~/filter/date-section';
 import { ST } from '~/mlst';
-import SectionHeader from './SectionHeader.react';
+import FilterableSection from './FilterableSection.react';
 
-import { selectors } from '~/filter';
-
-import {
-  getFilter,
-  getFilterSummary,
-  getSearchText,
-  isFilterOpen,
-  getPrefilter,
-} from './selectors';
+import { selectors as filter } from '~/filter';
+import * as selectors from './selectors';
 
 import { stateKey } from './index';
 import * as actions from './actions';
@@ -64,20 +57,18 @@ const Filter = ({
     textOnChangeEffect={applyFilter}
     textValue={textValue}
     updateFilter={updateFilter}
-    headerComponent={SectionHeader}
   >
-    <FilterSection
+    <FilterableSection
       autoSelect={false}
       filterKey="organismId"
       heading="Supported organism"
       icon="bug_report"
-      summary={filterSummary.supportedOrganisms}
       updateFilter={clearDependants(filterState, genusDependants)}
-      hidden={!filterSummary.genusId.length}
-      disabled={!filterSummary.supportedOrganisms.length}
+      hidden={!filterSummary.visible}
+      disabled={!filterSummary.organismId.length}
       disabledText="No supported organisms in current filter."
     />
-    <FilterSection
+    <FilterableSection
       filterKey="genusId"
       heading="Genus"
       icon="bug_report"
@@ -85,7 +76,7 @@ const Filter = ({
       updateFilter={clearDependants(filterState, genusDependants)}
       renderLabel={({ label }) => <em>{label}</em>}
     />
-    <FilterSection
+    <FilterableSection
       filterKey="speciesId"
       heading="Species"
       icon="bug_report"
@@ -95,7 +86,7 @@ const Filter = ({
       disabledText="Select a genus to filter by species."
       renderLabel={({ label }) => <em>{label}</em>}
     />
-    <FilterSection
+    <FilterableSection
       filterKey="subspecies"
       heading="Subspecies"
       icon="bug_report"
@@ -103,19 +94,19 @@ const Filter = ({
       hidden={filterState.organismId}
       renderLabel={({ value }) => <React.Fragment>subsp. <em>{value}</em></React.Fragment>}
     />
-    <FilterSection
+    <FilterableSection
       filterKey="serotype"
       heading={getSerotypeHeading(filterState.genusId)}
       icon="bug_report"
       hidden={filterState.organismId}
       renderLabel={({ value }) => `ser. ${value}`}
     />
-    <FilterSection
+    <FilterableSection
       filterKey="strain"
       heading="Strain"
       icon="scatter_plot"
     />
-    <FilterSection
+    <FilterableSection
       filterKey="mlst"
       heading={
         <React.Fragment>
@@ -129,7 +120,7 @@ const Filter = ({
         </React.Fragment>
       )}
     />
-    <FilterSection
+    <FilterableSection
       filterKey="mlst2"
       heading={
         <React.Fragment>
@@ -143,7 +134,7 @@ const Filter = ({
         </React.Fragment>
       )}
     />
-    <FilterSection
+    <FilterableSection
       filterKey="ngstar"
       heading="NG-STAR"
       icon="label"
@@ -153,7 +144,7 @@ const Filter = ({
         </React.Fragment>
       )}
     />
-    <FilterSection
+    <FilterableSection
       filterKey="ngmast"
       heading="NG-MAST"
       icon="label"
@@ -163,39 +154,40 @@ const Filter = ({
         </React.Fragment>
       )}
     />
-    <FilterSection
+    <FilterableSection
       filterKey="genotype"
       heading="Genotype"
       icon="label"
       renderLabel={({ value, active }) => (active ? `Genotype ${value}` : value)}
     />
-    <FilterSection
+    <FilterableSection
       filterKey="klocus"
       heading="K Locus"
       icon="label"
     />
-    <FilterSection
+    <FilterableSection
       filterKey="reference"
       heading="PW Reference"
       icon="book"
     />
-    <FilterSection
+    <FilterableSection
       filterKey="resistance"
       heading="Resistance"
       icon="local_pharmacy"
     />
-    <FilterSection
+    <FilterableSection
       filterKey="country"
       heading="Country"
       icon="language"
     />
     <DateSection summary={filterSummary.date} />
-    <FilterSection
+    <Section
       filterKey="access"
       heading="Access"
       icon="person"
+      headerComponent={({ heading }) => <span>{heading}</span>}
     />
-    <FilterSection
+    <FilterableSection
       filterKey="uploadedAt"
       heading="Uploaded at"
       icon="cloud_upload"
@@ -207,12 +199,13 @@ const Filter = ({
 
 function mapStateToProps(state) {
   return {
-    isActive: selectors.isActive(state, { stateKey }),
-    filterSummary: getFilterSummary(state, { stateKey }),
-    textValue: getSearchText(state),
-    isOpen: isFilterOpen(state),
-    prefilter: getPrefilter(state),
-    filterState: getFilter(state, { stateKey }),
+    filterState: selectors.getFilter(state, { stateKey }),
+    filterSummary: selectors.getFilterSummary(state, { stateKey }),
+    isActive: filter.isActive(state, { stateKey }),
+    isOpen: selectors.isFilterOpen(state),
+    listFilters: selectors.getListFilters(state),
+    prefilter: selectors.getPrefilter(state),
+    textValue: selectors.getSearchText(state),
   };
 }
 

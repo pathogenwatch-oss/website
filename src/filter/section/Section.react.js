@@ -28,7 +28,7 @@ function getActiveItem({ autoSelect = true, filterActive, summary = [], totalVis
   if (filterActive && summary.length === 1 && summary[0].count === totalVisible && autoSelect) {
     return summary[0];
   }
-  return null;
+  return summary.find(_ => _.active);
 }
 
 function isSectionHidden({ children, disabled, hidden, summary = [] }) {
@@ -129,7 +129,7 @@ const FilterSection = React.createClass({
         <header onClick={() => this.toggle(isOpen)}>
           <i className="material-icons">{icon}</i>
           { headerComponent ?
-            React.createElement(headerComponent, { filterKey, heading, isOpen, summary }) :
+            React.createElement(headerComponent, { ...this.props, isOpen }) :
             <span>{heading}</span> }
           <button className="wgsa-filter-section-toggle">
             <i className="material-icons">

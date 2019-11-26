@@ -3,6 +3,8 @@
   border-bottom: 1px solid transparent;
   box-sizing: border-box;
   padding: 0 16px;
+  transition: .28s cubic-bezier(.4,0,.2,1);
+  transition-property: border-color;
 }
 
 .wgsa-filter-section.is-open {
@@ -38,6 +40,10 @@
   height: 22px;
 }
 
+.wgsa-filter-section > header > :nth-child(3) {
+  margin-left: auto;
+}
+
 .wgsa-filter-section > header > span {
   white-space: nowrap;
   text-overflow: ellipsis;
@@ -53,8 +59,19 @@
   line-height: 20px;
 }
 
+.wgsa-filter-section > header .mdl-textfield__input:disabled {
+  border: none;
+  cursor: pointer;
+}
+
 .wgsa-filter-section > header .mdl-textfield__label {
   font-size: 14px;
+  transition: .28s cubic-bezier(.4,0,.2,1);
+  transition-property: color;
+}
+
+.wgsa-filter-section > header .mdl-textfield__input:disabled + .mdl-textfield__label {
+  color: rgba(0, 0, 0, 0.54);
 }
 
 .wgsa-filter-section.is-active > header {
@@ -69,7 +86,9 @@
 
 .wgsa-filter-section p {
   font-size: 13px;
-  line-height: 1.5;
+  line-height: 16px;
+  margin: 16px 0 8px;
+  color: rgba(0, 0, 0, 0.54)
 }
 
 .wgsa-filter-section-toggle {

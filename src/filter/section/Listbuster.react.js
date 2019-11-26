@@ -4,23 +4,50 @@ export default ({ filterKey, heading, isOpen, onChange, onSubmit, value }) => {
   const input = React.createRef();
 
   React.useEffect(() => {
+    componentHandler.upgradeElement(input.current.parentElement);
+  }, []);
+
+  React.useEffect(() => {
+    const el = input.current;
     if (isOpen) {
-      const el = input.current;
-      componentHandler.upgradeElement(el.parentElement);
+      el.parentElement.MaterialTextfield.checkDirty();
       el.focus();
+    } else {
+      el.value = null;
+      el.parentElement.MaterialTextfield.checkDirty();
     }
   }, [ isOpen ]);
 
-  if (isOpen) {
-    return (
-      <form action="#" onSubmit={onSubmit} onClick={e => e.stopPropagation()}>
-        <div className="mdl-textfield mdl-js-textfield">
-          <input className="mdl-textfield__input" type="text" id={`${filterKey}-filter`} ref={input} onChange={onChange} value={value} />
-          <label className="mdl-textfield__label" htmlFor={`${filterKey}-filter`}>{heading}</label>
-        </div>
-      </form>
-    );
-  }
-
-  return <span>{heading}</span>;
+  const id = `${filterKey}-filter`;
+  return (
+    <form
+      action="#"
+      onClick={isOpen ? e => e.stopPropagation() : null}
+      onSubmit={onSubmit}
+      autoComplete="off"
+      autoCorrect="off"
+    >
+      <div className="mdl-textfield mdl-js-textfield">
+        <input
+          className="mdl-textfield__input"
+          disabled={!isOpen}
+          id={id}
+          onChange={onChange}
+          onFocus={() => {
+            if (value && value.length) {
+              // to fix cursor position
+              input.current.setSelectionRange(value.length, value.length);
+            }
+          }}
+          ref={input}
+          title={heading}
+          type="text"
+          value={value}
+        />
+        <label className="mdl-textfield__label" htmlFor={id}>
+          {heading}
+        </label>
+      </div>
+    </form>
+  );
 };
