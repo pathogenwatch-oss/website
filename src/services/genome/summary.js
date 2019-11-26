@@ -165,7 +165,7 @@ function getSummaryFields(deployedOrganisms) {
       },
     },
     {
-      field: 'poppunk',
+      field: 'strain',
       aggregation: ({ query, user }) => {
         if (!organismHasTask('poppunk', [ query.organismId, query.speciesId, query.genusId ], user)) return null;
         return [
