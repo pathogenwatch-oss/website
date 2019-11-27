@@ -230,4 +230,14 @@ schema.statics.generateToken = function (title) {
   return sections.join('-');
 };
 
+schema.statics.getGenomeIds = function (_id, props) {
+  const query = this.getPrefilterCondition(props);
+  query._id = _id;
+  return (
+    this.findOne(query, { genomes: 1 })
+      .lean()
+      .then(doc => (doc ? doc.genomes : []))
+  );
+};
+
 module.exports = mongoose.model('Collection', schema);

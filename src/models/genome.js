@@ -2,6 +2,8 @@ const mongoose = require('mongoose');
 const { Schema } = mongoose;
 const escapeRegex = require('escape-string-regexp');
 
+const Collection = require('./collection');
+
 const geocoding = require('../utils/geocoding');
 const { summariseAnalysis } = require('../utils/analysis');
 
@@ -217,9 +219,10 @@ schema.statics.getPrefilterCondition = function ({ user, query = {} }) {
   throw new Error(`Invalid genome prefilter: '${prefilter}'`);
 };
 
-schema.statics.getFilterQuery = function (props) {
+schema.statics.getFilterQuery = async function (props) {
   const { user, query = {} } = props;
   const {
+    collection,
     country,
     genotype,
     genusId,
@@ -246,6 +249,10 @@ schema.statics.getFilterQuery = function (props) {
   } = query;
 
   const findQuery = this.getPrefilterCondition(props);
+
+  if (collection) {
+    findQuery._id = { $in: await Collection.getGenomeIds(collection, props) };
+  }
 
   if (searchText) {
     findQuery.name = { $regex: escapeRegex(searchText), $options: 'i' };

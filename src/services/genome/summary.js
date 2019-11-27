@@ -240,6 +240,43 @@ function getSummaryFields(deployedOrganisms) {
         ];
       },
     },
+    {
+      field: 'collection',
+      aggregation: ({ query, user }) => {
+        if (!deployedOrganisms.includes(query.organismId)) return null;
+        return [
+          { $project: { _id: 1 } }, // don't need genome details
+          { $lookup: { // attach membership info
+            from: 'genomecollections',
+            localField: '_id',
+            foreignField: '_genome',
+            as: 'memberOf',
+          } },
+          { $unwind: '$memberOf' }, // flatten document and filter out genomes not in a collection
+          { $replaceRoot: { newRoot: '$memberOf' } }, // work directly with genomecollection docs
+          { $unwind: '$collections' }, // create record for every membership
+          { $group: { _id: '$collections', count: { $sum: 1 } } }, // summarise membership
+          { $lookup: { // fetch related data
+            from: 'collections',
+            let: { id: '$_id' },
+            pipeline: [
+              { $match: { $or: [ { access: 'public' }, { _user: user._id } ], binned: false, organismId: query.organismId } }, // filter by visibility
+              { $match: { $expr: { $eq: [ '$_id', '$$id' ] } } },
+              { $project: { title: 1 } },
+            ],
+            as: 'collection',
+          } },
+          { $unwind: '$collection' }, // flatten document and filter out collections that are not visible
+          { $project: { // present in summary format
+            _id: {
+              key: '$_id',
+              label: { $cond: [ { $eq: [ '$collection.title', '' ] }, 'Untitled collection', '$collection.title' ] },
+            },
+            count: 1,
+          } },
+        ];
+      },
+    },
   ];
 }
 

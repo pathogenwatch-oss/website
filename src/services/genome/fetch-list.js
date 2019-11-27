@@ -3,12 +3,12 @@ const { getCollectionSchemes } = require('manifest');
 
 const MAX_PAGE_SIZE = 100;
 
-module.exports = function (props) {
+module.exports = async function (props) {
   const { user, query = {} } = props;
   const { skip = 0, limit = MAX_PAGE_SIZE, sort } = query;
   const schemes = new Set(getCollectionSchemes(user));
   return Genome.find(
-    Genome.getFilterQuery(props),
+    await Genome.getFilterQuery(props),
     {
       _user: 1,
       'analysis.mlst.st': 1,
