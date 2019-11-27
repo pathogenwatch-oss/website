@@ -155,7 +155,7 @@ function convertDocumentToGFF(doc, stream) {
       stream.write({
         sequence: contig,
         source: 'Pathogenwatch_MLST',
-        type: 'SO:0000851',
+        type: 'misc_feature',
         start: qStart,
         end: qEnd,
         score: null, // match.identity,
@@ -179,7 +179,7 @@ function convertDocumentToGFF(doc, stream) {
         stream.write({
           sequence: match.query.id,
           source: 'Pathogenwatch_PAAR',
-          type: match.type,
+          type: 'CDS',
           start: match.query.start,
           end: match.query.stop,
           score: match.identity || match.percentIdentity,
@@ -198,7 +198,7 @@ function convertDocumentToGFF(doc, stream) {
         stream.write({
           sequence: match.id,
           source: 'Pathogenwatch_SNPAR',
-          type: match.type,
+          type: 'variation',
           start: match.queryLocation,
           end: match.queryLocation,
           score: null,
@@ -216,7 +216,7 @@ function convertDocumentToGFF(doc, stream) {
         stream.write({
           sequence: match.query.id,
           source: 'Pathogenwatch_SNPAR',
-          type: match.type,
+          type: 'CDS',
           start: match.query.start,
           end: match.query.stop,
           score: match.identity || match.percentIdentity,
