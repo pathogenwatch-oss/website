@@ -151,12 +151,13 @@ function convertDocumentToGFF(doc, stream) {
 
   if (mlst) {
     for (const { gene, id, start, end, contig } of mlst.matches) {
+      const {qStart, qEnd} = [start, end].sort((a, b)=>{return a-b});
       stream.write({
         sequence: contig,
         source: 'Pathogenwatch_MLST',
         type: 'genetic_marker',
-        start,
-        end,
+        qStart,
+        qEnd,
         score: null, // match.identity,
         reversed: end < start,
         phase: null,
