@@ -155,7 +155,7 @@ function convertDocumentToGFF(doc, stream) {
       stream.write({
         sequence: contig,
         source: 'Pathogenwatch_MLST',
-        type: 'CDS region',
+        type: 'CDS_region',
         start: qStart,
         end: qEnd,
         score: null, // match.identity,
