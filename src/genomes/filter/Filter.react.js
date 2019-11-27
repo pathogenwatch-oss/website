@@ -108,11 +108,7 @@ const Filter = ({
     />
     <FilterableSection
       filterKey="mlst"
-      heading={
-        <React.Fragment>
-          MLST - {filterSummary.sources.mlst}
-        </React.Fragment>
-      }
+      heading={`MLST - ${filterSummary.sources.mlst}`}
       icon="label"
       renderLabel={({ active, value }) => (
         <React.Fragment>
@@ -122,11 +118,7 @@ const Filter = ({
     />
     <FilterableSection
       filterKey="mlst2"
-      heading={
-        <React.Fragment>
-          MLST - {filterSummary.sources.mlst2}
-        </React.Fragment>
-      }
+      heading={`MLST - ${filterSummary.sources.mlst2}`}
       icon="label"
       renderLabel={({ active, value }) => (
         <React.Fragment>

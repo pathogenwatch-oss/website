@@ -52,6 +52,10 @@
   overflow: hidden;
 }
 
+.wgsa-filter-section > header > .mdl-button--icon {
+  margin-right: -4px;
+}
+
 .wgsa-filter-section > header .mdl-textfield {
   width: calc(100% - 8px);
 }
@@ -61,7 +65,7 @@
   line-height: 19px;
 }
 
-.wgsa-filter-section > header .mdl-textfield__input:disabled {
+.wgsa-filter-section > header .mdl-textfield__input:read-only {
   border-color: transparent;
   cursor: pointer;
 }
@@ -72,7 +76,7 @@
   transition-property: color;
 }
 
-.wgsa-filter-section > header .mdl-textfield__input:disabled + .mdl-textfield__label {
+.wgsa-filter-section > header .mdl-textfield__input:read-only + .mdl-textfield__label {
   color: rgba(0, 0, 0, 0.54);
 }
 
@@ -91,20 +95,6 @@
   line-height: 16px;
   margin: 16px 0 8px;
   color: rgba(0, 0, 0, 0.54)
-}
-
-.wgsa-filter-section-toggle {
-  color: inherit;
-  height: 24px;
-  margin-left: auto;
-  outline: none;
-  padding: 0;
-}
-
-.wgsa-filter-section-toggle:focus,
-.wgsa-filter-section-toggle:active {
-  outline: 2px dotted #a386bd;
-  color: #a386bd;
 }
 
 .wgsa-filter .mdl-chip {

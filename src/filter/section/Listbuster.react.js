@@ -30,7 +30,7 @@ export default ({ filterKey, heading, isOpen, onChange, onSubmit, value }) => {
       <div className="mdl-textfield mdl-js-textfield">
         <input
           className="mdl-textfield__input"
-          disabled={!isOpen}
+          readOnly={!isOpen}
           id={id}
           onChange={onChange}
           onFocus={() => {

@@ -131,7 +131,7 @@ const FilterSection = React.createClass({
           { headerComponent ?
             React.createElement(headerComponent, { ...this.props, isOpen }) :
             <span>{heading}</span> }
-          <button className="wgsa-filter-section-toggle">
+          <button className="mdl-button mdl-button--icon">
             <i className="material-icons">
               {isOpen ? 'expand_less' : 'expand_more'}
             </i>
