@@ -363,9 +363,27 @@ const getDateSummary = createSelector(
   )
 );
 
+const getCollectionSummary = createSelector(
+  getFilterSummaries,
+  state => getFilter(state).collection,
+  getFilterFn('collection', 'label'),
+  ({ collection = {} }, filterValue, filterFn) => sortBy(
+    Object.keys(collection)
+      .map(value => ({
+        value,
+        label: collection[value].label,
+        active: filterValue === value,
+        count: collection[value].count,
+      }))
+      .filter(filterFn),
+    'value'
+  )
+);
+
 export const getFilterSummary = createSelector(
   ({ genomes }) => genomes.summary,
   getAccessSummary,
+  getCollectionSummary,
   getCountrySummary,
   getDateSummary,
   getGenotypeSummary,
@@ -384,8 +402,9 @@ export const getFilterSummary = createSelector(
   getSubspeciesSummary,
   getUploadedAtSummary,
   ({ loading, sources = {}, visible }, ...summaries) => {
-    const [
+    const [ // order is important!
       access,
+      collection,
       country,
       date,
       genotype,
@@ -403,7 +422,7 @@ export const getFilterSummary = createSelector(
       strain,
       subspecies,
       uploadedAt,
-    ] = summaries; // order is important!
+    ] = summaries;
 
     return {
       loading,
@@ -411,6 +430,7 @@ export const getFilterSummary = createSelector(
       visible,
 
       access,
+      collection,
       country,
       date,
       genotype,

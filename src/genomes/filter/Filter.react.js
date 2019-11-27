@@ -34,7 +34,7 @@ const speciesDependants = [
   'reference',
 ];
 
-const genusDependants = speciesDependants.concat([ 'speciesId', 'klocus' ]);
+const genusDependants = speciesDependants.concat([ 'speciesId', 'klocus', 'collection' ]);
 
 const Filter = ({
   applyFilter,
@@ -67,6 +67,11 @@ const Filter = ({
       hidden={!filterSummary.visible}
       disabled={!filterSummary.organismId.length}
       disabledText="No supported organisms in current filter."
+    />
+    <FilterableSection
+      filterKey="collection"
+      heading="Collection"
+      icon="collections"
     />
     <FilterableSection
       filterKey="genusId"
