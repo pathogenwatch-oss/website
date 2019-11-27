@@ -120,6 +120,7 @@ function convertDocumentToGFF(doc, stream) {
 
   stream.write(header);
 
+   // https://github.com/sanger-pathogens/Artemis/blob/master/etc/feature_keys_gff
   if (core) {
     const profile = core.profile.map(x => x.id).sort().map(x => core.profile.find(y => y.id === x));
     for (const { id, rlength, alleles } of profile) {
@@ -155,7 +156,7 @@ function convertDocumentToGFF(doc, stream) {
       stream.write({
         sequence: contig,
         source: 'Pathogenwatch_MLST',
-        type: 'misc_feature',
+        type: 'match',
         start: qStart,
         end: qEnd,
         score: null, // match.identity,
@@ -198,7 +199,7 @@ function convertDocumentToGFF(doc, stream) {
         stream.write({
           sequence: match.id,
           source: 'Pathogenwatch_SNPAR',
-          type: 'variation',
+          type: 'sequence_difference',
           start: match.queryLocation,
           end: match.queryLocation,
           score: null,
