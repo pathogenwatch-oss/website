@@ -34,7 +34,7 @@
     "named-argv": "^0.3.0",
     "natsort": "^1.0.6",
     "pathogenwatch-fasta-store": "https://gitlab.com/cgps/pathogenwatch-fasta-store#v4.1.0",
-    "pathogenwatch-front-end": "https://gitlab.com/cgps/pathogenwatch-front-end#c0eb22141140bdf8640dcc406a987abf6411300b",
+    "pathogenwatch-front-end": "https://gitlab.com/cgps/pathogenwatch-front-end#27e652eaeb40992b35e73d426427a9841f2f49c7",
     "promise-map-limit": "^1.0.0",
     "promisify-node": "^0.4.0",
     "pusher": "^1.1.0",
