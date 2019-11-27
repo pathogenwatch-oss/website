@@ -27,7 +27,9 @@
   font-family: "Roboto", "Helvetica", "Arial", sans-serif !important;
   font-weight: 500;
   color: rgba(0, 0, 0, 0.54);
-  margin: 0;
+  margin: 0 -16px; /* avoids clipping toggle outline */
+  overflow: hidden; /* prevents textfield from leaking out vertically */
+  padding: 0 16px; /* compensates for extended margin */
   height: 40px;
   align-items: center;
   cursor: pointer;
