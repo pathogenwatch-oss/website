@@ -139,7 +139,7 @@ function convertDocumentToGFF(doc, stream) {
             Name: id,
             Target: `${id} ${allele.rstart} ${rlength}`,
             TargetLength: rlength,
-            notes: [
+            note: [
               `Paralogue ${alleles.length}`,
               allele.complete ? 'Complete Match' : 'Partial Match',
             ].join(', '),
@@ -167,7 +167,7 @@ function convertDocumentToGFF(doc, stream) {
           Name: `${gene}_${id}`,
           // target: `${match.reference.id} ${match.reference.start} ${match.reference.length}`,
           // targetLength: match.reference.length,
-          Note: `Family ${gene} Allele ${id}`,
+          note: `Family ${gene} Allele ${id}`,
           // evalue: match.evalue,
         },
       });
@@ -191,7 +191,7 @@ function convertDocumentToGFF(doc, stream) {
             Name: match.id,
             Target: `${match.id} ${match.library.start} ${match.library.stop}`,
             TargetLength: match.library.length,
-            Note: match.agents.join(','),
+            note: match.agents.join(','),
             evalue: match.evalue,
           },
         });
@@ -209,8 +209,8 @@ function convertDocumentToGFF(doc, stream) {
             ID: `SNPAR_${match.id}_${match.queryLocation}_${match.name}`,
             Name: match.name,
             // parent: `SNPAR_${match.id}`,
-            Target: `${match.id} ${match.referenceLocation} ${match.referenceLocation}`,
-            Note: match.agents.join(','),
+            Target: `${match.name} ${match.referenceLocation} ${match.referenceLocation}`,
+            note: match.agents.join(', '),
           },
         });
       } else {
