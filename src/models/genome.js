@@ -295,44 +295,40 @@ schema.statics.getFilterQuery = function (props) {
     findQuery['analysis.speciator.genusId'] = genusId;
   }
 
-  if (organismId || speciesId || genusId) {
-    if (mlst) {
-      findQuery['analysis.mlst.st'] = mlst;
-    }
-
-    if (mlst2) {
-      findQuery['analysis.mlst2.st'] = mlst2;
-    }
-
-    if (subspecies) {
-      findQuery['analysis.serotype.subspecies'] = subspecies;
-    }
-
-    if (serotype) {
-      findQuery['analysis.serotype.value'] = serotype;
-    }
-
-    if (klocus) {
-      findQuery['analysis.kleborate.K_locus'] = klocus;
-    }
+  if (mlst) {
+    findQuery['analysis.mlst.st'] = mlst;
   }
 
-  if (organismId || speciesId) {
-    if (strain) {
-      findQuery['analysis.poppunk.strain'] = strain;
-    }
+  if (mlst2) {
+    findQuery['analysis.mlst2.st'] = mlst2;
+  }
 
-    if (ngmast) {
-      findQuery['analysis.ngmast.ngmast'] = ngmast;
-    }
+  if (subspecies) {
+    findQuery['analysis.serotype.subspecies'] = subspecies;
+  }
 
-    if (ngstar) {
-      findQuery['analysis.ngstar.st'] = ngstar;
-    }
+  if (serotype) {
+    findQuery['analysis.serotype.value'] = serotype;
+  }
 
-    if (genotype) {
-      findQuery['analysis.genotyphi.genotype'] = genotype;
-    }
+  if (klocus) {
+    findQuery['analysis.kleborate.K_locus'] = klocus;
+  }
+
+  if (strain) {
+    findQuery['analysis.poppunk.strain'] = strain;
+  }
+
+  if (ngmast) {
+    findQuery['analysis.ngmast.ngmast'] = ngmast;
+  }
+
+  if (ngstar) {
+    findQuery['analysis.ngstar.st'] = ngstar;
+  }
+
+  if (genotype) {
+    findQuery['analysis.genotyphi.genotype'] = genotype;
   }
 
   if (resistance) {
