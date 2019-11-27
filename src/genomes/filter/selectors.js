@@ -30,8 +30,12 @@ export const getListFilters = state => getGenomeFilter(state).listFilters;
 const getFilterFn = (filterKey, property) => createSelector(
   state => getListFilters(state)[filterKey],
   filterText => {
-    const regex = new RegExp(filterText, 'i');
-    return input => regex.test(property ? input[property] : input);
+    try {
+      const regex = new RegExp(filterText, 'i');
+      return input => regex.test(property ? input[property] : input);
+    } catch (e) {
+      return () => true;
+    }
   }
 );
 
