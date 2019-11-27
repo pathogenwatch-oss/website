@@ -56,11 +56,11 @@
 
 .wgsa-filter-section > header .mdl-textfield__input {
   font-size: 14px;
-  line-height: 20px;
+  line-height: 19px;
 }
 
 .wgsa-filter-section > header .mdl-textfield__input:disabled {
-  border: none;
+  border-color: transparent;
   cursor: pointer;
 }
 
@@ -76,7 +76,7 @@
 
 .wgsa-filter-section.is-active > header {
   color: #673c90;
-  cursor: unset; /* cursor is conditionally set in style */
+  cursor: unset; /* cursor is conditionally set inline */
 }
 
 .wgsa-filter-section.is-disabled > header {
