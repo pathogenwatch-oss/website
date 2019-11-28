@@ -96,7 +96,7 @@ function getSummaryFields(deployedOrganisms) {
         if (!user) return null;
         return [
           { $match: { _user: user._id } },
-          { $group: { _id: '$uploadedAt', count: { $sum: 1 } } },
+          { $group: { _id: { $dateToString: { date: '$uploadedAt', format: '%Y-%m-%dT%H:%M:%S.%LZ' } }, count: { $sum: 1 } } },
         ];
       },
     },
@@ -268,10 +268,7 @@ function getSummaryFields(deployedOrganisms) {
           } },
           { $unwind: '$collection' }, // flatten document and filter out collections that are not visible
           { $project: { // present in summary format
-            _id: {
-              key: '$collection.token',
-              label: { $cond: [ { $eq: [ '$collection.title', '' ] }, 'Untitled collection', '$collection.title' ] },
-            },
+            _id: { key: '$collection.token', label: '$collection.title' },
             count: 1,
           } },
         ];

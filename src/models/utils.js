@@ -81,7 +81,7 @@ function reduceResult(result) {
   return result.reduce(
     (memo, { _id, count }) => {
       if (_id === null || typeof _id === 'undefined') return memo;
-      if (_id.key && _id.label) {
+      if (typeof _id === 'object') {
         const previousCount = memo[_id.key] ? memo[_id.key].count : 0;
         memo[_id.key] = {
           count: previousCount + count,
