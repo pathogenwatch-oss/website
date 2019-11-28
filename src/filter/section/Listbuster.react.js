@@ -40,6 +40,7 @@ export default ({ filterKey, heading, isOpen, onChange, onSubmit, value }) => {
             }
           }}
           ref={input}
+          tabIndex={isOpen ? undefined : '-1'}
           title={heading}
           type="text"
           value={value}
