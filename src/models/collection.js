@@ -135,7 +135,7 @@ schema.statics.getSummary = function (fields, props) {
   return getSummary(this, fields, props);
 };
 
-schema.statics.getFilterQuery = function (props) {
+schema.statics.getSyncQuery = function (props) {
   const { query = {} } = props;
   const {
     maxDate,
@@ -179,6 +179,8 @@ schema.statics.getFilterQuery = function (props) {
 
   return findQuery;
 };
+
+schema.statics.getFilterQuery = schema.statics.getSyncQuery;
 
 const sortKeys = new Set([
   'createdAt', 'title', 'size', 'publicationYear',
@@ -230,9 +232,9 @@ schema.statics.generateToken = function (title) {
   return sections.join('-');
 };
 
-schema.statics.getGenomeIds = function (_id, props) {
+schema.statics.getGenomeIds = function (token, props) {
   const query = this.getPrefilterCondition(props);
-  query._id = _id;
+  query.token = token;
   return (
     this.findOne(query, { genomes: 1 })
       .lean()

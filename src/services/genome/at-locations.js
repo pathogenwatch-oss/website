@@ -1,7 +1,7 @@
 const Genome = require('../../models/genome');
 const { ServiceRequestError } = require('utils/errors');
 
-module.exports = function ({ user, coordinates, query }) {
+module.exports = async function ({ user, coordinates, query }) {
   if (!Array.isArray(coordinates) || !coordinates.length) {
     throw new ServiceRequestError('No coordinates provided');
   }
@@ -18,7 +18,7 @@ module.exports = function ({ user, coordinates, query }) {
       $match: { 'analysis.speciator': { $exists: true }, $or },
     },
     {
-      $match: Genome.getFilterQuery({ user, query }),
+      $match: await Genome.getFilterQuery({ user, query }),
     },
     {
       $group: {

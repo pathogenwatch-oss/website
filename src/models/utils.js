@@ -33,9 +33,11 @@ const sumAggregation = field => [
 ];
 
 async function aggregateSummaryFields(model, summaryFields, props) {
+  const asyncQuery = model.getAsyncQuery ? await model.getAsyncQuery(props) : {};
+
   const aggregations = [
     model.count(model.getPrefilterCondition(props)),
-    model.count(await model.getFilterQuery(props)),
+    model.count({ ...asyncQuery, ...model.getSyncQuery(props) }),
   ];
 
   for (const { field, aggregation, range, queryKeys = [] } of summaryFields) {
@@ -53,7 +55,7 @@ async function aggregateSummaryFields(model, summaryFields, props) {
       aggregations.push(Promise.resolve([]));
     } else {
       let query;
-      if (queryKeys.length) { // this is retained to support range aggregations e.g. date
+      if (queryKeys.length) { // this is to support range aggregations e.g. date
         query = {};
         for (const key of Object.keys(props.query)) {
           if (!queryKeys.includes(key)) {
@@ -63,7 +65,10 @@ async function aggregateSummaryFields(model, summaryFields, props) {
       } else {
         query = props.query;
       }
-      const $match = await model.getFilterQuery(Object.assign({}, props, { query }));
+      const $match = {
+        ...asyncQuery,
+        ...model.getSyncQuery(Object.assign({}, props, { query })),
+      };
       const prefilterStage = [ { $match }, ...aggregationStage ];
       aggregations.push(model.aggregate(prefilterStage));
     }

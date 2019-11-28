@@ -219,10 +219,29 @@ schema.statics.getPrefilterCondition = function ({ user, query = {} }) {
   throw new Error(`Invalid genome prefilter: '${prefilter}'`);
 };
 
+
 schema.statics.getFilterQuery = async function (props) {
+  return {
+    ...await this.getAsyncQuery(props),
+    ...this.getSyncQuery(props),
+  };
+};
+
+schema.statics.getAsyncQuery = async function (props) {
+  const { query = {} } = props;
+  const { collection } = query;
+  const result = {};
+
+  if (collection) {
+    result._id = { $in: await Collection.getGenomeIds(collection, props) };
+  }
+
+  return result;
+};
+
+schema.statics.getSyncQuery = function (props) {
   const { user, query = {} } = props;
   const {
-    collection,
     country,
     genotype,
     genusId,
@@ -249,10 +268,6 @@ schema.statics.getFilterQuery = async function (props) {
   } = query;
 
   const findQuery = this.getPrefilterCondition(props);
-
-  if (collection) {
-    findQuery._id = { $in: await Collection.getGenomeIds(collection, props) };
-  }
 
   if (searchText) {
     findQuery.name = { $regex: escapeRegex(searchText), $options: 'i' };

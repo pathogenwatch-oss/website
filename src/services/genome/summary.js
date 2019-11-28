@@ -262,14 +262,14 @@ function getSummaryFields(deployedOrganisms) {
             pipeline: [
               { $match: { $or: [ { access: 'public' }, { _user: user._id } ], binned: false, organismId: query.organismId } }, // filter by visibility
               { $match: { $expr: { $eq: [ '$_id', '$$id' ] } } },
-              { $project: { title: 1 } },
+              { $project: { title: 1, token: 1 } },
             ],
             as: 'collection',
           } },
           { $unwind: '$collection' }, // flatten document and filter out collections that are not visible
           { $project: { // present in summary format
             _id: {
-              key: '$_id',
+              key: '$collection.token',
               label: { $cond: [ { $eq: [ '$collection.title', '' ] }, 'Untitled collection', '$collection.title' ] },
             },
             count: 1,

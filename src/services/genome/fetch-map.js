@@ -1,9 +1,9 @@
 const Genome = require('models/genome');
 
-module.exports = function (props) {
+module.exports = async function (props) {
   const query = Object.assign(
     { latitude: { $exists: true, $ne: null }, longitude: { $exists: true, $ne: null } },
-    Genome.getFilterQuery(props)
+    await Genome.getFilterQuery(props)
   );
   return (
     Genome

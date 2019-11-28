@@ -1,9 +1,9 @@
 const Genome = require('models/genome');
 
-module.exports = function (props) {
+module.exports = async function (props) {
   const query = Object.assign(
     { 'analysis.metrics': { $exists: true } },
-    Genome.getFilterQuery(props)
+    await Genome.getFilterQuery(props)
   );
   return (
     Genome
