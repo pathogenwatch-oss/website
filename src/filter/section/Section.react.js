@@ -99,7 +99,7 @@ const FilterSection = React.createClass({
             title={titleAttr}
             onClick={autoSelected ? null : () => onClick(value)}
           >
-            <i className="material-icons">{icon}</i>
+            <i className="material-icons" title={heading}>{icon}</i>
             <span>{renderLabel({ ...activeItem, active: true })}</span>
             {!autoSelected && <i className="material-icons">filter_list</i>}
           </header>
@@ -113,7 +113,7 @@ const FilterSection = React.createClass({
       return (
         <section className="wgsa-filter-section is-disabled">
           <header title={disabledText}>
-            <i className="material-icons">{icon}</i>
+            <i className="material-icons" title={heading}>{icon}</i>
             <span>{heading}</span>
           </header>
         </section>
@@ -127,7 +127,7 @@ const FilterSection = React.createClass({
         })}
       >
         <header onClick={() => this.toggle(isOpen)}>
-          <i className="material-icons">{icon}</i>
+          <i className="material-icons" title={heading}>{icon}</i>
           { headerComponent ?
             React.createElement(headerComponent, { ...this.props, isOpen }) :
             <span>{heading}</span> }

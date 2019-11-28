@@ -8,6 +8,7 @@ import Section from '~/filter/section';
 import DateSection from '~/filter/date-section';
 import { ST } from '~/mlst';
 import FilterableSection from './FilterableSection.react';
+import MarkdownInline from '~/components/MarkdownInline.react';
 
 import { selectors as filter } from '~/filter';
 import * as selectors from './selectors';
@@ -72,6 +73,7 @@ const Filter = ({
       filterKey="collection"
       heading="Collection"
       icon="collections"
+      renderLabel={({ label }) => <MarkdownInline>{label}</MarkdownInline>}
     />
     <FilterableSection
       filterKey="genusId"

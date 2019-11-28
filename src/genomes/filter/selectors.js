@@ -1,5 +1,6 @@
 import { createSelector } from 'reselect';
 import sortBy from 'lodash.sortby';
+import removeMarkdown from 'remove-markdown';
 
 import { selectors as filter } from '~/filter';
 import { getDeployedOrganismIds } from '~/summary/selectors';
@@ -56,7 +57,8 @@ const getOrganismSummary = createSelector(
           value,
           active,
           label: organism.formattedName,
-          title: active ? `Organism: ${organism.name}` : organism.name,
+          title: organism.name,
+          activeTitle: `Organism: ${organism.name}`,
           count: organismId[value].count,
         };
       })
@@ -366,15 +368,21 @@ const getDateSummary = createSelector(
 const getCollectionSummary = createSelector(
   getFilterSummaries,
   state => getFilter(state).collection,
-  getFilterFn('collection', 'label'),
+  getFilterFn('collection', 'title'),
   ({ collection = {} }, filterValue, filterFn) => sortBy(
     Object.keys(collection)
-      .map(value => ({
-        value,
-        label: collection[value].label,
-        active: filterValue === value,
-        count: collection[value].count,
-      }))
+      .map(value => {
+        const label = collection[value].label;
+        const title = removeMarkdown(label);
+        return {
+          value,
+          label,
+          title,
+          activeTitle: `Collection: ${title}`,
+          active: filterValue === value,
+          count: collection[value].count,
+        };
+      })
       .filter(filterFn),
     'value'
   )

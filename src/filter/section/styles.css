@@ -110,6 +110,11 @@
   text-overflow: ellipsis;
 }
 
+.wgsa-filter .mdl-chip__text > div {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 .wgsa-filter-section.capitalised .mdl-chip__text {
   text-transform: capitalize;
 }
