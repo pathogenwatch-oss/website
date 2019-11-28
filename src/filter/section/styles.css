@@ -61,6 +61,7 @@
 }
 
 .wgsa-filter-section > header .mdl-textfield__input {
+  font-family: inherit;
   font-size: 14px;
   line-height: 19px;
 }
