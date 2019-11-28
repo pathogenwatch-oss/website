@@ -373,7 +373,9 @@ const untitled = '(untitled collection)';
 const sortCollections = (a, b) => {
   if (a.title === untitled && b.title !== untitled) return 1;
   if (a.title !== untitled && b.title === untitled) return -1;
-  return a.title - b.title;
+  if (a.title > b.title) return 1;
+  if (a.title < b.title) return -1;
+  return 0;
 };
 
 const getCollectionItems = createSelector(
