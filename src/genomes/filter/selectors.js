@@ -384,7 +384,7 @@ const getCollectionSummary = createSelector(
         };
       })
       .filter(filterFn),
-    'value'
+    'title'
   )
 );
 

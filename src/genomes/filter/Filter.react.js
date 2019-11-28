@@ -34,8 +34,8 @@ const speciesDependants = [
   'genotype',
   'reference',
 ];
-
 const genusDependants = speciesDependants.concat([ 'speciesId', 'klocus', 'collection' ]);
+const collectionDependents = speciesDependants.concat([ 'klocus' ]);
 
 const Filter = ({
   applyFilter,
@@ -61,51 +61,52 @@ const Filter = ({
   >
     <FilterableSection
       autoSelect={false}
-      filterKey="organismId"
-      heading="Supported organism"
-      icon="bug_report"
-      updateFilter={clearDependants(filterState, genusDependants)}
-      hidden={!filterSummary.visible}
       disabled={!filterSummary.organismId.length}
       disabledText="No supported organisms in current filter."
+      filterKey="organismId"
+      heading="Supported organism"
+      hidden={!filterSummary.visible}
+      icon="bug_report"
+      updateFilter={clearDependants(filterState, genusDependants)}
     />
     <FilterableSection
       filterKey="collection"
       heading="Collection"
       icon="collections"
       renderLabel={({ label }) => <MarkdownInline>{label}</MarkdownInline>}
+      updateFilter={clearDependants(filterState, collectionDependents)}
     />
     <FilterableSection
       filterKey="genusId"
       heading="Genus"
       icon="bug_report"
       hidden={filterState.organismId}
-      updateFilter={clearDependants(filterState, genusDependants)}
       renderLabel={({ label }) => <em>{label}</em>}
+      updateFilter={clearDependants(filterState, genusDependants)}
     />
     <FilterableSection
-      filterKey="speciesId"
-      heading="Species"
-      icon="bug_report"
-      updateFilter={clearDependants(filterState, speciesDependants)}
-      hidden={!filterSummary.genusId.length || filterState.organismId}
       disabled={!filterSummary.speciesId.length}
       disabledText="Select a genus to filter by species."
+      filterKey="speciesId"
+      heading="Species"
+      hidden={!filterSummary.genusId.length || filterState.organismId}
+      icon="bug_report"
       renderLabel={({ label }) => <em>{label}</em>}
+      updateFilter={clearDependants(filterState, speciesDependants)}
     />
     <FilterableSection
       filterKey="subspecies"
       heading="Subspecies"
-      icon="bug_report"
-      updateFilter={clearDependants(filterState, [ 'serotype' ])}
       hidden={filterState.organismId}
+      icon="bug_report"
       renderLabel={({ value }) => <React.Fragment>subsp. <em>{value}</em></React.Fragment>}
+      updateFilter={clearDependants(filterState, [ 'serotype' ])}
     />
     <FilterableSection
       filterKey="serotype"
       heading={getSerotypeHeading(filterState.genusId)}
-      icon="bug_report"
       hidden={filterState.organismId}
+      icon="bug_report"
       renderLabel={({ value }) => `ser. ${value}`}
     />
     <FilterableSection
@@ -182,15 +183,15 @@ const Filter = ({
     <DateSection summary={filterSummary.date} />
     <Section
       filterKey="access"
+      headerComponent={({ heading }) => <span>{heading}</span>}
       heading="Access"
       icon="person"
-      headerComponent={({ heading }) => <span>{heading}</span>}
     />
     <FilterableSection
+      autoSelect={filterSummary.access.length === 1}
       filterKey="uploadedAt"
       heading="Uploaded at"
       icon="cloud_upload"
-      autoSelect={filterSummary.access.length === 1}
     />
     <LocationListener update={updateFilter} />
   </FilterAside>
