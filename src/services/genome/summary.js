@@ -244,6 +244,10 @@ function getSummaryFields(deployedOrganisms) {
       field: 'collection',
       aggregation: ({ query, user }) => {
         if (!deployedOrganisms.includes(query.organismId)) return null;
+        const collectionAccess = [ { access: 'public' } ];
+        if (user) {
+          collectionAccess.push({ _user: user._id });
+        }
         return [
           { $project: { _id: 1 } }, // don't need genome details
           { $lookup: { // attach membership info
@@ -260,7 +264,7 @@ function getSummaryFields(deployedOrganisms) {
             from: 'collections',
             let: { id: '$_id' },
             pipeline: [
-              { $match: { $or: [ { access: 'public' }, { _user: user._id } ], binned: false, organismId: query.organismId } }, // filter by visibility
+              { $match: { $or: collectionAccess, binned: false, organismId: query.organismId } }, // filter by visibility
               { $match: { $expr: { $eq: [ '$_id', '$$id' ] } } },
               { $project: { title: 1, token: 1 } },
             ],
