@@ -5,6 +5,7 @@ const { getCollectionTask } = require('manifest');
 const Collection = require('models/collection');
 const Genome = require('models/genome');
 const Organism = require('models/organism');
+const Genomecollection = require('models/genomecollection');
 
 async function validate({ genomeIds, organismId, user }) {
   await request('collection', 'verify', { genomeIds, organismId, user });
@@ -66,7 +67,7 @@ async function createCollection(genomes, { organismId, title, description, pmid,
   const organism = await Organism.getLatest(organismId);
   const subtrees = await getSubtrees(organismId, genomes, genomeIds);
 
-  return Collection.create({
+  const collection = await Collection.create({
     _organism: organism,
     _user: user,
     access: user ? 'private' : 'shared',
@@ -81,6 +82,18 @@ async function createCollection(genomes, { organismId, title, description, pmid,
     token: Collection.generateToken(title),
     tree,
   });
+
+  await Genomecollection.bulkWrite(
+    genomeIds.map(_genome => ({
+      updateOne: {
+        filter: { _genome },
+        update: { $addToSet: { collections: collection._id } },
+        upsert: true,
+      },
+    })),
+  );
+
+  return collection;
 }
 
 function submitCollection(collection) {
