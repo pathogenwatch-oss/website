@@ -322,17 +322,21 @@ const getGenotypeSummary = createSelector(
 );
 
 const getReferenceSummary = createSelector(
+  createSelector( // caches sort
+    getFilterSummaries,
+    ({ reference = {} }) => Object.keys(reference).sort()
+  ),
   getFilterSummaries,
   state => getFilter(state).reference,
-  ({ reference = {} }, filterValue) => sortBy(
-    Object.keys(reference)
+  getFilterFn('reference'),
+  (items, { reference = {} }, filterValue, filterFn) =>
+    items
+      .filter(filterFn)
       .map(value => ({
         value,
         active: filterValue === value,
         count: reference[value].count,
-      })),
-    'value'
-  )
+      }))
 );
 
 const getKlocusSummary = createSelector(
@@ -365,27 +369,44 @@ const getDateSummary = createSelector(
   )
 );
 
-const getCollectionSummary = createSelector(
+const untitled = '(untitled collection)';
+const sortCollections = (a, b) => {
+  if (a.title === untitled && b.title !== untitled) return 1;
+  if (a.title !== untitled && b.title === untitled) return -1;
+  return a.title - b.title;
+};
+
+const getCollectionItems = createSelector(
   getFilterSummaries,
-  state => getFilter(state).collection,
-  getFilterFn('collection', 'title'),
-  ({ collection = {} }, filterValue, filterFn) => sortBy(
+  ({ collection = {} }) =>
     Object.keys(collection)
       .map(value => {
-        const label = collection[value].label;
+        const item = collection[value];
+        const label = item.label || untitled;
         const title = removeMarkdown(label);
         return {
           value,
           label,
           title,
-          activeTitle: `Collection: ${title}`,
-          active: filterValue === value,
-          count: collection[value].count,
         };
       })
-      .filter(filterFn),
-    'title'
-  )
+      .sort(sortCollections)
+);
+
+const getCollectionSummary = createSelector(
+  getCollectionItems,
+  getFilterSummaries,
+  state => getFilter(state).collection,
+  getFilterFn('collection', 'title'),
+  (items, { collection = {} }, filterValue, filterFn) =>
+    items
+      .filter(filterFn)
+      .map(item => ({
+        ...item,
+        activeTitle: `Collection: ${item.title}`,
+        active: filterValue === item.value,
+        count: collection[item.value].count,
+      }))
 );
 
 export const getFilterSummary = createSelector(
