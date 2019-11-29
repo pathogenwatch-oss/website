@@ -105,14 +105,20 @@ function getSummaryFields(deployedOrganisms) {
       field: 'mlst',
       aggregation: ({ query = {}, user }) => {
         if (!organismHasTask('mlst', [ query.organismId, query.speciesId, query.genusId ], user)) return null;
-        return [ { $group: { _id: '$analysis.mlst.st', count: { $sum: 1 }, sources: { $addToSet: '$analysis.mlst.source' } } } ];
+        return [
+          { $match: { 'analysis.mlst.st': { $exists: true } } },
+          { $group: { _id: '$analysis.mlst.st', count: { $sum: 1 }, sources: { $addToSet: '$analysis.mlst.source' } } },
+        ];
       },
     },
     {
       field: 'mlst2',
       aggregation: ({ query = {}, user }) => {
         if (!organismHasTask('mlst2', [ query.organismId, query.speciesId, query.genusId ], user)) return null;
-        return [ { $group: { _id: '$analysis.mlst2.st', count: { $sum: 1 }, sources: { $addToSet: '$analysis.mlst2.source' } } } ];
+        return [
+          { $match: { 'analysis.mlst2.st': { $exists: true } } },
+          { $group: { _id: '$analysis.mlst2.st', count: { $sum: 1 }, sources: { $addToSet: '$analysis.mlst2.source' } } },
+        ];
       },
     },
     {
