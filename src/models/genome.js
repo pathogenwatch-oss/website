@@ -366,7 +366,7 @@ schema.statics.getSummary = function (fields, props) {
   return getSummary(this, fields, props);
 };
 
-const sortKeys = new Set([ 'createdAt', 'name', 'organism', 'country', 'date', 'type', 'st' ]);
+const sortKeys = new Set([ 'createdAt', 'name', 'organism', 'country', 'date', 'type', 'mlst' ]);
 schema.statics.getSort = function (sort = 'createdAt-') {
   const sortOrder = sort.slice(-1) === '-' ? -1 : 1;
   const sortKey = sortOrder === 1 ? sort : sort.substr(0, sort.length - 1);
@@ -377,7 +377,7 @@ schema.statics.getSort = function (sort = 'createdAt-') {
     return { public: sortOrder, reference: sortOrder };
   }
 
-  if (sortKey === 'st') {
+  if (sortKey === 'mlst') {
     return {
       'analysis.mlst.st': sortOrder,
       'analysis.mlst2.st': sortOrder,
