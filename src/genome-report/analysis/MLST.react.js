@@ -4,7 +4,7 @@ import ExternalLink from '../ExternalLink.react';
 import { Metadata } from '../components';
 import { ST, Hit } from '../../mlst';
 
-export default ({ result, speciator, filterKey = 'mlst', heading, label }) => {
+export default ({ result, speciator, filterKey = 'mlst', heading = 'MLST – Multilocus sequence typing' }) => {
   const alleles = result.alleles.map(_ => {
     const split = _.gene.split('_');
     return {
@@ -15,7 +15,7 @@ export default ({ result, speciator, filterKey = 'mlst', heading, label }) => {
   return (
     <React.Fragment>
       <header className="pw-genome-report-section-header">
-        <h2>{heading || 'MLST – Multilocus sequence typing'}</h2>
+        <h2>{heading}</h2>
         <p>
           <a href={result.url} target="_blank" rel="noopener">
             {result.url}
@@ -24,7 +24,7 @@ export default ({ result, speciator, filterKey = 'mlst', heading, label }) => {
       </header>
       <div className="pw-genome-report-column one third">
         <dl>
-          <Metadata label={label || 'Sequence type'} className={label ? 'pw-capitalise' : null}>
+          <Metadata label="Sequence type">
             <ST id={result.st} />
           </Metadata>
         </dl>
@@ -33,7 +33,7 @@ export default ({ result, speciator, filterKey = 'mlst', heading, label }) => {
             speciator.speciesId
           }&${filterKey}=${result.st}`}
         >
-          View all {label || 'ST'} <ST id={result.st} textOnly />
+          View all ST <ST id={result.st} textOnly />
         </ExternalLink>
       </div>
       <div className="pw-genome-report-column two thirds">

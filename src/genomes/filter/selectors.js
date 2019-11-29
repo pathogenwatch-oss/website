@@ -77,7 +77,6 @@ const getMlstSummary = createSelector(
       .map(value => ({
         value,
         active: filterValue === value,
-        label: `ST ${value}`,
         activeTitle: `MLST - ${sources.mlst}: ST ${value}`,
         title: `ST ${value}`,
         count: mlst[value].count,
@@ -98,7 +97,6 @@ const getMlst2Summary = createSelector(
       .map(value => ({
         value,
         active: filterValue === value,
-        label: `ST ${value}`,
         activeTitle: `MLST - ${sources.mlst2}: ST ${value}`,
         title: `ST ${value}`,
         count: mlst2[value].count,
@@ -176,22 +174,30 @@ const getAccessSummary = createSelector(
 );
 
 const getUploadedAtSummary = createSelector(
+  createSelector(
+    getFilterSummaries,
+    ({ uploadedAt = {} }) =>
+      Object.keys(uploadedAt)
+        .sort((a, b) => new Date(b) - new Date(a))
+        .map(value => {
+          const dateValue = new Date(value);
+          return {
+            value,
+            label: formatDateTime(dateValue),
+          };
+        })
+  ),
   getFilterSummaries,
   state => getFilter(state).uploadedAt,
   getFilterFn('uploadedAt', 'label'),
-  ({ uploadedAt = {} }, filterValue, filterFn) =>
-    Object.keys(uploadedAt)
-      .sort((a, b) => new Date(b) - new Date(a))
-      .map(value => {
-        const dateValue = new Date(value);
-        return {
-          value,
-          label: formatDateTime(dateValue),
-          count: uploadedAt[value].count,
-          active: filterValue === value,
-        };
-      })
+  (items, { uploadedAt = {} }, filterValue, filterFn) =>
+    items
       .filter(filterFn)
+      .map(item => ({
+        ...item,
+        count: uploadedAt[item.value].count,
+        active: filterValue === item.value,
+      }))
 );
 
 const getResistanceSummary = createSelector(
@@ -281,7 +287,9 @@ const getNgmastSummary = createSelector(
       .map(value => ({
         value,
         active: filterValue === value,
+        activeTitle: `NG-MAST: ST ${value}`,
         count: ngmast[value].count,
+        title: `ST ${value}`,
       })),
     'value'
   )
@@ -297,8 +305,10 @@ const getNgstarSummary = createSelector(
       .map(value => ({
         value,
         active: filterValue === value,
+        activeTitle: `NG-STAR: ST ${value}`,
         count: ngstar[value].count,
         novel: isNovel(value),
+        title: `ST ${value}`,
       })),
     'novel',
     item => Number(item.value)
@@ -412,7 +422,7 @@ const getCollectionSummary = createSelector(
 );
 
 export const getFilterSummary = createSelector(
-  ({ genomes }) => genomes.summary,
+  getFilterSummaries,
   getAccessSummary,
   getCollectionSummary,
   getCountrySummary,
@@ -454,6 +464,7 @@ export const getFilterSummary = createSelector(
       subspecies,
       uploadedAt,
     ] = summaries;
+
 
     return {
       loading,

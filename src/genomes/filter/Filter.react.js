@@ -120,7 +120,7 @@ const Filter = ({
       icon="label"
       renderLabel={({ active, value }) => (
         <React.Fragment>
-          {active && filterSummary.mlst2.length ? `${filterSummary.sources.mlst}: ST` : 'ST'} <ST id={value} />
+          {active && (filterSummary.mlst2.length ? `${filterSummary.sources.mlst}:` : 'MLST:')} ST <ST id={value} />
         </React.Fragment>
       )}
     />
@@ -130,7 +130,7 @@ const Filter = ({
       icon="label"
       renderLabel={({ active, value }) => (
         <React.Fragment>
-          {active && filterSummary.mlst.length ? `${filterSummary.sources.mlst2}: ST` : 'ST'} <ST id={value} />
+          {active && (filterSummary.mlst.length ? `${filterSummary.sources.mlst2}:` : 'MLST:')} ST <ST id={value} />
         </React.Fragment>
       )}
     />
@@ -140,7 +140,7 @@ const Filter = ({
       icon="label"
       renderLabel={({ active, value }) => (
         <React.Fragment>
-          {active ? 'NG-STAR:' : 'Type'} <ST id={value} />
+          {active ? 'NG-STAR: ST' : 'ST'} <ST id={value} />
         </React.Fragment>
       )}
     />
@@ -150,7 +150,7 @@ const Filter = ({
       icon="label"
       renderLabel={({ active, value }) => (
         <React.Fragment>
-          {active ? 'NG-MAST:' : 'Type'} <ST id={value} />
+          {active ? 'NG-MAST: ST' : 'ST'} <ST id={value} />
         </React.Fragment>
       )}
     />

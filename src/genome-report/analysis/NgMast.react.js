@@ -30,7 +30,7 @@ export default ({ result }) => (
       <ExternalLink
         to={`/genomes/all?genusId=482&speciesId=485&ngmast=${result.ngmast}`}
       >
-        View all type {result.ngmast}
+        View all ST {result.ngmast}
       </ExternalLink>
     </div>
   </React.Fragment>
