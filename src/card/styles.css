@@ -89,10 +89,9 @@
 
 .wgsa-card-metadata .material-icons {
   font-size: 16px;
-  line-height: 18px;
-  height: 18px;
-  width: 15px; /* Hacked to make the SVG icon look crisp */
-  padding-right: 5px;
+  height: 16px;
+  width: 16px;
+  padding-right: 4px;
 }
 
 .wgsa-card-metadata .material-icons[title] {

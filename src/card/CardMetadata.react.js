@@ -5,7 +5,7 @@ import GenomeIcon from '../components/GenomeIcon.react';
 
 function showIcon(icon, title) {
   if (!icon) return null;
-  if (icon === 'wgsa_genome') return <GenomeIcon title={title} />;
+  if (icon === 'wgsa_genome') return <GenomeIcon title={title} viewBox="4 4 60 60" />;
   return <i title={title} className="material-icons">{icon}</i>;
 }
 
