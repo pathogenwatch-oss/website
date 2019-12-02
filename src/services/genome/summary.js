@@ -2,9 +2,9 @@ const Genome = require('models/genome');
 const Organism = require('models/organism');
 
 const {
-  organismHasTask,
   organismHasPopulation,
   getCollectionSchemes,
+  getTasksByOrganism,
 } = require('manifest');
 
 function getSummaryFields(deployedOrganisms) {
@@ -103,8 +103,8 @@ function getSummaryFields(deployedOrganisms) {
     { field: 'date', range: true, queryKeys: [ 'minDate', 'maxDate' ] },
     {
       field: 'mlst',
-      aggregation: ({ query = {}, user }) => {
-        if (!organismHasTask('mlst', [ query.organismId, query.speciesId, query.genusId ], user)) return null;
+      aggregation: ({ tasks = [] }) => {
+        if (!tasks.includes('mlst')) return null;
         return [
           { $match: { 'analysis.mlst.st': { $exists: true } } },
           { $group: { _id: '$analysis.mlst.st', count: { $sum: 1 }, sources: { $addToSet: '$analysis.mlst.source' } } },
@@ -113,8 +113,8 @@ function getSummaryFields(deployedOrganisms) {
     },
     {
       field: 'mlst2',
-      aggregation: ({ query = {}, user }) => {
-        if (!organismHasTask('mlst2', [ query.organismId, query.speciesId, query.genusId ], user)) return null;
+      aggregation: ({ tasks = [] }) => {
+        if (!tasks.includes('mlst2')) return null;
         return [
           { $match: { 'analysis.mlst2.st': { $exists: true } } },
           { $group: { _id: '$analysis.mlst2.st', count: { $sum: 1 }, sources: { $addToSet: '$analysis.mlst2.source' } } },
@@ -142,8 +142,8 @@ function getSummaryFields(deployedOrganisms) {
     },
     {
       field: 'subspecies',
-      aggregation: ({ query, user }) => {
-        if (!organismHasTask('serotype', [ query.organismId, query.speciesId, query.genusId ], user)) return null;
+      aggregation: ({ tasks = [] }) => {
+        if (!tasks.includes('serotype')) return null;
         return [
           { $match: { 'analysis.serotype': { $exists: true } } },
           {
@@ -157,8 +157,8 @@ function getSummaryFields(deployedOrganisms) {
     },
     {
       field: 'serotype',
-      aggregation: ({ query, user }) => {
-        if (!organismHasTask('serotype', [ query.organismId, query.speciesId, query.genusId ], user)) return null;
+      aggregation: ({ tasks = [] }) => {
+        if (!tasks.includes('serotype')) return null;
         return [
           { $match: { 'analysis.serotype': { $exists: true } } },
           {
@@ -172,8 +172,8 @@ function getSummaryFields(deployedOrganisms) {
     },
     {
       field: 'strain',
-      aggregation: ({ query, user }) => {
-        if (!organismHasTask('poppunk', [ query.organismId, query.speciesId, query.genusId ], user)) return null;
+      aggregation: ({ tasks = [] }) => {
+        if (!tasks.includes('poppunk')) return null;
         return [
           { $match: { 'analysis.poppunk': { $exists: true } } },
           {
@@ -187,8 +187,8 @@ function getSummaryFields(deployedOrganisms) {
     },
     {
       field: 'ngmast',
-      aggregation: ({ query, user }) => {
-        if (!organismHasTask('ngmast', [ query.organismId, query.speciesId, query.genusId ], user)) return null;
+      aggregation: ({ tasks = [] }) => {
+        if (!tasks.includes('ngmast')) return null;
         return [
           { $match: { 'analysis.ngmast': { $exists: true } } },
           {
@@ -202,8 +202,8 @@ function getSummaryFields(deployedOrganisms) {
     },
     {
       field: 'ngstar',
-      aggregation: ({ query, user }) => {
-        if (!organismHasTask('ngstar', [ query.organismId, query.speciesId, query.genusId ], user)) return null;
+      aggregation: ({ tasks = [] }) => {
+        if (!tasks.includes('ngstar')) return null;
         return [
           { $match: { 'analysis.ngstar': { $exists: true } } },
           {
@@ -217,9 +217,8 @@ function getSummaryFields(deployedOrganisms) {
     },
     {
       field: 'genotype',
-      aggregation: ({ query }) => {
-        // organism level currently requires being "deployed", hard-coding this for now.
-        if (query.genusId !== '590' && query.speciesId !== '28901') return null;
+      aggregation: ({ tasks = [] }) => {
+        if (!tasks.includes('genotyphi')) return null;
         return [
           { $match: { 'analysis.genotyphi': { $exists: true } } },
           {
@@ -233,8 +232,8 @@ function getSummaryFields(deployedOrganisms) {
     },
     {
       field: 'klocus',
-      aggregation: ({ query, user }) => {
-        if (!organismHasTask('kleborate', [ query.organismId, query.speciesId, query.genusId ], user)) return null;
+      aggregation: ({ tasks = [] }) => {
+        if (!tasks.includes('kleborate')) return null;
         return [
           { $match: { 'analysis.kleborate': { $exists: true } } },
           {
@@ -289,8 +288,9 @@ function getSummaryFields(deployedOrganisms) {
 
 module.exports = async function (props) {
   const deployedOrganisms = await Organism.deployedOrganismIds(props.user);
+  const tasks = getTasksByOrganism(props.query, props.user).map(_ => _.task);
   const summaryFields = getSummaryFields(deployedOrganisms);
-  const summary = await Genome.getSummary(summaryFields, props);
+  const summary = await Genome.getSummary(summaryFields, { ...props, tasks });
 
   // begin auto-taxonomy
   const genera = Object.keys(summary.genusId);
@@ -321,8 +321,12 @@ module.exports = async function (props) {
 
   if (Object.keys(taxQuery).length > 0) {
     const query = { ...props.query, ...taxQuery };
-    // this will add taxonomy-specific analysis
-    return Genome.getSummary(summaryFields, { ...props, query });
+    const nextTasks = getTasksByOrganism(query, props.user);
+    for (const { task } of nextTasks) {
+      if (!tasks.includes(task)) { // new task needs new summary
+        return Genome.getSummary(summaryFields, { ...props, query, tasks: nextTasks.map(_ => _.task) });
+      }
+    }
   }
 
   // species should not be returned unless genus selected
