@@ -41,8 +41,8 @@ function getRangeQuery(query, queryKeys) {
 }
 
 async function aggregateSummaryFields(model, summaryFields, props) {
-  const facets = [];
-  const ranges = [];
+  const pipelines = [];
+  const query = await model.getFilterQuery(props);
 
   for (const { field, aggregation, range } of summaryFields) {
     let pipeline = null;
@@ -60,42 +60,25 @@ async function aggregateSummaryFields(model, summaryFields, props) {
     }
 
     if (range) {
-      ranges.push({ field, pipeline });
+      const rangeQuery = { ...query };
+      delete rangeQuery[field];
+      pipelines.push({
+        field,
+        pipeline: [ { $match: rangeQuery }, ...pipeline ],
+      });
     } else {
-      facets.push({ field, pipeline });
-    }
-  }
-
-  const query = await model.getFilterQuery(props);
-  const initialMatch = { ...query };
-  const matchRanges = {};
-  const rangeFacets = {};
-  for (const { field, pipeline } of ranges) {
-    rangeFacets[field] = [ { $match: { ...matchRanges } }, ...pipeline ];
-    delete initialMatch[field];
-    if (field in query) {
-      matchRanges[field] = query[field];
-      for (const [ rangeField, [ { $match } ] ] of Object.entries(rangeFacets)) {
-        if (rangeField === field) continue;
-        $match[field] = query[field];
-      }
+      pipelines.push({
+        field,
+        pipeline: [ { $match: query }, ...pipeline ],
+      });
     }
   }
 
   return Promise.all([
     model.count(model.getPrefilterCondition(props)),
     model.count(query),
-    facets.length || ranges.length ? // $facet cannot be empty
-      model.aggregate([
-        { $match: initialMatch },
-        { $facet: {
-          ...facets.reduce((memo, { field, pipeline }) => {
-            memo[field] = [ { $match: matchRanges }, ...pipeline ];
-            return memo;
-          }, {}),
-          ...rangeFacets,
-        } },
-      ]) : [],
+    pipelines.map(_ => _.field),
+    ...pipelines.map(_ => model.aggregate(_.pipeline)),
   ]);
 }
 
@@ -120,14 +103,15 @@ function reduceResult(result) {
 }
 
 exports.getSummary = async function (model, summaryFields, props) {
-  const [ total, visible, [ facets = {} ] ] =
+  const [ total, visible, fields, ...results ] =
     await aggregateSummaryFields(model, summaryFields, props);
 
   const summary = { total, visible, sources: {} };
 
   for (const { field, range } of summaryFields) {
-    if (!(field in facets)) continue;
-    const result = facets[field];
+    const idx = fields.indexOf(field);
+    if (idx === -1) continue;
+    const result = results[idx];
     if (range) {
       summary[field] = result[0];
     } else {
