@@ -144,6 +144,7 @@ schema.statics.getSyncQuery = function (props) {
     publicationYear,
     searchText,
     type,
+    access = type,
   } = query;
 
   const findQuery = this.getPrefilterCondition(props);
@@ -156,9 +157,9 @@ schema.statics.getSyncQuery = function (props) {
     findQuery.organismId = organismId;
   }
 
-  if (type === 'public') {
+  if (access === 'public') {
     findQuery.access = 'public';
-  } else if (type === 'private') {
+  } else if (access === 'private') {
     findQuery.access = { $in: [ 'private', 'shared' ] };
   }
 
