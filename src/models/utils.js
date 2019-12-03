@@ -32,49 +32,68 @@ const sumAggregation = field => [
   { $group: { _id: `$${field}`, count: { $sum: 1 } } },
 ];
 
+function getRangeQuery(query, queryKeys) {
+  const nextQuery = { ...query };
+  for (const key of queryKeys) {
+    nextQuery[key] = undefined;
+  }
+  return nextQuery;
+}
+
 async function aggregateSummaryFields(model, summaryFields, props) {
-  const asyncQuery = model.getAsyncQuery ? await model.getAsyncQuery(props) : {};
+  const facets = [];
+  const ranges = [];
 
-  const aggregations = [
-    model.count(model.getPrefilterCondition(props)),
-    model.count({ ...asyncQuery, ...model.getSyncQuery(props) }),
-  ];
-
-  for (const { field, aggregation, range, queryKeys = [] } of summaryFields) {
-    let aggregationStage = null;
+  for (const { field, aggregation, range } of summaryFields) {
+    let pipeline = null;
 
     if (aggregation) {
-      aggregationStage = aggregation(props);
+      pipeline = aggregation(props);
     } else if (range) {
-      aggregationStage = rangeAggregation(field);
+      pipeline = rangeAggregation(field);
     } else {
-      aggregationStage = sumAggregation(field);
+      pipeline = sumAggregation(field);
     }
 
-    if (!aggregationStage) {
-      aggregations.push(Promise.resolve([]));
+    if (!pipeline) {
+      continue;
+    }
+
+    if (range) {
+      ranges.push({ field, pipeline });
     } else {
-      let query;
-      if (queryKeys.length) { // this is to support range aggregations e.g. date
-        query = {};
-        for (const key of Object.keys(props.query)) {
-          if (!queryKeys.includes(key)) {
-            query[key] = props.query[key];
-          }
-        }
-      } else {
-        query = props.query;
-      }
-      const $match = {
-        ...asyncQuery,
-        ...model.getSyncQuery(Object.assign({}, props, { query })),
-      };
-      const prefilterStage = [ { $match }, ...aggregationStage ];
-      aggregations.push(model.aggregate(prefilterStage));
+      facets.push({ field, pipeline });
     }
   }
 
-  return Promise.all(aggregations);
+  const query = await model.getFilterQuery(props);
+  const initialMatch = { ...query };
+  const matchRanges = {};
+  const rangeFacets = {};
+  for (const { field, pipeline } of ranges) {
+    rangeFacets[field] = [ { $match: { ...matchRanges } }, ...pipeline ];
+    delete initialMatch[field];
+    matchRanges[field] = query[field];
+    for (const [ rangeField, [ { $match } ] ] of Object.entries(rangeFacets)) {
+      if (rangeField === field) continue;
+      $match[field] = query[field];
+    }
+  }
+
+  return Promise.all([
+    model.count(model.getPrefilterCondition(props)),
+    model.count(query),
+    model.aggregate([
+      { $match: initialMatch },
+      { $facet: {
+        ...facets.reduce((memo, { field, pipeline }) => {
+          memo[field] = [ { $match: matchRanges }, ...pipeline ];
+          return memo;
+        }, {}),
+        ...rangeFacets,
+      } },
+    ]),
+  ]);
 }
 
 function reduceResult(result) {
@@ -97,24 +116,26 @@ function reduceResult(result) {
   );
 }
 
-exports.getSummary = function (model, summaryFields, props) {
-  return aggregateSummaryFields(model, summaryFields, props)
-    .then(([ total, visible, ...results ]) => {
-      const summary = { total, visible, sources: {} };
-      results.forEach((result, index) => {
-        const { field, range } = summaryFields[index];
-        if (range) {
-          summary[field] = result[0];
-        } else {
-          summary[field] = reduceResult(result);
-          if (result.length && result[0].sources) {
-            summary.sources[field] = result[0].sources[0];
-          }
-        }
-      });
+exports.getSummary = async function (model, summaryFields, props) {
+  const [ total, visible, [ facets ] ] =
+    await aggregateSummaryFields(model, summaryFields, props);
 
-      return summary;
-    });
+  const summary = { total, visible, sources: {} };
+
+  for (const { field, range } of summaryFields) {
+    if (!(field in facets)) continue;
+    const result = facets[field];
+    if (range) {
+      summary[field] = result[0];
+    } else {
+      summary[field] = reduceResult(result);
+    }
+    if (result.length && result[0].sources) {
+      summary.sources[field] = result[0].sources[0];
+    }
+  }
+
+  return summary;
 };
 
 exports.toSlug = function (text) {

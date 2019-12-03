@@ -271,14 +271,14 @@ module.exports = async function (props) {
   const deployedOrganisms = await Organism.deployedOrganismIds(props.user);
   const tasks = getTasksByOrganism(props.query, props.user).map(_ => _.task);
   const summary = await Genome.getSummary(
-    summaryFields.filter(_ => _.task ? tasks.includes(_.task) : true),
+    summaryFields.filter(_ => (_.task ? tasks.includes(_.task) : true)),
     { ...props, deployedOrganisms }
   );
 
   // begin auto-taxonomy
-  const genera = Object.keys(summary.genusId);
-  const species = Object.keys(summary.speciesId);
-  const organisms = Object.keys(summary.organismId);
+  const genera = Object.keys(summary.genusId || {});
+  const species = Object.keys(summary.speciesId || {});
+  const organisms = Object.keys(summary.organismId || {});
 
   const { genusId, speciesId, organismId } = props.query;
 
@@ -328,6 +328,11 @@ module.exports = async function (props) {
         },
       };
     }
+  }
+
+  // species should not be returned unless genus provided
+  if (!genusId) {
+    summary.speciesId = {};
   }
 
   return summary;

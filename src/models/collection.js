@@ -135,7 +135,7 @@ schema.statics.getSummary = function (fields, props) {
   return getSummary(this, fields, props);
 };
 
-schema.statics.getSyncQuery = function (props) {
+schema.statics.getFilterQuery = function (props) {
   const { query = {} } = props;
   const {
     maxDate,
@@ -180,8 +180,6 @@ schema.statics.getSyncQuery = function (props) {
 
   return findQuery;
 };
-
-schema.statics.getFilterQuery = schema.statics.getSyncQuery;
 
 const sortKeys = new Set([
   'createdAt', 'title', 'size', 'publicationYear',

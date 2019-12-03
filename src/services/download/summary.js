@@ -67,9 +67,9 @@ module.exports = function ({ user, ids }) {
         }, {}),
       },
     ]),
-  ]).then(([ organsisms, [ organismsByTask ] ]) => {
+  ]).then(([ organisms, [ organismsByTask ] ]) => {
     const summary = {};
-    for (const organism of organsisms) {
+    for (const organism of organisms) {
       summary[organism.speciesId] = Object.assign({ tasks: [] }, organism);
     }
     for (const task of Object.keys(organismsByTask)) {
