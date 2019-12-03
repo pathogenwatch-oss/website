@@ -120,11 +120,17 @@ const summaryFields = [
     field: 'resistance',
     aggregation: ({ query }) => {
       const pipeline = [
-        { $match: { 'analysis.paarsnp': { $exists: true } } },
-        { $project: { 'analysis.paarsnp.antibiotics': 1 } },
-        { $unwind: '$analysis.paarsnp.antibiotics' },
-        { $match: { 'analysis.paarsnp.antibiotics.state': 'RESISTANT' } },
-        { $group: { _id: '$analysis.paarsnp.antibiotics.fullName', count: { $sum: 1 } } },
+        { $project: {
+          antibiotics: {
+            $filter: {
+              input: '$analysis.paarsnp.antibiotics',
+              as: 'ab',
+              cond: { $eq: [ '$$ab.state', 'RESISTANT' ] },
+            },
+          },
+        } },
+        { $unwind: '$antibiotics' },
+        { $group: { _id: '$antibiotics.fullName', count: { $sum: 1 } } },
       ];
       if (query.resistance) {
         // return selected antibiotic only, required to show as "active"
