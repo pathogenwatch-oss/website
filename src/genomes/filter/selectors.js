@@ -234,7 +234,7 @@ const getSubspeciesSummary = createSelector(
 
 const getSeroname = createSelector(
   state => getFilterSummaries(state).speciesId,
-  (speciesIdSummary) => {
+  (speciesIdSummary = {}) => {
     const speciesIds = Object.keys(speciesIdSummary);
     return speciesIds.length === 1 ?
       getSeroName(speciesIdSummary[speciesIds[0]].label) :
@@ -369,7 +369,7 @@ const getDateSummary = createSelector(
   getFilterSummaries,
   state => getFilter(state).minDate,
   state => getFilter(state).maxDate,
-  ({ date }, minDate, maxDate) => (
+  ({ date = {} }, minDate, maxDate) => (
     date.min && date.max ?
       {
         bounds: [ date.min, date.max ],
