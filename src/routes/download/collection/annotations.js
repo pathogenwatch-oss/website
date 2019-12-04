@@ -120,6 +120,7 @@ function convertDocumentToGFF(doc, stream) {
 
   stream.write(header);
 
+   // https://github.com/sanger-pathogens/Artemis/blob/master/etc/feature_keys_gff
   if (core) {
     const profile = core.profile.map(x => x.id).sort().map(x => core.profile.find(y => y.id === x));
     for (const { id, rlength, alleles } of profile) {
@@ -135,13 +136,13 @@ function convertDocumentToGFF(doc, stream) {
           phase: (allele.rstart - 1) % 3,
           attributes: {
             ID: `CORE_${allele.qid}_${allele.rstart}_${allele.rstop}`,
-            name: id,
-            target: `${id} ${allele.rstart} ${rlength}`,
-            targetLength: rlength,
-            notes: [
+            Name: id,
+            Target: `${id} ${allele.rstart} ${rlength}`,
+            TargetLength: rlength,
+            note: [
               `Paralogue ${alleles.length}`,
               allele.complete ? 'Complete Match' : 'Partial Match',
-            ].join(','),
+            ].join(', '),
             evalue: allele.evalue,
           },
         });
@@ -151,21 +152,22 @@ function convertDocumentToGFF(doc, stream) {
 
   if (mlst) {
     for (const { gene, id, start, end, contig } of mlst.matches) {
+      const [qStart, qEnd] = [start, end].sort((a, b)=>{return a-b});
       stream.write({
         sequence: contig,
         source: 'Pathogenwatch_MLST',
-        type: 'genetic_marker',
-        start,
-        end,
+        type: 'match',
+        start: qStart,
+        end: qEnd,
         score: null, // match.identity,
         reversed: end < start,
         phase: null,
         attributes: {
           ID: `MLST_${contig}_${start}_${end}`,
-          name: `${gene}_${id}`,
+          Name: `${gene}_${id}`,
           // target: `${match.reference.id} ${match.reference.start} ${match.reference.length}`,
           // targetLength: match.reference.length,
-          note: `FamilyAllele ${id}`,
+          note: `Family ${gene} Allele ${id}`,
           // evalue: match.evalue,
         },
       });
@@ -178,17 +180,17 @@ function convertDocumentToGFF(doc, stream) {
         stream.write({
           sequence: match.query.id,
           source: 'Pathogenwatch_PAAR',
-          type: match.type,
+          type: 'CDS',
           start: match.query.start,
           end: match.query.stop,
-          score: match.identity,
+          score: match.identity || match.percentIdentity,
           reversed: match.reversed,
           phase: (match.query.start - 1) % 3,
           attributes: {
             ID: `PAAR_${match.query.id}_${match.query.start}_${match.query.stop}`,
-            name: match.id,
-            target: `${match.id} ${match.library.start} ${match.library.length}`,
-            targetLength: match.library.length,
+            Name: match.id,
+            Target: `${match.id} ${match.library.start} ${match.library.stop}`,
+            TargetLength: match.library.length,
             note: match.agents.join(','),
             evalue: match.evalue,
           },
@@ -197,35 +199,35 @@ function convertDocumentToGFF(doc, stream) {
         stream.write({
           sequence: match.id,
           source: 'Pathogenwatch_SNPAR',
-          type: match.type,
+          type: 'sequence_difference',
           start: match.queryLocation,
           end: match.queryLocation,
           score: null,
           reversed: match.reversed,
           phase: null,
           attributes: {
-            ID: `SNPAR_${match.name}`,
-            name: match.name,
-            parent: `${match.id}_${match.libraryStart}`,
-            target: `${match.id} ${match.referenceLocation} ${match.referenceLocation}`,
-            note: match.agents.join(','),
+            ID: `SNPAR_${match.id}_${match.queryLocation}_${match.name}`,
+            Name: match.name,
+            // parent: `SNPAR_${match.id}`,
+            Target: `${match.name} ${match.referenceLocation} ${match.referenceLocation}`,
+            note: match.agents.join(', '),
           },
         });
       } else {
         stream.write({
           sequence: match.query.id,
           source: 'Pathogenwatch_SNPAR',
-          type: match.type,
+          type: 'CDS',
           start: match.query.start,
           end: match.query.stop,
-          score: match.identity,
+          score: match.identity || match.percentIdentity,
           reversed: match.reversed,
           phase: (match.query.start - 1) % 3,
           attributes: {
             ID: `SNPAR_${match.query.id}_${match.query.start}_${match.query.stop}`,
-            name: match.id,
-            target: `${match.library.id} ${match.library.start} ${match.library.length}`,
-            targetLength: match.library.length,
+            Name: match.id,
+            Target: `${match.library.id} ${match.library.start} ${match.library.stop}`,
+            TargetLength: match.library.length,
             evalue: match.evalue,
           },
         });
