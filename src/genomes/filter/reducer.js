@@ -1,6 +1,6 @@
 import { GENOMES_FILTER_OPENED, GENOMES_FILTER_SUMMARY_LIST } from './actions';
 import { UPDATE_FILTER, SET_FILTER } from '~/filter/actions';
-import { stateKey } from '../filter';
+import { stateKey } from './index';
 
 const initialState = {
   isOpen: true,
@@ -18,7 +18,7 @@ export default function (state = initialState, { type, payload }) {
       return {
         ...state,
         listFilters: {
-          ...state,
+          ...state.listFilters,
           [payload.filterKey]: payload.text,
         },
       };
