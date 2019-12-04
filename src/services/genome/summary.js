@@ -118,29 +118,24 @@ const summaryFields = [
   },
   {
     field: 'resistance',
-    aggregation: ({ query }) => {
-      const pipeline = [
-        { $project: {
-          antibiotics: {
-            $filter: {
-              input: '$analysis.paarsnp.antibiotics',
-              as: 'ab',
-              cond: { $eq: [ '$$ab.state', 'RESISTANT' ] },
-            },
+    aggregation: ({ query }) => [
+      { $project: {
+        antibiotics: {
+          $filter: {
+            input: '$analysis.paarsnp.antibiotics',
+            as: 'ab',
+            cond: query.resistance ?
+              { $and: [
+                { $eq: [ '$$ab.state', 'RESISTANT' ] },
+                { $eq: [ '$$ab.fullName', query.resistance ] },
+              ] } :
+              { $eq: [ '$$ab.state', 'RESISTANT' ] },
           },
-        } },
-        { $unwind: '$antibiotics' },
-        { $group: { _id: '$antibiotics.fullName', count: { $sum: 1 } } },
-      ];
-      if (query.resistance) {
-        // return selected antibiotic only, required to show as "active"
-        return [
-          ...pipeline,
-          { $match: { _id: query.resistance } },
-        ];
-      }
-      return pipeline;
-    },
+        },
+      } },
+      { $unwind: '$antibiotics' },
+      { $group: { _id: '$antibiotics.fullName', count: { $sum: 1 } } },
+    ],
   },
   {
     field: 'subspecies',
