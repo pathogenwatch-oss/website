@@ -1,9 +1,24 @@
 const path = require('path');
 
+export const ASSEMBLY_FILE_EXTENSIONS = [
+  '.fa',
+  '.fas',
+  '.fna',
+  '.ffn',
+  '.faa',
+  '.frn',
+  '.fasta',
+  '.genome',
+  '.contig',
+  '.dna',
+];
+
 module.exports.createFastaFileName = function (genomeName = 'file') {
   const ext = path.extname(genomeName);
-  if (ext.length === 0) return `${genomeName}.fasta`;
-  return `${path.basename(genomeName, ext)}.fasta`;
+  if (ASSEMBLY_FILE_EXTENSIONS.includes(ext)) {
+    return `${path.basename(genomeName, ext)}.fasta`;
+  }
+  return `${genomeName}.fasta`;
 };
 
 module.exports.getNotificationResult = function ({ task, results }) {
