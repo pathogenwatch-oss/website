@@ -1,6 +1,6 @@
 const path = require('path');
 
-export const ASSEMBLY_FILE_EXTENSIONS = [
+const ASSEMBLY_FILE_EXTENSIONS = [
   '.fa',
   '.fas',
   '.fna',
