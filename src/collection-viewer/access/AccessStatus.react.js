@@ -14,7 +14,7 @@ const AccessStatus = ({ status }) => {
     content = <p><i className="material-icons">error_outline</i> Failed, please try again</p>;
   }
 
-  if (status !== 'OK') {
+  if (status === 'OK') {
     content = <p><i className="material-icons">check_circle</i> Saved</p>;
   }
 
