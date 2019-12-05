@@ -1,4 +1,4 @@
-FROM node:8.16.0-alpine
+FROM node:12.13.1-alpine
 
 COPY . /opt/pathogenwatch/middle-end
 

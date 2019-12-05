@@ -536,13 +536,13 @@ bcrypt-pbkdf@^1.0.0:
   dependencies:
     tweetnacl "^0.14.3"
 
-bcrypt@^3.0.3:
-  version "3.0.3"
-  resolved "https://registry.yarnpkg.com/bcrypt/-/bcrypt-3.0.3.tgz#7d1e9e5d533c5ea060e6ac8834942c004dbffe9c"
-  integrity sha512-4EuzUo6K790QC3uq/ogzy9w2Hc7XDIBoEndU5y7l7YaEAwQF8vyFqv6tC30+gOBZvyxk3F632xzKBQoLNz2pjg==
+bcrypt@^3.0.7:
+  version "3.0.7"
+  resolved "https://registry.yarnpkg.com/bcrypt/-/bcrypt-3.0.7.tgz#1187d29df2e1cde44268152b13e3d4a655a7c7de"
+  integrity sha512-K5UglF9VQvBMHl/1elNyyFvAfOY9Bj+rpKrCSR9sFwcW8FywAYJSRwTURNej5TaAK2TEJkcJ6r6lh1YPmspx5Q==
   dependencies:
-    nan "2.12.1"
-    node-pre-gyp "0.12.0"
+    nan "2.14.0"
+    node-pre-gyp "0.13.0"
 
 bcryptjs@2.3.0:
   version "2.3.0"
@@ -780,20 +780,20 @@ caseless@~0.12.0:
   resolved "https://registry.yarnpkg.com/caseless/-/caseless-0.12.0.tgz#1b681c21ff84033c826543090689420d187151dc"
   integrity sha1-G2gcIf+EAzyCZUMJBolCDRhxUdw=
 
-"cgps-user-accounts@https://gitlab.com/cgps/cgps-user-accounts#v2.1.1":
-  version "2.1.1"
-  resolved "https://gitlab.com/cgps/cgps-user-accounts#e8695fef7121c5866f9abfecfb4425af5bee50fc"
+"cgps-user-accounts@https://gitlab.com/cgps/cgps-user-accounts#v2.1.5":
+  version "2.1.5"
+  resolved "https://gitlab.com/cgps/cgps-user-accounts#f79fda62a8536649fcc9415e9ce367162453228d"
   dependencies:
     emailjs "^1.0.8"
     https-proxy-agent "^2.2.1"
-    passport "^0.2.1"
+    passport "^0.4.0"
     passport-facebook "^2.0.0"
     passport-google-oauth20 "^1.0.0"
     passport-jwt "^4.0.0"
     passport-ldapauth "^0.5.0"
     passport-passwordless "github:cgps-dev/passport-passwordless#8be8f55bc67b5a88dc9304132a108251575e74a4"
     passport-twitter "^1.0.3"
-    passwordless-mongostore "github:cgps-dev/passwordless-mongostore.git#dd82499a18ba68e298afdccce5f9d1c407596ff9"
+    passwordless-mongostore "github:cgps-dev/passwordless-mongostore.git#8550ec7f4d986be1f29fad4592e70595832ff912"
     request "^2.79.0"
 
 chalk@^1.1.0, chalk@^1.1.1:
@@ -3482,10 +3482,10 @@ named-argv@^0.3.0:
   resolved "https://registry.yarnpkg.com/named-argv/-/named-argv-0.3.0.tgz#7f17aec96f4cc01e9d4af2bfb61efd767816fdd1"
   integrity sha1-fxeuyW9MwB6dSvK/th79dngW/dE=
 
-nan@2.12.1:
-  version "2.12.1"
-  resolved "https://registry.yarnpkg.com/nan/-/nan-2.12.1.tgz#7b1aa193e9aa86057e3c7bbd0ac448e770925552"
-  integrity sha512-JY7V6lRkStKcKTvHO5NVSQRv+RV+FIL5pvDoLiAtSL9pKlC5x9PKQcZDsq7m4FO4d57mkhC6Z+QhAh3Jdk5JFw==
+nan@2.14.0:
+  version "2.14.0"
+  resolved "https://registry.yarnpkg.com/nan/-/nan-2.14.0.tgz#7818f722027b2459a86f0295d434d1fc2336c52c"
+  integrity sha512-INOFj37C7k3AfaNTtX8RhsTw7qRy7eLET14cROi9+5HAVbbHuIWUHEauBv5qT4Av2tWasiTY1Jw6puUNqRJXQg==
 
 nan@^2.10.0, nan@^2.9.2:
   version "2.11.1"
@@ -3558,10 +3558,10 @@ nid@0.3:
   resolved "https://registry.yarnpkg.com/nid/-/nid-0.3.2.tgz#977a9318ed5c2a38edd66263f3eafd8143f2251a"
   integrity sha1-l3qTGO1cKjjt1mJj8+r9gUPyJRo=
 
-node-pre-gyp@0.12.0:
-  version "0.12.0"
-  resolved "https://registry.yarnpkg.com/node-pre-gyp/-/node-pre-gyp-0.12.0.tgz#39ba4bb1439da030295f899e3b520b7785766149"
-  integrity sha512-4KghwV8vH5k+g2ylT+sLTjy5wmUOb9vPhnM8NHvRf9dHmnW/CndrFXy2aRPaPST6dugXSdHXfeaHQm77PIz/1A==
+node-pre-gyp@0.13.0:
+  version "0.13.0"
+  resolved "https://registry.yarnpkg.com/node-pre-gyp/-/node-pre-gyp-0.13.0.tgz#df9ab7b68dd6498137717838e4f92a33fc9daa42"
+  integrity sha512-Md1D3xnEne8b/HGVQkZZwV27WUi1ZRuZBij24TNaZwUPU3ZAFtvT6xxJGaUVillfmMKnn5oD1HoGsp2Ftik7SQ==
   dependencies:
     detect-libc "^1.0.2"
     mkdirp "^0.5.1"
@@ -3956,17 +3956,17 @@ passport-twitter@^1.0.3:
     passport-oauth1 "1.x.x"
     xtraverse "0.1.x"
 
-passport@^0.2.1:
-  version "0.2.2"
-  resolved "https://registry.yarnpkg.com/passport/-/passport-0.2.2.tgz#9c38f17beb929f3d81af7b8838e8430db8703f2b"
-  integrity sha1-nDjxe+uSnz2Br3uIOOhDDbhwPys=
+passport@^0.4.0:
+  version "0.4.0"
+  resolved "https://registry.yarnpkg.com/passport/-/passport-0.4.0.tgz#c5095691347bd5ad3b5e180238c3914d16f05811"
+  integrity sha1-xQlWkTR71a07XhgCOMORTRbwWBE=
   dependencies:
     passport-strategy "1.x.x"
     pause "0.0.1"
 
-"passwordless-mongostore@github:cgps-dev/passwordless-mongostore.git#dd82499a18ba68e298afdccce5f9d1c407596ff9":
+"passwordless-mongostore@github:cgps-dev/passwordless-mongostore.git#8550ec7f4d986be1f29fad4592e70595832ff912":
   version "0.1.5"
-  resolved "https://codeload.github.com/cgps-dev/passwordless-mongostore/tar.gz/dd82499a18ba68e298afdccce5f9d1c407596ff9"
+  resolved "https://codeload.github.com/cgps-dev/passwordless-mongostore/tar.gz/8550ec7f4d986be1f29fad4592e70595832ff912"
   dependencies:
     bcrypt "^3.0.3"
     mongodb "^3.1.10"
@@ -4042,15 +4042,15 @@ path-type@^2.0.0:
   dependencies:
     pify "^2.0.0"
 
-"pathogenwatch-fasta-store@https://gitlab.com/cgps/pathogenwatch-fasta-store#v4.1.0":
-  version "4.1.0"
-  resolved "https://gitlab.com/cgps/pathogenwatch-fasta-store#13c6e8f714987d6c3f004e4c39dfc987541d049e"
+"pathogenwatch-fasta-store@https://gitlab.com/cgps/pathogenwatch-fasta-store#v4.1.1":
+  version "4.1.1"
+  resolved "https://gitlab.com/cgps/pathogenwatch-fasta-store#9fa1fd27c14cefb77aff754e89587d5bf1b99858"
   dependencies:
     mkdirp "^0.5.1"
     pass-stream "^1.0.0"
     promisify-node "^0.4.0"
     uuid "^3.0.1"
-    writers-digest "^1.0.0"
+    writers-digest "github:cgps-dev/writers-digest#0aea383bd66a78eb668ef0567092852171e1385a"
     zip-stream "^1.2.0"
 
 "pathogenwatch-front-end@https://gitlab.com/cgps/pathogenwatch-front-end#v8.6.2":
@@ -5661,10 +5661,9 @@ write@^0.2.1:
   dependencies:
     mkdirp "^0.5.1"
 
-writers-digest@^1.0.0:
+"writers-digest@github:cgps-dev/writers-digest#0aea383bd66a78eb668ef0567092852171e1385a":
   version "1.1.0"
-  resolved "https://registry.yarnpkg.com/writers-digest/-/writers-digest-1.1.0.tgz#dec5f2d7b83a9c9421e7d4415ae49fd98a7504e6"
-  integrity sha512-kQxziMKr+5T9dvI0QtWmmMH5ZQavL+Sz4iW0GiNVgEsy6uwv/j21SjrdEfREBosyCA88Qn+zwD56eNfKF9BJvw==
+  resolved "https://codeload.github.com/cgps-dev/writers-digest/tar.gz/0aea383bd66a78eb668ef0567092852171e1385a"
   dependencies:
     mkdirp "0.5.1"
 
