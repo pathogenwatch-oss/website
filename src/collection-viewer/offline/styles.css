@@ -1,31 +1,23 @@
-.wgsa-save-for-offline {
-  text-align: center;
-  clear: both;
-  padding-top: 8px;
+.wgsa-save-for-offline.unsupported p {
+  margin: 0;
+  /* text-align: center; */
 }
 
-.wgsa-save-for-offline button {
-  margin-bottom: 8px;
+.wgsa-save-for-offline .libmr-Checkbox {
+  border: 1px solid transparent;
+  box-sizing: border-box;
+  line-height: 1.5;
+  padding: 0 8px;
+  user-select: none;
+  width: 100%;
 }
 
-.wgsa-save-for-offline > p {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 8px;
+.wgsa-save-for-offline .libmr-Checkbox > label {
+  padding-left: 8px;
+  width: 100%;
 }
 
-.wgsa-save-for-offline > p.small {
-  margin-bottom: 0;
-  font-size: 13px;
-}
-
-.wgsa-save-for-offline i {
-  margin-right: 4px;
-  color: rgb(72, 153, 111);
-}
-
-.wgsa-save-for-offline .mdl-spinner {
-  margin-left: 8px;
-  margin-bottom: -8px;
+.wgsa-save-for-offline a {
+  font-weight: 500;
+  color: #3c7383;
 }

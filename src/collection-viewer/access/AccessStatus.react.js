@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import Fade from '../../components/fade';
+import Fade from '~/components/fade';
 
 import { getAccessStatus } from './selectors';
 
@@ -11,15 +11,17 @@ const AccessStatus = ({ status }) => {
   let content;
 
   if (status === 'ERROR') {
-    content = <p>❎ Failed, please try again</p>;
+    content = <p><i className="material-icons">error_outline</i> Failed, please try again</p>;
   }
 
-  if (status === 'OK') {
-    content = <p>✔️ Saved</p>;
+  if (status !== 'OK') {
+    content = <p><i className="material-icons">check_circle</i> Saved</p>;
   }
 
   return (
-    <Fade className="wgsa-collection-access-status">{content}</Fade>
+    <Fade className="wgsa-collection-access-status">
+      {content}
+    </Fade>
   );
 };
 

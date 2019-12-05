@@ -1,65 +1,82 @@
 import React from 'react';
+// import classnames from 'classnames';
 
-import Spinner from '../../components/Spinner.react';
+import Checkbox from '@cgps/libmicroreact/checkbox';
 
 import { statuses } from './constants';
 
-import { isSupported } from '../../offline/utils';
+import { isSupported } from '~/offline/utils';
 
-export default React.createClass({
+const StatusMessage = ({ status }) => {
+  switch (status) {
+    case statuses.SAVING:
+      return 'saving data...';
+    case statuses.ERRORED:
+      return 'sorry, something went wrong.';
+    default:
+      return 'page will refresh once saved.';
+  }
+};
 
-  propTypes: {
-    status: React.PropTypes.number,
-    checkStatus: React.PropTypes.func,
-    onSave: React.PropTypes.func,
-  },
+const SaveForOffline = ({ status, checkStatus, onSave }) => {
+  const supported = isSupported();
 
-  componentDidMount() {
-    if (isSupported()) {
-      this.props.checkStatus();
+  React.useEffect(() => {
+    if (supported) {
+      checkStatus();
     }
-  },
+  }, []);
 
-  renderStatusContent() {
-    switch (this.props.status) {
-      case statuses.SAVED:
-        return (
-          <p>
-            <i className="material-icons">check_circle</i> Saved for offline use.
-          </p>
-        );
-      case statuses.ERRORED:
-        return <p className="small">Something went wrong. 😞</p>;
-      default:
-        return <p className="small">Page will refresh once saved.</p>;
+  const [ saved, setSaved ] = React.useState(status === statuses.SAVED);
+
+  React.useEffect(() => {
+    if (!saved && status === statuses.SAVED) {
+      setSaved(true);
     }
-  },
+  }, [ status ]);
 
-  render() {
-    const { status } = this.props;
-
-    if (isSupported()) {
-      return (
-        <div className="wgsa-save-for-offline">
-          { status !== statuses.SAVED &&
-            <button
-              className="mdl-button mdl-button--colored mdl-button--raised"
-              onClick={this.props.onSave}
-              disabled={status === statuses.SAVING}
-            >
-              Save for Offline Use
-            </button> }
-          { status === statuses.SAVING && <Spinner /> }
-          {this.renderStatusContent()}
-        </div>
-      );
-    }
-
+  if (!supported) {
     return (
-      <div className="wgsa-save-for-offline">
-        <p>Your browser does not support Offline Mode 😞.</p>
+      <div className="wgsa-save-for-offline unsupported">
+        <h4>Offline mode</h4>
+        <p>
+          Unsupported by your browser.
+        </p>
       </div>
     );
-  },
+  }
 
-});
+  const onChange = () => {
+    if (saved) return;
+    setSaved(true);
+    onSave();
+  };
+
+  return (
+    <div className="wgsa-save-for-offline supported">
+      <h4>Offline mode</h4>
+      <Checkbox
+        id="save-for-offline"
+        key="checkbox"
+        checked={saved}
+        onChange={onChange}
+      >
+        { status === statuses.SAVED ?
+          <span>
+            <strong>Saved for offline use</strong>
+            <br />
+            <a href="/offline" target="_blank" rel="noopener">
+              manage offline collections
+            </a>
+          </span> :
+          <span>
+            <strong>Save for offline use</strong>
+            <br />
+            <StatusMessage status={status} />
+          </span> }
+      </Checkbox>
+    </div>
+  );
+};
+
+export default SaveForOffline;
