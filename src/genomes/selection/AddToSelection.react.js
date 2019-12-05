@@ -9,7 +9,7 @@ const AddToSelection = ({ isSelected, onClick, className }) => (
   <button
     className={classnames('wgsa-genome-checkbox', className)}
     onClick={onClick}
-    title={isSelected ? 'Remove from Selection' : 'Add to Selection'}
+    title={isSelected ? 'Remove from selection' : 'Add to selection'}
   >
     <i className="material-icons">
       { isSelected ? 'check_box' : 'check_box_outline_blank' }

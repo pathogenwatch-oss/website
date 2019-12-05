@@ -54,13 +54,13 @@ const Selection = ({
           >
             <button
               className="wgsa-link-button"
-              title="View Details"
+              title="View report"
               onClick={() => showGenome(genome)}
             >
               {genome.name}
             </button>
             <button
-              title="Remove from Selection"
+              title="Remove from selection"
               onClick={e => {
                 e.stopPropagation();
                 removeGenome(genome);
@@ -77,15 +77,14 @@ const Selection = ({
       {!!user && (
         <div>
           <button
-            title="Send Selection to Bin"
             className="mdl-button mdl-button--icon"
             onClick={() => sendToBin(selectedGenomes)}
-            title="Send to Bin"
+            title="Send to bin"
           >
             <i className="material-icons">delete_sweep</i>
           </button>
           <button
-            title="Edit Metadata"
+            title="Edit metadata"
             className="mdl-button"
             onClick={() => toggle('edit')}
           >

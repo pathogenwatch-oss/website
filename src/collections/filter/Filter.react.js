@@ -33,40 +33,37 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(
-  ({ active, searchText, filterSummary, updateFilterValue, applyFilter, updateFilter, clearFilter, prefilter }) => (
-    <FilterAside
-      active={active}
-      clear={clearFilter}
-      textValue={searchText}
-      textOnChange={value => updateFilterValue('searchText', value)}
-      textOnChangeEffect={applyFilter}
-      prefilter={prefilter}
-    >
-      <FilterSection
-        filterKey="organismId"
-        heading="Organism"
-        icon="bug_report"
-        summary={filterSummary.organism}
-        updateFilter={updateFilter}
-      />
-      <FilterSection
-        className="capitalised"
-        filterKey="type"
-        heading="Type"
-        icon="label"
-        summary={filterSummary.type}
-        updateFilter={updateFilter}
-      />
-      <DateSection summary={filterSummary.date} updateFilter={updateFilter} />
-      <FilterSection
-        filterKey="publicationYear"
-        heading="Publication Year"
-        icon="chrome_reader_mode"
-        summary={filterSummary.publicationYear}
-        updateFilter={updateFilter}
-      />
-      <LocationListener update={updateFilter} />
-    </FilterAside>
-  )
+const Filter = ({ active, searchText, filterSummary, updateFilterValue, applyFilter, updateFilter, clearFilter, prefilter }) => (
+  <FilterAside
+    active={active}
+    clear={clearFilter}
+    prefilter={prefilter}
+    summary={filterSummary}
+    textValue={searchText}
+    textOnChange={value => updateFilterValue('searchText', value)}
+    textOnChangeEffect={applyFilter}
+    updateFilter={updateFilter}
+  >
+    <FilterSection
+      filterKey="organismId"
+      heading="Organism"
+      icon="bug_report"
+      summary={filterSummary.organism}
+    />
+    <FilterSection
+      className="capitalised"
+      filterKey="access"
+      heading="Access"
+      icon="person"
+    />
+    <DateSection summary={filterSummary.date} />
+    <FilterSection
+      filterKey="publicationYear"
+      heading="Publication Year"
+      icon="chrome_reader_mode"
+    />
+    <LocationListener update={updateFilter} />
+  </FilterAside>
 );
+
+export default connect(mapStateToProps, mapDispatchToProps)(Filter);

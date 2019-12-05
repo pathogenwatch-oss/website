@@ -8,49 +8,56 @@ function formatCount(count) {
   return count;
 }
 
-const FilterItem = ({ value, title, label, count, active, onClick }) => (
-  <button
-    title={title || label}
-    className={classnames('mdl-chip mdl-chip--contact', {
-      'mdl-chip--active': active,
-    })}
-    onClick={() => onClick(value)}
-  >
-    <span className="mdl-chip__contact">{formatCount(count)}</span>
-    <span className="mdl-chip__text">{label || value}</span>
-  </button>
-);
+const FilterItem = ({ item, onClick, renderLabel }) => {
+  const { value, label = value, title = label, count, active } = item;
+  return (
+    <button
+      title={title}
+      className={classnames('mdl-chip mdl-chip--contact', {
+        'mdl-chip--active': active,
+      })}
+      onClick={() => onClick(value)}
+    >
+      <span className="mdl-chip__contact">{formatCount(count)}</span>
+      <span className="mdl-chip__text">{renderLabel(item)}</span>
+    </button>
+  );
+};
+
+function getActiveItem({ autoSelect = true, filterActive, summary = [], totalVisible }) {
+  if (filterActive && summary.length === 1 && summary[0].count === totalVisible && autoSelect) {
+    return summary[0];
+  }
+  return summary.find(_ => _.active);
+}
+
+function isSectionHidden({ children, disabled, hidden, summary = [] }) {
+  if (children) return false;
+  return !!hidden || !disabled && summary.length === 0;
+}
 
 const FilterSection = React.createClass({
   getInitialState() {
-    const { summary, expanded = summary.some(_ => _.active) } = this.props;
     return {
-      isOpen: expanded,
-      isActive: expanded,
+      activeItem: getActiveItem(this.props),
+      isHidden: isSectionHidden(this.props),
+      isOpen: false,
     };
   },
 
   componentWillReceiveProps(nextProps) {
-    const activeItem =
-      nextProps.summary && nextProps.summary.find(_ => _.active);
+    const { activeItem, isHidden, isOpen } = this.state;
+    this.setState({
+      activeItem: nextProps.isLoading && !activeItem ? activeItem : getActiveItem(nextProps),
+      isHidden: nextProps.isLoading ? isHidden : isSectionHidden(nextProps),
+      isOpen: nextProps.isLoading ? false : isOpen,
+    });
+  },
 
-    if (activeItem) {
-      this.setState({
-        isActive: true, // caches fact that we had an active item
-      });
-    } else if (this.state.isActive && nextProps.isLoading) {
-      this.setState({
-        isOpen: false,
-      });
-    } else if (
-      this.state.isActive &&
-      this.props.isLoading &&
-      !nextProps.isLoading
-    ) {
-      this.setState({
-        isActive: false,
-        isOpen: true,
-      });
+  componentDidUpdate(_, previous) {
+    if (!previous.isOpen && this.state.isOpen && this.itemFilterInput) {
+      componentHandler.upgradeElement(this.itemFilterInput.parentElement);
+      this.itemFilterInput.focus();
     }
   },
 
@@ -59,45 +66,56 @@ const FilterSection = React.createClass({
   },
 
   render() {
+    if (this.state.isHidden) {
+      return null;
+    }
+
     const {
+      children,
+      filterKey,
       heading,
       icon,
       summary = [],
       updateFilter,
-      filterKey,
-      children,
+      renderLabel = ({ value, label = value }) => label,
     } = this.props;
-    const { isOpen } = this.state;
+    const { activeItem, isOpen } = this.state;
 
-    const activeItem = summary.find(_ => _.active);
     const onClick = value => updateFilter(filterKey, value);
 
     if (activeItem) {
-      const { title, label, value } = activeItem;
+      const { value, label = value, title, activeTitle = title } = activeItem;
+      const autoSelected = !activeItem.active;
+
+      let titleAttr = activeTitle || `${heading}: ${label}`;
+      if (autoSelected) titleAttr += ' (selected automatically)';
+
       return (
-        <section className="wgsa-filter-section is-active">
-          <h3
-            title={`${heading}: ${title || label}`}
-            onClick={() => onClick(value)}
+        <section
+          className="wgsa-filter-section is-active"
+          style={!autoSelected ? { cursor: 'pointer' } : undefined}
+        >
+          <header
+            title={titleAttr}
+            onClick={autoSelected ? null : () => onClick(value)}
           >
-            <i className="material-icons">{icon}</i>
-            <span>{label}</span>
-            <i className="material-icons">filter_list</i>
-          </h3>
+            <i className="material-icons" title={heading}>{icon}</i>
+            <span>{renderLabel({ ...activeItem, active: true })}</span>
+            {!autoSelected && <i className="material-icons">filter_list</i>}
+          </header>
         </section>
       );
     }
 
-    const { disabled, disabledText, className } = this.props;
+    const { disabled, disabledText, className, headerComponent } = this.props;
 
     if (disabled) {
       return (
         <section className="wgsa-filter-section is-disabled">
-          <h3 title={disabledText}>
-            <i className="material-icons">{icon}</i>
+          <header title={disabledText}>
+            <i className="material-icons" title={heading}>{icon}</i>
             <span>{heading}</span>
-            {/* <i className="material-icons">{isOpen ? 'expand_less' : 'expand_more'}</i> */}
-          </h3>
+          </header>
         </section>
       );
     }
@@ -108,20 +126,29 @@ const FilterSection = React.createClass({
           'is-open': isOpen,
         })}
       >
-        <h3 onClick={() => this.toggle(isOpen)}>
-          <i className="material-icons">{icon}</i>
-          <span>{heading}</span>
-          <i className="material-icons">
-            {isOpen ? 'expand_less' : 'expand_more'}
-          </i>
-        </h3>
+        <header onClick={() => this.toggle(isOpen)}>
+          <i className="material-icons" title={heading}>{icon}</i>
+          { headerComponent ?
+            React.createElement(headerComponent, { ...this.props, isOpen }) :
+            <span>{heading}</span> }
+          <button className="mdl-button mdl-button--icon">
+            <i className="material-icons">
+              {isOpen ? 'expand_less' : 'expand_more'}
+            </i>
+          </button>
+        </header>
         {isOpen && (
           <React.Fragment>
             {children ||
-              summary.map(props => {
-                if (props.active) return null;
+              summary.map(item => {
+                if (item.active) return null;
                 return (
-                  <FilterItem key={props.value} {...props} onClick={onClick} />
+                  <FilterItem
+                    key={item.value}
+                    item={item}
+                    onClick={onClick}
+                    renderLabel={renderLabel}
+                  />
                 );
               })}
           </React.Fragment>
@@ -131,13 +158,4 @@ const FilterSection = React.createClass({
   },
 });
 
-export default props => {
-  if (
-    props.children ||
-    (props.disabled && !props.hidden) ||
-    (props.summary && props.summary.length)
-  ) {
-    return <FilterSection {...props} />;
-  }
-  return null;
-};
+export default FilterSection;

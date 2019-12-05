@@ -9,8 +9,8 @@ export default ({ genome }) => {
 
   return (
     <React.Fragment>
-      <h2>Antimicrobial Resistance (AMR)</h2>
-      {!!paarsnp && <PAARSNP result={paarsnp} genome={genome} />}
+      <h2>Antimicrobial resistance (AMR)</h2>
+      {(!!paarsnp && !kleborate) && <PAARSNP result={paarsnp} genome={genome} />}
       {!!kleborate && <KleborateAMR result={kleborate} />}
       {!!spn_pbp_amr && <SpnPbpAMR result={spn_pbp_amr} />}
     </React.Fragment>

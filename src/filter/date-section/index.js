@@ -1,1 +1,1 @@
-export default from './DateSection.react.js';
+export { default } from './DateSection.react.js';

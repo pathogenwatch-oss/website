@@ -1,6 +1,4 @@
-import PromiseWorker from 'promise-worker';
-
-import getCSVWorker from 'worker-loader?name=csv-worker.[hash].js!./CsvWorker';
+import getCSVWorker from 'workerize-loader?name=csv.[hash]!./CsvWorker';
 
 import { getColumnLabel } from '../table/utils';
 import { tableKeys } from '../constants';
@@ -25,9 +23,8 @@ function convertTableToCSV(table, additionalColumns = []) {
         }))
         .concat(additionalColumns);
     const rows = genomeIds.map(id => genomes[id]);
-    return (
-      new PromiseWorker(getCSVWorker()).postMessage({ table, rows, columns })
-    );
+    const worker = getCSVWorker();
+    return worker.createCSV(table, columns, rows);
   };
 }
 

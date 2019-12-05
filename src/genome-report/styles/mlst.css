@@ -7,7 +7,7 @@ section#mlst {
 }
 
 .pw-genome-report-column .pw-mlst-profile {
-  margin: 0;
+  margin: 0 auto;
 }
 
 .pw-genome-report-column .pw-mlst-profile td {

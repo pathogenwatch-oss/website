@@ -1,20 +1,17 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { LocationListener } from '../../location';
-import FilterAside from '../../filter/aside';
-import FilterSection from '../../filter/section';
-import DateSection from '../../filter/date-section';
 
-import { selectors } from '../../filter';
+import { LocationListener } from '~/location';
+import FilterAside from '~/filter/aside';
+import Section from '~/filter/section';
+import DateSection from '~/filter/date-section';
+import { ST } from '~/mlst';
+import FilterableSection from './FilterableSection.react';
+import MarkdownInline from '~/components/MarkdownInline.react';
 
-import {
-  getFilter,
-  getFilterSummary,
-  getSearchText,
-  isFilterOpen,
-  getPrefilter,
-} from './selectors';
+import { selectors as filter } from '~/filter';
+import * as selectors from './selectors';
 
 import { stateKey } from './index';
 import * as actions from './actions';
@@ -26,124 +23,175 @@ function getSerotypeHeading(genusId) {
   return 'Serotype';
 }
 
+const speciesDependants = [
+  'subspecies',
+  'serotype',
+  'strain',
+  'mlst',
+  'mlst2',
+  'ngmast',
+  'ngstar',
+  'genotype',
+  'reference',
+];
+const genusDependants = speciesDependants.concat([ 'speciesId', 'klocus', 'collection' ]);
+const collectionDependents = speciesDependants.concat([ 'klocus' ]);
+
 const Filter = ({
   applyFilter,
   clearFilter,
   filterSummary,
+  filterState,
   isActive,
   prefilter,
-  genusId,
   textValue,
   updateFilter,
   updateFilterValue,
-  updateMulti,
+  clearDependants,
 }) => (
   <FilterAside
-    loading={filterSummary.loading}
     active={isActive}
     clear={clearFilter}
-    textValue={textValue}
+    prefilter={prefilter}
+    summary={filterSummary}
     textOnChange={value => updateFilterValue('searchText', value)}
     textOnChangeEffect={applyFilter}
-    prefilter={prefilter}
+    textValue={textValue}
+    updateFilter={updateFilter}
   >
-    <FilterSection
+    <FilterableSection
+      autoSelect={false}
+      disabled={!filterSummary.organismId.length}
+      disabledText="No supported organisms in current filter."
       filterKey="organismId"
-      heading="Supported Organism"
+      heading="Supported organism"
+      hidden={!filterSummary.visible}
       icon="bug_report"
-      summary={filterSummary.supportedOrganisms}
-      updateFilter={updateFilter}
+      updateFilter={clearDependants(filterState, genusDependants)}
     />
-    <FilterSection
+    <FilterableSection
+      filterKey="collection"
+      heading="Collection"
+      icon="collections"
+      renderLabel={({ label }) => <MarkdownInline>{label}</MarkdownInline>}
+      updateFilter={clearDependants(filterState, collectionDependents)}
+    />
+    <FilterableSection
       filterKey="genusId"
       heading="Genus"
       icon="bug_report"
-      summary={filterSummary.genusId}
-      updateFilter={(key, value) => {
-        const speciesItem = filterSummary.speciesId.find(_ => _.active);
-        if (speciesItem) {
-          updateMulti({
-            genusId: value,
-            speciesId: speciesItem.value,
-          });
-        } else {
-          updateFilter('genusId', value);
-        }
-      }}
+      hidden={filterState.organismId}
+      renderLabel={({ label }) => <em>{label}</em>}
+      updateFilter={clearDependants(filterState, genusDependants)}
     />
-    <FilterSection
-      filterKey="speciesId"
-      heading="Species"
-      icon="bug_report"
-      summary={filterSummary.speciesId}
-      updateFilter={updateFilter}
-      hidden={!filterSummary.genusId.length}
+    <FilterableSection
       disabled={!filterSummary.speciesId.length}
       disabledText="Select a genus to filter by species."
+      filterKey="speciesId"
+      heading="Species"
+      hidden={!filterSummary.genusId.length || filterState.organismId}
+      icon="bug_report"
+      renderLabel={({ label }) => <em>{label}</em>}
+      updateFilter={clearDependants(filterState, speciesDependants)}
     />
-    <FilterSection
+    <FilterableSection
       filterKey="subspecies"
       heading="Subspecies"
+      hidden={filterState.organismId}
       icon="bug_report"
-      summary={filterSummary.subspecies}
-      updateFilter={updateFilter}
-      hidden={!filterSummary.subspecies.length}
+      renderLabel={({ value }) => <React.Fragment>subsp. <em>{value}</em></React.Fragment>}
+      updateFilter={clearDependants(filterState, [ 'serotype' ])}
     />
-    <FilterSection
+    <FilterableSection
       filterKey="serotype"
-      heading={getSerotypeHeading(genusId)}
+      heading={getSerotypeHeading(filterState.genusId)}
+      hidden={filterState.organismId}
       icon="bug_report"
-      summary={filterSummary.serotype}
-      updateFilter={updateFilter}
-      hidden={!filterSummary.serotype.length}
+      renderLabel={({ value }) => `ser. ${value}`}
     />
-    <FilterSection
+    <FilterableSection
       filterKey="strain"
       heading="Strain"
       icon="scatter_plot"
-      summary={filterSummary.strain}
-      updateFilter={updateFilter}
-      hidden={!filterSummary.strain.length}
     />
-    <FilterSection
-      filterKey="sequenceType"
-      heading="Sequence Type"
-      icon="new_releases"
-      summary={filterSummary.sequenceTypes}
-      updateFilter={updateFilter}
-      hidden={!filterSummary.genusId.length}
-      disabled={!filterSummary.sequenceTypes.length}
-      disabledText="Select an organism, species, or genus to filter by sequence type."
+    <FilterableSection
+      filterKey="mlst"
+      heading={`MLST - ${filterSummary.sources.mlst}`}
+      icon="label"
+      renderLabel={({ active, value }) => (
+        <React.Fragment>
+          {active && (filterSummary.mlst2.length ? `${filterSummary.sources.mlst}:` : 'MLST:')} ST <ST id={value} />
+        </React.Fragment>
+      )}
     />
-    <FilterSection
+    <FilterableSection
+      filterKey="mlst2"
+      heading={`MLST - ${filterSummary.sources.mlst2}`}
+      icon="label"
+      renderLabel={({ active, value }) => (
+        <React.Fragment>
+          {active && (filterSummary.mlst.length ? `${filterSummary.sources.mlst2}:` : 'MLST:')} ST <ST id={value} />
+        </React.Fragment>
+      )}
+    />
+    <FilterableSection
+      filterKey="ngstar"
+      heading="NG-STAR"
+      icon="label"
+      renderLabel={({ active, value }) => (
+        <React.Fragment>
+          {active ? 'NG-STAR: ST' : 'ST'} <ST id={value} />
+        </React.Fragment>
+      )}
+    />
+    <FilterableSection
+      filterKey="ngmast"
+      heading="NG-MAST"
+      icon="label"
+      renderLabel={({ active, value }) => (
+        <React.Fragment>
+          {active ? 'NG-MAST: ST' : 'ST'} <ST id={value} />
+        </React.Fragment>
+      )}
+    />
+    <FilterableSection
+      filterKey="genotype"
+      heading="Genotype"
+      icon="label"
+      renderLabel={({ value, active }) => (active ? `Genotype ${value}` : value)}
+    />
+    <FilterableSection
+      filterKey="klocus"
+      heading="K Locus"
+      icon="label"
+    />
+    <FilterableSection
+      filterKey="reference"
+      heading="PW Reference"
+      icon="book"
+    />
+    <FilterableSection
       filterKey="resistance"
       heading="Resistance"
       icon="local_pharmacy"
-      summary={filterSummary.antibiotics}
-      updateFilter={updateFilter}
     />
-    <FilterSection
+    <FilterableSection
       filterKey="country"
       heading="Country"
       icon="language"
-      summary={filterSummary.country}
-      updateFilter={updateFilter}
     />
-    <DateSection summary={filterSummary.date} updateFilter={updateFilter} />
-    <FilterSection
-      className="capitalised"
-      filterKey="type"
-      heading="Type"
-      icon="label"
-      summary={filterSummary.type}
-      updateFilter={updateFilter}
+    <DateSection summary={filterSummary.date} />
+    <Section
+      filterKey="access"
+      headerComponent={({ heading }) => <span>{heading}</span>}
+      heading="Access"
+      icon="person"
     />
-    <FilterSection
+    <FilterableSection
+      autoSelect={filterSummary.access.length === 1}
       filterKey="uploadedAt"
-      heading="Uploaded At"
+      heading="Uploaded at"
       icon="cloud_upload"
-      summary={filterSummary.uploadedAt}
-      updateFilter={updateFilter}
     />
     <LocationListener update={updateFilter} />
   </FilterAside>
@@ -151,12 +199,13 @@ const Filter = ({
 
 function mapStateToProps(state) {
   return {
-    isActive: selectors.isActive(state, { stateKey }),
-    filterSummary: getFilterSummary(state, { stateKey }),
-    textValue: getSearchText(state),
-    isOpen: isFilterOpen(state),
-    prefilter: getPrefilter(state),
-    genusId: getFilter(state, { stateKey }).genusId,
+    filterState: selectors.getFilter(state, { stateKey }),
+    filterSummary: selectors.getFilterSummary(state, { stateKey }),
+    isActive: filter.isActive(state, { stateKey }),
+    isOpen: selectors.isFilterOpen(state),
+    listFilters: selectors.getListFilters(state),
+    prefilter: selectors.getPrefilter(state),
+    textValue: selectors.getSearchText(state),
   };
 }
 
@@ -168,7 +217,16 @@ function mapDispatchToProps(dispatch) {
     applyFilter: () => dispatch(actions.applyFilter()),
     updateFilter: (filterKey, value) =>
       dispatch(actions.updateFilter({ [filterKey]: value })),
-    updateMulti: filterMap => dispatch(actions.updateFilter(filterMap)),
+    clearDependants: (filterState, dependants) =>
+      (key, value) => {
+        const update = { [key]: value };
+        for (const [ k, v ] of Object.entries(filterState)) {
+          if (dependants.includes(k)) {
+            update[k] = v;
+          }
+        }
+        dispatch(actions.updateFilter(update));
+      },
   };
 }
 

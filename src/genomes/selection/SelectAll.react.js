@@ -13,9 +13,9 @@ const iconsByStatus = {
 
 function getTitle(status, disabled) {
   if (disabled) {
-    return '"Select All" is not available on the unfiltered list, please select at least one filter criterion.';
+    return '"Select All" is not available on the unfiltered list, please select at least one filter.';
   }
-  return status === 'CHECKED' ? 'Remove from Selection' : 'Add to Selection';
+  return status === 'CHECKED' ? 'Remove from selection' : 'Add to selection';
 }
 
 const SelectAll = ({ status, disabled, select }) => {

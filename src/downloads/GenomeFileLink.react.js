@@ -20,7 +20,7 @@ export default ({ id, name }) => (
     download={formatGenomeFilename(name)}
     target="_blank"
     rel="noopener"
-    title="Download Genome"
+    title="Download genome"
     className="wgsa-download-button mdl-button mdl-button--icon"
   >
     <DownloadIcon color={CGPS.COLOURS.PURPLE} label=".fa" />

@@ -12,7 +12,7 @@ import Summary from '../Summary.react';
 import { addFiles } from './actions';
 import { fetchUploads } from '../previous/actions';
 
-import { isReadsEligible } from '../file-utils';
+import { isReadsEligible, getUploadAccepts } from '../file-utils';
 
 const Instructions = ({ onFiles, fetchPreviousUploads }) => {
   React.useEffect(() => {
@@ -21,7 +21,11 @@ const Instructions = ({ onFiles, fetchPreviousUploads }) => {
 
   const readsEligible = isReadsEligible();
   return (
-    <FileDragAndDrop onFiles={onFiles} readsEligible={readsEligible}>
+    <FileDragAndDrop
+      onFiles={onFiles}
+      readsEligible={readsEligible}
+      accept={getUploadAccepts(readsEligible)}
+    >
       <DocumentTitle>Upload</DocumentTitle>
       <Summary />
       <section className="wgsa-page wgsa-compact-page wgsa-upload-instructions">

@@ -1,6 +1,6 @@
 {
   "name": "pathogenwatch-front-end",
-  "version": "8.5.1",
+  "version": "8.6.2",
   "description": "Web client for Pathogenwatch",
   "main": "index.js",
   "scripts": {
@@ -65,7 +65,6 @@
     "postcss-nesting": "^7.0.1",
     "postcss-preset-env": "^6.7.0",
     "promise-file-reader": "^0.3.0",
-    "promise-worker": "^1.1.1",
     "prop-types": "^15.6.0",
     "query-string": "^4.2.3",
     "raw-loader": "^3.0.0",
@@ -96,7 +95,6 @@
     "webpack-dev-middleware": "^3.7.2",
     "webpack-hot-middleware": "^2.20.0",
     "why-did-you-update": "^0.1.1",
-    "worker-loader": "^2.0.0",
     "workerize-loader": "^1.0.4"
   },
   "browserslist": {

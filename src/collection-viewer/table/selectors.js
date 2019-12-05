@@ -1,7 +1,12 @@
 import { createSelector } from 'reselect';
 
 import { getViewer } from '../selectors';
-import { getGenomeList, hasMetadata, hasAMR } from '../genomes/selectors';
+import {
+  getGenomeList,
+  hasMetadata,
+  hasAMR,
+  hasKleborateAMR,
+} from '../genomes/selectors';
 
 import {
   getColumnNames,
@@ -63,7 +68,7 @@ export const getTables = createSelector(
   (tables, metadata) => ({
     ...tables,
     metadata,
-  }),
+  })
 );
 
 export const hasTyping = createSelector(
@@ -108,6 +113,19 @@ export const getVisibleTable = state => {
   return getTables(state)[name];
 };
 
+export const getActiveColumns = createSelector(
+  getVisibleTable,
+  ({ activeColumn, activeColumns }) => (
+    new Set(
+      activeColumn ?
+        [ activeColumn.columnKey ] :
+        Array.from(activeColumns)
+          .filter(_ => _) // columns are sometimes undefined, not sure why
+          .map(_ => _.columnKey),
+    )
+  ),
+);
+
 export const getActiveDataTable = createSelector(
   getTables,
   getDataTableName,
@@ -131,9 +149,11 @@ export const getFixedGroupWidth = createSelector(
   hasMetadata,
   hasTyping,
   isAMRTable,
-  (amr, metadata, typing, amrVisible) => {
-    if (!amr) return null; // no need for fixed width without AMR tables
-    let width = amrVisible ? 404 : 348; // acount for multi button
+  hasKleborateAMR,
+  (amr, metadata, typing, amrVisible, kleborate) => {
+    if (!amr && !kleborate) return null;
+    let width = kleborate ? 333 : 408;
+    if (amrVisible) width += 56; // account for multi button
     if (!metadata) width -= 68;
     if (!typing) width -= 53;
     return width;

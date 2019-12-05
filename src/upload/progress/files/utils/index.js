@@ -2,7 +2,7 @@ import { readAsText } from 'promise-file-reader';
 
 import { validateGenomeContent } from './validation';
 
-import getCompressWorker from 'worker-loader?name=compress.[hash].worker.js!./compressWorker';
+import getCompressWorker from 'workerize-loader?name=compress.[hash]!./compressWorker';
 
 import config from '~/app/config';
 
@@ -11,14 +11,8 @@ export function isReadsEligible() {
 }
 
 export function compress(text) {
-  return new Promise((resolve, reject) => {
-    const worker = getCompressWorker();
-    worker.onmessage = function (event) {
-      resolve(event.data);
-    };
-    worker.onerror = reject;
-    worker.postMessage(text);
-  });
+  const worker = getCompressWorker();
+  return worker.compress(text);
 }
 
 export function validateAssembly(genome) {

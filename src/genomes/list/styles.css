@@ -55,18 +55,18 @@
 }
 
 .wgsa-genome-list-cell:nth-child(2) {
-  width: 30%;
+  width: 25%;
 }
 
 .wgsa-genome-list-cell:nth-child(3) {
-  width: 7.5%;
+  width: 10%;
 }
 
-.wgsa-genome-list-cell:nth-child(4) {
-  width: 17.5%;
+.wgsa-genome-list-cell:nth-child(4),
+.wgsa-genome-list-cell:nth-child(5) {
+  width: 15%;
 }
 
-.wgsa-genome-list-cell:nth-child(5),
 .wgsa-genome-list-cell:nth-child(6) {
   width: 10%;
 }
@@ -87,36 +87,38 @@
   font-weight: 500;
 }
 
+@media (max-width: 1279px) {
+  .wgsa-genome-list-cell:nth-child(1) {
+    width: 33%;
+  }
+  .wgsa-genome-list-cell:nth-child(2) {
+    width: 33%;
+  }
+  .wgsa-genome-list-cell:nth-child(3) {
+    width: 18%;
+  }
+  .wgsa-genome-list-cell:nth-child(4),
+  .wgsa-genome-list-cell:nth-child(5) {
+    display: none;
+  }
+  .wgsa-genome-list-cell:nth-child(6) {
+    width: 18%;
+  }
+}
+
 @media (max-width: 1024px) {
   .wgsa-genome-list-cell:nth-child(1) {
     width: 40%;
   }
   .wgsa-genome-list-cell:nth-child(2) {
-    width: 45%;
+    width: 40%;
   }
   .wgsa-genome-list-cell:nth-child(3) {
-    width: 15%;
+    width: 20%;
   }
   .wgsa-genome-list-cell:nth-child(4),
   .wgsa-genome-list-cell:nth-child(5),
   .wgsa-genome-list-cell:nth-child(6) {
-    display: none;
-  }
-}
-
-@media (max-width: 1279px) {
-  .has-filter .wgsa-genome-list-cell:nth-child(1) {
-    width: 40%;
-  }
-  .has-filter .wgsa-genome-list-cell:nth-child(2) {
-    width: 45%;
-  }
-  .has-filter .wgsa-genome-list-cell:nth-child(3) {
-    width: 15%;
-  }
-  .has-filter .wgsa-genome-list-cell:nth-child(4),
-  .has-filter .wgsa-genome-list-cell:nth-child(5),
-  .has-filter .wgsa-genome-list-cell:nth-child(6) {
     display: none;
   }
 }

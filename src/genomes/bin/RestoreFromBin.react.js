@@ -10,7 +10,7 @@ const RestoreFromBin = ({ selectedGenomes, disabled, restore }) => (
     disabled={disabled}
     className="mdl-button mdl-button--primary"
     onClick={() => restore(selectedGenomes)}
-    title={disabled ? 'Select Genomes to Restore' : 'Restore Selected Genomes'}
+    title={disabled ? 'Select genomes to restore' : 'Restore selected genomes'}
   >
     Restore From Bin
   </button>

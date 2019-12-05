@@ -5,7 +5,7 @@ import classnames from 'classnames';
 import Multi from './Multi.react';
 
 import { getVisibleTableName, hasTyping } from './selectors';
-import { hasMetadata, hasAMR } from '../genomes/selectors';
+import { hasMetadata, hasAMR, hasKleborateAMR } from '../genomes/selectors';
 
 import { setTable } from './actions';
 
@@ -61,6 +61,11 @@ const TableSwitcher = props => (
         <Button table={tableKeys.snps} />
         <Button table={tableKeys.genes} />
       </ButtonGroup> }
+    { props.hasKleborate &&
+      <ButtonGroup>
+        <i className="material-icons" title="AMR">local_pharmacy</i>
+        <Button table={tableKeys.kleborateAMR} />
+      </ButtonGroup> }
     <Multi />
   </div>
 );
@@ -68,10 +73,12 @@ const TableSwitcher = props => (
 TableSwitcher.displayName = 'TableSwitcher';
 
 function mapSwitcherStateToProps(state) {
+  const hasKleborate = hasKleborateAMR(state);
   return {
     hasMetadata: hasMetadata(state),
     hasTyping: hasTyping(state),
-    hasAMR: hasAMR(state),
+    hasKleborate,
+    hasAMR: hasAMR(state) && !hasKleborate,
   };
 }
 

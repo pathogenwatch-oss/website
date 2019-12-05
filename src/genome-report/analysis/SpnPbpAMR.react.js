@@ -21,12 +21,12 @@ import classnames from 'classnames';
 //   "penMeningitis": "S",
 // }
 const antimicrobials = {
-  amx: { name: 'Amoxicillin', type: 'Beta-Lactams' },
-  cro: { name: 'Ceftriaxone', type: 'Extended-Spectrum Beta-Lactams' },
-  ctx: { name: 'Cefotaxime', type: 'Broad-spectrum Cephalosporins' },
+  amx: { name: 'Amoxicillin', type: 'Beta-lactams' },
+  cro: { name: 'Ceftriaxone', type: 'Extended-Spectrum Beta-lactams' },
+  ctx: { name: 'Cefotaxime', type: 'Broad-spectrum cephalosporins' },
   cxm: { name: 'Cefuroxime', type: 'Beta-lactams' },
   mem: { name: 'Meropenem', type: 'Carbapenems' },
-  pen: { name: 'Penicillin', type: 'Beta-Lactams' },
+  pen: { name: 'Penicillin', type: 'Beta-lactams' },
 };
 
 export default ({ result }) => (
@@ -57,12 +57,12 @@ export default ({ result }) => (
       </table>
     </div>
     <table cellSpacing="0" className="wgsa-genome-report-amr wide bordered">
-      <caption>Predicted Resistance Profile</caption>
+      <caption>Predicted resistance profile</caption>
       <thead>
         <tr>
           <th>Agent</th>
           <th>MIC</th>
-          <th>Phenotype (Non/Meningitis)</th>
+          <th>Phenotype (non/meningitis)</th>
         </tr>
       </thead>
       <tbody>

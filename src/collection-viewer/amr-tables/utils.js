@@ -11,7 +11,7 @@ import { statuses } from '../../collection-viewer/constants';
 
 import Organisms from '../../organisms';
 
-const systemGroup = {
+export const systemGroup = {
   group: true,
   system: true,
   fixed: true,
@@ -28,7 +28,7 @@ const systemGroup = {
   ],
 };
 
-const spacerGroup = {
+export const spacerGroup = {
   group: true,
   system: true,
   columnKey: 'spacer',
@@ -52,17 +52,16 @@ export function createAdvancedViewColumn(element, profileKey, profiles) {
       this.hidden = data.every(({ analysis }) =>
         !analysis.paarsnp || notPresent(analysis.paarsnp[profileKey], key)
       );
-      this.width = this.getWidth() + 16;
+      this.width = this.getWidth() + 12;
       return this;
     },
     columnKey: key,
     displayName,
     label,
     cellClasses: 'wgsa-table-cell--resistance',
-    cellPadding: 16,
     flexGrow: 0,
     getWidth() {
-      return measureText(label, true) + 4;
+      return measureText(label, true);
     },
     getCellContents(props, genome) {
       return amr.hasElement(genome, profileKey, key) ? (
@@ -106,16 +105,10 @@ export function createReducer({ name, buildColumns }) {
         const columns = buildColumns(organism.resistance, paarsnpResults);
         return {
           ...state,
-          columns: [ systemGroup ].concat(
-            columns.some(_ => _.group) ?
-              columns :
-              { group: true,
-                columnKey: 'dynamicGroup',
-                getHeaderContent() {},
-                columns,
-              },
-            spacerGroup
-          ),
+          columns:
+            columns.length && columns[0].group ?
+              [ systemGroup, ...columns, spacerGroup ] :
+              [ ...systemGroup.columns, ...columns, ...spacerGroup.columns ],
         };
       }
       case SET_COLOUR_COLUMNS:

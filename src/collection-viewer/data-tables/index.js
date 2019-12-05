@@ -1,3 +1,3 @@
-export metadata from './metadata';
-export typing from './typing';
-export stats from './stats';
+export { default as metadata } from './metadata';
+export { default as typing } from './typing';
+export { default as stats } from './stats';

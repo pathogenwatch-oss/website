@@ -24,7 +24,7 @@ function defaultView(message) {
   return (
     <React.Fragment>
       <header className="pw-genome-report-section-header">
-        <h2>Plasmid Inc Types</h2>
+        <h2>Plasmid Inc types</h2>
         <p>
           <a
             href="https://cge.cbs.dtu.dk/services/PlasmidFinder/"
@@ -40,7 +40,7 @@ function defaultView(message) {
 }
 
 export default ({ analysis }) => {
-  const { inctyper, paarsnp = { matches: [] } } = analysis;
+  const { inctyper, paarsnp = { matches: [], library: '' } } = analysis;
 
   if (!inctyper.hasOwnProperty('Inc Matches')) {
     return defaultView('Inctyper was not run for this assembly.');
@@ -82,7 +82,7 @@ export default ({ analysis }) => {
   return (
     <React.Fragment>
       <header className="pw-genome-report-section-header">
-        <h2>Plasmid Inc Types</h2>
+        <h2>Plasmid Inc types</h2>
         <p>
           <a
             href="https://cge.cbs.dtu.dk/services/PlasmidFinder/"
@@ -96,32 +96,32 @@ export default ({ analysis }) => {
       <table className="bordered wide" cellSpacing="0">
         <thead>
           <tr>
-            <th>Contig Inc Type</th>
-            {paarsnp.matches.length !== 0 && <th>Contig AMR Genes</th>}
+            <th>Contig Inc type</th>
+            {paarsnp.library !== '' && <th>Contig AMR genes</th>}
             <th>Match ID</th>
             <th>% Identity</th>
             <th>% Coverage</th>
           </tr>
         </thead>
-        <tbody>
-          {Object.keys(groupedMatches).length ? (
-            contigOrder.map((contigId, index) => (
-              <InctyperContig
-                amrMatches={amrMatches[contigId]}
-                library={inctyper.Library}
-                matches={groupedMatches[contigId]}
-                setBackground={index % 2 === 0}
-                displayAmr={paarsnp.matches.length !== 0}
-              />
-            ))
-          ) : (
+        {Object.keys(groupedMatches).length ? (
+          contigOrder.map((contigId, index) => (
+            <InctyperContig
+              amrMatches={amrMatches[contigId]}
+              library={inctyper.Library}
+              matches={groupedMatches[contigId]}
+              setBackground={index % 2 === 0}
+              displayAmr={paarsnp.library !== ''}
+            />
+          ))
+        ) : (
+          <tbody>
             <tr>
               <td colSpan="5" className="muted">
                 No matches
               </td>
             </tr>
-          )}
-        </tbody>
+          </tbody>
+        )}
       </table>
     </React.Fragment>
   );

@@ -4,7 +4,7 @@ import { Metadata } from '../components';
 
 export default ({ result }) => (
   <React.Fragment>
-    <h2>Organism Prediction</h2>
+    <h2>Organism prediction</h2>
     <dl className="grid">
       <Metadata label="Taxonomy ID">
         <a
@@ -16,15 +16,15 @@ export default ({ result }) => (
           {result.organismId}
         </a>
       </Metadata>
-      <Metadata label="Organism Name">{result.organismName}</Metadata>
-      <Metadata label="RefSeq Reference">
+      <Metadata label="Organism name">{result.organismName}</Metadata>
+      <Metadata label="RefSeq reference">
         <a href={`http://www.ncbi.nlm.nih.gov/assembly/${result.referenceId}/`} target="_blank" rel="noopener">
           {result.referenceId}
         </a>
       </Metadata>
-      <Metadata label="Mash Distance">{result.mashDistance}</Metadata>
+      <Metadata label="Mash distance">{result.mashDistance}</Metadata>
       <Metadata label="p-value">{result.pValue}</Metadata>
-      <Metadata label="Matching Hashes">{result.matchingHashes}</Metadata>
+      <Metadata label="Matching hashes">{result.matchingHashes}</Metadata>
     </dl>
   </React.Fragment>
 );

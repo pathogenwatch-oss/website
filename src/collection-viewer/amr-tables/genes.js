@@ -37,9 +37,9 @@ export function buildColumns({ paar = {}, antibiotics }, profiles) {
         headerTitle: fullName,
         onHeaderClick,
         columns: paar[key]
-        .map(({ element, effect }) => createAdvancedViewColumn(
-          { key: element, label: element, effect }, 'paar', profiles
-        )),
+          .map(({ element, effect }) => createAdvancedViewColumn(
+            { key: element, label: element, effect }, 'paar', profiles
+          )),
       });
     }
     return groups;

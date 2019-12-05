@@ -9,7 +9,7 @@ const Header = ({ isOpen, onClick }) => (
     <button
       className="mdl-button mdl-button--icon"
       onClick={onClick}
-      title={isOpen ? 'Hide Filter' : 'Show Filter'}
+      title={isOpen ? 'Hide filter' : 'Show filter'}
     >
       <i className="material-icons">tune</i>
     </button>

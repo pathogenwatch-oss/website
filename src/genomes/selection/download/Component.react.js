@@ -1,8 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import Spinner from '../../../components/Spinner.react';
-import OrganismName from '../../../organisms/OrganismName.react';
+import Spinner from '~/components/Spinner.react';
+import OrganismName from '~/organisms/OrganismName.react';
 import Limiter from '../Limiter.react';
 import DownloadLink from './DownloadLink.react';
 
@@ -14,9 +14,9 @@ import {
 
 import { fetchDownloads, toggleDropdown } from '../actions';
 
-import { statuses } from '../../../app/constants';
+import { statuses } from '~/app/constants';
 
-import { getServerPath } from '../../../utils/Api';
+import { getServerPath } from '~/utils/Api';
 
 const Section = ({ speciesId, speciesName, total, tasks, ids }) => {
   if (!speciesId) return null;
@@ -43,9 +43,7 @@ const Section = ({ speciesId, speciesName, total, tasks, ids }) => {
         {tasks.map(task => (
           <li key={task.name}>
             <DownloadLink
-              link={getServerPath(
-                `/download/analysis/${task.name}?speciesId=${speciesId}`
-              )}
+              link={task.link}
               ids={task.ids}
             >
               {task.label}
@@ -123,7 +121,7 @@ const Content = React.createClass({
                     link={getServerPath('/download/analysis/speciator')}
                     ids={ids}
                   >
-                    <strong>Speciation</strong>
+                    <strong>Species Prediction</strong>
                   </DownloadLink>
                 </li>
               </ul>

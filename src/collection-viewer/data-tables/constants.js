@@ -1,11 +1,12 @@
 import React from 'react';
 
 // imports must not include css to remain compatible with csv generator
-import ST from '../../mlst/ST.react';
-import Profile from '../../mlst/Profile.react';
+import ST from '~/mlst/ST.react';
+import Profile from '~/mlst/Profile.react';
 
-import { isNovel, createCode } from '../../mlst/utils';
+import { isNovel, createCode } from '~/mlst/utils';
 import { getFormattedDateString } from '../table/utils';
+import { sources } from './utils';
 
 export const systemDataColumns = {
   __date: {
@@ -45,38 +46,127 @@ export const systemDataColumns = {
   __mlst: {
     columnKey: '__mlst',
     label: 'ST',
-    displayName: 'MLST ST',
+    get displayName() {
+      if (sources.mlst) {
+        return `MLST ST (${sources.mlst})`;
+      }
+      return 'MLST ST';
+    },
     valueGetter({ analysis }) {
-      if (!analysis.mlst) return 0;
+      if (!analysis.mlst) return null;
       const { st } = analysis.mlst;
-      if (isNovel(st)) return `(${st.slice(0, 4)})`;
+      if (isNovel(st)) return `*${st.slice(0, 4)}`;
       return st;
     },
     display({ analysis }) {
       if (!analysis.mlst) return null;
-      return <ST id={analysis.mlst.st} textOnly/>;
+      return <ST id={analysis.mlst.st} />;
     },
   },
   __mlst_profile: {
     columnKey: '__mlst_profile',
     label: 'PROFILE',
-    displayName: 'MLST PROFILE',
+    get displayName() {
+      if (sources.mlst) {
+        return `MLST PROFILE (${sources.mlst})`;
+      }
+      return 'MLST PROFILE';
+    },
     valueGetter({ analysis }) {
       if (!analysis.mlst) return null;
-      const { code, alleles } = analysis.mlst;
-      if (code) return code;
-      return createCode(alleles, 4);
+      return createCode(analysis.mlst.alleles, 4);
     },
     display({ analysis }) {
       if (!analysis.mlst) return null;
-      const { code, alleles } = analysis.mlst;
-      if (code) return code;
-      return <Profile alleles={alleles} textOnly/>;
+      return <Profile alleles={analysis.mlst.alleles} />;
+    },
+  },
+  __mlst2: {
+    columnKey: '__mlst2',
+    label: 'ST',
+    get displayName() {
+      if (sources.mlst2) {
+        return `MLST ST (${sources.mlst2})`;
+      }
+      return 'MLST ST';
+    },
+    valueGetter({ analysis }) {
+      if (!analysis.mlst2) return null;
+      const { st } = analysis.mlst2;
+      if (isNovel(st)) return `*${st.slice(0, 4)}`;
+      return st;
+    },
+    display({ analysis }) {
+      if (!analysis.mlst2) return null;
+      return <ST id={analysis.mlst2.st} />;
+    },
+  },
+  __mlst2_profile: {
+    columnKey: '__mlst2_profile',
+    label: 'PROFILE',
+    get displayName() {
+      if (sources.mlst2) {
+        return `MLST PROFILE (${sources.mlst2})`;
+      }
+      return 'MLST PROFILE';
+    },
+    valueGetter({ analysis }) {
+      if (!analysis.mlst2) return null;
+      return createCode(analysis.mlst2.alleles, 4);
+    },
+    display({ analysis }) {
+      if (!analysis.mlst2) return null;
+      return <Profile alleles={analysis.mlst2.alleles} />;
+    },
+  },
+  __ngstar: {
+    columnKey: '__ngstar',
+    label: 'TYPE',
+    get displayName() {
+      return 'NG-STAR TYPE';
+    },
+    valueGetter({ analysis }) {
+      if (!analysis.ngstar) return null;
+      const { st } = analysis.ngstar;
+      if (isNovel(st)) return `*${st.slice(0, 4)}`;
+      return st;
+    },
+    display({ analysis }) {
+      if (!analysis.ngstar) return null;
+      return <ST id={analysis.ngstar.st} />;
+    },
+  },
+  __ngstar_profile: {
+    columnKey: '__ngstar_profile',
+    label: 'PROFILE',
+    get displayName() {
+      return 'NG-STAR PROFILE';
+    },
+    valueGetter({ analysis }) {
+      if (!analysis.ngstar) return null;
+      return createCode(analysis.ngstar.alleles, 4);
+    },
+    display({ analysis }) {
+      if (!analysis.ngstar) return null;
+      return <Profile alleles={analysis.ngstar.alleles} />;
     },
   },
   __inc_types: {
     columnKey: '__inc_types',
     displayName: 'Inc Types',
+    // TODO: add width without breaking everything here
+    // addState({ data }) {
+    //   if (!data.length) return this;
+    //   let hidden = true;
+    //   for (const row of data) {
+    //     if (row.analysis && row.analysis.inctyper) {
+    //       hidden = false;
+    //       break;
+    //     }
+    //   }
+    //   this.hidden = hidden;
+    //   return this;
+    // },
     valueGetter({ analysis }) {
       if (!analysis.inctyper) return null;
       if (Object.keys(analysis.inctyper).length === 0 && analysis.inctyper.constructor === Object) return null;
@@ -98,6 +188,15 @@ export const systemDataColumns = {
         )
         .sort()
         .join('; ');
+    },
+  },
+  __Virulence_Score: {
+    columnKey: '__Virulence_Score',
+    displayName: 'Virulence Score',
+    label: 'Virulence Score',
+    valueGetter({ analysis }) {
+      if (!analysis.kleborate) return null;
+      return `${analysis.kleborate.virulence_score}`;
     },
   },
   __K_locus: {

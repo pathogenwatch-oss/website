@@ -1,11 +1,10 @@
 import { stateKey } from './index';
 
-import { actions } from '../../filter';
+import { actions } from '~/filter';
 import { fetchGenomeSummary, fetchGenomeList } from '../actions';
+import { checkStale } from '~/actions';
 
 import { getFilter } from './selectors';
-
-import { checkStale } from '../../actions';
 
 export function updateFilterValue(filterMap) {
   return actions.update(stateKey, filterMap);
@@ -46,5 +45,17 @@ export const GENOMES_FILTER_OPENED = 'GENOMES_FILTER_OPENED';
 export function toggleFilter() {
   return {
     type: GENOMES_FILTER_OPENED,
+  };
+}
+
+export const GENOMES_FILTER_SUMMARY_LIST = 'GENOMES_FILTER_SUMMARY_LIST';
+
+export function filterSummaryList(filterKey, text) {
+  return {
+    type: GENOMES_FILTER_SUMMARY_LIST,
+    payload: {
+      filterKey,
+      text,
+    },
   };
 }

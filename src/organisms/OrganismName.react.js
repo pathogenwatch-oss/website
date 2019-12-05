@@ -2,9 +2,10 @@ import React from 'react';
 
 const callsItSerovar = new Set([
   'Salmonella enterica',
+  'Salmonella bongori',
 ]);
 
-function getSeroName(speciesName) {
+export function getSeroName(speciesName) {
   if (callsItSerovar.has(speciesName)) {
     return 'serovar';
   }
@@ -24,6 +25,9 @@ function getTitle({ speciesName, subspecies, serotype }) {
 
 function getFormatted({ speciesName, subspecies, serotype, abbreviated }) {
   const seroName = getSeroName(speciesName);
+  if (speciesName === 'Salmonella enterica' && serotype) {
+    return <React.Fragment><em>Salmonella</em> {serotype}</React.Fragment>;
+  }
   if (speciesName && subspecies && serotype) {
     return (
       <React.Fragment>

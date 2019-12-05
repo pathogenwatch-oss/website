@@ -12,7 +12,7 @@ import { getSelectionDropdownView, getSelectionSize } from '../selectors';
 
 const EmptySelection = (
   <div className="wgsa-selection-message">
-    <h3>No Genomes Selected</h3>
+    <h3>No genomes selected</h3>
     <p>
       In the <strong>List</strong> view, select genomes by clicking a row. Try
       selecting one genome and holding <strong>shift</strong> to select more.

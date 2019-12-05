@@ -81,16 +81,6 @@
     display: none;
   }
 
-  /* Replace novel MLST icon */
-  .wgsa-mlst-hit .material-icons,
-  .wgsa-mlst-profile-hit .material-icons {
-    display: none;
-  }
-  .wgsa-mlst-hit.is-novel::before,
-  .wgsa-mlst-profile-hit.is-novel::before {
-    content: "(!)";
-  }
-
   /* show content links as text */
   .wgsa-genome-report-content dd a {
     text-decoration: none;

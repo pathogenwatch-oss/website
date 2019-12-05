@@ -71,7 +71,7 @@ export default React.createClass({
   },
 
   render() {
-    const { readsEligible } = this.props;
+    const { readsEligible, accept } = this.props;
     return (
       <div
         className={`wgsa-drag-and-drop ${
@@ -123,6 +123,7 @@ export default React.createClass({
           type="file"
           multiple="multiple"
           ref="fileInput"
+          accept={accept}
           style={fileInputStyle}
           onChange={this.handleFileInputChange}
         />

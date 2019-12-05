@@ -48,3 +48,9 @@ export function getTrailingSystemColumnProps(columnNames) {
       ])
   );
 }
+
+export let sources = {};
+
+export function resetSources() {
+  sources = {};
+}

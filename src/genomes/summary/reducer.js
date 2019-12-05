@@ -3,14 +3,7 @@ import { FETCH_GENOME_SUMMARY } from '../actions';
 const initialState = {
   total: 0,
   visible: 0,
-  organismId: {},
-  speciesId: {},
-  genusId: {},
-  country: {},
-  type: {},
-  uploadedAt: {},
-  date: {},
-  resistant: {},
+  loading: false,
 };
 
 export default function (state = initialState, { type, payload }) {
@@ -18,7 +11,7 @@ export default function (state = initialState, { type, payload }) {
     case FETCH_GENOME_SUMMARY.ATTEMPT:
       return { ...state, loading: true };
     case FETCH_GENOME_SUMMARY.SUCCESS:
-      return { ...state, loading: false, ...payload.result.summary };
+      return { loading: false, ...payload.result.summary };
     default:
       return state;
   }

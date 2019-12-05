@@ -27,6 +27,7 @@ export const months = [
 
 export const formatMonth = index => months[index - 1].text;
 
+/* eslint no-nested-ternary: 0 */
 export function formatDay(number) {
   const b = number % 10;
   // prettier-ignore
@@ -68,10 +69,6 @@ export function formatDateTime(date) {
     return `Yesterday, ${format(date, 'HH:mm')}`;
   }
   return format(date, 'D MMMM, HH:mm');
-}
-
-export function formatDate(date) {
-  return format(date, 'DD MMM YYYY');
 }
 
 import difference from 'date-fns/difference_in_calendar_months';

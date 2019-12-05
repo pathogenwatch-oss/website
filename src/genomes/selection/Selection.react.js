@@ -40,12 +40,12 @@ const Summary = React.createClass({
         <button
           className="mdl-chip mdl-chip--contact mdl-chip--active wgsa-selection"
           onClick={() => toggle(view || 'selection')}
-          title={size === 0 ? 'No Genomes Selected' : undefined}
+          title={size === 0 ? 'No genomes selected' : undefined}
         >
           <span
             ref={el => { this.sonarEl = el; }}
             className="mdl-chip__contact"
-            title={size > 0 ? 'View Selection' : undefined}
+            title={size > 0 ? 'View selection' : undefined}
           >
             {formatCount(size)}
           </span>

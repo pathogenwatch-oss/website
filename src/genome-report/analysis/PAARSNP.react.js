@@ -40,17 +40,17 @@ export default ({ result, genome }) => {
     <React.Fragment>
       <p className="pw-genome-report-section-header">
         <a href={libraryUrl} target="_blank" rel="noopener" className="pw-genome-report-secondary-link">
-          <strong>PAARSNP AMR</strong> - Library {library.label} Version {library.version}
+          <strong>PAARSNP AMR</strong> - Library {library.label} version {library.version}
           {library.source !== 'PUBLIC' ? ` (${library.source})` : ''}
         </a>
       </p>
       <table cellSpacing="0" className="wgsa-genome-report-amr wide bordered">
-        <caption>Resistance Profile</caption>
+        <caption>Resistance profile</caption>
         <thead>
           <tr>
             <th>Agent</th>
-            <th>Predicted Phenotype</th>
-            <th>SNPs/Genes</th>
+            <th>Predicted phenotype</th>
+            <th>SNPs/genes</th>
           </tr>
         </thead>
         <tbody>
