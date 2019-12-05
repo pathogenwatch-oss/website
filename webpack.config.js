@@ -80,11 +80,13 @@ const devConfig = {
     path: __dirname,
     filename: 'dev.js',
     publicPath: '/',
+    globalObject: 'this',
   },
   resolve,
   plugins: [
     ...commonPlugins,
     new webpack.HotModuleReplacementPlugin(),
+    new webpack.ProgressPlugin(),
   ],
   module: {
     rules: [
@@ -131,6 +133,7 @@ const prodConfig = {
     path: path.join(__dirname, 'public', 'app'),
     filename: '[name].[chunkhash].js',
     publicPath: '/app/',
+    globalObject: 'this',
   },
   resolve,
   plugins: [

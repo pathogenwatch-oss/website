@@ -1,4 +1,4 @@
-import getCSVWorker from 'workerize-loader?name=csv.[hash]!./CsvWorker';
+import { createCSV } from './CsvWorker';
 
 import { getColumnLabel } from '../table/utils';
 import { tableKeys } from '../constants';
@@ -23,8 +23,7 @@ function convertTableToCSV(table, additionalColumns = []) {
         }))
         .concat(additionalColumns);
     const rows = genomeIds.map(id => genomes[id]);
-    const worker = getCSVWorker();
-    return worker.createCSV(table, columns, rows);
+    return Promise.resolve(createCSV(table, columns, rows));
   };
 }
 
@@ -39,10 +38,3 @@ export const generateStatsFile = convertTableToCSV(tableKeys.stats);
 export const generateAMRProfile = convertTableToCSV(tableKeys.antibiotics);
 export const generateAMRSNPs = convertTableToCSV(tableKeys.snps);
 export const generateAMRGenes = convertTableToCSV(tableKeys.genes);
-
-const windowURL = window.URL || window.webkitURL;
-
-export function createCSVLink(data) {
-  const blob = new Blob([ data ], { type: 'text/csv;charset=utf-8' });
-  return windowURL.createObjectURL(blob);
-}

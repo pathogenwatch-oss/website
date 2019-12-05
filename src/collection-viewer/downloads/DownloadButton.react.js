@@ -1,6 +1,11 @@
 import React from 'react';
 
-import { createCSVLink } from './client-side';
+const windowURL = window.URL || window.webkitURL;
+
+export function createCSVLink(data) {
+  const blob = new Blob([ data ], { type: 'text/csv;charset=utf-8' });
+  return windowURL.createObjectURL(blob);
+}
 
 const DownloadButton = React.createClass({
   getInitialState() {

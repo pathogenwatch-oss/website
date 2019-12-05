@@ -26,30 +26,23 @@ const DownloadForm = ({ link, filename, title, genomeIds, children }) => (
 );
 
 const DownloadsMenu = ({ collection, genomeIds, prefix }) => (
-  <li>
-    <h4>Analysis</h4>
-    <ul>
-      <li>
-        <DownloadForm
-          link={`${prefix}/speciator`}
-          filename={formatCollectionFilename(collection, 'species-prediction.csv')}
-          genomeIds={genomeIds}
-        >
-          Species Prediction
-        </DownloadForm>
-      </li>
-      { Organisms.uiOptions.kleborate &&
-        <li>
-          <DownloadForm
-            link={`${prefix}/kleborate`}
-            filename={formatCollectionFilename(collection, 'kleborate.csv')}
-            genomeIds={genomeIds}
-          >
-            Kleborate
-          </DownloadForm>
-        </li> }
-    </ul>
-  </li>
+  <React.Fragment>
+    <DownloadForm
+      link={`${prefix}/speciator`}
+      filename={formatCollectionFilename(collection, 'species-prediction.csv')}
+      genomeIds={genomeIds}
+    >
+      Species prediction
+    </DownloadForm>
+    { Organisms.uiOptions.kleborate &&
+    <DownloadForm
+      link={`${prefix}/kleborate`}
+      filename={formatCollectionFilename(collection, 'kleborate.csv')}
+      genomeIds={genomeIds}
+    >
+      Kleborate
+    </DownloadForm> }
+  </React.Fragment>
 );
 
 DownloadsMenu.propTypes = {
