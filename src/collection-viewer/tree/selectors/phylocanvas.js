@@ -114,3 +114,17 @@ export const getTreeOrder = createSelector(
     return getLeafNodeOrder(source);
   }
 );
+
+export const getTreeFilteredIds = createSelector(
+  state => getVisiblePhylocanvas(state).ids,
+  state => getVisiblePhylocanvas(state).subtreeIds,
+  (ids, subtreeIds) => {
+    if (ids !== null) {
+      return ids;
+    }
+    if (subtreeIds !== null) {
+      return subtreeIds;
+    }
+    return [];
+  }
+);

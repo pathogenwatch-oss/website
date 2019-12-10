@@ -6,14 +6,15 @@ import Fade from '~/components/fade';
 import Spinner from '~/components/Spinner.react';
 import Header from './Header.react';
 
-import { getTreeStateKey, isLoading } from './selectors';
+import { getHistory } from '../selectors';
+import { isLoading } from './selectors';
 import { getVisibleTree } from './selectors/entities';
 import {
   getPhylocanvasState,
   getHighlightedNodeIds,
 } from './selectors/phylocanvas';
 
-import { snapshot } from '@cgps/libmicroreact/history/actions';
+import { snapshot, travel } from '@cgps/libmicroreact/history/actions';
 import { setHighlight } from '../highlight/actions';
 import { displayTree } from './thunks';
 
@@ -65,14 +66,25 @@ const setTreeHighlight = (ids, merge, stateKey) =>
     }
   };
 
+const addInitialSnapshot = (image, stateKey) =>
+  (dispatch, getState) => {
+    const state = getState();
+    const history = getHistory(state)[stateKey];
+    if (history && history.entries.length) {
+      dispatch({ stateKey, ...travel(history.current) });
+    } else {
+      dispatch({ stateKey, ...snapshot(image) });
+    }
+  };
+
 function mapDispatchToProps(dispatch, { stateKey }) {
   return {
-    onPhylocanvasInitialise: (image) => dispatch(snapshot(image, stateKey)),
-    onPhylocanvasStateChange: (state) => dispatch(setPhylocanvasState(state, stateKey)),
-    setHighlightedIds: (ids, merge) => dispatch(setTreeHighlight(ids, merge, stateKey)),
+    onAddHistoryEntry: (image) => dispatch({ stateKey, ...snapshot(image) }),
     onFilterChange: (ids, path) => dispatch(setTreeFilter(ids, path, stateKey)),
     onLassoChange: active => dispatch(onLassoChange(active, stateKey)),
-    onAddHistoryEntry: (image) => dispatch(snapshot(image, stateKey)),
+    onPhylocanvasInitialise: (image) => dispatch(addInitialSnapshot(image, stateKey)),
+    onPhylocanvasStateChange: (state) => dispatch(setPhylocanvasState(state, stateKey)),
+    setHighlightedIds: (ids, merge) => dispatch(setTreeHighlight(ids, merge, stateKey)),
   };
 }
 

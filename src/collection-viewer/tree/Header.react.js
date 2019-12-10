@@ -3,15 +3,14 @@ import { connect } from 'react-redux';
 import classnames from 'classnames';
 
 import { getSingleTree } from '../selectors';
-import { getLastSubtree } from './selectors';
-import { getVisibleTree } from './selectors/entities';
+import { getLastSubtree, getTreeStateKey } from './selectors';
 import * as actions from './thunks';
 
 import { POPULATION, COLLECTION } from '~/app/stateKeys/tree';
 
 function mapStateToButtonProps(state) {
   return {
-    visibleTreeName: getVisibleTree(state).name,
+    visibleTreeName: getTreeStateKey(state),
   };
 }
 

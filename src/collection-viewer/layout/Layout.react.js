@@ -21,9 +21,13 @@ import { getCollection, getHistory } from '../selectors';
 import { travel } from '@cgps/libmicroreact/history/actions';
 
 const ConnectedHistory = connect(
-  getHistory,
-  (dispatch, props) => ({ onTravel: index => dispatch(travel(index, props.treeStateKey)) }),
+  (state, { stateKey }) => getHistory(state)[stateKey] || { entries: [] },
+  (dispatch, { stateKey }) => ({ onTravel: index => dispatch({ ...travel(index), stateKey }) }),
 )(History);
+
+const TreeWithStateKey = connect(
+  state => ({ stateKey: getTreeStateKey(state) })
+)(Tree);
 
 const Layout = React.createClass({
   getInitialState() {
@@ -63,7 +67,7 @@ const Layout = React.createClass({
           resizerClassName="wgsa-resizer"
           onChange={verticalSize => this.setState({ verticalSize })}
         >
-          <AutoSizer component={(props) => <Tree {...props} stateKey={this.props.treeStateKey} />} />
+          <AutoSizer component={TreeWithStateKey} />
           <Map>
             <Summary />
           </Map>
@@ -98,7 +102,7 @@ const Layout = React.createClass({
       {
         title: 'History',
         icon: <i className="material-icons">history</i>,
-        component: () => <ConnectedHistory treeStateKey={this.props.treeStateKey} />,
+        component: () => <ConnectedHistory stateKey={this.props.treeStateKey} />,
       },
     ];
 

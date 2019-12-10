@@ -14,10 +14,8 @@ export const getVisibleTree = createSelector(
 
 export const isLoaded = createSelector(
   getVisibleTree,
-  tree => !!tree.phylocanvas.source
+  tree => !!tree.newick
 );
-export const getTreeType = state => getVisibleTree(state).type;
-
 
 export const getSubtreeNames = createSelector(
   getTrees,
@@ -38,19 +36,5 @@ export const areTreesComplete = createSelector(
       }
     }
     return true;
-  }
-);
-
-export const getTreeFilteredIds = createSelector(
-  state => getVisibleTree(state).ids,
-  state => getVisibleTree(state).subtreeIds,
-  (ids, subtreeIds) => {
-    if (ids !== null) {
-      return ids;
-    }
-    if (subtreeIds !== null) {
-      return subtreeIds;
-    }
-    return [];
   }
 );

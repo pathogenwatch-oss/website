@@ -1,5 +1,4 @@
 import { combineReducers } from 'redux';
-import history from '@cgps/libmicroreact/history/reducer';
 
 import collection from './collection';
 import genomes from '../genomes/reducer';
@@ -8,6 +7,7 @@ import aboutCollectionOpen from '../about-collection/reducer';
 import downloads from '../downloads/reducer';
 import filter from '../filter/reducer';
 import highlight from '../highlight/reducer';
+import history from './history';
 import summary from '../summary/reducer';
 import tree from '../tree/reducer';
 import table from '../table/reducer';

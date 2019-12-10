@@ -1,17 +1,11 @@
 import { getCollection } from '../selectors';
-import { getHighlightedIds } from '../highlight/selectors';
-import { getTrees, getVisibleTree } from './selectors/entities';
+import { getTrees } from './selectors/entities';
 
 import { showToast } from '../../toast';
 import * as actions from './actions';
-import { activateFilter, resetFilter } from '../filter/actions';
-import { setHighlight, clearHighlight } from '../highlight/actions';
 import { updateProgress } from '../actions';
 
 import { getTree } from './api';
-
-import { POPULATION } from '../../app/stateKeys/tree';
-import { filterKeys } from '../filter/constants';
 
 function fetchTree(name) {
   return (dispatch, getState) => {
@@ -33,7 +27,7 @@ export function displayTree(name) {
 
     if (!tree || tree.status !== 'READY') return;
 
-    if (tree.phylocanvas.source) {
+    if (tree.newick) {
       dispatch(actions.setTree(name));
       return;
     }
@@ -41,46 +35,6 @@ export function displayTree(name) {
     dispatch(fetchTree(name))
       .then(() => dispatch(actions.setTree(name)))
       .catch(() => dispatch(showToast(errorToast)));
-  };
-}
-
-export function treeClicked(event, phylocanvas) {
-  return (dispatch, getState) => {
-    if (event.property !== phylocanvas.clickFlag) {
-      return;
-    }
-
-    const state = getState();
-    const stateKey = getVisibleTree(getState()).name;
-
-    if (stateKey === POPULATION) {
-      const { nodeIds } = event;
-
-      if (nodeIds.length === 1) {
-        const name = nodeIds[0];
-        dispatch(displayTree(name));
-      }
-    } else {
-      const nodeIds = phylocanvas.getNodeIdsWithFlag(phylocanvas.clickFlag);
-
-      if (nodeIds.length === 1) {
-        const [ id ] = nodeIds;
-        dispatch(setHighlight([ id ], event.append));
-      } else if (nodeIds.length === 0) {
-        const highlightedIds = getHighlightedIds(state);
-        if (highlightedIds.size > 0) {
-          dispatch(clearHighlight());
-        } else {
-          dispatch(resetFilter(filterKeys.TREE));
-        }
-      } else {
-        dispatch(
-          event.append ?
-            setHighlight(nodeIds, true) :
-            activateFilter(nodeIds, filterKeys.TREE)
-        );
-      }
-    }
   };
 }
 

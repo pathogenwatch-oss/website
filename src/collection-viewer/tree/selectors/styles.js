@@ -1,7 +1,7 @@
 import { createSelector } from 'reselect';
 
-import { getTrees, getSubtreeNames, getVisibleTree } from './entities';
-import { getTitles } from './index';
+import { getTrees, getSubtreeNames } from './entities';
+import { getTitles, getTreeStateKey } from './index';
 import { getGenomeStyles } from '../../selectors/styles';
 import { getFilteredGenomeIds } from '../../filter/selectors';
 import { getGenomes } from '../../genomes/selectors';
@@ -78,7 +78,7 @@ const getPopulationNodeStyles = createSelector(
 );
 
 export const getNodeStyles = state => {
-  const { name } = getVisibleTree(state);
+  const name = getTreeStateKey(state);
   return name === POPULATION ?
     getPopulationNodeStyles(state) :
     getStandardNodeStyles(state);
