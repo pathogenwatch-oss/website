@@ -1,6 +1,5 @@
 import { combineReducers } from 'redux';
 import history from '@cgps/libmicroreact/history/reducer';
-import { withHistory } from '@cgps/libmicroreact/history';
 
 import collection from './collection';
 import genomes from '../genomes/reducer';
@@ -36,7 +35,7 @@ const reducer = combineReducers({
   search,
   summary,
   table,
-  tree: withHistory(tree),
+  tree,
 });
 
 const initialState = reducer(undefined, {});

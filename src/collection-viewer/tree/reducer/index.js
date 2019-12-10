@@ -1,35 +1,15 @@
 import { combineReducers } from 'redux';
 
-import treeReducer from '@cgps/libmicroreact/tree/reducer';
+import phylocanvas from './phylocanvas';
 
-import { FETCH_COLLECTION, UPDATE_COLLECTION_PROGRESS }
-  from '../actions';
-import * as ACTIONS from './actions';
+import { FETCH_COLLECTION, UPDATE_COLLECTION_PROGRESS } from '../../actions';
+import * as ACTIONS from '../actions';
 
-import { topLevelTrees } from './constants';
-import { COLLECTION, POPULATION } from '../../app/stateKeys/tree';
+import { topLevelTrees } from '../constants';
+import { COLLECTION, POPULATION } from '~/app/stateKeys/tree';
 
-function getInitialState(newick) {
-  const treeState = treeReducer(undefined, {});
-  return {
-    ...treeState,
-    phylocanvas: {
-      ...treeState.phylocanvas,
-      source: newick,
-      fontSize: 14,
-    },
-  };
-}
 
 function entities(state = {}, action) {
-  if (action.stateKey) {
-    const treeState = state[action.stateKey];
-    return {
-      ...state,
-      [action.stateKey]: treeReducer(treeState, action),
-    };
-  }
-
   const { type, payload } = action;
 
   switch (type) {
@@ -44,7 +24,6 @@ function entities(state = {}, action) {
             progress: 0,
             lastStatus: 0,
             ...subtree,
-            ...getInitialState(subtree.newick),
           };
           return memo;
         }, {}),
@@ -57,7 +36,6 @@ function entities(state = {}, action) {
           lastStatus: 0,
           ...tree,
           name: COLLECTION,
-          ...getInitialState(tree.newick),
         };
       }
 
@@ -66,7 +44,7 @@ function entities(state = {}, action) {
           name: POPULATION,
           status: 'READY',
           leafIds: organism.references.map(_ => _.uuid),
-          ...getInitialState(organism.tree),
+          newick: organism.tree,
         };
       }
 
@@ -138,21 +116,9 @@ function entities(state = {}, action) {
           ...state[payload.stateKey],
           name: payload.stateKey,
           status: payload.result.status,
-          ...getInitialState(),
-          phylocanvas: {
-            ...state[payload.stateKey].phylocanvas,
-            source: payload.result.newick,
-          },
+          newick: payload.result.newick,
         },
       };
-    // case ACTIONS.SET_TREE:
-    //   return {
-    //     ...state,
-    //     [payload.name]: {
-    //       ...state[payload.name],
-    //       loaded: false,
-    //     },
-    //   };
     default:
       return state;
   }
@@ -226,9 +192,10 @@ function titles(state = {}, { type, payload }) {
 
 export default combineReducers({
   entities,
-  visible,
-  loading,
   lastSubtree,
+  loading,
+  phylocanvas,
   size,
   titles,
+  visible,
 });

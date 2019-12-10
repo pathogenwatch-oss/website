@@ -29,30 +29,22 @@ function mapStateToProps(state) {
   };
 }
 
-const withStateKey = action =>
-  (dispatch, getState) =>
-    dispatch({
-      stateKey: getTreeStateKey(getState()),
-      ...action,
-    });
+const setPhylocanvasState = (state, stateKey) => ({
+  stateKey,
+  type: 'SET PHYLOCANVAS STATE',
+  payload: state,
+});
 
-const setPhylocanvasState = (state) =>
-  withStateKey({
-    type: 'SET PHYLOCANVAS STATE',
-    payload: state,
-  });
+const onLassoChange = (active, stateKey) => ({
+  stateKey,
+  type: 'SET TREE LASSO',
+  payload: {
+    lasso: active,
+  },
+});
 
-const onLassoChange = (active) =>
-  withStateKey({
-    type: 'SET TREE LASSO',
-    payload: {
-      lasso: active,
-    },
-  });
-
-const setTreeFilter = (ids, path) =>
-  (dispatch, getState) => {
-    const stateKey = getTreeStateKey(getState());
+const setTreeFilter = (ids, path, stateKey) =>
+  (dispatch) => {
     if (stateKey !== POPULATION) {
       dispatch({
         stateKey,
@@ -62,9 +54,8 @@ const setTreeFilter = (ids, path) =>
     }
   };
 
-const setTreeHighlight = (ids, merge) =>
-  (dispatch, getState) => {
-    const stateKey = getTreeStateKey(getState());
+const setTreeHighlight = (ids, merge, stateKey) =>
+  (dispatch) => {
     if (stateKey === POPULATION) {
       if (ids.length === 1) {
         dispatch(displayTree(ids[0]));
@@ -74,14 +65,14 @@ const setTreeHighlight = (ids, merge) =>
     }
   };
 
-function mapDispatchToProps(dispatch) {
+function mapDispatchToProps(dispatch, { stateKey }) {
   return {
-    onPhylocanvasInitialise: (image) => dispatch(snapshot(image)),
-    onPhylocanvasStateChange: (state) => dispatch(setPhylocanvasState(state)),
-    setHighlightedIds: (ids, merge) => dispatch(setTreeHighlight(ids, merge)),
-    onFilterChange: (ids, path) => dispatch(setTreeFilter(ids, path)),
-    onLassoChange: active => dispatch(onLassoChange(active)),
-    onAddHistoryEntry: (image) => dispatch(snapshot(image)),
+    onPhylocanvasInitialise: (image) => dispatch(snapshot(image, stateKey)),
+    onPhylocanvasStateChange: (state) => dispatch(setPhylocanvasState(state, stateKey)),
+    setHighlightedIds: (ids, merge) => dispatch(setTreeHighlight(ids, merge, stateKey)),
+    onFilterChange: (ids, path) => dispatch(setTreeFilter(ids, path, stateKey)),
+    onLassoChange: active => dispatch(onLassoChange(active, stateKey)),
+    onAddHistoryEntry: (image) => dispatch(snapshot(image, stateKey)),
   };
 }
 

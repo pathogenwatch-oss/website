@@ -25,55 +25,6 @@ export function fetchTree(stateKey, promise) {
   };
 }
 
-export const SET_NODE_SCALE = 'SET_NODE_SCALE';
-
-export function setNodeScale(stateKey, scale) {
-  return {
-    type: SET_NODE_SCALE,
-    payload: {
-      stateKey,
-      scale: parseFloat(scale),
-    },
-  };
-}
-
-export const SET_LABEL_SCALE = 'SET_LABEL_SCALE';
-
-export function setLabelScale(stateKey, scale) {
-  return {
-    type: SET_LABEL_SCALE,
-    payload: {
-      stateKey,
-      scale: parseFloat(scale),
-    },
-  };
-}
-
-export const TIME_TRAVEL = 'TIME_TRAVEL';
-
-export function timeTravel(stateKey, snapshot) {
-  return {
-    type: TIME_TRAVEL,
-    payload: {
-      stateKey,
-      snapshot,
-    },
-  };
-}
-
-export const INTERNAL_NODE_SELECTED = 'INTERNAL_NODE_SELECTED';
-
-export function internalNodeSelected(stateKey, nodeId) {
-  return {
-    type: INTERNAL_NODE_SELECTED,
-    payload: {
-      stateKey,
-      nodeId,
-    },
-  };
-}
-
-
 export const FETCH_TREE_POSITION = createAsyncConstants('FETCH_TREE_POSITION');
 
 export function fetchTreePosition(stateKey, date) {
@@ -82,18 +33,6 @@ export function fetchTreePosition(stateKey, date) {
     payload: {
       stateKey,
       promise: api.fetchTreePosition(date),
-    },
-  };
-}
-
-
-export const RESET_TREE_ROOT = 'RESET_TREE_ROOT';
-
-export function resetTreeRoot(stateKey) {
-  return {
-    type: RESET_TREE_ROOT,
-    payload: {
-      stateKey,
     },
   };
 }

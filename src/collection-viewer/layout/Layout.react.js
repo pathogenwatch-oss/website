@@ -15,23 +15,15 @@ import Table from '../table';
 
 import ClusterViewNetwork from '~/cluster-viewer/Network.react';
 
-import { getVisibleTree } from '../tree/selectors/entities';
+import { getTreeStateKey } from '../tree/selectors';
 import { getCollection, getHistory } from '../selectors';
 
 import { travel } from '@cgps/libmicroreact/history/actions';
 
 const ConnectedHistory = connect(
   getHistory,
-  dispatch => ({ onTravel: index => dispatch(travel(index)) }),
+  (dispatch, props) => ({ onTravel: index => dispatch(travel(index, props.treeStateKey)) }),
 )(History);
-
-const panes = [
-  {
-    title: 'History',
-    icon: <i className="material-icons">history</i>,
-    component: ConnectedHistory,
-  },
-];
 
 const Layout = React.createClass({
   getInitialState() {
@@ -62,7 +54,7 @@ const Layout = React.createClass({
       );
     }
 
-    if (this.props.showTree) {
+    if (this.props.treeStateKey) {
       return (
         <SplitPane
           split="vertical"
@@ -71,7 +63,7 @@ const Layout = React.createClass({
           resizerClassName="wgsa-resizer"
           onChange={verticalSize => this.setState({ verticalSize })}
         >
-          <AutoSizer component={Tree} />
+          <AutoSizer component={(props) => <Tree {...props} stateKey={this.props.treeStateKey} />} />
           <Map>
             <Summary />
           </Map>
@@ -102,6 +94,14 @@ const Layout = React.createClass({
 
     if (this.props.isClusterView) return splitPanes;
 
+    const panes = [
+      {
+        title: 'History',
+        icon: <i className="material-icons">history</i>,
+        component: () => <ConnectedHistory treeStateKey={this.props.treeStateKey} />,
+      },
+    ];
+
     return (
       <SidePane panes={panes}>
         {splitPanes}
@@ -115,7 +115,7 @@ function mapStateToProps(state) {
   return {
     createdAt: collection.createdAt,
     isClusterView: collection.isClusterView,
-    showTree: getVisibleTree(state) !== null,
+    treeStateKey: getTreeStateKey(state),
   };
 }
 

@@ -1,5 +1,6 @@
 import { createSelector } from 'reselect';
 import parse from '@cgps/phylocanvas/utils/parse';
+import treeReducer from '@cgps/libmicroreact/tree/reducer';
 
 import { getTreeState, getTreeStateKey, getTitles } from './index';
 import { getNodeStyles } from './styles';
@@ -12,6 +13,14 @@ import Organisms from '~/organisms';
 
 import { topLevelTrees, titles } from '../constants';
 import { POPULATION, COLLECTION } from '~/app/stateKeys/tree';
+
+export const getPhylocanvas = state => getTreeState(state).phylocanvas;
+
+export const getVisiblePhylocanvas = createSelector(
+  getTreeStateKey,
+  getPhylocanvas,
+  (tree, states) => (tree in states ? states[tree].current : treeReducer(undefined, {}))
+);
 
 export const getHighlightedNodeIds = createSelector(
   getTreeStateKey,
@@ -50,7 +59,6 @@ const getFilenames = createSelector(
   })
 );
 
-
 const scaleBarProps = {
   digits: 0,
   fontSize: 13,
@@ -63,17 +71,19 @@ const populationLeafNodeStyle = {
 
 export const getPhylocanvasState = createSelector(
   getVisibleTree,
+  getVisiblePhylocanvas,
   getNodeStyles,
   getHighlightedNodeIds,
   state => getTreeState(state).size,
   getFilenames,
-  ({ phylocanvas, name }, nodeStyles, highlightedIds, size, filenames) => ({
+  ({ name, newick }, { phylocanvas }, nodeStyles, highlightedIds, size, filenames) => ({
     ...phylocanvas,
     leafNodeStyle: name === POPULATION ? populationLeafNodeStyle : phylocanvas.leafNodeStyle,
     renderLeafLabels: name === POPULATION || phylocanvas.renderLeafLabels,
     scalebar: scaleBarProps,
     selectedIds: highlightedIds,
     size: size || phylocanvas.size,
+    source: phylocanvas.source || newick,
     styles: nodeStyles,
     contextMenu: {
       ...phylocanvas.contextMenu,
@@ -89,14 +99,14 @@ const getLeafNodeOrder = source => {
 };
 
 const getCollectionTreeOrder = createSelector(
-  state => getTrees(state)[COLLECTION].phylocanvas.source,
+  state => getTrees(state)[COLLECTION].newick,
   getLeafNodeOrder
 );
 
 export const getTreeOrder = createSelector(
   getTreeStateKey,
   getCollectionTreeOrder,
-  state => getVisibleTree(state).phylocanvas.source,
+  state => getVisibleTree(state).newick,
   (stateKey, collectionTreeOrder, source) => {
     if (topLevelTrees.has(stateKey)) {
       return collectionTreeOrder;

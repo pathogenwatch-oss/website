@@ -4,7 +4,7 @@ import { getViewer } from '../../selectors';
 
 import { topLevelTrees } from '../constants';
 
-export const getTreeState = state => getViewer(state).tree.current;
+export const getTreeState = state => getViewer(state).tree;
 
 export const getTreeStateKey = state => getTreeState(state).visible;
 export const isLoading = state => getTreeState(state).loading;

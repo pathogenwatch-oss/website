@@ -84,14 +84,6 @@ export function treeClicked(event, phylocanvas) {
   };
 }
 
-export function internalNodeSelected(node) {
-  return (dispatch, getState) => {
-    const state = getState();
-    const stateKey = getVisibleTree(state).name;
-    dispatch(actions.internalNodeSelected(stateKey, node ? node.id : null));
-  };
-}
-
 export function handleTreeProgress(payload = {}) {
   return (dispatch) => {
     if (payload.task === 'tree' && payload.status === 'READY') {
@@ -100,12 +92,3 @@ export function handleTreeProgress(payload = {}) {
     return dispatch(updateProgress(payload));
   };
 }
-
-export function resetTreeRoot() {
-  return (dispatch, getState) => {
-    const state = getState();
-    const stateKey = getVisibleTree(state).name;
-    dispatch(actions.resetTreeRoot(stateKey));
-  };
-}
-
