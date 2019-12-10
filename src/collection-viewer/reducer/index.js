@@ -1,4 +1,6 @@
 import { combineReducers } from 'redux';
+import history from '@cgps/libmicroreact/history/reducer';
+import { withHistory } from '@cgps/libmicroreact/history';
 
 import collection from './collection';
 import genomes from '../genomes/reducer';
@@ -14,7 +16,7 @@ import offline from '../offline/reducer';
 import search from '../search/reducer';
 import metadata from '../private-metadata/reducer';
 
-import clusterView from '../../cluster-viewer/reducer';
+import clusterView from '~/cluster-viewer/reducer';
 
 import { RESET_COLLECTION_VIEW } from '../actions';
 
@@ -28,12 +30,13 @@ const reducer = combineReducers({
   downloads,
   filter,
   highlight,
+  history,
   metadata,
   offline,
   search,
   summary,
   table,
-  tree,
+  tree: withHistory(tree),
 });
 
 const initialState = reducer(undefined, {});

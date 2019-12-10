@@ -5,6 +5,7 @@ import { POPULATION, COLLECTION } from '~/app/stateKeys/tree';
 import Organisms from '~/organisms';
 
 export const getViewer = ({ viewer }) => viewer;
+export const getHistory = ({ viewer }) => viewer.history;
 
 export const getCollection = state => getViewer(state).entities.collection;
 export const isClusterView = state => getCollection(state).isClusterView;

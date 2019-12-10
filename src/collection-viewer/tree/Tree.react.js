@@ -13,6 +13,7 @@ import {
   getHighlightedNodeIds,
 } from './selectors/phylocanvas';
 
+import { snapshot } from '@cgps/libmicroreact/history/actions';
 import { setHighlight } from '../highlight/actions';
 import { displayTree } from './thunks';
 
@@ -75,12 +76,12 @@ const setTreeHighlight = (ids, merge) =>
 
 function mapDispatchToProps(dispatch) {
   return {
-    onPhylocanvasInitialise: console.log, // (image) => dispatch(addInitialTreeHistory(image)),
+    onPhylocanvasInitialise: (image) => dispatch(snapshot(image)),
     onPhylocanvasStateChange: (state) => dispatch(setPhylocanvasState(state)),
     setHighlightedIds: (ids, merge) => dispatch(setTreeHighlight(ids, merge)),
     onFilterChange: (ids, path) => dispatch(setTreeFilter(ids, path)),
     onLassoChange: active => dispatch(onLassoChange(active)),
-    onAddHistoryEntry: console.log, // (image) => dispatch(addTreeHistory(image)),
+    onAddHistoryEntry: (image) => dispatch(snapshot(image)),
   };
 }
 

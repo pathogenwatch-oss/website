@@ -2,9 +2,11 @@ import './styles.css';
 
 import React from 'react';
 import SplitPane from 'react-split-pane/src';
-import { AutoSizer } from 'react-virtualized';
 import { connect } from 'react-redux';
 
+import AutoSizer from '@cgps/libmicroreact/auto-sizer';
+import SidePane from '@cgps/libmicroreact/side-pane';
+import History from '@cgps/libmicroreact/history';
 import Tree from '../tree';
 import TreeProgress from '../tree/Progress.react';
 import Map from '../map';
@@ -14,7 +16,22 @@ import Table from '../table';
 import ClusterViewNetwork from '~/cluster-viewer/Network.react';
 
 import { getVisibleTree } from '../tree/selectors/entities';
-import { getCollection } from '../selectors';
+import { getCollection, getHistory } from '../selectors';
+
+import { travel } from '@cgps/libmicroreact/history/actions';
+
+const ConnectedHistory = connect(
+  getHistory,
+  dispatch => ({ onTravel: index => dispatch(travel(index)) }),
+)(History);
+
+const panes = [
+  {
+    title: 'History',
+    icon: <i className="material-icons">history</i>,
+    component: ConnectedHistory,
+  },
+];
 
 const Layout = React.createClass({
   getInitialState() {
@@ -54,9 +71,7 @@ const Layout = React.createClass({
           resizerClassName="wgsa-resizer"
           onChange={verticalSize => this.setState({ verticalSize })}
         >
-          <AutoSizer>
-            {({ height, width }) => <Tree height={height} width={width} />}
-          </AutoSizer>
+          <AutoSizer component={Tree} />
           <Map>
             <Summary />
           </Map>
@@ -73,7 +88,7 @@ const Layout = React.createClass({
   },
 
   render() {
-    return (
+    const splitPanes = (
       <SplitPane
         split="horizontal"
         defaultSize="68%"
@@ -81,10 +96,16 @@ const Layout = React.createClass({
         onChange={horizontalSize => this.setState({ horizontalSize })}
       >
         {this.renderNorthSection()}
-        <AutoSizer>
-          {({ height, width }) => <Table height={height} width={width} />}
-        </AutoSizer>
+        <AutoSizer component={Table} />
       </SplitPane>
+    );
+
+    if (this.props.isClusterView) return splitPanes;
+
+    return (
+      <SidePane panes={panes}>
+        {splitPanes}
+      </SidePane>
     );
   },
 });
