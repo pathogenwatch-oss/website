@@ -47,9 +47,9 @@ function notPresent(profileSection, element) {
 export function createAdvancedViewColumn(element, profileKey, profiles) {
   const { key, displayName, label, effect } = element;
   return {
-    addState({ data }) {
-      if (!data.length) return this;
-      this.hidden = data.every(({ analysis }) =>
+    addState({ genomes }) {
+      if (!genomes.length) return this;
+      this.hidden = genomes.every(({ analysis }) =>
         !analysis.paarsnp || notPresent(analysis.paarsnp[profileKey], key)
       );
       this.width = this.getWidth() + 12;

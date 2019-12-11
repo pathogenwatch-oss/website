@@ -11,11 +11,11 @@ import {
   getVisibleTable,
   getVisibleTableName,
   getFixedGroupWidth,
-} from '../table/selectors';
+} from './selectors';
+import { getVisibleTableColumns } from './selectors/columns';
 
 import { onRowClick } from './thunks';
 
-import { addColumnWidth } from '../table/columnWidth';
 import { getColumnLabel, setFixedGroupMinWidth } from './utils';
 
 const preventDefault = e => e.preventDefault();
@@ -40,11 +40,13 @@ const Table = React.createClass({
   },
 
   shouldComponentUpdate(previous) {
-    const { data, columns, filter } = this.props;
+    const { data, columns, filter, width, height } = this.props;
     return (
       data !== previous.data ||
       columns !== previous.columns ||
-      filter !== previous.filter
+      filter !== previous.filter ||
+      width !== previous.width ||
+      height !== previous.height
     );
   },
 
@@ -63,7 +65,7 @@ const Table = React.createClass({
         <Fade>
           <FixedTable
             key={this.props.tableName}
-            { ...this.props }
+            {...this.props}
             rowClickHandler={this.props.onRowClick}
             getDefaultHeaderContent={this.props.getDefaultHeaderContent}
           />
@@ -98,40 +100,23 @@ function mapStateToProps(state) {
     activeColumns:
       activeColumn ? new Set([ activeColumn ]) : activeColumns,
     collection: getCollection(state),
+    columns: getVisibleTableColumns(state),
     data: getActiveGenomes(state),
     fixedGroupWidth: getFixedGroupWidth(state),
     tableName: getVisibleTableName(state),
   };
 }
 
-function mapStateToColumn(column, state, dispatch) {
-  column.isSelected = state.activeColumns.has(column);
-
-  if (column.group) {
-    for (let i = 0; i < column.columns.length; i++) {
-      column.columns[i] = mapStateToColumn(column.columns[i], state, dispatch);
-    }
-    return column;
-  }
-
-  if (column.addState) return column.addState(state, dispatch);
-  return state.data.length ? addColumnWidth(column, state) : column;
-}
-
 function mergeProps(state, { dispatch }, props) {
   const { data, columns, activeColumns, tableName } = state;
-
-  const mappedColumns =
-    columns.map(column => mapStateToColumn(column, state, dispatch));
-
-  setFixedGroupMinWidth(mappedColumns, props.width, state.fixedGroupWidth);
-
+  // hack required due to width being a prop
+  setFixedGroupMinWidth(columns, props.width, state.fixedGroupWidth);
   return {
     ...props,
     activeColumns,
     data,
     tableName,
-    columns: mappedColumns,
+    columns,
     onRowClick: row => dispatch(onRowClick(row)),
     getDefaultHeaderContent: columnProps => (
       <DefaultColumnHeader

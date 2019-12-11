@@ -1,23 +1,22 @@
 import { createSelector } from 'reselect';
 
-import { getViewer } from '../selectors';
+import { getViewer } from '../../selectors';
 import {
   getGenomeList,
   hasMetadata,
   hasAMR,
   hasKleborateAMR,
-} from '../genomes/selectors';
+} from '../../genomes/selectors';
 
 import {
   getColumnNames,
   getLeadingSystemColumnProps,
   getTrailingSystemColumnProps,
   getUserDefinedColumnProps,
-} from '../data-tables/utils';
+} from '../../data-tables/utils';
 
-import { nameColumnProps } from './constants';
-import { tableKeys } from '../constants';
-
+import { nameColumnProps } from '../constants';
+import { tableKeys } from '../../constants';
 export const getTableState = state => getViewer(state).table;
 export const getAMRTableName = state => getTableState(state).activeAMR;
 export const getTableEntities = state => getTableState(state).entities;
@@ -159,3 +158,5 @@ export const getFixedGroupWidth = createSelector(
     return width;
   }
 );
+
+

@@ -93,14 +93,13 @@ export const downloadColumnProps = {
       </span>
     );
   },
-  addState(state) {
-    const { collection, data } = state; // not full state :/
+  addState({ collection, genomes }) {
     return {
       ...this,
       collection,
       width: collection.isClusterView ? 44 : 68,
       archiveDownloads: {
-        ids: data.map(_ => _.id || _._id),
+        ids: genomes.map(_ => _.id || _._id),
         filenames: {
           genome: formatCollectionFilename(collection, 'genomes.zip'),
           annotation: formatCollectionFilename(collection, 'annotations.zip'),

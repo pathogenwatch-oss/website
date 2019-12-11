@@ -55,8 +55,8 @@ function buildColumns() {
   for (const agent of agents) {
     columns.push({
       columnKey: `kleborate_${agent.field}`,
-      addState({ data }) {
-        if (!data.length) return this;
+      addState({ genomes }) {
+        if (!genomes.length) return this;
         // this.hidden = data.every(({ analysis }) =>
         //   !analysis.paarsnp || notPresent(analysis.paarsnp[profileKey], key)
         // );

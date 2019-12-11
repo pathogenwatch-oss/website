@@ -29,11 +29,11 @@ export function buildColumns({ snp = {}, antibiotics }, profiles) {
                 flexGrow: 0,
                 getCellContents() {},
                 getLabel: () => `${gene}_`,
-                addState({ data }) {
-                  if (!data.length) return this;
+                addState({ genomes }) {
+                  if (!genomes.length) return this;
                   this.hidden =
                     snp[key][gene].every(({ snpName }) =>
-                      data.every(({ analysis }) =>
+                      genomes.every(({ analysis }) =>
                         analysis.paarsnp &&
                         analysis.paarsnp.snp.indexOf(`${gene}_${snpName}`) === -1
                       )

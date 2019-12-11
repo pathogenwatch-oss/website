@@ -1,3 +1,3 @@
 import './styles.css';
 
-export default from './Table.react';
+export { default } from './Table.react';

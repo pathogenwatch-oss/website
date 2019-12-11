@@ -20,7 +20,7 @@ export function defaultWidthGetter(row, column, isBold) {
   return measureText(string, isBold);
 }
 
-export function addColumnWidth(column, { data }) {
+export function addColumnWidth(column, { genomes }) {
   if (column.fixedWidth) {
     return column;
   }
@@ -31,13 +31,13 @@ export function addColumnWidth(column, { data }) {
   let longestValue = '';
   let isBold = false;
   const { valueGetter, getTextToMeasure = valueGetter } = column;
-  for (const row of data) {
-    let value = getTextToMeasure(row);
+  for (const genome of genomes) {
+    let value = getTextToMeasure(genome);
     if (value === null || typeof value === 'undefined') continue;
     value = String(value);
     if (value.length > longestValue.length) {
       longestValue = value;
-      isBold = column.columnKey === '__name' && (row.__isCollection || row.__isReference);
+      isBold = column.columnKey === '__name' && (genome.__isCollection || genome.__isReference);
     }
   }
 
