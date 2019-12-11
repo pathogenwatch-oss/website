@@ -14,11 +14,11 @@ import Organisms from '~/organisms';
 import { topLevelTrees, titles } from '../constants';
 import { POPULATION, COLLECTION } from '~/app/stateKeys/tree';
 
-export const getPhylocanvas = state => getTreeState(state).phylocanvas;
+export const getLibMRTrees = state => getTreeState(state).libmicroreact;
 
-export const getVisiblePhylocanvas = createSelector(
+export const getVisibleLibMRTree = createSelector(
   getTreeStateKey,
-  getPhylocanvas,
+  getLibMRTrees,
   (tree, states) => (tree in states ? states[tree].current : treeReducer(undefined, {}))
 );
 
@@ -71,7 +71,7 @@ const populationLeafNodeStyle = {
 
 export const getPhylocanvasState = createSelector(
   getVisibleTree,
-  getVisiblePhylocanvas,
+  getVisibleLibMRTree,
   getNodeStyles,
   getHighlightedNodeIds,
   state => getTreeState(state).size,
@@ -116,8 +116,8 @@ export const getTreeOrder = createSelector(
 );
 
 export const getTreeFilteredIds = createSelector(
-  state => getVisiblePhylocanvas(state).ids,
-  state => getVisiblePhylocanvas(state).subtreeIds,
+  state => getVisibleLibMRTree(state).ids,
+  state => getVisibleLibMRTree(state).subtreeIds,
   (ids, subtreeIds) => {
     if (ids !== null) {
       return ids;

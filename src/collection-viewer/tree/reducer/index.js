@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux';
 
-import phylocanvas from './phylocanvas';
+import libmicroreact from './libmicroreact';
 
 import { FETCH_COLLECTION, UPDATE_COLLECTION_PROGRESS } from '../../actions';
 import * as ACTIONS from '../actions';
@@ -194,7 +194,7 @@ export default combineReducers({
   entities,
   lastSubtree,
   loading,
-  phylocanvas,
+  libmicroreact,
   size,
   titles,
   visible,
