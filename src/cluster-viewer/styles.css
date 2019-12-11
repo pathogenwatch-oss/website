@@ -17,11 +17,6 @@
   box-sizing: border-box;
 }
 
-.Pane .pw-cluster-network .libmr-controls-toggler,
-.Pane .pw-cluster-network .libmr-secondary-controls {
-  transform: translate(-8px, 8px);
-}
-
 .pw-cluster-view-current-threshold {
   position: absolute;
   top: 16px;
