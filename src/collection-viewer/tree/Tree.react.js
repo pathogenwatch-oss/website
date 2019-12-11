@@ -14,7 +14,7 @@ import {
   getHighlightedNodeIds,
 } from './selectors/phylocanvas';
 
-import { snapshot } from '@cgps/libmicroreact/history/actions';
+import { snapshot, revert } from '@cgps/libmicroreact/history/actions';
 import { setHighlight } from '../highlight/actions';
 import { displayTree } from './thunks';
 
@@ -83,6 +83,7 @@ function mapDispatchToProps(dispatch, { stateKey }) {
     onLassoChange: active => dispatch(onLassoChange(active, stateKey)),
     onPhylocanvasInitialise: image => dispatch(addInitialSnapshot(image, stateKey)),
     onPhylocanvasStateChange: state => dispatch(setPhylocanvasState(state, stateKey)),
+    onRedrawOriginalTree: () => dispatch({ stateKey, ...revert() }),
     setHighlightedIds: (ids, merge) => dispatch(setTreeHighlight(ids, merge, stateKey)),
   };
 }
