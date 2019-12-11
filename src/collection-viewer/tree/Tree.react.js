@@ -14,7 +14,7 @@ import {
   getHighlightedNodeIds,
 } from './selectors/phylocanvas';
 
-import { snapshot, travel } from '@cgps/libmicroreact/history/actions';
+import { snapshot } from '@cgps/libmicroreact/history/actions';
 import { setHighlight } from '../highlight/actions';
 import { displayTree } from './thunks';
 
@@ -71,19 +71,18 @@ const addInitialSnapshot = (image, stateKey) =>
     const state = getState();
     const history = getHistory(state)[stateKey];
     if (history && history.entries.length) {
-      dispatch({ stateKey, ...travel(history.current) });
-    } else {
-      dispatch({ stateKey, ...snapshot(image) });
+      return;
     }
+    dispatch({ stateKey, ...snapshot(image) });
   };
 
 function mapDispatchToProps(dispatch, { stateKey }) {
   return {
-    onAddHistoryEntry: (image) => dispatch({ stateKey, ...snapshot(image) }),
+    onAddHistoryEntry: image => dispatch({ stateKey, ...snapshot(image) }),
     onFilterChange: (ids, path) => dispatch(setTreeFilter(ids, path, stateKey)),
     onLassoChange: active => dispatch(onLassoChange(active, stateKey)),
-    onPhylocanvasInitialise: (image) => dispatch(addInitialSnapshot(image, stateKey)),
-    onPhylocanvasStateChange: (state) => dispatch(setPhylocanvasState(state, stateKey)),
+    onPhylocanvasInitialise: image => dispatch(addInitialSnapshot(image, stateKey)),
+    onPhylocanvasStateChange: state => dispatch(setPhylocanvasState(state, stateKey)),
     setHighlightedIds: (ids, merge) => dispatch(setTreeHighlight(ids, merge, stateKey)),
   };
 }
