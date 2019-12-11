@@ -1,8 +1,7 @@
 import { createSelector } from 'reselect';
 import parse from '@cgps/phylocanvas/utils/parse';
-import treeReducer from '@cgps/libmicroreact/tree/reducer';
 
-import { getTreeState, getTreeStateKey, getTitles } from './index';
+import { getTreeState, getTreeStateKey, getTitles, getVisibleLibMRTree } from './index';
 import { getNodeStyles } from './styles';
 import { getTrees, getVisibleTree } from './entities';
 import { getHighlightedIdArray } from '../../highlight/selectors';
@@ -13,14 +12,6 @@ import Organisms from '~/organisms';
 
 import { topLevelTrees, titles } from '../constants';
 import { POPULATION, COLLECTION } from '~/app/stateKeys/tree';
-
-export const getLibMRTrees = state => getTreeState(state).libmicroreact;
-
-export const getVisibleLibMRTree = createSelector(
-  getTreeStateKey,
-  getLibMRTrees,
-  (tree, states) => (tree in states ? states[tree].current : treeReducer(undefined, {}))
-);
 
 export const getHighlightedNodeIds = createSelector(
   getTreeStateKey,
@@ -112,19 +103,5 @@ export const getTreeOrder = createSelector(
       return collectionTreeOrder;
     }
     return getLeafNodeOrder(source);
-  }
-);
-
-export const getTreeFilteredIds = createSelector(
-  state => getVisibleLibMRTree(state).ids,
-  state => getVisibleLibMRTree(state).subtreeIds,
-  (ids, subtreeIds) => {
-    if (ids !== null) {
-      return ids;
-    }
-    if (subtreeIds !== null) {
-      return subtreeIds;
-    }
-    return [];
   }
 );

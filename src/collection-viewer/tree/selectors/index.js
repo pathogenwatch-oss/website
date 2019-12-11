@@ -1,4 +1,5 @@
 import { createSelector } from 'reselect';
+import treeReducer from '@cgps/libmicroreact/tree/reducer';
 
 import { getViewer } from '../../selectors';
 
@@ -24,4 +25,27 @@ export const getLastSubtree = createSelector(
       { name: lastSubtree, title: titles[lastSubtree] } :
       null
   )
+);
+
+export const getLibMRTrees = state => getTreeState(state).libmicroreact;
+
+export const getVisibleLibMRTree = createSelector(
+  getTreeStateKey,
+  getLibMRTrees,
+  (tree, states) => (tree in states ? states[tree].current : treeReducer(undefined, {}))
+);
+
+export const getTreeUnfilteredIds = createSelector(
+  state => getVisibleLibMRTree(state).subtreeIds,
+  (subtreeIds) => (subtreeIds === null ? [] : subtreeIds)
+);
+
+export const getTreeFilteredIds = createSelector(
+  state => getVisibleLibMRTree(state).ids,
+  (ids) => {
+    if (ids !== null) {
+      return ids;
+    }
+    return [];
+  }
 );

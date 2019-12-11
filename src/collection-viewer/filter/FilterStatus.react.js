@@ -22,10 +22,9 @@ const FilterStatus = ({ active, filteredAmount, totalAmount, clear, children }) 
 
 function mapStateToProps(state) {
   const filter = getFilter(state);
-  const totalAmount = filter.unfilteredIds.length;
   return {
-    totalAmount,
-    filteredAmount: filter.active ? filter.ids.size : totalAmount,
+    totalAmount: filter.total,
+    filteredAmount: filter.count,
     active: filter.active,
   };
 }

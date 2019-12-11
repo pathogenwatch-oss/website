@@ -2,7 +2,7 @@ import { createSelector } from 'reselect';
 
 import { getNetworkFilteredIds } from '~/cluster-viewer/selectors';
 import { getUnfilteredGenomeIds } from '../genomes/selectors';
-import { getTreeFilteredIds } from '../tree/selectors/phylocanvas';
+import { getTreeFilteredIds, getTreeUnfilteredIds } from '../tree/selectors';
 
 import { filterKeys } from '../filter/constants';
 
@@ -45,17 +45,26 @@ export const getNonSearchFilterIntersections = createSelector(
   }
 );
 
-export const getFilter = createSelector(
+const getUnfilteredIds = createSelector(
   getUnfilteredGenomeIds,
+  getTreeUnfilteredIds,
+  (genomeIds, treeIds) => (treeIds.length ? treeIds : genomeIds)
+);
+
+const getTotal = createSelector(
+  getUnfilteredGenomeIds,
+  ids => ids.length
+);
+
+const getFilterIds = createSelector(
   getNonSearchFilterIntersections,
   state => getViewer(state).search.intersections,
   getSearchIds,
-  (unfilteredIds, nonSearchIntersections, searchTerms, searchIds) => {
+  (nonSearchIntersections, searchTerms, searchIds) => {
     const intersections = [ ...nonSearchIntersections ];
     if (searchTerms.length) {
       intersections.push(new Set(searchIds));
     }
-
     const ids = new Set(intersections[0]);
     for (const intersection of intersections.slice(1)) {
       for (const id of ids) {
@@ -64,13 +73,21 @@ export const getFilter = createSelector(
         }
       }
     }
-
-    return {
-      unfilteredIds,
-      ids: new Set(ids),
-      active: intersections.length,
-    };
+    return new Set(ids);
   }
+);
+
+export const getFilter = createSelector(
+  getUnfilteredIds,
+  getTotal,
+  getFilterIds,
+  (unfilteredIds, total, ids, active = !!ids.size) => ({
+    unfilteredIds,
+    total,
+    ids,
+    active,
+    count: active ? ids.size : unfilteredIds.length,
+  })
 );
 
 export const getFilteredGenomeIds = createSelector(
