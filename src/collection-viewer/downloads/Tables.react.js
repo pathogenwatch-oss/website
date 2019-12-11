@@ -53,7 +53,7 @@ const DownloadsMenu = (props) => {
             genomeIds={genomeIds}
             generateFile={() => generateAMRProfile({ genomes, genomeIds, tables })}
           >
-            AMR Profile
+            AMR profile
           </DownloadButton>
           <DownloadButton
             filename={formatCollectionFilename(collection, 'amr-snps.csv')}
@@ -67,7 +67,7 @@ const DownloadsMenu = (props) => {
             genomeIds={genomeIds}
             generateFile={() => generateAMRGenes({ genomes, genomeIds, tables })}
           >
-            AMR Genes
+            AMR genes
           </DownloadButton>
         </React.Fragment>
       }
