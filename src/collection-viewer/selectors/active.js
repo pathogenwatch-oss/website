@@ -4,6 +4,7 @@ import { getGenomes } from '../genomes/selectors';
 import { getHighlightedIds } from '../highlight/selectors';
 import { getFilteredGenomeIds } from '../filter/selectors';
 import { getTreeOrder } from '../tree/selectors/phylocanvas';
+import { isClusterView } from '../selectors';
 
 export const getActiveGenomeIds = createSelector(
   getHighlightedIds,
@@ -11,14 +12,24 @@ export const getActiveGenomeIds = createSelector(
   (highlighted, visible) => Array.from(highlighted.size ? highlighted : visible)
 );
 
+const getOrder = state => {
+  if (isClusterView(state)) {
+    return undefined;
+  }
+  return getTreeOrder(state);
+};
+
 export const getActiveGenomes = createSelector(
   getGenomes,
   getActiveGenomeIds,
-  getTreeOrder,
-  (genomes, active, order) => {
+  getOrder,
+  (genomes, activeIds, order) => {
+    if (!order) {
+      return activeIds.map(id => genomes[id]);
+    }
     const sorted = [];
     for (const id of order) {
-      if (active.includes(id)) {
+      if (activeIds.includes(id)) {
         sorted.push(genomes[id]);
       }
     }
