@@ -1,3 +1,3 @@
 import './styles.css';
 
-export default from './Downloads.react';
+export { default } from './Downloads.react';

@@ -30,8 +30,12 @@ const DownloadsMenu = ({ viewHasTrees }) => {
       <Analysis />
       <hr />
       <Tables />
-      <hr />
-      {viewHasTrees && <Trees />}
+      { viewHasTrees &&
+        <>
+          <hr />
+          <Trees />
+        </>
+      }
     </Menu>
   );
 };
