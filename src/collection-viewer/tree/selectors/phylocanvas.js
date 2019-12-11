@@ -1,7 +1,8 @@
 import { createSelector } from 'reselect';
 import parse from '@cgps/phylocanvas/utils/parse';
+import rotateSubtree from '@cgps/phylocanvas/utils/rotateSubtree';
 
-import { getTreeState, getTreeStateKey, getTitles, getVisibleLibMRTree } from './index';
+import { getTreeState, getTreeStateKey, getTitles, getVisibleLibMRTree, getLibMRTrees } from './index';
 import { getNodeStyles } from './styles';
 import { getTrees, getVisibleTree } from './entities';
 import { getHighlightedIdArray } from '../../highlight/selectors';
@@ -83,25 +84,46 @@ export const getPhylocanvasState = createSelector(
   })
 );
 
-const getLeafNodeOrder = source => {
+const getLeafNodeOrder = (source, rotatedIds = []) => {
   if (!source) return [];
-  const parsed = parse(source);
-  return parsed.leafNodes.map(_ => _.id);
+  const nodes = parse(source);
+
+  for (const id of rotatedIds) {
+    const node = nodes.nodeById[id];
+    rotateSubtree(null, nodes, node);
+  }
+
+  return (
+    nodes.preorderTraversal
+      .filter(_ => _.isLeaf)
+      .map(_ => _.id)
+  );
+};
+
+const getCollectionPhylocanvasState = state => {
+  const libmrStates = getLibMRTrees(state);
+  if (COLLECTION in libmrStates) {
+    return libmrStates[COLLECTION].phylocanvas;
+  }
+  return {};
 };
 
 const getCollectionTreeOrder = createSelector(
+  state => getCollectionPhylocanvasState(state).source,
   state => getTrees(state)[COLLECTION].newick,
-  getLeafNodeOrder
+  state => getCollectionPhylocanvasState(state).rotatedIds,
+  (source, newick, rotatedIds) => getLeafNodeOrder(source || newick, rotatedIds)
 );
 
 export const getTreeOrder = createSelector(
   getTreeStateKey,
   getCollectionTreeOrder,
-  state => getVisibleTree(state).newick,
-  (stateKey, collectionTreeOrder, source) => {
+  state => getVisibleLibMRTree(state).phylocanvas.source,
+  state => getVisibleLibMRTree(state).phylocanvas.rotatedIds,
+  (stateKey, collectionTreeOrder, source, rotatedIds) => {
     if (topLevelTrees.has(stateKey)) {
       return collectionTreeOrder;
     }
-    return getLeafNodeOrder(source);
+    return getLeafNodeOrder(source, rotatedIds);
   }
 );

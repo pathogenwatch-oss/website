@@ -27,12 +27,21 @@ export const getLastSubtree = createSelector(
   )
 );
 
-export const getLibMRTrees = state => getTreeState(state).libmicroreact;
+export const getLibMRTrees = createSelector(
+  state => getTreeState(state).libmicroreact,
+  trees => {
+    const flattened = {};
+    for (const [ key, { current } ] of Object.entries(trees)) {
+      flattened[key] = current;
+    }
+    return flattened;
+  }
+);
 
 export const getVisibleLibMRTree = createSelector(
   getTreeStateKey,
   getLibMRTrees,
-  (tree, states) => (tree in states ? states[tree].current : treeReducer(undefined, {}))
+  (tree, states) => (tree in states ? states[tree] : treeReducer(undefined, {}))
 );
 
 export const getTreeUnfilteredIds = createSelector(
