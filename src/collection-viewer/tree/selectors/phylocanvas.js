@@ -84,20 +84,21 @@ export const getPhylocanvasState = createSelector(
   })
 );
 
-const getLeafNodeOrder = (source, rotatedIds = []) => {
-  if (!source) return [];
-  const nodes = parse(source);
+const getLeafNodeOrder = (nodes, rotatedIds = []) => {
+  if (!nodes) return [];
 
   for (const id of rotatedIds) {
     const node = nodes.nodeById[id];
     rotateSubtree(null, nodes, node);
   }
 
-  return (
-    nodes.preorderTraversal
-      .filter(_ => _.isLeaf)
-      .map(_ => _.id)
-  );
+  const order = [];
+  for (const node of nodes.preorderTraversal) {
+    if (node.isLeaf) {
+      order.push(node.id);
+    }
+  }
+  return order;
 };
 
 const getCollectionPhylocanvasState = state => {
@@ -108,22 +109,32 @@ const getCollectionPhylocanvasState = state => {
   return {};
 };
 
-const getCollectionTreeOrder = createSelector(
+const getCollectionNodes = createSelector(
   state => getCollectionPhylocanvasState(state).source,
   state => getTrees(state)[COLLECTION].newick,
+  (source, newick) => parse(source || newick)
+);
+
+const getCollectionTreeOrder = createSelector(
+  getCollectionNodes,
   state => getCollectionPhylocanvasState(state).rotatedIds,
-  (source, newick, rotatedIds) => getLeafNodeOrder(source || newick, rotatedIds)
+  (nodes, rotatedIds) => getLeafNodeOrder(nodes, rotatedIds)
+);
+
+const getVisibleTreeNodes = createSelector(
+  state => getVisibleLibMRTree(state).phylocanvas.source,
+  source => (source ? parse(source) : null)
 );
 
 export const getTreeOrder = createSelector(
   getTreeStateKey,
   getCollectionTreeOrder,
-  state => getVisibleLibMRTree(state).phylocanvas.source,
+  getVisibleTreeNodes,
   state => getVisibleLibMRTree(state).phylocanvas.rotatedIds,
-  (stateKey, collectionTreeOrder, source, rotatedIds) => {
+  (stateKey, collectionTreeOrder, nodes, rotatedIds) => {
     if (topLevelTrees.has(stateKey)) {
       return collectionTreeOrder;
     }
-    return getLeafNodeOrder(source, rotatedIds);
+    return getLeafNodeOrder(nodes, rotatedIds);
   }
 );
