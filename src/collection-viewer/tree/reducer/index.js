@@ -1,4 +1,5 @@
 import { combineReducers } from 'redux';
+import { setPhylocanvasState } from '@cgps/libmicroreact/tree/actions';
 
 import libmicroreact from './libmicroreact';
 
@@ -7,7 +8,6 @@ import * as ACTIONS from '../actions';
 
 import { topLevelTrees } from '../constants';
 import { COLLECTION, POPULATION } from '~/app/stateKeys/tree';
-
 
 function entities(state = {}, action) {
   const { type, payload } = action;
@@ -161,9 +161,12 @@ function lastSubtree(state = null, { type, payload }) {
   }
 }
 
+/* would ideally just import the type */
+const setPhylocanvasStateAction = setPhylocanvasState();
+
 function size(state = null, { type, payload }) {
   switch (type) {
-    case 'SET PHYLOCANVAS STATE': {
+    case setPhylocanvasStateAction.type: {
       if (payload.size) return payload.size;
       return state;
     }

@@ -15,9 +15,18 @@ import {
 } from './selectors/phylocanvas';
 
 import { snapshot, revert } from '@cgps/libmicroreact/history/actions';
+import {
+  setLassoActive,
+  setPhylocanvasState,
+  setTreeFilter,
+} from '@cgps/libmicroreact/tree/actions';
 import { setHighlight } from '../highlight/actions';
 import { displayTree } from './thunks';
 
+import {
+  addExportCallback,
+  removeExportCallback,
+} from '@cgps/libmicroreact/utils/downloads';
 import { POPULATION } from '~/app/stateKeys/tree';
 
 function mapStateToProps(state) {
@@ -30,32 +39,7 @@ function mapStateToProps(state) {
   };
 }
 
-const setPhylocanvasState = (state, stateKey) => ({
-  stateKey,
-  type: 'SET PHYLOCANVAS STATE',
-  payload: state,
-});
-
-const onLassoChange = (active, stateKey) => ({
-  stateKey,
-  type: 'SET TREE LASSO',
-  payload: {
-    lasso: active,
-  },
-});
-
-const setTreeFilter = (ids, path, stateKey) =>
-  (dispatch) => {
-    if (stateKey !== POPULATION) {
-      dispatch({
-        stateKey,
-        type: 'SET TREE FILTER',
-        payload: { ids, path },
-      });
-    }
-  };
-
-const setTreeHighlight = (ids, merge, stateKey) =>
+const setTreeHighlight = (stateKey, ids, merge) =>
   (dispatch) => {
     if (stateKey === POPULATION) {
       if (ids.length === 1) {
@@ -66,7 +50,7 @@ const setTreeHighlight = (ids, merge, stateKey) =>
     }
   };
 
-const addInitialSnapshot = (image, stateKey) =>
+const addInitialSnapshot = (stateKey, image) =>
   (dispatch, getState) => {
     const state = getState();
     const history = getHistory(state)[stateKey];
@@ -79,12 +63,12 @@ const addInitialSnapshot = (image, stateKey) =>
 function mapDispatchToProps(dispatch, { stateKey }) {
   return {
     onAddHistoryEntry: image => dispatch({ stateKey, ...snapshot(image) }),
-    onFilterChange: (ids, path) => dispatch(setTreeFilter(ids, path, stateKey)),
-    onLassoChange: active => dispatch(onLassoChange(active, stateKey)),
-    onPhylocanvasInitialise: image => dispatch(addInitialSnapshot(image, stateKey)),
-    onPhylocanvasStateChange: state => dispatch(setPhylocanvasState(state, stateKey)),
+    onFilterChange: (ids, path) => stateKey !== POPULATION && dispatch({ stateKey, ...setTreeFilter(ids, path, stateKey) }),
+    onLassoChange: active => dispatch({ stateKey, ...setLassoActive(active) }),
+    onPhylocanvasInitialise: image => dispatch(addInitialSnapshot(stateKey, image)),
+    onPhylocanvasStateChange: state => dispatch({ stateKey, ...setPhylocanvasState(state) }),
     onRedrawOriginalTree: () => dispatch({ stateKey, ...revert() }),
-    setHighlightedIds: (ids, merge) => dispatch(setTreeHighlight(ids, merge, stateKey)),
+    setHighlightedIds: (ids, merge) => dispatch(setTreeHighlight(stateKey, ids, merge)),
   };
 }
 
@@ -98,8 +82,10 @@ const Component = (props) => {
   return (
     <Tree
       {...props}
+      addExportCallback={addExportCallback}
       controlsVisible={controls}
       onControlsVisibleChange={toggleControls}
+      removeExportCallback={removeExportCallback}
     >
       <Fade in>
         {!controls && <Header key="header" />}
