@@ -988,51 +988,52 @@
     lodash "^4.17.13"
     to-fast-properties "^2.0.0"
 
-"@cgps/libmicroreact@https://gitlab.com/cgps/libmicroreact#d1dd96bb15d7112563930a4d05972f0edc11e4d5":
-  version "2.0.1"
-  resolved "https://gitlab.com/cgps/libmicroreact#d1dd96bb15d7112563930a4d05972f0edc11e4d5"
+"@cgps/libmicroreact@https://gitlab.com/cgps/libmicroreact#v2.1.1":
+  version "2.1.1"
+  resolved "https://gitlab.com/cgps/libmicroreact#f902cbb42d5ffbfa4315601175bc507148259ca2"
   dependencies:
-    "@cgps/phylocanvas" "^3.0.0-beta.12"
-    "@cgps/phylocanvas-plugin-context-menu" "^3.0.0-beta.12"
-    "@cgps/phylocanvas-plugin-interactions" "^3.0.0-beta.12"
-    "@cgps/phylocanvas-plugin-metadata" "^3.0.0-beta.12"
-    "@cgps/phylocanvas-plugin-scalebar" "^3.0.0-beta.12"
-    "@cgps/phylocanvas-plugin-svg-export" "^3.0.0-beta.12"
+    "@cgps/phylocanvas" "^3.0.0-beta.13"
+    "@cgps/phylocanvas-plugin-context-menu" "^3.0.0-beta.13"
+    "@cgps/phylocanvas-plugin-interactions" "^3.0.0-beta.13"
+    "@cgps/phylocanvas-plugin-metadata" "^3.0.0-beta.13"
+    "@cgps/phylocanvas-plugin-scalebar" "^3.0.0-beta.13"
+    "@cgps/phylocanvas-plugin-svg-export" "^3.0.0-beta.13"
     "@material/icon-button" "^3.1.0"
+    canvas2svg gliffy/canvas2svg#eaab317a36a57421711a297d996bc80318185e44
     lodash.debounce "^4.0.8"
-    rc-animate "2.5.4"
+    rc-animate "^2.10.2"
     react-mdc-web "^0.17.0"
     react-relative-portal "^1.5.1"
 
-"@cgps/phylocanvas-plugin-context-menu@^3.0.0-beta.12":
-  version "3.0.0-beta.12"
-  resolved "https://registry.yarnpkg.com/@cgps/phylocanvas-plugin-context-menu/-/phylocanvas-plugin-context-menu-3.0.0-beta.12.tgz#31061a2b301b1e8a2846c0c65383ee8e3a620aa0"
-  integrity sha512-T3yUeo197bsQxjVpyMmDvsfkVw9QAEOzU2iekPm8ghHJxpA6iBXabzd2yl19xlyCNSWotzucQoYevk9QxOj3fQ==
+"@cgps/phylocanvas-plugin-context-menu@^3.0.0-beta.13":
+  version "3.0.0-beta.13"
+  resolved "https://registry.yarnpkg.com/@cgps/phylocanvas-plugin-context-menu/-/phylocanvas-plugin-context-menu-3.0.0-beta.13.tgz#07005a3f05691b001b976c8263592e23dce96bbb"
+  integrity sha512-cphVkEu5q2x3jIqEk39DaSiiJSBrE395omn6BWVPskJmmVf0ZWeLI9x2MAo31RnDOPlGAlFUria/sgkTDU/Mkg==
 
-"@cgps/phylocanvas-plugin-interactions@^3.0.0-beta.12":
-  version "3.0.0-beta.12"
-  resolved "https://registry.yarnpkg.com/@cgps/phylocanvas-plugin-interactions/-/phylocanvas-plugin-interactions-3.0.0-beta.12.tgz#797c31957f1694b83f390440f9b14c71d0c6c81d"
-  integrity sha512-ZSxWYT2uza8iVLZWA5X5V+QbvbtjxLp4xFEmYFIjSiIQmwfh7FIV6n6hRqWfMq9AFI+TXOubMQO9BFUk3W1bKA==
+"@cgps/phylocanvas-plugin-interactions@^3.0.0-beta.13":
+  version "3.0.0-beta.13"
+  resolved "https://registry.yarnpkg.com/@cgps/phylocanvas-plugin-interactions/-/phylocanvas-plugin-interactions-3.0.0-beta.13.tgz#52fbb4507d613eb27d0e66eb7cbd231ae649426c"
+  integrity sha512-r9LxT70gTASCxjeoTI2W3zMgd/vPrcPhKGAfy+O/pLRQdaLPb64rMc1RXpZJtq6oJhDxrcRY5+yKlBcxfQTX9Q==
 
-"@cgps/phylocanvas-plugin-metadata@^3.0.0-beta.12":
-  version "3.0.0-beta.12"
-  resolved "https://registry.yarnpkg.com/@cgps/phylocanvas-plugin-metadata/-/phylocanvas-plugin-metadata-3.0.0-beta.12.tgz#2ef1e4259d7e7f59f705a72b830eab672d054261"
-  integrity sha512-A/OukP8OTuuTc2UvAlk/+nJdBfUzfrgkcC357LIa2XwIR6MwWQOxh6p6+7+PUt3CNNed7pwjbbQNXXYLfX2njA==
+"@cgps/phylocanvas-plugin-metadata@^3.0.0-beta.13":
+  version "3.0.0-beta.13"
+  resolved "https://registry.yarnpkg.com/@cgps/phylocanvas-plugin-metadata/-/phylocanvas-plugin-metadata-3.0.0-beta.13.tgz#c106c92109a40a7ba4706d94cade12ebd7f5730b"
+  integrity sha512-TuXN+dBLZVggXekf8ugJvFEfdiLGckUl6kKWxxj1uJsjc3xrWAmJ6Wm3jD+uzPBs33CnoWliZ1SuPF6HYi6AxQ==
 
-"@cgps/phylocanvas-plugin-scalebar@^3.0.0-beta.12":
-  version "3.0.0-beta.12"
-  resolved "https://registry.yarnpkg.com/@cgps/phylocanvas-plugin-scalebar/-/phylocanvas-plugin-scalebar-3.0.0-beta.12.tgz#0557dd7bdfc80be5518f77cf16cdcba8bec0a53d"
-  integrity sha512-v52+r0EMfD6fM2+kvEQTBA4B35yhpWzip4LFU5sGylx+MaukwEPnVFTFracgGJAph5qlBdbTZHa634GWdF/ZIw==
+"@cgps/phylocanvas-plugin-scalebar@^3.0.0-beta.13":
+  version "3.0.0-beta.13"
+  resolved "https://registry.yarnpkg.com/@cgps/phylocanvas-plugin-scalebar/-/phylocanvas-plugin-scalebar-3.0.0-beta.13.tgz#c96005803401a06f0c7566248146c037a58ebb58"
+  integrity sha512-SJhhZludOsdnhkBAn88soSBa3RWVhTRvHrNGAVTfN4WglG2nCHw4t7PwAEUR6UdtzQeJRwTiqP21oog9RFarww==
 
-"@cgps/phylocanvas-plugin-svg-export@^3.0.0-beta.12":
-  version "3.0.0-beta.12"
-  resolved "https://registry.yarnpkg.com/@cgps/phylocanvas-plugin-svg-export/-/phylocanvas-plugin-svg-export-3.0.0-beta.12.tgz#faea123424ef36706238b8917fa32ca2ef8ee68c"
-  integrity sha512-itGXmn+yIbotNEzNwzb9EFy+KOji23TIgsc0461LxOCUeI/9xQsz97E6acRmFrYVOOJFgHHsEbfKBrSEfav9Yw==
+"@cgps/phylocanvas-plugin-svg-export@^3.0.0-beta.13":
+  version "3.0.0-beta.13"
+  resolved "https://registry.yarnpkg.com/@cgps/phylocanvas-plugin-svg-export/-/phylocanvas-plugin-svg-export-3.0.0-beta.13.tgz#c8a49f52131eacba0e133a28946460ad4e53af57"
+  integrity sha512-2XOk0kolBZYU1V4/qgFVX83SUCpbfYc2YUf78/OwPfX5hP6McM4uq5jEab0i3pDbXatj5Jn/GddX895swJVFww==
 
-"@cgps/phylocanvas@^3.0.0-beta.12":
-  version "3.0.0-beta.12"
-  resolved "https://registry.yarnpkg.com/@cgps/phylocanvas/-/phylocanvas-3.0.0-beta.12.tgz#cc43cd27de21e0f3c0d6a3c0797e3f3aa672a654"
-  integrity sha512-Kp8gCDEDmvcG/22mQD4QvcBmf6WK9VcfTVBiM4aJ1szSVkD9EHJ71EQA377zGq+wNgHoACN6KrL9mq0FE+AO1Q==
+"@cgps/phylocanvas@^3.0.0-beta.13":
+  version "3.0.0-beta.13"
+  resolved "https://registry.yarnpkg.com/@cgps/phylocanvas/-/phylocanvas-3.0.0-beta.13.tgz#abf6f47b241c3eac38a47299a4412c783551f330"
+  integrity sha512-ghJQ8BmmmaI4uYP+CBI61QcWUwHqcxWcS6VWyh+URtKkaVNfPgm8vUXvvOuwspldk15u8EuJ889MnBE9h/wySw==
 
 "@csstools/convert-colors@^1.4.0":
   version "1.4.0"
@@ -2469,6 +2470,10 @@ caniuse-lite@^1.0.30000989:
   version "1.0.30000989"
   resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30000989.tgz#b9193e293ccf7e4426c5245134b8f2a56c0ac4b9"
   integrity sha512-vrMcvSuMz16YY6GSVZ0dWDTJP8jqk3iFQ/Aq5iqblPwxSVVZI+zxDyTX0VPqtQsDnfdrBDcsmhgTEOh5R8Lbpw==
+
+canvas2svg@gliffy/canvas2svg#eaab317a36a57421711a297d996bc80318185e44:
+  version "1.0.19"
+  resolved "https://codeload.github.com/gliffy/canvas2svg/tar.gz/eaab317a36a57421711a297d996bc80318185e44"
 
 caseless@~0.12.0:
   version "0.12.0"
@@ -7421,18 +7426,6 @@ rc-align@^2.4.0:
     prop-types "^15.5.8"
     rc-util "^4.0.4"
 
-rc-animate@2.5.4:
-  version "2.5.4"
-  resolved "https://registry.yarnpkg.com/rc-animate/-/rc-animate-2.5.4.tgz#3b308c42e137a2e3fb578650fdb145c2100fcc35"
-  integrity sha512-aYisNYRuOvH+r5/nxEHHUzk1celxPg4nMUOuBGHd77c6NZbZ5fcjHFgWF3/nPdRPbLaqY4Z7Q317EcLO41fOvQ==
-  dependencies:
-    babel-runtime "6.x"
-    classnames "^2.2.6"
-    css-animation "^1.3.2"
-    prop-types "15.x"
-    raf "^3.4.0"
-    react-lifecycles-compat "^3.0.4"
-
 rc-animate@2.x:
   version "2.6.0"
   resolved "https://registry.yarnpkg.com/rc-animate/-/rc-animate-2.6.0.tgz#ca8440d042781af7a1329d84f97ea94794c5ec15"
@@ -7443,6 +7436,19 @@ rc-animate@2.x:
     css-animation "^1.3.2"
     prop-types "15.x"
     raf "^3.4.0"
+    react-lifecycles-compat "^3.0.4"
+
+rc-animate@^2.10.2:
+  version "2.10.2"
+  resolved "https://registry.yarnpkg.com/rc-animate/-/rc-animate-2.10.2.tgz#217fdc76ff26cbf425a5caf87cc8a36ba4598456"
+  integrity sha512-cE/A7piAzoWFSgUD69NmmMraqCeqVBa51UErod8NS3LUEqWfppSVagHfa0qHAlwPVPiIBg3emRONyny3eiH0Dg==
+  dependencies:
+    babel-runtime "6.x"
+    classnames "^2.2.6"
+    css-animation "^1.3.2"
+    prop-types "15.x"
+    raf "^3.4.0"
+    rc-util "^4.15.3"
     react-lifecycles-compat "^3.0.4"
 
 rc-slider@^7.0.2:
@@ -7487,6 +7493,17 @@ rc-util@^4.0.4, rc-util@^4.4.0:
     babel-runtime "6.x"
     prop-types "^15.5.10"
     shallowequal "^0.2.2"
+
+rc-util@^4.15.3:
+  version "4.16.1"
+  resolved "https://registry.yarnpkg.com/rc-util/-/rc-util-4.16.1.tgz#bf9070ab219a69624c047026a8c68f71225396a2"
+  integrity sha512-nYwXV8hqOVpjpuCBckq57LM2W8HzfUGVm8xcbbHqH8SJeQk4EhLZY1mA/vJcEiz9Q1tN9ImrqengyF8FVc8ZJQ==
+  dependencies:
+    add-dom-event-listener "^1.1.0"
+    babel-runtime "6.x"
+    prop-types "^15.5.10"
+    react-lifecycles-compat "^3.0.4"
+    shallowequal "^1.1.0"
 
 rc@^1.2.7:
   version "1.2.8"
@@ -8220,7 +8237,7 @@ shallowequal@^0.2.2:
   dependencies:
     lodash.keys "^3.1.2"
 
-shallowequal@^1.0.2:
+shallowequal@^1.0.2, shallowequal@^1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/shallowequal/-/shallowequal-1.1.0.tgz#188d521de95b9087404fd4dcb68b13df0ae4e7f8"
   integrity sha512-y0m1JoUZSlPAjXVtPPW70aZWfIL/dSP7AFkRnniLCrK/8MDKog3TySTBmckD+RObVxH0v4Tox67+F14PdED2oQ==

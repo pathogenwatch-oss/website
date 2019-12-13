@@ -25,7 +25,7 @@
     "@babel/plugin-syntax-export-namespace-from": "^7.2.0",
     "@babel/preset-env": "^7.6.3",
     "@babel/preset-react": "^7.6.3",
-    "@cgps/libmicroreact": "https://gitlab.com/cgps/libmicroreact#d1dd96bb15d7112563930a4d05972f0edc11e4d5",
+    "@cgps/libmicroreact": "https://gitlab.com/cgps/libmicroreact#v2.1.1",
     "@svgr/webpack": "^4.3.2",
     "babel-loader": "^8.0.6",
     "babel-plugin-transform-class-properties": "^6.24.1",
