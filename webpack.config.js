@@ -4,6 +4,7 @@ const WebpackAssetsManifest = require('webpack-assets-manifest');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
+const DuplicatePackageCheckerPlugin = require('duplicate-package-checker-webpack-plugin');
 
 const srcFolder = path.join(__dirname, 'src');
 
@@ -69,6 +70,7 @@ const commonRules = [
 
 const commonPlugins = [
   new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
+  new DuplicatePackageCheckerPlugin(),
 ];
 
 const devConfig = {
@@ -97,9 +99,14 @@ const devConfig = {
 };
 
 const vendorModules = [
+  'babel-runtime',
   'commonmark',
+  'date-fns',
+  'fixed-data-table',
   'leaflet',
   'leaflet.markercluster',
+  'lodash',
+  'lodash.sortby',
   'papaparse',
   '@cgps/phylocanvas',
   '@cgps/phylocanvas-plugin-context-menu',

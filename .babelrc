@@ -12,7 +12,8 @@
     "react-hot-loader/babel",
     "transform-class-properties",
     "@babel/plugin-proposal-export-default-from",
-    "@babel/plugin-syntax-export-namespace-from"
+    "@babel/plugin-syntax-export-namespace-from",
+    "lodash",
+    "@babel/plugin-transform-runtime"
   ]
 }
-

@@ -23,23 +23,26 @@
     "@babel/core": "^7.6.4",
     "@babel/plugin-proposal-export-default-from": "^7.5.2",
     "@babel/plugin-syntax-export-namespace-from": "^7.2.0",
+    "@babel/plugin-transform-runtime": "^7.7.6",
     "@babel/preset-env": "^7.6.3",
     "@babel/preset-react": "^7.6.3",
     "@cgps/libmicroreact": "https://gitlab.com/cgps/libmicroreact#v2.1.1",
     "@svgr/webpack": "^4.3.2",
     "babel-loader": "^8.0.6",
+    "babel-plugin-lodash": "^3.3.4",
     "babel-plugin-transform-class-properties": "^6.24.1",
     "babel-plugin-transform-export-extensions": "^6.22.0",
     "biojs-io-newick": "^1.5.0",
     "body-parser": "^1.14.1",
     "cgps-commons": "https://gitlab.com/cgps/commons",
-    "cgps-user-accounts": "https://gitlab.com/cgps/cgps-user-accounts#v1.10.3",
+    "cgps-user-accounts": "https://gitlab.com/cgps/cgps-user-accounts#v2.1.5",
     "chart.piecelabel.js": "https://gitlab.com/cgps/chart.piecelabel.js",
     "classnames": "^2.2.5",
     "clean-webpack-plugin": "^0.1.19",
     "create-react-class": "^15.6.2",
     "css-loader": "^3.2.0",
     "date-fns": "^1.28.4",
+    "duplicate-package-checker-webpack-plugin": "^3.0.0",
     "ejs": "^2.5.1",
     "ejs-loader": "^0.3.0",
     "eslint-config-cgps": "github:cgps-dev/eslint-config-cgps#v2.1.1",
@@ -97,16 +100,10 @@
     "why-did-you-update": "^0.1.1",
     "workerize-loader": "^1.1.0"
   },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
-  }
+  "browserslist": [
+    "defaults",
+    "not IE 11",
+    "not IE_Mob 11",
+    "maintained node versions"
+  ]
 }
