@@ -9,6 +9,11 @@ import * as actions from './actions';
 
 import * as constants from './constants';
 
+import {
+  addExportCallback,
+  removeExportCallback,
+} from '@cgps/libmicroreact/utils/downloads';
+
 const FetchingMessage = () => (
   <div className="pw-cluster-status">
     <p className="wgsa-blink">Fetching cluster...</p>
@@ -65,24 +70,25 @@ const ClusterNetwork = React.createClass({
               <ClusterDescription /> }
           </p> }
         <Network
+          addExportCallback={addExportCallback}
           controlsVisible={controlsVisible}
           graph={this.props.graph}
           hasLasso={this.props.hasLasso}
           lassoActive={this.props.lassoActive}
           lassoPath={this.props.lassoPath}
-          onLassoPathChange={this.props.onLassoPathChange}
-          onLassoActiveChange={this.props.onLassoActiveChange}
           layoutDuration={Math.min(Math.max(1000, edgesCount / 5), 10000)}
           layoutSettings={constants.LAYOUT_OPTIONS}
           onControlsVisibleChange={() => this.setState({ controlsVisible: !controlsVisible })}
+          onLassoActiveChange={this.props.onLassoActiveChange}
+          onLassoPathChange={this.props.onLassoPathChange}
           onLayoutChange={this.props.stopLayout}
           onLayoutStart={this.props.startLayout}
           onNodeSelect={this.props.onNodeSelect}
           primaryControls={this.props.primaryControls}
           recomputeLayout={this.props.status === 'FETCHED_EDGES'}
+          removeExportCallback={removeExportCallback}
           settings={constants.NETWORK_SETTINGS}
           style={style}
-          theme="purple"
         />
       </div>
     );

@@ -3,16 +3,15 @@ import { connect } from 'react-redux';
 import Menu from '@cgps/libmicroreact/dropdown-menu';
 import IconButton from '@cgps/libmicroreact/icon-button';
 
-import { isMenuOpen } from './selectors';
-
-import { setMenuActive } from './actions';
-
+import Analysis from './Analysis.react';
+import Network from './Network.react';
 import Tables from './Tables.react';
 import Trees from './Trees.react';
-import Analysis from './Analysis.react';
-import { hasTrees } from '../tree/selectors/entities';
 
-const DownloadsMenu = ({ viewHasTrees }) => {
+import { hasTrees } from '../tree/selectors/entities';
+import { isClusterView } from '../selectors';
+
+const DownloadsMenu = ({ viewHasTrees, viewHasNetwork }) => {
   const [ isOpen, toggleIsOpen ] = React.useState(false);
   return (
     <Menu
@@ -36,30 +35,26 @@ const DownloadsMenu = ({ viewHasTrees }) => {
           <Trees />
         </>
       }
+      { viewHasNetwork &&
+        <>
+          <hr />
+          <Network />
+        </>
+      }
     </Menu>
   );
 };
 
 DownloadsMenu.propTypes = {
-  menuOpen: React.PropTypes.bool,
-  counts: React.PropTypes.object,
-  closeMenu: React.PropTypes.func,
+  viewHasTrees: React.PropTypes.bool,
+  viewHasNetwork: React.PropTypes.bool,
 };
 
 function mapStateToProps(state) {
   return {
     viewHasTrees: hasTrees(state),
-    menuOpen: isMenuOpen(state),
+    viewHasNetwork: isClusterView(state),
   };
 }
 
-function mapDispatchToProps(dispatch) {
-  return {
-    closeMenu: () => dispatch(setMenuActive(false)),
-  };
-}
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(DownloadsMenu);
+export default connect(mapStateToProps)(DownloadsMenu);
