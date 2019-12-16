@@ -536,7 +536,7 @@ bcrypt-pbkdf@^1.0.0:
   dependencies:
     tweetnacl "^0.14.3"
 
-bcrypt@^3.0.3:
+bcrypt@^3.0.7:
   version "3.0.7"
   resolved "https://registry.yarnpkg.com/bcrypt/-/bcrypt-3.0.7.tgz#1187d29df2e1cde44268152b13e3d4a655a7c7de"
   integrity sha512-K5UglF9VQvBMHl/1elNyyFvAfOY9Bj+rpKrCSR9sFwcW8FywAYJSRwTURNej5TaAK2TEJkcJ6r6lh1YPmspx5Q==
@@ -4054,9 +4054,9 @@ path-type@^2.0.0:
     writers-digest "github:cgps-dev/writers-digest#0aea383bd66a78eb668ef0567092852171e1385a"
     zip-stream "^1.2.0"
 
-"pathogenwatch-front-end@https://gitlab.com/cgps/pathogenwatch-front-end#399b76a17d46468424ff108d2538650000631149":
+"pathogenwatch-front-end@https://gitlab.com/cgps/pathogenwatch-front-end#6f2c1540b54840462d38ab542797d00a19ce6577":
   version "8.6.2"
-  resolved "https://gitlab.com/cgps/pathogenwatch-front-end#399b76a17d46468424ff108d2538650000631149"
+  resolved "https://gitlab.com/cgps/pathogenwatch-front-end#6f2c1540b54840462d38ab542797d00a19ce6577"
 
 patrun@1.0:
   version "1.0.0"
