@@ -431,17 +431,17 @@ async@2.6.0:
   dependencies:
     lodash "^4.14.0"
 
-async@^1.4.0:
-  version "1.5.2"
-  resolved "https://registry.yarnpkg.com/async/-/async-1.5.2.tgz#ec6a61ae56480c0c3cb241c95618e20892f9672a"
-  integrity sha1-7GphrlZIDAw8skHJVhjiCJL5Zyo=
-
-async@^2.0.1:
+async@2.6.1, async@^2.0.1:
   version "2.6.1"
   resolved "https://registry.yarnpkg.com/async/-/async-2.6.1.tgz#b245a23ca71930044ec53fa46aa00a3e87c6a610"
   integrity sha512-fNEiL2+AZt6AlAw/29Cr0UDe4sRAHCpEHh54WMz+Bb7QfNcFw4h3loofyJpLeQs4Yx7yuqu/2dLgM5hKOs6HlQ==
   dependencies:
     lodash "^4.17.10"
+
+async@^1.4.0:
+  version "1.5.2"
+  resolved "https://registry.yarnpkg.com/async/-/async-1.5.2.tgz#ec6a61ae56480c0c3cb241c95618e20892f9672a"
+  integrity sha1-7GphrlZIDAw8skHJVhjiCJL5Zyo=
 
 asynckit@^0.4.0:
   version "0.4.0"
@@ -536,7 +536,7 @@ bcrypt-pbkdf@^1.0.0:
   dependencies:
     tweetnacl "^0.14.3"
 
-bcrypt@^3.0.7:
+bcrypt@^3.0.3:
   version "3.0.7"
   resolved "https://registry.yarnpkg.com/bcrypt/-/bcrypt-3.0.7.tgz#1187d29df2e1cde44268152b13e3d4a655a7c7de"
   integrity sha512-K5UglF9VQvBMHl/1elNyyFvAfOY9Bj+rpKrCSR9sFwcW8FywAYJSRwTURNej5TaAK2TEJkcJ6r6lh1YPmspx5Q==
@@ -3595,7 +3595,7 @@ node-uuid@~1.4.7:
   resolved "https://registry.yarnpkg.com/node-uuid/-/node-uuid-1.4.8.tgz#b040eb0923968afabf8d32fb1f17f1167fdab907"
   integrity sha1-sEDrCSOWivq/jTL7HxfxFn/auQc=
 
-nodegit-promise@~4.0.0:
+nodegit-promise@^4.0.0, nodegit-promise@~4.0.0:
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/nodegit-promise/-/nodegit-promise-4.0.0.tgz#5722b184f2df7327161064a791d2e842c9167b34"
   integrity sha1-VyKxhPLfcycWEGSnkdLoQskWezQ=
@@ -3968,7 +3968,7 @@ passport@^0.4.0:
   version "0.1.5"
   resolved "https://codeload.github.com/cgps-dev/passwordless-mongostore/tar.gz/8550ec7f4d986be1f29fad4592e70595832ff912"
   dependencies:
-    bcrypt "^3.0.3"
+    bcrypt "^3.0.7"
     mongodb "^3.1.10"
     passwordless-tokenstore "0.0.10"
 
@@ -4042,20 +4042,21 @@ path-type@^2.0.0:
   dependencies:
     pify "^2.0.0"
 
-"pathogenwatch-fasta-store@https://gitlab.com/cgps/pathogenwatch-fasta-store#v4.1.1":
-  version "4.1.1"
-  resolved "https://gitlab.com/cgps/pathogenwatch-fasta-store#9fa1fd27c14cefb77aff754e89587d5bf1b99858"
+"pathogenwatch-fasta-store@https://gitlab.com/cgps/pathogenwatch-fasta-store#v4.1.2":
+  version "4.1.2"
+  resolved "https://gitlab.com/cgps/pathogenwatch-fasta-store#cf663789fa86d865c23d012d0558e7f6d54d3839"
   dependencies:
+    async "2.6.1"
     mkdirp "^0.5.1"
     pass-stream "^1.0.0"
-    promisify-node "^0.4.0"
+    promisify-node "^0.5.0"
     uuid "^3.0.1"
     writers-digest "github:cgps-dev/writers-digest#0aea383bd66a78eb668ef0567092852171e1385a"
     zip-stream "^1.2.0"
 
-"pathogenwatch-front-end@https://gitlab.com/cgps/pathogenwatch-front-end#v8.6.2":
+"pathogenwatch-front-end@https://gitlab.com/cgps/pathogenwatch-front-end#399b76a17d46468424ff108d2538650000631149":
   version "8.6.2"
-  resolved "https://gitlab.com/cgps/pathogenwatch-front-end#0bee7fbadca3402a917d679014329b7067e08b08"
+  resolved "https://gitlab.com/cgps/pathogenwatch-front-end#399b76a17d46468424ff108d2538650000631149"
 
 patrun@1.0:
   version "1.0.0"
@@ -4171,6 +4172,14 @@ promisify-node@^0.4.0:
   dependencies:
     nodegit-promise "~4.0.0"
     object-assign "^4.0.1"
+
+promisify-node@^0.5.0:
+  version "0.5.0"
+  resolved "https://registry.yarnpkg.com/promisify-node/-/promisify-node-0.5.0.tgz#b7115a9d5cd241e939c96e260acda24938d25720"
+  integrity sha512-GR2E4qgCoKFTprhULqP2OP3bl8kHo16XtnqtkHH6be7tPW1yL6rXd15nl3oV2sLTFv1+j6tqoF69VVpFtJ/j+A==
+  dependencies:
+    nodegit-promise "^4.0.0"
+    object-assign "^4.1.1"
 
 prop-types@^15.6.2:
   version "15.6.2"
