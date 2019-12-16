@@ -2,7 +2,7 @@ import { createSelector } from 'reselect';
 import parse from '@cgps/phylocanvas/utils/parse';
 import rotateSubtree from '@cgps/phylocanvas/utils/rotateSubtree';
 
-import { getTreeState, getTreeStateKey, getTitles, getVisibleLibMRTree, getLibMRTrees } from './index';
+import { getTreeStateKey, getTitles, getVisibleLibMRTree, getLibMRTrees } from './index';
 import { getNodeStyles } from './styles';
 import { getTrees, getVisibleTree } from './entities';
 import { getHighlightedIdArray } from '../../highlight/selectors';
@@ -104,11 +104,14 @@ const getCollectionPhylocanvasState = state => {
 
 const getCollectionNodes = createSelector(
   state => getCollectionPhylocanvasState(state).source,
-  state => getTrees(state)[COLLECTION].newick,
-  (source, newick) => parse(source || newick)
+  state => (getTrees(state)[COLLECTION] || {}).newick,
+  (source, newick) => {
+    if (!source && !newick) return null;
+    return parse(source || newick);
+  }
 );
 
-const getCollectionTreeOrder = createSelector(
+const getInitialTreeOrder = createSelector(
   getCollectionNodes,
   state => getCollectionPhylocanvasState(state).rotatedIds,
   (nodes, rotatedIds) => getLeafNodeOrder(nodes, rotatedIds)
@@ -121,12 +124,12 @@ const getVisibleTreeNodes = createSelector(
 
 export const getTreeOrder = createSelector(
   getTreeStateKey,
-  getCollectionTreeOrder,
+  getInitialTreeOrder,
   getVisibleTreeNodes,
   state => getVisibleLibMRTree(state).phylocanvas.rotatedIds,
   (stateKey, collectionTreeOrder, nodes, rotatedIds) => {
     if (topLevelTrees.has(stateKey)) {
-      return collectionTreeOrder;
+      return collectionTreeOrder.length ? collectionTreeOrder : null;
     }
     return getLeafNodeOrder(nodes, rotatedIds);
   }
