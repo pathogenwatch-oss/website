@@ -12,6 +12,7 @@ import { getVisibleTree } from './selectors/entities';
 import {
   getPhylocanvasState,
   getHighlightedNodeIds,
+  getFilenames,
 } from './selectors/phylocanvas';
 
 import { snapshot, revert } from '@cgps/libmicroreact/history/actions';
@@ -33,9 +34,10 @@ function mapStateToProps(state) {
   const { name, loaded, lasso, path } = getVisibleTree(state);
   return {
     name, loaded, lasso, path,
+    filenames: getFilenames(state),
     highlightedIds: getHighlightedNodeIds(state),
-    phylocanvasState: getPhylocanvasState(state),
     loading: isLoading(state),
+    phylocanvasState: getPhylocanvasState(state),
   };
 }
 
@@ -50,22 +52,12 @@ const setTreeHighlight = (stateKey, ids, merge) =>
     }
   };
 
-const addInitialSnapshot = (stateKey, image) =>
-  (dispatch, getState) => {
-    const state = getState();
-    const history = getHistory(state)[stateKey];
-    if (history && history.entries.length) {
-      return;
-    }
-    dispatch({ stateKey, ...snapshot(image) });
-  };
-
 function mapDispatchToProps(dispatch, { stateKey }) {
   return {
     onAddHistoryEntry: image => dispatch({ stateKey, ...snapshot(image) }),
     onFilterChange: (ids, path) => stateKey !== POPULATION && dispatch({ stateKey, ...setTreeFilter(ids, path, stateKey) }),
     onLassoChange: active => dispatch({ stateKey, ...setLassoActive(active) }),
-    onPhylocanvasInitialise: image => dispatch(addInitialSnapshot(stateKey, image)),
+    onPhylocanvasInitialise: image => dispatch({ stateKey, ...snapshot(image) }),
     onPhylocanvasStateChange: state => dispatch({ stateKey, ...setPhylocanvasState(state) }),
     onRedrawOriginalTree: () => dispatch({ stateKey, ...revert() }),
     setHighlightedIds: (ids, merge) => dispatch(setTreeHighlight(stateKey, ids, merge)),

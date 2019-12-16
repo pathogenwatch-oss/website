@@ -161,20 +161,6 @@ function lastSubtree(state = null, { type, payload }) {
   }
 }
 
-/* would ideally just import the type */
-const setPhylocanvasStateAction = setPhylocanvasState();
-
-function size(state = null, { type, payload }) {
-  switch (type) {
-    case setPhylocanvasStateAction.type: {
-      if (payload.size) return payload.size;
-      return state;
-    }
-    default:
-      return state;
-  }
-}
-
 function titles(state = {}, { type, payload }) {
   switch (type) {
     case FETCH_COLLECTION.SUCCESS: {
@@ -198,7 +184,6 @@ export default combineReducers({
   lastSubtree,
   loading,
   libmicroreact,
-  size,
   titles,
   visible,
 });

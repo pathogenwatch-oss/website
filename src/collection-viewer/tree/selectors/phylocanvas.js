@@ -42,7 +42,7 @@ export const getFilenamePrefix = createSelector(
   }
 );
 
-const getFilenames = createSelector(
+export const getFilenames = createSelector(
   getFilenamePrefix,
   (prefix) => ({
     image: `${prefix}.png`,
@@ -66,21 +66,14 @@ export const getPhylocanvasState = createSelector(
   getVisibleLibMRTree,
   getNodeStyles,
   getHighlightedNodeIds,
-  state => getTreeState(state).size,
-  getFilenames,
-  ({ name, newick }, { phylocanvas }, nodeStyles, highlightedIds, size, filenames) => ({
+  ({ name, newick }, { phylocanvas }, nodeStyles, highlightedIds) => ({
     ...phylocanvas,
     leafNodeStyle: name === POPULATION ? populationLeafNodeStyle : phylocanvas.leafNodeStyle,
     renderLeafLabels: name === POPULATION || phylocanvas.renderLeafLabels,
     scalebar: scaleBarProps,
     selectedIds: highlightedIds,
-    size: size || phylocanvas.size,
     source: phylocanvas.source || newick,
     styles: nodeStyles,
-    contextMenu: {
-      ...phylocanvas.contextMenu,
-      filenames,
-    },
   })
 );
 

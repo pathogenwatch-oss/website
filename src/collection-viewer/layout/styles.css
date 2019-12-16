@@ -40,3 +40,7 @@
 .libmr-SidePane-nav {
   z-index: 2;
 }
+
+.libmr-SidePane-nav {
+  margin-bottom: 128px;
+}

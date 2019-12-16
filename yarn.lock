@@ -1014,16 +1014,16 @@
     lodash "^4.17.13"
     to-fast-properties "^2.0.0"
 
-"@cgps/libmicroreact@https://gitlab.com/cgps/libmicroreact#v2.1.1":
-  version "2.1.1"
-  resolved "https://gitlab.com/cgps/libmicroreact#f902cbb42d5ffbfa4315601175bc507148259ca2"
+"@cgps/libmicroreact@https://gitlab.com/cgps/libmicroreact#v2.1.2":
+  version "2.1.2"
+  resolved "https://gitlab.com/cgps/libmicroreact#a35eaebe9f16795a0ed449bcfcf663eb94e67ffd"
   dependencies:
-    "@cgps/phylocanvas" "^3.0.0-beta.13"
-    "@cgps/phylocanvas-plugin-context-menu" "^3.0.0-beta.13"
-    "@cgps/phylocanvas-plugin-interactions" "^3.0.0-beta.13"
-    "@cgps/phylocanvas-plugin-metadata" "^3.0.0-beta.13"
-    "@cgps/phylocanvas-plugin-scalebar" "^3.0.0-beta.13"
-    "@cgps/phylocanvas-plugin-svg-export" "^3.0.0-beta.13"
+    "@cgps/phylocanvas" "^3.0.0-beta.15"
+    "@cgps/phylocanvas-plugin-context-menu" "^3.0.0-beta.16"
+    "@cgps/phylocanvas-plugin-interactions" "^3.0.0-beta.15"
+    "@cgps/phylocanvas-plugin-metadata" "^3.0.0-beta.15"
+    "@cgps/phylocanvas-plugin-scalebar" "^3.0.0-beta.15"
+    "@cgps/phylocanvas-plugin-svg-export" "^3.0.0-beta.15"
     "@material/icon-button" "^3.1.0"
     canvas2svg gliffy/canvas2svg#eaab317a36a57421711a297d996bc80318185e44
     lodash.debounce "^4.0.8"
@@ -1031,35 +1031,35 @@
     react-mdc-web "^0.17.0"
     react-relative-portal "^1.5.1"
 
-"@cgps/phylocanvas-plugin-context-menu@^3.0.0-beta.13":
-  version "3.0.0-beta.13"
-  resolved "https://registry.yarnpkg.com/@cgps/phylocanvas-plugin-context-menu/-/phylocanvas-plugin-context-menu-3.0.0-beta.13.tgz#07005a3f05691b001b976c8263592e23dce96bbb"
-  integrity sha512-cphVkEu5q2x3jIqEk39DaSiiJSBrE395omn6BWVPskJmmVf0ZWeLI9x2MAo31RnDOPlGAlFUria/sgkTDU/Mkg==
+"@cgps/phylocanvas-plugin-context-menu@^3.0.0-beta.16":
+  version "3.0.0-beta.16"
+  resolved "https://registry.yarnpkg.com/@cgps/phylocanvas-plugin-context-menu/-/phylocanvas-plugin-context-menu-3.0.0-beta.16.tgz#2a05b0de786b8a22b69cde6a12d301d2ac095036"
+  integrity sha512-mvE+7TbhKkJxQ56n4x+oq2ylXwqh2Kggqt9eoMk9U/XmyvuW2jWLP1gH6gGn+mvx9yWFWlTv4B5XyHdqQERv9g==
 
-"@cgps/phylocanvas-plugin-interactions@^3.0.0-beta.13":
-  version "3.0.0-beta.13"
-  resolved "https://registry.yarnpkg.com/@cgps/phylocanvas-plugin-interactions/-/phylocanvas-plugin-interactions-3.0.0-beta.13.tgz#52fbb4507d613eb27d0e66eb7cbd231ae649426c"
-  integrity sha512-r9LxT70gTASCxjeoTI2W3zMgd/vPrcPhKGAfy+O/pLRQdaLPb64rMc1RXpZJtq6oJhDxrcRY5+yKlBcxfQTX9Q==
+"@cgps/phylocanvas-plugin-interactions@^3.0.0-beta.15":
+  version "3.0.0-beta.15"
+  resolved "https://registry.yarnpkg.com/@cgps/phylocanvas-plugin-interactions/-/phylocanvas-plugin-interactions-3.0.0-beta.15.tgz#7c57d68443c3076e5c8ac5539df6b415acdc4e74"
+  integrity sha512-whXH1YXaImXJIIZg+sB0dfRYRS6DvU5yCA2Zk/fEgiXxEcnvWTiHfAD5mHmcFqWeeSyGtlwzCvvONioTH1WGHQ==
 
-"@cgps/phylocanvas-plugin-metadata@^3.0.0-beta.13":
-  version "3.0.0-beta.13"
-  resolved "https://registry.yarnpkg.com/@cgps/phylocanvas-plugin-metadata/-/phylocanvas-plugin-metadata-3.0.0-beta.13.tgz#c106c92109a40a7ba4706d94cade12ebd7f5730b"
-  integrity sha512-TuXN+dBLZVggXekf8ugJvFEfdiLGckUl6kKWxxj1uJsjc3xrWAmJ6Wm3jD+uzPBs33CnoWliZ1SuPF6HYi6AxQ==
+"@cgps/phylocanvas-plugin-metadata@^3.0.0-beta.15":
+  version "3.0.0-beta.15"
+  resolved "https://registry.yarnpkg.com/@cgps/phylocanvas-plugin-metadata/-/phylocanvas-plugin-metadata-3.0.0-beta.15.tgz#5d63563191589c6f1ac7cdccc938e2b0462eb6ba"
+  integrity sha512-DD3YSRJ+LpPrqsB6fl6KqJRtMWs5PzDK56eac5M3n/GAXlpA+/RoxCeS5ene2WqqwD9BShv8jnRu0daF9LX82Q==
 
-"@cgps/phylocanvas-plugin-scalebar@^3.0.0-beta.13":
-  version "3.0.0-beta.13"
-  resolved "https://registry.yarnpkg.com/@cgps/phylocanvas-plugin-scalebar/-/phylocanvas-plugin-scalebar-3.0.0-beta.13.tgz#c96005803401a06f0c7566248146c037a58ebb58"
-  integrity sha512-SJhhZludOsdnhkBAn88soSBa3RWVhTRvHrNGAVTfN4WglG2nCHw4t7PwAEUR6UdtzQeJRwTiqP21oog9RFarww==
+"@cgps/phylocanvas-plugin-scalebar@^3.0.0-beta.15":
+  version "3.0.0-beta.15"
+  resolved "https://registry.yarnpkg.com/@cgps/phylocanvas-plugin-scalebar/-/phylocanvas-plugin-scalebar-3.0.0-beta.15.tgz#564c8d9e52db0f8769eafa39691dfa6e1a1b9b0f"
+  integrity sha512-/UXnWxOkD9ALqDRDlSXhuWwo6+Z3e5+izfoCwc1BJ2s+8Kt/bhBHtXDlLgvpuioFrxQmVu81nA/L/aveR77KtA==
 
-"@cgps/phylocanvas-plugin-svg-export@^3.0.0-beta.13":
-  version "3.0.0-beta.13"
-  resolved "https://registry.yarnpkg.com/@cgps/phylocanvas-plugin-svg-export/-/phylocanvas-plugin-svg-export-3.0.0-beta.13.tgz#c8a49f52131eacba0e133a28946460ad4e53af57"
-  integrity sha512-2XOk0kolBZYU1V4/qgFVX83SUCpbfYc2YUf78/OwPfX5hP6McM4uq5jEab0i3pDbXatj5Jn/GddX895swJVFww==
+"@cgps/phylocanvas-plugin-svg-export@^3.0.0-beta.15":
+  version "3.0.0-beta.15"
+  resolved "https://registry.yarnpkg.com/@cgps/phylocanvas-plugin-svg-export/-/phylocanvas-plugin-svg-export-3.0.0-beta.15.tgz#641b12ea0e0f37c60ea397836364ff81c784c24f"
+  integrity sha512-yHfGJH2aW9oGnzbYlzlk7dxLJdmE8pwYiL9DqcmLpvIjeyiImHd08gZDCemPEzTSH0pgv1PDecOskxtiKA7mfQ==
 
-"@cgps/phylocanvas@^3.0.0-beta.13":
-  version "3.0.0-beta.13"
-  resolved "https://registry.yarnpkg.com/@cgps/phylocanvas/-/phylocanvas-3.0.0-beta.13.tgz#abf6f47b241c3eac38a47299a4412c783551f330"
-  integrity sha512-ghJQ8BmmmaI4uYP+CBI61QcWUwHqcxWcS6VWyh+URtKkaVNfPgm8vUXvvOuwspldk15u8EuJ889MnBE9h/wySw==
+"@cgps/phylocanvas@^3.0.0-beta.15":
+  version "3.0.0-beta.15"
+  resolved "https://registry.yarnpkg.com/@cgps/phylocanvas/-/phylocanvas-3.0.0-beta.15.tgz#f45fa15da884f38fe9f2b1ba4f0f23254eefa2f5"
+  integrity sha512-r7a6aUKVFTzRBvSGuqLMyDmM1zly6nfH5R6fkcYJRvirPeeyosAPqn5jHvECh9HXOOWNT7iLfjylnx6mZOdwWg==
 
 "@csstools/convert-colors@^1.4.0":
   version "1.4.0"
@@ -2191,7 +2191,7 @@ bcrypt-pbkdf@^1.0.0:
   dependencies:
     tweetnacl "^0.14.3"
 
-bcrypt@^3.0.7:
+bcrypt@^3.0.3:
   version "3.0.7"
   resolved "https://registry.yarnpkg.com/bcrypt/-/bcrypt-3.0.7.tgz#1187d29df2e1cde44268152b13e3d4a655a7c7de"
   integrity sha512-K5UglF9VQvBMHl/1elNyyFvAfOY9Bj+rpKrCSR9sFwcW8FywAYJSRwTURNej5TaAK2TEJkcJ6r6lh1YPmspx5Q==
@@ -6567,7 +6567,7 @@ passport@^0.4.0:
   version "0.1.5"
   resolved "https://codeload.github.com/cgps-dev/passwordless-mongostore/tar.gz/8550ec7f4d986be1f29fad4592e70595832ff912"
   dependencies:
-    bcrypt "^3.0.3"
+    bcrypt "^3.0.7"
     mongodb "^3.1.10"
     passwordless-tokenstore "0.0.10"
 
