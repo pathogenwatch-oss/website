@@ -2,7 +2,6 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import FixedTable from '../../fixed-table';
-import TableSwitcher from '../table/Switcher.react';
 import Fade from '~/components/fade';
 
 import { getCollection } from '../selectors';
@@ -61,7 +60,6 @@ const Table = React.createClass({
         onWheel={preventDefault}
         onTouchMove={preventDefault}
       >
-        <TableSwitcher />
         <Fade>
           <FixedTable
             key={this.props.tableName}

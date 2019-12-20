@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import classnames from 'classnames';
+
+import ControlsButton from '@cgps/libmicroreact/controls-button';
 
 import { isAMRTable, getTableState } from './selectors';
 import { toggleMulti } from './actions';
@@ -20,17 +21,15 @@ function mapDispatchToProps(dispatch) {
 
 const ButtonGroup = ({ visible, active, toggle }) => {
   if (!visible) return null;
-
   return (
-    <div className="wgsa-button-group mdl-shadow--2dp">
-      <button
-        className={classnames('wgsa-button-group__item', { active })}
-        onClick={() => toggle()}
-        title="Toggle multiple resistance"
-      >
-        Multi
-      </button>
-    </div>
+    <ControlsButton
+      active={active}
+      className="pw-multi-button"
+      onClick={() => toggle()}
+      title="Toggle multiple resistance"
+    >
+      MDR
+    </ControlsButton>
   );
 };
 

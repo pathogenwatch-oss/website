@@ -5,18 +5,21 @@ import SplitPane from 'react-split-pane/src';
 import { connect } from 'react-redux';
 
 import AutoSizer from '@cgps/libmicroreact/auto-sizer';
-import SidePane from '@cgps/libmicroreact/side-pane';
 import History from '@cgps/libmicroreact/history';
-import Tree from '../tree';
-import TreeProgress from '../tree/Progress.react';
 import Map from '../map';
+import SidePane from '@cgps/libmicroreact/side-pane';
 import Summary from '../summary';
 import Table from '../table';
+import TableSwitcher from '../table/Switcher.react';
+import Timeline from '../timeline';
+import Tree from '../tree';
+import TreeProgress from '../tree/Progress.react';
 
 import ClusterViewNetwork from '~/cluster-viewer/Network.react';
 
 import { getTreeStateKey } from '../tree/selectors';
 import { getCollection, getHistory } from '../selectors';
+import { getVisibleTableName } from '../table/selectors';
 
 import { travel } from '@cgps/libmicroreact/history/actions';
 
@@ -28,6 +31,15 @@ const ConnectedHistory = connect(
 const TreeWithStateKey = connect(
   state => ({ stateKey: getTreeStateKey(state) })
 )(Tree);
+
+const SouthSection = connect(
+  state => ({ visible: getVisibleTableName(state) })
+)(({ visible, ...props }) => (
+  <div style={{ position: 'relative' }}>
+    <TableSwitcher />
+    {visible === 'timeline' ? <Timeline {...props} /> : <Table {...props} />}
+  </div>
+));
 
 const Layout = React.createClass({
   getInitialState() {
@@ -87,12 +99,12 @@ const Layout = React.createClass({
     const splitPanes = (
       <SplitPane
         split="horizontal"
-        defaultSize="68%"
+        defaultSize="62.5%"
         resizerClassName="wgsa-resizer"
         onChange={horizontalSize => this.setState({ horizontalSize })}
       >
         {this.renderNorthSection()}
-        <AutoSizer component={Table} />
+        <AutoSizer component={SouthSection} />
       </SplitPane>
     );
 

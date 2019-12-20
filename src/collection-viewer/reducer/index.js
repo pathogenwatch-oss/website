@@ -8,12 +8,13 @@ import downloads from '../downloads/reducer';
 import filter from '../filter/reducer';
 import highlight from '../highlight/reducer';
 import history from './history';
-import summary from '../summary/reducer';
-import tree from '../tree/reducer';
-import table from '../table/reducer';
+import metadata from '../private-metadata/reducer';
 import offline from '../offline/reducer';
 import search from '../search/reducer';
-import metadata from '../private-metadata/reducer';
+import summary from '../summary/reducer';
+import table from '../table/reducer';
+import timeline from '@cgps/libmicroreact/timeline/reducer';
+import tree from '../tree/reducer';
 
 import clusterView from '~/cluster-viewer/reducer';
 
@@ -35,6 +36,7 @@ const reducer = combineReducers({
   search,
   summary,
   table,
+  timeline,
   tree,
 });
 

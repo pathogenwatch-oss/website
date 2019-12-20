@@ -6,6 +6,15 @@
   transform: translateY(-16px);
 }
 
+.wgsa-table-switcher > * + * {
+  margin-left: 4px;
+}
+
+.pw-multi-button {
+  font-size: 12px;
+  font-weight: 500;
+}
+
 .wgsa-button-group {
   margin: 0 4px;
   background: #fff;

@@ -1,7 +1,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import classnames from 'classnames';
 
+import ControlsButton from '@cgps/libmicroreact/controls-button';
+import MenuButton from '@cgps/libmicroreact/menu-button';
+import DropdownMenu from '@cgps/libmicroreact/dropdown-menu';
 import Multi from './Multi.react';
 
 import { getVisibleTableName, hasTyping } from './selectors';
@@ -11,75 +13,74 @@ import { setTable } from './actions';
 
 import { tableKeys, tableDisplayNames } from '../constants';
 
-function mapStateToProps(state, { table }) {
-  return {
-    displayName: tableDisplayNames[table],
-    active: getVisibleTableName(state) === table,
-  };
-}
-
-function mapDispatchToProps(dispatch, { table }) {
-  return {
-    showTable: () => dispatch(setTable(table)),
-  };
-}
-
-const Button = connect(mapStateToProps, mapDispatchToProps)(
-  ({ displayName, active, showTable }) => (
-    <button
-      className={classnames('wgsa-button-group__item', { active })}
-      onClick={showTable}
-    >
-      {displayName}
-    </button>
+const TimelineButton = connect(
+  state => ({
+    active: getVisibleTableName(state) === 'timeline',
+  }),
+  dispatch => ({
+    showTimeline: () => dispatch(setTable('timeline')),
+  }),
+)(
+  ({ active, showTimeline }) => (
+    <ControlsButton active={active} onClick={showTimeline} title="Timeline">
+      <i className="material-icons">access_time</i>
+    </ControlsButton>
   )
 );
 
-const ButtonGroup = ({ children }) => (
-  <div className="wgsa-button-group mdl-shadow--2dp">
-    {children}
-  </div>
+const TableMenu = connect(
+  state => {
+    const hasKleborate = hasKleborateAMR(state);
+    return {
+      visibleTable: getVisibleTableName(state),
+      metadata: hasMetadata(state),
+      typing: hasTyping(state),
+      kleborate: hasKleborate,
+      amr: hasAMR(state) && !hasKleborate,
+    };
+  },
+  dispatch => ({
+    showTable: table => dispatch(setTable(table)),
+  })
+)(
+  ({ visibleTable, showTable, metadata, typing, kleborate, amr }) => (
+    <DropdownMenu
+      direction="up"
+      button={
+        <MenuButton
+          active={visibleTable !== 'timeline'}
+          label={tableDisplayNames[visibleTable] || 'Tables'}
+          direction="up"
+        />
+      }
+    >
+      {metadata && <button onClick={() => showTable(tableKeys.metadata)}>Metadata</button>}
+      {typing && <button onClick={() => showTable(tableKeys.typing)}>Typing</button>}
+      <button onClick={() => showTable(tableKeys.stats)}>Stats</button>
+      {(amr || kleborate) && <hr />}
+      {amr &&
+        <>
+          <button onClick={() => showTable(tableKeys.antibiotics)}>Antibiotics</button>
+          <button onClick={() => showTable(tableKeys.snps)}>SNPs</button>
+          <button onClick={() => showTable(tableKeys.genes)}>Genes</button>
+        </>
+      }
+      {kleborate && <button onClick={() => showTable(tableKeys.kleborateAMR)}>Kleborate AMR</button>}
+    </DropdownMenu>
+  )
 );
 
-const TableSwitcher = props => (
+const TableSwitcher = () => (
   <div
     className="wgsa-table-switcher"
     onClick={event => event.stopPropagation()}
   >
-    <ButtonGroup>
-      <i className="material-icons" title="Data">list</i>
-      { props.hasMetadata &&
-        <Button table={tableKeys.metadata} /> }
-      { props.hasTyping &&
-        <Button table={tableKeys.typing} /> }
-      <Button table={tableKeys.stats} />
-    </ButtonGroup>
-    { props.hasAMR &&
-      <ButtonGroup>
-        <i className="material-icons" title="AMR">local_pharmacy</i>
-        <Button table={tableKeys.antibiotics} />
-        <Button table={tableKeys.snps} />
-        <Button table={tableKeys.genes} />
-      </ButtonGroup> }
-    { props.hasKleborate &&
-      <ButtonGroup>
-        <i className="material-icons" title="AMR">local_pharmacy</i>
-        <Button table={tableKeys.kleborateAMR} />
-      </ButtonGroup> }
+    <TimelineButton />
+    <TableMenu />
     <Multi />
   </div>
 );
 
 TableSwitcher.displayName = 'TableSwitcher';
 
-function mapSwitcherStateToProps(state) {
-  const hasKleborate = hasKleborateAMR(state);
-  return {
-    hasMetadata: hasMetadata(state),
-    hasTyping: hasTyping(state),
-    hasKleborate,
-    hasAMR: hasAMR(state) && !hasKleborate,
-  };
-}
-
-export default connect(mapSwitcherStateToProps)(TableSwitcher);
+export default TableSwitcher;

@@ -14,6 +14,7 @@ export const tableKeys = {
   snps: 'snps',
   genes: 'genes',
   kleborateAMR: 'kleborateAMR',
+  timeline: 'timeline',
 };
 
 export const tableDisplayNames = {

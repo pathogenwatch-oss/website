@@ -145,18 +145,12 @@ export const isAMRTable = createSelector(
 
 export const getFixedGroupWidth = createSelector(
   hasAMR,
-  hasMetadata,
-  hasTyping,
   isAMRTable,
   hasKleborateAMR,
-  (amr, metadata, typing, amrVisible, kleborate) => {
+  (amr, amrVisible, kleborate) => {
     if (!amr && !kleborate) return null;
-    let width = kleborate ? 333 : 408;
-    if (amrVisible) width += 56; // account for multi button
-    if (!metadata) width -= 68;
-    if (!typing) width -= 53;
+    let width = kleborate ? 152 : 104;
+    if (amrVisible) width += 48; // account for multi button
     return width;
   }
 );
-
-
