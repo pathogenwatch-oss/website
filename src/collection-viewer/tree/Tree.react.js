@@ -6,7 +6,6 @@ import Fade from '~/components/fade';
 import Spinner from '~/components/Spinner.react';
 import Header from './Header.react';
 
-import { getHistory } from '../selectors';
 import { isLoading } from './selectors';
 import { getVisibleTree } from './selectors/entities';
 import {

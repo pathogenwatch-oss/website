@@ -13,6 +13,10 @@ import * as actions from '@cgps/libmicroreact/timeline/actions';
 import { setHighlight } from '../highlight/actions';
 
 import { createChartData } from '@cgps/libmicroreact/timeline/utils';
+import {
+  addExportCallback,
+  removeExportCallback,
+} from '@cgps/libmicroreact/utils/downloads';
 
 const getActivePoints = createSelector(
   selectors.getPoints,
@@ -63,5 +67,11 @@ function mapDispatchToProps(dispatch) {
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(
-  props => (props.hasTimeline ? <PureTimeline {...props} /> : <div />)
+  props => (props.hasTimeline ?
+    <PureTimeline
+      addExportCallback={addExportCallback}
+      removeExportCallback={removeExportCallback}
+      {...props}
+    /> : null
+  )
 );

@@ -6,12 +6,14 @@ import IconButton from '@cgps/libmicroreact/icon-button';
 import Analysis from './Analysis.react';
 import Network from './Network.react';
 import Tables from './Tables.react';
+import Timeline from './Timeline.react';
 import Trees from './Trees.react';
 
 import { hasTrees } from '../tree/selectors/entities';
 import { isClusterView } from '../selectors';
+import { hasTimeline } from '../timeline/selectors';
 
-const DownloadsMenu = ({ viewHasTrees, viewHasNetwork }) => {
+const DownloadsMenu = ({ viewHasTrees, viewHasNetwork, viewHasTimeline }) => {
   const [ isOpen, toggleIsOpen ] = React.useState(false);
   return (
     <Menu
@@ -29,16 +31,17 @@ const DownloadsMenu = ({ viewHasTrees, viewHasNetwork }) => {
       <Analysis />
       <hr />
       <Tables />
+      { (viewHasTrees || viewHasNetwork) && <hr /> }
       { viewHasTrees &&
-        <>
-          <hr />
-          <Trees />
-        </>
+          <>
+            { viewHasTimeline && <Timeline /> }
+            <Trees />
+          </>
       }
       { viewHasNetwork &&
         <>
-          <hr />
           <Network />
+          { viewHasTimeline && <Timeline /> }
         </>
       }
     </Menu>
@@ -48,12 +51,14 @@ const DownloadsMenu = ({ viewHasTrees, viewHasNetwork }) => {
 DownloadsMenu.propTypes = {
   viewHasTrees: React.PropTypes.bool,
   viewHasNetwork: React.PropTypes.bool,
+  viewHasTimeline: React.PropTypes.bool,
 };
 
 function mapStateToProps(state) {
   return {
     viewHasTrees: hasTrees(state),
     viewHasNetwork: isClusterView(state),
+    viewHasTimeline: hasTimeline(state),
   };
 }
 
