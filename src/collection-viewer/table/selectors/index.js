@@ -7,6 +7,7 @@ import {
   hasAMR,
   hasKleborateAMR,
 } from '../../genomes/selectors';
+import { hasTimeline } from '../../timeline/selectors';
 
 import {
   getColumnNames,
@@ -17,6 +18,7 @@ import {
 
 import { nameColumnProps } from '../constants';
 import { tableKeys } from '../../constants';
+
 export const getTableState = state => getViewer(state).table;
 export const getAMRTableName = state => getTableState(state).activeAMR;
 export const getTableEntities = state => getTableState(state).entities;
@@ -88,9 +90,11 @@ const getInitialTable = createSelector(
 export const getVisibleTableName = createSelector(
   state => getTableState(state).visible,
   getInitialTable,
+  state => !hasTimeline(state),
   state => !hasMetadata(state),
-  (visible, initial, noMetadata) => {
+  (visible, initial, noTimeline, noMetadata) => {
     if (visible === null) return initial;
+    if (visible === tableKeys.timeline && noTimeline) return initial;
     if (visible === tableKeys.metadata && noMetadata) return initial;
     return visible;
   }
