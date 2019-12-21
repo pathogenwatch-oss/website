@@ -3,6 +3,7 @@ import { createSelector } from 'reselect';
 import { getNetworkFilteredIds } from '~/cluster-viewer/selectors';
 import { getUnfilteredGenomeIds } from '../genomes/selectors';
 import { getTreeFilteredIds, getTreeUnfilteredIds } from '../tree/selectors';
+import { getTimelineFilteredIds } from '../timeline/selectors';
 
 import { filterKeys } from '../filter/constants';
 
@@ -25,7 +26,8 @@ export const getNonSearchFilterIntersections = createSelector(
   getFilterState,
   getNetworkFilteredIds,
   getTreeFilteredIds,
-  (filterState, networkIds = [], treeIds = []) => {
+  getTimelineFilteredIds,
+  (filterState, networkIds = [], treeIds = [], timelineIds = []) => {
     const intersections = [];
 
     if (filterState[filterKeys.MAP].active) {
@@ -36,6 +38,9 @@ export const getNonSearchFilterIntersections = createSelector(
     }
     if (treeIds && treeIds.length) {
       intersections.push(new Set(treeIds));
+    }
+    if (timelineIds && timelineIds.length) {
+      intersections.push(new Set(timelineIds));
     }
     if (filterState[filterKeys.VISIBILITY].active) {
       intersections.push(filterState[filterKeys.VISIBILITY].ids);

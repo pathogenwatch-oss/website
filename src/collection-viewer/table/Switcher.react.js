@@ -12,19 +12,23 @@ import { hasMetadata, hasAMR, hasKleborateAMR } from '../genomes/selectors';
 import { setTable } from './actions';
 
 import { tableKeys, tableDisplayNames } from '../constants';
+import { hasTimeline } from '../timeline/selectors';
 
 const TimelineButton = connect(
   state => ({
     active: getVisibleTableName(state) === 'timeline',
+    timeline: hasTimeline(state),
   }),
   dispatch => ({
     showTimeline: () => dispatch(setTable('timeline')),
   }),
 )(
-  ({ active, showTimeline }) => (
-    <ControlsButton active={active} onClick={showTimeline} title="Timeline">
-      <i className="material-icons">access_time</i>
-    </ControlsButton>
+  ({ active, showTimeline, timeline }) => (
+    timeline ?
+      <ControlsButton active={active} onClick={showTimeline} title="Timeline">
+        <i className="material-icons">access_time</i>
+      </ControlsButton> :
+      null
   )
 );
 

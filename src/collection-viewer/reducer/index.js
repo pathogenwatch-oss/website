@@ -13,7 +13,7 @@ import offline from '../offline/reducer';
 import search from '../search/reducer';
 import summary from '../summary/reducer';
 import table from '../table/reducer';
-import timeline from '@cgps/libmicroreact/timeline/reducer';
+import timeline from '../timeline/reducer';
 import tree from '../tree/reducer';
 
 import clusterView from '~/cluster-viewer/reducer';

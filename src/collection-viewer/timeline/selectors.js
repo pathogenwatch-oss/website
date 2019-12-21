@@ -22,12 +22,8 @@ export const getPoints = createSelector(
       if (!genome.year) continue;
       const m = moment();
       m.set('year', genome.year);
-      if (genome.month) {
-        m.set('month', genome.month);
-      }
-      if (genome.day) {
-        m.set('day', genome.day);
-      }
+      m.set('month', genome.month || 1);
+      m.set('date', genome.day || 1);
       points.push({
         date: m.toDate(),
         id: genome.id,
@@ -38,11 +34,6 @@ export const getPoints = createSelector(
 );
 
 export const hasTimeline = state => getPoints(state).length > 0;
-
-export const getChartData = createSelector(
-  getPoints,
-  utils.createChartData
-);
 
 export const getHistogram = createSelector(
   getPoints,
@@ -60,4 +51,20 @@ export const getMomentBounds = createSelector(
   getBounds,
   getHistogram,
   utils.convertBoundsToMoments
+);
+
+export const getTimelineFilteredIds = createSelector(
+  state => getTimeline(state).bounds,
+  getPoints,
+  getMomentBounds,
+  (bounds, points, { min, max }) => {
+    if (bounds === null) return null;
+    const ids = [];
+    for (const { date, id } of points) {
+      if (min.isSameOrBefore(date) && max.isSameOrAfter(date)) {
+        ids.push(id);
+      }
+    }
+    return ids;
+  }
 );

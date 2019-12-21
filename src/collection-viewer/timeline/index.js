@@ -1,21 +1,44 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { createSelector } from 'reselect';
 
 import { PureTimeline } from '@cgps/libmicroreact/timeline';
 
 import * as selectors from './selectors';
 import { getHighlightedIds } from '../highlight/selectors';
 import { getGenomeStyles } from '../selectors/styles';
+import { getFilteredGenomeIds } from '../filter/selectors';
 
 import * as actions from '@cgps/libmicroreact/timeline/actions';
 import { setHighlight } from '../highlight/actions';
+
+import { createChartData } from '@cgps/libmicroreact/timeline/utils';
+
+const getActivePoints = createSelector(
+  selectors.getPoints,
+  getFilteredGenomeIds,
+  (points, ids) => {
+    const activePoints = [];
+    for (const point of points) {
+      if (ids.includes(point.id)) {
+        activePoints.push(point);
+      }
+    }
+    return activePoints;
+  }
+);
+
+const getChartData = createSelector(
+  getActivePoints,
+  createChartData
+);
 
 function mapStateToProps(state) {
   const tl = selectors.getTimeline(state);
   return {
     hasTimeline: selectors.hasTimeline(state),
     bounds: selectors.getBounds(state),
-    chartData: selectors.getChartData(state),
+    chartData: getChartData(state),
     getTooltip: selectors.getTooltipGetter(state),
     highlightedIds: getHighlightedIds(state),
     histogram: selectors.getHistogram(state),
