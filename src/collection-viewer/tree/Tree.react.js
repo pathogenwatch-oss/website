@@ -64,9 +64,17 @@ function mapDispatchToProps(dispatch, { stateKey }) {
   };
 }
 
-const Component = (props) => {
-  const [ controls, toggleControls ] = React.useState(false);
+const TreeExtras = ({ controlsVisible = false, loading }) => (
+  <Fade in>
+    {!controlsVisible && <Header key="header" />}
+    { loading ?
+      <div className="wgsa-loading-overlay" key="loading">
+        <Spinner />
+      </div> : null }
+  </Fade>
+);
 
+const Component = (props) => {
   if (props.width === 0 || props.height === 0) {
     return null;
   }
@@ -75,17 +83,9 @@ const Component = (props) => {
     <Tree
       {...props}
       addExportCallback={addExportCallback}
-      controlsVisible={controls}
-      onControlsVisibleChange={toggleControls}
       removeExportCallback={removeExportCallback}
     >
-      <Fade in>
-        {!controls && <Header key="header" />}
-        { props.loading ?
-          <div className="wgsa-loading-overlay" key="loading">
-            <Spinner />
-          </div> : null }
-      </Fade>
+      <TreeExtras loading={props.loading} />
     </Tree>
   );
 };
