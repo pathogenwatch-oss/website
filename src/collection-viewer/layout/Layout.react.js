@@ -90,7 +90,7 @@ const NorthSection = ({ isClusterView, treeStateKey, horizontalSize, createdAt }
 
 const defaultHorizontalSize = '62.5%';
 
-const Layout = ({ isClusterView, treeStateKey }) => {
+const Layout = ({ isClusterView, treeStateKey, createdAt }) => {
   const [ horizontalSize, setHorizontalSize ] = React.useState(null);
 
   const navStyle = React.useMemo(() => ({
@@ -117,6 +117,7 @@ const Layout = ({ isClusterView, treeStateKey }) => {
         onChange={setHorizontalSize}
       >
         <NorthSection
+          createdAt={createdAt}
           isClusterView={isClusterView}
           treeStateKey={treeStateKey}
           horizontalSize={horizontalSize}
