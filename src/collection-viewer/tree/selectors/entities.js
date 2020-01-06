@@ -1,6 +1,6 @@
 import { createSelector } from 'reselect';
 
-import { getTreeState } from './index';
+import { getTreeState, getTitles } from './index';
 
 import { topLevelTrees } from '../constants';
 
@@ -36,5 +36,19 @@ export const areTreesComplete = createSelector(
       }
     }
     return true;
+  }
+);
+
+export const getSubtreeMenuItems = createSelector(
+  getTitles,
+  getTrees,
+  (titles, entities) => {
+    const menuItems = [];
+    for (const key of Object.keys(titles).sort()) {
+      if (key in entities && entities[key].status === 'READY') {
+        menuItems.push([ key, titles[key] ]);
+      }
+    }
+    return menuItems;
   }
 );

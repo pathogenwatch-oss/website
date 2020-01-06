@@ -3,7 +3,7 @@ import treeReducer from '@cgps/libmicroreact/tree/reducer';
 
 import { getViewer } from '../../selectors';
 
-import { topLevelTrees } from '../constants';
+import { topLevelTrees, titles } from '../constants';
 
 export const getTreeState = state => getViewer(state).tree;
 
@@ -17,14 +17,10 @@ export const isTopLevelTree = createSelector(
 
 export const getTitles = state => getTreeState(state).titles;
 
-export const getLastSubtree = createSelector(
-  getTreeState,
+export const getVisibleTreeLabel = createSelector(
+  getTreeStateKey,
   getTitles,
-  ({ lastSubtree }, titles) => (
-    lastSubtree ?
-      { name: lastSubtree, title: titles[lastSubtree] } :
-      null
-  )
+  (key, subtrees) => subtrees[key] || titles[key] || '',
 );
 
 export const getLibMRTrees = createSelector(

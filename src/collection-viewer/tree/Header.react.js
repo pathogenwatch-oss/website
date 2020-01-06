@@ -1,16 +1,54 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import classnames from 'classnames';
+
+import MenuButton from '@cgps/libmicroreact/menu-button';
+import DropdownMenu from '@cgps/libmicroreact/dropdown-menu';
 
 import { getSingleTree } from '../selectors';
-import { getLastSubtree, getTreeStateKey } from './selectors';
+import { getVisibleTreeLabel } from './selectors';
+import { getSubtreeMenuItems } from './selectors/entities';
+
 import * as actions from './thunks';
 
 import { POPULATION, COLLECTION } from '~/app/stateKeys/tree';
 
-function mapStateToButtonProps(state) {
+const Header = ({ singleTree, displayTree, subtrees, visibleTree }) => {
+  if (singleTree === COLLECTION) return null;
+  return (
+    <header className="wgsa-tree-header">
+      <DropdownMenu
+        button={
+          <MenuButton>
+            {visibleTree}
+          </MenuButton>
+        }
+      >
+        {!singleTree &&
+          <button onClick={() => displayTree(COLLECTION)}>
+            Collection
+          </button>
+        }
+        {(!singleTree || singleTree === POPULATION) &&
+          <button onClick={() => displayTree(POPULATION)}>
+            Population
+          </button>
+        }
+        <hr />
+        {subtrees.map(([ key, label ]) =>
+          (<button onClick={() => displayTree(key)}>
+            {label}
+          </button>)
+        )}
+      </DropdownMenu>
+    </header>
+  );
+};
+
+function mapStateToProps(state) {
   return {
-    visibleTreeName: getTreeStateKey(state),
+    singleTree: getSingleTree(state),
+    visibleTree: getVisibleTreeLabel(state),
+    subtrees: getSubtreeMenuItems(state),
   };
 }
 
@@ -20,42 +58,4 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-const Button = connect(mapStateToButtonProps, mapDispatchToProps)(
-  ({ visibleTreeName, displayTree, treeName, children }) => (
-    <button
-      className={classnames(
-        'wgsa-button-group__item',
-        { active: visibleTreeName === treeName }
-      )}
-      onClick={() => displayTree(treeName)}
-    >
-      {children}
-    </button>
-  )
-);
-
-const Header = ({ singleTree, lastSubtree }) => (
-  <header className="wgsa-tree-header">
-    <div className="wgsa-button-group mdl-shadow--2dp">
-      <i className="material-icons" title="View">visibility</i>
-      { (!singleTree || singleTree === COLLECTION) &&
-        <Button treeName={COLLECTION}>Collection</Button>
-      }
-      { (!singleTree || singleTree === POPULATION) &&
-        <Button treeName={POPULATION}>Population</Button>
-      }
-      { lastSubtree &&
-        <Button treeName={lastSubtree.name}>{lastSubtree.title}</Button>
-      }
-    </div>
-  </header>
-);
-
-function mapStateToProps(state) {
-  return {
-    singleTree: getSingleTree(state),
-    lastSubtree: getLastSubtree(state),
-  };
-}
-
-export default connect(mapStateToProps)(Header);
+export default connect(mapStateToProps, mapDispatchToProps)(Header);

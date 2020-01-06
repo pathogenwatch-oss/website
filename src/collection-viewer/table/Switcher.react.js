@@ -55,12 +55,6 @@ const TableMenu = connect(
         </MenuButton>
       }
     >
-      {timeline &&
-        <>
-          <button onClick={_showTimeline}>Timeline</button>
-          <hr />
-        </>
-      }
       {metadata && <button onClick={() => showTable(tableKeys.metadata)}>Metadata</button>}
       {typing && <button onClick={() => showTable(tableKeys.typing)}>Typing</button>}
       <button onClick={() => showTable(tableKeys.stats)}>Stats</button>
@@ -73,6 +67,12 @@ const TableMenu = connect(
         </>
       }
       {kleborate && <button onClick={() => showTable(tableKeys.kleborateAMR)}>Kleborate AMR</button>}
+      {timeline &&
+        <>
+          <hr />
+          <button onClick={_showTimeline}>Timeline</button>
+        </>
+      }
     </DropdownMenu>
   )
 );
