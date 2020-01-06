@@ -3,12 +3,13 @@ import { connect } from 'react-redux';
 
 import ControlsButton from '@cgps/libmicroreact/controls-button';
 
-import { isAMRTable, getTableState } from './selectors';
+import { isAMRTableVisible } from '../layout/selectors';
+import { getTableState } from './selectors';
 import { toggleMulti } from './actions';
 
 function mapStateToProps(state) {
   return {
-    visible: isAMRTable(state),
+    visible: isAMRTableVisible(state),
     active: getTableState(state).multi,
   };
 }

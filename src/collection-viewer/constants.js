@@ -18,11 +18,12 @@ export const tableKeys = {
 };
 
 export const tableDisplayNames = {
-  [tableKeys.metadata]: 'Metadata',
-  [tableKeys.typing]: 'Typing',
-  [tableKeys.stats]: 'Stats',
   [tableKeys.antibiotics]: 'Antibiotics',
-  [tableKeys.snps]: 'SNPs',
   [tableKeys.genes]: 'Genes',
   [tableKeys.kleborateAMR]: 'Kleborate AMR',
+  [tableKeys.metadata]: 'Metadata',
+  [tableKeys.stats]: 'Stats',
+  [tableKeys.snps]: 'SNPs',
+  [tableKeys.timeline]: 'Timeline',
+  [tableKeys.typing]: 'Typing',
 };

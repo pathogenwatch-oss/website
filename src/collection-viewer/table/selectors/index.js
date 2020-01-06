@@ -5,9 +5,7 @@ import {
   getGenomeList,
   hasMetadata,
   hasAMR,
-  hasKleborateAMR,
 } from '../../genomes/selectors';
-import { hasTimeline } from '../../timeline/selectors';
 
 import {
   getColumnNames,
@@ -90,11 +88,9 @@ const getInitialTable = createSelector(
 export const getVisibleTableName = createSelector(
   state => getTableState(state).visible,
   getInitialTable,
-  state => !hasTimeline(state),
   state => !hasMetadata(state),
-  (visible, initial, noTimeline, noMetadata) => {
+  (visible, initial, noMetadata) => {
     if (visible === null) return initial;
-    if (visible === tableKeys.timeline && noTimeline) return initial;
     if (visible === tableKeys.metadata && noMetadata) return initial;
     return visible;
   }
@@ -150,10 +146,9 @@ export const isAMRTable = createSelector(
 export const getFixedGroupWidth = createSelector(
   hasAMR,
   isAMRTable,
-  hasKleborateAMR,
-  (amr, amrVisible, kleborate) => {
-    if (!amr && !kleborate) return null;
-    let width = kleborate ? 152 : 104;
+  (amr, amrVisible) => {
+    if (!amr) return null;
+    let width = 88;
     if (amrVisible) width += 48; // account for multi button
     return width;
   }

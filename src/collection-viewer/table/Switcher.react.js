@@ -1,63 +1,66 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import ControlsButton from '@cgps/libmicroreact/controls-button';
+// import ControlsButton from '@cgps/libmicroreact/controls-button';
 import MenuButton from '@cgps/libmicroreact/menu-button';
 import DropdownMenu from '@cgps/libmicroreact/dropdown-menu';
 import Multi from './Multi.react';
 
-import { getVisibleTableName, hasTyping } from './selectors';
+import { hasTyping } from './selectors';
 import { hasMetadata, hasAMR, hasKleborateAMR } from '../genomes/selectors';
-
-import { setTable } from './actions';
-
-import { tableKeys, tableDisplayNames } from '../constants';
 import { hasTimeline } from '../timeline/selectors';
 
-const TimelineButton = connect(
-  state => ({
-    active: getVisibleTableName(state) === 'timeline',
-    timeline: hasTimeline(state),
-  }),
-  dispatch => ({
-    showTimeline: () => dispatch(setTable('timeline')),
-  }),
-)(
-  ({ active, showTimeline, timeline }) => (
-    timeline ?
-      <ControlsButton active={active} onClick={showTimeline} title="Timeline">
-        <i className="material-icons">access_time</i>
-      </ControlsButton> :
-      null
-  )
-);
+import { setTable } from './actions';
+import { showTimeline } from '../timeline/actions';
+
+import { tableKeys, tableDisplayNames } from '../constants';
+import { getVisibleSouthView } from '../layout/selectors';
+
+const icons = {
+  [tableKeys.metadata]: 'list',
+  [tableKeys.typing]: 'list',
+  [tableKeys.stats]: 'list',
+  [tableKeys.antibiotics]: 'local_pharmacy',
+  [tableKeys.snps]: 'local_pharmacy',
+  [tableKeys.genes]: 'local_pharmacy',
+  [tableKeys.timeline]: 'access_time',
+};
 
 const TableMenu = connect(
   state => {
     const hasKleborate = hasKleborateAMR(state);
     return {
-      visibleTable: getVisibleTableName(state),
-      metadata: hasMetadata(state),
-      typing: hasTyping(state),
-      kleborate: hasKleborate,
       amr: hasAMR(state) && !hasKleborate,
+      kleborate: hasKleborate,
+      metadata: hasMetadata(state),
+      timeline: hasTimeline(state),
+      typing: hasTyping(state),
+      visibleView: getVisibleSouthView(state),
     };
   },
   dispatch => ({
     showTable: table => dispatch(setTable(table)),
+    _showTimeline: visible => dispatch(showTimeline(visible)),
   })
 )(
-  ({ visibleTable, showTable, metadata, typing, kleborate, amr }) => (
+  ({ visibleView, showTable, _showTimeline, metadata, timeline, typing, kleborate, amr }) => (
     <DropdownMenu
       direction="up"
       button={
         <MenuButton
-          active={visibleTable !== 'timeline'}
-          label={tableDisplayNames[visibleTable] || 'Tables'}
           direction="up"
-        />
+        >
+          <i className="material-icons">{icons[visibleView]}</i>
+          {tableDisplayNames[visibleView]}
+        </MenuButton>
       }
     >
+      {timeline &&
+        <>
+          <button onClick={_showTimeline}>Timeline</button>
+          <hr />
+        </>
+      }
       {metadata && <button onClick={() => showTable(tableKeys.metadata)}>Metadata</button>}
       {typing && <button onClick={() => showTable(tableKeys.typing)}>Typing</button>}
       <button onClick={() => showTable(tableKeys.stats)}>Stats</button>
@@ -79,7 +82,6 @@ const TableSwitcher = () => (
     className="wgsa-table-switcher"
     onClick={event => event.stopPropagation()}
   >
-    <TimelineButton />
     <TableMenu />
     <Multi />
   </div>

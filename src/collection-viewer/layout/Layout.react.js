@@ -19,7 +19,7 @@ import ClusterViewNetwork from '~/cluster-viewer/Network.react';
 
 import { getTreeStateKey } from '../tree/selectors';
 import { getCollection, getHistory } from '../selectors';
-import { getVisibleTableName } from '../table/selectors';
+import { getVisibleSouthView } from './selectors';
 
 import { travel } from '@cgps/libmicroreact/history/actions';
 
@@ -33,7 +33,7 @@ const TreeWithStateKey = connect(
 )(Tree);
 
 const SouthSection = connect(
-  state => ({ visible: getVisibleTableName(state) })
+  state => ({ visible: getVisibleSouthView(state) })
 )(({ visible, ...props }) => (
   <div style={{ position: 'relative' }}>
     <TableSwitcher />
@@ -41,90 +41,91 @@ const SouthSection = connect(
   </div>
 ));
 
-const Layout = React.createClass({
-  getInitialState() {
-    return {
-      horizontalSize: null,
-      verticalSize: null,
-    };
-  },
-
-  renderNorthSection() {
-    if (this.props.isClusterView) {
-      return (
-        <SplitPane
-          split="vertical"
-          defaultSize="50%"
-          className="wgsa-no-overflow-pane"
-          resizerClassName="wgsa-resizer"
-          onChange={verticalSize => this.setState({ verticalSize })}
-        >
-          <ClusterViewNetwork
-            width={this.state.verticalSize}
-            height={this.state.horizontalSize}
-          />
-          <Map>
-            <Summary />
-          </Map>
-        </SplitPane>
-      );
-    }
-
-    if (this.props.treeStateKey) {
-      return (
-        <SplitPane
-          split="vertical"
-          defaultSize="50%"
-          className="wgsa-no-overflow-pane"
-          resizerClassName="wgsa-resizer"
-          onChange={verticalSize => this.setState({ verticalSize })}
-        >
-          <AutoSizer component={TreeWithStateKey} />
-          <Map>
-            <Summary />
-          </Map>
-        </SplitPane>
-      );
-    }
-
+const NorthSection = ({ isClusterView, treeStateKey, horizontalSize, createdAt }) => {
+  const [ verticalSize, setVerticalSize ] = React.useState(null);
+  if (isClusterView) {
     return (
-      <Map>
-        <Summary />
-        <TreeProgress date={this.props.createdAt} />
-      </Map>
-    );
-  },
-
-  render() {
-    const splitPanes = (
       <SplitPane
-        split="horizontal"
-        defaultSize="62.5%"
+        split="vertical"
+        defaultSize="50%"
+        className="wgsa-no-overflow-pane"
         resizerClassName="wgsa-resizer"
-        onChange={horizontalSize => this.setState({ horizontalSize })}
+        onChange={setVerticalSize}
       >
-        {this.renderNorthSection()}
-        <AutoSizer component={SouthSection} />
+        <ClusterViewNetwork
+          width={verticalSize}
+          height={horizontalSize}
+        />
+        <Map>
+          <Summary />
+        </Map>
       </SplitPane>
     );
+  }
 
-    if (this.props.isClusterView) return splitPanes;
+  if (treeStateKey) {
+    return (
+      <SplitPane
+        split="vertical"
+        defaultSize="50%"
+        className="wgsa-no-overflow-pane"
+        resizerClassName="wgsa-resizer"
+        onChange={setVerticalSize}
+      >
+        <AutoSizer component={TreeWithStateKey} />
+        <Map>
+          <Summary />
+        </Map>
+      </SplitPane>
+    );
+  }
 
-    const panes = [
+  return (
+    <Map>
+      <Summary />
+      <TreeProgress date={createdAt} />
+    </Map>
+  );
+};
+
+const defaultHorizontalSize = '62.5%';
+
+const Layout = ({ isClusterView, treeStateKey }) => {
+  const [ horizontalSize, setHorizontalSize ] = React.useState(null);
+
+  const navStyle = React.useMemo(() => ({
+    height: horizontalSize || defaultHorizontalSize,
+  }), [ horizontalSize ]);
+
+  const panes = React.useMemo(() => {
+    if (isClusterView) return [];
+    return [
       {
         title: 'History',
         icon: <i className="material-icons">history</i>,
-        component: () => <ConnectedHistory stateKey={this.props.treeStateKey} />,
+        component: () => <ConnectedHistory stateKey={treeStateKey} />,
       },
     ];
+  }, [ isClusterView, treeStateKey ]);
 
-    return (
-      <SidePane panes={panes}>
-        {splitPanes}
-      </SidePane>
-    );
-  },
-});
+  return (
+    <SidePane panes={panes} navStyle={navStyle}>
+      <SplitPane
+        split="horizontal"
+        defaultSize={defaultHorizontalSize}
+        resizerClassName="wgsa-resizer"
+        onChange={setHorizontalSize}
+      >
+        <NorthSection
+          isClusterView={isClusterView}
+          treeStateKey={treeStateKey}
+          horizontalSize={horizontalSize}
+        />
+        <AutoSizer component={SouthSection} />
+      </SplitPane>
+    </SidePane>
+  );
+};
 
 function mapStateToProps(state) {
   const collection = getCollection(state);

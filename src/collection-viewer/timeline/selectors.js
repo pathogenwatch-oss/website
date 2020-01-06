@@ -7,7 +7,8 @@ import { getGenomes, getGenomeList } from '../genomes/selectors';
 
 import * as utils from '@cgps/libmicroreact/timeline/utils';
 
-export const getTimeline = state => getViewer(state).timeline;
+export const getTimeline = state => getViewer(state).timeline.libmicroreact;
+export const isTimelineVisible = state => getViewer(state).timeline.visible;
 
 export const getTooltipGetter = createSelector(
   getGenomes,
