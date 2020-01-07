@@ -107,12 +107,12 @@ const prodConfig = {
       cacheGroups: {
         vendor: {
           test: module =>
-            typeof module.userRequest === 'string' && !(
-              module.userRequest.startsWith(`${__dirname}/src`) ||
-              module.userRequest.startsWith(`${__dirname}/universal`) ||
-              module.userRequest.includes('cgps')
+            typeof module.resource === 'string' && !(
+              module.resource.startsWith(`${__dirname}/src`) ||
+              module.resource.startsWith(`${__dirname}/universal`) ||
+              module.resource.includes('cgps')
             ),
-          // test: module => !appRegex.test(module.rawRequest),
+          // test: module => { console.log(module.userRequest); },
           chunks: 'initial',
           name: 'vendor',
           priority: 10,
