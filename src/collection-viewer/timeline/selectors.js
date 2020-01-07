@@ -3,16 +3,21 @@ import moment from 'moment';
 import sortBy from 'lodash.sortby';
 
 import { getViewer } from '../selectors';
-import { getGenomes, getGenomeList } from '../genomes/selectors';
+import { getGenomeList } from '../genomes/selectors';
+import { getActiveDataTable } from '../table/selectors';
+import { getGenomeStyles } from '../selectors/styles';
 
+import { getColumnLabel } from '../table/utils';
 import * as utils from '@cgps/libmicroreact/timeline/utils';
 
 export const getTimeline = state => getViewer(state).timeline.libmicroreact;
 export const isTimelineVisible = state => getViewer(state).timeline.visible;
 
 export const getTooltipGetter = createSelector(
-  getGenomes,
-  genomes => ({ id }) => genomes[id].name
+  getActiveDataTable,
+  getGenomeStyles,
+  (table, styles) =>
+    ({ id }) => `${getColumnLabel(table.activeColumn)}: ${styles[id].label}`
 );
 
 export const getPoints = createSelector(
