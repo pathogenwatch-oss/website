@@ -1,11 +1,9 @@
-/* global Chart */
-
 import React, { Component } from 'react';
+import Chart from 'chart.js';
 
 const cursorStyle = { cursor: 'pointer' };
 
 class SimpleBarChart extends Component {
-
   state = {
     hovering: false,
   }

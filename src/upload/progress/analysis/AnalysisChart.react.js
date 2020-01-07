@@ -1,5 +1,3 @@
-/* global Chart */
-
 import './styles.css';
 
 import React from 'react';
@@ -8,6 +6,7 @@ import { Link } from 'react-router-dom';
 import classnames from 'classnames';
 import 'chart.piecelabel.js';
 import { AutoSizer } from 'react-virtualized';
+import Chart from 'chart.js';
 
 import ChartResizer from '~/components/chart-resizer';
 

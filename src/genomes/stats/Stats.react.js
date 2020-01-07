@@ -1,9 +1,8 @@
-/* global Chart */
-
 import React from 'react';
 import { connect } from 'react-redux';
 import classnames from 'classnames';
 import { AutoSizer } from 'react-virtualized';
+import Chart from 'chart.js';
 
 import ChartResizer from '../../components/chart-resizer';
 
@@ -103,10 +102,10 @@ export const StatsView = React.createClass({
           callbacks: {
             title: (points, { datasets }) =>
               points.map(({ index, datasetIndex }) =>
-              datasets[datasetIndex].data[index].label
-            ).join(', '),
+                datasets[datasetIndex].data[index].label
+              ).join(', '),
             label: ({ index, datasetIndex }, { datasets }) =>
-            datasets[datasetIndex].data[index].y,
+              datasets[datasetIndex].data[index].y,
           },
         },
       },
@@ -137,7 +136,7 @@ export const StatsView = React.createClass({
       <div className="wgsa-genome-stats">
         <AutoSizer>
           {({ height, width }) =>
-            <div style={{ height, width, position: 'relative' }}>
+            (<div style={{ height, width, position: 'relative' }}>
               <nav className="wgsa-button-group">
                 <i title="Metric" className="material-icons">timeline</i>
                 {charts.map(props =>
@@ -168,7 +167,7 @@ export const StatsView = React.createClass({
                   </dd>
                 </dl>
               </div>
-            </div>
+            </div>)
           }
         </AutoSizer>
       </div>

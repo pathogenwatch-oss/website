@@ -10,7 +10,8 @@
   margin-left: 4px;
 }
 
-.pw-multi-button {
+/* specificity hacking */
+.libmr-ControlsButton.pw-multi-button {
   font-size: 12px;
   font-weight: 500;
 }
