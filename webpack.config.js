@@ -109,6 +109,7 @@ const prodConfig = {
           test: module =>
             typeof module.userRequest === 'string' && !(
               module.userRequest.startsWith(`${__dirname}/src`) ||
+              module.userRequest.startsWith(`${__dirname}/universal`) ||
               module.userRequest.includes('cgps')
             ),
           // test: module => !appRegex.test(module.rawRequest),
@@ -134,7 +135,7 @@ const prodConfig = {
       publicPath: true,
     }),
     new CleanWebpackPlugin([ 'public/app', 'assets.json' ]),
-    new ExtractTextPlugin('styles.[md5:contenthash:hex:20].css'),
+    new ExtractTextPlugin('[name].[md5:contenthash:hex:20].css'),
     new OptimizeCssAssetsPlugin({
       cssProcessor: require('cssnano'),
       cssProcessorPluginOptions: {
