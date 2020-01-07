@@ -98,26 +98,6 @@ const devConfig = {
   },
 };
 
-const vendorModules = [
-  'babel-runtime',
-  'commonmark',
-  'date-fns',
-  'fixed-data-table',
-  'leaflet',
-  'leaflet.markercluster',
-  'lodash',
-  'lodash.sortby',
-  'papaparse',
-  '@cgps/phylocanvas',
-  '@cgps/phylocanvas-plugin-context-menu',
-  '@cgps/phylocanvas-plugin-interactions',
-  '@cgps/phylocanvas-plugin-metadata',
-  '@cgps/phylocanvas-plugin-scalebar',
-  '@cgps/phylocanvas-plugin-svg-export',
-  'react',
-  'react-dom',
-];
-
 const prodConfig = {
   mode: 'production',
   entry: './src',
@@ -126,8 +106,12 @@ const prodConfig = {
     splitChunks: {
       cacheGroups: {
         vendor: {
-          // test: /node_modules/,
-          test: module => vendorModules.includes(module.rawRequest),
+          test: module =>
+            typeof module.userRequest === 'string' && !(
+              module.userRequest.startsWith(`${__dirname}/src`) ||
+              module.userRequest.includes('cgps')
+            ),
+          // test: module => !appRegex.test(module.rawRequest),
           chunks: 'initial',
           name: 'vendor',
           priority: 10,

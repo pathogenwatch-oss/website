@@ -6,8 +6,9 @@ module.exports = function () {
   const {
     ['runtime.js']: runtime,
     ['vendor.js']: vendor,
+    ['vendor.css']: vendorStyles,
     ['main.js']: main,
-    ['main.css']: styles,
+    ['main.css']: mainStyles,
   } = assets;
 
   // script order is important
@@ -15,7 +16,8 @@ module.exports = function () {
   scripts.push(vendor);
   scripts.push(main);
 
-  stylesheets.push(styles);
+  stylesheets.push(vendorStyles);
+  stylesheets.push(mainStyles);
 
   return { scripts, stylesheets };
 };
