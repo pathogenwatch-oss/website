@@ -101,6 +101,7 @@ const devConfig = {
 const prodConfig = {
   mode: 'production',
   entry: './src',
+  recordsPath: path.join(__dirname, 'records.json'),
   optimization: {
     runtimeChunk: 'single',
     splitChunks: {
@@ -123,7 +124,7 @@ const prodConfig = {
   },
   output: {
     path: path.join(__dirname, 'public', 'app'),
-    filename: '[name].[chunkhash].js',
+    filename: '[name].[contenthash].js',
     publicPath: '/app/',
     globalObject: 'this',
   },
