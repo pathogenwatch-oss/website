@@ -26,12 +26,8 @@ export const getPoints = createSelector(
     const points = [];
     for (const genome of genomes) {
       if (!genome.year) continue;
-      const m = moment();
-      m.set('year', genome.year);
-      m.set('month', genome.month || 1);
-      m.set('date', genome.day || 1);
       points.push({
-        date: m.toDate(),
+        date: new Date(`${genome.year}-${genome.month || 1}-${genome.day || 1}`),
         id: genome.id,
       });
     }
