@@ -7,7 +7,7 @@ echo Creating new $LEVEL release...
 
 yarn build
 
-git add public views monitor.json assets.json
+git add public views monitor.json assets.json records.json
 git commit -m "Build" --allow-empty
 
 npm version $LEVEL # `yarn version` works differently
