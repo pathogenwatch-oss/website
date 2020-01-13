@@ -35,7 +35,7 @@
     "biojs-io-newick": "^1.5.0",
     "body-parser": "^1.14.1",
     "cgps-commons": "https://gitlab.com/cgps/commons",
-    "cgps-user-accounts": "https://gitlab.com/cgps/cgps-user-accounts#v2.1.5",
+    "cgps-user-accounts": "https://gitlab.com/cgps/cgps-user-accounts#v2.1.6",
     "chart.piecelabel.js": "https://gitlab.com/cgps/chart.piecelabel.js",
     "classnames": "^2.2.5",
     "clean-webpack-plugin": "^0.1.19",
