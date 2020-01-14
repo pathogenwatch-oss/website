@@ -19,8 +19,9 @@
   line-height: 1.5;
 }
 
-.wgsa-profile-counter {
-  padding-bottom: 40px;
+/* needs specificity hack at build time */
+.wgsa-hub-stats-section.wgsa-profile-counter {
+  padding-bottom: 32px;
 }
 
 .wgsa-profile-counter:hover,
