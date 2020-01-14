@@ -1,5 +1,4 @@
 import { combineReducers } from 'redux';
-import { setPhylocanvasState } from '@cgps/libmicroreact/tree/actions';
 
 import libmicroreact from './libmicroreact';
 
@@ -164,13 +163,11 @@ function lastSubtree(state = null, { type, payload }) {
 function titles(state = {}, { type, payload }) {
   switch (type) {
     case FETCH_COLLECTION.SUCCESS: {
-      const { organism = {}, subtrees } = payload.result;
+      const { organism } = payload.result;
+      if (!organism || !organism.references) return state;
       const nextState = {};
-      for (const subtree of subtrees) {
-        const reference = organism.references.find(_ => _.uuid === subtree.name);
-        if (reference) {
-          nextState[subtree.name] = reference.name;
-        }
+      for (const reference of organism.references) {
+        nextState[reference.uuid] = reference.name;
       }
       return nextState;
     }
