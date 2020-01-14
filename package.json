@@ -1,6 +1,6 @@
 {
   "name": "pathogenwatch-front-end",
-  "version": "8.7.0",
+  "version": "8.7.1",
   "description": "Web client for Pathogenwatch",
   "main": "index.js",
   "scripts": {
@@ -35,7 +35,7 @@
     "biojs-io-newick": "^1.5.0",
     "body-parser": "^1.14.1",
     "cgps-commons": "https://gitlab.com/cgps/commons",
-    "cgps-user-accounts": "https://gitlab.com/cgps/cgps-user-accounts#v2.1.6",
+    "cgps-user-accounts": "https://gitlab.com/cgps/cgps-user-accounts#v2.1.7",
     "chart.piecelabel.js": "https://gitlab.com/cgps/chart.piecelabel.js",
     "classnames": "^2.2.5",
     "clean-webpack-plugin": "^0.1.19",

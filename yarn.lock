@@ -2321,9 +2321,9 @@ caseless@~0.12.0:
   dependencies:
     eslint-config-cgps "github:cgps-dev/eslint-config-cgps#v2.0.0"
 
-"cgps-user-accounts@https://gitlab.com/cgps/cgps-user-accounts#v2.1.6":
-  version "2.1.6"
-  resolved "https://gitlab.com/cgps/cgps-user-accounts#2403415f08dec2ef2fa61ce450d157f00857e546"
+"cgps-user-accounts@https://gitlab.com/cgps/cgps-user-accounts#v2.1.7":
+  version "2.1.7"
+  resolved "https://gitlab.com/cgps/cgps-user-accounts#c18b44a677051545fce1107ee2daaa9754bd00e2"
   dependencies:
     emailjs "^1.0.8"
     https-proxy-agent "^2.2.1"
