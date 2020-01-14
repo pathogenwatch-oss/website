@@ -1,7 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-// import ControlsButton from '@cgps/libmicroreact/controls-button';
 import MenuButton from '@cgps/libmicroreact/menu-button';
 import DropdownMenu from '@cgps/libmicroreact/dropdown-menu';
 import Multi from './Multi.react';
@@ -23,6 +22,7 @@ const icons = {
   [tableKeys.antibiotics]: 'local_pharmacy',
   [tableKeys.snps]: 'local_pharmacy',
   [tableKeys.genes]: 'local_pharmacy',
+  [tableKeys.kleborateAMR]: 'local_pharmacy',
   [tableKeys.timeline]: 'access_time',
 };
 
