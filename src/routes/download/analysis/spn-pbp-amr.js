@@ -6,12 +6,19 @@ const transformer = function (doc) {
   const record = {
     'Genome ID': doc._id.toString(),
     'Genome Name': doc.name,
+    'Version': doc.analysis.spn_pbp_amr.__v,
+    'PBP1a': doc.analysis.spn_pbp_amr.pbp1a,
+    'PBP2b': doc.analysis.spn_pbp_amr.pbp2b,
+    'PBP2x': doc.analysis.spn_pbp_amr.pbp2x,
   };
 
-  Object.keys(doc.analysis.spn_pbp_amr).forEach(
-    prop =>
-      (record[prop.replace('__v', 'Version').replace(/_/g, ' ')] = doc.analysis.kleborate[prop])
-  );
+  Object.keys(doc.analysis.spn_pbp_amr)
+    .filter(prop => !prop.match(/^pbp/))
+    .filter(prop => prop !== '__v')
+    .sort()
+    .forEach(prop =>
+      (record[prop.replace(/_/g, ' ')] = doc.analysis.spn_pbp_amr[prop])
+    );
   return record;
 };
 
@@ -25,7 +32,7 @@ module.exports = (req, res) => {
   res.setHeader('Content-Type', 'text/csv');
 
   const query = Object.assign(
-    { _id: { $in: ids.split(',') }, 'analysis.spnPbpAme': { $exists: true } },
+    { _id: { $in: ids.split(',') }, 'analysis.spn_pbp_amr': { $exists: true } },
     Genome.getPrefilterCondition({ user })
   );
   const projection = {

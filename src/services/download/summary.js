@@ -16,6 +16,7 @@ module.exports = function ({ user, ids }) {
     'poppunk',
     'serotype',
     'speciator',
+    'spn_pbp_amr'
   ];
   const $in = ids.map(id => new ObjectId(id));
   return Promise.all([
