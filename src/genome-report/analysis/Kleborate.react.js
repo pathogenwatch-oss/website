@@ -2,17 +2,6 @@ import React from 'react';
 
 import ExternalLink from '../ExternalLink.react';
 
-// const kleborateTypingFields1 = [
-//   'species',
-//   'virulence_score',
-//   'resistance_score',
-//   'K_locus',
-//   'K_locus_confidence',
-//   'O_locus',
-//   'O_locus_confidence',
-//   'wzi',
-// ];
-
 export default ({ genome }) => {
   const { kleborate } = genome.analysis;
   const species = kleborate.species !== genome.analysis.speciator.speciesName;
