@@ -25,7 +25,7 @@ router.post('/paarsnp', require('./paarsnp'));
 router.post('/paarsnp-snps-genes', require('./paarsnp-snps-genes'));
 router.post('/poppunk', require('./poppunk'));
 router.post('/serotype', require('./serotype'));
-router.post('/spn-pbp-amr', require('./spn-pbp-amr'));
+router.post('/spn_pbp_amr', require('./spn-pbp-amr'));
 router.post('/speciator', require('./speciator'));
 
 module.exports = router;
