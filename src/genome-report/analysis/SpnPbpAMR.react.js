@@ -29,6 +29,13 @@ const antimicrobials = {
   pen: { name: 'Penicillin', type: 'Beta-lactams' },
 };
 
+function formatPhenotype(phenotype) {
+  return phenotype
+    .replace(/R/g, 'Resistant')
+    .replace(/I/g, 'Intermediate')
+    .replace(/S/g, 'Sensitive');
+}
+
 export default ({ result }) => (
   <React.Fragment>
     <p className="pw-genome-report-section-header">
@@ -38,31 +45,13 @@ export default ({ result }) => (
         <strong>PBP Analysis</strong> - Li et al, 2016
       </a>
     </p>
-    <div className="pw-genome-report-column">
-      <table className="pw-mlst-profile" cellSpacing="0">
-        <thead>
-          <tr>
-            <th>pbp1A</th>
-            <th>pbp2B</th>
-            <th>pbp2X</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>{result.pbp1a}</td>
-            <td>{result.pbp2b}</td>
-            <td>{result.pbp2x}</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
     <table cellSpacing="0" className="wgsa-genome-report-amr wide bordered">
       <caption>Predicted resistance profile</caption>
       <thead>
         <tr>
           <th>Agent</th>
-          <th>MIC</th>
-          <th>Phenotype (non/meningitis)</th>
+          <th>Predicted MIC</th>
+          <th>Inferred phenotype (non/meningitis)</th>
         </tr>
       </thead>
       <tbody>
@@ -70,9 +59,7 @@ export default ({ result }) => (
           <tr
             key={antimicrobials[agentKey].name}
             className={classnames({
-              'pw-genome-report-amr-present': result[agentKey] !== 'NF'
-                || result[`${agentKey}Meningitis`] !== 'NF'
-                || result[`${agentKey}NonMeningitis`] !== 'NF',
+              'pw-genome-report-amr-present': true,
               'pw-genome-report-amr-resistant': result[agentKey] === 'R'
                 || result[`${agentKey}Meningitis`] === 'R'
                 || result[`${agentKey}NonMeningitis`] === 'R',
@@ -83,9 +70,9 @@ export default ({ result }) => (
               {result[`${agentKey}Mic`]}
             </td>
             <td className="wgsa-genome-report-amr-state">
-              {result.hasOwnProperty(agentKey) ?
+              {formatPhenotype(result.hasOwnProperty(agentKey) ?
                 result[agentKey] :
-                `(${result[`${agentKey}NonMeningitis`]} / ${result[`${agentKey}Meningitis`]})`
+                `${result[`${agentKey}NonMeningitis`]} / ${result[`${agentKey}Meningitis`]}`)
               }
             </td>
           </tr>
