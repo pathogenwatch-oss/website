@@ -21,26 +21,26 @@ export default ({ genome }) => {
           <dt>K locus</dt>
           <dd>{kleborate.K_locus}</dd>
           <ExternalLink to={`/genomes/all?genusId=570&klocus=${kleborate.K_locus}`}>
-            View all {kleborate.K_locus}
+            View all {kleborate.typing.K_locus}
           </ExternalLink>
         </div>
         <div className="pw-genome-report-metadata">
           <dt>Confidence</dt>
-          <dd>{kleborate.K_locus_confidence}</dd>
+          <dd>{kleborate.typing.K_locus_confidence}</dd>
         </div>
         <div className="pw-genome-report-metadata">
           <dt><em>wzi</em></dt>
-          <dd>{kleborate.wzi}</dd>
+          <dd>{kleborate.typing.wzi}</dd>
         </div>
       </dl>
       <dl className="grid">
         <div className="pw-genome-report-metadata">
           <dt>O locus</dt>
-          <dd>{kleborate.O_locus}</dd>
+          <dd>{kleborate.typing.O_locus}</dd>
         </div>
         <div className="pw-genome-report-metadata">
           <dt>Confidence</dt>
-          <dd>{kleborate.O_locus_confidence}</dd>
+          <dd>{kleborate.typing.O_locus_confidence}</dd>
         </div>
       </dl>
       {species &&

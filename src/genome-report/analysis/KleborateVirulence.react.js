@@ -9,6 +9,17 @@ const scores = {
   5: 'yersiniabactin, colibactin and aerobactin and/or salmochelin',
 };
 
+const virulenceFields = [
+  'Yersiniabactin',
+  'YbST',
+  'Colibactin',
+  'CbST',
+  'Aerobactin',
+  'AbST',
+  'Salmochelin',
+  'SmST',
+];
+
 const Value = ({ className, children }) => (
   <td className={className}>
     {children.replace('0', '-')}
@@ -34,7 +45,7 @@ export default ({ result }) => (
       <dl className="pw-genome-report-unsized">
         <div>
           <dt>Hypermucoidy (<em>rmpA</em> / <em>rmpA2</em>)</dt>
-          <dd>{result.rmpA} / {result.rmpA2}</dd>
+          <dd>{result.virulence.rmpA} / {result.virulence.rmpA2}</dd>
         </div>
       </dl>
     </div>
@@ -42,26 +53,16 @@ export default ({ result }) => (
       <table className="wide bordered" cellSpacing="0">
         <thead>
           <tr>
-            <th>Yersiniabactin</th>
-            <th>YbST</th>
-            <th>Colibactin</th>
-            <th>CbST</th>
-            <th>Aerobactin</th>
-            <th>AbST</th>
-            <th>Salmochelin</th>
-            <th>SmST</th>
+            {virulenceFields.map((field) => (
+              <th>{field}</th>
+            ))}
           </tr>
         </thead>
         <tbody>
           <tr>
-            <Value>{result.Yersiniabactin}</Value>
-            <Value>{result.YbST}</Value>
-            <Value>{result.Colibactin}</Value>
-            <Value>{result.CbST}</Value>
-            <Value>{result.Aerobactin}</Value>
-            <Value>{result.AbST}</Value>
-            <Value>{result.Salmochelin}</Value>
-            <Value>{result.SmST}</Value>
+            {virulenceFields.map((field) => (
+              <Value>{result.virulence[field]}</Value>
+            ))}
           </tr>
         </tbody>
       </table>
