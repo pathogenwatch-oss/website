@@ -8,7 +8,7 @@ const { query = { 'tree.versions': { $exists: false } } } = argv.opts;
 
 async function run() {
   const collections = await Collection.find(
-    query,
+    JSON.parse(query),
     { token: 1, organismId: 1, tree: 1, subtrees: 1 },
     { lean: true }
   );
