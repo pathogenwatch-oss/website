@@ -50,7 +50,7 @@ export default ({ result, genome }) => {
           <tr>
             <th>Agent</th>
             <th>Predicted phenotype</th>
-            <th>SNPs/genes</th>
+            <th>Variants/genes</th>
           </tr>
         </thead>
         <tbody>

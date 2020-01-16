@@ -192,14 +192,14 @@ export const systemDataColumns = {
     label: 'K LOCUS (wzi)',
     valueGetter({ analysis }) {
       if (!analysis.kleborate) return null;
-      return `${analysis.kleborate.K_locus} (${analysis.kleborate.wzi})`;
+      return `${analysis.kleborate.typing.K_locus} (${analysis.kleborate.typing.wzi})`;
     },
   },
   __O_locus: {
     columnKey: '__O_locus',
     valueGetter({ analysis }) {
       if (!analysis.kleborate) return null;
-      return analysis.kleborate.O_locus;
+      return analysis.kleborate.typing.O_locus;
     },
   },
   __Aerobactin: {
@@ -209,7 +209,7 @@ export const systemDataColumns = {
     valueGetter({ analysis }) {
       if (!analysis.kleborate) return null;
       if (analysis.kleborate.Aerobactin === '-') return null;
-      return `${analysis.kleborate.Aerobactin} (${analysis.kleborate.AbST})`;
+      return `${analysis.kleborate.virulence.Aerobactin} (${analysis.kleborate.virulence.AbST})`;
     },
   },
   __Colibactin: {
@@ -219,7 +219,7 @@ export const systemDataColumns = {
     valueGetter({ analysis }) {
       if (!analysis.kleborate) return null;
       if (analysis.kleborate.Colibactin === '-') return null;
-      return `${analysis.kleborate.Colibactin} (${analysis.kleborate.CbST})`;
+      return `${analysis.kleborate.virulence.Colibactin} (${analysis.kleborate.virulence.CbST})`;
     },
   },
   __Salmochelin: {
@@ -229,7 +229,7 @@ export const systemDataColumns = {
     valueGetter({ analysis }) {
       if (!analysis.kleborate) return null;
       if (analysis.kleborate.Salmochelin === '-') return null;
-      return `${analysis.kleborate.Salmochelin} (${analysis.kleborate.SmST})`;
+      return `${analysis.kleborate.virulence.Salmochelin} (${analysis.kleborate.virulence.SmST})`;
     },
   },
   __Yersiniabactin: {
@@ -239,7 +239,7 @@ export const systemDataColumns = {
     valueGetter({ analysis }) {
       if (!analysis.kleborate) return null;
       if (analysis.kleborate.Yersiniabactin === '-') return null;
-      return `${analysis.kleborate.Yersiniabactin} (${analysis.kleborate.YbST})`;
+      return `${analysis.kleborate.virulence.Yersiniabactin} (${analysis.kleborate.virulence.YbST})`;
     },
   },
   __rmpA: {
@@ -248,7 +248,7 @@ export const systemDataColumns = {
     valueGetter({ analysis }) {
       if (!analysis.kleborate) return null;
       if (analysis.kleborate.rmpA === '-') return null;
-      return analysis.kleborate.rmpA;
+      return analysis.kleborate.virulence.rmpA;
     },
   },
   __rmpA2: {
@@ -257,7 +257,7 @@ export const systemDataColumns = {
     valueGetter({ analysis }) {
       if (!analysis.kleborate) return null;
       if (analysis.kleborate.rmpA2 === '-') return null;
-      return analysis.kleborate.rmpA2;
+      return analysis.kleborate.virulence.rmpA2;
     },
   },
   '__ng-mast': {
