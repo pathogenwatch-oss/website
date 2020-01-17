@@ -793,9 +793,9 @@
     lodash "^4.17.13"
     to-fast-properties "^2.0.0"
 
-"@cgps/libmicroreact@https://gitlab.com/cgps/libmicroreact#v2.2.1":
-  version "2.2.1"
-  resolved "https://gitlab.com/cgps/libmicroreact#59059b27504f6876733ee4ecbf7a491bf64fdbf3"
+"@cgps/libmicroreact@https://gitlab.com/cgps/libmicroreact#v2.2.2":
+  version "2.2.2"
+  resolved "https://gitlab.com/cgps/libmicroreact#3a4746e3d87a63a4d8a7feebb81868f67ed0f805"
   dependencies:
     "@cgps/phylocanvas" "^3.0.0-beta.15"
     "@cgps/phylocanvas-plugin-context-menu" "^3.0.0-beta.16"
