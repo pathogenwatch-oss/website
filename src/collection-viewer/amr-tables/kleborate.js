@@ -5,7 +5,7 @@ import { SET_COLOUR_COLUMNS } from '../table/actions';
 import { onHeaderClick } from './thunks';
 
 import * as amr from '../amr-utils';
-import { measureText } from '../table/columnWidth';
+import { measureHeadingText } from '../table/columnWidth';
 import { systemGroup, spacerGroup } from './utils';
 import Organism from '~/organisms';
 
@@ -40,7 +40,7 @@ function buildColumns(genomes) {
         // this.hidden = data.every(({ analysis }) =>
         //   !analysis.paarsnp || notPresent(analysis.paarsnp[profileKey], key)
         // );
-        this.width = this.getWidth() + 16;
+        this.width = this.getWidth() + this.cellPadding;
         return this;
       },
       headerClasses: 'wgsa-table-header--expanded',
@@ -51,7 +51,7 @@ function buildColumns(genomes) {
       // displayName: agent.name,
       label: record.name,
       getWidth() {
-        return measureText(record.name, true);
+        return measureHeadingText(record.name);
       },
       getCellContents(props, genome) {
         return hasElement(genome, record.key) ? (

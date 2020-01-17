@@ -1,6 +1,6 @@
 const { onHeaderClick } = require('./thunks');
 
-import { measureText } from '../table/columnWidth';
+import { measureHeadingText } from '../table/columnWidth';
 import { createAdvancedViewColumn, getAntibioticLabel } from './utils';
 
 import { tableKeys } from '../constants';
@@ -25,7 +25,7 @@ export function buildColumns({ snp = {}, antibiotics }, profiles) {
               columns.concat({
                 cellClasses: 'wgsa-table-cell--resistance',
                 columnKey: gene,
-                fixedWidth: measureText(gene, true) + 8,
+                fixedWidth: measureHeadingText(gene) + 16,
                 flexGrow: 0,
                 getCellContents() {},
                 getLabel: () => `${gene}_`,

@@ -2,14 +2,21 @@ import { getColumnLabel } from './utils';
 
 export const canvas = document.createElement('canvas').getContext('2d');
 
+const weights = {
+  bold: 'bold',
+  normal: 'normal',
+};
+
 const getFontString =
-  (weight = 'normal') => `${weight} 13px "Roboto", "Helvetica", "Arial", sans-serif`;
+  (weight = weights.normal, size = 13) => `${weight} ${size}px "Roboto", "Helvetica", "Arial", sans-serif`;
 
 const maxChars = 100;
-export function measureText(text, isBold) {
-  canvas.font = getFontString(isBold ? 'bold' : 'normal');
+export function measureText(text, weight, size) {
+  canvas.font = getFontString(weight, size);
   return canvas.measureText(text.slice(0, maxChars)).width;
 }
+
+export const measureHeadingText = text => measureText(text, weights.bold, 11);
 
 export function defaultWidthGetter(row, column, isBold) {
   const { valueGetter, getTextToMeasure = valueGetter } = column;
@@ -17,7 +24,7 @@ export function defaultWidthGetter(row, column, isBold) {
   if (value === null || typeof value === 'undefined') return 0;
   const string = String(value);
   if (!string.length) return 0;
-  return measureText(string, isBold);
+  return measureText(string, isBold ? weights.bold : weights.normal);
 }
 
 export function addColumnWidth(column, { genomes }) {
@@ -25,8 +32,8 @@ export function addColumnWidth(column, { genomes }) {
     return column;
   }
 
-  const { cellPadding = 24 } = column;
-  const columnHeaderWidth = measureText(getColumnLabel(column), true) + cellPadding;
+  const { cellPadding = 16 } = column;
+  const columnHeaderWidth = measureHeadingText(getColumnLabel(column)) + cellPadding;
 
   let longestValue = '';
   let isBold = false;
@@ -45,7 +52,7 @@ export function addColumnWidth(column, { genomes }) {
     Math.max(
       column.getMinWidth ? column.getMinWidth() : column.minWidth || 0,
       columnHeaderWidth,
-      measureText(longestValue, isBold) + cellPadding,
+      measureText(longestValue, isBold ? weights.bold : weights.normal) + cellPadding,
     )
     : columnHeaderWidth;
 
