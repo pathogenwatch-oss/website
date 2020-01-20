@@ -233,6 +233,8 @@ export default ({ deployedOrganisms }) => (
               </td>
               <td>
                 <small>NG-MAST</small>
+                <br />
+                <small>NG-STAR</small>
               </td>
             </tr>
             {deployedOrganisms.has('1646') && (
@@ -311,6 +313,8 @@ export default ({ deployedOrganisms }) => (
                 <small>PopPUNK</small>
                 <br />
                 <small>SeroBA</small>
+                <br />
+                <small>PBP Typing</small>
               </td>
             </tr>
             {deployedOrganisms.has('64320') && (
