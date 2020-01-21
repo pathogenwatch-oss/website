@@ -33,9 +33,10 @@ export const getGenomeStyles = createSelector(
   (genomes, getLabel, getColour) => {
     const styles = {};
     for (const genome of genomes) {
+      const label = getLabel(genome);
       styles[genome.id] = {
         colour: getColour(genome),
-        label: getLabel(genome),
+        label: typeof label === 'string' && label.length ? label : ' ', // must be a space or Phylocanvas will ignore
         shape: getShape(genome),
       };
     }
