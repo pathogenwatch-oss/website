@@ -6,7 +6,7 @@ function getNotification(analysis) {
   const { task, version, results, error } = analysis;
   switch (task) {
     case 'speciator':
-      return { task, version, result: summariseAnalysis(analysis), error };
+      return { task, version, result: error ? null : summariseAnalysis(analysis), error };
     case 'mlst':
     case 'mlst2':
       return { task, version, result: { st: results.st, source: results.source }, error };
