@@ -56,15 +56,25 @@ apiRouter.get('/genome/:id', (req, res) => {
 
 /* Collections */
 
-apiRouter.get('/collection', (req, res) => {
-  setTimeout(() => {
-    res.sendFile(`${__dirname}/static_data/collections.json`);
-  }, 0);
+const collectionsPath = getPath('collections');
+
+apiRouter.get('/collection/summary', (req, res) => {
+  fs.promises.readdir(collectionsPath)
+    .then(folders => {
+      res.json({
+        summary: {},
+        collections: folders.map(folder => ({
+          id: folder,
+          title: folder,
+          token: folder,
+        })),
+      });
+    });
 });
 
 apiRouter.get('/collection/:id', (req, res) => {
   setTimeout(() => {
-    res.sendFile(`${getPath(req.params.id)}/collection.json`);
+    res.sendFile(`${collectionsPath}/${req.params.id}/collection.json`);
   }, 0);
 });
 
@@ -72,7 +82,7 @@ apiRouter.get('/collection/:id/tree/:subtree', (req, res) => {
   setTimeout(
     () =>
       res.sendFile(
-        `${getPath(req.params.id)}/${req.params.subtree}.json`
+        `${collectionsPath}/${req.params.id}/${req.params.subtree}.json`
       ),
     1000
   );

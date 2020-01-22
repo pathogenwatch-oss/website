@@ -6,8 +6,7 @@ import Fade from '~/components/fade';
 import Spinner from '~/components/Spinner.react';
 import Header from './Header.react';
 
-import { isLoading } from './selectors';
-import { getVisibleTree } from './selectors/entities';
+import { isLoading, getVisibleLibMRTree } from './selectors';
 import {
   getPhylocanvasState,
   getHighlightedNodeIds,
@@ -30,9 +29,9 @@ import {
 import { POPULATION } from '~/app/stateKeys/tree';
 
 function mapStateToProps(state) {
-  const { name, loaded, lasso, path } = getVisibleTree(state);
+  const { lasso, path } = getVisibleLibMRTree(state);
   return {
-    name, loaded, lasso, path,
+    lasso, path,
     filenames: getFilenames(state),
     highlightedIds: getHighlightedNodeIds(state),
     loading: isLoading(state),

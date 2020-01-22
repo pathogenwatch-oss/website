@@ -3638,7 +3638,8 @@
       "node_modules/babel-loader/lib/index.js?{\"extends\":\"/root/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!src/index.js e1f939ba0815ae2221b90314c06beece": 858,
       "node_modules/react-router-dom/es/Switch.js 19823964521889da89546186b8c0798d": 888,
       "node_modules/react-router-dom/es/Router.js 288208f311e7579cbc09665baf597e97": 893,
-      "node_modules/react-router-dom/es/Prompt.js 84b50f8039f44cb0d98db735e90d669e": 894
+      "node_modules/react-router-dom/es/Prompt.js 84b50f8039f44cb0d98db735e90d669e": 894,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/home/rg14/code/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!src/app/router.js 44af48757ce7a741b46694fef60f2f85": 228
     },
     "usedIds": {
       "0": 0,
