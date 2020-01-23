@@ -24,7 +24,7 @@ export const getActiveGenomes = createSelector(
   getActiveGenomeIds,
   getOrder,
   (genomes, activeIds, order) => {
-    if (!order) {
+    if (!order || !order.length) {
       return activeIds.map(id => genomes[id]);
     }
     const sorted = [];

@@ -33,7 +33,7 @@ export const getUnfilteredGenomeIds = createSelector(
   (genomes, tree, isTopLevel) => {
     const ids = [];
     for (const genome of Object.values(genomes)) {
-      if (isTopLevel) {
+      if (isTopLevel || tree === null) {
         if (genome.__isCollection) {
           ids.push(genome.uuid);
         }
