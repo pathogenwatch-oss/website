@@ -5,7 +5,7 @@ import { SET_COLOUR_COLUMNS } from '../table/actions';
 import { onHeaderClick } from './thunks';
 
 import * as amr from '../amr-utils';
-import { measureText } from '../table/columnWidth';
+import { measureHeadingText } from '../table/columnWidth';
 import * as constants from '../table/constants';
 import { statuses } from '../../collection-viewer/constants';
 
@@ -52,7 +52,7 @@ export function createAdvancedViewColumn(element, profileKey, profiles) {
       this.hidden = genomes.every(({ analysis }) =>
         !analysis.paarsnp || notPresent(analysis.paarsnp[profileKey], key)
       );
-      this.width = this.getWidth() + 12;
+      this.width = this.getWidth() + 16;
       return this;
     },
     columnKey: key,
@@ -61,7 +61,7 @@ export function createAdvancedViewColumn(element, profileKey, profiles) {
     cellClasses: 'wgsa-table-cell--resistance',
     flexGrow: 0,
     getWidth() {
-      return measureText(label, true);
+      return measureHeadingText(label);
     },
     getCellContents(props, genome) {
       return amr.hasElement(genome, profileKey, key) ? (
