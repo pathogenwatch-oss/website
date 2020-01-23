@@ -4,7 +4,7 @@ const argv = require('named-argv');
 const { request } = require('services');
 const Collection = require('models/collection');
 
-const { query = { 'tree.versions': { $exists: false } } } = argv.opts;
+const { query = { 'tree.versions': { $exists: false } }, subtrees = false } = argv.opts;
 
 async function run() {
   const collections = await Collection.find(
@@ -14,17 +14,14 @@ async function run() {
   );
 
   for (const collection of collections) {
-    console.log(collection);
-
-    if (collection.tree) {
+    if (!subtrees && collection.tree) {
       await request('collection', 'submit-tree', {
         organismId: collection.organismId,
         collectionId: collection._id,
         clientId: collection.token,
       });
     }
-
-    if (Array.isArray(collection.subtrees)) {
+    if (subtrees && Array.isArray(collection.subtrees)) {
       await request('collection', 'submit-subtrees', {
         organismId: collection.organismId,
         collectionId: collection._id,
