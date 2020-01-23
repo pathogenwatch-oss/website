@@ -13,7 +13,7 @@ import {
   getFilenames,
 } from './selectors/phylocanvas';
 
-import { snapshot, revert } from '@cgps/libmicroreact/history/actions';
+import { snapshot /* , revert */ } from '@cgps/libmicroreact/history/actions';
 import {
   setLassoActive,
   setPhylocanvasState,
@@ -57,7 +57,7 @@ function mapDispatchToProps(dispatch, { stateKey }) {
     onLassoChange: active => dispatch({ stateKey, ...setLassoActive(active) }),
     onPhylocanvasInitialise: image => dispatch({ stateKey, ...snapshot(image) }),
     onPhylocanvasStateChange: state => dispatch({ stateKey, ...setPhylocanvasState(state) }),
-    onRedrawOriginalTree: () => dispatch({ stateKey, ...revert() }),
+    // onRedrawOriginalTree: () => dispatch({ stateKey, ...revert() }),
     setHighlightedIds: (ids, merge) => dispatch(setTreeHighlight(stateKey, ids, merge)),
   };
 }
