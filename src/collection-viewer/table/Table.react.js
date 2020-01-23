@@ -69,7 +69,7 @@ const Table = React.createClass({
           />
         </Fade>
         { this.props.data.length === 0 &&
-          <p className="wgsa-text-overlay wgsa-hipster-style">
+          <p style={{ width: this.props.width }} className="wgsa-text-overlay wgsa-hipster-style">
             No matching results.
           </p> }
       </section>
