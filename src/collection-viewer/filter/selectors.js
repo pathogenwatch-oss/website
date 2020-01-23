@@ -9,8 +9,10 @@ import { filterKeys } from '../filter/constants';
 
 const getViewer = state => state.viewer;
 
+const getSearchTerms = state => getViewer(state).search.intersections;
+
 const getSearchIds = createSelector(
-  state => getViewer(state).search.intersections,
+  getSearchTerms,
   intersections => intersections.reduce((memo, terms) => {
     let ids = terms[0].value.ids;
     for (const { value } of terms.slice(1)) {
@@ -63,7 +65,7 @@ const getTotal = createSelector(
 
 const getFilterIds = createSelector(
   getNonSearchFilterIntersections,
-  state => getViewer(state).search.intersections,
+  getSearchTerms,
   getSearchIds,
   (nonSearchIntersections, searchTerms, searchIds) => {
     const intersections = [ ...nonSearchIntersections ];
@@ -82,11 +84,18 @@ const getFilterIds = createSelector(
   }
 );
 
+const isFilterActive = createSelector(
+  getSearchTerms,
+  getFilterIds,
+  (terms, ids) => !!terms.length || !!ids.size
+);
+
 export const getFilter = createSelector(
   getUnfilteredIds,
   getTotal,
   getFilterIds,
-  (unfilteredIds, total, ids, active = !!ids.size) => ({
+  isFilterActive,
+  (unfilteredIds, total, ids, active) => ({
     unfilteredIds,
     total,
     ids,
