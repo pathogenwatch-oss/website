@@ -6,10 +6,11 @@ import NgMast from './NgMast.react';
 import Serotype from './Serotype.react';
 import Strain from './Strain.react';
 import Kleborate from './Kleborate.react';
-import SpnPbpType from './SpnPbpType.react'
+import SpnPbpType from './SpnPbpType.react';
+import VistaGenotype from './VistaGenotype.react';
 
 function getSecondaryTyping(genome) {
-  const { genotyphi, ngmast, serotype, poppunk, kleborate, spn_pbp_amr } = genome.analysis;
+  const { genotyphi, ngmast, serotype, poppunk, kleborate, spn_pbp_amr, vista } = genome.analysis;
   return (
     <React.Fragment>
       {!!poppunk &&
@@ -35,6 +36,10 @@ function getSecondaryTyping(genome) {
       {!!spn_pbp_amr &&
         <div>
           <SpnPbpType genome={genome} />
+        </div>}
+      {!!vista &&
+        <div>
+          <VistaGenotype genome={genome} />
         </div>}
     </React.Fragment>
   );

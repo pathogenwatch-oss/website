@@ -74,7 +74,8 @@ export function getValueLabel(value, table) {
   if (
     table === tableKeys.snps ||
     table === tableKeys.genes ||
-    table === tableKeys.kleborateAMR
+    table === tableKeys.kleborateAMR ||
+    table === tableKeys.vista
   ) {
     return value === nonResistantColour ? 'ABSENT' : 'PRESENT';
   }

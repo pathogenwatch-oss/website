@@ -42,6 +42,15 @@ const DownloadsMenu = ({ collection, genomeIds, prefix }) => (
     >
       Kleborate
     </DownloadForm> }
+    { Organisms.uiOptions.vista &&
+    <DownloadForm
+      link={`${prefix}/vista`}
+      filename={formatCollectionFilename(collection, 'vista.csv')}
+      genomeIds={genomeIds}
+    >
+      Virulence
+    </DownloadForm> }
+
   </React.Fragment>
 );
 
