@@ -16,7 +16,8 @@ module.exports = function ({ user, ids }) {
     'poppunk',
     'serotype',
     'speciator',
-    'spn_pbp_amr'
+    'spn_pbp_amr',
+    'vista'
   ];
   const $in = ids.map(id => new ObjectId(id));
   return Promise.all([

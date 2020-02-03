@@ -44,5 +44,6 @@ router.get('/:token/variance-summary', require('./variance-summary'));
 
 router.post('/:token/speciator', require('./speciator'));
 router.post('/:token/kleborate', require('./kleborate'));
+router.post('/:token/vista', require('./vista'));
 
 module.exports = router;
