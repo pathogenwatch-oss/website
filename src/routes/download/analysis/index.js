@@ -27,5 +27,6 @@ router.post('/poppunk', require('./poppunk'));
 router.post('/serotype', require('./serotype'));
 router.post('/spn_pbp_amr', require('./spn-pbp-amr'));
 router.post('/speciator', require('./speciator'));
+router.post('/vista', require('./vista'));
 
 module.exports = router;

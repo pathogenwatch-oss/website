@@ -49,6 +49,7 @@ const projection = {
   'analysis.serotype': 1,
   'analysis.speciator': 1,
   'analysis.spn_pbp_amr': 1,
+  'analysis.vista': 1,
   'upload.type': 1,
 };
 
