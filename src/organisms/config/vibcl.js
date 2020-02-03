@@ -28,5 +28,7 @@ export default {
   maxGenomeSize: 7 * Math.pow(10, 6),
   publicMetadataColumnNames: [],
   collections: [],
-  uiOptions: {},
+  uiOptions: {
+    vista: true,
+  },
 };

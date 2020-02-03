@@ -58,6 +58,7 @@ const getGenomeDatatypes = createSelector(
     let hasMetadata = false;
     let hasAMR = false;
     let hasKleborateAMR = false;
+    let hasVista = false;
 
     for (const genome of genomes) {
       if (!hasMetadata) {
@@ -74,8 +75,11 @@ const getGenomeDatatypes = createSelector(
       if (!hasKleborateAMR && genome.analysis.kleborate) {
         hasKleborateAMR = true;
       }
+      if (!hasVista && genome.analysis.vista) {
+        hasVista = true;
+      }
 
-      if (hasMetadata && (isClusterView || (hasAMR && hasKleborateAMR))) {
+      if (hasMetadata && (isClusterView || (hasAMR && hasKleborateAMR && hasVista))) {
         break;
       }
     }
@@ -84,6 +88,7 @@ const getGenomeDatatypes = createSelector(
       hasMetadata,
       hasAMR: isClusterView ? false : hasAMR,
       hasKleborateAMR: isClusterView ? false : hasKleborateAMR,
+      hasVista: isClusterView ? false : hasVista,
     };
   }
 );
@@ -101,4 +106,9 @@ export const hasAMR = createSelector(
 export const hasKleborateAMR = createSelector(
   getGenomeDatatypes,
   datatypes => datatypes.hasKleborateAMR
+);
+
+export const hasVista = createSelector(
+  getGenomeDatatypes,
+  datatypes => datatypes.hasVista
 );

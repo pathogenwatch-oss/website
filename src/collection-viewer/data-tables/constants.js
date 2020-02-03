@@ -311,6 +311,24 @@ export const systemDataColumns = {
     },
     numeric: true,
   },
+  __vista_biotype: {
+    columnKey: '__vista_biotype',
+    label: 'BIOTYPE',
+    displayName: 'V. CHOLERAE BIOTYPE',
+    valueGetter({ analysis }) {
+      if (!analysis.vista) return null;
+      return analysis.vista.biotype;
+    },
+  },
+  __vista_serogroup: {
+    columnKey: '__vista_serogroup',
+    label: 'SEROGROUP',
+    displayName: 'V. CHOLERAE SEROGROUP',
+    valueGetter({ analysis }) {
+      if (!analysis.vista) return null;
+      return analysis.vista.serogroup;
+    },
+  },
   __core_matches: {
     columnKey: '__core_matches',
     valueGetter({ analysis }) {

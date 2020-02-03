@@ -97,6 +97,12 @@ const kleborateGroup = {
   columns: [ '__K_locus', '__O_locus', '__Virulence_Score', '__Aerobactin', '__Colibactin', '__Salmochelin', '__Yersiniabactin', '__rmpA', '__rmpA2' ],
 };
 
+const vistaGroup = {
+  group: true,
+  columnKey: 'vista',
+  columns: [ '__vista_biotype', '__vista_serogroup' ],
+};
+
 function fillColumnDefs({ columns, ...group }) {
   return {
     ...group,
@@ -116,13 +122,14 @@ function getTypingColumnGroups({ isClusterView }, uiOptions, hasAltMLST) {
     uiOptions.genotyphi ? genotyphiGroup : null,
     uiOptions.inctyper ? inctyperGroup : null,
     uiOptions.kleborate ? kleborateGroup : null,
+    uiOptions.vista ? vistaGroup : null,
   ]
     .filter(_ => _) // removes the nulls
     .map(fillColumnDefs);
 }
 
-export function hasTyping({ noPopulation, noMLST, ngMast, genotyphi }) {
-  if (noPopulation && noMLST && !ngMast && !genotyphi) return false;
+export function hasTyping({ noPopulation, noMLST, ngMast, genotyphi, vista }) {
+  if (noPopulation && noMLST && !ngMast && !genotyphi && !vista) return false;
   return true;
 }
 

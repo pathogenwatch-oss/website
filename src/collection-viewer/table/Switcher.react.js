@@ -6,7 +6,7 @@ import DropdownMenu from '@cgps/libmicroreact/dropdown-menu';
 import Multi from './Multi.react';
 
 import { hasTyping } from './selectors';
-import { hasMetadata, hasAMR, hasKleborateAMR } from '../genomes/selectors';
+import { hasMetadata, hasAMR, hasKleborateAMR, hasVista } from '../genomes/selectors';
 import { hasTimeline } from '../timeline/selectors';
 
 import { setTable } from './actions';
@@ -23,6 +23,7 @@ const icons = {
   [tableKeys.snps]: 'local_pharmacy',
   [tableKeys.genes]: 'local_pharmacy',
   [tableKeys.kleborateAMR]: 'local_pharmacy',
+  [tableKeys.vista]: 'local_pharmacy',
   [tableKeys.timeline]: 'access_time',
 };
 
@@ -32,6 +33,7 @@ const TableMenu = connect(
     return {
       amr: hasAMR(state) && !hasKleborate,
       kleborate: hasKleborate,
+      vista: hasVista(state),
       metadata: hasMetadata(state),
       timeline: hasTimeline(state),
       typing: hasTyping(state),
@@ -43,7 +45,7 @@ const TableMenu = connect(
     _showTimeline: visible => dispatch(showTimeline(visible)),
   })
 )(
-  ({ visibleView, showTable, _showTimeline, metadata, timeline, typing, kleborate, amr }) => (
+  ({ visibleView, showTable, _showTimeline, metadata, timeline, typing, kleborate, vista, amr }) => (
     <DropdownMenu
       direction="up"
       button={
@@ -60,15 +62,17 @@ const TableMenu = connect(
       <button onClick={() => showTable(tableKeys.stats)}>Stats</button>
       {(amr || kleborate) && <hr />}
       {amr &&
-        <>
+      <>
           <button onClick={() => showTable(tableKeys.antibiotics)}>Antibiotics</button>
           <button onClick={() => showTable(tableKeys.snps)}>SNPs</button>
           <button onClick={() => showTable(tableKeys.genes)}>Genes</button>
         </>
       }
       {kleborate && <button onClick={() => showTable(tableKeys.kleborateAMR)}>Kleborate AMR</button>}
+      {vista && <hr />}
+      {vista && <button onClick={() => showTable(tableKeys.vista)}>Virulence</button>}
       {timeline &&
-        <>
+      <>
           <hr />
           <button onClick={_showTimeline}>Timeline</button>
         </>

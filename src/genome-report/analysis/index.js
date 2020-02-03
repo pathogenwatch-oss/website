@@ -22,7 +22,8 @@ function hasSpeciesTypingResult(analysis) {
     analysis.serotype ||
     analysis.poppunk ||
     analysis.kleborate ||
-    analysis.ngstar
+    analysis.ngstar ||
+    analysis.vista
   );
 }
 
@@ -36,6 +37,7 @@ export default genome => {
     metrics,
     paarsnp,
     speciator,
+    vista,
   } = analysis;
 
   const sections = [];
@@ -58,7 +60,7 @@ export default genome => {
       component: <Inctyper analysis={analysis} />,
     });
   }
-  if (kleborate) {
+  if (kleborate || vista) {
     sections.push({
       key: 'Virulence',
       component: <Virulence genome={genome} />,

@@ -23,6 +23,7 @@ export const amrTables = new Set([
   tableKeys.snps,
   tableKeys.genes,
   tableKeys.kleborateAMR,
+  tableKeys.vista,
 ]);
 
 export const leftSpacerColumn = {

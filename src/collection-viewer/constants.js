@@ -15,6 +15,7 @@ export const tableKeys = {
   genes: 'genes',
   kleborateAMR: 'kleborateAMR',
   timeline: 'timeline',
+  vista: 'vista',
 };
 
 export const tableDisplayNames = {
@@ -26,4 +27,5 @@ export const tableDisplayNames = {
   [tableKeys.snps]: 'SNPs',
   [tableKeys.timeline]: 'Timeline',
   [tableKeys.typing]: 'Typing',
+  [tableKeys.vista]: 'Virulence',
 };

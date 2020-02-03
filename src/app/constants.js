@@ -69,4 +69,5 @@ export const analysisLabels = {
   serotype: 'Serotype',
   speciator: 'Species prediction',
   spn_pbp_amr: 'AMR (PBPs)',
+  vista: 'Vista Virulence',
 };
