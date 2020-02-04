@@ -1,10 +1,29 @@
 import React from 'react';
 
 import { FormattedName } from '~/organisms';
+import Fade from '~/components/fade/Fade.react';
 
-export default () => (
+export default ({ remaining }) => (
   <React.Fragment>
     <div className="pw-upload-instructions-column">
+      <Fade className="pw-upload-assembler-usage">
+        <aside>
+          <p>
+            <strong>Processing reads is a trial service with fair-use limits.</strong>
+          </p>
+          <p>
+            {(!remaining || remaining === 0) ?
+              (<React.Fragment>You have no assemblies remaining, check back soon.</React.Fragment>) :
+              (
+                <React.Fragment>You are currently limited to <strong>{remaining} assemblies</strong>.</React.Fragment>)
+            }
+            <br />
+            <a href="https://cgps.gitbook.io/pathogenwatch/technical-descriptions/short-read-assembly" target="_blank"
+              rel="noopener"
+            >How the service works</a>
+          </p>
+        </aside>
+      </Fade>
       <h2>Genomic Data</h2>
       <p>
         One or more <strong>pairs of files</strong> in gzip-compressed{' '}

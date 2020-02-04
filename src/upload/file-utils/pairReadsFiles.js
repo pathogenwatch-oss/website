@@ -21,7 +21,7 @@ export default function pairReadsFiles(files, filenameRegex, assemblerUsage) {
   }
   if (assemblerUsage && Object.keys(pairs).length > assemblerUsage.remaining) {
     throw new Error(
-      'You do not have enough remaining assemblies to complete this upload.'
+      `You do not have enough remaining credits to complete this upload. You have ${assemblerUsage.remaining} left.`
     );
   }
   return pairs;
