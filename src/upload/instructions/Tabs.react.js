@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 
 import Assemblies from './Assemblies.react';
 import Reads from './Reads.react';
-import Fade from '../../components/fade';
 import Badge from '../../components/badge';
 
 import { useAssemblerUsage } from '../hooks';
@@ -24,23 +23,6 @@ const Tabs = ({ usage, token }) => {
 
   return (
     <React.Fragment>
-      <Fade className="pw-upload-assembler-usage">
-        {usage && (
-          <aside>
-            <p>
-              <strong>Processing reads is a trial service with fair-use limits.</strong>
-            </p>
-            <p>
-              {usage.remaining === 0 ?
-                (<React.Fragment>You have no assemblies remaining, check back soon.</React.Fragment>) :
-                (<React.Fragment>You are currently limited to <strong>{usage.remaining} assemblies</strong>.</React.Fragment>)
-              }
-              <br />
-              <a href="https://cgps.gitbook.io/pathogenwatch/technical-descriptions/short-read-assembly" target="_blank" rel="noopener">How the service works</a>
-            </p>
-          </aside>
-        )}
-      </Fade>
       <div
         ref={el => {
           tabsRef.current = el;
@@ -62,7 +44,7 @@ const Tabs = ({ usage, token }) => {
           <Assemblies />
         </div>
         <div className="mdl-tabs__panel" id="reads-panel">
-          <Reads />
+          <Reads remaining={!!usage && !!usage.remaining ? usage.remaining : 0} />
         </div>
       </div>
     </React.Fragment>
