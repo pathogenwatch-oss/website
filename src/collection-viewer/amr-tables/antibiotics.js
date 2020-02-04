@@ -6,6 +6,7 @@ import * as amr from '../amr-utils';
 import { tableKeys } from '../constants';
 import Organisms from '../../organisms';
 import { getAntibioticLabel } from './utils';
+import { measureHeadingText } from '../table/columnWidth';
 
 const isMac =
   (navigator && navigator.platform &&
@@ -25,8 +26,12 @@ function createColumn(antibiotic) {
     flexGrow: 0,
     label: getAntibioticLabel(antibiotic),
     addState() {
-      this.width = 48;
+      this.width = this.getWidth();
       return this;
+    },
+    getWidth() {
+      const textWidth = measureHeadingText(antibiotic.key);
+      return textWidth < 32 ? 48 : textWidth + 16;
     },
     getCellContents(props, { analysis }) {
       if (!analysis.paarsnp) return null;
