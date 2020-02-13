@@ -18,12 +18,14 @@ export const getGenomeSummary = createSelector(
   getActiveGenomes,
   getGenomeStyles,
   (activeGenomes, genomeStyles) => Array.from(
-    activeGenomes.reduce((memo, genome) => {
-      const colour = genomeStyles[genome.id].colour;
-      const genomes = memo.get(colour) || [];
-      genomes.push(genome);
-      return memo.set(colour, genomes);
-    }, new Map()).entries()
+    activeGenomes
+      .filter(genome => Object.keys(genomeStyles).includes(genome.id))
+      .reduce((memo, genome) => {
+        const colour = genomeStyles[genome.id].colour;
+        const genomes = memo.get(colour) || [];
+        genomes.push(genome);
+        return memo.set(colour, genomes);
+      }, new Map()).entries()
   )
 );
 
