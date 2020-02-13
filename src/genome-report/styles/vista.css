@@ -1,0 +1,15 @@
+.pw-genome-report-vista caption {
+  display: none;
+}
+
+.pw-genome-report-vista td {
+  font-size: 14px;
+}
+
+.pw-genome-report-vista td:not(.pw-genome-report-vista-present) {
+  color: rgba(0, 0, 0, 0.54);
+}
+
+.pw-genome-report-vista th:has(.pw-genome-report-vista-present) {
+  color: rgba(0, 0, 0, 0.87);
+}
