@@ -28,8 +28,8 @@ export default ({ result }) => {
             <tr
               key={record.name}
               className={classnames({
-                'pw-genome-report-amr-present': record.status !== 'Not Found',
-                'pw-genome-report-amr-resistant': record.status !== 'Not Found',
+                'pw-genome-report-amr-present': record.status === 'Present',
+                'pw-genome-report-amr-resistant': record.status === 'Present',
               })}
             >
               <td>{record.type}</td>
@@ -37,7 +37,7 @@ export default ({ result }) => {
               <td className="wgsa-genome-report-amr-state">{
                 record.status
                   .replace('Present', '\u2713')
-                  .replace('Not found', '\u2a2f')
+                  .replace('Not found', '\u2718')
                   .replace('Incomplete', '\u2053')}
               </td>
             </tr>
@@ -46,19 +46,26 @@ export default ({ result }) => {
       </table>
       <h3>Virulence clusters</h3>
       {result.virulenceClusters.map((cluster) => (
-        <table cellSpacing="0" className="wgsa-genome-report-amr wide bordered">
+        <table cellSpacing="0" className="pw-genome-report-vista wide bordered">
           <caption>{cluster.name} - {cluster.type}</caption>
           <thead>
             <tr><th colSpan={cluster.genes.length}>{cluster.name} - {cluster.type}</th></tr>
-            <tr>{cluster.genes.map((gene) => (<th>{gene}</th>))}</tr>
+            <tr>{cluster.genes.map((gene) => (
+              <th key={gene.name}>{gene}</th>
+            ))}
+            </tr>
           </thead>
           <tbody>
             <tr>{cluster.genes.map((gene) => (
-              <td>
+              <td
+                className={classnames({
+                  'pw-genome-report-vista-present': cluster.present.includes(gene) && !cluster.incomplete.includes(gene),
+                })}
+              >
                 {
                   cluster.matches[gene].status
                     .replace('Present', '\u2713')
-                    .replace('Not found', '\u2a2f')
+                    .replace('Not found', '\u2718')
                     .replace('Incomplete', '\u2053')
                 }
               </td>))}</tr>
