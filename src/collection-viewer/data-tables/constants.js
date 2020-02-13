@@ -1,10 +1,9 @@
 import React from 'react';
-
 // imports must not include css to remain compatible with csv generator
 import ST from '~/mlst/ST.react';
 import Profile from '~/mlst/Profile.react';
 
-import { isNovel, createCode } from '~/mlst/utils';
+import { createCode, isNovel } from '~/mlst/utils';
 import { getFormattedDateString } from '../table/utils';
 import { sources } from './utils';
 
@@ -278,7 +277,7 @@ export const systemDataColumns = {
   },
   __tbpb: {
     columnKey: '__tbpb',
-    displayName: 'NG-MAST TBQB',
+    displayName: 'NG-MAST TBPB',
     valueGetter({ analysis }) {
       if (!analysis.ngmast) return null;
       return analysis.ngmast.tbpb;
