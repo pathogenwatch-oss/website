@@ -19,12 +19,15 @@ export const getGenomeSummary = createSelector(
   getGenomeStyles,
   (activeGenomes, genomeStyles) => Array.from(
     activeGenomes
-      .filter(genome => Object.keys(genomeStyles).includes(genome.id))
       .reduce((memo, genome) => {
-        const colour = genomeStyles[genome.id].colour;
-        const genomes = memo.get(colour) || [];
-        genomes.push(genome);
-        return memo.set(colour, genomes);
+        if (genome.id in genomeStyles) {
+          const colour = genomeStyles[genome.id].colour;
+          const genomes = memo.get(colour) || [];
+          genomes.push(genome);
+          return memo.set(colour, genomes);
+        }
+        return memo;
+
       }, new Map()).entries()
   )
 );
