@@ -10,7 +10,7 @@ module.exports.transformer = function (doc) {
   });
 
   doc.analysis.vista.virulenceClusters.forEach(cluster => {
-    record[cluster.name] = cluster.complete ? 'Present' : cluster.present.length === 0 ? 'Not Found' : 'Partial';
+    record[cluster.name] = cluster.status;
   });
 
   return record;
