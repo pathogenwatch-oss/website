@@ -30,8 +30,8 @@ const transformer = function (doc) {
   );
 
   doc.analysis.vista.virulenceClusters.forEach(cluster => {
-    record[cluster.id] = cluster.complete ? 'Present' : 'Incomplete';
     record[`${cluster.id} type`] = cluster.type;
+    record[cluster.id] = cluster.status;
     record[`${cluster.id}  missing`] = cluster.missing;
     record[`${cluster.id}  incomplete`] = cluster.incomplete;
     Object.keys(cluster.matches).forEach(clusterGene => {
