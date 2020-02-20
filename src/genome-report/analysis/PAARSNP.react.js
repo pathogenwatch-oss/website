@@ -33,8 +33,9 @@ function extractLocation(snp) {
   return location !== '' ? parseInt(location, 10) : -1;
 }
 
-function formatElements(mechanisms, paar) {
+function formatElements(mechanisms, paar, variants) {
   const elementMap = mechanisms
+    .filter(mechanism => (paar.includes(mechanism) || variants.includes(mechanism)))
     .map(mechanism => (paar.includes(mechanism) ? [ mechanism, '' ] : formatElement(mechanism)))
     .reduce((map, mechanismName) => {
       if (!map[mechanismName[0]]) {
@@ -59,6 +60,7 @@ export default ({ result, genome }) => {
   const { organismId } = genome.analysis.speciator;
   const {
     antibiotics,
+    snp,
     paar,
     library = {
       label: organismId,
@@ -113,7 +115,7 @@ export default ({ result, genome }) => {
                 {state.replace(/_/g, ' ').toLowerCase()}
               </td>
               <td className="pw-genome-report-amr-mechanisms">
-                {formatElements(mechanisms, paar)}
+                {formatElements(mechanisms, paar, snp)}
               </td>
             </tr>
           ))}
