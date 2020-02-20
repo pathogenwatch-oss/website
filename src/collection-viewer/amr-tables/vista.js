@@ -6,101 +6,86 @@ import { onHeaderClick } from './thunks';
 
 import * as amr from '../amr-utils';
 import { measureHeadingText } from '../table/columnWidth';
-import { systemGroup, spacerGroup } from './utils';
-import Organism from '~/organisms';
+import { spacerGroup, systemGroup } from './utils';
+import Organism from '../../organisms';
 
-import { statuses } from '../constants';
-import { tableKeys } from '../constants';
+import { statuses, tableKeys } from '../constants';
 
 export const name = tableKeys.vista;
 
+function findElement(genome, geneName) {
+  return genome.analysis.vista.virulenceGenes
+    .find(gene => gene.name === geneName);
+}
+
 function hasElement(genome, geneName) {
   return genome.analysis.vista &&
-    genome.analysis.vista.virulenceGenes
-      .find(gene => gene.name === geneName && gene.status === 'Present');
+    findElement(genome, geneName).status !== 'Not found';
 }
 
-function hasCluster(genome, clusterName) {
+function selectColour(status) {
+  if (status === 'Present') {
+    return amr.getEffectColour('RESISTANT');
+  }
+  if (status === 'Incomplete') {
+    return amr.getEffectColour('INTERMEDIATE');
+  }
+  return amr.nonResistantColour;
+}
+
+// const effectColour = amr.getEffectColour('RESISTANT');
+function hasCluster(genome, clusterName, field) {
   return genome.analysis.vista &&
-    genome.analysis.vista.virulenceClusters
-      .find(cluster => cluster.name === clusterName && cluster.complete);
+    genome.analysis.vista[field]
+      .find(cluster => cluster.name === clusterName && cluster.status !== 'Not found');
 }
-
-const effectColour = amr.getEffectColour('RESISTANT');
 
 const isMac =
   (navigator && navigator.platform &&
     navigator.platform.toUpperCase().indexOf('MAC') >= 0);
 const modifierKey = isMac ? 'Cmd' : 'Ctrl';
 
-function buildColumns(genomes) {
-  const columns = [];
-  for (const gene of genomes[0].analysis.vista.virulenceGenes) {
-    columns.push({
-      columnKey: `vista_${gene.name}`,
+function buildColumnGroup(field, genomes) {
+  const groupColumns = [];
+  for (const record of genomes[0].analysis.vista[field]) {
+    groupColumns.push({
+      columnKey: `vista_${record.name}`,
       addState({ genomes }) {
         if (!genomes.length) return this;
         this.width = this.getWidth() + this.cellPadding;
         return this;
       },
       headerClasses: 'wgsa-table-header--expanded',
-      headerTitle: `${gene.name} (${gene.type}) - ${modifierKey} + click to select multiple`,
+      headerTitle: `${record.name} (${record.type}) - ${modifierKey} + click to select multiple`,
       cellClasses: 'wgsa-table-cell--resistance',
       cellPadding: 16,
       // flexGrow: 0,
       // displayName: agent.name,
-      label: gene.name,
+      label: record.name,
       getWidth() {
-        return measureHeadingText(gene.name);
+        const textWidth = measureHeadingText(record.name);
+        return textWidth < 32 ? 48 : textWidth + 16;
       },
       getCellContents(props, genome) {
-        return hasElement(genome, gene.name) ? (
+        return hasCluster(genome, record.name, field) ? (
           <i
             className="material-icons wgsa-resistance-icon"
-            style={{ color: effectColour }}
-            title={`${gene.name} (${gene.type})`}
+            style={{ color: selectColour(hasCluster(genome, record.name, field).status) }}
+            title={`${record.name} (${record.type})`}
           >
             lens
           </i>
         ) : null;
       },
-      valueGetter: genome => (hasElement(genome, gene.name) ? effectColour : amr.nonResistantColour),
       onHeaderClick,
     });
   }
+  return groupColumns;
+}
 
-  for (const cluster of genomes[0].analysis.vista.virulenceClusters) {
-    columns.push({
-      columnKey: `vista_${cluster.name}`,
-      addState({ genomes }) {
-        if (!genomes.length) return this;
-        this.width = this.getWidth() + this.cellPadding;
-        return this;
-      },
-      headerClasses: 'wgsa-table-header--expanded',
-      headerTitle: `${cluster.name} (${cluster.type}) - ${modifierKey} + click to select multiple`,
-      cellClasses: 'wgsa-table-cell--resistance',
-      cellPadding: 16,
-      label: cluster.name,
-      getWidth() {
-        return measureHeadingText(cluster.name);
-      },
-      getCellContents(props, genome) {
-        return hasCluster(genome, cluster.name) ? (
-          <i
-            className="material-icons wgsa-resistance-icon"
-            style={{ color: effectColour }}
-            title={`${cluster.name} (${cluster.type})`}
-          >
-            lens
-          </i>
-        ) : null;
-      },
-      valueGetter: genome => (hasCluster(genome, cluster.name) ? effectColour : amr.nonResistantColour),
-      onHeaderClick,
-    });
-  }
-  return columns;
+function buildColumns(genomes) {
+  return buildColumnGroup('virulenceGenes', genomes)
+    .concat(buildColumnGroup('virulenceClusters', genomes));
 }
 
 const initialState = {
