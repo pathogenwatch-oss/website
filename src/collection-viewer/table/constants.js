@@ -4,13 +4,13 @@ import FastaFileLink from './FastaFileLink.react';
 import FastaArchiveLink from './FastaArchiveLink.react';
 import AnnotationFileLink from './AnnotationFileLink.react';
 import AnnotationArchiveLink from './AnnotationArchiveLink.react';
+import GenomeReportButton from './GenomeReportButton.react';
 
 import { formatCollectionFilename } from '../downloads/utils';
 import { getServerPath } from '../../utils/Api';
 
 import { tableKeys } from '../constants';
 import { CGPS } from '../../app/constants';
-import Organisms from '../../organisms';
 
 export const dataTables = new Set([
   tableKeys.metadata,
@@ -64,15 +64,24 @@ export const downloadColumnProps = {
     if (isClusterView) {
       return (
         <span className="wgsa-table-downloads" onClick={(e) => e.stopPropagation()}>
-          <FastaArchiveLink url={getServerPath(`/download/genome/fasta?filename=${filenames.genome}`)} ids={ids} />
+          <FastaArchiveLink
+            url={getServerPath(`/download/genome/fasta?filename=${filenames.genome}`)}
+            ids={ids}
+          />
         </span>
       );
     }
 
     return (
       <span className="wgsa-table-downloads" onClick={(e) => e.stopPropagation()}>
-        <FastaArchiveLink url={getServerPath(`/download/collection/${uuid}/fastas?filename=${filenames.genome}`)} ids={ids} />
-        <AnnotationArchiveLink uuid={uuid} ids={ids} filename={filenames.annotation} />
+        <FastaArchiveLink
+          url={getServerPath(`/download/collection/${uuid}/fastas?filename=${filenames.genome}`)}
+          ids={ids}
+        />
+        <AnnotationArchiveLink
+          uuid={uuid} ids={ids}
+          filename={filenames.annotation}
+        />
       </span>
     );
   },
@@ -135,19 +144,12 @@ export const nameColumnProps = {
   fixed: true,
   getCellContents({ valueGetter }, data) {
     return (
-      <div className="wgsa-genome-name-cell">
-        {getNameText(data, valueGetter)}
-        <div onClick={(e) => e.stopPropagation()}>
-          { data.__isPublic && data.collectionId ?
-            <a className="mdl-button mdl-button--icon"
-              href={`/${Organisms.nickname}/collection/${data.collectionId}`}
-              title="View original collection"
-              target="_blank" rel="noopener"
-            >
-              <i className="material-icons">open_in_new</i>
-            </a> : null
-          }
-        </div>
+      <div onClick={(e) => e.stopPropagation()}>
+        <GenomeReportButton
+          id={data.id}
+          name={data.name}
+          text={getNameText(data, valueGetter)}
+        />
       </div>
     );
   },

@@ -168,6 +168,10 @@
   color: #673c90;
 }
 
+.wgsa-table-reports {
+  padding: 0 8px;
+}
+
 .wgsa-table-downloads {
   padding: 0 8px;
 }
@@ -285,4 +289,9 @@
 .wgsa-table-content-options > button {
   display: inline-block;
   margin: 0 4px;
+}
+
+.pw-report-button {
+  padding: 0;
+  width: 100%;
 }
