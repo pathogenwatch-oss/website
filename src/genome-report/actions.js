@@ -4,13 +4,13 @@ import * as api from './api';
 
 export const SHOW_GENOME_REPORT = createAsyncConstants('SHOW_GENOME_REPORT');
 
-export function showGenomeReport(id, name) {
+export function showGenomeReport(id, name, collectionId) {
   return {
     type: SHOW_GENOME_REPORT,
     payload: {
       name,
       genomeId: id,
-      promise: api.fetchGenome(id),
+      promise: api.fetchGenome(id, collectionId),
     },
   };
 }
