@@ -54,10 +54,10 @@ router.post('/genome/at-locations', (req, res, next) => {
 router.get('/genome/:id', (req, res, next) => {
   const { user, params } = req;
   const { id } = params;
-
+  const { collectionId } = req.query;
   LOGGER.info(`Received request to get single genome ${id}`);
   services
-    .request('genome', 'fetch-one', { user, id })
+    .request('genome', 'fetch-one', { user, id, collectionId })
     .then(response => res.json(response))
     .catch(next);
 });
