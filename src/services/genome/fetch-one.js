@@ -57,11 +57,10 @@ const projection = {
 //   'speciator', 'metrics', 'mlst', 'paarsnp', 'genotyphi', 'ngmast', 'core',
 // ];
 
-module.exports = async ({ user, id }) => {
+module.exports = async ({ user, id, collectionId }) => {
   if (!id) throw new ServiceRequestError('Missing Id');
 
-  const genome = await request('genome', 'authorise', { user, id, projection });
-
+  const genome = await request('genome', 'authorise', { user, id, collectionId, projection });
   // TODO: Add task versions back when version-switching added to front-end
   // TODO: Check if there are any relevant flags which disable tasks.
   return genome;
