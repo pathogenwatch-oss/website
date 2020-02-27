@@ -28,7 +28,7 @@ function hasSpeciesTypingResult(analysis) {
 }
 
 export default genome => {
-  const { analysis = {} } = genome;
+  const { analysis = {}, owner = '' } = genome;
   const {
     cgmlst,
     core,
@@ -66,7 +66,7 @@ export default genome => {
       component: <Virulence genome={genome} />,
     });
   }
-  if (cgmlst) {
+  if (cgmlst && owner !== 'other') {
     sections.push({
       key: 'Clustering',
       component: <Clustering result={cgmlst} />,
