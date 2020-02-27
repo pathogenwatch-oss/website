@@ -66,7 +66,7 @@ export default genome => {
       component: <Virulence genome={genome} />,
     });
   }
-  if (cgmlst && owner !== 'other') {
+  if (cgmlst && (owner !== 'other' || genome.public || genome.reference)) {
     sections.push({
       key: 'Clustering',
       component: <Clustering result={cgmlst} />,
