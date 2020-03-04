@@ -4042,18 +4042,6 @@ path-type@^2.0.0:
   dependencies:
     pify "^2.0.0"
 
-"pathogenwatch-fasta-store@https://gitlab.com/cgps/pathogenwatch-fasta-store#v4.1.2":
-  version "4.1.2"
-  resolved "https://gitlab.com/cgps/pathogenwatch-fasta-store#cf663789fa86d865c23d012d0558e7f6d54d3839"
-  dependencies:
-    async "2.6.1"
-    mkdirp "^0.5.1"
-    pass-stream "^1.0.0"
-    promisify-node "^0.5.0"
-    uuid "^3.0.1"
-    writers-digest "github:cgps-dev/writers-digest#0aea383bd66a78eb668ef0567092852171e1385a"
-    zip-stream "^1.2.0"
-
 "pathogenwatch-front-end@https://gitlab.com/cgps/pathogenwatch-front-end#v8.8.4":
   version "8.8.4"
   resolved "https://gitlab.com/cgps/pathogenwatch-front-end#d1154370635576c2003b6b90019272692d9a5f6b"
