@@ -1,5 +1,5 @@
 const fs = require('fs');
-const fastaStorage = require('pathogenwatch-fasta-store');
+const fastaStorage = require('../../utils/fasta-store')
 
 const Analysis = require('models/analysis');
 const TaskLog = require('models/taskLog');
@@ -8,7 +8,6 @@ const Genome = require('models/genome');
 const notify = require('services/genome/notify');
 const docker = require('../docker');
 const { DEFAULT_TIMEOUT } = require('../bus');
-const { fastaStoragePath } = require('configuration');
 const { getImageName } = require('manifest.js');
 
 const LOGGER = require('utils/logging').createLogger('runner');
@@ -34,7 +33,7 @@ function runTask({ fileId, task, version, organismId, speciesId, genusId, timeou
       timeout
     );
     try {
-      const stream = fs.createReadStream(fastaStorage.getFilePath(fastaStoragePath, fileId));
+      const stream = fastaStorage.fetch(fileId);
       stream.on('error', err => {
         LOGGER.info('Error in input stream, destroying container.');
         container.destroy(() => reject(err));

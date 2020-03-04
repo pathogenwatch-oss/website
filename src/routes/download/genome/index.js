@@ -20,13 +20,15 @@ router.get('/:id/fasta', (req, res, next) => {
 
   return services
     .request('genome', 'download', { user, type, id })
-    .then(({ filePath, fileName }) => {
+    .then(({ fileName, stream }) => new Promise((resolve, reject) => {
+      stream.on('error', reject);
       res.set({
         'Content-Disposition': `attachment; filename="${fileName}"`,
         'Content-type': 'text/plain',
       });
-      return res.sendFile(filePath);
-    })
+      stream.pipe(res);
+      stream.on('close', () => resolve())
+    }))
     .catch(next);
 });
 
