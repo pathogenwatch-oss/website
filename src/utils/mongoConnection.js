@@ -19,9 +19,14 @@ const handleError = error => {
   process.exit(1);
 };
 
+let disconnectExpected = false;
+
 function connect(callback) {
   mongoose.connection.on('error', handleError);
-  mongoose.connection.on('disconnected', () => handleError('disconnected event'));
+  mongoose.connection.on('disconnected', () => {
+    if (disconnectExpected) return
+    handleError('disconnected event')
+  });
   if (callback) {
     mongoose.connection.once('open', callback);
   }
@@ -38,4 +43,7 @@ mongoose.set('debug', (collection, ...args) => {
 
 module.exports.connect = connect;
 module.exports.dbUrl = dbUrl;
-module.exports.close = () => mongoose.connection.close();
+module.exports.close = () => {
+  disconnectExpected = true;
+  mongoose.connection.close()
+};
