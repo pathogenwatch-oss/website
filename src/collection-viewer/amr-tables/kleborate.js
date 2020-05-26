@@ -7,7 +7,7 @@ import { onHeaderClick } from './thunks';
 import * as amr from '../amr-utils';
 import { measureHeadingText } from '../table/columnWidth';
 import { systemGroup, spacerGroup } from './utils';
-import Organism from '~/organisms';
+import Organism from '../../organisms';
 
 import { statuses } from '../constants';
 import { tableKeys } from '../constants';
