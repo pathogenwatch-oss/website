@@ -18,12 +18,10 @@ function findElement(genome, geneName) {
     .find(gene => gene.name === geneName);
 }
 
-function hasElement(genome, geneName) {
-  return genome.analysis.vista &&
-    findElement(genome, geneName).status !== 'Not found';
-}
-
 function selectColour(status) {
+  if (!status) {
+    return amr.nonResistantColour;
+  }
   if (status === 'Present') {
     return amr.getEffectColour('RESISTANT');
   }
@@ -76,6 +74,10 @@ function buildColumnGroup(field, genomes) {
             lens
           </i>
         ) : null;
+      },
+      valueGetter: (genome) => {
+        const value = hasCluster(genome, record.name, field);
+        return !!value ? selectColour(value.status) : amr.nonResistantColour;
       },
       onHeaderClick,
     });
