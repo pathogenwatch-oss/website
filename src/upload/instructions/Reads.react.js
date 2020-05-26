@@ -66,7 +66,7 @@ export default ({ remaining }) => (
     <div className="pw-upload-instructions-column">
       <h2>Metadata</h2>
       <p>
-        One or more files in{' '}
+        Attach metadata to each genome by including one or more files in{' '}
         <a
           href="https://en.wikipedia.org/wiki/Comma-separated_values"
           target="_blank"
@@ -74,8 +74,11 @@ export default ({ remaining }) => (
         >
           CSV format
         </a>{' '}
-        with the extension <strong>.csv</strong>.
-      </p>
+        with the extension <strong>.csv</strong> when selecting files for upload. Metadata can also be added and updated
+        after upload -{' '}
+        <a
+          href="https://cgps.gitbook.io/pathogenwatch/how-to-use-pathogenwatch/editing-metadata"
+        >see here for instructions</a></p>
       <p>
         Files should contain a <strong>filename</strong> column to match each
         row to its respective genomic data. Please use either the common prefix
