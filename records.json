@@ -18,7 +18,8 @@
           "node_modules/isarray/index.js": 12,
           "node_modules/node-forge/lib/baseN.js": 13,
           "node_modules/workerize-loader/dist/rpc-worker-loader.js!node_modules/babel-loader/lib/index.js?{\"extends\":\"/root/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!src/upload/progress/assembly/hashWorker.js": 5,
-          "node_modules/workerize-loader/dist/rpc-worker-loader.js!node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/coriny/cgps-gits/build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!src/upload/progress/assembly/hashWorker.js": 5
+          "node_modules/workerize-loader/dist/rpc-worker-loader.js!node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/coriny/cgps-gits/build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!src/upload/progress/assembly/hashWorker.js": 5,
+          "node_modules/workerize-loader/dist/rpc-worker-loader.js!node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!src/upload/progress/assembly/hashWorker.js": 5
         },
         "usedIds": {
           "0": 0,
@@ -68,7 +69,8 @@
           "node_modules/pako/lib/zlib/inftrees.js": 15,
           "node_modules/pako/lib/zlib/gzheader.js": 16,
           "node_modules/workerize-loader/dist/rpc-worker-loader.js!node_modules/babel-loader/lib/index.js?{\"extends\":\"/root/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!src/upload/progress/files/utils/compressWorker.js": 8,
-          "node_modules/workerize-loader/dist/rpc-worker-loader.js!node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/coriny/cgps-gits/build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!src/upload/progress/files/utils/compressWorker.js": 8
+          "node_modules/workerize-loader/dist/rpc-worker-loader.js!node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/coriny/cgps-gits/build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!src/upload/progress/files/utils/compressWorker.js": 8,
+          "node_modules/workerize-loader/dist/rpc-worker-loader.js!node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!src/upload/progress/files/utils/compressWorker.js": 8
         },
         "usedIds": {
           "0": 0,
@@ -119,7 +121,7 @@
         "byName": {},
         "bySource": {},
         "usedIds": [
-          0
+          1
         ]
       }
     }
@@ -140,7 +142,7 @@
         "byName": {},
         "bySource": {},
         "usedIds": [
-          0
+          1
         ]
       }
     }
@@ -161,7 +163,7 @@
         "byName": {},
         "bySource": {},
         "usedIds": [
-          0
+          1
         ]
       }
     }
@@ -182,7 +184,7 @@
         "byName": {},
         "bySource": {},
         "usedIds": [
-          0
+          1
         ]
       }
     }
@@ -203,7 +205,7 @@
         "byName": {},
         "bySource": {},
         "usedIds": [
-          0
+          1
         ]
       }
     }
@@ -224,7 +226,7 @@
         "byName": {},
         "bySource": {},
         "usedIds": [
-          0
+          1
         ]
       }
     }
@@ -245,7 +247,7 @@
         "byName": {},
         "bySource": {},
         "usedIds": [
-          0
+          1
         ]
       }
     }
@@ -288,7 +290,7 @@
         "byName": {},
         "bySource": {},
         "usedIds": [
-          0
+          1
         ]
       }
     }
@@ -309,7 +311,7 @@
         "byName": {},
         "bySource": {},
         "usedIds": [
-          0
+          1
         ]
       }
     }
@@ -330,7 +332,7 @@
         "byName": {},
         "bySource": {},
         "usedIds": [
-          0
+          1
         ]
       }
     }
@@ -351,7 +353,7 @@
         "byName": {},
         "bySource": {},
         "usedIds": [
-          0
+          1
         ]
       }
     }
@@ -372,7 +374,7 @@
         "byName": {},
         "bySource": {},
         "usedIds": [
-          0
+          1
         ]
       }
     }
@@ -393,7 +395,7 @@
         "byName": {},
         "bySource": {},
         "usedIds": [
-          0
+          1
         ]
       }
     }
@@ -414,7 +416,7 @@
         "byName": {},
         "bySource": {},
         "usedIds": [
-          0
+          1
         ]
       }
     }
@@ -435,7 +437,7 @@
         "byName": {},
         "bySource": {},
         "usedIds": [
-          0
+          1
         ]
       }
     }
@@ -456,7 +458,7 @@
         "byName": {},
         "bySource": {},
         "usedIds": [
-          0
+          1
         ]
       }
     }
@@ -477,7 +479,7 @@
         "byName": {},
         "bySource": {},
         "usedIds": [
-          0
+          1
         ]
       }
     }
@@ -498,7 +500,7 @@
         "byName": {},
         "bySource": {},
         "usedIds": [
-          0
+          1
         ]
       }
     }
@@ -519,7 +521,7 @@
         "byName": {},
         "bySource": {},
         "usedIds": [
-          0
+          1
         ]
       }
     }
@@ -540,7 +542,7 @@
         "byName": {},
         "bySource": {},
         "usedIds": [
-          0
+          1
         ]
       }
     }
@@ -561,7 +563,7 @@
         "byName": {},
         "bySource": {},
         "usedIds": [
-          0
+          1
         ]
       }
     }
@@ -582,7 +584,7 @@
         "byName": {},
         "bySource": {},
         "usedIds": [
-          0
+          1
         ]
       }
     }
@@ -603,7 +605,7 @@
         "byName": {},
         "bySource": {},
         "usedIds": [
-          0
+          1
         ]
       }
     }
@@ -628,7 +630,7 @@
         "byName": {},
         "bySource": {},
         "usedIds": [
-          0
+          1
         ]
       }
     }
@@ -651,7 +653,7 @@
         "byName": {},
         "bySource": {},
         "usedIds": [
-          0
+          1
         ]
       }
     }
@@ -674,7 +676,7 @@
         "byName": {},
         "bySource": {},
         "usedIds": [
-          0
+          1
         ]
       }
     }
@@ -695,7 +697,7 @@
         "byName": {},
         "bySource": {},
         "usedIds": [
-          0
+          1
         ]
       }
     }
@@ -716,7 +718,7 @@
         "byName": {},
         "bySource": {},
         "usedIds": [
-          0
+          1
         ]
       }
     }
@@ -741,7 +743,7 @@
         "byName": {},
         "bySource": {},
         "usedIds": [
-          0
+          1
         ]
       }
     }
@@ -762,7 +764,7 @@
         "byName": {},
         "bySource": {},
         "usedIds": [
-          0
+          1
         ]
       }
     }
@@ -783,7 +785,7 @@
         "byName": {},
         "bySource": {},
         "usedIds": [
-          0
+          1
         ]
       }
     }
@@ -804,7 +806,7 @@
         "byName": {},
         "bySource": {},
         "usedIds": [
-          0
+          1
         ]
       }
     }
@@ -825,7 +827,7 @@
         "byName": {},
         "bySource": {},
         "usedIds": [
-          0
+          1
         ]
       }
     }
@@ -846,7 +848,7 @@
         "byName": {},
         "bySource": {},
         "usedIds": [
-          0
+          1
         ]
       }
     }
@@ -867,7 +869,7 @@
         "byName": {},
         "bySource": {},
         "usedIds": [
-          0
+          1
         ]
       }
     }
@@ -888,7 +890,7 @@
         "byName": {},
         "bySource": {},
         "usedIds": [
-          0
+          1
         ]
       }
     }
@@ -909,7 +911,7 @@
         "byName": {},
         "bySource": {},
         "usedIds": [
-          0
+          1
         ]
       }
     }
@@ -930,7 +932,7 @@
         "byName": {},
         "bySource": {},
         "usedIds": [
-          0
+          1
         ]
       }
     }
@@ -951,7 +953,7 @@
         "byName": {},
         "bySource": {},
         "usedIds": [
-          0
+          1
         ]
       }
     }
@@ -972,7 +974,7 @@
         "byName": {},
         "bySource": {},
         "usedIds": [
-          0
+          1
         ]
       }
     }
@@ -997,7 +999,7 @@
         "byName": {},
         "bySource": {},
         "usedIds": [
-          0
+          1
         ]
       }
     }
@@ -1018,7 +1020,7 @@
         "byName": {},
         "bySource": {},
         "usedIds": [
-          0
+          1
         ]
       }
     }
@@ -1041,7 +1043,7 @@
         "byName": {},
         "bySource": {},
         "usedIds": [
-          0
+          1
         ]
       }
     }
@@ -1062,7 +1064,7 @@
         "byName": {},
         "bySource": {},
         "usedIds": [
-          0
+          1
         ]
       }
     }
@@ -1083,7 +1085,7 @@
         "byName": {},
         "bySource": {},
         "usedIds": [
-          0
+          1
         ]
       }
     }
@@ -1104,7 +1106,7 @@
         "byName": {},
         "bySource": {},
         "usedIds": [
-          0
+          1
         ]
       }
     }
@@ -1125,7 +1127,7 @@
         "byName": {},
         "bySource": {},
         "usedIds": [
-          0
+          1
         ]
       }
     }
@@ -1146,7 +1148,7 @@
         "byName": {},
         "bySource": {},
         "usedIds": [
-          0
+          1
         ]
       }
     }
@@ -1167,7 +1169,7 @@
         "byName": {},
         "bySource": {},
         "usedIds": [
-          0
+          1
         ]
       }
     }
@@ -1188,7 +1190,7 @@
         "byName": {},
         "bySource": {},
         "usedIds": [
-          0
+          1
         ]
       }
     }
@@ -1209,7 +1211,7 @@
         "byName": {},
         "bySource": {},
         "usedIds": [
-          0
+          1
         ]
       }
     }
@@ -1230,7 +1232,7 @@
         "byName": {},
         "bySource": {},
         "usedIds": [
-          0
+          1
         ]
       }
     }
@@ -1251,7 +1253,7 @@
         "byName": {},
         "bySource": {},
         "usedIds": [
-          0
+          1
         ]
       }
     }
@@ -1272,7 +1274,7 @@
         "byName": {},
         "bySource": {},
         "usedIds": [
-          0
+          1
         ]
       }
     }
@@ -1293,7 +1295,7 @@
         "byName": {},
         "bySource": {},
         "usedIds": [
-          0
+          1
         ]
       }
     }
@@ -1318,7 +1320,7 @@
         "byName": {},
         "bySource": {},
         "usedIds": [
-          0
+          1
         ]
       }
     }
@@ -1339,7 +1341,7 @@
         "byName": {},
         "bySource": {},
         "usedIds": [
-          0
+          1
         ]
       }
     }
@@ -1360,7 +1362,7 @@
         "byName": {},
         "bySource": {},
         "usedIds": [
-          0
+          1
         ]
       }
     }
@@ -1381,7 +1383,7 @@
         "byName": {},
         "bySource": {},
         "usedIds": [
-          0
+          1
         ]
       }
     }
@@ -1402,7 +1404,7 @@
         "byName": {},
         "bySource": {},
         "usedIds": [
-          0
+          1
         ]
       }
     }
@@ -1423,7 +1425,7 @@
         "byName": {},
         "bySource": {},
         "usedIds": [
-          0
+          1
         ]
       }
     }
@@ -1444,7 +1446,7 @@
         "byName": {},
         "bySource": {},
         "usedIds": [
-          0
+          1
         ]
       }
     }
@@ -1465,7 +1467,7 @@
         "byName": {},
         "bySource": {},
         "usedIds": [
-          0
+          1
         ]
       }
     }
@@ -1486,7 +1488,7 @@
         "byName": {},
         "bySource": {},
         "usedIds": [
-          0
+          1
         ]
       }
     }
@@ -1507,7 +1509,7 @@
         "byName": {},
         "bySource": {},
         "usedIds": [
-          0
+          1
         ]
       }
     }
@@ -1528,7 +1530,7 @@
         "byName": {},
         "bySource": {},
         "usedIds": [
-          0
+          1
         ]
       }
     }
@@ -1549,7 +1551,7 @@
         "byName": {},
         "bySource": {},
         "usedIds": [
-          0
+          1
         ]
       }
     }
@@ -1570,7 +1572,7 @@
         "byName": {},
         "bySource": {},
         "usedIds": [
-          0
+          1
         ]
       }
     }
@@ -1591,7 +1593,7 @@
         "byName": {},
         "bySource": {},
         "usedIds": [
-          0
+          1
         ]
       }
     }
@@ -1612,7 +1614,7 @@
         "byName": {},
         "bySource": {},
         "usedIds": [
-          0
+          1
         ]
       }
     }
@@ -1633,7 +1635,7 @@
         "byName": {},
         "bySource": {},
         "usedIds": [
-          0
+          1
         ]
       }
     }
@@ -1654,7 +1656,7 @@
         "byName": {},
         "bySource": {},
         "usedIds": [
-          0
+          1
         ]
       }
     }
@@ -1675,7 +1677,7 @@
         "byName": {},
         "bySource": {},
         "usedIds": [
-          0
+          1
         ]
       }
     }
@@ -1696,7 +1698,7 @@
         "byName": {},
         "bySource": {},
         "usedIds": [
-          0
+          1
         ]
       }
     }
@@ -1717,7 +1719,7 @@
         "byName": {},
         "bySource": {},
         "usedIds": [
-          0
+          1
         ]
       }
     }
@@ -1738,7 +1740,7 @@
         "byName": {},
         "bySource": {},
         "usedIds": [
-          0
+          1
         ]
       }
     }
@@ -1759,7 +1761,7 @@
         "byName": {},
         "bySource": {},
         "usedIds": [
-          0
+          1
         ]
       }
     }
@@ -1780,7 +1782,7 @@
         "byName": {},
         "bySource": {},
         "usedIds": [
-          0
+          1
         ]
       }
     }
@@ -1801,7 +1803,7 @@
         "byName": {},
         "bySource": {},
         "usedIds": [
-          0
+          1
         ]
       }
     }
@@ -1834,7 +1836,7 @@
         "byName": {},
         "bySource": {},
         "usedIds": [
-          0
+          1
         ]
       }
     }
@@ -1855,7 +1857,7 @@
         "byName": {},
         "bySource": {},
         "usedIds": [
-          0
+          1
         ]
       }
     }
@@ -1876,7 +1878,7 @@
         "byName": {},
         "bySource": {},
         "usedIds": [
-          0
+          1
         ]
       }
     }
@@ -1897,7 +1899,7 @@
         "byName": {},
         "bySource": {},
         "usedIds": [
-          0
+          1
         ]
       }
     }
@@ -1918,7 +1920,7 @@
         "byName": {},
         "bySource": {},
         "usedIds": [
-          0
+          1
         ]
       }
     }
@@ -1939,7 +1941,7 @@
         "byName": {},
         "bySource": {},
         "usedIds": [
-          0
+          1
         ]
       }
     }
@@ -1960,7 +1962,7 @@
         "byName": {},
         "bySource": {},
         "usedIds": [
-          0
+          1
         ]
       }
     }
@@ -1981,7 +1983,7 @@
         "byName": {},
         "bySource": {},
         "usedIds": [
-          0
+          1
         ]
       }
     }
@@ -2002,7 +2004,7 @@
         "byName": {},
         "bySource": {},
         "usedIds": [
-          0
+          1
         ]
       }
     }
@@ -2023,7 +2025,7 @@
         "byName": {},
         "bySource": {},
         "usedIds": [
-          0
+          1
         ]
       }
     }
@@ -2044,7 +2046,7 @@
         "byName": {},
         "bySource": {},
         "usedIds": [
-          0
+          1
         ]
       }
     }
@@ -2065,7 +2067,7 @@
         "byName": {},
         "bySource": {},
         "usedIds": [
-          0
+          1
         ]
       }
     }
@@ -2086,7 +2088,7 @@
         "byName": {},
         "bySource": {},
         "usedIds": [
-          0
+          1
         ]
       }
     }
@@ -2107,7 +2109,7 @@
         "byName": {},
         "bySource": {},
         "usedIds": [
-          0
+          1
         ]
       }
     }
@@ -2128,7 +2130,7 @@
         "byName": {},
         "bySource": {},
         "usedIds": [
-          0
+          1
         ]
       }
     }
@@ -2149,7 +2151,7 @@
         "byName": {},
         "bySource": {},
         "usedIds": [
-          0
+          1
         ]
       }
     }
@@ -2170,7 +2172,7 @@
         "byName": {},
         "bySource": {},
         "usedIds": [
-          0
+          1
         ]
       }
     }
@@ -2191,7 +2193,7 @@
         "byName": {},
         "bySource": {},
         "usedIds": [
-          0
+          1
         ]
       }
     }
@@ -2212,7 +2214,7 @@
         "byName": {},
         "bySource": {},
         "usedIds": [
-          0
+          1
         ]
       }
     }
@@ -2233,7 +2235,7 @@
         "byName": {},
         "bySource": {},
         "usedIds": [
-          0
+          1
         ]
       }
     }
@@ -3914,7 +3916,271 @@
       "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/coriny/cgps-gits/build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!src/clustering/index.js 9253f04bad89dd85c7b86d0bc375beb3": 671,
       "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/coriny/cgps-gits/build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!node_modules/@cgps/libmicroreact/lasso-button/index.js f714f2341f6c84f77adc9fdf3f35b5c1": 672,
       "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/coriny/cgps-gits/build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!node_modules/@cgps/libmicroreact/canvas-lasso/index.js ac02cd285e52905e1312ddfe532226c6": 673,
-      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/coriny/cgps-gits/build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!node_modules/@cgps/libmicroreact/zoom-controls/index.js 24019db9db2fc7cc09f06f5ba1e228ef": 674
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/coriny/cgps-gits/build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!node_modules/@cgps/libmicroreact/zoom-controls/index.js 24019db9db2fc7cc09f06f5ba1e228ef": 674,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!src/react-shim.js": 0,
+      "node_modules/react-redux/es/index.js c05930e8b8caac796ba54204a4e67de0": 3,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!src/utils/Api.js": 6,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!src/collection-viewer/constants.js": 9,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!src/organisms/index.js": 10,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!src/collection-viewer/selectors/index.js": 13,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!src/actions/index.js": 14,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!src/app/config.js": 15,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!src/app/constants.js": 16,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!src/genomes/actions.js": 18,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!src/clustering/selectors.js": 20,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!src/app/stateKeys/tree.js": 21,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!src/genomes/selection/selectors.js": 22,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!node_modules/leaflet/dist/leaflet-src.js": 23,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!src/collection-viewer/genomes/selectors.js": 24,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!src/genomes/selection/actions.js 0a07b8eb87576735a99558fc68f8eeb9": 26,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!src/collection-viewer/table/selectors/index.js": 27,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!src/components/fade/index.js": 28,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!src/collection-viewer/actions.js 8e6afa7e584ba99be511505e4602f8e9": 30,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!src/genomes/filter/selectors.js": 31,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!node_modules/chart.js/src/helpers/index.js": 32,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!src/upload/progress/files/selectors.js": 33,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!src/collection-viewer/tree/selectors/index.js": 34,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!node_modules/@cgps/libmicroreact/defaults.js": 36,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!src/collection-viewer/search/actions.js": 37,
+      "node_modules/redux/es/index.js c425afdaaca8032171da398c48d566c0": 38,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!src/upload/actions.js": 39,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!src/collection-viewer/table/constants.js a5fb15aee12765bf5a7619c5ad39eece": 40,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!src/location/index.js e40f121c8fb1caeb8389a78f0ec8b7ad": 41,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!src/clustering/actions.js e383872f3ae4d36036f2ced4fade74cc": 42,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!src/collection-viewer/table/actions.js": 44,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!src/collection-viewer/amr-utils.js": 46,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!src/components/Spinner.react.js": 48,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!node_modules/chart.js/src/core/core.defaults.js": 49,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!src/utils/Date.js": 50,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!src/branding/DocumentTitle.react.js": 51,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!src/branding/index.js 4cd120f109f1eb6acd44ef1b31069ce6": 52,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!src/genomes/selectors.js": 53,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!src/collection-viewer/filter/constants.js": 54,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!src/upload/progress/files/constants.js": 55,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!src/upload/progress/selectors.js": 57,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!src/collection-viewer/table/utils.js": 58,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!src/upload/progress/genomes/selectors.js": 59,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!src/upload/progress/files/actions.js bb8a2ceb13e35f882325e0030e24a4c1": 62,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!src/toast/index.js de821ab39cbec9810ad470f643c46d18": 63,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!src/collection-viewer/filter/actions.js": 64,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!src/filter/index.js de8af3a95f4a84c9262239f2e5351c1e": 65,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!node_modules/@cgps/libmicroreact/controls-button/index.js 50e318ca2f79cb765610848ff78812ff": 68,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!src/collection-viewer/downloads/utils.js": 69,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!src/genomes/filter/actions.js": 70,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!src/collection-viewer/highlight/actions.js": 71,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!src/offline/utils.js": 72,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!src/collection-viewer/tree/selectors/entities.js": 73,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!node_modules/chart.js/src/chart.js": 74,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!src/collections/actions.js": 75,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!src/collection-viewer/data-tables/utils.js": 79,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!src/collections/filter/selectors.js": 80,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!node_modules/@cgps/libmicroreact/utils/downloads.js": 81,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!src/map/actions.js": 82,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!src/upload/progress/actions.js": 83,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!src/mlst/utils.js": 85,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!src/collection-viewer/tree/actions.js": 86,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!src/genomes/filter/index.js 13decacb1e631658856b0838fc4013fd": 88,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!src/mlst/index.js": 89,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!src/collection-viewer/data-tables/constants.js": 90,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!node_modules/@cgps/libmicroreact/icon-button/index.js 450caecf06bcee62effdc07a0cafc1e2": 91,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!src/upload/constants.js": 95,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!src/card/index.js 5c6ca2884eb9b2e1e22e4b696359673e": 96,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!src/collection-viewer/offline/constants.js": 97,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!src/summary/selectors.js": 98,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!src/map/selectors.js": 99,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!src/upload/progress/assembly/selectors.js": 100,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!node_modules/@cgps/libmicroreact/menu/index.js 5aab48bd1efb7481852689fc1f059c88": 101,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!src/collections/filter/actions.js": 103,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!src/clustering/constants.js": 104,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!src/upload/selectors.js": 105,
+      "node_modules/lodash-es/_baseGetTag.js 53fd8d8d3b12a4b26af1824a879c9027": 106,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!node_modules/@cgps/libmicroreact/theme/index.js fdc925e330daed9e3dced039dbc60592": 107,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!src/genome-report/actions.js ca5c01259ee8dc5aab6d825242997aa6": 108,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!src/collection-viewer/tree/constants.js": 110,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!src/app/store.js d8e23bbc8ba8e6e3bc93ca4baaafafd5": 111,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!src/utils/Notification.js": 112,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!src/collection-viewer/search/utils.js": 114,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!src/collection-viewer/table/columnWidth.js": 115,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!node_modules/@cgps/libmicroreact/history/actions.js": 116,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!node_modules/@cgps/libmicroreact/timeline/actions.js": 118,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!node_modules/@cgps/libmicroreact/toggle-switch/index.js 0f3a0f6fae8bcc1264de7cec3f736b4f": 120,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!node_modules/chart.js/src/core/core.element.js": 121,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!src/summary/actions.js a895a1a8e8b3ad6af6b88160c3a3ce36": 122,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!src/upload/progress/analysis/selectors.js ef5c10776e3b62b221bac9005f5eceb8": 123,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!src/genomes/selection/utils.js": 126,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!src/genomes/create-collection-form/selectors.js": 128,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!src/organisms/config/index.js": 129,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!src/downloads/DownloadIcon.react.js": 130,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!src/genome-report/index.js 76b2e5e46ea16cc904ba89507bc64801": 131,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!src/offline/actions.js": 132,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!src/collection-viewer/search/constants.js": 133,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!node_modules/react-style-proptype/src/index.js": 134,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!src/collection-viewer/amr-tables/thunks.js": 139,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!src/genomes/create-collection-form/actions.js": 140,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!src/filter/actions.js": 141,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!src/organisms/OrganismName.react.js": 142,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!src/genomes/summary/selectors.js": 143,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!src/collection-viewer/private-metadata/actions.js": 144,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!src/upload/progress/analysis/actions.js": 147,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!src/upload/progress/assembly/actions.js": 148,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!src/cluster-viewer/actions.js b9e53876b821f9bb1b2f4b68b3948d50": 149,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!src/collections/filter/index.js b87914310c605e922b733ee5d46f9101": 150,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!src/collections/constants.js": 151,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!node_modules/chart.js/src/elements/index.js": 152,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!src/filter/selectors.js": 154,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!src/utils/country.js": 155,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!src/components/MarkdownInline.react.js": 156,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!src/components/Loading.react.js": 157,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!node_modules/promise-file-reader/PromiseFileReader.js": 158,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!src/collection-viewer/utils.js": 159,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!src/offline/index.js fe2c03ab6cae514c4c902b78dfc61d51": 160,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!src/filter/section/index.js": 161,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!src/account/constants.js": 162,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!src/upload/previous/actions.js": 163,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!src/genomes/create-collection-form/index.js 254e077b317e64ee8008d104a3492994": 164,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!node_modules/@cgps/libmicroreact/controls-menu/index.js 83f03dcbbfe76acab1c884892d1fc41b": 165,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!node_modules/@cgps/libmicroreact/slider/index.js e30394d4cf4915ef7524d879e83a51e1": 166,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!src/genomes/constants.js": 167,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!src/genomes/map/actions.js 4816774c6de3a2788005bea44cc159ec": 168,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!node_modules/@cgps/libmicroreact/utils/drawing.js 5faa47261deb7e0bd504fdd0ab53d699": 169,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!src/header/actions.js": 170,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!src/upload/api.js": 171,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!src/organisms/actions.js 032bf050aef5f9faa8f7c47a1cb46e0a": 172,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!src/genomes/bin/actions.js 84604200ffede3cf1f1a909409e73056": 179,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!node_modules/@cgps/libmicroreact/panel/index.js 127074a54fff9a5b42b662a14637f534": 181,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!src/genomes/api.js": 183,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!src/downloads/constants.js": 184,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!node_modules/@cgps/libmicroreact/transitions/Fade.react.js": 185,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!src/genomes/map/selectors.js": 186,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!src/auth/actions.js c2c9673fe09fa01559d374fca89a5053": 187,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!src/mlst/ST.react.js": 188,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!src/mlst/Profile.react.js": 189,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!src/branding/constants.js": 190,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!node_modules/react-markdown/src/react-markdown.js": 203,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!src/components/PubMedLink.react.js": 204,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!src/components/MarkdownHeading.react.js": 205,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!src/upload/progress/recovery/selectors.js": 206,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!src/upload/progress/assembly/api.js": 210,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!src/app/router.js 5c96e937a4e5cb082c2d27f30d04a7e0": 211,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!src/organisms/route.js 99d3e47cc3a8aa97f17cfe89c4bd55e1": 212,
+      "node_modules/rc-animate/es/CSSMotion.js 16a13e8e0ed7d645cd1d84e682d70c2b": 213,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!src/components/overlay/index.js a59baf20535f4cfbbab3bb8d958146e8": 214,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!node_modules/@cgps/libmicroreact/menu-button/index.js 11d519ff12b242491f664e5248ef567c": 215,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!node_modules/@cgps/libmicroreact/shape/draw.js 9d3eb7d6f8bfe5fe2305599fd0d9b0e1": 216,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!src/offline/constants.js": 217,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!src/clustering/util.js": 218,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!src/collection-viewer/access/actions.js": 219,
+      "node_modules/history/es/index.js a3c47956b7d0eb28317fc1c2e806211d": 220,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!src/account/actions.js 1bac1e1a475c911b518b6412f4af68a3": 221,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!node_modules/chart.js/src/core/core.ticks.js": 222,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!src/collections/api.js": 223,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!src/clustering/ClusterButton.react.js": 224,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!src/collection-viewer/offline/actions.js": 225,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!src/upload/progress/files/api.js": 226,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!src/components/static-grid/index.js f67579bac58a05f8fe461bba0a1e5d40": 227,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!src/app/stateKeys/filter.js": 228,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!src/organisms/config/FormattedName.react.js": 229,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!node_modules/chart.js/src/helpers/helpers.core.js": 230,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!src/components/fade/Fade.react.js": 231,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!src/filter/section/Section.react.js": 232,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!src/mlst/Hit.react.js": 234,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!src/components/RemoveButton.react.js": 235,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!src/components/GenomeIcon.react.js": 236,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!src/middleware/index.js": 237,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!src/components/Poller.react.js": 238,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!src/components/CircularProgress.react.js": 239,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!node_modules/@cgps/libmicroreact/drawing/halo.js": 240,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!src/clustering/ClusterDescription.react.js": 241,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!src/collection-viewer/private-metadata/selectors.js": 254,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!node_modules/@cgps/libmicroreact/tree/reducer.js": 258,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!src/collection-viewer/about-collection/actions.js": 260,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!src/collection-viewer/summary/actions.js": 262,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!src/collection-viewer/timeline/actions.js": 263,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!src/collection-viewer/tree/api.js": 264,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!src/queue/api.js": 265,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!src/genomes/create-collection-form/api.js": 266,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!src/genomes/stats/actions.js": 267,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!src/upload/progress/errors/actions.js": 274,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!src/upload/progress/files/utils/validation.js": 276,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!src/clustering/Network.react.js 53a5c0a007b3c40ac77c4f50394d1a97": 277,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!src/filter/date-section/index.js f3b758b6f461f89d39e60f3315ec7a31": 285,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!src/collections/CollectionCard.react.js ed5896760b731dfd9e2d6c2e64b936d8": 286,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!src/clustering/index.js 16ab5fbd577e36d9b6caab732999cc9b": 287,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!src/filter/aside/index.js adef25c8db401323ea1c7b08654d705c": 288,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!node_modules/@cgps/libmicroreact/lasso-button/index.js d5bcbed836b30f414175b474adec5ab2": 289,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!node_modules/@cgps/libmicroreact/canvas-lasso/index.js db72eab6169051c4e163b53b0d60747e": 290,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!node_modules/@cgps/libmicroreact/zoom-controls/index.js 5be83e695f3e13942773581abe1376d3": 291,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!universal/organisms.js": 295,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!src/organisms/config/canar.js": 297,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!src/organisms/config/klepn.js": 298,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!src/organisms/config/ngonorrhoeae.js": 301,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!src/organisms/config/rensm.js": 302,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!src/organisms/config/saureus.js": 304,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!src/organisms/config/sequi.js": 306,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!src/organisms/config/strpn.js": 307,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!src/organisms/config/styphi.js": 308,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!src/organisms/config/vibcl.js": 309,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!src/organisms/config/zikv.js": 310,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!node_modules/chart.js/src/core/core.interaction.js": 311,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!node_modules/chart.js/src/platforms/platform.js": 312,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!universal/validateMetadata.js": 313,
+      "node_modules/workerize-loader/dist/index.js?name=compress.[hash]!node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!src/upload/progress/files/utils/compressWorker.js": 314,
+      "node_modules/workerize-loader/dist/index.js?name=hash.[hash]!node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!src/upload/progress/assembly/hashWorker.js": 315,
+      "node_modules/react-router/es/Redirect.js ebc1711aae897a8910ef9a950c6e061b": 317,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!src/create-class-shim.js": 318,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!node_modules/commonmark-react-renderer/src/commonmark-react-renderer.js": 319,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!node_modules/xss-filters/src/xss-filters.js": 320,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!node_modules/chart.js/src/core/core.js": 321,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!node_modules/chart.js/src/helpers/helpers.easing.js": 322,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!node_modules/chart.js/src/helpers/helpers.canvas.js": 323,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!node_modules/chart.js/src/helpers/helpers.options.js": 324,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!node_modules/chart.js/src/core/core.helpers.js": 325,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!node_modules/chart.js/src/elements/element.arc.js": 326,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!node_modules/chart.js/src/elements/element.line.js": 327,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!node_modules/chart.js/src/elements/element.point.js": 328,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!node_modules/chart.js/src/elements/element.rectangle.js": 329,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!node_modules/chart.js/src/platforms/platform.basic.js": 330,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!node_modules/chart.js/src/platforms/platform.dom.js": 331,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!node_modules/chart.js/src/core/core.plugin.js": 332,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!node_modules/chart.js/src/core/core.animation.js": 334,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!node_modules/chart.js/src/core/core.controller.js": 380,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!node_modules/chart.js/src/core/core.datasetController.js": 404,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!node_modules/chart.js/src/core/core.layoutService.js": 408,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!node_modules/chart.js/src/core/core.scaleService.js": 409,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!node_modules/chart.js/src/core/core.scale.js": 410,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!node_modules/chart.js/src/core/core.tooltip.js": 411,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!node_modules/chart.js/src/scales/scale.linearbase.js": 412,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!node_modules/chart.js/src/scales/scale.category.js": 413,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!node_modules/chart.js/src/scales/scale.linear.js": 415,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!node_modules/chart.js/src/scales/scale.logarithmic.js": 416,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!node_modules/chart.js/src/scales/scale.radialLinear.js": 417,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!node_modules/chart.js/src/scales/scale.time.js": 420,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!node_modules/chart.js/src/controllers/controller.bar.js": 444,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!node_modules/chart.js/src/controllers/controller.bubble.js": 445,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!node_modules/chart.js/src/controllers/controller.doughnut.js": 446,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!node_modules/chart.js/src/controllers/controller.line.js": 472,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!node_modules/chart.js/src/controllers/controller.polarArea.js": 492,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!node_modules/chart.js/src/controllers/controller.radar.js": 502,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!node_modules/chart.js/src/controllers/controller.scatter.js": 510,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!node_modules/chart.js/src/charts/Chart.Bar.js": 511,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!node_modules/chart.js/src/charts/Chart.Bubble.js": 513,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!node_modules/chart.js/src/charts/Chart.Doughnut.js": 514,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!node_modules/chart.js/src/charts/Chart.Line.js": 515,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!node_modules/chart.js/src/charts/Chart.PolarArea.js": 536,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!node_modules/chart.js/src/charts/Chart.Radar.js": 644,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!node_modules/chart.js/src/charts/Chart.Scatter.js": 647,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!node_modules/chart.js/src/plugins/plugin.filler.js": 659,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!node_modules/chart.js/src/plugins/plugin.legend.js": 660,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!node_modules/chart.js/src/plugins/plugin.title.js": 661,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!node_modules/biojs-io-newick/src/index.js": 662,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!node_modules/biojs-io-newick/src/newick.js": 663,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!node_modules/biojs-io-newick/src/extended_newick.js": 668,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!node_modules/react-style-proptype/src/css-properties.js": 669,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!node_modules/leaflet.markercluster/dist/leaflet.markercluster-src.js": 670,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!src/cgps-commons/lassoselect.js": 671,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!node_modules/fast-memoize/src/index.js": 672,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!node_modules/chart.piecelabel.js/src/Chart.PieceLabel.js": 673,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/corin/cgps-gits/pw-build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!src/index.js cd8cbe4441cfd660cd6f75548ef172ca": 674
     },
     "usedIds": {
       "0": 0,
