@@ -65,21 +65,21 @@ const Details = React.createClass({
             <h2 className="wgsa-section-title">About</h2>
             {desc}
           </div>
-          <div className="wgsa-section-divider">
-            <h2 className="wgsa-section-title">Taxonomy</h2>
-            <ul>
-              {
-                taxonomy.map(({ taxId, scientificName, rank }) =>
-                  <li key={taxId}>
-                    <a href={`https://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?mode=Info&id=${taxId}`} target="_blank" rel="noopener">
-                      {scientificName}
-                    </a>
-                    { rank !== 'no rank' && ` (${rank})` }
-                  </li>
-                )
-              }
-            </ul>
-          </div>
+          {/*<div className="wgsa-section-divider">*/}
+          {/*  <h2 className="wgsa-section-title">Taxonomy</h2>*/}
+          {/*  <ul>*/}
+          {/*    {*/}
+          {/*      taxonomy.map(({ taxId, scientificName, rank }) =>*/}
+          {/*        <li key={taxId}>*/}
+          {/*          <a href={`https://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?mode=Info&id=${taxId}`} target="_blank" rel="noopener">*/}
+          {/*            {scientificName}*/}
+          {/*          </a>*/}
+          {/*          { rank !== 'no rank' && ` (${rank})` }*/}
+          {/*        </li>*/}
+          {/*      )*/}
+          {/*    }*/}
+          {/*  </ul>*/}
+          {/*</div>*/}
         </div>
         <div className="mdl-cell mdl-cell--3-col">
           <div className="wgsa-section-divider">
