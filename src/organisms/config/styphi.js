@@ -44,7 +44,7 @@ export default {
         <li><a href="https://cgps.gitbook.io/pathogenwatch/technical-descriptions/typing-methods/genotyphi" target="_blank" rel="noopener">Genotyping with Genotyphi.</a></li>
         <li><a href="https://cgps.gitbook.io/pathogenwatch/technical-descriptions/typing-methods/mlst" target="_blank" rel="noopener">Multi-locus sequence typing (MLST) using the PUBMLST database.</a></li>
         <li><a href="https://cgps.gitbook.io/pathogenwatch/technical-descriptions/cgmlst-clusters" target="_blank" rel="noopener">Core genome MLST (cgMLST) using the Enterobase database.</a></li>
-        <li><a href="https://cgps.gitbook.io/pathogenwatch/technical-descriptions/inctyper" target="_blank" rel="noopener">Plasmid replication type assignment based on the Plasmidfinder database.</a></li>
+        <li><a href="https://cgps.gitbook.io/pathogenwatch/technical-descriptions/inctyper" target="_blank" rel="noopener">Plasmid replicon type assignment based on the Plasmidfinder database.</a></li>
       </ol>
     </span>
   ),
