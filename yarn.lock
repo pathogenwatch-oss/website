@@ -431,17 +431,17 @@ async@2.6.0:
   dependencies:
     lodash "^4.14.0"
 
-async@2.6.1, async@^2.0.1:
+async@^1.4.0:
+  version "1.5.2"
+  resolved "https://registry.yarnpkg.com/async/-/async-1.5.2.tgz#ec6a61ae56480c0c3cb241c95618e20892f9672a"
+  integrity sha1-7GphrlZIDAw8skHJVhjiCJL5Zyo=
+
+async@^2.0.1:
   version "2.6.1"
   resolved "https://registry.yarnpkg.com/async/-/async-2.6.1.tgz#b245a23ca71930044ec53fa46aa00a3e87c6a610"
   integrity sha512-fNEiL2+AZt6AlAw/29Cr0UDe4sRAHCpEHh54WMz+Bb7QfNcFw4h3loofyJpLeQs4Yx7yuqu/2dLgM5hKOs6HlQ==
   dependencies:
     lodash "^4.17.10"
-
-async@^1.4.0:
-  version "1.5.2"
-  resolved "https://registry.yarnpkg.com/async/-/async-1.5.2.tgz#ec6a61ae56480c0c3cb241c95618e20892f9672a"
-  integrity sha1-7GphrlZIDAw8skHJVhjiCJL5Zyo=
 
 asynckit@^0.4.0:
   version "0.4.0"
@@ -3595,7 +3595,7 @@ node-uuid@~1.4.7:
   resolved "https://registry.yarnpkg.com/node-uuid/-/node-uuid-1.4.8.tgz#b040eb0923968afabf8d32fb1f17f1167fdab907"
   integrity sha1-sEDrCSOWivq/jTL7HxfxFn/auQc=
 
-nodegit-promise@^4.0.0, nodegit-promise@~4.0.0:
+nodegit-promise@~4.0.0:
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/nodegit-promise/-/nodegit-promise-4.0.0.tgz#5722b184f2df7327161064a791d2e842c9167b34"
   integrity sha1-VyKxhPLfcycWEGSnkdLoQskWezQ=
@@ -3878,11 +3878,6 @@ pascalcase@^0.1.1:
   resolved "https://registry.yarnpkg.com/pascalcase/-/pascalcase-0.1.1.tgz#b363e55e8006ca6fe21784d2db22bd15d7917f14"
   integrity sha1-s2PlXoAGym/iF4TS2yK9FdeRfxQ=
 
-pass-stream@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/pass-stream/-/pass-stream-1.0.0.tgz#72850ad6b20ff7a2724a780f50e2506200b61e82"
-  integrity sha1-coUK1rIP96JySngPUOJQYgC2HoI=
-
 passport-facebook@^2.0.0:
   version "2.1.1"
   resolved "https://registry.yarnpkg.com/passport-facebook/-/passport-facebook-2.1.1.tgz#c39d0b52ae4d59163245a4e21a7b9b6321303311"
@@ -4042,9 +4037,9 @@ path-type@^2.0.0:
   dependencies:
     pify "^2.0.0"
 
-"pathogenwatch-front-end@https://gitlab.com/cgps/pathogenwatch-front-end#v8.8.4":
-  version "8.8.4"
-  resolved "https://gitlab.com/cgps/pathogenwatch-front-end#d1154370635576c2003b6b90019272692d9a5f6b"
+"pathogenwatch-front-end@https://gitlab.com/cgps/pathogenwatch-front-end#v8.9.7":
+  version "8.9.7"
+  resolved "https://gitlab.com/cgps/pathogenwatch-front-end#d905a56ac4a2dd523287b9419ad9091c8ad887e6"
 
 patrun@1.0:
   version "1.0.0"
@@ -4160,14 +4155,6 @@ promisify-node@^0.4.0:
   dependencies:
     nodegit-promise "~4.0.0"
     object-assign "^4.0.1"
-
-promisify-node@^0.5.0:
-  version "0.5.0"
-  resolved "https://registry.yarnpkg.com/promisify-node/-/promisify-node-0.5.0.tgz#b7115a9d5cd241e939c96e260acda24938d25720"
-  integrity sha512-GR2E4qgCoKFTprhULqP2OP3bl8kHo16XtnqtkHH6be7tPW1yL6rXd15nl3oV2sLTFv1+j6tqoF69VVpFtJ/j+A==
-  dependencies:
-    nodegit-promise "^4.0.0"
-    object-assign "^4.1.1"
 
 prop-types@^15.6.2:
   version "15.6.2"
@@ -5562,7 +5549,7 @@ utils-merge@1.0.1, utils-merge@1.x.x:
   resolved "https://registry.yarnpkg.com/utils-merge/-/utils-merge-1.0.1.tgz#9f95710f50a267947b2ccc124741c1028427e713"
   integrity sha1-n5VxD1CiZ5R7LMwSR0HBAoQn5xM=
 
-uuid@^3.0.0, uuid@^3.0.1, uuid@^3.3.2:
+uuid@^3.0.0, uuid@^3.3.2:
   version "3.3.2"
   resolved "https://registry.yarnpkg.com/uuid/-/uuid-3.3.2.tgz#1b4af4955eb3077c501c23872fc6513811587131"
   integrity sha512-yXJmeNaw3DnnKAOKJE51sL/ZaYfWJRl1pK9dr19YFCu0ObS231AB1/LbqTKRAQ5kw8A90rA6fr4riOUpTZvQZA==
@@ -5657,12 +5644,6 @@ write@^0.2.1:
   integrity sha1-X8A4KOJkzqP+kUVUdvejxWbLB1c=
   dependencies:
     mkdirp "^0.5.1"
-
-"writers-digest@github:cgps-dev/writers-digest#0aea383bd66a78eb668ef0567092852171e1385a":
-  version "1.1.0"
-  resolved "https://codeload.github.com/cgps-dev/writers-digest/tar.gz/0aea383bd66a78eb668ef0567092852171e1385a"
-  dependencies:
-    mkdirp "0.5.1"
 
 xdg-basedir@^3.0.0:
   version "3.0.0"
