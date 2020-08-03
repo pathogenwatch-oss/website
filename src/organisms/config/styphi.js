@@ -49,26 +49,6 @@ export default {
     </span>
   ),
   imageCredit: 'Dave Goulding',
-  // taxonomy: [
-  //   { taxId: 131567, scientificName: 'Cellular organisms', rank: 'no rank' },
-  //   { taxId: 2, scientificName: 'Bacteria', rank: 'superkingdom' },
-  //   { taxId: 1224, scientificName: 'Proteobacteria', rank: 'phylum' },
-  //   { taxId: 1236, scientificName: 'Gammaproteobacteria', rank: 'class' },
-  //   { taxId: 91347, scientificName: 'Enterobacterales', rank: 'order' },
-  //   { taxId: 543, scientificName: 'Enterobacteriaceae', rank: 'family' },
-  //   { taxId: 590, scientificName: 'Salmonella', rank: 'genus' },
-  //   { taxId: 28901, scientificName: 'Salmonella enterica', rank: 'species' },
-  //   {
-  //     taxId: 59201,
-  //     scientificName: 'Salmonella enterica subsp. enterica',
-  //     rank: 'subspecies'
-  //   },
-  //   {
-  //     taxId: 90370,
-  //     scientificName: 'Salmonella enterica subsp. enterica serovar Typhi',
-  //     rank: 'no rank'
-  //   },
-  // ],
   publicMetadataColumnNames: [],
   collections: [],
   amrOptions: {
