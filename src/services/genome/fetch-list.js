@@ -43,7 +43,7 @@ module.exports = async function (props) {
         formattedGenome.st2 = mlst2.st;
         formattedGenome.organismId = speciator.organismId;
         formattedGenome.speciesName = speciator.speciesName;
-        formattedGenome.subspecies = serotype.subspecies;
+        formattedGenome.subspecies = speciator.organismId === '2697049' ? 'SARS-CoV-2' : serotype.subspecies;
         formattedGenome.serotype = serotype.value;
         if (genome.reference && !schemes.has(speciator.organismId)) {
           genome.reference = false;
