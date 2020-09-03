@@ -60,7 +60,7 @@ const valueGettersByTable = {
   typing: getUserDefinedValue,
   stats: getUserDefinedValue,
   antibiotics: (antibiotic, { analysis: { paarsnp } }) =>
-    (isResistant(paarsnp, antibiotic) ? 1 : 0),
+    (!!paarsnp && isResistant(paarsnp, antibiotic) ? 1 : 0),
   snps: (snp, genome) => (hasElement(genome, 'snp', snp) ? 1 : 0),
   genes: (gene, genome) => (hasElement(genome, 'paar', gene) ? 1 : 0),
 };
