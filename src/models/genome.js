@@ -312,7 +312,11 @@ schema.statics.getFilterQuery = async function (props) {
   }
 
   if (subspecies) {
-    findQuery['analysis.serotype.subspecies'] = subspecies;
+    if (subspecies === 'SARS-CoV-2') {
+      findQuery['analysis.speciator.organismName'] = subspecies;
+    } else {
+      findQuery['analysis.serotype.subspecies'] = subspecies;
+    }
   }
 
   if (serotype) {

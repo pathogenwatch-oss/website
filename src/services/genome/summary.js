@@ -139,12 +139,14 @@ const summaryFields = [
   },
   {
     field: 'subspecies',
-    task: 'serotype',
+    // task: 'serotype',
     aggregation: () => [
-      { $match: { 'analysis.serotype': { $exists: true } } },
+      { $match: { $or: [ { 'analysis.serotype': { $exists: true } }, { 'analysis.speciator.organismId': '2697049' } ] }},
       {
         $group: {
-          _id: '$analysis.serotype.subspecies',
+          _id: {
+            $ifNull: [ '$analysis.serotype.subspecies', '$analysis.speciator.organismName' ]
+          },
           count: { $sum: 1 },
         },
       },
