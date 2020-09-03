@@ -97,7 +97,7 @@ const Filter = ({
     <FilterableSection
       filterKey="subspecies"
       heading="Subspecies"
-      hidden={filterState.organismId}
+      hidden={!filterSummary.speciesId.length || filterState.organismId}
       icon="bug_report"
       renderLabel={({ value }) => <React.Fragment>subsp. <em>{value}</em></React.Fragment>}
       updateFilter={clearDependants(filterState, [ 'serotype' ])}
