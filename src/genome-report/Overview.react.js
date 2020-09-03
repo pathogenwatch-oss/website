@@ -19,6 +19,8 @@ const SpeciesSubtitle = ({ analysis }) => {
         serotype={serotype.value}
       />
     );
+  } else if (speciator.organismId === '2697049') {
+    return (<OrganismName speciesName={speciator.organismName} />);
   }
   return <OrganismName speciesName={speciator.speciesName} />;
 };
