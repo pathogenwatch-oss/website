@@ -37,7 +37,7 @@ export const getUnfilteredGenomeIds = createSelector(
         if (genome.__isCollection) {
           ids.push(genome.uuid);
         }
-      } else if (genome.analysis && genome.analysis.core.fp.reference === tree) {
+      } else if (genome.analysis && !!genome.analysis.core && genome.analysis.core.fp.reference === tree) {
         ids.push(genome.uuid);
       }
     }
