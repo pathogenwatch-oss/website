@@ -22,6 +22,11 @@ function fetchRecords(fileIds, task, version) {
   return Analysis.find({ fileId: { $in: fileIds }, task, version, }, { fileId: 1, results: 1 }).lean();
 }
 
+function hasFlags(task) {
+  const { flags = {} } = task;
+  return Object.keys(flags).length > 0;
+}
+
 async function cleanGenomeCache(genome, newAnalysis, oldAnalysis) {
   const { analysis = {} } = genome;
   const { speciator = {} } = analysis;
@@ -48,13 +53,13 @@ async function cleanGenomeCache(genome, newAnalysis, oldAnalysis) {
     const oldSuperkingdomId = !!oldAnalysis ? oldAnalysis.superkingdomId : speciator.superkingdomId;
 
     // Get set of old tasks for that organism.
-    const tasks = !!user ?
+    const tasks = !user ?
       getTasksByOrganism({
         organismId: oldOrganismId,
         speciesId: oldSpeciesId,
         genusId: oldGenusId,
         superkingdomId: oldSuperkingdomId
-      }) :
+      }, { canRun: task => !hasFlags(task) }) :
       getTasksByOrganism({
         organismId: oldOrganismId,
         speciesId: oldSpeciesId,
