@@ -31,7 +31,7 @@ async function cleanGenomeCache(genome, newAnalysis, oldAnalysis) {
   }
   // If not in records, speciesId has changed or it's a non-species level organism full update anyway
   if (!oldAnalysis || (oldAnalysis && (newAnalysis.speciesId !== oldAnalysis.speciesId || (speciator.organismId !== speciator.speciesId && newAnalysis.taxId !== speciator.organismId)))) {
-    count = count +1;
+    count = count + 1;
     console.log(`${count} ${genome.fileId}`);
     // console.log(`Cleaning ${genome.fileId} from ${!!oldAnalysis ? oldAnalysis.speciesId : 'Very old'} to ${newAnalysis.speciesId}`)
     console.log(`Cleaning ${genome.fileId} from ${!!oldAnalysis ? oldAnalysis.speciesId : 'Very old'} to ${newAnalysis.speciesId}`);
@@ -48,12 +48,19 @@ async function cleanGenomeCache(genome, newAnalysis, oldAnalysis) {
     const oldSuperkingdomId = !!oldAnalysis ? oldAnalysis.superkingdomId : speciator.superkingdomId;
 
     // Get set of old tasks for that organism.
-    const tasks = getTasksByOrganism({
-      organismId: oldOrganismId,
-      speciesId: oldSpeciesId,
-      genusId: oldGenusId,
-      superkingdomId: oldSuperkingdomId
-    }, user);
+    const tasks = !!user ?
+      getTasksByOrganism({
+        organismId: oldOrganismId,
+        speciesId: oldSpeciesId,
+        genusId: oldGenusId,
+        superkingdomId: oldSuperkingdomId
+      }) :
+      getTasksByOrganism({
+        organismId: oldOrganismId,
+        speciesId: oldSpeciesId,
+        genusId: oldGenusId,
+        superkingdomId: oldSuperkingdomId
+      }, user);
 
     if (doIt) {
       // Delete the task results from the cache for that fileId
