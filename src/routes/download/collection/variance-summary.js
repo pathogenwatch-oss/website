@@ -291,6 +291,7 @@ function writeMatrixFooter(stream) {
 }
 
 async function generateData({ genomes, tree, subtrees = [] }, stream) {
+  subtrees = subtrees === null ? [] : subtrees;
   const collectionGenomeIds = new Set(genomes.map(id => id.toString()));
   if (tree) {
     const collectionTree = {
