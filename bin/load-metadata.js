@@ -1,10 +1,9 @@
 const argv = require('named-argv');
-const fs = import('fs')
 
 const Genome = require('models/genome');
 const mongoConnection = require('utils/mongoConnection');
-const editMany = require('services/genome/edit-many')
-const readCsv = require('../utils/read-csv')
+const editMany = require('services/genome/edit-many');
+const readCsv = require('../utils/read-csv');
 
 function parseQuery() {
   const { query = '{}' } = argv.opts;
@@ -46,15 +45,15 @@ function mapMetadata(metadataUpdate, genomes) {
 
 async function main() {
   checkOpts();
-  const metadataUpdate = await readCsv(argv.opts.csvFile)
+  const metadataUpdate = await readCsv(argv.opts.csvFile);
   await mongoConnection.connect();
   const query = parseQuery(argv.opts.query);
   query._user = argv.opts.userId;
-  console.log(`Query: ${query}`)
+  console.log(`Query: ${query}`);
   const genomes = await fetchGenomes(query);
   const data = mapMetadata(metadataUpdate, genomes);
-  const user = { '_id': argv.opts.userId}
-  await editMany({ user, data })
+  const user = { '_id': argv.opts.userId};
+  await editMany({ user, data });
 }
 
 main()
