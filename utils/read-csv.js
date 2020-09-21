@@ -1,5 +1,5 @@
-const promisify = require('promisify-node');
-const fs = promisify('fs');
+const util = require('util')
+const fs = require('fs');
 
 const systemMetadataColumns = new Set([
   'assemblyId', 'uuid', 'speciesId', 'fileId', 'collectionId', 'pmid',
@@ -33,9 +33,11 @@ function parseRows(file) {
     });
 }
 
+const readFile = util.promisify(fs.readFile);
+
 module.exports = function (csvFilePath) {
   return (
-    fs.readFile(csvFilePath, 'utf8')
+    readFile(csvFilePath, 'utf8')
       .then(parseRows)
   );
 };
