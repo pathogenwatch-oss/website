@@ -37,6 +37,9 @@ export default ({ genome }) => {
         <div className="pw-genome-report-metadata">
           <dt>O locus</dt>
           <dd>{kleborate.typing.O_locus}</dd>
+          <ExternalLink to={`/genomes/all?genusId=570&olocus=${kleborate.typing.O_locus}`}>
+            View all {kleborate.typing.O_locus}
+          </ExternalLink>
         </div>
         <div className="pw-genome-report-metadata">
           <dt>Confidence</dt>

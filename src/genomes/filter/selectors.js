@@ -365,6 +365,22 @@ const getKlocusSummary = createSelector(
   )
 );
 
+const getOlocusSummary = createSelector(
+  getFilterSummaries,
+  state => getFilter(state).olocus,
+  getFilterFn('olocus'),
+  ({ olocus = {} }, filterValue, filterFn) => sortBy(
+    Object.keys(olocus)
+      .filter(filterFn)
+      .map(value => ({
+        value,
+        active: filterValue === value,
+        count: olocus[value].count,
+      })),
+    'value'
+  )
+);
+
 const getDateSummary = createSelector(
   getFilterSummaries,
   state => getFilter(state).minDate,
@@ -434,6 +450,7 @@ export const getFilterSummary = createSelector(
   getMlstSummary,
   getNgmastSummary,
   getNgstarSummary,
+  getOlocusSummary,
   getOrganismSummary,
   getReferenceSummary,
   getResistanceSummary,
@@ -455,6 +472,7 @@ export const getFilterSummary = createSelector(
       mlst,
       ngmast,
       ngstar,
+      olocus,
       organismId,
       reference,
       resistance,
@@ -482,6 +500,7 @@ export const getFilterSummary = createSelector(
       mlst2,
       ngmast,
       ngstar,
+      olocus,
       organismId,
       reference,
       resistance,
