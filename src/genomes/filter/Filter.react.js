@@ -34,8 +34,8 @@ const speciesDependants = [
   'genotype',
   'reference',
 ];
-const genusDependants = speciesDependants.concat([ 'speciesId', 'klocus', 'collection' ]);
-const collectionDependents = speciesDependants.concat([ 'klocus' ]);
+const genusDependants = speciesDependants.concat([ 'speciesId', 'klocus', 'olocus', 'collection' ]);
+const collectionDependents = speciesDependants.concat([ 'klocus', 'olocus' ]);
 
 const Filter = ({
   applyFilter,
@@ -163,6 +163,11 @@ const Filter = ({
     <FilterableSection
       filterKey="klocus"
       heading="K Locus"
+      icon="label"
+    />
+    <FilterableSection
+      filterKey="olocus"
+      heading="O Locus"
       icon="label"
     />
     <FilterableSection
