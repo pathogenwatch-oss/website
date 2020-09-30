@@ -3,8 +3,8 @@ import React from 'react';
 import ExternalLink from '../ExternalLink.react';
 
 export default ({ genome }) => {
-  const { kleborate } = genome.analysis;
-  const species = kleborate.species !== genome.analysis.speciator.speciesName;
+  const { kleborate, speciator } = genome.analysis;
+  const species = !kleborate.species.replace('Klebsiella (Raoultella)', 'Raoultella').startsWith(speciator.speciesName);
 
   return (
     <React.Fragment>
@@ -20,7 +20,7 @@ export default ({ genome }) => {
         <div className="pw-genome-report-metadata">
           <dt>K locus</dt>
           <dd>{kleborate.typing.K_locus}</dd>
-          <ExternalLink to={`/genomes/all?genusId=570&klocus=${kleborate.typing.K_locus}`}>
+          <ExternalLink to={`/genomes/all?genusId=${speciator.genusId}&klocus=${kleborate.typing.K_locus}`}>
             View all {kleborate.typing.K_locus}
           </ExternalLink>
         </div>
@@ -37,7 +37,7 @@ export default ({ genome }) => {
         <div className="pw-genome-report-metadata">
           <dt>O locus</dt>
           <dd>{kleborate.typing.O_locus}</dd>
-          <ExternalLink to={`/genomes/all?genusId=570&olocus=${kleborate.typing.O_locus}`}>
+          <ExternalLink to={`/genomes/all?genusId=${speciator.genusId}&olocus=${kleborate.typing.O_locus}`}>
             View all {kleborate.typing.O_locus}
           </ExternalLink>
         </div>
