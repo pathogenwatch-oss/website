@@ -224,7 +224,20 @@ const summaryFields = [
       { $match: { 'analysis.kleborate': { $exists: true } } },
       {
         $group: {
-          _id: '$analysis.kleborate.K_locus',
+          _id: '$analysis.kleborate.typing.K_locus',
+          count: { $sum: 1 },
+        },
+      },
+    ],
+  },
+  {
+    field: 'olocus',
+    task: 'kleborate',
+    aggregation: () => [
+      { $match: { 'analysis.kleborate': { $exists: true } } },
+      {
+        $group: {
+          _id: '$analysis.kleborate.typing.O_locus',
           count: { $sum: 1 },
         },
       },

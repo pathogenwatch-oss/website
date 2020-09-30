@@ -85,7 +85,8 @@ schema.index({ 'analysis.ngstar.st': 1 });
 schema.index({ 'analysis.ngmast.ngmast': 1 });
 schema.index({ 'analysis.genotyphi.genotype': 1 });
 schema.index({ 'analysis.core.fp.reference': 1 });
-schema.index({ 'analysis.kleborate.K_locus': 1 });
+schema.index({ 'analysis.kleborate.typing.K_locus': 1 });
+schema.index({ 'analysis.kleborate.typing.O_locus': 1 });
 
 schema.statics.uploadTypes = uploadTypes;
 
@@ -232,6 +233,7 @@ schema.statics.getFilterQuery = async function (props) {
     minDate,
     ngmast,
     ngstar,
+    olocus,
     organismId,
     resistance,
     searchText,
@@ -324,7 +326,11 @@ schema.statics.getFilterQuery = async function (props) {
   }
 
   if (klocus) {
-    findQuery['analysis.kleborate.K_locus'] = klocus;
+    findQuery['analysis.kleborate.typing.K_locus'] = klocus;
+  }
+
+  if (olocus) {
+    findQuery['analysis.kleborate.typing.O_locus'] = olocus;
   }
 
   if (strain) {
