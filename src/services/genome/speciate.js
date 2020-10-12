@@ -9,6 +9,7 @@ const { summariseAnalysis } = require('../../utils/analysis');
 
 async function submitTasks({ genomeId, fileId, uploadedAt, clientId, userId }, doc) {
   const speciatorResult = summariseAnalysis(doc);
+  const { organismId, speciesId, genusId, superkingdomId } = speciatorResult;
   const user = await User.findById(userId, { flags: 1 });
   const tasks = getTasksByOrganism(speciatorResult, user);
   const cachedResults = await Analysis.find({
@@ -19,16 +20,14 @@ async function submitTasks({ genomeId, fileId, uploadedAt, clientId, userId }, d
   await Genome.addAnalysisResults(genomeId, doc, ...cachedResults);
 
   const existingTasks = [ doc, ...cachedResults ];
-  const existingTasknames = new Set(cachedResults.map(_ => _.task));
-  const missingTasks = tasks.filter(_ => !existingTasknames.has(_.task));
+  const existingTaskNames = new Set(cachedResults.map(_ => _.task));
+  const missingTasks = tasks.filter(_ => !existingTaskNames.has(_.task));
 
   if (clientId && existingTasks.length > 0) {
     notify({ genomeId, clientId, uploadedAt, tasks: existingTasks });
   }
 
   if (missingTasks.length === 0) return Promise.resolve();
-
-  const { organismId, speciesId, genusId, superkingdomId } = speciatorResult;
 
   return request('tasks', 'enqueue-genome', {
     genomeId,
