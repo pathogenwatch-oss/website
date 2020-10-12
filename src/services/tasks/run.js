@@ -1,5 +1,5 @@
 const fs = require('fs');
-const fastaStorage = require('../../utils/fasta-store')
+const fastaStorage = require('../../utils/fasta-store');
 
 const Analysis = require('models/analysis');
 const TaskLog = require('models/taskLog');
@@ -100,11 +100,11 @@ module.exports = async function ({ task, version, metadata, timeout$: timeout = 
       timeout,
     });
     await Analysis.update(
-      { fileId, task, version },
-      { fileId, task, version, results },
+      { fileId, task, version, organismId },
+      { fileId, task, version, organismId, results },
       { upsert: true }
     ).exec();
-    doc = { fileId, task, version, results };
+    doc = { fileId, task, version, organismId, results };
   }
 
   if (!precache) {

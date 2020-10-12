@@ -27,7 +27,7 @@ module.exports.getImages = function (sectionName) {
 
 module.exports.getSpeciatorTask = function () {
   const { speciation = {} } = config.tasks || {};
-  const { task = 'speciator', version = 'v1' } = speciation;
+  const { task = 'speciator', version = 'v3.0.1' } = speciation;
   return { task, version };
 };
 

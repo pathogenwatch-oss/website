@@ -15,7 +15,7 @@ function checkOpts() {
   const { userId, query, csvFile } = argv.opts;
 
   if (!userId || !query || !csvFile) {
-    console.log('Missing argument(s) (--userId, --query, --csvFile');
+    console.log('Missing argument(s) (--userId, --query, --csvFile)');
     process.exit(1);
   }
 }

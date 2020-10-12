@@ -6,10 +6,11 @@ const schema = new Schema({
   task: String,
   version: String,
   fileId: String,
+  organismId: String,
   results: Object,
 });
 
-schema.index({ fileId: 1, task: 1, version: 1 });
+schema.index({ fileId: 1, task: 1, version: 1, organismId: 1 });
 
 // clustering index
 schema.index({ task: 1, 'results.scheme': 1, 'results.st': 1 }, { partialFilterExpression: { task: 'cgmlst' } });
