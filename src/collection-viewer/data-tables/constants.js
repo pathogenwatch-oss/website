@@ -170,7 +170,7 @@ export const systemDataColumns = {
             match['Inc Match'].replace(/_\d+$/, '') :
             match.Group))
           .sort()
-          .join('/')
+          .join('--')
         )
         .sort()
         .join('; ');
