@@ -29,9 +29,11 @@ function updateAnalyses(tasks) {
 async function fetchTaskData(query) {
   const taskData = new Set();
   const genomeCount = await Genome.count(query);
-  const step = 1000;
+  const step = 10000;
   for (let index = 0; index < genomeCount; index += step) {
-    const genomes = await Genome.find(query, '-_id fileId analysis').sort({ _id: 1 }).skip(index).limit(step).lean();
+    console.log(`${index} / ${genomeCount}`);
+    const genomes = await Genome.find(query, '-_id fileId analysis', { timeout: false }).sort({ createdAt: 1 }).skip(index).limit(step)
+      .lean();
     for (const genome of genomes) {
       const fileId = genome.fileId;
       // Check if the genome has the analysis field & speciator record.
