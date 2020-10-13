@@ -27,23 +27,27 @@ function updateAnalyses(tasks) {
 // If a genome appears more than once a superset of the analyses are kept
 // organismId is compared as a sanity check
 async function fetchTaskData(query) {
-  const genomes = await Genome.find(query, '-_id fileId analysis').lean().exec();
   const taskData = new Set();
-  genomes.forEach((genome) => {
-    const fileId = genome.fileId;
-    // Check if the genome has the analysis field & speciator record.
-    // If not it's a dodgy assembly that was never processed and should be ignored.
-    if (!!genome.analysis && !!genome.analysis.speciator) {
-      const organismId = genome.analysis.speciator.organismId;
-      // There's an average of 2.5 records per fileId, the section below ensures they are merged correctly.
-      Object.keys(genome.analysis).forEach((task) => {
-        taskData.add(JSON.stringify({ fileId, organismId, task, version: genome.analysis[task].__v }));
-      });
-    } else {
-      // Should always have the same organismId for each file ID, so if not, fail.
-      console.log(`Speciator error with fileID ${genome.fileId}`);
+  const genomeCount = await Genome.count(query);
+  const step = 1000;
+  for (let index = 0; index < genomeCount; index += step) {
+    const genomes = await Genome.find(query, '-_id fileId analysis').sort({ _id: 1 }).skip(index).limit(step).lean();
+    for (const genome of genomes) {
+      const fileId = genome.fileId;
+      // Check if the genome has the analysis field & speciator record.
+      // If not it's a dodgy assembly that was never processed and should be ignored.
+      if (!!genome.analysis && !!genome.analysis.speciator) {
+        const organismId = genome.analysis.speciator.organismId;
+        // There's an average of 2.5 records per fileId, the section below ensures they are merged correctly.
+        Object.keys(genome.analysis).forEach((task) => {
+          taskData.add(JSON.stringify({ fileId, organismId, task, version: genome.analysis[task].__v }));
+        });
+      } else {
+        // Should always have the same organismId for each file ID, so if not, fail.
+        console.log(`Speciator error with fileID ${genome.fileId}`);
+      }
     }
-  });
+  }
   return [ ...taskData ];
 }
 
