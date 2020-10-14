@@ -77,6 +77,7 @@ function writeLines(columns, genomes, res) {
 function getGenomes(query, fileIds, genomeLookup) {
   const cores = Analysis.find(query, {
     fileId: 1,
+    organismId: 1,
     results: 1,
   }).lean().cursor();
 
@@ -148,7 +149,7 @@ module.exports = async (req, res, next) => {
     'Content-type': 'text/csv',
   });
 
-  const collection = await request('collection', 'authorise', { user, token, projection: { genomes: 1, 'tree.versions': 1, 'subtrees.versions': 1, 'subtrees.name': 1 } });
+  const collection = await request('collection', 'authorise', { user, token, projection: { genomes: 1, organismId: 1, 'tree.versions': 1, 'subtrees.versions': 1, 'subtrees.name': 1 } });
   try {
     const tree = subtree ?
         collection.subtrees.find(_ => _.name === subtree) :
@@ -169,6 +170,7 @@ module.exports = async (req, res, next) => {
     const analysisQuery = {
       task: 'core',
       fileId: { $in: fileIds },
+      organismId: collection.organismId,
       version: coreVersion,
     };
     const columns = await getColumns(analysisQuery);

@@ -42,6 +42,7 @@ module.exports = async (req, res) => {
   const projection = {
     name: 1,
     'analysis.cgmlst.__v': 1,
+    'analysis.speciator.organismId': 1,
     fileId: 1,
   };
 
@@ -59,6 +60,7 @@ module.exports = async (req, res) => {
   const analysisQuery = {
     fileId: { $in: fileIds },
     task: 'cgmlst',
+    organismId: genomeDetails.analysis.speciator.organismId
   };
 
   return Analysis.find(analysisQuery)
