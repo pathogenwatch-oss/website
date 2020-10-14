@@ -23,13 +23,13 @@ function getCache(genomes, versions) {
     ),
     { sort: { fileId: 1 } }
   )
-  .then(cache => {
-    const cacheByFileId = {};
-    for (const doc of cache) {
-      cacheByFileId[doc.fileId] = doc.scores;
-    }
-    return cacheByFileId;
-  });
+    .then(cache => {
+      const cacheByFileId = {};
+      for (const doc of cache) {
+        cacheByFileId[doc.fileId] = doc.scores;
+      }
+      return cacheByFileId;
+    });
 }
 
 

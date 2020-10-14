@@ -41,9 +41,6 @@ function mapMetadata(metadataUpdate, genomes, nameColumn) {
     }
     const currentName = row[nameColumn] ? row[nameColumn] : row.userDefined[nameColumn];
 
-    // if (!row[currentName]) {
-    //   return memo;
-    // }
     memo[currentName] = row;
     if (memo[currentName].day === 'Unknown' || !memo[currentName].day) {
       delete memo[currentName].day;
@@ -54,9 +51,6 @@ function mapMetadata(metadataUpdate, genomes, nameColumn) {
     if (memo[currentName].year === 'Unknown' || !memo[currentName].year) {
       delete memo[currentName].year;
     }
-    // memo[row.name].day = row.day !== 'Unknown' ? row.day : null;
-    // memo[row.name].month = row.month !== 'Unknown' ? row.month : null;
-    // memo[row.name].year = row.year !== 'Unknown' ? row.year : null;
     return memo;
   }, {});
 

@@ -70,7 +70,7 @@ function runTask({ fileId, task, version, organismId, speciesId, genusId, timeou
       }
     });
     container.on('spawn', containerId => {
-      LOGGER.info('spawn', containerId, 'for task', task, 'file', fileId);
+      LOGGER.info('spawn', containerId, 'for task', task, 'file', fileId, 'organismId', organismId);
     });
     container.on('error', reject);
   });
@@ -87,7 +87,7 @@ module.exports = async function ({ task, version, metadata, timeout$: timeout = 
     clientId,
     userId,
   } = metadata;
-  let doc = await Analysis.findOne({ fileId, task, version }).lean();
+  let doc = await Analysis.findOne({ fileId, task, version, organismId }).lean();
   if (!doc) {
     // The results weren't in the cache
     const results = await runTask({

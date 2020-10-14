@@ -14,7 +14,7 @@ async function submitTasks({ genomeId, fileId, uploadedAt, clientId, userId }, d
   const tasks = getTasksByOrganism(speciatorResult, user);
   const cachedResults = await Analysis.find({
     fileId,
-    $or: tasks.map(({ task, version }) => ({ task, version })),
+    $or: tasks.map(({ task, version }) => ({ task, version, organismId })),
   }).lean();
 
   await Genome.addAnalysisResults(genomeId, doc, ...cachedResults);
