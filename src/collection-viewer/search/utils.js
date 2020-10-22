@@ -2,12 +2,12 @@ import { getColumnLabel } from '../table/utils';
 import { tableKeys } from '../constants';
 import { getColourState, nonResistantColour } from '../amr-utils';
 
-export function mapColumnsToSearchCategories(columns, tableName, matcher) {
+export function mapColumnsToSearchCategories(columns = [], tableName, matcher) {
   const categories = [];
   const columnKeys = new Set();
 
   for (const column of columns) {
-    if (column.group) {
+    if (column.group && column.columns && Array.isArray(column.columns)) {
       const subcategories =
         mapColumnsToSearchCategories(column.columns, tableName, matcher);
       for (const category of subcategories) {
