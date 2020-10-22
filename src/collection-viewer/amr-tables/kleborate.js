@@ -58,7 +58,7 @@ function buildColumns(genomes) {
           <i
             className="material-icons wgsa-resistance-icon"
             style={{ color: effectColour }}
-            title={genome.analysis.kleborate.amr[record.key]}
+            title={genome.analysis.kleborate.amr[record.key].match}
           >
             lens
           </i>
