@@ -1,6 +1,6 @@
 {
   "name": "pathogenwatch-front-end",
-  "version": "8.10.5",
+  "version": "8.11.0",
   "description": "Web client for Pathogenwatch",
   "main": "index.js",
   "scripts": {
