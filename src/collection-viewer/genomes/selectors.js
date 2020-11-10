@@ -88,6 +88,7 @@ const getGenomeDatatypes = createSelector(
       hasMetadata,
       hasAMR: isClusterView ? false : hasAMR,
       hasKleborateAMR: isClusterView ? false : hasKleborateAMR,
+      hasKleborateAMRGenotypes: isClusterView ? false : hasKleborateAMR,
       hasVista: isClusterView ? false : hasVista,
     };
   }
@@ -104,6 +105,11 @@ export const hasAMR = createSelector(
 );
 
 export const hasKleborateAMR = createSelector(
+  getGenomeDatatypes,
+  datatypes => datatypes.hasKleborateAMR
+);
+
+export const hasKleborateAMRGenotypes = createSelector(
   getGenomeDatatypes,
   datatypes => datatypes.hasKleborateAMR
 );

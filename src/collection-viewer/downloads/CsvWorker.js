@@ -5,7 +5,7 @@ import { getUserDefinedValue } from '../table/utils';
 import { systemDataColumns } from '../data-tables/constants';
 import { createCode } from '../../mlst/utils';
 
-import { isResistant, hasElement } from '../amr-utils';
+import { hasElement, kleborateHasElement, isResistant, kleborateIsResistant } from '../amr-utils';
 
 const nameColumn = {
   columnKey: '__name',
@@ -63,6 +63,10 @@ const valueGettersByTable = {
     (!!paarsnp && isResistant(paarsnp, antibiotic) ? 1 : 0),
   snps: (snp, genome) => (hasElement(genome, 'snp', snp) ? 1 : 0),
   genes: (gene, genome) => (hasElement(genome, 'paar', gene) ? 1 : 0),
+  kleborateAMR: (antibiotic, { analysis: { kleborate } }) =>
+    (kleborateIsResistant(kleborate, antibiotic.replace('kleborate_', '')) ? 1 : 0),
+  kleborateAMRGenotypes: (element, { analysis: { kleborate } }) =>
+    (kleborateHasElement(kleborate, element.replace('kleborateAMRGenotypes_', '').split('_')[0], element.replace('kleborateAMRGenotypes_', '').split('_').slice(1).join('_')) ? 1 : 0),
 };
 
 function mapToGetters(columns, table) {

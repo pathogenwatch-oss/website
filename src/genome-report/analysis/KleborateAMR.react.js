@@ -1,5 +1,6 @@
 import React from 'react';
 import classnames from 'classnames';
+import { kleborateIsResistant } from '^/collection-viewer/amr-utils';
 
 export default ({ result }) => (
   <React.Fragment>
@@ -16,7 +17,7 @@ export default ({ result }) => (
         <tr>
           <th>Agent</th>
           <th>Predicted phenotype</th>
-          <th>Genes/variants</th>
+          <th>Genotypes</th>
         </tr>
       </thead>
       <tbody>
@@ -32,7 +33,7 @@ export default ({ result }) => (
             >
               <td>{result.amr[record.field].name}</td>
               <td className="wgsa-genome-report-amr-state">
-                {result.amr[record.field].match === '-' ? 'Not Found' : 'Resistant'}
+                {kleborateIsResistant(result, record.field) ? 'Resistant' : 'Not Found'}
               </td>
               <td className="pw-genome-report-amr-mechanisms">
                 {result.amr[record.field].match

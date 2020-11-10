@@ -11,17 +11,9 @@ import Organism from '../../organisms';
 
 import { statuses } from '../constants';
 import { tableKeys } from '../constants';
+import { kleborateIsResistant } from '../amr-utils';
 
 export const name = tableKeys.kleborateAMR;
-
-function hasElement(genome, field) {
-  return (
-    genome.analysis.kleborate &&
-    genome.analysis.kleborate.amr[field] &&
-    genome.analysis.kleborate.amr[field].match &&
-    genome.analysis.kleborate.amr[field].match !== '-'
-  );
-}
 
 const effectColour = amr.getEffectColour('RESISTANT');
 
@@ -53,18 +45,18 @@ function buildColumns(genomes) {
       getWidth() {
         return measureHeadingText(record.name);
       },
-      getCellContents(props, genome) {
-        return hasElement(genome, record.key) ? (
+      getCellContents(props, { analysis: { kleborate } }) {
+        return kleborateIsResistant(kleborate, record.key) ? (
           <i
             className="material-icons wgsa-resistance-icon"
             style={{ color: effectColour }}
-            title={genome.analysis.kleborate.amr[record.key].match}
+            title={kleborate.amr[record.key].match}
           >
             lens
           </i>
         ) : null;
       },
-      valueGetter: genome => (hasElement(genome, record.key) ? effectColour : amr.nonResistantColour),
+      valueGetter: genome => (kleborateIsResistant(genome, record.key) ? effectColour : amr.nonResistantColour),
       onHeaderClick,
     });
   }

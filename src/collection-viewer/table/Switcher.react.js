@@ -23,6 +23,7 @@ const icons = {
   [tableKeys.snps]: 'local_pharmacy',
   [tableKeys.genes]: 'local_pharmacy',
   [tableKeys.kleborateAMR]: 'local_pharmacy',
+  [tableKeys.kleborateAMRGenotypes]: 'local_pharmacy',
   [tableKeys.vista]: 'local_pharmacy',
   [tableKeys.timeline]: 'access_time',
 };
@@ -33,6 +34,7 @@ const TableMenu = connect(
     return {
       amr: hasAMR(state) && !hasKleborate,
       kleborate: hasKleborate,
+      kleborateAMRGenotypes: hasKleborate,
       vista: hasVista(state),
       metadata: hasMetadata(state),
       timeline: hasTimeline(state),
@@ -68,7 +70,11 @@ const TableMenu = connect(
           <button onClick={() => showTable(tableKeys.genes)}>Genes</button>
         </>
       }
-      {kleborate && <button onClick={() => showTable(tableKeys.kleborateAMR)}>Kleborate AMR</button>}
+      {kleborate && <>
+          <button onClick={() => showTable(tableKeys.kleborateAMR)}>Antibiotics</button>
+          <button onClick={() => showTable(tableKeys.kleborateAMRGenotypes)}>AMR Genotypes</button>
+        </>
+      }
       {vista && <hr />}
       {vista && <button onClick={() => showTable(tableKeys.vista)}>Virulence</button>}
       {timeline &&
