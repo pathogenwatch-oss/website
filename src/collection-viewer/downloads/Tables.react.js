@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import DownloadButton from './DownloadButton.react';
 
 import { getCollection } from '../selectors';
-import { getGenomes, hasMetadata, hasAMR } from '../genomes/selectors';
+import { getGenomes, hasMetadata, hasAMR, hasKleborateAMR } from '../genomes/selectors';
 import { getTables, hasTyping } from '../table/selectors';
 import { getActiveGenomeIds } from '../selectors/active';
 
@@ -16,6 +16,8 @@ import {
   generateAMRProfile,
   generateAMRSNPs,
   generateAMRGenes,
+  generateKleborateAMRGenotypes,
+  generateKleborateAMRProfiles,
 } from './client-side';
 
 const DownloadsMenu = (props) => {
@@ -71,6 +73,26 @@ const DownloadsMenu = (props) => {
           </DownloadButton>
         </React.Fragment>
       }
+      {
+        props.hasKleborateTables &&
+        <React.Fragment>
+          <hr />
+          <DownloadButton
+            filename={formatCollectionFilename(collection, 'amr-profile.csv')}
+            genomeIds={genomeIds}
+            generateFile={() => generateKleborateAMRProfiles({ genomes, genomeIds, tables })}
+          >
+            AMR profile
+          </DownloadButton>
+          <DownloadButton
+            filename={formatCollectionFilename(collection, 'amr-genotypes.csv')}
+            genomeIds={genomeIds}
+            generateFile={() => generateKleborateAMRGenotypes({ genomes, genomeIds, tables })}
+          >
+            AMR Genotypes
+          </DownloadButton>
+        </React.Fragment>
+      }
     </React.Fragment>
   );
 };
@@ -92,6 +114,7 @@ function mapStateToProps(state) {
     hasMetadataTable: hasMetadata(state),
     hasTypingTable: hasTyping(state),
     hasAMRTables: hasAMR(state),
+    hasKleborateTables: hasKleborateAMR(state),
     tables: getTables(state),
   };
 }

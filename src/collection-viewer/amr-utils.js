@@ -1,4 +1,4 @@
-import { DEFAULT, CGPS } from '../app/constants';
+import { CGPS, DEFAULT } from '../app/constants';
 
 const stateColours = {
   RESISTANT: DEFAULT.DANGER_COLOUR,
@@ -28,6 +28,28 @@ export function hasElement(genome, type, element) {
   const { paarsnp } = genome.analysis;
   if (!paarsnp) return false;
   return paarsnp[type].indexOf(element) !== -1;
+}
+
+export function kleborateIsResistant({ amr }, antibiotic) {
+  if (!amr || !(antibiotic in amr) || !('match' in amr[antibiotic])) return false;
+  return amr[antibiotic].match !== '-';
+}
+
+export function kleborateCleanElement(element) {
+  return element.replace('^', '').replace('*', '').replace('?', '');
+}
+
+export function kleborateHasElement({ amr }, antibiotic, element) {
+  if (!amr) return false;
+  for (const key of Object.keys(amr)) {
+    if (!('name' in amr[key]) || amr[key].name !== antibiotic) {
+      continue;
+    }
+    if (amr[key].match === '-') return false;
+    const elements = amr[key].match.split(';').map(text => kleborateCleanElement(text));
+    return elements.includes(element);
+  }
+  return false;
 }
 
 export function defaultColourGetter(genome) {

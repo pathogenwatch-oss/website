@@ -38,4 +38,6 @@ export const generateStatsFile = convertTableToCSV(tableKeys.stats);
 export const generateAMRProfile = convertTableToCSV(tableKeys.antibiotics);
 export const generateAMRSNPs = convertTableToCSV(tableKeys.snps);
 export const generateAMRGenes = convertTableToCSV(tableKeys.genes);
+export const generateKleborateAMRProfiles = convertTableToCSV(tableKeys.kleborateAMR);
+export const generateKleborateAMRGenotypes = convertTableToCSV(tableKeys.kleborateAMRGenotypes);
 export const generateVistaFile = convertTableToCSV(tableKeys.vista);
