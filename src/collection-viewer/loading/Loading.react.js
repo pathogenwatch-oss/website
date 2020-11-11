@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 import Spinner from '../../components/Spinner.react';
-import { Logo, DocumentTitle } from '../../branding';
+import { DocumentTitle, Logo } from '../../branding';
 
 import { statuses } from '../constants';
 
@@ -27,8 +27,8 @@ const Background = connect()(React.createClass({
     return (
       <div style={backgroundStyle} className="wgsa-loading-container">
         <div className="wgsa-loading-content">
-          { logo && <Logo className="wgsa-loading-logo" /> }
-          { this.props.children }
+          {logo && <Logo className="wgsa-loading-logo" />}
+          {this.props.children}
         </div>
       </div>
     );
@@ -60,15 +60,18 @@ function getStatusMessage({ collection, location }) {
       return [
         <h1>Looking for an old collection?</h1>,
         <p className="mdl-typography--title">
-          It will be available at <a href={`https://archive.wgsa.net/${organism}${location.pathname}`}>archive.wgsa.net</a> for a short time.
+          It will be available at <a
+          href={`https://archive.wgsa.net/${organism}${location.pathname}`}>archive.wgsa.net</a> for a short time.
           <br />
-          Please <a href="mailto:cgps@sanger.ac.uk">contact us</a> if you would like your data migrated to the new site.
+          Please <a
+          href={`mailto:pathogenwatch@cgps.group?subject=${encodeURIComponent('Data Migration')}`}>contact us</a> if you would like your data migrated to the new site.
         </p>,
       ];
     }
     return [
       <h1>We're sorry, this collection cannot be found.</h1>,
-      <p className="mdl-typography--title">Please ensure that the address is correct, and if so, please try again later.</p>,
+      <p className="mdl-typography--title">
+        Please ensure that the address is correct, and if so, please try again later.</p>,
     ];
   }
   if (status === statuses.ABORTED) {
@@ -93,10 +96,11 @@ export const LoadError = React.createClass({
     return (
       <Background>
         <DocumentTitle>Error</DocumentTitle>
-        { getStatusMessage(this.props) }
-        <p>Please contact <a href="mailto:cgps@sanger.ac.uk">cgps@sanger.ac.uk</a> if problems persist.</p>
+        {getStatusMessage(this.props)}
+        <p>Please contact <a
+          href={`mailto:pathogenwatch@cgps.group?subject=${encodeURIComponent('Upload Error')}&body=${encodeURIComponent('Please edit the section below as appropriate and include it in your message\nAffected URL - the URL of the query page if relevant.\nBrowser / Operating system / Time & Date\n')}`}
+        >pathogenwatch@cgps.group</a> if problems persist.</p>
       </Background>
     );
   },
-
 });

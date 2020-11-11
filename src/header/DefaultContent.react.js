@@ -38,7 +38,7 @@ export default ({ offline = isOffline() }) => {
       </a>
       <a
         className="mdl-button mdl-button--icon"
-        href="mailto:cgps@sanger.ac.uk"
+        href={`mailto:pathogenwatch@cgps.group?body=${encodeURIComponent('Please add a descriptive subject line and also edit the section below as appropriate.\n------\nTopic - Website / Data / Documentation / Other\nType - Feature Request / Error Report / Explanation Request\nAffected URL - the URL of the query page if relevant.\nBug Report - Browser / Operating system / Time & Date\n-----\n')}`}
         rel="noopener"
         target="_blank"
         title="Contact us"
