@@ -204,8 +204,8 @@ const UserDrawer = React.createClass({
               >
                 <img src="/images/cgps-short.svg" />
               </a>
-              <a className="contact-email" href="mailto:cgps@sanger.ac.uk">
-                cgps@sanger.ac.uk
+              <a className="contact-email" href="mailto:pathogenwatch@cgps.group">
+                pathogenwatch@cgps.group
               </a>
             </footer>
           </div>
