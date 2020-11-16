@@ -73,7 +73,7 @@ function buildColumns(genomes) {
       if (phenotype.match === '-') {
         continue;
       }
-      if (!elementsInResults[phenotype]) {
+      if (!elementsInResults[phenotype.name]) {
         elementsInResults[phenotype.name] = new Set();
       }
       const elements = phenotype.match.split(';').map(element => kleborateCleanElement(element));
