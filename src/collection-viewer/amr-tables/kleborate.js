@@ -24,7 +24,10 @@ const modifierKey = isMac ? 'Cmd' : 'Ctrl';
 
 function buildColumns(genomes) {
   const columns = [];
-  for (const record of Object.values(genomes[0].analysis.kleborate.amr)) {
+
+  // Need to gather into phenotypes
+
+  for (const record of Object.values(genomes[0].analysis.kleborate.amr.profile)) {
     columns.push({
       columnKey: `kleborate_${record.key}`,
       addState({ genomes }) {
@@ -50,13 +53,13 @@ function buildColumns(genomes) {
           <i
             className="material-icons wgsa-resistance-icon"
             style={{ color: effectColour }}
-            title={kleborate.amr[record.key].match}
+            title={kleborate.amr.profile[record.key].matches}
           >
             lens
           </i>
         ) : null;
       },
-      valueGetter: genome => (kleborateIsResistant(genome, record.key) ? effectColour : amr.nonResistantColour),
+      valueGetter: genome => (kleborateIsResistant(genome.analysis.kleborate, record.key) ? effectColour : amr.nonResistantColour),
       onHeaderClick,
     });
   }

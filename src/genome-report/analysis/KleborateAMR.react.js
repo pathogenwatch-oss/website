@@ -1,6 +1,5 @@
 import React from 'react';
 import classnames from 'classnames';
-import { kleborateIsResistant } from '^/collection-viewer/amr-utils';
 
 export default ({ result }) => (
   <React.Fragment>
@@ -21,22 +20,23 @@ export default ({ result }) => (
         </tr>
       </thead>
       <tbody>
-        {result.csv
-          .filter((record) => record.set === 'amr')
+        {Object.values(result.amr.profile)
           .map((record) => (
             <tr
-              key={result.amr[record.field].name}
+              key={record.name}
               className={classnames({
-                'pw-genome-report-amr-present': result.amr[record.field].match !== '-',
-                'pw-genome-report-amr-resistant': result.amr[record.field].match !== '-',
+                'pw-genome-report-amr-present': record.resistant,
+                'pw-genome-report-amr-resistant': record.resistant,
               })}
             >
-              <td>{result.amr[record.field].name}</td>
+              <td>{record.name}</td>
               <td className="wgsa-genome-report-amr-state">
-                {kleborateIsResistant(result, record.field) ? 'Resistant' : 'Not Found'}
+                {record.resistant ? 'Resistant' : 'Not Found'}
               </td>
               <td className="pw-genome-report-amr-mechanisms">
-                {result.amr[record.field].match
+                {record
+                  .matches
+                  .replace('-', '')
                   .replace(/;/gi, ', ')
                   .replace(/\^/gi, '')
                   .replace(/\*\?/gi, ' (homolog, fragment)')
