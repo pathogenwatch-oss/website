@@ -69,14 +69,14 @@ function buildColumns(genomes) {
       continue;
     }
     genomeMap[genome.id] = new Set();
-    for (const phenotype of Object.values(genome.analysis.kleborate.amr)) {
+    for (const phenotype of Object.values(genome.analysis.kleborate.amr.profile)) {
       if (phenotype.match === '-') {
         continue;
       }
       if (!elementsInResults[phenotype.name]) {
         elementsInResults[phenotype.name] = new Set();
       }
-      const elements = phenotype.match.split(';').map(element => kleborateCleanElement(element));
+      const elements = phenotype.matches.split(';').map(element => kleborateCleanElement(element));
       elements.forEach(element => { genomeMap[genome.id].add(element); elementsInResults[phenotype.name].add(element); });
     }
   }
@@ -92,6 +92,7 @@ function buildColumns(genomes) {
       headerTitle: antibiotic,
       onHeaderClick,
       columns: Array.from(elementsInResults[antibiotic])
+        .filter(element => element !== '-')
         .map((element) => createAdvancedViewColumn(
           `kleborateAMRGenotypes_${antibiotic}_${element}`, element, genomeMap, bufferSize
         )),

@@ -31,22 +31,21 @@ export function hasElement(genome, type, element) {
 }
 
 export function kleborateIsResistant({ amr }, antibiotic) {
-  if (!amr || !(antibiotic in amr) || !('match' in amr[antibiotic])) return false;
-  return amr[antibiotic].match !== '-';
+  return !!amr.profile && antibiotic in amr.profile && !!amr.profile[antibiotic].resistant;
 }
 
 export function kleborateCleanElement(element) {
   return element.replace('^', '').replace('*', '').replace('?', '');
 }
 
-export function kleborateHasElement({ amr }, antibiotic, element) {
-  if (!amr) return false;
-  for (const key of Object.keys(amr)) {
-    if (!('name' in amr[key]) || amr[key].name !== antibiotic) {
+export function kleborateHasElement({ amr: { profile } }, antibiotic, element) {
+  if (element === '-' || !profile) return false;
+  for (const key of Object.keys(profile)) {
+    if (!('name' in profile[key]) || profile[key].name !== antibiotic) {
       continue;
     }
-    if (amr[key].match === '-') return false;
-    const elements = amr[key].match.split(';').map(text => kleborateCleanElement(text));
+    if (profile[key].matches === '-') return false;
+    const elements = profile[key].matches.split(';').map(text => kleborateCleanElement(text));
     return elements.includes(element);
   }
   return false;
