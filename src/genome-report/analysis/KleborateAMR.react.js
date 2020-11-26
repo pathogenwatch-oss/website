@@ -4,10 +4,10 @@ import classnames from 'classnames';
 export default ({ result }) => (
   <React.Fragment>
     <p className="pw-genome-report-section-header">
-      <a href="https://github.com/katholt/Kleborate#resistance-gene-detection" target="_blank"
+      <a href="https://github.com/katholt/Kleborate/wiki/Antimicrobial-resistance" target="_blank"
          rel="noopener" className="pw-genome-report-secondary-link"
       >
-        <strong>Kleborate</strong> - https://github.com/katholt/Kleborate#resistance-gene-detection
+        <strong>Sourced from Kleborate</strong>
       </a>
     </p>
     <table cellSpacing="0" className="wgsa-genome-report-amr wide bordered">
@@ -34,14 +34,14 @@ export default ({ result }) => (
                 {record.resistant ? 'Resistant' : 'Not Found'}
               </td>
               <td className="pw-genome-report-amr-mechanisms">
-                {record
+                {record.matches === '-' ? '' : record
                   .matches
-                  .replace('-', '')
                   .replace(/;/gi, ', ')
                   .replace(/\^/gi, '')
                   .replace(/\*\?/gi, ' (homolog, fragment)')
                   .replace(/\*/gi, ' (homolog)')
                   .replace(/\?/gi, ' (fragment)')
+                  .replace(/\.v\d/g, '')
                 }
               </td>
             </tr>

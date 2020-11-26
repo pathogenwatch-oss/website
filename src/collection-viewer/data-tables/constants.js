@@ -241,13 +241,13 @@ export const systemDataColumns = {
       return `${analysis.kleborate.virulence.Yersiniabactin} (${analysis.kleborate.virulence.YbST})`;
     },
   },
-  __rmpA: {
-    columnKey: '__rmpA',
-    displayName: 'rmpA',
+  __RmpADC: {
+    columnKey: '__RmpADC',
+    displayName: 'RmpADC',
     valueGetter({ analysis }) {
       if (!analysis.kleborate) return null;
-      if (analysis.kleborate.rmpA === '-') return null;
-      return analysis.kleborate.virulence.rmpA;
+      if (analysis.kleborate.virulence.RmpADC === '-') return null;
+      return analysis.kleborate.virulence.RmpADC;
     },
   },
   __rmpA2: {
@@ -255,7 +255,7 @@ export const systemDataColumns = {
     displayName: 'rmpA2',
     valueGetter({ analysis }) {
       if (!analysis.kleborate) return null;
-      if (analysis.kleborate.rmpA2 === '-') return null;
+      if (analysis.kleborate.virulence.rmpA2 === '-') return null;
       return analysis.kleborate.virulence.rmpA2;
     },
   },

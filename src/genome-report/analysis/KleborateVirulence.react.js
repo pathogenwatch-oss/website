@@ -29,11 +29,11 @@ const Value = ({ className, children }) => (
 export default ({ result }) => (
   <React.Fragment>
     <p className="pw-genome-report-section-header">
-      <a href="https://github.com/katholt/Kleborate#virulence-loci" target="_blank"
+      <a href="https://github.com/katholt/Kleborate/wiki/Acquired-virulence-loci" target="_blank"
         rel="noopener" className="pw-genome-report-secondary-link"
-      ><strong>Kleborate virulence</strong> - https://github.com/katholt/Kleborate#virulence-loci</a>
+      ><strong>Sourced from Kleborate</strong></a>
     </p>
-    <div className="pw-genome-report-column two thirds">
+    <div >
       <dl className="pw-genome-report-unsized">
         <div>
           <dt>Virulence score</dt>
@@ -41,11 +41,11 @@ export default ({ result }) => (
         </div>
       </dl>
     </div>
-    <div className="pw-genome-report-column one third">
+    <div >
       <dl className="pw-genome-report-unsized">
         <div>
-          <dt>Hypermucoidy (<em>rmpA</em> / <em>rmpA2</em>)</dt>
-          <dd>{result.virulence.rmpA} / {result.virulence.rmpA2}</dd>
+          <dt>Hypermucoidy (<em>RmpADC</em> / <em>rmpA2</em>)</dt>
+          <dd>{result.virulence.RmpADC} / {result.virulence.rmpA2}</dd>
         </div>
       </dl>
     </div>
