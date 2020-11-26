@@ -94,7 +94,7 @@ const inctyperGroup = {
 const kleborateGroup = {
   group: true,
   columnKey: 'kleborate',
-  columns: [ '__K_locus', '__O_locus', '__Virulence_Score', '__Aerobactin', '__Colibactin', '__Salmochelin', '__Yersiniabactin', '__rmpA', '__rmpA2' ],
+  columns: [ '__K_locus', '__O_locus', '__Virulence_Score', '__Aerobactin', '__Colibactin', '__Salmochelin', '__Yersiniabactin', '__RmpADC', '__rmpA2' ],
 };
 
 const vistaGroup = {

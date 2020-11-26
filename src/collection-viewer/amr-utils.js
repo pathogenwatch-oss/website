@@ -35,7 +35,12 @@ export function kleborateIsResistant({ amr }, antibiotic) {
 }
 
 export function kleborateCleanElement(element) {
-  return element.replace('^', '').replace('*', '').replace('?', '');
+  return element
+    .replace('^', '')
+    .replace('*', '')
+    .replace('?', '')
+    .replace(/\.v\d/, '')
+    .replace(/-\d+%/g, '_truncated');
 }
 
 export function kleborateHasElement({ amr: { profile } }, antibiotic, element) {
