@@ -70,7 +70,7 @@ function buildColumns(genomes) {
     }
     genomeMap[genome.id] = new Set();
     for (const phenotype of Object.values(genome.analysis.kleborate.amr.profile)) {
-      if (phenotype.match === '-') {
+      if (phenotype.match === '-' || phenotype.key === 'SHVM') {
         continue;
       }
       if (!elementsInResults[phenotype.name]) {
