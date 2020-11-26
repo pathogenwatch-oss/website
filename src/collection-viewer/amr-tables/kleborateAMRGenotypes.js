@@ -93,6 +93,7 @@ function buildColumns(genomes) {
       onHeaderClick,
       columns: Array.from(elementsInResults[antibiotic])
         .filter(element => element !== '-')
+        .sort()
         .map((element) => createAdvancedViewColumn(
           `kleborateAMRGenotypes_${antibiotic}_${element}`, element, genomeMap, bufferSize
         )),
