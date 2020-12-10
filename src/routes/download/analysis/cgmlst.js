@@ -47,6 +47,10 @@ module.exports = async (req, res) => {
   };
 
   const genomeDetails = await Genome.find(query, projection).lean();
+  const organismIds = genomeDetails.reduce((acc, details) => {
+    acc.push(details.analysis.speciator.organismId);
+    return acc;
+  }, []);
   const versions = genomeDetails.reduce((acc, details) => {
     const version = details.analysis.cgmlst.__v;
     const { fileId } = details;
@@ -60,7 +64,7 @@ module.exports = async (req, res) => {
   const analysisQuery = {
     fileId: { $in: fileIds },
     task: 'cgmlst',
-    organismId: genomeDetails.analysis.speciator.organismId
+    organismId: { $in: organismIds },
   };
 
   return Analysis.find(analysisQuery)
