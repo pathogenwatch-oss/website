@@ -21,6 +21,7 @@ export default ({ result }) => (
       </thead>
       <tbody>
         {Object.values(result.amr.profile)
+          .filter((record) => record.key !== 'SHVM')
           .map((record) => (
             <tr
               key={record.name}
