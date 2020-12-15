@@ -18,6 +18,7 @@ const projection = {
   reference: 1,
   userDefined: 1,
   year: 1,
+  assembler: 1,
   'analysis.cgmlst.scheme': 1,
   'analysis.core.__v': 1,
   'analysis.core.fp': 1,
