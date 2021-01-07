@@ -244,6 +244,7 @@ export const systemDataColumns = {
   __RmpADC: {
     columnKey: '__RmpADC',
     displayName: 'RmpADC',
+    label: 'RmpADC',
     valueGetter({ analysis }) {
       if (!analysis.kleborate) return null;
       if (analysis.kleborate.virulence.RmpADC === '-') return null;
@@ -253,6 +254,7 @@ export const systemDataColumns = {
   __rmpA2: {
     columnKey: '__rmpA2',
     displayName: 'rmpA2',
+    label: 'rmpA2',
     valueGetter({ analysis }) {
       if (!analysis.kleborate) return null;
       if (analysis.kleborate.virulence.rmpA2 === '-') return null;
