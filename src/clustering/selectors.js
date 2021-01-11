@@ -2,6 +2,10 @@ import { createSelector } from 'reselect';
 
 import { cluster } from './util';
 import { MAX_CLUSTER_SIZE, MAX_THRESHOLD } from './constants';
+import { isClusterView } from '~/collection-viewer/selectors';
+import { getGenomeStyles } from '~/collection-viewer/selectors/styles';
+import { DEFAULT } from '~/app/constants';
+import { nonResistantColour } from '~/collection-viewer/amr-utils';
 
 const NODE_COLORS = {
   0: '#673c90',
@@ -147,10 +151,8 @@ const getClusterNodeIds = createSelector(
     if (!clusters) return undefined;
     const nodeIds = [];
     for (let i = 0; i < nodes.length; i++) {
-      // if (clusters[i] === clusters[indexOfSelectedInAll]) {
       const { ids } = nodes[i];
       nodeIds.push(ids);
-      // }
     }
     return nodeIds;
   }
@@ -167,15 +169,52 @@ export const getClusterNodeLabels = createSelector(
     });
   }
 );
+
 export const getClusterNodeDegrees = createSelector(
   getEdgeMatrix,
   getIndexOfSelectedInCluster,
   calcDistanceFromSelected
 );
+
 export const getClusterNodeColors = createSelector(
   getClusterNodeDegrees,
-  degrees => (!degrees ? undefined : degrees.map(d => NODE_COLORS[d] || NODE_COLORS[-1]))
+  isClusterView,
+  getClusterNodes,
+  getGenomeStyles,
+  (degrees, clusterView, nodes, styles) => {
+    const defaultColours = !degrees ? [ NODE_COLORS[0] ] : degrees.map(d => NODE_COLORS[d] || NODE_COLORS[-1]);
+    if (!clusterView) {
+      return defaultColours;
+    }
+    const filterColours = [ DEFAULT.DANGER_COLOUR, DEFAULT.WARNING_COLOUR, DEFAULT.COLOUR, nonResistantColour ];
+    const testColour = styles[Object.keys(styles)[0]].colour;
+    if (!filterColours.includes(testColour)) {
+      return defaultColours;
+    }
+    // This is slightly over-engineered to support creating pie chart nodes.
+    return nodes
+      .map(node => node.ids) // genome IDs in each node
+      .map(ids => {
+        const colours = ids.flat()
+          .map(genomeId => genomeId in styles ? styles[genomeId].colour : nonResistantColour)
+          .reduce((memo, colour) => {
+            if (!memo.hasOwnProperty(colour)) {
+              memo[colour] = 0;
+            }
+            memo[colour] += 1;
+            return memo;
+          }, {});
+        if (DEFAULT.DANGER_COLOUR in colours) {
+          return DEFAULT.DANGER_COLOUR;
+        }
+        if (DEFAULT.WARNING_COLOUR in colours) {
+          return DEFAULT.WARNING_COLOUR;
+        }
+        return nonResistantColour;
+      });
+  }
 );
+
 // They're scaled and normalized to make them look nicer.
 export const getClusterNodeSizes = createSelector(
   getClusterNodeIds,
@@ -274,7 +313,7 @@ export const getChartColours = createSelector(
   }
 );
 
-function calcGraph(status, sts, nodeData, selectedIdx, labels, sizes, nodeColors, nodeZIndex, coordinates, edgesMatrix, edgeColors, edgeZIndex) {
+function calcGraph(status, sts, nodeData, selectedIdx, labels, sizes, nodeColours, nodeZIndex, coordinates, edgesMatrix, edgeColors, edgeZIndex) {
   const nodes = [];
   const edges = [];
   if (!sts) return { nodes, edges };
@@ -287,7 +326,7 @@ function calcGraph(status, sts, nodeData, selectedIdx, labels, sizes, nodeColors
         {
           label: labels[0],
           _label: labels[0],
-          color: NODE_COLORS[0],
+          color: nodeColours[0],
           genomeIds: nodeData[id].ids,
           id,
           size: 1,
@@ -310,13 +349,13 @@ function calcGraph(status, sts, nodeData, selectedIdx, labels, sizes, nodeColors
     const id = sts[i];
     nodes.push({
       label: showLabel ? labels[i] : undefined,
-      color: showLabel ? nodeColors[i] : undefined,
+      color: showLabel ? nodeColours[i] : undefined,
       hoverLabel: showLabel ? undefined : labels[i],
       id,
       genomeIds: nodeData[id].ids,
       size: sizes[i],
       style: {
-        colour: nodeColors[i],
+        colour: nodeColours[i],
         shape: 'circle',
       },
       zIndex: nodeZIndex[i],

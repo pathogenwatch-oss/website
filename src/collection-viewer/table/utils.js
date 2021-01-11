@@ -37,7 +37,7 @@ function getTotalWidth(columns) {
 
 // TODO: stop hacking
 export function setFixedGroupMinWidth(columns, tableWidth, magicWidth) {
-  if (!tableWidth) return;
+  if (!tableWidth || !columns || columns.length === 0) return;
 
   if (!columns[0].group) {
     columns[0].flexGrow = 1;

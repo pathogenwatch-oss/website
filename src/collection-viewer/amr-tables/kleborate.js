@@ -76,8 +76,8 @@ export function createReducer() {
   return function (state = initialState, { type, payload }) {
     switch (type) {
       case FETCH_COLLECTION.SUCCESS: {
-        const { genomes, status, isClusterView } = payload.result;
-        if (status !== statuses.READY || isClusterView || !Organism.uiOptions.kleborate) return state;
+        const { genomes, status } = payload.result;
+        if (status !== statuses.READY || !Organism.uiOptions.kleborate) return state;
         return {
           ...state,
           columns: [
