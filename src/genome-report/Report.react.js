@@ -105,7 +105,7 @@ const Content = React.createClass({
                   {upload.type === 'assembly' ? 'insert_drive_file' : 'file_copy'}
                 </i>
               </span>
-              <p className="h6">{genome.assembler.error ? genome.assembler.error.charAt(0).toUpperCase() + genome.assembler.error.slice(1) : 'Awaiting assembly'}</p>
+              <p className="h6">{genome.assembler && genome.assembler.error ? genome.assembler.error.charAt(0).toUpperCase() + genome.assembler.error.slice(1) : 'Awaiting assembly'}</p>
             </div>
           }
         </div>
