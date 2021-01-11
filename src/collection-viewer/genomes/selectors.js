@@ -2,7 +2,7 @@ import { createSelector } from 'reselect';
 
 import { getCollection } from '../selectors';
 import { getPrivateMetadata } from '../private-metadata/selectors';
-import { isTopLevelTree, getTreeStateKey } from '../tree/selectors';
+import { getTreeStateKey, isTopLevelTree } from '../tree/selectors';
 
 export const getGenomes = createSelector(
   state => state.viewer.entities.genomes,
@@ -58,6 +58,7 @@ const getGenomeDatatypes = createSelector(
     let hasMetadata = false;
     let hasAMR = false;
     let hasKleborateAMR = false;
+    let hasKleborateAMRGenotypes = false;
     let hasVista = false;
 
     for (const genome of genomes) {
@@ -68,28 +69,33 @@ const getGenomeDatatypes = createSelector(
         }
       }
 
-      if (!genome.analysis || isClusterView) continue;
-      if (!hasAMR && genome.analysis.paarsnp) {
+      if (!genome.analysis) continue;
+
+      if (!hasAMR && !hasKleborateAMRGenotypes && !hasKleborateAMR && genome.analysis.kleborate) {
+        hasKleborateAMR = true;
+        hasKleborateAMRGenotypes = true;
         hasAMR = true;
       }
-      if (!hasKleborateAMR && genome.analysis.kleborate) {
-        hasKleborateAMR = true;
-      }
+
       if (!hasVista && genome.analysis.vista) {
         hasVista = true;
       }
 
-      if (hasMetadata && (isClusterView || (hasAMR && hasKleborateAMR && hasVista))) {
+      if (!isClusterView && !hasAMR && genome.analysis.paarsnp) {
+        hasAMR = true;
+      }
+
+      if (hasMetadata && hasKleborateAMR && hasKleborateAMRGenotypes && hasVista && (isClusterView || (hasAMR))) {
         break;
       }
     }
 
     return {
       hasMetadata,
-      hasAMR: isClusterView ? false : hasAMR,
-      hasKleborateAMR: isClusterView ? false : hasKleborateAMR,
-      hasKleborateAMRGenotypes: isClusterView ? false : hasKleborateAMR,
-      hasVista: isClusterView ? false : hasVista,
+      hasAMR,
+      hasKleborateAMR,
+      hasKleborateAMRGenotypes,
+      hasVista,
     };
   }
 );
@@ -111,7 +117,7 @@ export const hasKleborateAMR = createSelector(
 
 export const hasKleborateAMRGenotypes = createSelector(
   getGenomeDatatypes,
-  datatypes => datatypes.hasKleborateAMR
+  datatypes => datatypes.hasKleborateAMRGenotypes
 );
 
 export const hasVista = createSelector(
