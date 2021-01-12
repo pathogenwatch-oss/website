@@ -17,7 +17,6 @@ export default function (state = {}, { type, payload }) {
       const { genomes = [], organism = {} } = payload.result;
       const { references = [] } = organism;
       return {
-        ...state,
         ...flagGenomes(genomes, 'isCollection'),
         ...flagGenomes(references, 'isReference'),
       };
