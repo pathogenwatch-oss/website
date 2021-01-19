@@ -12,6 +12,7 @@ router.post('/:task', (req, res, next) => {
   return next();
 });
 
+router.post('/core', require('./core-summary'));
 router.post('/cgmlst', require('./cgmlst'));
 router.post('/genotyphi', require('./genotyphi'));
 router.post('/inctyper', require('./inctyper'));
