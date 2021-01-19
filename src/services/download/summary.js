@@ -3,6 +3,7 @@ const { ObjectId } = require('mongoose').Types;
 
 module.exports = function ({ user, ids }) {
   const taskNames = [
+    'core',
     'cgmlst',
     'genotyphi',
     'inctyper',
@@ -17,7 +18,7 @@ module.exports = function ({ user, ids }) {
     'serotype',
     'speciator',
     'spn_pbp_amr',
-    'vista'
+    'vista',
   ];
   const $in = ids.map(id => new ObjectId(id));
   return Promise.all([

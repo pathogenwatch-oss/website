@@ -8,7 +8,7 @@ module.exports = function ({ id, user, type }) {
       .then(genome => {
         const fileName = createFastaFileName(genome.name);
         const stream = fastaStorage.fetch(genome.fileId);
-        return { fileName, stream }
+        return { fileName, stream };
       })
   );
 };
