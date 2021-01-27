@@ -413,6 +413,8 @@ schema.statics.getForCollection = function (query, user = {}) {
     'analysis.paarsnp.paar': 1,
     'analysis.paarsnp.snp': 1,
     'analysis.paarsnp.library': 1,
+    'analysis.pangolin': 1,
+    'analysis.sars_cov2_variants': 1,
     'analysis.speciator.organismId': 1,
     'analysis.spn_pbp_amr': 1,
     'analysis.vista': 1,
