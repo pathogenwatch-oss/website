@@ -87,6 +87,7 @@ schema.index({ 'analysis.genotyphi.genotype': 1 });
 schema.index({ 'analysis.core.fp.reference': 1 });
 schema.index({ 'analysis.kleborate.typing.K_locus': 1 });
 schema.index({ 'analysis.kleborate.typing.O_locus': 1 });
+schema.index({ 'analysis.pangolin.lineage': 1 });
 
 schema.statics.uploadTypes = uploadTypes;
 
@@ -235,6 +236,7 @@ schema.statics.getFilterQuery = async function (props) {
     ngstar,
     olocus,
     organismId,
+    pangolin,
     resistance,
     searchText,
     serotype,
@@ -331,6 +333,10 @@ schema.statics.getFilterQuery = async function (props) {
 
   if (olocus) {
     findQuery['analysis.kleborate.typing.O_locus'] = olocus;
+  }
+
+  if (pangolin) {
+    findQuery['analysis.pangolin.lineage'] = pangolin;
   }
 
   if (strain) {

@@ -141,11 +141,11 @@ const summaryFields = [
     field: 'subspecies',
     // task: 'serotype',
     aggregation: () => [
-      { $match: { $or: [ { 'analysis.serotype': { $exists: true } }, { 'analysis.speciator.organismId': '2697049' } ] }},
+      { $match: { $or: [ { 'analysis.serotype': { $exists: true } }, { 'analysis.speciator.organismId': '2697049' } ] } },
       {
         $group: {
           _id: {
-            $ifNull: [ '$analysis.serotype.subspecies', '$analysis.speciator.organismName' ]
+            $ifNull: [ '$analysis.serotype.subspecies', '$analysis.speciator.organismName' ],
           },
           count: { $sum: 1 },
         },
@@ -244,6 +244,19 @@ const summaryFields = [
     ],
   },
   {
+    field: 'pangolin',
+    task: 'pangolin',
+    aggregation: () => [
+      { $match: { 'analysis.pangolin': { $exists: true } } },
+      {
+        $group: {
+          _id: '$analysis.pangolin.lineage',
+          count: { $sum: 1 },
+        },
+      },
+    ],
+  },
+  {
     field: 'collection',
     aggregation: ({ query, user, deployedOrganisms }) => {
       if (!deployedOrganisms.includes(query.organismId)) return null;
@@ -285,6 +298,9 @@ const summaryFields = [
 
 module.exports = async function (props) {
   const deployedOrganisms = await Organism.deployedOrganismIds(props.user);
+  if (props.query.subspecies && props.query.subspecies === 'SARS-CoV-2') {
+    props.query.organismId = '2697049';
+  }
   const tasks = getTasksByOrganism(props.query, props.user).map(_ => _.task);
   const summary = await Genome.getSummary(
     summaryFields.filter(_ => (_.task ? tasks.includes(_.task) : true)),

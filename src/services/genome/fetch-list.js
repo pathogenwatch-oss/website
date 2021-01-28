@@ -13,6 +13,7 @@ module.exports = async function (props) {
       _user: 1,
       'analysis.mlst.st': 1,
       'analysis.mlst2.st': 1,
+      'analysis.pangolin.lineage': 1,
       'analysis.serotype.subspecies': 1,
       'analysis.serotype.value': 1,
       'analysis.speciator.organismId': 1,
