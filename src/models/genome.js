@@ -88,6 +88,8 @@ schema.index({ 'analysis.core.fp.reference': 1 });
 schema.index({ 'analysis.kleborate.typing.K_locus': 1 });
 schema.index({ 'analysis.kleborate.typing.O_locus': 1 });
 schema.index({ 'analysis.pangolin.lineage': 1 });
+schema.index({ 'analysis.sars_cov2_variants.variant.present': 1 });
+schema.index({ 'analysis.sars_cov2_variants.variant.name': 1 });
 
 schema.statics.uploadTypes = uploadTypes;
 
@@ -238,6 +240,8 @@ schema.statics.getFilterQuery = async function (props) {
     organismId,
     pangolin,
     resistance,
+    // eslint-disable-next-line camelcase
+    sars_cov2_variant,
     searchText,
     serotype,
     sequenceType,
@@ -337,6 +341,13 @@ schema.statics.getFilterQuery = async function (props) {
 
   if (pangolin) {
     findQuery['analysis.pangolin.lineage'] = pangolin;
+  }
+
+  // eslint-disable-next-line camelcase
+  if (sars_cov2_variant) {
+    findQuery['analysis.sars_cov2_variants.variants'] = {
+      $elemMatch: { name: sars_cov2_variant, present: true },
+    };
   }
 
   if (strain) {
