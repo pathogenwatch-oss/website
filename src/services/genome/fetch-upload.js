@@ -18,6 +18,7 @@ module.exports = async function ({ user, query }) {
     'analysis.ngstar.__v': 1,
     'analysis.paarsnp.__v': 1,
     'analysis.pangolin.__v': 1,
+    'analysis.pangolin.lineage': 1,
     'analysis.poppunk.__v': 1,
     'analysis.sars_cov2_variants.__v': 1,
     'analysis.serotype.__v': 1,
