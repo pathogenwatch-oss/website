@@ -16,7 +16,7 @@ const mongoConnection = require('utils/mongoConnection');
 const LOGGER = logging.getBaseLogger();
 const app = express();
 
-const clientPath = path.join(__dirname, 'node_modules', 'pathogenwatch-front-end');
+const clientPath = path.join(__dirname, 'front-end');
 
 let version = '';
 if (process.env.NODE_ENV === 'production') {
@@ -48,7 +48,7 @@ app.use(
 
 logging.initHttpLogging(app, process.env.NODE_ENV || 'none');
 
-module.exports = () =>
+module.exports = (isDev) =>
   mongoConnection.connect().then(() => {
     // security
     app.use((req, res, next) => {
@@ -63,10 +63,6 @@ module.exports = () =>
       res.header('X-Clacks-Overhead', 'GNU Terry Pratchett');
       next();
     });
-
-    if (process.env.NODE_ENV === 'development') {
-      app.use(require('./src/dev'));
-    }
 
     app.use((req, res, next) => {
       if (req.method === 'OPTIONS') {
@@ -106,37 +102,35 @@ module.exports = () =>
     app.set('view engine', 'ejs');
     app.set('views', path.join(clientPath, 'views'));
 
-    const files = require(path.join(clientPath, 'assets.js'))();
-    app.use('/', (req, res, next) => {
-      // crude file matching
-      if ((req.path !== '/index.html' && req.path.match(/\.[a-z]{1,4}$/)) || req.xhr) {
-        return next();
-      }
+    if (!isDev) {
+      const files = require(path.join(clientPath, 'assets.js'))();
+      app.use('/', (req, res, next) => {
+        // crude file matching
+        if ((req.path !== '/index.html' && req.path.match(/\.[a-z]{1,4}$/)) || req.xhr) {
+          return next();
+        }
 
-      let clientId = null;
-      const limits = {
-        maxCollectionSize: config.maxCollectionSize,
-        maxDownloadSize: config.maxDownloadSize,
-      };
+        let clientId = null;
+        const limits = {
+          maxCollectionSize: config.maxCollectionSize,
+          maxDownloadSize: config.maxDownloadSize,
+        };
 
-      if (req.user) {
-        const hash = crypto.createHash('sha1');
-        hash.update(req.user.id);
-        clientId = hash.digest('hex');
-        if (req.user.limits) {
-          for (const [ key, value ] of Object.entries(req.user.limits)) {
-            // model will provide missing properties as undefined, should not overwrite.
-            if (!!value) {
-              limits[key] = value;
+        if (req.user) {
+          const hash = crypto.createHash('sha1');
+          hash.update(req.user.id);
+          clientId = hash.digest('hex');
+          if (req.user.limits) {
+            for (const [ key, value ] of Object.entries(req.user.limits)) {
+              // model will provide missing properties as undefined, should not overwrite.
+              if (!!value) {
+                limits[key] = value;
+              }
             }
           }
         }
-      }
 
-      return res.render('index', {
-        files,
-        gaTrackingId: config.gaTrackingId,
-        frontEndConfig: {
+        const frontEndConfig = {
           assemblerAddress: config.assemblerAddress,
           clientId,
           mapboxKey: config.mapboxKey,
@@ -158,13 +152,21 @@ module.exports = () =>
             }
             : undefined,
           version,
-        },
+        };
+
+        app.set("front-end-config", frontEndConfig);
+
+        return res.render('index', {
+          files,
+          gaTrackingId: config.gaTrackingId,
+          frontEndConfig,
+        });
       });
-    });
+    }
 
-    app.use(require('routes/notFound'));
+    // app.use(require('routes/notFound'));
 
-    require('errors.js')(app);
+    // require('errors.js')(app);
 
     const server = http.createServer(app).listen(app.get('port'), () => {
       LOGGER.info(`✔ Express server listening on port ${app.get('port')}`);
@@ -182,4 +184,6 @@ module.exports = () =>
 
       return app;
     });
+
+    return app;
   });

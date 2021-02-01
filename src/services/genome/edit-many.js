@@ -2,7 +2,7 @@ const Genome = require('models/genome');
 const { ObjectId } = require('mongoose').Types;
 
 const { ServiceRequestError } = require('utils/errors');
-const validateMetadata = require('pathogenwatch-front-end/universal/validateMetadata');
+const validateMetadata = require('../../../front-end/universal/validateMetadata');
 
 module.exports = async function ({ user, data }) {
   if (!user) {

@@ -1,4 +1,4 @@
-var React = require('../node_modules/react');
+var React = require('../../node_modules/react');
 var factory = require('create-react-class/factory');
 
 if (typeof React === 'undefined') {

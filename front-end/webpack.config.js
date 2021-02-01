@@ -51,10 +51,10 @@ const commonRules = [
     loader: `babel-loader?${JSON.stringify(babelSettings)}`,
     include: [
       /(src|universal|cgps-commons|libmicroreact)/,
-      path.join(__dirname, 'node_modules', 'promise-file-reader'),
-      path.join(__dirname, 'node_modules', 'cgps-commons'),
-      path.join(__dirname, 'node_modules', 'cgps-user-accounts', 'components'),
-      path.join(__dirname, 'node_modules', '@cgps', 'phylocanvas', 'utils'),
+      path.join(__dirname, '..', 'node_modules', 'promise-file-reader'),
+      path.join(__dirname, '..', 'node_modules', 'cgps-commons'),
+      path.join(__dirname, '..', 'node_modules', 'cgps-user-accounts', 'components'),
+      path.join(__dirname, '..', 'node_modules', '@cgps', 'phylocanvas', 'utils'),
     ],
   },
   {
@@ -77,7 +77,7 @@ const devConfig = {
   mode: 'development',
   devServer: { hot: true },
   devtool: '#eval-source-map',
-  entry: [ 'react-hot-loader/patch', 'webpack-hot-middleware/client', './src' ],
+  entry: [ 'react-hot-loader/patch', 'webpack-hot-middleware/client', './front-end/src' ],
   output: {
     path: __dirname,
     filename: 'dev.js',
