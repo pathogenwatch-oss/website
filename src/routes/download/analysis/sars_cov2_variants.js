@@ -9,8 +9,8 @@ const transformer = function (doc) {
     Version: doc.analysis.sars_cov2_variants.__v,
   };
 
-  Object.keys(doc.analysis.sars_cov2_variants).forEach((item) => {
-    record[item] = doc.analysis.sars_cov2_variants[item];
+  doc.analysis.sars_cov2_variants.variants.forEach((variant) => {
+    record[variant.name] = variant.state === 'other' ? `${variant.state} (${variant.found})` : variant.state;
   });
 
   return record;
