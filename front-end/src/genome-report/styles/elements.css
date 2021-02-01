@@ -1,0 +1,194 @@
+.wgsa-genome-report,
+.wgsa-genome-report p {
+  line-height: 16px;
+}
+
+.wgsa-genome-report .baseline-grid {
+  background-size: 100% 16px;
+}
+
+.wgsa-genome-report strong {
+  font-weight: 500;
+}
+
+.wgsa-genome-report dl {
+  margin: 0;
+}
+
+.wgsa-genome-report dl.flex,
+.wgsa-genome-report dl.grid {
+  display: flex;
+}
+
+.wgsa-genome-report dl.flex > div {
+  margin-left: 32px;
+}
+
+.wgsa-genome-report dl.flex > div:first-child {
+  margin-left: 0;
+}
+
+.wgsa-genome-report dl.grid {
+  flex-wrap: wrap;
+  margin: 8px 0;
+  margin-left: -8px;
+}
+
+.wgsa-genome-report dl.grid + * {
+  margin-top: 8px;
+}
+
+.wgsa-genome-report dl.grid + dl,
+.pw-genome-report-section-header + dl.grid {
+  margin-top: -8px;
+}
+
+.wgsa-genome-report dl.grid > div {
+  width: calc(33.333% - 16px);
+  margin: 8px;
+}
+
+.wgsa-genome-report dt,
+.wgsa-genome-report table caption,
+.wgsa-genome-report figcaption {
+  font-size: 13px;
+  font-weight: 400;
+}
+
+.pw-genome-report-capitalise-titles dt {
+  text-transform: capitalize;
+}
+
+.wgsa-genome-report dd {
+  margin-left: 0;
+  line-height: 24px;
+  padding: 4px 0;
+  font-size: 16px;
+  font-weight: 500;
+  color: rgba(0, 0, 0, 0.87);
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  hyphens: auto;
+}
+
+.wgsa-genome-report dd:empty {
+  color: rgba(0, 0, 0, 0.54);
+  font-size: 14px;
+}
+
+.wgsa-genome-report dd:empty:before {
+  content: "(none)";
+}
+
+.wgsa-genome-report dd .pw-genome-report-secondary-link {
+  margin-left: 8px;
+  line-height: 16px;
+}
+
+.pw-genome-report-metadata.inline {
+  display: inline-flex;
+  align-items: baseline;
+}
+
+.pw-genome-report-metadata.inline dd {
+  margin-top: 0;
+  margin-left: 8px;
+}
+
+.wgsa-genome-report table {
+  margin: 0 auto 16px;
+  font-size: 14px;
+}
+
+.wgsa-genome-report table.bordered {
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  margin-bottom: 15px; /* subtract for border */
+}
+
+.wgsa-genome-report table.wide {
+  width: 100%;
+}
+
+.wgsa-genome-report table caption,
+.wgsa-genome-report-content figcaption {
+  text-align: center;
+}
+
+.wgsa-genome-report table caption.pw-genome-report-section-header {
+  margin-bottom: 16px;
+  text-align: left;
+}
+
+.wgsa-genome-report figure {
+  margin: 0 0 16px;
+}
+
+.wgsa-genome-report figure canvas {
+  margin: 0 auto;
+}
+
+.wgsa-genome-report th,
+.wgsa-genome-report td {
+  color: rgba(0, 0, 0, 0.54);
+  padding: 8px;
+  text-align: center;
+}
+
+.wgsa-genome-report td {
+  color: rgba(0, 0, 0, 0.87);
+}
+
+.wgsa-genome-report th {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.14);
+  box-sizing: border-box;
+  color: rgba(0, 0, 0, 0.54);
+  font-size: 13px;
+}
+
+.wgsa-genome-report table.bordered th {
+  padding-top: 7px;
+  padding-bottom: 7px;
+}
+
+.wgsa-genome-report th.italic,
+.wgsa-genome-report td.italic {
+  font-style: italic;
+}
+
+.wgsa-genome-report td.muted {
+  font-size: 13px;
+  color: rgba(0, 0, 0, 0.54);
+}
+
+.wgsa-genome-report tr:hover > td {
+  background-color: rgba(0, 0, 0, 0.07);
+}
+
+.pw-genome-report-column.right .pw-genome-report-external-link {
+  justify-content: flex-end;
+}
+
+.pw-genome-report-external-link {
+  align-items: center;
+  display: flex;
+  margin-top: 4px;
+  margin-bottom: 12px;
+}
+
+.wgsa-genome-report dl .pw-genome-report-external-link {
+  margin-bottom: -4px;
+}
+
+.pw-genome-report-external-link a {
+  font-size: 13px;
+  font-weight: 500;
+  color: hsl(194, 55.5%, 32%);
+}
+
+.pw-genome-report-external-link .material-icons {
+  font-size: 16px;
+  width: 16px;
+  height: 16px;
+  color: hsl(194, 55.5%, 32%);
+  margin-left: 2px;
+}

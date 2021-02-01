@@ -1,0 +1,47 @@
+.wgsa-analysis-chart {
+  height: 100%;
+  max-height: 640px;
+  position: relative;
+}
+
+.wgsa-analysis-chart canvas {
+  position: relative;
+  z-index: 1;
+}
+
+.pw-analysis-chart-hover-trigger,
+.pw-analysis-chart-hover-trigger + * {
+  width: 80px;
+  height: 80px;
+  position: absolute;
+  top: calc(50% + 4.5px);
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1;
+}
+
+.pw-analysis-chart-hover-trigger:hover + *,
+.pw-analysis-chart-hover-trigger + *:hover {
+  z-index: 1;
+}
+
+.pw-analysis-chart-hover-trigger {
+  padding: 16px;
+}
+
+.wgsa-view-genomes-button {
+  background-color: #3c7383;
+  color: #fff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  text-align: center;
+  text-transform: uppercase;
+  z-index: 0;
+  padding: 8px;
+}
+
+.wgsa-view-genomes-button:hover {
+  text-decoration: none !important;
+  background-color: #975faa;
+}

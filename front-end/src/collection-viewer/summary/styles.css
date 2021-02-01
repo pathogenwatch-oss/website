@@ -1,0 +1,59 @@
+.wgsa-collection-viewer-summary {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  width: 40px;
+  background: rgba(255, 255, 255, 0.87);
+  padding: 4px;
+  cursor: pointer;
+}
+
+.wgsa-collection-viewer-summary--expanded {
+  width: 160px;
+  padding: 8px;
+}
+
+.wgsa-summary-list {
+  display: none;
+  list-style: none;
+  margin-top: 4px;
+  margin-bottom: -4px;
+}
+.wgsa-collection-viewer-summary--expanded .wgsa-summary-list {
+  display: block;
+}
+
+.wgsa-summary-list__chip {
+  background: transparent;
+  margin: 4px 0;
+}
+
+.wgsa-summary-list__chip > .mdl-chip__contact {
+  box-sizing: border-box;
+}
+
+.wgsa-summary-list__chip.mdl-chip--inverse > .mdl-chip__contact {
+  color: #555;
+  border: 1px solid rgba(0, 0, 0, 0.28);
+}
+
+.wgsa-summary-list__chip:hover {
+  background: rgba(0, 0, 0, 0.14);
+}
+
+.wgsa-summary-list__chip:focus {
+  box-shadow: none;
+}
+
+.wgsa-collection-viewer-summary--expanded path:hover {
+  opacity: 0.70;
+}
+.wgsa-collection-viewer-summary--expanded path[fill="#fff"]:hover {
+  fill: #efefef;
+}
+
+.wgsa-collection-viewer-summary > button {
+  position: absolute;
+  right: 2px;
+  top: 2px;
+}

@@ -1,0 +1,118 @@
+@media print {
+
+  * {
+    overflow: visible !important;
+  }
+
+  /* hide everything that isn't the report */
+  .mdl-layout > :not(.wgsa-genome-report),
+  .wgsa-genome-report .wgsa-modal > header,
+  .wgsa-genome-report .wgsa-modal nav
+   {
+    display: none;
+  }
+
+  /* put everything in view */
+  .mdl-layout__container,
+  .wgsa-modal-container.wgsa-genome-report,
+  .wgsa-genome-report .wgsa-overlay,
+  .wgsa-genome-report .wgsa-modal {
+    position: static;
+  }
+  html,
+  body,
+  .mdl-layout__container,
+  .mdl-layout {
+    height: auto;
+  }
+  .mdl-layout,
+  .wgsa-genome-report,
+  .wgsa-modal,
+  .wgsa-overlay {
+    display: block !important;
+  }
+
+  /* make the report the full width of the page */
+  .wgsa-genome-report .wgsa-modal {
+    width: auto;
+    max-width: none;
+  }
+
+  .wgsa-genome-report-content {
+    margin: 0;
+    padding: 0;
+  }
+
+  @page {
+    margin-top: 1cm;
+    margin-bottom: 1cm;
+  }
+
+  .wgsa-genome-report-content {
+    margin-top: 0;
+    padding-bottom: 16px;
+  }
+
+  .wgsa-genome-report-summary header {
+    padding-top: 0;
+  }
+
+  /* page breaks */
+  figure {
+    break-inside: avoid;
+  }
+
+  /* https://stackoverflow.com/a/53742871 */
+  .wgsa-genome-report-content h2 {
+    break-inside: avoid;
+  }
+  .wgsa-genome-report-content h2::after {
+    content: "";
+    display: block;
+    height: 100px;
+    margin-bottom: -100px;
+  }
+
+  /* hide unnecessary elements */
+  .pw-genome-report-external-link,
+  a::after,
+  .wgsa-genome-report dd .pw-genome-report-secondary-link,
+  .pw-genome-report-noprint {
+    display: none;
+  }
+
+  /* show content links as text */
+  .wgsa-genome-report-content dd a {
+    text-decoration: none;
+    font-weight: inherit;
+  }
+
+  /* Clustering overrides */
+  .pw-cluster-view button,
+  .pw-cluster-view a,
+  .pw-cluster-buttons,
+  .libmr-ZoomControls,
+  .pw-cluster-chart-intro,
+  .chartjs-size-monitor {
+    display: none !important;
+  }
+  .wgsa-genome-report .pw-cluster-view {
+    height: auto;
+    margin: 0;
+  }
+  .pw-cluster-view > canvas {
+    margin: 0 auto;
+  }
+  .wgsa-genome-report-content #clustering {
+    break-inside: avoid;
+  }
+  .pw-network-cover-message {
+    position: static;
+    margin: 0;
+    padding: 0;
+  }
+  .pw-cluster-network {
+    margin-bottom: 16px;
+  }
+
+}

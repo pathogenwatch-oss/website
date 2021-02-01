@@ -1,0 +1,6 @@
+{
+  "globals": {
+    "componentHandler": true,
+    "$": true
+  }
+}

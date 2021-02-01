@@ -1,0 +1,15 @@
+section#mlst {
+  margin-bottom: 16px;
+}
+
+#mlst .pw-genome-report-column {
+  margin-bottom: 0;
+}
+
+.pw-genome-report-column .pw-mlst-profile {
+  margin: 0 auto;
+}
+
+.pw-genome-report-column .pw-mlst-profile td {
+  font-weight: 500;
+}

@@ -1,0 +1,34 @@
+.CircularProgress-Bg,
+.CircularProgress-Fg {
+  fill: none;
+  opacity: 1;
+  transform-origin: center;
+  transform: rotate(-90deg); /* starts progress at 12 o' clock position */
+}
+
+.CircularProgress-Bg {
+  stroke: #ccc;
+}
+
+.CircularProgress,
+.CircularProgress-Fg,
+.CircularProgress-Text {
+  transition: 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.CircularProgress-Fg {
+  transition-property: stroke-dashoffset, stroke, transform;
+}
+
+.CircularProgress-Text {
+  transition-property: fill;
+  fill: #673c90;
+  font-size: 16px;
+}
+
+.CircularProgress-success .CircularProgress-Fg {
+  stroke: #48996f;
+}
+.CircularProgress-success .CircularProgress-Text {
+  fill: #48996f;
+}

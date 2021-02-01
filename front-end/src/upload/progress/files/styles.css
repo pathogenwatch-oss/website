@@ -1,0 +1,72 @@
+.wgsa-upload-card-list {
+  display: block;
+  overflow: hidden;
+}
+
+.wgsa-upload-card-enter {
+  opacity: 0;
+}
+
+.wgsa-upload-card-enter.wgsa-upload-card-enter-active {
+  opacity: 1;
+  transition: 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+  transition-property: opacity;
+}
+
+.wgsa-upload-card-leave {
+  transform: translateX(0);
+}
+
+.wgsa-upload-card-leave.wgsa-upload-card-leave-active {
+  transform: translateX(-100%);
+  transition: 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+  transition-property: transform;
+}
+
+.wgsa-upload-progress .wgsa-card-header i {
+  position: absolute;
+  right: 0;
+  top: 0;
+  font-size: 18px;
+  color: #d11b1b;
+}
+
+.wgsa-upload-progress .wgsa-card-content {
+  height: auto;
+}
+
+.pw-upload-file-error {
+  display: flex;
+  align-items: center;
+  padding: 0;
+  margin-top: 20px;
+}
+
+.pw-upload-file-error:first-of-type {
+  margin-top: 18px;
+}
+
+.pw-upload-file-error:last-of-type {
+  margin-bottom: 20px;
+}
+
+.pw-upload-file-error .material-icons {
+  color: hsl(0, 62.25%, 52.5%);
+  padding: 0 20px;
+}
+
+.pw-upload-file-error h5 {
+  font-size: 14px;
+  letter-spacing: 0;
+  line-height: 20px;
+  margin: 0;
+}
+
+.pw-upload-file-error p {
+  margin: 0;
+  line-height: 20px;
+}
+
+.pw-upload-file-error-footer {
+  text-align: center;
+}

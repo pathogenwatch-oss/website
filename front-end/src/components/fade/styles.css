@@ -1,0 +1,19 @@
+.wgsa-fade-enter {
+  opacity: 0;
+}
+
+.wgsa-fade-enter.wgsa-fade-enter-active {
+  opacity: 1;
+  transition: .28s cubic-bezier(.4,0,.2,1);
+  transition-property: opacity;
+}
+
+.wgsa-fade-leave {
+  opacity: 1;
+}
+
+.wgsa-fade-leave.wgsa-fade-leave-active {
+  opacity: 0;
+  transition: .28s cubic-bezier(.4,0,.2,1);
+  transition-property: opacity;
+}

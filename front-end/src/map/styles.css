@@ -1,0 +1,206 @@
+.leaflet-top, .leaflet-bottom {
+  z-index: 1;
+}
+
+.cgps-leaflet-map {
+  height: 100%;
+  width: 100%;
+  position: absolute !important;
+  background: #cad2d3;
+}
+
+.cgps-leaflet-map-controls {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  z-index: 1;
+  display: flex;
+  flex-direction: row-reverse;
+}
+
+.cgps-leaflet-map-controls > * + * {
+  margin-right: 4px;
+}
+
+.cgps-leaflet-map .leaflet-map-lasso-button.is-active {
+  background-color: #a386bd;
+}
+
+.cgps-leaflet-map .leaflet-marker-controls-button.is-active {
+  background-color: #a386bd;
+  color: #fff;
+}
+
+.leaflet-cluster-anim .leaflet-marker-icon, .leaflet-cluster-anim .leaflet-marker-shadow {
+  transition: transform 0.3s ease-out, opacity 0.3s ease-in;
+}
+
+.leaflet-cluster-spider-leg {
+  transition: stroke-dashoffset 0.3s ease-out, stroke-opacity 0.3s ease-in;
+}
+
+.marker-cluster-small {
+  background-color: color(#a386bd alpha(60%) lightness(75%));
+}
+.marker-cluster-small div {
+  background-color: color(#a386bd alpha(60%));
+}
+
+.marker-cluster-medium {
+  background-color: color(#673c90 alpha(60%) lightness(75%));
+}
+.marker-cluster-medium div {
+  background-color: color(#673c90 alpha(60%));
+}
+
+.marker-cluster-large {
+  background-color: color(#ac65a6 alpha(60%) lightness(75%));
+}
+.marker-cluster-large div {
+  background-color: color(#ac65a6 alpha(60%));
+}
+
+  /* IE 6-8 fallback colors */
+.leaflet-oldie .marker-cluster-small {
+  background-color: rgb(181, 226, 140);
+}
+.leaflet-oldie .marker-cluster-small div {
+  background-color: rgb(110, 204, 57);
+}
+
+.leaflet-oldie .marker-cluster-medium {
+  background-color: rgb(241, 211, 87);
+}
+.leaflet-oldie .marker-cluster-medium div {
+  background-color: rgb(240, 194, 12);
+}
+
+.leaflet-oldie .marker-cluster-large {
+  background-color: rgb(253, 156, 115);
+}
+.leaflet-oldie .marker-cluster-large div {
+  background-color: rgb(241, 128, 23);
+}
+
+.marker-cluster {
+  background-clip: padding-box;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.marker-cluster div {
+  width: 80%;
+  height: 80%;
+  text-align: center;
+  border-radius: 50%;
+  font-size: 10px;
+  font-weight: 700;
+  color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.cgps-leaflet-map .leaflet-marker-icon {
+  cursor: pointer;
+}
+
+.cgps-leaflet-map--marker-size-1 .leaflet-marker-icon {
+  width: 16px;
+  height: 16px;
+  margin-top: -8px;
+  margin-left: -8px;
+}
+
+.cgps-leaflet-map--marker-size-2 .leaflet-marker-icon {
+  width: 18px;
+  height: 18px;
+  margin-top: -9px;
+  margin-left: -9px;
+}
+
+.cgps-leaflet-map--marker-size-3 .leaflet-marker-icon {
+  width: 20px;
+  height: 20px;
+  margin-top: -10px;
+  margin-left: -10px;
+}
+
+.cgps-leaflet-map--marker-size-4 .leaflet-marker-icon {
+  width: 24px;
+  height: 24px;
+  margin-top: -12px;
+  margin-left: -12px;
+}
+
+.cgps-leaflet-map--marker-size-5 .leaflet-marker-icon {
+  width: 28px;
+  height: 28px;
+  margin-top: -14px;
+  margin-left: -14px;
+}
+
+.cgps-leaflet-map--marker-size-6 .leaflet-marker-icon {
+  width: 32px;
+  height: 32px;
+  margin-top: -16px;
+  margin-left: -16px;
+}
+
+.cgps-leaflet-map--marker-size-7 .leaflet-marker-icon {
+  width: 36px;
+  height: 36px;
+  margin-top: -18px;
+  margin-left: -18px;
+}
+
+.cgps-leaflet-map--marker-size-8 .leaflet-marker-icon {
+  width: 40px;
+  height: 40px;
+  margin-top: -20px;
+  margin-left: -20px;
+}
+
+.cgps-leaflet-map--marker-size-9 .leaflet-marker-icon {
+  width: 44px;
+  height: 44px;
+  margin-top: -22px;
+  margin-left: -22px;
+}
+
+.cgps-leaflet-map--marker-size-10 .leaflet-marker-icon {
+  width: 48px;
+  height: 48px;
+  margin-top: -24px;
+  margin-left: -24px;
+}
+
+.wgsa-marker-cluster {
+  height: 20px;
+  width: 20px;
+  margin: -10px;
+  background: color(#a386bd alpha(75%));
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  border-radius: 50%;
+  font-size: 10px;
+  font-weight: 700;
+  color: #fff;
+  background-clip: padding-box;
+  border: 2px solid color(#a386bd alpha(60%) lightness(75%));
+}
+
+.wgsa-marker-cluster:hover,
+.wgsa-marker-cluster.has-popup {
+  cursor: pointer;
+  background: color(#673c90 alpha(75%));
+  border: 2px solid color(#673c90 alpha(60%) lightness(75%));
+}
+
+.wgsa-marker-cluster.has-popup {
+  z-index: 1;
+}

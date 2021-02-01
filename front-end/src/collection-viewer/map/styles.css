@@ -1,0 +1,3 @@
+.wgsa-collection-viewer-map .leaflet-marker-icon.highlighted {
+  z-index: 100;
+}

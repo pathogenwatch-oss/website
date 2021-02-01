@@ -1,0 +1,29 @@
+.wgsa-about-collection-dropdown.libmr-Menu-element {
+  max-width: calc(400px + 24px * 2);
+  min-width: 400px;
+}
+
+.wgsa-about-collection-dropdown .libmr-Menu-content {
+  padding: 24px;
+}
+
+.wgsa-about-collection-dropdown h3 {
+  margin: 0 0 8px;
+  font-size: 1.5rem;
+  color: #673c90;
+}
+
+.wgsa-about-collection-dropdown h4 {
+  font-family: 'Roboto', Arial, sans-serif !important;
+  font-size: 12px;
+  margin-top: 16px;
+  text-transform: uppercase;
+}
+
+.wgsa-about-collection-dropdown p {
+  margin-bottom: 12px;
+}
+
+.wgsa-about-collection-dropdown .pw-append-icon {
+  color: #673c90;
+}

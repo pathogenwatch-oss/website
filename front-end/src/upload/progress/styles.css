@@ -1,0 +1,166 @@
+.wgsa-upload-progress {
+  display: flex;
+  justify-content: space-between;
+  height: 100%;
+}
+
+.pw-upload-page {
+  align-self: stretch;
+  box-sizing: border-box;
+  margin: 0 auto;
+  max-width: 1000px;
+  padding-left: 64px;
+  padding-right: 64px;
+  width: 100%;
+  line-height: 20px;
+}
+
+.wgsa-upload-progress > :first-child {
+  width: 320px;
+}
+
+.wgsa-upload-progress > :last-child {
+  margin-left: 20px;
+  flex-grow: 1;
+  position: relative;
+  flex-basis: 320px;
+  min-width: 560px;
+}
+
+.pw-upload-summary-column {
+  margin-left: auto;
+  height: 100%;
+  min-width: 560px;
+  margin-right: 0;
+  display: flex;
+  align-items: center;
+}
+
+.pw-upload-session-time {
+  font-weight: 500;
+  margin: 0;
+  margin-left: auto;
+}
+
+.pw-upload-page .wgsa-section-divider {
+  padding: 18px 0 20px;
+  box-sizing: border-box;
+}
+
+.pw-upload-progress-view {
+  flex-grow: 1;
+}
+
+.wgsa-upload-legend {
+  margin-top: 0;
+  line-height: inherit;
+}
+
+.wgsa-upload-legend li {
+  line-height: inherit;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.wgsa-upload-legend-header {
+  display: flex;
+  align-items: top;
+  flex-wrap: nowrap;
+  white-space: nowrap;
+  overflow-x: hidden;
+  font-weight: 700;
+  width: 100%;
+}
+
+.wgsa-upload-legend-organism {
+  text-overflow: ellipsis;
+  flex-shrink: 1;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.wgsa-upload-legend > li {
+  margin-bottom: 20px;
+}
+
+.wgsa-upload-legend li > ul {
+  width: 100%;
+  line-height: 20px;
+  /* margin-top: 8px; */
+}
+
+.wgsa-upload-legend-count {
+  margin-left: auto;
+  min-width: 18px;
+  text-align: center;
+}
+
+.wgsa-upload-legend-count.aligned {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.wgsa-upload-legend-count .material-icons.success {
+  color: #48996f;
+}
+
+.wgsa-upload-legend-count-errors {
+  font-size: 13px;
+  margin-right: 4px;
+}
+
+.pw-with-icon {
+  align-items: center;
+  display: flex;
+  position: relative;
+  padding-left: 24px;
+}
+
+.pw-with-icon i {
+  font-size: 18px;
+}
+
+.pw-with-icon > i:first-child {
+  position: absolute;
+  left: 0;
+}
+
+.pw-with-icon.success {
+  font-weight: 500;
+  color: hsl(149, 90%, 22%);
+}
+
+.pw-with-icon.success i {
+  color: #48996f;
+}
+
+.wgsa-upload-progress-overview {
+  padding-right: 8px;
+}
+
+.wgsa-upload-progress-overview > * {
+  margin-bottom: 0;
+  padding-left: 24px;
+  line-height: inherit;
+}
+
+.wgsa-upload-progress-overview .wgsa-progress-bar {
+  justify-content: space-between;
+}
+
+.wgsa-upload-progress-overview .wgsa-progress-bar > label {
+  width: 96px;
+}
+
+.wgsa-flex-section {
+  display: flex;
+  flex-direction: column;
+}
+
+.wgsa-upload-progress .wgsa-section-title {
+  font-family: Roboto, Helvetica, Arial, sans-serif !important;
+  margin-bottom: 8px;
+  color: hsl(270, 8%, 49%);
+}

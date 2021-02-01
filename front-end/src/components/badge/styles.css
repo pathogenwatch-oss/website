@@ -1,0 +1,77 @@
+.pw-badge {
+  position: relative;
+}
+
+.pw-pill {
+  border-radius: 1em;
+  padding: 0.5em 1em;
+  font-weight: 500;
+  line-height: 1;
+}
+
+.pw-badge::after {
+  border-radius: 12px;
+  content: attr(data-text);
+  font-size: 13px !important;
+  font-weight: 500;
+  left: calc(100% + 0.5em);
+  line-height: 1;
+  padding: 4px 8px;
+  position: absolute;
+  text-transform: uppercase;
+  top: -1.5em;
+  z-index: 1;
+}
+
+.pw-badge.circular::after {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pw-badge-turquoise::after {
+  color: hsl(194, 67%, 27%);
+  background-color: hsl(194, 74%, 37%, 0.075);
+}
+
+.pw-badge-magenta::after {
+  color: hsl(306, 82%, 34%);
+  background-color: hsl(306, 61.5%, 47%, 0.075);
+}
+
+.pw-pill-purple,
+.pw-badge-purple::after {
+  color: hsl(271, 41%, 39%);
+  background-color: hsl(271, 51.25%, 95%);
+}
+
+.pw-badge-gold::after {
+  color: hsl(43, 99%, 28%);
+  background-color: rgba(218, 165, 32, 0.25);
+}
+
+.pw-badge-silver::after {
+  color: hsl(60, 0%, 42%);
+  background-color: rgba(192, 192, 192, 0.25);
+}
+
+.pw-badge-bronze::after {
+  color: hsl(30, 99%, 34%);
+  background-color: rgba(205, 133, 63, 0.25);
+}
+
+.pw-pill-danger,
+.pw-badge-danger::after {
+  color: hsl(0, 83%, 35%);
+  background-color: hsl(0, 77%, 96%);
+}
+
+.pw-pill-danger:hover,
+.pw-pill-danger:focus,
+.pw-pill-danger:active {
+  outline-color: currentColor;
+}

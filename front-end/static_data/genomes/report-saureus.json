@@ -1,0 +1,296 @@
+{
+  "name": "ERR070041.fasta",
+  "createdAt": "2019-07-05T09:23:52.682Z",
+  "fileId": "0c886c3c5cbcef4c574355484f52c5407e72b0de",
+  "analysis": {
+    "paarsnp": {
+      "matches": [
+        {
+          "query": {
+            "id": "NODE_15_length_20702_cov_186.591943",
+            "length": 20702,
+            "start": 13549,
+            "stop": 14394
+          },
+          "library": { "id": "blaZ", "length": 846, "start": 1, "stop": 846 },
+          "identity": 97.75,
+          "evalue": 0,
+          "reversed": false,
+          "type": "CDS",
+          "source": "WGSA_PAAR",
+          "id": "blaZ",
+          "agents": ["PEN"]
+        },
+        {
+          "query": {
+            "id": "NODE_1_length_939026_cov_42.584040",
+            "length": 939026,
+            "start": 862312,
+            "stop": 862950
+          },
+          "library": { "id": "fusC", "length": 639, "start": 1, "stop": 639 },
+          "identity": 100,
+          "evalue": 0,
+          "reversed": false,
+          "type": "CDS",
+          "source": "WGSA_PAAR",
+          "id": "fusC",
+          "agents": ["FUS"]
+        },
+        {
+          "query": {
+            "id": "NODE_17_length_2548_cov_620.246664",
+            "length": 2548,
+            "start": 397,
+            "stop": 1131
+          },
+          "library": { "id": "ermC", "length": 735, "start": 735, "stop": 1 },
+          "identity": 99.59,
+          "evalue": 0,
+          "reversed": true,
+          "type": "CDS",
+          "source": "WGSA_PAAR",
+          "id": "ermC_CLI",
+          "agents": ["CLI"]
+        },
+        {
+          "query": {
+            "id": "NODE_1_length_939026_cov_42.584040",
+            "length": 939026,
+            "start": 825065,
+            "stop": 827071
+          },
+          "library": { "id": "mecA", "length": 2007, "start": 2007, "stop": 1 },
+          "identity": 99.85,
+          "evalue": 0,
+          "reversed": true,
+          "type": "CDS",
+          "source": "WGSA_PAAR",
+          "id": "mecA",
+          "agents": ["PEN", "MET"]
+        },
+        {
+          "query": {
+            "id": "NODE_17_length_2548_cov_620.246664",
+            "length": 2548,
+            "start": 397,
+            "stop": 1131
+          },
+          "library": { "id": "ermC", "length": 735, "start": 735, "stop": 1 },
+          "identity": 99.59,
+          "evalue": 0,
+          "reversed": true,
+          "type": "CDS",
+          "source": "WGSA_PAAR",
+          "id": "ermC_ERY",
+          "agents": ["ERY"]
+        }
+      ],
+      "snp": [],
+      "paar": ["mecA", "ermC", "blaZ", "ermC_LP", "fusC"],
+      "antibiotics": [
+        {
+          "mechanisms": [],
+          "state": "NOT_FOUND",
+          "fullName": "Amikacin",
+          "name": "AMI"
+        },
+        {
+          "mechanisms": [],
+          "state": "NOT_FOUND",
+          "fullName": "Gentamicin",
+          "name": "GEN"
+        },
+        {
+          "mechanisms": [],
+          "state": "NOT_FOUND",
+          "fullName": "Tobramycin",
+          "name": "TOB"
+        },
+        {
+          "mechanisms": [],
+          "state": "NOT_FOUND",
+          "fullName": "Kanamycin",
+          "name": "KAN"
+        },
+        {
+          "mechanisms": ["mecA"],
+          "state": "RESISTANT",
+          "fullName": "Methicillin",
+          "name": "MET"
+        },
+        {
+          "mechanisms": ["blaZ", "mecA"],
+          "state": "RESISTANT",
+          "fullName": "Penicillin",
+          "name": "PEN"
+        },
+        {
+          "mechanisms": ["fusC"],
+          "state": "RESISTANT",
+          "fullName": "Fusidic Acid",
+          "name": "FUS"
+        },
+        {
+          "mechanisms": [],
+          "state": "NOT_FOUND",
+          "fullName": "Vancomycin",
+          "name": "VAN"
+        },
+        {
+          "mechanisms": ["ermC"],
+          "state": "INDUCIBLE",
+          "fullName": "Clindamycin",
+          "name": "CLI"
+        },
+        {
+          "mechanisms": ["ermC"],
+          "state": "RESISTANT",
+          "fullName": "Erythromycin",
+          "name": "ERY"
+        },
+        {
+          "mechanisms": [],
+          "state": "NOT_FOUND",
+          "fullName": "Mupirocin",
+          "name": "MUP"
+        },
+        {
+          "mechanisms": [],
+          "state": "NOT_FOUND",
+          "fullName": "Linezolid",
+          "name": "LNZ"
+        },
+        {
+          "mechanisms": [],
+          "state": "NOT_FOUND",
+          "fullName": "Tetracycline",
+          "name": "TCY"
+        },
+        {
+          "mechanisms": [],
+          "state": "NOT_FOUND",
+          "fullName": "Trimethoprim",
+          "name": "TMP"
+        },
+        {
+          "mechanisms": [],
+          "state": "NOT_FOUND",
+          "fullName": "Daptomycin",
+          "name": "DAP"
+        },
+        {
+          "mechanisms": [],
+          "state": "NOT_FOUND",
+          "fullName": "Rifampicin",
+          "name": "RIF"
+        },
+        {
+          "mechanisms": [],
+          "state": "NOT_FOUND",
+          "fullName": "Ciprofloxacin",
+          "name": "CIP"
+        },
+        {
+          "mechanisms": [],
+          "state": "NOT_FOUND",
+          "fullName": "Moxifloxacin",
+          "name": "MFX"
+        },
+        {
+          "mechanisms": [],
+          "state": "NOT_FOUND",
+          "fullName": "Teicoplanin",
+          "name": "TEC"
+        }
+      ],
+      "__v": "v2.1"
+    },
+    "mlst": {
+      "alleles": [
+        { "hits": [1], "gene": "arcC" },
+        { "hits": [1], "gene": "aroE" },
+        { "hits": [1], "gene": "glpF" },
+        { "hits": [1], "gene": "gmk" },
+        { "hits": [1], "gene": "pta" },
+        { "hits": [1], "gene": "tpi" },
+        { "hits": [1], "gene": "yqiL" }
+      ],
+      "url": "https://pubmlst.org/data/profiles/saureus.txt",
+      "st": "1",
+      "__v": "20180806174658-v1.6.10"
+    },
+    "metrics": {
+      "contigSums": [
+        939026,
+        1393639,
+        1702642,
+        1975644,
+        2150939,
+        2323462,
+        2439561,
+        2512851,
+        2562102,
+        2608499,
+        2646540,
+        2681188,
+        2714439,
+        2738607,
+        2759309,
+        2762387,
+        2764935,
+        2766580,
+        2767638,
+        2768274
+      ],
+      "gcContent": "32.6",
+      "nonATCG": 700,
+      "N50Contig": 2,
+      "N50": 454613,
+      "averageContig": 138413,
+      "largestContig": 939026,
+      "smallestContig": 636,
+      "contigs": 20,
+      "length": 2768274,
+      "__v": "v2"
+    },
+    "core": {
+      "summary": {
+        "percentAssemblyMatched": 62.9,
+        "percentKernelMatched": 99.9,
+        "kernelSize": 1626,
+        "completeAlleles": 1621,
+        "familiesMatched": 1624,
+        "speciesId": "1280",
+        "assemblyId": "0c886c3c5cbcef4c574355484f52c5407e72b0de"
+      },
+      "fp": { "size": 79977, "reference": "MSSA476" },
+      "__v": "v1"
+    },
+    "cgmlst": {
+      "scheme": "http://rest.pubmlst.org/db/pubmlst_saureus_seqdef/schemes/2"
+    },
+    "speciator": {
+      "organismName": "Staphylococcus aureus",
+      "organismId": "1280",
+      "matchingHashes": "399/400",
+      "pValue": 0,
+      "mashDistance": 0.00007827176977911485,
+      "referenceId": "GCF_900057335.1",
+      "superkingdomName": "Bacteria",
+      "superkingdomId": "2",
+      "genusName": "Staphylococcus",
+      "genusId": "1279",
+      "speciesName": "Staphylococcus aureus",
+      "speciesId": "1280",
+      "__v": "t8"
+    }
+  },
+  "reference": false,
+  "upload": { "type": "assembly" },
+  "public": false,
+  "population": false,
+  "binned": false,
+  "id": "5d1f1728cc05ddc802fa18b3",
+  "owner": "me"
+}

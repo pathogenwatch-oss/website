@@ -1,0 +1,297 @@
+.wgsa-table-switcher {
+  display: flex;
+  z-index: 2;
+  left: 8px;
+  position: absolute;
+  transform: translateY(-16px);
+}
+
+.wgsa-table-switcher > * + * {
+  margin-left: 4px;
+}
+
+/* specificity hacking */
+.libmr-ControlsButton.pw-multi-button {
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.wgsa-button-group {
+  margin: 0 4px;
+  background: #fff;
+  border-radius: 4px;
+  display: flex;
+  align-items: stretch;
+}
+
+.wgsa-button-group .material-icons {
+  line-height: 28px;
+  padding: 0 4px;
+  color: rgba(0, 0, 0, 0.54);
+  cursor: help;
+  font-size: 17px;
+  border: 1px solid rgba(0, 0, 0, 0.28);
+  border-right: none;
+}
+
+.wgsa-button-group__item {
+  background: #fff;
+  border: 1px solid rgba(0, 0, 0, 0.28);
+  border-right: none;
+  color: inherit;
+  font-weight: 500;
+  font-size: 12px;
+  padding: 4px 8px;
+  outline: none;
+  text-decoration: none !important;
+  transition: .28s cubic-bezier(.4,0,.2,1);
+  transition-property: background-color, color;
+}
+
+.wgsa-button-group > :first-child {
+  border-top-left-radius: 4px;
+  border-bottom-left-radius: 4px;
+}
+
+.wgsa-button-group > :last-child {
+  border-right: 1px solid rgba(0, 0, 0, 0.28);
+  border-top-right-radius: 4px;
+  border-bottom-right-radius: 4px;
+}
+
+.wgsa-button-group .active {
+  background: #673c90;
+  border-color: #673c90;
+  color: #fff;
+}
+
+
+.wgsa-table-header {
+  box-sizing: border-box;
+  background: none !important;
+  border-right: none;
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 18px;
+  min-width: 32px;
+  padding-left: 2px;
+  text-overflow: ellipsis;
+  vertical-align: top;
+  white-space: nowrap;
+}
+
+.wgsa-table-header--unstyled button {
+  background: none;
+  cursor: auto !important;
+  text-align: inherit;
+}
+
+.wgsa-table-header--expanded {
+  text-align: center;
+  padding: 0;
+}
+
+.wgsa-table-header--expanded button {
+  margin-left: auto;
+  margin-right: auto;
+  width: calc(100% - 2px);
+  display: block;
+}
+
+.wgsa-table-header--group {
+  margin-top: 4px;
+}
+
+.wgsa-selectable-column-heading {
+  background: rgba(0, 0, 0, 0.07);
+  color: rgba(0, 0, 0, 0.87);
+  border: none;
+  border-radius: 4px;
+  line-height: 20px;
+  font-size: 11px;
+  font-weight: 500;
+  height: 20px;
+  margin: 0 0 4px;
+  padding: 1px 6px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  /* browser-specific button padding means we must set left and right ONLY here */
+  padding-left: 6px;
+  padding-right: 6px;
+}
+
+.wgsa-selectable-column-heading--active,
+.wgsa-table-header--selected .wgsa-selectable-column-heading {
+  background: #673c90;
+  color: #fff;
+}
+
+.wgsa-selectable-column-heading:hover,
+.wgsa-selectable-column-heading:focus,
+.wgsa-selectable-column-heading:active {
+  outline: none;
+}
+
+.wgsa-selectable-column-heading:hover {
+  cursor: pointer;
+}
+
+.wgsa-table-row:hover {
+  cursor: pointer;
+}
+.wgsa-table-row:hover .public_fixedDataTableCell_main,
+.wgsa-table-cell--selected {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+.wgsa-table-cell {
+  border-top: 1px solid rgba(0, 0, 0, 0.12);
+  border-right: none;
+  box-sizing: border-box;
+  font-size: 13px;
+  padding-left: 8px;
+  vertical-align: top;
+  white-space: nowrap;
+}
+
+.wgsa-table-cell--bordered,
+.wgsa-table-cell--resistance {
+  border-left: 2px solid #F0F0F0;
+}
+
+.wgsa-table-cell--resistance,
+.wgsa-table-cell--skinny {
+  padding: 0;
+}
+
+.wgsa-table-cell a {
+  color: #673c90;
+}
+
+.wgsa-table-reports {
+  padding: 0 8px;
+}
+
+.wgsa-table-downloads {
+  padding: 0 8px;
+}
+
+.wgsa-table-header .wgsa-table-downloads {
+  display: block;
+  line-height: 20px;
+  margin-bottom: 2px;
+}
+
+.wgsa-table-downloads .wgsa-download-button {
+  padding: 0;
+  min-width: 28px;
+}
+
+.wgsa-table-downloads .wgsa-download-button,
+.wgsa-table-downloads .wgsa-download-icon {
+  width: 28px;
+  height: 28px;
+  line-height: 28px;
+}
+
+.wgsa-table-downloads .wgsa-download-button > span {
+  display: none;
+}
+
+.wgsa-table-header .wgsa-download-button {
+  margin-bottom: -2px;
+}
+
+.wgsa-table-header .mdl-spinner {
+  width: 24px;
+  height: 24px;
+}
+
+.wgsa-download-label {
+  font-size: 8px;
+  position: absolute;
+  top: 4px;
+  left: 0;
+  right: 0;
+  z-index: 1;
+  color: #fff;
+  text-transform: none;
+}
+
+.wgsa-table-cell .mdl-button:hover,
+.wgsa-table-cell .mdl-button:focus,
+.wgsa-table-cell .mdl-button:active {
+  background-color: rgba(255, 255, 255, 0.8);
+}
+
+.wgsa-table-header--resistance {
+  text-align: center;
+  padding: 0;
+}
+
+.wgsa-table-header--resistance button {
+  line-height: 16px;
+  margin: 0;
+  padding: 2px 6px 8px;
+  text-transform: uppercase;
+  white-space: nowrap;
+  z-index: 1;
+  width: 38px;
+}
+
+.wgsa-resistance-icon {
+  position: absolute;
+  left: 0;
+  top: calc(50% - 10px);
+  right: 0;
+  font-size: 20px;
+  text-align: center;
+}
+
+.wgsa-genome-name-cell {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.wgsa-genome-name-cell a {
+  color: #673c90;
+}
+
+.wgsa-genome-name-cell .material-icons {
+  font-size: 16px;
+}
+
+.wgsa-genome-name-cell .mdl-button--icon {
+  height: 24px;
+  width: 24px;
+  min-width: 24px;
+}
+
+.wgsa-amr--resistant {
+  color: #d11b1b;
+}
+
+.wgsa-amr--inducible {
+  color: #E68D44;
+}
+
+.wgsa-amr--intermediate {
+  color: #d19b1b;
+}
+
+.wgsa-table-content-options {
+  margin-left: 8px;
+  display: flex;
+  align-items: center;
+}
+
+.wgsa-table-content-options > button {
+  display: inline-block;
+  margin: 0 4px;
+}
+
+.pw-report-button {
+  padding: 0;
+  width: 100%;
+}

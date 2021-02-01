@@ -1,0 +1,30 @@
+.wgsa-content-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-bottom: 32px;
+  z-index: 1;
+}
+
+.wgsa-overlay-enter {
+  opacity: 0;
+}
+
+.wgsa-overlay-enter.wgsa-overlay-enter-active {
+  opacity: 1;
+  transition: opacity .28s cubic-bezier(0.165,0.840,0.440,1.000);
+}
+
+.wgsa-overlay-leave {
+  opacity: 1;
+}
+
+.wgsa-overlay-leave.wgsa-overlay-leave-active {
+  opacity: 0;
+  transition: opacity .28s cubic-bezier(0.165,0.840,0.440,1.000);
+}

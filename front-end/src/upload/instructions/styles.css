@@ -1,0 +1,142 @@
+.wgsa-upload-instructions {
+  display: flex;
+  flex-wrap: wrap;
+  align-content: flex-start;
+  justify-content: space-between;
+  min-height: 540px;
+  max-width: 880px;
+  position: relative;
+}
+
+.wgsa-upload-instructions h1 {
+  margin: 20px 0;
+  line-height: 60px;
+  width: 100%;
+}
+
+.wgsa-upload-instructions h2,
+.wgsa-upload-instructions .h2 {
+  margin: 20px 0;
+  line-height: 40px;
+}
+
+.wgsa-upload-instructions h3 {
+  line-height: 40px;
+  margin-top: 0;
+  margin-bottom: 0px;
+}
+
+.pw-upload-instructions-column {
+  width: calc(50% - 16px);
+  box-sizing: border-box;
+}
+
+.wgsa-upload-instructions ul {
+  line-height: 20px;
+  margin: 0 0 20px;
+}
+
+.wgsa-upload-instructions li {
+  line-height: 20px;
+}
+
+.wgsa-upload-instructions ul.inline li,
+.wgsa-upload-instructions strong,
+.wgsa-upload-instructions td {
+  color: #673c90;
+  font-weight: 500;
+}
+
+ul.inline li {
+  display: inline-block;
+  margin-right: 0.333em;
+  margin-bottom: 0;
+}
+
+ul.inline li::after {
+  content: ",";
+}
+
+ul.inline li:last-child::after {
+  display: none;
+}
+
+.wgsa-upload-instructions p {
+  line-height: 20px;
+  margin-bottom: 20px;
+}
+
+.wgsa-upload-instructions table {
+  width: 50%;
+  margin-bottom: 20px;
+}
+
+.wgsa-upload-instructions td {
+  line-height: 20px;
+}
+
+.wgsa-upload-instructions .wgsa-settings-switch {
+  height: 20px;
+  user-select: none;
+}
+
+.wgsa-upload-instructions .baseline-grid {
+  background-image: linear-gradient(
+    to bottom,
+    rgba(0, 170, 255, 0.3) 1px,
+    transparent 1px
+  );
+  background-position: left top;
+  background-repeat: repeat;
+  background-size: 100% 20px;
+}
+
+/* Tabs */
+
+.wgsa-upload-instructions .mdl-tabs__tab-bar {
+  justify-content: flex-start;
+  border: none;
+}
+
+.wgsa-upload-instructions .mdl-tabs__tab {
+  overflow: visible;
+}
+
+.wgsa-upload-instructions .mdl-tabs__ripple-container {
+  z-index: 0;
+}
+
+.wgsa-upload-instructions .mdl-tabs .mdl-tabs__panel.is-active {
+  display: flex;
+  justify-content: space-between;
+}
+
+/* Usage */
+
+.pw-upload-assembler-usage {
+  position: absolute;
+  top: -20px;
+  right: 20px;
+  max-width: 400px;
+}
+
+.pw-upload-assembler-usage aside {
+  background: hsla(194, 74%, 37%, 0.025);
+  padding: 10px 20px;
+  border-radius: 0 3px 3px 0;
+  border-left: 4px solid #3c7383;
+  margin-top: -20px;
+}
+
+.pw-upload-assembler-usage strong,
+.pw-upload-assembler-usage a {
+  color: hsl(194, 67%, 27%);
+}
+
+.pw-upload-assembler-usage p {
+  margin-bottom: 10px;
+}
+
+.pw-upload-assembler-usage aside > :last-child {
+  margin-bottom: 0;
+}

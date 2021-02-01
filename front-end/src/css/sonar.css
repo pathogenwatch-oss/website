@@ -1,0 +1,82 @@
+/*********** Sonar Effect ************/
+
+/* Prevent scrollbars to appear when waves go out of bound */
+.wgsa-sonar-effect {
+  position: relative;
+  overflow: visible;
+}
+
+/* the 'wave', same shape and size as its parent */
+.wgsa-sonar-effect::after  {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 9999px;
+  background-color: inherit;
+  opacity: 0;
+  z-index: -1;
+  pointer-events: none;
+  animation: sonarWave 1.5s linear infinite;
+  animation-delay: inherit;
+}
+
+@keyframes sonarWave {
+  from {
+    transform: scale(1);
+    opacity: 0.8;
+  }
+
+  to {
+    transform: scale(2.2);
+    opacity: 0;
+  }
+}
+/**********************************************/
+
+/*********** Sonar Effect ************/
+
+/* Prevent scrollbars to appear when waves go out of bound */
+.wgsa-sonar-effect2 {
+  position: relative;
+  z-index: 1;
+  overflow: visible;
+}
+
+/* the 'wave', same shape and size as its parent */
+.wgsa-sonar-effect2::before  {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 9999px;
+  background-color: HSL(149, 36%, 60%);
+  opacity: 0;
+  z-index: -1;
+  pointer-events: none;
+  animation: sonarWave2 linear 0.2s;
+  animation-iteration-count: 2;
+}
+
+@keyframes sonarWave2 {
+  from {
+    transform: scale(1);
+    opacity: 0.2;
+  }
+
+  50% {
+    transform: scale(1.25);
+    opacity: 1;
+  }
+
+  to {
+    transform: scale(1);
+    opacity: 0.2;
+  }
+}
+
+/**********************************************/

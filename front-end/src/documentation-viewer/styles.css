@@ -1,0 +1,12 @@
+.wgsa-wiki-page blockquote::before,
+.wgsa-wiki-page blockquote::after {
+  display: none;
+}
+
+.wgsa-wiki-page blockquote p {
+  display: inline-block;
+}
+
+.wgsa-wiki-page pre {
+  overflow-x: auto;
+}

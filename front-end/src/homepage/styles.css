@@ -1,0 +1,89 @@
+@import "showcase.css";
+@import "how-it-works.css";
+@import "organisms.css";
+@import "features.css";
+@import "footer.css";
+
+.homepage-section-link {
+  font-size: 20px;
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+}
+
+.homepage-section-link i {
+  margin-right: 8px;
+  font-size: 32px;
+}
+
+.wgsa-homepage > section:not(.showcase) {
+  padding: 40px;
+}
+
+.wgsa-homepage section.alt {
+  background: #efefef;
+}
+
+.wgsa-homepage__content {
+  max-width: 1280px;
+  margin: 0 auto;
+}
+
+.wgsa-homepage h2 {
+  color: #673c90;
+  text-align: center;
+}
+
+.wgsa-homepage > section footer {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 24px;
+}
+
+
+/* Jumbotron */
+
+.jumbotron {
+  background: linear-gradient(to top, rgba(255,255,255,0) 0%, rgb(255,255,255) 75%);
+  left: 0;
+  position: absolute;
+  right: 0;
+  top: 0;
+  z-index: 2;
+}
+
+.jumbotron-content {
+  margin: 16px auto;
+  max-width: 1280px;
+  padding: 0 16px;
+  box-sizing: border-box;
+  @media (min-width: 1024px) { /* 1280 - 64 */
+    padding: 0 64px;
+  }
+}
+
+.jumbotron img {
+  display: block;
+  width: 240px;
+}
+
+.jumbotron h1 {
+  color: #673c90;
+  font-size: 45px;
+  line-height: 1.2;
+  font-weight: 300;
+  text-shadow: 1px 1px 1px #efefef;
+  margin: 16px 0;
+}
+
+.jumbotron h1 > em,
+.jumbotron h1 > span {
+  font-weight: 300;
+}
+
+.jumbotron h1 > strong {
+  font-weight: 500;
+  letter-spacing: 0.01em;
+}

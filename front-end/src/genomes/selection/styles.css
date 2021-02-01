@@ -1,0 +1,46 @@
+.wgsa-genome-checkbox {
+  background: none;
+  border: none;
+  outline: none;
+  color: #3c7383 !important;
+  vertical-align: middle;
+  line-height: 1;
+  padding: 0;
+}
+
+.wgsa-genome-checkbox[disabled] {
+  color: rgba(0, 0, 0, 0.28) !important;
+}
+
+.wgsa-genome-checkbox > .material-icons {
+  font-size: 20px;
+}
+
+.wgsa-selection-summary {
+  position: fixed; /* allows sonar to appear on top of header in Firefox */
+  right: 16px;
+  z-index: 3; /* same z-index as header */
+}
+
+.wgsa-selection-summary .wgsa-sonar-effect {
+  position: relative;
+  z-index: 1;
+}
+
+.wgsa-selection-summary .wgsa-sonar-effect::after {
+  animation-delay: 0s;
+  animation-iteration-count: 1;
+}
+
+.wgsa-selection-summary .wgsa-overlay {
+  background: none;
+  cursor: pointer;
+}
+
+.wgsa-selection .mdl-chip__text {
+  font-weight: 400;
+}
+
+.wgsa-selection.mdl-chip--active .mdl-chip__text {
+  font-weight: inherit;
+}

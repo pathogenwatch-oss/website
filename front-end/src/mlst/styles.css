@@ -1,0 +1,28 @@
+.wgsa-mlst-profile-hit:not(:last-child)::after {
+  content: ", ";
+}
+
+.wgsa-mlst-profile-section:not(:last-child)::after {
+  content: "_";
+}
+
+.wgsa-mlst-st {
+  text-transform: none;
+}
+
+.wgsa-mlst-st[title],
+.wgsa-mlst-profile-hit[title] {
+  cursor: help;
+}
+
+.wgsa-mlst-st.is-novel::before {
+  content: '*';
+  font-weight: 700;
+}
+
+.wgsa-mlst-profile-hit.is-novel,
+.wgsa-mlst-profile-hit.is-missing {
+  font-size: 13px;
+  font-weight: 400;
+  color: rgba(0, 0, 0, 0.54);
+}

@@ -1,0 +1,71 @@
+.pw-edit-metadata {
+  flex-grow: 1;
+}
+
+.pw-edit-metadata-section {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  justify-content: center;
+}
+
+.pw-edit-metadata ol {
+  margin-top: 0;
+}
+
+.pw-edit-metadata-instructions {
+  width: 100%;
+}
+
+.pw-edit-metadata-warning {
+  display: flex;
+  font-weight: 500;
+  color: rgba(0, 0, 0, 0.87);
+}
+
+.pw-edit-metadata-warning .material-icons {
+  margin-right: 4px;
+}
+
+.pw-edit-metadata-link {
+  color: #673c90;
+  font-weight: 500;
+  margin-bottom: 8px;
+  text-decoration: underline;
+}
+
+.pw-edit-metadata-progress {
+  width: 100%;
+  text-align: center;
+}
+
+.pw-edit-metadata-progress p {
+  line-height: 1.5;
+}
+
+.pw-edit-metadata-progress p:first-child {
+  font-weight: 500;
+  margin-bottom: 8px;
+}
+
+.pw-edit-metadata-progress button {
+  display: block;
+  margin-right: auto;
+  margin-top: auto;
+}
+
+.pw-edit-metadata-progress.error {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  margin-bottom: auto;
+  text-align: left;
+}
+
+.pw-edit-metadata-progress.success .material-icons {
+  color: #48996f;
+  display: block;
+  font-size: 32px;
+  margin-bottom: 4px;
+}

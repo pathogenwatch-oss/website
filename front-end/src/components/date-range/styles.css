@@ -1,0 +1,79 @@
+.wgsa-date-range {
+  padding: 0 8px;
+}
+
+.rc-slider-handle {
+  border-color: #a386bd;
+  background-color: #a386bd;
+}
+
+.rc-slider--inactive .rc-slider-handle {
+  border-color: #ccc;
+  background-color: #ccc;
+}
+
+.rc-slider-handle:hover,
+.rc-slider-handle:focus,
+.rc-slider-handle:active {
+  border-color: #673c90;
+  background: #673c90;
+}
+
+.rc-slider-track {
+  background-color: #a386bd;
+}
+
+.rc-slider--inactive .rc-slider-track {
+  background-color: #ccc;
+}
+
+.wgsa-date-range label {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 32px;
+  font-size: 13px;
+  color: rgba(0, 0, 0, .54);
+}
+
+.wgsa-date-range label > button {
+  font-size: inherit;
+  color: inherit;
+  outline: none;
+  padding: 0;
+}
+
+.wgsa-month-year-selector {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.wgsa-month-year-selector select,
+.wgsa-month-year-selector input {
+  font-size: 13px;
+  font-weight: 400;
+  color: rgba(0, 0, 0, .54);
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.wgsa-month-year-selector input {
+  border: 1px solid rgba(0, 0, 0, .54);
+  width: 48px;
+  padding: 2px;
+}
+
+.wgsa-month-year-selector button {
+  min-width: 0;
+  padding: 0;
+  width: 16px;
+  outline: none;
+  margin-left: 4px;
+  overflow: hidden;
+}
+
+.wgsa-month-year-selector .material-icons {
+  font-size: 16px;
+  max-width: 16px;
+}
