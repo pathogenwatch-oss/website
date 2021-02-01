@@ -257,6 +257,28 @@ const summaryFields = [
     ],
   },
   {
+    field: 'sars_cov2_variants',
+    task: 'sars_cov2_variants',
+    aggregation: ({ query }) => [
+      { $project: {
+        sars_cov2_variants: {
+          $filter: {
+            input: '$analysis.sars_cov2_variants.variants',
+            as: 'va',
+            cond: query.sars_cov2_variants ?
+              { $and: [
+                { $eq: [ '$$va.state', 'var' ] },
+                { $eq: [ '$$va.name', query.sars_cov2_variants ] },
+              ] } :
+              { $eq: [ '$$va.state', 'var' ] },
+          },
+        },
+      } },
+      { $unwind: '$sars_cov2_variants' },
+      { $group: { _id: '$sars_cov2_variants.name', count: { $sum: 1 } } },
+    ],
+  },
+  {
     field: 'collection',
     aggregation: ({ query, user, deployedOrganisms }) => {
       if (!deployedOrganisms.includes(query.organismId)) return null;
