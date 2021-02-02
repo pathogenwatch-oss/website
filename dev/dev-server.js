@@ -3,7 +3,7 @@
 const express = require('express');
 const webpack = require('webpack');
 
-// const createServer = require('../server');
+const createServer = require('../server');
 
 const config = require('../webpack.config.js');
 const getFrontEndSettings = require('../server/get-front-end-settings');
@@ -36,7 +36,7 @@ function createDevServer(app) {
 
 Promise.resolve(new express())
   .then(createDevServer)
-  // .then(createServer)
+  .then(createServer)
   .then(() => console.info('*** Dev server started ***'))
   .catch(error => {
     console.error(error);

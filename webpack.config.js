@@ -6,8 +6,7 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const DuplicatePackageCheckerPlugin = require('duplicate-package-checker-webpack-plugin');
 
-const srcFolder = path.join(__dirname, 'src');
-const rootFolder = path.resolve(__dirname, '..');
+const srcFolder = path.join(__dirname, 'front-end');
 
 const resolve = {
   alias: {
@@ -15,7 +14,7 @@ const resolve = {
     '~': srcFolder,
     react: path.join(srcFolder, 'react-shim.js'),
   },
-  modules: [ 'node_modules', path.join(rootFolder, 'node_modules') ],
+  modules: [ 'node_modules', path.join(__dirname, 'node_modules') ],
   unsafeCache: true,
 };
 
@@ -50,11 +49,11 @@ const commonRules = [
     test: /\.js$/,
     loader: `babel-loader?${JSON.stringify(babelSettings)}`,
     include: [
-      /(src|universal|cgps-commons|libmicroreact)/,
-      path.join(rootFolder, 'node_modules', 'promise-file-reader'),
-      path.join(rootFolder, 'node_modules', 'cgps-commons'),
-      path.join(rootFolder, 'node_modules', 'cgps-user-accounts', 'components'),
-      path.join(rootFolder, 'node_modules', '@cgps', 'phylocanvas', 'utils'),
+      /(front-end|react-split-pane|cgps-commons|libmicroreact)/,
+      path.join(__dirname, 'node_modules', 'promise-file-reader'),
+      path.join(__dirname, 'node_modules', 'cgps-commons'),
+      path.join(__dirname, 'node_modules', 'cgps-user-accounts', 'components'),
+      path.join(__dirname, 'node_modules', '@cgps', 'phylocanvas', 'utils'),
     ],
   },
   {
@@ -77,7 +76,7 @@ const devConfig = {
   mode: 'development',
   devServer: { hot: true },
   devtool: '#eval-source-map',
-  entry: [ 'react-hot-loader/patch', 'webpack-hot-middleware/client', './front-end/src' ],
+  entry: [ 'react-hot-loader/patch', 'webpack-hot-middleware/client', './front-end' ],
   output: {
     path: __dirname,
     filename: 'dev.js',

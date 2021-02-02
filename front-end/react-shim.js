@@ -1,4 +1,4 @@
-const React = require('../../node_modules/react');
+const React = require('../node_modules/react');
 
 const createClass = require('./create-class-shim');
 const PropTypes = require('prop-types');

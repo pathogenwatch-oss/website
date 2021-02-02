@@ -3,7 +3,7 @@ const path = require("path");
 
 const config = require("../services/configuration");
 
-const clientPath = path.join(__dirname, "..", "front-end");
+const clientPath = path.join(__dirname, "..");
 
 const getFrontEndSettings = require("./get-front-end-settings");
 

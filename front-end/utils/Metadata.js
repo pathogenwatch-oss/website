@@ -1,7 +1,7 @@
 /* eslint no-param-reassign: ["error", { "props": false }] */
 
 import Papa from 'papaparse';
-import validateMetadata from '../../../universal/validateMetadata';
+import validateMetadata from '../../universal/validateMetadata';
 
 export const CSV_FILENAME_REGEX = /(\.csv)$/i;
 

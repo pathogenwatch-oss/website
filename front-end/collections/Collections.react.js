@@ -66,7 +66,7 @@ const Collections = React.createClass({
         default:
           return (
             <p className="pw-filter-view-message">
-              Nothing to see here.!!!!
+              Nothing to see here.
             </p>
           );
       }

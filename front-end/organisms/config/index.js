@@ -1,4 +1,4 @@
-const supportedOrganisms = require('../../../../universal/organisms');
+const supportedOrganisms = require('../../../universal/organisms');
 
 const supportedOrganismsIds = new Set(supportedOrganisms.map(_ => _.id));
 
