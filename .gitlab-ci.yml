@@ -8,9 +8,21 @@ build:
     paths:
       - node_modules/
   script:
-    - apk add --update git bash docker
-    - git config --global url.https://gitlab-ci-token:$CI_JOB_TOKEN@gitlab.com/.insteadOf git://gitlab.com/
-    - git config --global url.https://gitlab-ci-token:$CI_JOB_TOKEN@gitlab.com/cgps.insteadOf git@gitlab.com:cgps
-    - git config --global url.https://gitlab-ci-token:$CI_JOB_TOKEN@gitlab.com/cgps.insteadOf https://gitlab.com/cgps
-    - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
-    - ./bin/build-image.sh $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME
+    - apk add --update docker
+    - docker login
+      --username gitlab-ci-token
+      --password $CI_JOB_TOKEN $CI_REGISTRY
+    - tag=$CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME
+    - docker build
+      --force-rm
+      --tag $tag
+      --build-arg REPO_USER=gitlab-ci-token 
+      --build-arg REPO_TOKEN=${CI_JOB_TOKEN}
+      --build-arg http_proxy=$http_proxy
+      --build-arg https_proxy=$https_proxy
+      .
+    - docker push
+      $tag
+    - docker rmi
+      --force
+      $tag

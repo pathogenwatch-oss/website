@@ -1,18 +1,47 @@
-FROM node:12.13.1-alpine
+FROM node:12.13.1-alpine AS middle-end
 
-COPY . /opt/pathogenwatch/middle-end
+ARG REPO_USER
 
-RUN apk add --update --no-cache --virtual pathogenwatch-build-deps \
+ARG REPO_TOKEN
+
+RUN apk add --update --no-cache \
       g++ \
       make \
-      python && \
-    cd /opt/pathogenwatch/middle-end/ && \
-      npm rebuild && \
-    apk del --purge pathogenwatch-build-deps
+      git \
+      python
 
-ENV NODE_PATH=/opt/pathogenwatch/middle-end/src \
+RUN git config --global url.https://$REPO_USER:$REPO_TOKEN@gitlab.com/.insteadOf git://gitlab.com/ && \
+    git config --global url.https://$REPO_USER:$REPO_TOKEN@gitlab.com/cgps.insteadOf git@gitlab.com:cgps && \
+    git config --global url.https://$REPO_USER:$REPO_TOKEN@gitlab.com/cgps/.insteadOf ssh://git@gitlab.com/cgps/ && \
+    git config --global url.https://$REPO_USER:$REPO_TOKEN@gitlab.com/cgps/.insteadOf https://gitlab.com/cgps/
+
+WORKDIR /pathogenwatch/
+
+COPY . /pathogenwatch
+
+RUN yarn --production
+
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
+
+FROM middle-end AS front-end
+
+RUN yarn # installs dev dependencies
+RUN yarn build # runs webpack build
+
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
+
+FROM node:12.13.1-alpine
+
+WORKDIR /pathogenwatch/
+
+ENV NODE_PATH=/pathogenwatch/src \
     NODE_ENV=production
 
-WORKDIR /opt/pathogenwatch/middle-end
+COPY . /pathogenwatch/
+
+COPY --from=middle-end /pathogenwatch/node_modules /pathogenwatch/node_modules
+
+COPY --from=front-end /pathogenwatch/public /pathogenwatch/public
+COPY --from=front-end /pathogenwatch/assets.json /pathogenwatch/assets.json
 
 CMD [ "node", "start.js", "--seneca.log.quiet" ]
