@@ -1,10 +1,13 @@
-const createServer = require('./server');
-const LOGGER = require('utils/logging').getBaseLogger();
+const express = require("express");
 
-createServer()
-  .then(() => LOGGER.info('*** Application started ***'))
+const createServer = require('./server/index');
+const { BaseLogger } = require('./services/logger');
+
+Promise.resolve(new express())
+  .then(createServer)
+  .then(() => BaseLogger.info('*** Application started ***'))
   .catch(error => {
-    LOGGER.error(error);
-    LOGGER.error('*** Application not started ***');
+    BaseLogger.error(error);
+    BaseLogger.error('*** Application not started ***');
     return process.exit(1);
   });

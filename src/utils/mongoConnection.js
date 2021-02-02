@@ -24,7 +24,7 @@ let disconnectExpected = false;
 function connect(callback) {
   mongoose.connection.on('error', handleError);
   mongoose.connection.on('disconnected', () => {
-    if (disconnectExpected) return
+    if (disconnectExpected) return;
     handleError('disconnected event')
   });
   if (callback) {
@@ -45,5 +45,5 @@ module.exports.connect = connect;
 module.exports.dbUrl = dbUrl;
 module.exports.close = () => {
   disconnectExpected = true;
-  mongoose.connection.close()
+  return mongoose.connection.close();
 };

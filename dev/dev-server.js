@@ -1,10 +1,12 @@
-const createServer = require('../server');
+/* eslint-disable no-console */
 
-const fs = require('fs');
-
+const express = require('express');
 const webpack = require('webpack');
 
+// const createServer = require('../server');
+
 const config = require('../front-end/webpack.config.js');
+const getFrontEndSettings = require('../server/get-front-end-settings');
 const compiler = webpack(config);
 
 function createDevServer(app) {
@@ -21,19 +23,22 @@ function createDevServer(app) {
 
   app.use('/', (req, res) =>
     res.render('index', {
-      frontEndConfig: app.get('front-end-config'),
+      frontEndConfig: getFrontEndSettings(req),
       files: {
         scripts: [ '/dev.js' ],
         stylesheets: [],
       },
     })
   );
+
+  return app;
 }
 
-createServer(true)
+Promise.resolve(new express())
   .then(createDevServer)
-  .then(() => console.info('*** Dev server started ***')).
-  catch(error => {
+  // .then(createServer)
+  .then(() => console.info('*** Dev server started ***'))
+  .catch(error => {
     console.error(error);
     console.error('*** Dev server not started ***');
     return process.exit(1);

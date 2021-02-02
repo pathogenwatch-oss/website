@@ -2,11 +2,18 @@
   "extends": "cgps",
   "env": {
     "node": true,
-    "browser": false
+    "browser": true
   },
   "rules": {
+    "react/prop-types": 0,
     "no-multiple-empty-lines": 0,
-    "new-cap": [ "error", { "capIsNewExceptions": [ "Router" ] } ],
-    "max-len": [ "warn", 100 ]
+    "new-cap": 0,
+    "max-len": 0,
+    "quotes": 0,
+    "brace-style": 0,
+    "padded-blocks": 0
+  },
+  "settings": {
+    "import/resolver": "webpack"
   }
 }

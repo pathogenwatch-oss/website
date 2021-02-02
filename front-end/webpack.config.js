@@ -7,6 +7,7 @@ const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const DuplicatePackageCheckerPlugin = require('duplicate-package-checker-webpack-plugin');
 
 const srcFolder = path.join(__dirname, 'src');
+const rootFolder = path.resolve(__dirname, '..');
 
 const resolve = {
   alias: {
@@ -14,7 +15,7 @@ const resolve = {
     '~': srcFolder,
     react: path.join(srcFolder, 'react-shim.js'),
   },
-  modules: [ 'node_modules', path.join(__dirname, 'node_modules') ],
+  modules: [ 'node_modules', path.join(rootFolder, 'node_modules') ],
   unsafeCache: true,
 };
 
@@ -47,14 +48,13 @@ const commonRules = [
   { test: /\.(png|jpg|jpeg|gif)$/, use: 'file' },
   {
     test: /\.js$/,
-    // loader: (process.env.NODE_ENV === 'production' ? '' : 'react-hot-loader!').concat(`babel-loader?${JSON.stringify(babelSettings)}`),
     loader: `babel-loader?${JSON.stringify(babelSettings)}`,
     include: [
       /(src|universal|cgps-commons|libmicroreact)/,
-      path.join(__dirname, '..', 'node_modules', 'promise-file-reader'),
-      path.join(__dirname, '..', 'node_modules', 'cgps-commons'),
-      path.join(__dirname, '..', 'node_modules', 'cgps-user-accounts', 'components'),
-      path.join(__dirname, '..', 'node_modules', '@cgps', 'phylocanvas', 'utils'),
+      path.join(rootFolder, 'node_modules', 'promise-file-reader'),
+      path.join(rootFolder, 'node_modules', 'cgps-commons'),
+      path.join(rootFolder, 'node_modules', 'cgps-user-accounts', 'components'),
+      path.join(rootFolder, 'node_modules', '@cgps', 'phylocanvas', 'utils'),
     ],
   },
   {
