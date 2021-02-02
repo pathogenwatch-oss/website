@@ -49,7 +49,9 @@ const commonRules = [
     test: /\.js$/,
     loader: `babel-loader?${JSON.stringify(babelSettings)}`,
     include: [
-      /(front-end|react-split-pane|cgps-commons|libmicroreact)/,
+      /(cgps-commons|libmicroreact)/,
+      path.join(__dirname, 'front-end'),
+      path.join(__dirname, 'node_modules', 'react-split-pane'),
       path.join(__dirname, 'node_modules', 'promise-file-reader'),
       path.join(__dirname, 'node_modules', 'cgps-commons'),
       path.join(__dirname, 'node_modules', 'cgps-user-accounts', 'components'),

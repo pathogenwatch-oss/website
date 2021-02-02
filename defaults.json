@@ -3,6 +3,8 @@
 
 	"downloadFileLocation": "/path/to/files/",
 
+  "fastaStoragePath": "./fastas",
+
 	"googleMapsKey": "",
 
   "mapboxKey": "",
@@ -85,25 +87,18 @@
 			"passwordless": {
 				"mongoStore": "mongodb://localhost:27017/pathogenwatch",
 				"smtp": {
-					"user": "cgps.dev@gmail.com",
+					"user": "e@mail.com",
 	        "password": "",
-	        "host": "smtp.gmail.com",
+	        "host": "smtp.mail.com",
 	        "port": "465",
 	        "ssl": true
 				},
-				"from": "WGSA <cgps.dev@gmail.com>",
+				"from": "WGSA <e@mail.com>",
 				"subject": "Login token for WGSA",
 				"text": "You have successfully set up your WGSA account and you can now access it by clicking on the following link: http://localhost:8001/auth/passwordless/callback?token=<%= tokenToSend %>&uid=",
 				"html": "views/emails/passwordless.html"
 			}
 		}
-	},
-
-	"postgres": {
-		"username": "postgres",
-    "database": "pathogenwatch",
-    "host": "127.0.0.1",
-    "password": "postgres"
 	},
 
   "pusher": {
@@ -113,17 +108,6 @@
     "secret": "",
 		"useTLS": true
   },
-
-  "storage": {
-		"bucketName": "pathogen-watch",
-		"s3": {
-			"accessKeyId": "IXGHJ2EOHRNEOSNYG9SR",
-			"secretAccessKey": "GznfmzvSf4hyDS6mAbTbv+fjOFgS1YZMb7fMuTn+",
-			"endpoint": "http://127.0.0.1:9000",
-			"s3ForcePathStyle": true,
-			"signatureVersion": "v4"
-		}
-	},
 
   "tasks": {
     "retries": 3,
