@@ -138,6 +138,8 @@
   "scripts": {
     "dev": "NODE_PATH=./src node dev/dev-server.js --seneca.log.quiet | bunyan -o short",
     "start": "NODE_PATH=./src NODE_ENV=production node start.js --seneca.log.quiet",
+    "build": "NODE_ENV=production webpack --progress",
+
     "test": "eval $npm_package_testcmd 'test/unit/**/*.test.js'",
     "test-example": "eval $npm_package_testcmd 'test/example.test.js'",
     "e2e": "eval $npm_package_testcmd 'test/e2e/**/*.test.js'",
