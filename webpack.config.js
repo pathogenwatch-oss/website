@@ -101,7 +101,7 @@ const devConfig = {
 
 const prodConfig = {
   mode: 'production',
-  entry: './src',
+  entry: './front-end',
   recordsPath: path.join(__dirname, 'records.json'),
   optimization: {
     runtimeChunk: 'single',
