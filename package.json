@@ -1,6 +1,6 @@
 {
   "name": "pathogenwatch-middle-end",
-  "version": "8.13.15",
+  "version": "8.14.0",
   "description": "Server-side code for Pathogenwatch",
   "main": "app.js",
   "engines": {
@@ -140,7 +140,6 @@
     "start": "NODE_PATH=./src NODE_ENV=production node start.js --seneca.log.quiet",
     "build": "NODE_ENV=production webpack --progress",
     "release": "npm run build && git add . && git commit -m Build && npm version major && git push && git push --tags",
-
     "test": "eval $npm_package_testcmd 'test/unit/**/*.test.js'",
     "test-example": "eval $npm_package_testcmd 'test/example.test.js'",
     "e2e": "eval $npm_package_testcmd 'test/e2e/**/*.test.js'",
