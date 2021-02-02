@@ -4,7 +4,7 @@ import { Redirect, Route } from 'react-router-dom';
 import Index from './index-page';
 import Details from './details-page';
 
-const supportedOrganisms = require('../../universal/organisms');
+const supportedOrganisms = require('../../../universal/organisms');
 
 const path = '/organisms';
 

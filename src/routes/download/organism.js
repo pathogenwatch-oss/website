@@ -4,7 +4,7 @@ const router = express.Router();
 const { request } = require('services');
 
 const downloads = require('utils/organismDownloads');
-const downloadUtils = require('../../../front-end/universal/downloads');
+const downloadUtils = require('../../../universal/downloads');
 
 const LOGGER = require('utils/logging').createLogger('Organism Downloads');
 

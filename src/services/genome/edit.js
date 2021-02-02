@@ -1,7 +1,7 @@
 const Genome = require('models/genome');
 
 const { ServiceRequestError } = require('utils/errors');
-const validateMetadata = require('../../../front-end/universal/validateMetadata');
+const validateMetadata = require('../../../universal/validateMetadata');
 
 module.exports = async function ({ id, user, metadata, reference }) {
   if (!reference && !user) {

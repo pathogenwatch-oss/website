@@ -1,9 +1,0 @@
-node_modules
-npm*
-config.json
-.DS_Store
-*.log
-fastas
-.idea/
-package-lock.json
-static_data/clustering

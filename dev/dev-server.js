@@ -5,7 +5,7 @@ const webpack = require('webpack');
 
 // const createServer = require('../server');
 
-const config = require('../front-end/webpack.config.js');
+const config = require('../webpack.config.js');
 const getFrontEndSettings = require('../server/get-front-end-settings');
 const compiler = webpack(config);
 
