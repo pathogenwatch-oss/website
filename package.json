@@ -139,6 +139,7 @@
     "dev": "NODE_PATH=./src node dev/dev-server.js --seneca.log.quiet | bunyan -o short",
     "start": "NODE_PATH=./src NODE_ENV=production node start.js --seneca.log.quiet",
     "build": "NODE_ENV=production webpack --progress",
+    "release": "npm run build && git add . && git commit -m Build && npm version major && git push && git push --tags",
 
     "test": "eval $npm_package_testcmd 'test/unit/**/*.test.js'",
     "test-example": "eval $npm_package_testcmd 'test/example.test.js'",
