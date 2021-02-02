@@ -37,7 +37,8 @@
           "node_modules/pako/lib/zlib/inflate.js": 13,
           "node_modules/pako/lib/zlib/inffast.js": 14,
           "node_modules/pako/lib/zlib/inftrees.js": 15,
-          "node_modules/pako/lib/zlib/gzheader.js": 16
+          "node_modules/pako/lib/zlib/gzheader.js": 16,
+          "node_modules/workerize-loader/dist/rpc-worker-loader.js!node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!front-end/upload/progress/assembly/hashWorker.js": 5
         },
         "usedIds": {
           "0": 0,
@@ -106,7 +107,8 @@
           "node_modules/base64-js/index.js": 10,
           "node_modules/ieee754/index.js": 11,
           "node_modules/isarray/index.js": 12,
-          "node_modules/node-forge/lib/baseN.js": 13
+          "node_modules/node-forge/lib/baseN.js": 13,
+          "node_modules/workerize-loader/dist/rpc-worker-loader.js!node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!front-end/upload/progress/files/utils/compressWorker.js": 8
         },
         "usedIds": {
           "0": 0,
@@ -4483,7 +4485,498 @@
       "node_modules/babel-loader/lib/index.js?{\"extends\":\"/home/corin/cgps-gits/build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!src/index.js e858faa90a0bb419551eab4c9e9917f0": 674,
       "node_modules/babel-loader/lib/index.js?{\"extends\":\"/home/corin/cgps-gits/build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!src/app/store.js a3f62499787c69d00bd159d6751f4077": 111,
       "node_modules/babel-loader/lib/index.js?{\"extends\":\"/home/corin/cgps-gits/build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!src/collection-viewer/selectors/styles.js": 211,
-      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/home/corin/cgps-gits/build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!src/app/router.js 2df542cb831e32166d92734114b47098": 675
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/home/corin/cgps-gits/build/pathogenwatch-front-end/.babelrc\",\"cacheDirectory\":true}!src/app/router.js 2df542cb831e32166d92734114b47098": 675,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!front-end/react-shim.js": 0,
+      "node_modules/@babel/runtime/helpers/defineProperty.js": 3,
+      "node_modules/react-redux/es/index.js 6556ecfd8d9a43f13c120a379e65f3db": 6,
+      "node_modules/@babel/runtime/helpers/slicedToArray.js": 9,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!front-end/collection-viewer/constants.js": 10,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!front-end/utils/Api.js": 13,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!front-end/organisms/index.js": 14,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!front-end/collection-viewer/selectors/index.js": 15,
+      "node_modules/@babel/runtime/helpers/toConsumableArray.js": 16,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!front-end/app/constants.js": 18,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!front-end/actions/index.js": 20,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!front-end/app/config.js": 21,
+      "node_modules/@babel/runtime/helpers/possibleConstructorReturn.js": 22,
+      "node_modules/@babel/runtime/helpers/getPrototypeOf.js": 23,
+      "node_modules/@babel/runtime/helpers/classCallCheck.js": 24,
+      "node_modules/@babel/runtime/helpers/createClass.js": 26,
+      "node_modules/@babel/runtime/helpers/inherits.js": 27,
+      "node_modules/@babel/runtime/helpers/objectWithoutProperties.js": 28,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!front-end/genomes/actions.js": 30,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!front-end/collection-viewer/amr-utils.js": 31,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!front-end/clustering/selectors.js": 32,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!front-end/app/stateKeys/tree.js": 33,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!front-end/collection-viewer/genomes/selectors.js": 34,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!front-end/genomes/selection/selectors.js": 36,
+      "node_modules/leaflet/dist/leaflet-src.js": 37,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!front-end/collection-viewer/actions.js 494cd69a5508b428e2efb5801fe0fdc9": 38,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!front-end/genomes/selection/actions.js 127e16df597cf13c17e24ebc3276d1da": 39,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!front-end/collection-viewer/table/selectors/index.js": 40,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!front-end/components/fade/index.js": 41,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!front-end/genomes/filter/selectors.js": 42,
+      "node_modules/chart.js/src/helpers/index.js": 44,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!front-end/upload/progress/files/selectors.js": 46,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!front-end/collection-viewer/tree/selectors/index.js": 49,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!node_modules/@cgps/libmicroreact/defaults.js": 50,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!front-end/collection-viewer/search/actions.js": 51,
+      "node_modules/redux/es/index.js 7515bff7944a1029e12aa23c64bdde66": 52,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!front-end/upload/actions.js": 53,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!front-end/collection-viewer/table/actions.js": 54,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!front-end/collection-viewer/table/constants.js 9625206153e0bb1d10948bbec1f01dc9": 55,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!front-end/location/index.js 58f9f92f668f649837b7cef2d5587449": 57,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!front-end/clustering/actions.js c5308a1eb10354a81f8f75d1f3a400cd": 58,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!front-end/components/Spinner.react.js": 59,
+      "node_modules/chart.js/src/core/core.defaults.js": 62,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!front-end/utils/Date.js": 63,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!front-end/branding/DocumentTitle.react.js": 64,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!front-end/branding/index.js 5bb04f67eeccdf816c19efd4595536c6": 65,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!front-end/genomes/selectors.js": 68,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!front-end/collection-viewer/filter/constants.js": 69,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!front-end/upload/progress/files/constants.js": 70,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!front-end/upload/progress/selectors.js": 71,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!front-end/collection-viewer/downloads/utils.js": 72,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!front-end/collection-viewer/table/utils.js": 73,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!front-end/upload/progress/genomes/selectors.js": 74,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!front-end/upload/progress/files/actions.js ca4c0f22a8d4967187e78f8f24538d5e": 75,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!front-end/toast/index.js 56846ce502e4675c3ae1dcd0448c8cdd": 79,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!front-end/collection-viewer/filter/actions.js": 80,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!front-end/filter/index.js 59b8d9e3209a7d87fbce56439a9cbbf6": 81,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!node_modules/@cgps/libmicroreact/controls-button/index.js 6088033c1658ef178a17eff85fd63dcc": 82,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!front-end/genomes/filter/actions.js": 83,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!front-end/collection-viewer/highlight/actions.js": 85,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!front-end/offline/utils.js": 86,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!front-end/collection-viewer/tree/selectors/entities.js": 88,
+      "node_modules/chart.js/src/chart.js": 89,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!front-end/collections/actions.js": 90,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!front-end/collection-viewer/data-tables/utils.js": 91,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!front-end/collections/filter/selectors.js": 95,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!node_modules/@cgps/libmicroreact/utils/downloads.js": 96,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!front-end/map/actions.js": 97,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!front-end/upload/progress/actions.js": 98,
+      "node_modules/react-virtualized/dist/es/index.js 0d79b30f785e2e64178c5516c7c45313": 99,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!front-end/mlst/utils.js": 100,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!front-end/collection-viewer/tree/actions.js": 101,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!front-end/genomes/filter/index.js 6e75caf2e736a55aca6df3d2618411c6": 103,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!front-end/mlst/index.js": 104,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!front-end/collection-viewer/data-tables/constants.js": 105,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!front-end/collection-viewer/table/columnWidth.js": 106,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!node_modules/@cgps/libmicroreact/icon-button/index.js 82882ddfa5aac6e14eb77ca3c54ac238": 107,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!front-end/upload/constants.js": 108,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!front-end/card/index.js 335e35d74e103004886cfdd6abae4265": 110,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!front-end/collection-viewer/offline/constants.js": 111,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!front-end/summary/selectors.js": 115,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!front-end/map/selectors.js": 116,
+      "node_modules/lodash-es/_getNative.js 6b3b40818c6cf043276c6c374c7c5b41": 118,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!front-end/upload/progress/assembly/selectors.js": 120,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!node_modules/@cgps/libmicroreact/menu/index.js 46f579098c6ae56199b6f7c4f57f4c3f": 121,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!front-end/collections/filter/actions.js": 122,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!front-end/clustering/constants.js": 123,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!node_modules/@cgps/libmicroreact/timeline/utils.js": 126,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!front-end/collection-viewer/selectors/styles.js": 129,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!front-end/upload/selectors.js": 132,
+      "node_modules/lodash-es/_baseGetTag.js bc55c5ef4a6c3c98489c7ec3aa2ae9c9": 133,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!node_modules/@cgps/libmicroreact/theme/index.js 578be07f53de1404fe022f11c0cc3522": 134,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!front-end/genome-report/actions.js 4d5a4ab4d64616c2d65b376fbc07d4de": 139,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!front-end/collection-viewer/tree/constants.js": 140,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!front-end/app/store.js a025d723c75c8c078656d0b83d4de1c7": 141,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!front-end/utils/Notification.js": 142,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!front-end/collection-viewer/search/utils.js": 143,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!front-end/organisms/config/index.js": 144,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!front-end/collection-viewer/amr-tables/thunks.js": 147,
+      "node_modules/lodash-es/keys.js a34291c9f2776f52eb744da20154f47d": 148,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!node_modules/@cgps/libmicroreact/history/actions.js": 149,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!node_modules/@cgps/libmicroreact/timeline/actions.js": 150,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!node_modules/@cgps/libmicroreact/toggle-switch/index.js 0536a2f9b64eeee2b247a12c366705b0": 152,
+      "node_modules/chart.js/src/core/core.element.js": 154,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!front-end/summary/actions.js 44828ad6c8f710866d30378718c0bd56": 155,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!front-end/upload/progress/analysis/selectors.js c2311555eac8d2a7da653c8998bd5ef0": 157,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!front-end/genomes/selection/utils.js": 158,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!front-end/genomes/create-collection-form/selectors.js": 159,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!front-end/downloads/DownloadIcon.react.js": 160,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!front-end/genome-report/index.js b81acb8a201cdf9cba75e56a0e438865": 161,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!front-end/offline/actions.js": 162,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!front-end/organisms/OrganismName.react.js": 163,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!front-end/collection-viewer/search/constants.js": 164,
+      "node_modules/react-style-proptype/src/index.js": 165,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!front-end/genomes/create-collection-form/actions.js": 167,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!front-end/filter/actions.js": 168,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!front-end/genomes/summary/selectors.js": 169,
+      "node_modules/lodash-es/_getTag.js e2bd70dabfdc4889e8d52a41036f043d": 170,
+      "node_modules/@babel/runtime/helpers/assertThisInitialized.js": 171,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!front-end/collection-viewer/private-metadata/actions.js": 172,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!front-end/upload/progress/analysis/actions.js": 179,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!front-end/upload/progress/assembly/actions.js": 181,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!front-end/cluster-viewer/actions.js 61a4a643837f30ff4b36e50f73ebb118": 183,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!front-end/collections/filter/index.js 64e5634823ddb62f5b24cce1e548a9dd": 184,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!front-end/collections/constants.js": 185,
+      "node_modules/chart.js/src/elements/index.js": 186,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!front-end/filter/selectors.js": 187,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!front-end/utils/country.js": 188,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!front-end/components/MarkdownInline.react.js": 189,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!front-end/components/Loading.react.js": 190,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!node_modules/promise-file-reader/PromiseFileReader.js": 206,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!front-end/collection-viewer/utils.js": 210,
+      "node_modules/lodash-es/_ListCache.js 2934f4e4bae898dfa4bcbe69b83e3c05": 211,
+      "node_modules/lodash-es/_castPath.js 6b61e22ea3281761a611442fb8c8cddb": 212,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!front-end/offline/index.js 3dad7dcdc54e52c7e81d01bc967a65ad": 213,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!front-end/filter/section/index.js": 214,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!front-end/account/constants.js": 215,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!front-end/upload/previous/actions.js": 226,
+      "node_modules/lodash-es/_Stack.js b629cc3b933b29c14fc196d85e81d2f7": 227,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!front-end/genomes/create-collection-form/index.js d20a53c10d4b0fbc6159770ce6906d76": 228,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!node_modules/@cgps/libmicroreact/controls-menu/index.js f70c9231485c66a6882e40d64d50e404": 229,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!node_modules/@cgps/libmicroreact/slider/index.js b8e3b0df3864a0ffd3c86d6783536c16": 230,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!front-end/genomes/constants.js": 231,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!front-end/genomes/map/actions.js f7c5633e31e397c82a3ccb171305a8bd": 232,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!node_modules/@cgps/libmicroreact/utils/drawing.js 7788807d0f2f7a47995f87aa210dd535": 234,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!front-end/header/actions.js": 235,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!front-end/upload/api.js": 236,
+      "node_modules/lodash-es/_MapCache.js c5ee899b8089e189323c241791e29178": 239,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!front-end/organisms/actions.js 5ed71cb917a44a4a3e9254e0c62e3b8e": 240,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!front-end/genomes/bin/actions.js a43abe375b2ae5f08cb44b0fc41ca440": 241,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!node_modules/@cgps/libmicroreact/panel/index.js 899bf970142ddb2fe9f5c8eccdc11e20": 254,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!front-end/genomes/api.js": 258,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!front-end/downloads/constants.js": 262,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!node_modules/@cgps/libmicroreact/transitions/Fade.react.js": 263,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!front-end/genomes/map/selectors.js": 265,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!front-end/auth/actions.js 5996d4c637222637b34e4d80123ce14b": 266,
+      "node_modules/lodash-es/forEach.js 2a2e4ddad8099aa4ce973a67d0a575b7": 267,
+      "node_modules/react-leaflet/es/MapComponent.js 64b0f656827b9c9ee1e95cc2ac5d28f3": 274,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!front-end/mlst/ST.react.js": 276,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!front-end/mlst/Profile.react.js": 277,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!front-end/branding/constants.js": 284,
+      "node_modules/react-markdown/src/react-markdown.js": 285,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!front-end/components/PubMedLink.react.js": 286,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!front-end/components/MarkdownHeading.react.js": 295,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!front-end/upload/progress/recovery/selectors.js": 297,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!front-end/upload/progress/assembly/api.js": 298,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!front-end/app/router.js fba5b8dc5026f3dd923ad6e348cca2ab": 301,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!front-end/organisms/route.js 3945147530e771967296621fc39ec29b": 302,
+      "node_modules/rc-animate/es/CSSMotion.js f9fb0e0c1c422d1915c3521e641b4a5f": 304,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!front-end/components/overlay/index.js 492c00bf1722cd5c000c8bf182d903f4": 317,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!node_modules/@cgps/libmicroreact/dropdown-menu/index.js cb177b8e256662b0c8bbb1fee0318be6": 318,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!node_modules/@cgps/libmicroreact/menu-button/index.js f8c968dec228cddcf015d1ffc6a05ad0": 319,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!node_modules/@cgps/libmicroreact/shape/draw.js 6755baa61df56725c2f66e1f2092634e": 320,
+      "node_modules/lodash-es/isArguments.js fcb0721dd24172792f29d7385effd47a": 321,
+      "node_modules/lodash-es/_getSymbols.js 352935661c0a1679e7fc0121e029591f": 322,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!front-end/offline/constants.js": 323,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!front-end/clustering/util.js": 324,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!front-end/collection-viewer/access/actions.js": 325,
+      "node_modules/history/es/index.js a2e0b74f8e7a6dbf59c5849a01d4ba31": 326,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!front-end/account/actions.js 4f8ca1f1f4a27d74565e00ad030a15d2": 327,
+      "node_modules/css-animation/es/index.js a0a70b701d74b90b51c73288950049e2": 328,
+      "node_modules/chart.js/src/core/core.ticks.js": 329,
+      "node_modules/react-leaflet/es/index.js 179daef4cb5bd32c381f31648a494e57": 330,
+      "node_modules/@babel/runtime/helpers/typeof.js": 331,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!front-end/collections/api.js": 332,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!front-end/clustering/ClusterButton.react.js": 334,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!front-end/collection-viewer/offline/actions.js": 380,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!front-end/upload/progress/files/api.js": 404,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!front-end/components/static-grid/index.js a4cc1eec4a71cc5b7e9e58924655cf30": 408,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!front-end/app/stateKeys/filter.js": 409,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!front-end/organisms/config/FormattedName.react.js": 410,
+      "node_modules/chart.js/src/helpers/helpers.core.js": 411,
+      "node_modules/readable-stream/node_modules/process-nextick-args/index.js": 412,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!front-end/components/fade/Fade.react.js": 413,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!front-end/filter/section/Section.react.js": 414,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!front-end/mlst/Hit.react.js": 415,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!front-end/components/RemoveButton.react.js": 416,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!front-end/components/GenomeIcon.react.js": 417,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!front-end/middleware/index.js": 420,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!front-end/components/Poller.react.js": 470,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!front-end/components/CircularProgress.react.js": 472,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!front-end/collection-viewer/private-metadata/selectors.js": 492,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!node_modules/@cgps/libmicroreact/tree/reducer.js": 510,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!front-end/clustering/Network.react.js": 511,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!node_modules/@cgps/libmicroreact/drawing/halo.js": 513,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!front-end/clustering/ClusterDescription.react.js": 514,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!front-end/collection-viewer/about-collection/actions.js": 515,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!front-end/cgps-commons/LeafletMarkerLayer.react.js": 536,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!front-end/cgps-commons/PieChart.react.js": 628,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!front-end/collection-viewer/summary/actions.js": 644,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!front-end/collection-viewer/timeline/actions.js": 647,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!front-end/collection-viewer/tree/api.js": 659,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!front-end/queue/api.js": 660,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!front-end/genomes/create-collection-form/api.js": 661,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!front-end/genomes/stats/actions.js": 662,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!node_modules/@cgps/libmicroreact/history/reducer.js": 663,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!front-end/upload/progress/errors/actions.js": 668,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!front-end/upload/progress/files/utils/validation.js": 669,
+      "node_modules/lodash-es/_baseClone.js 68be12987711dc7242e61891646dfc62": 670,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!front-end/filter/date-section/index.js cb6a96d0a22c18146cf6b5f66741c627": 671,
+      "node_modules/lodash-es/_baseEach.js 41872ac9882201cb242544232549316d": 672,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!front-end/collections/CollectionCard.react.js 2235eb171508914cb1c0a61146c1ed6c": 673,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!front-end/clustering/index.js 792108d635c6c997c67525b6579d4a06": 674,
+      "node_modules/lodash-es/keysIn.js f5ff8051f216f08d43891d40c7bc627f": 675,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!front-end/filter/aside/index.js f47b7c29599d4b2ca0f68804cffcaf80": 676,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!node_modules/@cgps/libmicroreact/lasso-button/index.js 22b904b7d94d8e9b461e22ed48ebb593": 677,
+      "node_modules/lodash-es/_arrayLikeKeys.js bfdb9554cc9f47b05f39389e1e496b9d": 678,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!node_modules/@cgps/libmicroreact/canvas-lasso/index.js 15e53300ac6ee90711ff8927feaf7a68": 679,
+      "node_modules/lodash-es/isTypedArray.js 64f39db3a7056bfe19e780fcdb6d9b52": 680,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!node_modules/@cgps/libmicroreact/zoom-controls/index.js 83fe1ea946f262d635590275937e1550": 681,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!node_modules/@cgps/libmicroreact/tree/actions.js": 682,
+      "node_modules/@babel/runtime/helpers/get.js": 683,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!node_modules/@cgps/phylocanvas/utils/parse.js 1e77cfdedca703f5e81166364f91d6cc": 684,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!node_modules/@cgps/libmicroreact/auto-sizer/index.js 6a014d573b5e42256bde3b68c55367e2": 685,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!front-end/cgps-commons/LeafletPieChartMarker.react.js d66972c77e7c55ae97e42038b6cebfb5": 686,
+      "universal/organisms.js": 687,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!front-end/organisms/config/canar.js": 689,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!front-end/organisms/config/klepn.js": 690,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!front-end/organisms/config/ngonorrhoeae.js": 691,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!front-end/organisms/config/rensm.js": 692,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!front-end/organisms/config/saureus.js": 693,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!front-end/organisms/config/sequi.js": 694,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!front-end/organisms/config/strpn.js": 695,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!front-end/organisms/config/styphi.js": 696,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!front-end/organisms/config/vibcl.js": 697,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!front-end/organisms/config/zikv.js": 698,
+      "node_modules/chart.js/src/core/core.interaction.js": 699,
+      "node_modules/chart.js/src/platforms/platform.js": 700,
+      "node_modules/webpack/node_modules/string_decoder/lib/string_decoder.js": 701,
+      "node_modules/react-leaflet/es/Map.js ae4ea1cd905c23db5fdd16c1c6847c81": 702,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!front-end/cgps-commons/ChartJSGuidelinePlugin.js": 703,
+      "universal/validateMetadata.js": 704,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!node_modules/@cgps/phylocanvas/utils/rotateSubtree.js": 705,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!front-end/cgps-commons/LeafletMarkerControls.react.js": 706,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!front-end/cgps-commons/ChipButton.react.js": 707,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!node_modules/@cgps/libmicroreact/timeline/reducer.js": 708,
+      "node_modules/workerize-loader/dist/index.js?name=compress.[hash]!node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!front-end/upload/progress/files/utils/compressWorker.js": 711,
+      "node_modules/workerize-loader/dist/index.js?name=hash.[hash]!node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!front-end/upload/progress/assembly/hashWorker.js": 815,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!node_modules/@cgps/libmicroreact/theme/pathogenwatch.js": 816,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!node_modules/@cgps/libmicroreact/tree/index.js 6448b2312308f0674e6812ef059433b7": 856,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!node_modules/@cgps/libmicroreact/timeline/index.js bdae2e19dad0052292159760ac881769": 858,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!node_modules/@cgps/libmicroreact/network/index.js d91f32d9859afc29d97feec7bb1b7dff": 888,
+      "node_modules/rc-animate/es/Animate.js 0d7c8cfe8e6c7ca6e3b04a7953f3e2bf": 892,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!front-end/cgps-commons/LeafletMap.react.js 56ece01e9e635036529a9b405c44de90": 893,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!node_modules/cgps-user-accounts/components/login/index.js 2d325623cff8d877b5cb59d219d95a44": 894,
+      "node_modules/react-router/es/Redirect.js e794fcb795d9add0fc1fd57d09626820": 895,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!node_modules/@cgps/libmicroreact/cookie-consent/index.js d2a31730626c5a317fd7b30b3aca2621": 915,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!node_modules/cgps-user-accounts/components/passwordless/index.js 0c7040de314f7f0ae9175b86d144ed4f": 916,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!node_modules/@cgps/libmicroreact/history/index.js fd4c4f7a7b519652e908290b820ab1fa": 918,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!node_modules/@cgps/libmicroreact/side-pane/index.js 85f8f906c1035e5651300e8f1cd3c14a": 921,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!node_modules/@cgps/libmicroreact/checkbox/index.js 0930949b56d366207123762c176f8acb": 922,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!front-end/create-class-shim.js": 923,
+      "node_modules/@babel/runtime/helpers/arrayWithoutHoles.js": 924,
+      "node_modules/@babel/runtime/helpers/iterableToArray.js": 925,
+      "node_modules/@babel/runtime/helpers/nonIterableSpread.js": 926,
+      "node_modules/@babel/runtime/helpers/objectWithoutPropertiesLoose.js": 927,
+      "node_modules/@babel/runtime/helpers/arrayWithHoles.js": 928,
+      "node_modules/@babel/runtime/helpers/iterableToArrayLimit.js": 929,
+      "node_modules/@babel/runtime/helpers/nonIterableRest.js": 930,
+      "node_modules/@babel/runtime/helpers/setPrototypeOf.js": 931,
+      "front-end/organisms/config sync /^\\.\\/.*$/": 932,
+      "node_modules/commonmark-react-renderer/src/commonmark-react-renderer.js": 933,
+      "node_modules/xss-filters/src/xss-filters.js": 934,
+      "node_modules/chart.js/src/core/core.js": 935,
+      "node_modules/chart.js/src/helpers/helpers.easing.js": 936,
+      "node_modules/chart.js/src/helpers/helpers.canvas.js": 937,
+      "node_modules/chart.js/src/helpers/helpers.options.js": 938,
+      "node_modules/chart.js/src/core/core.helpers.js": 939,
+      "node_modules/chart.js/src/elements/element.arc.js": 940,
+      "node_modules/chart.js/src/elements/element.line.js": 941,
+      "node_modules/chart.js/src/elements/element.point.js": 942,
+      "node_modules/chart.js/src/elements/element.rectangle.js": 943,
+      "node_modules/chart.js/src/platforms/platform.basic.js": 944,
+      "node_modules/chart.js/src/platforms/platform.dom.js": 945,
+      "node_modules/chart.js/src/core/core.plugin.js": 946,
+      "node_modules/chart.js/src/core/core.animation.js": 947,
+      "node_modules/chart.js/src/core/core.controller.js": 948,
+      "node_modules/chart.js/src/core/core.datasetController.js": 949,
+      "node_modules/chart.js/src/core/core.layoutService.js": 950,
+      "node_modules/chart.js/src/core/core.scaleService.js": 951,
+      "node_modules/chart.js/src/core/core.scale.js": 952,
+      "node_modules/chart.js/src/core/core.tooltip.js": 953,
+      "node_modules/chart.js/src/scales/scale.linearbase.js": 954,
+      "node_modules/chart.js/src/scales/scale.category.js": 957,
+      "node_modules/chart.js/src/scales/scale.linear.js": 958,
+      "node_modules/chart.js/src/scales/scale.logarithmic.js": 959,
+      "node_modules/chart.js/src/scales/scale.radialLinear.js": 960,
+      "node_modules/chart.js/src/scales/scale.time.js": 961,
+      "node_modules/chart.js/src/controllers/controller.bar.js": 962,
+      "node_modules/chart.js/src/controllers/controller.bubble.js": 963,
+      "node_modules/chart.js/src/controllers/controller.doughnut.js": 964,
+      "node_modules/chart.js/src/controllers/controller.line.js": 965,
+      "node_modules/chart.js/src/controllers/controller.polarArea.js": 966,
+      "node_modules/chart.js/src/controllers/controller.radar.js": 967,
+      "node_modules/chart.js/src/controllers/controller.scatter.js": 968,
+      "node_modules/chart.js/src/charts/Chart.Bar.js": 969,
+      "node_modules/chart.js/src/charts/Chart.Bubble.js": 970,
+      "node_modules/chart.js/src/charts/Chart.Doughnut.js": 971,
+      "node_modules/chart.js/src/charts/Chart.Line.js": 972,
+      "node_modules/chart.js/src/charts/Chart.PolarArea.js": 973,
+      "node_modules/chart.js/src/charts/Chart.Radar.js": 974,
+      "node_modules/chart.js/src/charts/Chart.Scatter.js": 1003,
+      "node_modules/chart.js/src/plugins/plugin.filler.js": 1004,
+      "node_modules/chart.js/src/plugins/plugin.legend.js": 1005,
+      "node_modules/chart.js/src/plugins/plugin.title.js": 1006,
+      "node_modules/biojs-io-newick/src/index.js": 1007,
+      "node_modules/biojs-io-newick/src/newick.js": 1008,
+      "node_modules/biojs-io-newick/src/extended_newick.js": 1009,
+      "node_modules/react-style-proptype/src/css-properties.js": 1010,
+      "node_modules/@babel/runtime/helpers/superPropBase.js": 1011,
+      "node_modules/leaflet.markercluster/dist/leaflet.markercluster-src.js": 1012,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!front-end/cgps-commons/lassoselect.js": 1013,
+      "node_modules/fast-memoize/src/index.js": 1014,
+      "node_modules/chart.piecelabel.js/src/Chart.PieceLabel.js": 1015,
+      "node_modules/babel-loader/lib/index.js?{\"extends\":\"/Users/ka10/Projects/pathogenwatch/pathogenwatch-middle-end/.babelrc\",\"cacheDirectory\":true}!front-end/index.js 54deef0c62f11630dffb994233bd47da": 1016,
+      "node_modules/extract-text-webpack-plugin/dist/loader.js??ref--7-0!node_modules/style-loader/index.js!node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/css/base.css": 1020,
+      "node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/css/base.css": 1021,
+      "node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/css/utils.css": 1025,
+      "node_modules/extract-text-webpack-plugin/dist/loader.js??ref--7-0!node_modules/style-loader/index.js!node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/css/cgps-mdl-theme.css": 1026,
+      "node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/css/cgps-mdl-theme.css": 1027,
+      "node_modules/extract-text-webpack-plugin/dist/loader.js??ref--7-0!node_modules/style-loader/index.js!node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/app/utils.css": 1028,
+      "node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/app/utils.css": 1033,
+      "node_modules/extract-text-webpack-plugin/dist/loader.js??ref--7-0!node_modules/style-loader/index.js!node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/app/styles.css": 1034,
+      "node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/app/styles.css": 1035,
+      "node_modules/extract-text-webpack-plugin/dist/loader.js??ref--7-0!node_modules/style-loader/index.js!node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/css/menu.css": 1036,
+      "node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/css/menu.css": 1039,
+      "node_modules/extract-text-webpack-plugin/dist/loader.js??ref--7-0!node_modules/style-loader/index.js!node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/css/forms.css": 1040,
+      "node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/css/forms.css": 1041,
+      "node_modules/extract-text-webpack-plugin/dist/loader.js??ref--7-0!node_modules/style-loader/index.js!node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/toast/styles.css": 1042,
+      "node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/toast/styles.css": 1045,
+      "node_modules/extract-text-webpack-plugin/dist/loader.js??ref--7-0!node_modules/style-loader/index.js!node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/genome-report/styles/index.css": 1046,
+      "node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/genome-report/styles/index.css": 1056,
+      "node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/genome-report/styles/modal.css": 1057,
+      "node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/genome-report/styles/layout.css": 1064,
+      "node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/genome-report/styles/nav.css": 1065,
+      "node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/genome-report/styles/elements.css": 1066,
+      "node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/genome-report/styles/summary.css": 1067,
+      "node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/genome-report/styles/version.css": 1068,
+      "node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/genome-report/styles/amr.css": 1069,
+      "node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/genome-report/styles/mlst.css": 1070,
+      "node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/genome-report/styles/clustering.css": 1071,
+      "node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/genome-report/styles/inctyper.css": 1072,
+      "node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/genome-report/styles/vista.css": 1073,
+      "node_modules/extract-text-webpack-plugin/dist/loader.js??ref--7-0!node_modules/style-loader/index.js!node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/components/modal/styles.css": 1074,
+      "node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/components/modal/styles.css": 1075,
+      "node_modules/extract-text-webpack-plugin/dist/loader.js??ref--7-0!node_modules/style-loader/index.js!node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/components/overlay/styles.css": 1076,
+      "node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/components/overlay/styles.css": 1077,
+      "node_modules/extract-text-webpack-plugin/dist/loader.js??ref--7-0!node_modules/style-loader/index.js!node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/components/fade/styles.css": 1078,
+      "node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/components/fade/styles.css": 1079,
+      "node_modules/extract-text-webpack-plugin/dist/loader.js??ref--7-0!node_modules/style-loader/index.js!node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/filter/aside/styles.css": 1080,
+      "node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/filter/aside/styles.css": 1081,
+      "node_modules/extract-text-webpack-plugin/dist/loader.js??ref--7-0!node_modules/style-loader/index.js!node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/filter/section/styles.css": 1082,
+      "node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/filter/section/styles.css": 1083,
+      "node_modules/extract-text-webpack-plugin/dist/loader.js??ref--7-0!node_modules/style-loader/index.js!node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/components/date-range/styles.css": 1084,
+      "node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/components/date-range/styles.css": 1085,
+      "node_modules/extract-text-webpack-plugin/dist/loader.js??ref--7-0!node_modules/style-loader/index.js!node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/mlst/styles.css": 1086,
+      "node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/mlst/styles.css": 1087,
+      "node_modules/extract-text-webpack-plugin/dist/loader.js??ref--7-0!node_modules/style-loader/index.js!node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/filter/styles.css": 1088,
+      "node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/filter/styles.css": 1089,
+      "node_modules/extract-text-webpack-plugin/dist/loader.js??ref--7-0!node_modules/style-loader/index.js!node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/organisms/index-page/styles.css": 1090,
+      "node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/organisms/index-page/styles.css": 1091,
+      "node_modules/extract-text-webpack-plugin/dist/loader.js??ref--7-0!node_modules/style-loader/index.js!node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/card/styles.css": 1092,
+      "node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/card/styles.css": 1093,
+      "node_modules/extract-text-webpack-plugin/dist/loader.js??ref--7-0!node_modules/style-loader/index.js!node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/components/static-grid/styles.css": 1094,
+      "node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/components/static-grid/styles.css": 1095,
+      "node_modules/extract-text-webpack-plugin/dist/loader.js??ref--7-0!node_modules/style-loader/index.js!node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/organisms/details-page/styles.css": 1096,
+      "node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/organisms/details-page/styles.css": 1097,
+      "node_modules/extract-text-webpack-plugin/dist/loader.js??ref--7-0!node_modules/style-loader/index.js!node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/clustering/styles.css": 1098,
+      "node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/clustering/styles.css": 1099,
+      "node_modules/extract-text-webpack-plugin/dist/loader.js??ref--7-0!node_modules/style-loader/index.js!node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/css/circular-progress.css": 1100,
+      "node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/css/circular-progress.css": 1101,
+      "node_modules/extract-text-webpack-plugin/dist/loader.js??ref--7-0!node_modules/style-loader/index.js!node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/header/styles.css": 1102,
+      "node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/header/styles.css": 1103,
+      "node_modules/extract-text-webpack-plugin/dist/loader.js??ref--7-0!node_modules/style-loader/index.js!node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/collection-viewer/search/styles.css": 1104,
+      "node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/collection-viewer/search/styles.css": 1105,
+      "node_modules/extract-text-webpack-plugin/dist/loader.js??ref--7-0!node_modules/style-loader/index.js!node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/collection-viewer/private-metadata/styles.css": 1106,
+      "node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/collection-viewer/private-metadata/styles.css": 1107,
+      "node_modules/extract-text-webpack-plugin/dist/loader.js??ref--7-0!node_modules/style-loader/index.js!node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/components/drop-area/styles.css": 1108,
+      "node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/components/drop-area/styles.css": 1109,
+      "node_modules/extract-text-webpack-plugin/dist/loader.js??ref--7-0!node_modules/style-loader/index.js!node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/collection-viewer/about-collection/styles.css": 1116,
+      "node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/collection-viewer/about-collection/styles.css": 1117,
+      "node_modules/extract-text-webpack-plugin/dist/loader.js??ref--7-0!node_modules/style-loader/index.js!node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/collection-viewer/access/styles.css": 1118,
+      "node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/collection-viewer/access/styles.css": 1119,
+      "node_modules/extract-text-webpack-plugin/dist/loader.js??ref--7-0!node_modules/style-loader/index.js!node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/collection-viewer/offline/styles.css": 1120,
+      "node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/collection-viewer/offline/styles.css": 1121,
+      "node_modules/extract-text-webpack-plugin/dist/loader.js??ref--7-0!node_modules/style-loader/index.js!node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/collection-viewer/downloads/styles.css": 1122,
+      "node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/collection-viewer/downloads/styles.css": 1123,
+      "node_modules/extract-text-webpack-plugin/dist/loader.js??ref--7-0!node_modules/style-loader/index.js!node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/collection-viewer/component/styles.css": 1124,
+      "node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/collection-viewer/component/styles.css": 1125,
+      "node_modules/extract-text-webpack-plugin/dist/loader.js??ref--7-0!node_modules/style-loader/index.js!node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/collection-viewer/layout/styles.css": 1126,
+      "node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/collection-viewer/layout/styles.css": 1127,
+      "node_modules/extract-text-webpack-plugin/dist/loader.js??ref--7-0!node_modules/style-loader/index.js!node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/collection-viewer/map/styles.css": 1128,
+      "node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/collection-viewer/map/styles.css": 1129,
+      "node_modules/extract-text-webpack-plugin/dist/loader.js??ref--7-0!node_modules/style-loader/index.js!node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/map/styles.css": 1130,
+      "node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/map/styles.css": 1131,
+      "node_modules/extract-text-webpack-plugin/dist/loader.js??ref--7-0!node_modules/style-loader/index.js!node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/collection-viewer/summary/styles.css": 1132,
+      "node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/collection-viewer/summary/styles.css": 1133,
+      "node_modules/extract-text-webpack-plugin/dist/loader.js??ref--7-0!node_modules/style-loader/index.js!node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/collection-viewer/table/styles.css": 1134,
+      "node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/collection-viewer/table/styles.css": 1135,
+      "node_modules/extract-text-webpack-plugin/dist/loader.js??ref--7-0!node_modules/style-loader/index.js!node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/fixed-table/styles.css": 1136,
+      "node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/fixed-table/styles.css": 1137,
+      "node_modules/extract-text-webpack-plugin/dist/loader.js??ref--7-0!node_modules/style-loader/index.js!node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/collection-viewer/tree/styles.css": 1142,
+      "node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/collection-viewer/tree/styles.css": 1143,
+      "node_modules/extract-text-webpack-plugin/dist/loader.js??ref--7-0!node_modules/style-loader/index.js!node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/collection-viewer/loading/styles.css": 1144,
+      "node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/collection-viewer/loading/styles.css": 1145,
+      "node_modules/extract-text-webpack-plugin/dist/loader.js??ref--7-0!node_modules/style-loader/index.js!node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/collections/styles.css": 1146,
+      "node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/collections/styles.css": 1147,
+      "node_modules/extract-text-webpack-plugin/dist/loader.js??ref--7-0!node_modules/style-loader/index.js!node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/grid/styles.css": 1148,
+      "node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/grid/styles.css": 1149,
+      "node_modules/extract-text-webpack-plugin/dist/loader.js??ref--7-0!node_modules/style-loader/index.js!node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/filter/summary/styles.css": 1150,
+      "node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/filter/summary/styles.css": 1151,
+      "node_modules/extract-text-webpack-plugin/dist/loader.js??ref--7-0!node_modules/style-loader/index.js!node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/overlay/styles.css": 1152,
+      "node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/overlay/styles.css": 1153,
+      "node_modules/extract-text-webpack-plugin/dist/loader.js??ref--7-0!node_modules/style-loader/index.js!node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/genomes/header/styles.css": 1154,
+      "node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/genomes/header/styles.css": 1155,
+      "node_modules/extract-text-webpack-plugin/dist/loader.js??ref--7-0!node_modules/style-loader/index.js!node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/genomes/selection/styles.css": 1156,
+      "node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/genomes/selection/styles.css": 1157,
+      "node_modules/extract-text-webpack-plugin/dist/loader.js??ref--7-0!node_modules/style-loader/index.js!node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/genomes/selection/dropdown/styles.css": 1158,
+      "node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/genomes/selection/dropdown/styles.css": 1159,
+      "node_modules/extract-text-webpack-plugin/dist/loader.js??ref--7-0!node_modules/style-loader/index.js!node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/genomes/selection/list/styles.css": 1160,
+      "node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/genomes/selection/list/styles.css": 1161,
+      "node_modules/extract-text-webpack-plugin/dist/loader.js??ref--7-0!node_modules/style-loader/index.js!node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/genomes/selection/collection/styles.css": 1162,
+      "node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/genomes/selection/collection/styles.css": 1163,
+      "node_modules/extract-text-webpack-plugin/dist/loader.js??ref--7-0!node_modules/style-loader/index.js!node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/genomes/create-collection-form/styles.css": 1164,
+      "node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/genomes/create-collection-form/styles.css": 1165,
+      "node_modules/extract-text-webpack-plugin/dist/loader.js??ref--7-0!node_modules/style-loader/index.js!node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/genomes/selection/download/styles.css": 1166,
+      "node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/genomes/selection/download/styles.css": 1167,
+      "node_modules/extract-text-webpack-plugin/dist/loader.js??ref--7-0!node_modules/style-loader/index.js!node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/genomes/selection/edit/styles.css": 1168,
+      "node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/genomes/selection/edit/styles.css": 1169,
+      "node_modules/extract-text-webpack-plugin/dist/loader.js??ref--7-0!node_modules/style-loader/index.js!node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/genomes/list/styles.css": 1170,
+      "node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/genomes/list/styles.css": 1171,
+      "node_modules/extract-text-webpack-plugin/dist/loader.js??ref--7-0!node_modules/style-loader/index.js!node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/genomes/map/styles.css": 1172,
+      "node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/genomes/map/styles.css": 1173,
+      "node_modules/extract-text-webpack-plugin/dist/loader.js??ref--7-0!node_modules/style-loader/index.js!node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/genomes/stats/styles.css": 1174,
+      "node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/genomes/stats/styles.css": 1175,
+      "node_modules/extract-text-webpack-plugin/dist/loader.js??ref--7-0!node_modules/style-loader/index.js!node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/cluster-viewer/styles.css": 1176,
+      "node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/cluster-viewer/styles.css": 1177,
+      "node_modules/extract-text-webpack-plugin/dist/loader.js??ref--7-0!node_modules/style-loader/index.js!node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/account/styles.css": 1178,
+      "node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/account/styles.css": 1179,
+      "node_modules/extract-text-webpack-plugin/dist/loader.js??ref--7-0!node_modules/style-loader/index.js!node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/homepage/styles.css": 1180,
+      "node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/homepage/styles.css": 1181,
+      "node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/homepage/showcase.css": 1182,
+      "node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/css/sonar.css": 1183,
+      "node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/homepage/how-it-works.css": 1184,
+      "node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/homepage/organisms.css": 1185,
+      "node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/homepage/features.css": 1186,
+      "node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/homepage/footer.css": 1187,
+      "node_modules/extract-text-webpack-plugin/dist/loader.js??ref--7-0!node_modules/style-loader/index.js!node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/sign-in/styles.css": 1188,
+      "node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/sign-in/styles.css": 1189,
+      "node_modules/extract-text-webpack-plugin/dist/loader.js??ref--7-0!node_modules/style-loader/index.js!node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/upload/styles.css": 1190,
+      "node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/upload/styles.css": 1191,
+      "node_modules/extract-text-webpack-plugin/dist/loader.js??ref--7-0!node_modules/style-loader/index.js!node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/upload/instructions/styles.css": 1192,
+      "node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/upload/instructions/styles.css": 1193,
+      "node_modules/extract-text-webpack-plugin/dist/loader.js??ref--7-0!node_modules/style-loader/index.js!node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/upload/drag-and-drop/styles.css": 1194,
+      "node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/upload/drag-and-drop/styles.css": 1195,
+      "node_modules/extract-text-webpack-plugin/dist/loader.js??ref--7-0!node_modules/style-loader/index.js!node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/components/switch/styles.css": 1196,
+      "node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/components/switch/styles.css": 1197,
+      "node_modules/extract-text-webpack-plugin/dist/loader.js??ref--7-0!node_modules/style-loader/index.js!node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/components/badge/styles.css": 1198,
+      "node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/components/badge/styles.css": 1199,
+      "node_modules/extract-text-webpack-plugin/dist/loader.js??ref--7-0!node_modules/style-loader/index.js!node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/upload/previous/styles.css": 1200,
+      "node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/upload/previous/styles.css": 1201,
+      "node_modules/extract-text-webpack-plugin/dist/loader.js??ref--7-0!node_modules/style-loader/index.js!node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/upload/progress/styles.css": 1202,
+      "node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/upload/progress/styles.css": 1203,
+      "node_modules/extract-text-webpack-plugin/dist/loader.js??ref--7-0!node_modules/style-loader/index.js!node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/upload/progress/analysis/styles.css": 1204,
+      "node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/upload/progress/analysis/styles.css": 1205,
+      "node_modules/extract-text-webpack-plugin/dist/loader.js??ref--7-0!node_modules/style-loader/index.js!node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/upload/progress/files/styles.css": 1206,
+      "node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/upload/progress/files/styles.css": 1207,
+      "node_modules/extract-text-webpack-plugin/dist/loader.js??ref--7-0!node_modules/style-loader/index.js!node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/components/progress-bar/styles.css": 1208,
+      "node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/components/progress-bar/styles.css": 1209,
+      "node_modules/extract-text-webpack-plugin/dist/loader.js??ref--7-0!node_modules/style-loader/index.js!node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/upload/progress/recovery/styles.css": 1210,
+      "node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/upload/progress/recovery/styles.css": 1211
     },
     "usedIds": {
       "0": 0,
@@ -5627,7 +6120,77 @@
       "1138": 1138,
       "1139": 1139,
       "1140": 1140,
-      "1141": 1141
+      "1141": 1141,
+      "1142": 1142,
+      "1143": 1143,
+      "1144": 1144,
+      "1145": 1145,
+      "1146": 1146,
+      "1147": 1147,
+      "1148": 1148,
+      "1149": 1149,
+      "1150": 1150,
+      "1151": 1151,
+      "1152": 1152,
+      "1153": 1153,
+      "1154": 1154,
+      "1155": 1155,
+      "1156": 1156,
+      "1157": 1157,
+      "1158": 1158,
+      "1159": 1159,
+      "1160": 1160,
+      "1161": 1161,
+      "1162": 1162,
+      "1163": 1163,
+      "1164": 1164,
+      "1165": 1165,
+      "1166": 1166,
+      "1167": 1167,
+      "1168": 1168,
+      "1169": 1169,
+      "1170": 1170,
+      "1171": 1171,
+      "1172": 1172,
+      "1173": 1173,
+      "1174": 1174,
+      "1175": 1175,
+      "1176": 1176,
+      "1177": 1177,
+      "1178": 1178,
+      "1179": 1179,
+      "1180": 1180,
+      "1181": 1181,
+      "1182": 1182,
+      "1183": 1183,
+      "1184": 1184,
+      "1185": 1185,
+      "1186": 1186,
+      "1187": 1187,
+      "1188": 1188,
+      "1189": 1189,
+      "1190": 1190,
+      "1191": 1191,
+      "1192": 1192,
+      "1193": 1193,
+      "1194": 1194,
+      "1195": 1195,
+      "1196": 1196,
+      "1197": 1197,
+      "1198": 1198,
+      "1199": 1199,
+      "1200": 1200,
+      "1201": 1201,
+      "1202": 1202,
+      "1203": 1203,
+      "1204": 1204,
+      "1205": 1205,
+      "1206": 1206,
+      "1207": 1207,
+      "1208": 1208,
+      "1209": 1209,
+      "1210": 1210,
+      "1211": 1211
     }
   },
   "chunks": {
@@ -5639,7 +6202,1493 @@
     "bySource": {},
     "usedIds": [
       0,
-      1
+      1,
+      2
     ]
-  }
+  },
+  "extract-text-webpack-plugin node_modules/extract-text-webpack-plugin/dist node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/css/cgps-mdl-theme.css": [
+    {
+      "modules": {
+        "byIdentifier": {
+          "node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/css/cgps-mdl-theme.css": 0,
+          "node_modules/css-loader/dist/runtime/api.js": 1
+        },
+        "usedIds": {
+          "0": 0,
+          "1": 1
+        }
+      },
+      "chunks": {
+        "byName": {},
+        "bySource": {},
+        "usedIds": [
+          1
+        ]
+      }
+    }
+  ],
+  "extract-text-webpack-plugin node_modules/extract-text-webpack-plugin/dist node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/css/base.css": [
+    {
+      "modules": {
+        "byIdentifier": {
+          "node_modules/css-loader/dist/runtime/api.js": 0,
+          "node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/css/base.css": 1,
+          "node_modules/css-loader/dist/cjs.js?{\"importLoaders\":1}!node_modules/postcss-loader/src/index.js??postcss!front-end/css/utils.css": 2
+        },
+        "usedIds": {
+          "0": 0,
+          "1": 1,
+          "2": 2
+        }
+      },
+      "chunks": {
+        "byName": {},
+        "bySource": {},
+        "usedIds": [
+          1
+        ]
+      }
+    }
+  ],
+  "extract-text-webpack-plugin node_modules/extract-text-webpack-plugin/dist node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/app/utils.css": [
+    {
+      "modules": {
+        "byIdentifier": {
+          "node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/app/utils.css": 0,
+          "node_modules/css-loader/dist/runtime/api.js": 1
+        },
+        "usedIds": {
+          "0": 0,
+          "1": 1
+        }
+      },
+      "chunks": {
+        "byName": {},
+        "bySource": {},
+        "usedIds": [
+          1
+        ]
+      }
+    }
+  ],
+  "extract-text-webpack-plugin node_modules/extract-text-webpack-plugin/dist node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/app/styles.css": [
+    {
+      "modules": {
+        "byIdentifier": {
+          "node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/app/styles.css": 0,
+          "node_modules/css-loader/dist/runtime/api.js": 1
+        },
+        "usedIds": {
+          "0": 0,
+          "1": 1
+        }
+      },
+      "chunks": {
+        "byName": {},
+        "bySource": {},
+        "usedIds": [
+          1
+        ]
+      }
+    }
+  ],
+  "extract-text-webpack-plugin node_modules/extract-text-webpack-plugin/dist node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/css/menu.css": [
+    {
+      "modules": {
+        "byIdentifier": {
+          "node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/css/menu.css": 0,
+          "node_modules/css-loader/dist/runtime/api.js": 1
+        },
+        "usedIds": {
+          "0": 0,
+          "1": 1
+        }
+      },
+      "chunks": {
+        "byName": {},
+        "bySource": {},
+        "usedIds": [
+          1
+        ]
+      }
+    }
+  ],
+  "extract-text-webpack-plugin node_modules/extract-text-webpack-plugin/dist node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/css/forms.css": [
+    {
+      "modules": {
+        "byIdentifier": {
+          "node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/css/forms.css": 0,
+          "node_modules/css-loader/dist/runtime/api.js": 1
+        },
+        "usedIds": {
+          "0": 0,
+          "1": 1
+        }
+      },
+      "chunks": {
+        "byName": {},
+        "bySource": {},
+        "usedIds": [
+          1
+        ]
+      }
+    }
+  ],
+  "extract-text-webpack-plugin node_modules/extract-text-webpack-plugin/dist node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/toast/styles.css": [
+    {
+      "modules": {
+        "byIdentifier": {
+          "node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/toast/styles.css": 0,
+          "node_modules/css-loader/dist/runtime/api.js": 1
+        },
+        "usedIds": {
+          "0": 0,
+          "1": 1
+        }
+      },
+      "chunks": {
+        "byName": {},
+        "bySource": {},
+        "usedIds": [
+          1
+        ]
+      }
+    }
+  ],
+  "extract-text-webpack-plugin node_modules/extract-text-webpack-plugin/dist node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/genome-report/styles/index.css": [
+    {
+      "modules": {
+        "byIdentifier": {
+          "node_modules/css-loader/dist/runtime/api.js": 0,
+          "node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/genome-report/styles/index.css": 1,
+          "node_modules/css-loader/dist/cjs.js?{\"importLoaders\":1}!node_modules/postcss-loader/src/index.js??postcss!front-end/genome-report/styles/modal.css": 2,
+          "node_modules/css-loader/dist/cjs.js?{\"importLoaders\":1}!node_modules/postcss-loader/src/index.js??postcss!front-end/genome-report/styles/layout.css": 3,
+          "node_modules/css-loader/dist/cjs.js?{\"importLoaders\":1}!node_modules/postcss-loader/src/index.js??postcss!front-end/genome-report/styles/nav.css": 4,
+          "node_modules/css-loader/dist/cjs.js?{\"importLoaders\":1}!node_modules/postcss-loader/src/index.js??postcss!front-end/genome-report/styles/elements.css": 5,
+          "node_modules/css-loader/dist/cjs.js?{\"importLoaders\":1}!node_modules/postcss-loader/src/index.js??postcss!front-end/genome-report/styles/summary.css": 6,
+          "node_modules/css-loader/dist/cjs.js?{\"importLoaders\":1}!node_modules/postcss-loader/src/index.js??postcss!front-end/genome-report/styles/version.css": 7,
+          "node_modules/css-loader/dist/cjs.js?{\"importLoaders\":1}!node_modules/postcss-loader/src/index.js??postcss!front-end/genome-report/styles/amr.css": 8,
+          "node_modules/css-loader/dist/cjs.js?{\"importLoaders\":1}!node_modules/postcss-loader/src/index.js??postcss!front-end/genome-report/styles/mlst.css": 9,
+          "node_modules/css-loader/dist/cjs.js?{\"importLoaders\":1}!node_modules/postcss-loader/src/index.js??postcss!front-end/genome-report/styles/clustering.css": 10,
+          "node_modules/css-loader/dist/cjs.js?{\"importLoaders\":1}!node_modules/postcss-loader/src/index.js??postcss!front-end/genome-report/styles/inctyper.css": 11,
+          "node_modules/css-loader/dist/cjs.js?{\"importLoaders\":1}!node_modules/postcss-loader/src/index.js??postcss!front-end/genome-report/styles/vista.css": 12
+        },
+        "usedIds": {
+          "0": 0,
+          "1": 1,
+          "2": 2,
+          "3": 3,
+          "4": 4,
+          "5": 5,
+          "6": 6,
+          "7": 7,
+          "8": 8,
+          "9": 9,
+          "10": 10,
+          "11": 11,
+          "12": 12
+        }
+      },
+      "chunks": {
+        "byName": {},
+        "bySource": {},
+        "usedIds": [
+          1
+        ]
+      }
+    }
+  ],
+  "extract-text-webpack-plugin node_modules/extract-text-webpack-plugin/dist node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/components/modal/styles.css": [
+    {
+      "modules": {
+        "byIdentifier": {
+          "node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/components/modal/styles.css": 0,
+          "node_modules/css-loader/dist/runtime/api.js": 1
+        },
+        "usedIds": {
+          "0": 0,
+          "1": 1
+        }
+      },
+      "chunks": {
+        "byName": {},
+        "bySource": {},
+        "usedIds": [
+          1
+        ]
+      }
+    }
+  ],
+  "extract-text-webpack-plugin node_modules/extract-text-webpack-plugin/dist node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/components/overlay/styles.css": [
+    {
+      "modules": {
+        "byIdentifier": {
+          "node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/components/overlay/styles.css": 0,
+          "node_modules/css-loader/dist/runtime/api.js": 1
+        },
+        "usedIds": {
+          "0": 0,
+          "1": 1
+        }
+      },
+      "chunks": {
+        "byName": {},
+        "bySource": {},
+        "usedIds": [
+          1
+        ]
+      }
+    }
+  ],
+  "extract-text-webpack-plugin node_modules/extract-text-webpack-plugin/dist node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/components/fade/styles.css": [
+    {
+      "modules": {
+        "byIdentifier": {
+          "node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/components/fade/styles.css": 0,
+          "node_modules/css-loader/dist/runtime/api.js": 1
+        },
+        "usedIds": {
+          "0": 0,
+          "1": 1
+        }
+      },
+      "chunks": {
+        "byName": {},
+        "bySource": {},
+        "usedIds": [
+          1
+        ]
+      }
+    }
+  ],
+  "extract-text-webpack-plugin node_modules/extract-text-webpack-plugin/dist node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/filter/aside/styles.css": [
+    {
+      "modules": {
+        "byIdentifier": {
+          "node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/filter/aside/styles.css": 0,
+          "node_modules/css-loader/dist/runtime/api.js": 1
+        },
+        "usedIds": {
+          "0": 0,
+          "1": 1
+        }
+      },
+      "chunks": {
+        "byName": {},
+        "bySource": {},
+        "usedIds": [
+          1
+        ]
+      }
+    }
+  ],
+  "extract-text-webpack-plugin node_modules/extract-text-webpack-plugin/dist node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/filter/section/styles.css": [
+    {
+      "modules": {
+        "byIdentifier": {
+          "node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/filter/section/styles.css": 0,
+          "node_modules/css-loader/dist/runtime/api.js": 1
+        },
+        "usedIds": {
+          "0": 0,
+          "1": 1
+        }
+      },
+      "chunks": {
+        "byName": {},
+        "bySource": {},
+        "usedIds": [
+          1
+        ]
+      }
+    }
+  ],
+  "extract-text-webpack-plugin node_modules/extract-text-webpack-plugin/dist node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/components/date-range/styles.css": [
+    {
+      "modules": {
+        "byIdentifier": {
+          "node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/components/date-range/styles.css": 0,
+          "node_modules/css-loader/dist/runtime/api.js": 1
+        },
+        "usedIds": {
+          "0": 0,
+          "1": 1
+        }
+      },
+      "chunks": {
+        "byName": {},
+        "bySource": {},
+        "usedIds": [
+          1
+        ]
+      }
+    }
+  ],
+  "extract-text-webpack-plugin node_modules/extract-text-webpack-plugin/dist node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/mlst/styles.css": [
+    {
+      "modules": {
+        "byIdentifier": {
+          "node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/mlst/styles.css": 0,
+          "node_modules/css-loader/dist/runtime/api.js": 1
+        },
+        "usedIds": {
+          "0": 0,
+          "1": 1
+        }
+      },
+      "chunks": {
+        "byName": {},
+        "bySource": {},
+        "usedIds": [
+          1
+        ]
+      }
+    }
+  ],
+  "extract-text-webpack-plugin node_modules/extract-text-webpack-plugin/dist node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/filter/styles.css": [
+    {
+      "modules": {
+        "byIdentifier": {
+          "node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/filter/styles.css": 0,
+          "node_modules/css-loader/dist/runtime/api.js": 1
+        },
+        "usedIds": {
+          "0": 0,
+          "1": 1
+        }
+      },
+      "chunks": {
+        "byName": {},
+        "bySource": {},
+        "usedIds": [
+          1
+        ]
+      }
+    }
+  ],
+  "extract-text-webpack-plugin node_modules/extract-text-webpack-plugin/dist node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/organisms/index-page/styles.css": [
+    {
+      "modules": {
+        "byIdentifier": {
+          "node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/organisms/index-page/styles.css": 0,
+          "node_modules/css-loader/dist/runtime/api.js": 1
+        },
+        "usedIds": {
+          "0": 0,
+          "1": 1
+        }
+      },
+      "chunks": {
+        "byName": {},
+        "bySource": {},
+        "usedIds": [
+          1
+        ]
+      }
+    }
+  ],
+  "extract-text-webpack-plugin node_modules/extract-text-webpack-plugin/dist node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/card/styles.css": [
+    {
+      "modules": {
+        "byIdentifier": {
+          "node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/card/styles.css": 0,
+          "node_modules/css-loader/dist/runtime/api.js": 1
+        },
+        "usedIds": {
+          "0": 0,
+          "1": 1
+        }
+      },
+      "chunks": {
+        "byName": {},
+        "bySource": {},
+        "usedIds": [
+          1
+        ]
+      }
+    }
+  ],
+  "extract-text-webpack-plugin node_modules/extract-text-webpack-plugin/dist node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/components/static-grid/styles.css": [
+    {
+      "modules": {
+        "byIdentifier": {
+          "node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/components/static-grid/styles.css": 0,
+          "node_modules/css-loader/dist/runtime/api.js": 1
+        },
+        "usedIds": {
+          "0": 0,
+          "1": 1
+        }
+      },
+      "chunks": {
+        "byName": {},
+        "bySource": {},
+        "usedIds": [
+          1
+        ]
+      }
+    }
+  ],
+  "extract-text-webpack-plugin node_modules/extract-text-webpack-plugin/dist node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/organisms/details-page/styles.css": [
+    {
+      "modules": {
+        "byIdentifier": {
+          "node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/organisms/details-page/styles.css": 0,
+          "node_modules/css-loader/dist/runtime/api.js": 1
+        },
+        "usedIds": {
+          "0": 0,
+          "1": 1
+        }
+      },
+      "chunks": {
+        "byName": {},
+        "bySource": {},
+        "usedIds": [
+          1
+        ]
+      }
+    }
+  ],
+  "extract-text-webpack-plugin node_modules/extract-text-webpack-plugin/dist node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/clustering/styles.css": [
+    {
+      "modules": {
+        "byIdentifier": {
+          "node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/clustering/styles.css": 0,
+          "node_modules/css-loader/dist/runtime/api.js": 1
+        },
+        "usedIds": {
+          "0": 0,
+          "1": 1
+        }
+      },
+      "chunks": {
+        "byName": {},
+        "bySource": {},
+        "usedIds": [
+          1
+        ]
+      }
+    }
+  ],
+  "extract-text-webpack-plugin node_modules/extract-text-webpack-plugin/dist node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/css/circular-progress.css": [
+    {
+      "modules": {
+        "byIdentifier": {
+          "node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/css/circular-progress.css": 0,
+          "node_modules/css-loader/dist/runtime/api.js": 1
+        },
+        "usedIds": {
+          "0": 0,
+          "1": 1
+        }
+      },
+      "chunks": {
+        "byName": {},
+        "bySource": {},
+        "usedIds": [
+          1
+        ]
+      }
+    }
+  ],
+  "extract-text-webpack-plugin node_modules/extract-text-webpack-plugin/dist node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/header/styles.css": [
+    {
+      "modules": {
+        "byIdentifier": {
+          "node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/header/styles.css": 0,
+          "node_modules/css-loader/dist/runtime/api.js": 1
+        },
+        "usedIds": {
+          "0": 0,
+          "1": 1
+        }
+      },
+      "chunks": {
+        "byName": {},
+        "bySource": {},
+        "usedIds": [
+          1
+        ]
+      }
+    }
+  ],
+  "extract-text-webpack-plugin node_modules/extract-text-webpack-plugin/dist node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/collection-viewer/search/styles.css": [
+    {
+      "modules": {
+        "byIdentifier": {
+          "node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/collection-viewer/search/styles.css": 0,
+          "node_modules/css-loader/dist/runtime/api.js": 1
+        },
+        "usedIds": {
+          "0": 0,
+          "1": 1
+        }
+      },
+      "chunks": {
+        "byName": {},
+        "bySource": {},
+        "usedIds": [
+          1
+        ]
+      }
+    }
+  ],
+  "extract-text-webpack-plugin node_modules/extract-text-webpack-plugin/dist node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/collection-viewer/private-metadata/styles.css": [
+    {
+      "modules": {
+        "byIdentifier": {
+          "node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/collection-viewer/private-metadata/styles.css": 0,
+          "node_modules/css-loader/dist/runtime/api.js": 1
+        },
+        "usedIds": {
+          "0": 0,
+          "1": 1
+        }
+      },
+      "chunks": {
+        "byName": {},
+        "bySource": {},
+        "usedIds": [
+          1
+        ]
+      }
+    }
+  ],
+  "extract-text-webpack-plugin node_modules/extract-text-webpack-plugin/dist node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/components/drop-area/styles.css": [
+    {
+      "modules": {
+        "byIdentifier": {
+          "node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/components/drop-area/styles.css": 0,
+          "node_modules/css-loader/dist/runtime/api.js": 1
+        },
+        "usedIds": {
+          "0": 0,
+          "1": 1
+        }
+      },
+      "chunks": {
+        "byName": {},
+        "bySource": {},
+        "usedIds": [
+          1
+        ]
+      }
+    }
+  ],
+  "extract-text-webpack-plugin node_modules/extract-text-webpack-plugin/dist node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/collection-viewer/about-collection/styles.css": [
+    {
+      "modules": {
+        "byIdentifier": {
+          "node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/collection-viewer/about-collection/styles.css": 0,
+          "node_modules/css-loader/dist/runtime/api.js": 1
+        },
+        "usedIds": {
+          "0": 0,
+          "1": 1
+        }
+      },
+      "chunks": {
+        "byName": {},
+        "bySource": {},
+        "usedIds": [
+          1
+        ]
+      }
+    }
+  ],
+  "extract-text-webpack-plugin node_modules/extract-text-webpack-plugin/dist node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/collection-viewer/access/styles.css": [
+    {
+      "modules": {
+        "byIdentifier": {
+          "node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/collection-viewer/access/styles.css": 0,
+          "node_modules/css-loader/dist/runtime/api.js": 1
+        },
+        "usedIds": {
+          "0": 0,
+          "1": 1
+        }
+      },
+      "chunks": {
+        "byName": {},
+        "bySource": {},
+        "usedIds": [
+          1
+        ]
+      }
+    }
+  ],
+  "extract-text-webpack-plugin node_modules/extract-text-webpack-plugin/dist node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/collection-viewer/offline/styles.css": [
+    {
+      "modules": {
+        "byIdentifier": {
+          "node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/collection-viewer/offline/styles.css": 0,
+          "node_modules/css-loader/dist/runtime/api.js": 1
+        },
+        "usedIds": {
+          "0": 0,
+          "1": 1
+        }
+      },
+      "chunks": {
+        "byName": {},
+        "bySource": {},
+        "usedIds": [
+          1
+        ]
+      }
+    }
+  ],
+  "extract-text-webpack-plugin node_modules/extract-text-webpack-plugin/dist node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/collection-viewer/downloads/styles.css": [
+    {
+      "modules": {
+        "byIdentifier": {
+          "node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/collection-viewer/downloads/styles.css": 0,
+          "node_modules/css-loader/dist/runtime/api.js": 1
+        },
+        "usedIds": {
+          "0": 0,
+          "1": 1
+        }
+      },
+      "chunks": {
+        "byName": {},
+        "bySource": {},
+        "usedIds": [
+          1
+        ]
+      }
+    }
+  ],
+  "extract-text-webpack-plugin node_modules/extract-text-webpack-plugin/dist node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/collection-viewer/component/styles.css": [
+    {
+      "modules": {
+        "byIdentifier": {
+          "node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/collection-viewer/component/styles.css": 0,
+          "node_modules/css-loader/dist/runtime/api.js": 1
+        },
+        "usedIds": {
+          "0": 0,
+          "1": 1
+        }
+      },
+      "chunks": {
+        "byName": {},
+        "bySource": {},
+        "usedIds": [
+          1
+        ]
+      }
+    }
+  ],
+  "extract-text-webpack-plugin node_modules/extract-text-webpack-plugin/dist node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/collection-viewer/layout/styles.css": [
+    {
+      "modules": {
+        "byIdentifier": {
+          "node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/collection-viewer/layout/styles.css": 0,
+          "node_modules/css-loader/dist/runtime/api.js": 1
+        },
+        "usedIds": {
+          "0": 0,
+          "1": 1
+        }
+      },
+      "chunks": {
+        "byName": {},
+        "bySource": {},
+        "usedIds": [
+          1
+        ]
+      }
+    }
+  ],
+  "extract-text-webpack-plugin node_modules/extract-text-webpack-plugin/dist node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/collection-viewer/map/styles.css": [
+    {
+      "modules": {
+        "byIdentifier": {
+          "node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/collection-viewer/map/styles.css": 0,
+          "node_modules/css-loader/dist/runtime/api.js": 1
+        },
+        "usedIds": {
+          "0": 0,
+          "1": 1
+        }
+      },
+      "chunks": {
+        "byName": {},
+        "bySource": {},
+        "usedIds": [
+          1
+        ]
+      }
+    }
+  ],
+  "extract-text-webpack-plugin node_modules/extract-text-webpack-plugin/dist node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/map/styles.css": [
+    {
+      "modules": {
+        "byIdentifier": {
+          "node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/map/styles.css": 0,
+          "node_modules/css-loader/dist/runtime/api.js": 1
+        },
+        "usedIds": {
+          "0": 0,
+          "1": 1
+        }
+      },
+      "chunks": {
+        "byName": {},
+        "bySource": {},
+        "usedIds": [
+          1
+        ]
+      }
+    }
+  ],
+  "extract-text-webpack-plugin node_modules/extract-text-webpack-plugin/dist node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/collection-viewer/summary/styles.css": [
+    {
+      "modules": {
+        "byIdentifier": {
+          "node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/collection-viewer/summary/styles.css": 0,
+          "node_modules/css-loader/dist/runtime/api.js": 1
+        },
+        "usedIds": {
+          "0": 0,
+          "1": 1
+        }
+      },
+      "chunks": {
+        "byName": {},
+        "bySource": {},
+        "usedIds": [
+          1
+        ]
+      }
+    }
+  ],
+  "extract-text-webpack-plugin node_modules/extract-text-webpack-plugin/dist node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/collection-viewer/table/styles.css": [
+    {
+      "modules": {
+        "byIdentifier": {
+          "node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/collection-viewer/table/styles.css": 0,
+          "node_modules/css-loader/dist/runtime/api.js": 1
+        },
+        "usedIds": {
+          "0": 0,
+          "1": 1
+        }
+      },
+      "chunks": {
+        "byName": {},
+        "bySource": {},
+        "usedIds": [
+          1
+        ]
+      }
+    }
+  ],
+  "extract-text-webpack-plugin node_modules/extract-text-webpack-plugin/dist node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/fixed-table/styles.css": [
+    {
+      "modules": {
+        "byIdentifier": {
+          "node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/fixed-table/styles.css": 0,
+          "node_modules/css-loader/dist/runtime/api.js": 1
+        },
+        "usedIds": {
+          "0": 0,
+          "1": 1
+        }
+      },
+      "chunks": {
+        "byName": {},
+        "bySource": {},
+        "usedIds": [
+          1
+        ]
+      }
+    }
+  ],
+  "extract-text-webpack-plugin node_modules/extract-text-webpack-plugin/dist node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/collection-viewer/tree/styles.css": [
+    {
+      "modules": {
+        "byIdentifier": {
+          "node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/collection-viewer/tree/styles.css": 0,
+          "node_modules/css-loader/dist/runtime/api.js": 1
+        },
+        "usedIds": {
+          "0": 0,
+          "1": 1
+        }
+      },
+      "chunks": {
+        "byName": {},
+        "bySource": {},
+        "usedIds": [
+          1
+        ]
+      }
+    }
+  ],
+  "extract-text-webpack-plugin node_modules/extract-text-webpack-plugin/dist node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/collection-viewer/loading/styles.css": [
+    {
+      "modules": {
+        "byIdentifier": {
+          "node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/collection-viewer/loading/styles.css": 0,
+          "node_modules/css-loader/dist/runtime/api.js": 1
+        },
+        "usedIds": {
+          "0": 0,
+          "1": 1
+        }
+      },
+      "chunks": {
+        "byName": {},
+        "bySource": {},
+        "usedIds": [
+          1
+        ]
+      }
+    }
+  ],
+  "extract-text-webpack-plugin node_modules/extract-text-webpack-plugin/dist node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/collections/styles.css": [
+    {
+      "modules": {
+        "byIdentifier": {
+          "node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/collections/styles.css": 0,
+          "node_modules/css-loader/dist/runtime/api.js": 1
+        },
+        "usedIds": {
+          "0": 0,
+          "1": 1
+        }
+      },
+      "chunks": {
+        "byName": {},
+        "bySource": {},
+        "usedIds": [
+          1
+        ]
+      }
+    }
+  ],
+  "extract-text-webpack-plugin node_modules/extract-text-webpack-plugin/dist node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/grid/styles.css": [
+    {
+      "modules": {
+        "byIdentifier": {
+          "node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/grid/styles.css": 0,
+          "node_modules/css-loader/dist/runtime/api.js": 1
+        },
+        "usedIds": {
+          "0": 0,
+          "1": 1
+        }
+      },
+      "chunks": {
+        "byName": {},
+        "bySource": {},
+        "usedIds": [
+          1
+        ]
+      }
+    }
+  ],
+  "extract-text-webpack-plugin node_modules/extract-text-webpack-plugin/dist node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/filter/summary/styles.css": [
+    {
+      "modules": {
+        "byIdentifier": {
+          "node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/filter/summary/styles.css": 0,
+          "node_modules/css-loader/dist/runtime/api.js": 1
+        },
+        "usedIds": {
+          "0": 0,
+          "1": 1
+        }
+      },
+      "chunks": {
+        "byName": {},
+        "bySource": {},
+        "usedIds": [
+          1
+        ]
+      }
+    }
+  ],
+  "extract-text-webpack-plugin node_modules/extract-text-webpack-plugin/dist node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/overlay/styles.css": [
+    {
+      "modules": {
+        "byIdentifier": {
+          "node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/overlay/styles.css": 0,
+          "node_modules/css-loader/dist/runtime/api.js": 1
+        },
+        "usedIds": {
+          "0": 0,
+          "1": 1
+        }
+      },
+      "chunks": {
+        "byName": {},
+        "bySource": {},
+        "usedIds": [
+          1
+        ]
+      }
+    }
+  ],
+  "extract-text-webpack-plugin node_modules/extract-text-webpack-plugin/dist node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/genomes/header/styles.css": [
+    {
+      "modules": {
+        "byIdentifier": {
+          "node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/genomes/header/styles.css": 0,
+          "node_modules/css-loader/dist/runtime/api.js": 1
+        },
+        "usedIds": {
+          "0": 0,
+          "1": 1
+        }
+      },
+      "chunks": {
+        "byName": {},
+        "bySource": {},
+        "usedIds": [
+          1
+        ]
+      }
+    }
+  ],
+  "extract-text-webpack-plugin node_modules/extract-text-webpack-plugin/dist node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/genomes/selection/styles.css": [
+    {
+      "modules": {
+        "byIdentifier": {
+          "node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/genomes/selection/styles.css": 0,
+          "node_modules/css-loader/dist/runtime/api.js": 1
+        },
+        "usedIds": {
+          "0": 0,
+          "1": 1
+        }
+      },
+      "chunks": {
+        "byName": {},
+        "bySource": {},
+        "usedIds": [
+          1
+        ]
+      }
+    }
+  ],
+  "extract-text-webpack-plugin node_modules/extract-text-webpack-plugin/dist node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/genomes/selection/dropdown/styles.css": [
+    {
+      "modules": {
+        "byIdentifier": {
+          "node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/genomes/selection/dropdown/styles.css": 0,
+          "node_modules/css-loader/dist/runtime/api.js": 1
+        },
+        "usedIds": {
+          "0": 0,
+          "1": 1
+        }
+      },
+      "chunks": {
+        "byName": {},
+        "bySource": {},
+        "usedIds": [
+          1
+        ]
+      }
+    }
+  ],
+  "extract-text-webpack-plugin node_modules/extract-text-webpack-plugin/dist node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/genomes/selection/list/styles.css": [
+    {
+      "modules": {
+        "byIdentifier": {
+          "node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/genomes/selection/list/styles.css": 0,
+          "node_modules/css-loader/dist/runtime/api.js": 1
+        },
+        "usedIds": {
+          "0": 0,
+          "1": 1
+        }
+      },
+      "chunks": {
+        "byName": {},
+        "bySource": {},
+        "usedIds": [
+          1
+        ]
+      }
+    }
+  ],
+  "extract-text-webpack-plugin node_modules/extract-text-webpack-plugin/dist node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/genomes/selection/collection/styles.css": [
+    {
+      "modules": {
+        "byIdentifier": {
+          "node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/genomes/selection/collection/styles.css": 0,
+          "node_modules/css-loader/dist/runtime/api.js": 1
+        },
+        "usedIds": {
+          "0": 0,
+          "1": 1
+        }
+      },
+      "chunks": {
+        "byName": {},
+        "bySource": {},
+        "usedIds": [
+          1
+        ]
+      }
+    }
+  ],
+  "extract-text-webpack-plugin node_modules/extract-text-webpack-plugin/dist node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/genomes/create-collection-form/styles.css": [
+    {
+      "modules": {
+        "byIdentifier": {
+          "node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/genomes/create-collection-form/styles.css": 0,
+          "node_modules/css-loader/dist/runtime/api.js": 1
+        },
+        "usedIds": {
+          "0": 0,
+          "1": 1
+        }
+      },
+      "chunks": {
+        "byName": {},
+        "bySource": {},
+        "usedIds": [
+          1
+        ]
+      }
+    }
+  ],
+  "extract-text-webpack-plugin node_modules/extract-text-webpack-plugin/dist node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/genomes/selection/download/styles.css": [
+    {
+      "modules": {
+        "byIdentifier": {
+          "node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/genomes/selection/download/styles.css": 0,
+          "node_modules/css-loader/dist/runtime/api.js": 1
+        },
+        "usedIds": {
+          "0": 0,
+          "1": 1
+        }
+      },
+      "chunks": {
+        "byName": {},
+        "bySource": {},
+        "usedIds": [
+          1
+        ]
+      }
+    }
+  ],
+  "extract-text-webpack-plugin node_modules/extract-text-webpack-plugin/dist node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/genomes/selection/edit/styles.css": [
+    {
+      "modules": {
+        "byIdentifier": {
+          "node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/genomes/selection/edit/styles.css": 0,
+          "node_modules/css-loader/dist/runtime/api.js": 1
+        },
+        "usedIds": {
+          "0": 0,
+          "1": 1
+        }
+      },
+      "chunks": {
+        "byName": {},
+        "bySource": {},
+        "usedIds": [
+          1
+        ]
+      }
+    }
+  ],
+  "extract-text-webpack-plugin node_modules/extract-text-webpack-plugin/dist node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/genomes/list/styles.css": [
+    {
+      "modules": {
+        "byIdentifier": {
+          "node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/genomes/list/styles.css": 0,
+          "node_modules/css-loader/dist/runtime/api.js": 1
+        },
+        "usedIds": {
+          "0": 0,
+          "1": 1
+        }
+      },
+      "chunks": {
+        "byName": {},
+        "bySource": {},
+        "usedIds": [
+          1
+        ]
+      }
+    }
+  ],
+  "extract-text-webpack-plugin node_modules/extract-text-webpack-plugin/dist node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/genomes/map/styles.css": [
+    {
+      "modules": {
+        "byIdentifier": {
+          "node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/genomes/map/styles.css": 0,
+          "node_modules/css-loader/dist/runtime/api.js": 1
+        },
+        "usedIds": {
+          "0": 0,
+          "1": 1
+        }
+      },
+      "chunks": {
+        "byName": {},
+        "bySource": {},
+        "usedIds": [
+          1
+        ]
+      }
+    }
+  ],
+  "extract-text-webpack-plugin node_modules/extract-text-webpack-plugin/dist node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/genomes/stats/styles.css": [
+    {
+      "modules": {
+        "byIdentifier": {
+          "node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/genomes/stats/styles.css": 0,
+          "node_modules/css-loader/dist/runtime/api.js": 1
+        },
+        "usedIds": {
+          "0": 0,
+          "1": 1
+        }
+      },
+      "chunks": {
+        "byName": {},
+        "bySource": {},
+        "usedIds": [
+          1
+        ]
+      }
+    }
+  ],
+  "extract-text-webpack-plugin node_modules/extract-text-webpack-plugin/dist node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/cluster-viewer/styles.css": [
+    {
+      "modules": {
+        "byIdentifier": {
+          "node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/cluster-viewer/styles.css": 0,
+          "node_modules/css-loader/dist/runtime/api.js": 1
+        },
+        "usedIds": {
+          "0": 0,
+          "1": 1
+        }
+      },
+      "chunks": {
+        "byName": {},
+        "bySource": {},
+        "usedIds": [
+          1
+        ]
+      }
+    }
+  ],
+  "extract-text-webpack-plugin node_modules/extract-text-webpack-plugin/dist node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/account/styles.css": [
+    {
+      "modules": {
+        "byIdentifier": {
+          "node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/account/styles.css": 0,
+          "node_modules/css-loader/dist/runtime/api.js": 1
+        },
+        "usedIds": {
+          "0": 0,
+          "1": 1
+        }
+      },
+      "chunks": {
+        "byName": {},
+        "bySource": {},
+        "usedIds": [
+          1
+        ]
+      }
+    }
+  ],
+  "extract-text-webpack-plugin node_modules/extract-text-webpack-plugin/dist node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/homepage/styles.css": [
+    {
+      "modules": {
+        "byIdentifier": {
+          "node_modules/css-loader/dist/runtime/api.js": 0,
+          "node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/homepage/styles.css": 1,
+          "node_modules/css-loader/dist/cjs.js?{\"importLoaders\":1}!node_modules/postcss-loader/src/index.js??postcss!front-end/homepage/showcase.css": 2,
+          "node_modules/css-loader/dist/cjs.js?{\"importLoaders\":1}!node_modules/postcss-loader/src/index.js??postcss!front-end/css/sonar.css": 3,
+          "node_modules/css-loader/dist/cjs.js?{\"importLoaders\":1}!node_modules/postcss-loader/src/index.js??postcss!front-end/homepage/how-it-works.css": 4,
+          "node_modules/css-loader/dist/cjs.js?{\"importLoaders\":1}!node_modules/postcss-loader/src/index.js??postcss!front-end/homepage/organisms.css": 5,
+          "node_modules/css-loader/dist/cjs.js?{\"importLoaders\":1}!node_modules/postcss-loader/src/index.js??postcss!front-end/homepage/features.css": 6,
+          "node_modules/css-loader/dist/cjs.js?{\"importLoaders\":1}!node_modules/postcss-loader/src/index.js??postcss!front-end/homepage/footer.css": 7
+        },
+        "usedIds": {
+          "0": 0,
+          "1": 1,
+          "2": 2,
+          "3": 3,
+          "4": 4,
+          "5": 5,
+          "6": 6,
+          "7": 7
+        }
+      },
+      "chunks": {
+        "byName": {},
+        "bySource": {},
+        "usedIds": [
+          1
+        ]
+      }
+    }
+  ],
+  "extract-text-webpack-plugin node_modules/extract-text-webpack-plugin/dist node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/sign-in/styles.css": [
+    {
+      "modules": {
+        "byIdentifier": {
+          "node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/sign-in/styles.css": 0,
+          "node_modules/css-loader/dist/runtime/api.js": 1
+        },
+        "usedIds": {
+          "0": 0,
+          "1": 1
+        }
+      },
+      "chunks": {
+        "byName": {},
+        "bySource": {},
+        "usedIds": [
+          1
+        ]
+      }
+    }
+  ],
+  "extract-text-webpack-plugin node_modules/extract-text-webpack-plugin/dist node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/upload/styles.css": [
+    {
+      "modules": {
+        "byIdentifier": {
+          "node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/upload/styles.css": 0,
+          "node_modules/css-loader/dist/runtime/api.js": 1
+        },
+        "usedIds": {
+          "0": 0,
+          "1": 1
+        }
+      },
+      "chunks": {
+        "byName": {},
+        "bySource": {},
+        "usedIds": [
+          1
+        ]
+      }
+    }
+  ],
+  "extract-text-webpack-plugin node_modules/extract-text-webpack-plugin/dist node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/upload/instructions/styles.css": [
+    {
+      "modules": {
+        "byIdentifier": {
+          "node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/upload/instructions/styles.css": 0,
+          "node_modules/css-loader/dist/runtime/api.js": 1
+        },
+        "usedIds": {
+          "0": 0,
+          "1": 1
+        }
+      },
+      "chunks": {
+        "byName": {},
+        "bySource": {},
+        "usedIds": [
+          1
+        ]
+      }
+    }
+  ],
+  "extract-text-webpack-plugin node_modules/extract-text-webpack-plugin/dist node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/upload/drag-and-drop/styles.css": [
+    {
+      "modules": {
+        "byIdentifier": {
+          "node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/upload/drag-and-drop/styles.css": 0,
+          "node_modules/css-loader/dist/runtime/api.js": 1
+        },
+        "usedIds": {
+          "0": 0,
+          "1": 1
+        }
+      },
+      "chunks": {
+        "byName": {},
+        "bySource": {},
+        "usedIds": [
+          1
+        ]
+      }
+    }
+  ],
+  "extract-text-webpack-plugin node_modules/extract-text-webpack-plugin/dist node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/components/switch/styles.css": [
+    {
+      "modules": {
+        "byIdentifier": {
+          "node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/components/switch/styles.css": 0,
+          "node_modules/css-loader/dist/runtime/api.js": 1
+        },
+        "usedIds": {
+          "0": 0,
+          "1": 1
+        }
+      },
+      "chunks": {
+        "byName": {},
+        "bySource": {},
+        "usedIds": [
+          1
+        ]
+      }
+    }
+  ],
+  "extract-text-webpack-plugin node_modules/extract-text-webpack-plugin/dist node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/components/badge/styles.css": [
+    {
+      "modules": {
+        "byIdentifier": {
+          "node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/components/badge/styles.css": 0,
+          "node_modules/css-loader/dist/runtime/api.js": 1
+        },
+        "usedIds": {
+          "0": 0,
+          "1": 1
+        }
+      },
+      "chunks": {
+        "byName": {},
+        "bySource": {},
+        "usedIds": [
+          1
+        ]
+      }
+    }
+  ],
+  "extract-text-webpack-plugin node_modules/extract-text-webpack-plugin/dist node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/upload/previous/styles.css": [
+    {
+      "modules": {
+        "byIdentifier": {
+          "node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/upload/previous/styles.css": 0,
+          "node_modules/css-loader/dist/runtime/api.js": 1
+        },
+        "usedIds": {
+          "0": 0,
+          "1": 1
+        }
+      },
+      "chunks": {
+        "byName": {},
+        "bySource": {},
+        "usedIds": [
+          1
+        ]
+      }
+    }
+  ],
+  "extract-text-webpack-plugin node_modules/extract-text-webpack-plugin/dist node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/upload/progress/styles.css": [
+    {
+      "modules": {
+        "byIdentifier": {
+          "node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/upload/progress/styles.css": 0,
+          "node_modules/css-loader/dist/runtime/api.js": 1
+        },
+        "usedIds": {
+          "0": 0,
+          "1": 1
+        }
+      },
+      "chunks": {
+        "byName": {},
+        "bySource": {},
+        "usedIds": [
+          1
+        ]
+      }
+    }
+  ],
+  "extract-text-webpack-plugin node_modules/extract-text-webpack-plugin/dist node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/upload/progress/analysis/styles.css": [
+    {
+      "modules": {
+        "byIdentifier": {
+          "node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/upload/progress/analysis/styles.css": 0,
+          "node_modules/css-loader/dist/runtime/api.js": 1
+        },
+        "usedIds": {
+          "0": 0,
+          "1": 1
+        }
+      },
+      "chunks": {
+        "byName": {},
+        "bySource": {},
+        "usedIds": [
+          1
+        ]
+      }
+    }
+  ],
+  "extract-text-webpack-plugin node_modules/extract-text-webpack-plugin/dist node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/upload/progress/files/styles.css": [
+    {
+      "modules": {
+        "byIdentifier": {
+          "node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/upload/progress/files/styles.css": 0,
+          "node_modules/css-loader/dist/runtime/api.js": 1
+        },
+        "usedIds": {
+          "0": 0,
+          "1": 1
+        }
+      },
+      "chunks": {
+        "byName": {},
+        "bySource": {},
+        "usedIds": [
+          1
+        ]
+      }
+    }
+  ],
+  "extract-text-webpack-plugin node_modules/extract-text-webpack-plugin/dist node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/components/progress-bar/styles.css": [
+    {
+      "modules": {
+        "byIdentifier": {
+          "node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/components/progress-bar/styles.css": 0,
+          "node_modules/css-loader/dist/runtime/api.js": 1
+        },
+        "usedIds": {
+          "0": 0,
+          "1": 1
+        }
+      },
+      "chunks": {
+        "byName": {},
+        "bySource": {},
+        "usedIds": [
+          1
+        ]
+      }
+    }
+  ],
+  "extract-text-webpack-plugin node_modules/extract-text-webpack-plugin/dist node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/upload/progress/recovery/styles.css": [
+    {
+      "modules": {
+        "byIdentifier": {
+          "node_modules/css-loader/dist/cjs.js??ref--7-2!node_modules/postcss-loader/src/index.js??postcss!front-end/upload/progress/recovery/styles.css": 0,
+          "node_modules/css-loader/dist/runtime/api.js": 1
+        },
+        "usedIds": {
+          "0": 0,
+          "1": 1
+        }
+      },
+      "chunks": {
+        "byName": {},
+        "bySource": {},
+        "usedIds": [
+          1
+        ]
+      }
+    }
+  ]
 }
