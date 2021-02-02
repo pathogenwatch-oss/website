@@ -1,11 +1,11 @@
-# Pathogenwatch Middle End
+# Pathogenwatch
 
 ## Development
 
-Needs a couple of json files:
-
-* config.json - copy this from cgps-secrets
-* tasks.json - copy this from pathogenwatch-central
+1. Start MongoDB
+2. Copy config.json from Keybase/team/cgps.dev/Projects/Pathogenwatch/Config/dev.json
+3. `yarn`
+4. `npm run dev`
 
 ## Scripts
 
