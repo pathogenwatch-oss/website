@@ -138,7 +138,7 @@
   "scripts": {
     "dev": "NODE_PATH=./src node dev/dev-server.js --seneca.log.quiet | bunyan -o short",
     "start": "NODE_PATH=./src NODE_ENV=production node start.js --seneca.log.quiet",
-    "build": "NODE_ENV=production webpack --progress",
+    "build": "NODE_ENV=production webpack",
     "release": "npm run build && git add . && git commit -m Build && npm version major && git push && git push --tags",
     "runner": "NODE_PATH=./src node microservices/bootstrap.js runner",
     "test": "eval $npm_package_testcmd 'test/unit/**/*.test.js'",
