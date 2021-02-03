@@ -39,7 +39,8 @@ module.exports = async function (props) {
       genomes.map(genome => {
         const formattedGenome = Genome.toObject(genome, user);
         const { analysis = {} } = genome;
-        const { mlst = {}, mlst2 = {}, speciator = {}, serotype = {} } = analysis;
+        const { mlst = {}, mlst2 = {}, pangolin = {}, speciator = {}, serotype = {} } = analysis;
+        formattedGenome.pangolin = pangolin.lineage;
         formattedGenome.st = mlst.st;
         formattedGenome.st2 = mlst2.st;
         formattedGenome.organismId = speciator.organismId;
