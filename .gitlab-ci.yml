@@ -8,14 +8,10 @@ build:
   #   paths:
   #     - node_modules/
   script:
-    - apk add --update git bash docker
-    - git config --global url.https://gitlab-ci-token:$CI_JOB_TOKEN@gitlab.com/.insteadOf git://gitlab.com/
-    - git config --global url.https://gitlab-ci-token:$CI_JOB_TOKEN@gitlab.com/cgps.insteadOf git@gitlab.com:cgps
-    - git config --global url.https://gitlab-ci-token:$CI_JOB_TOKEN@gitlab.com/cgps.insteadOf https://gitlab.com/cgps
+    - apk add --update docker
     - docker login
       --username gitlab-ci-token
       --password $CI_JOB_TOKEN $CI_REGISTRY
-    - yarn --production --ignore-scripts --ignore-engines
     - tag=$CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME
     - docker build
       --force-rm

@@ -1,7 +1,6 @@
 FROM node:12.13.1-alpine AS middle-end
 
 ARG REPO_USER
-
 ARG REPO_TOKEN
 
 RUN apk add --update --no-cache \
@@ -18,7 +17,7 @@ WORKDIR /pathogenwatch/
 
 COPY . /pathogenwatch
 
-RUN npm rebuild
+RUN yarn --production
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
 
