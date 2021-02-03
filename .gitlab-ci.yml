@@ -3,10 +3,10 @@ image: node:10.12.0-alpine
 build:
   only:
     - tags
-  cache:
-    untracked: true
-    paths:
-      - node_modules/
+  # cache:
+  #   untracked: true
+  #   paths:
+  #     - node_modules/
   script:
     - apk add --update git bash docker
     - git config --global url.https://gitlab-ci-token:$CI_JOB_TOKEN@gitlab.com/.insteadOf git://gitlab.com/
