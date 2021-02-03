@@ -785,6 +785,22 @@
         "version": "202011162044-v2.6.3"
       }
     ],
+    "2697049": [
+      {
+        "task": "sars_cov2_variants",
+        "version": "0.0.9",
+        "flags": {
+          "COV2_USER": true
+        }
+      },
+      {
+        "task": "pangolin",
+        "version": "v2.1.7_2021-01-20_R2",
+        "flags": {
+          "COV2_USER": true
+        }
+      }
+    ],
     "2751": [
       {
         "task": "mlst",
