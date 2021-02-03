@@ -1,0 +1,165 @@
+version: "3.9"
+
+x-pathogenwatch:
+  config_name: &config_name pathogenwatch-dev-4
+  image_tag: &image_tag registry.gitlab.com/cgps/pathogenwatch-middle-end:dev-4
+
+configs:
+  *config_name:
+    file: ./config.json
+
+networks:
+  mongodb:
+    external: true
+
+services:
+
+  web-api:
+    image: *image_tag
+    volumes:
+      - /nfs/wgsa/live/filecache:/nfs/wgst/filecache
+      - /nfs/wgsa/live/fasta-store:/nfs/wgst/fasta-store
+    configs:
+      - source: *config_name
+        target: /opt/pathogenwatch/middle-end/config.json
+    ports:
+      - 8001:8001
+    environment:
+      - NODE_PATH=/opt/pathogenwatch/middle-end/src
+      - NODE_ENV=production
+    command: node --max-old-space-size=1024 /opt/pathogenwatch/middle-end/start.js --seneca.log.quiet
+    deploy:
+      mode: replicated
+      replicas: 3
+      update_config:
+        parallelism: 1
+        order: start-first
+        delay: 1s
+      placement:
+        constraints:
+          - node.labels.type == worker
+    networks:
+      - default
+      - mongodb
+    healthcheck:
+      test: ["CMD", "node", "healthcheck.js"]
+      interval: 5s
+      timeout: 10s
+      retries: 5
+
+  speciator:
+    image: *image_tag
+    volumes:
+      - /nfs/wgsa/live/fasta-store:/nfs/wgst/fasta-store
+      - /var/run/docker.sock:/var/run/docker.sock
+    configs:
+      - source: *config_name
+        target: /opt/pathogenwatch/middle-end/config.json
+    environment:
+      - NODE_PATH=/opt/pathogenwatch/middle-end/src
+      - NODE_ENV=production
+    command: node /opt/pathogenwatch/middle-end/microservices/bootstrap.js runner --queue=genome --workers=8
+    deploy:
+      mode: replicated
+      replicas: 6
+      update_config:
+        parallelism: 1
+        order: start-first
+        delay: 1s
+      resources:
+        reservations:
+          memory: 4G
+      placement:
+        constraints:
+          - node.labels.type == worker
+    networks:
+      - default
+      - mongodb
+
+  tasks:
+    image: *image_tag
+    volumes:
+      - /nfs/wgsa/live/fasta-store:/nfs/wgst/fasta-store
+      - /var/run/docker.sock:/var/run/docker.sock
+    configs:
+      - source: *config_name
+        target: /opt/pathogenwatch/middle-end/config.json
+    environment:
+      - NODE_PATH=/opt/pathogenwatch/middle-end/src
+      - NODE_ENV=production
+    command: node /opt/pathogenwatch/middle-end/microservices/bootstrap.js runner --queue=task --workers=8
+    deploy:
+      mode: replicated
+      replicas: 6
+      update_config:
+        parallelism: 1
+        order: start-first
+        delay: 1s
+      resources:
+        reservations:
+          memory: 16G
+      placement:
+        constraints:
+          - node.labels.type == worker
+    networks:
+      - default
+      - mongodb
+
+  collection:
+    image: *image_tag
+    volumes:
+      - /nfs/wgsa/live/fasta-store:/nfs/wgst/fasta-store
+      - /var/run/docker.sock:/var/run/docker.sock
+    configs:
+      - source: *config_name
+        target: /opt/pathogenwatch/middle-end/config.json
+    environment:
+      - NODE_PATH=/opt/pathogenwatch/middle-end/src
+      - NODE_ENV=production
+    command: node /opt/pathogenwatch/middle-end/microservices/bootstrap.js runner --queue=collection --workers=2
+    deploy:
+      mode: replicated
+      replicas: 3
+      update_config:
+        parallelism: 1
+        order: start-first
+        delay: 1s
+      resources:
+        reservations:
+          memory: 8G
+      placement:
+        constraints:
+          - node.labels.type == worker
+    networks:
+      - default
+      - mongodb
+
+  clustering:
+    image: *image_tag
+    volumes:
+      - /nfs/wgsa/live/fasta-store:/nfs/wgst/fasta-store
+      - /var/run/docker.sock:/var/run/docker.sock
+    configs:
+      - source: *config_name
+        target: /opt/pathogenwatch/middle-end/config.json
+    environment:
+      - NODE_PATH=/opt/pathogenwatch/middle-end/src
+      - NODE_ENV=production
+    command: node --max-old-space-size=4096 /opt/pathogenwatch/middle-end/microservices/bootstrap.js runner --queue=clustering --workers=1
+    deploy:
+      mode: replicated
+      replicas: 3
+      update_config:
+        parallelism: 1
+        order: start-first
+        delay: 1s
+      resources:
+        reservations:
+          memory: 24G
+      placement:
+        constraints:
+          - node.labels.type == worker
+    networks:
+      - default
+      - mongodb
+

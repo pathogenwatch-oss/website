@@ -1,0 +1,104 @@
+version: "3.9"
+
+x-pathogenwatch:
+  image_tag: &image_tag registry.gitlab.com/cgps/pathogenwatch-middle-end:dev-4
+
+services:
+
+  mongodb:
+    container_name: pathogenwatch-mongodb
+    image: mongo:3.6.6
+    volumes:
+      - ./data/mongodb/:/data/db/
+    restart: on-failure
+    ports:
+      - "27017:27017"
+    networks:
+      default:
+        aliases:
+          - mongodb
+
+  web-api:
+    image: *image_tag
+    volumes:
+      - ./data/fasta-store/:/pathogenwatch/fastas/
+      - ./config.json:/pathogenwatch/config.json
+    restart: on-failure
+    ports:
+      - 8001:8001
+    environment:
+      NODE_PATH: /pathogenwatch/src
+      NODE_ENV: production
+    command: node --max-old-space-size=1024 /pathogenwatch/start.js --seneca.log.quiet
+    depends_on:
+      - mongodb
+
+  # runner:
+  #   image: *image_tag
+  #   volumes:
+  #     - ./data/fasta-store/:/pathogenwatch/fastas/
+  #     - ./config.json:/pathogenwatch/config.json
+  #     - /var/run/docker.sock:/var/run/docker.sock
+  #   restart: on-failure
+  #   environment:
+  #     NODE_PATH: /pathogenwatch/src
+  #     NODE_ENV: production
+  #   command: node /pathogenwatch/microservices/bootstrap.js runner
+  #   depends_on:
+  #     - mongodb
+
+  speciator:
+    image: *image_tag
+    volumes:
+      - ./data/fasta-store/:/pathogenwatch/fastas/
+      - ./config.json:/pathogenwatch/config.json
+      - /var/run/docker.sock:/var/run/docker.sock
+    restart: on-failure
+    environment:
+      NODE_PATH: /pathogenwatch/src
+      NODE_ENV: production
+    command: node /pathogenwatch/microservices/bootstrap.js runner --queue=genome --workers=8
+    depends_on:
+      - mongodb
+
+  tasks:
+    image: *image_tag
+    volumes:
+      - ./data/fasta-store/:/pathogenwatch/fastas/
+      - ./config.json:/pathogenwatch/config.json
+      - /var/run/docker.sock:/var/run/docker.sock
+    restart: on-failure
+    environment:
+      NODE_PATH: /pathogenwatch/src
+      NODE_ENV: production
+    command: node /pathogenwatch/microservices/bootstrap.js runner --queue=task --workers=8
+    depends_on:
+      - mongodb
+
+  collection:
+    image: *image_tag
+    volumes:
+      - ./data/fasta-store/:/pathogenwatch/fastas/
+      - ./config.json:/pathogenwatch/config.json
+      - /var/run/docker.sock:/var/run/docker.sock
+    restart: on-failure
+    environment:
+      NODE_PATH: /pathogenwatch/src
+      NODE_ENV: production
+    command: node /pathogenwatch/microservices/bootstrap.js runner --queue=collection --workers=2
+    depends_on:
+      - mongodb
+
+  clustering:
+    image: *image_tag
+    volumes:
+      - ./data/fasta-store/:/pathogenwatch/fastas/
+      - ./config.json:/pathogenwatch/config.json
+      - /var/run/docker.sock:/var/run/docker.sock
+    restart: on-failure
+    environment:
+      NODE_PATH: /pathogenwatch/src
+      NODE_ENV: production
+    command: node --max-old-space-size=4096 /pathogenwatch/microservices/bootstrap.js runner --queue=clustering --workers=1
+    depends_on:
+      - mongodb
