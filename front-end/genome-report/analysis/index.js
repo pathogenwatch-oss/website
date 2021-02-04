@@ -10,6 +10,7 @@ import AMR from './AMR.react';
 import Speciator from './Speciator.react';
 import Typing from './Typing.react';
 import Virulence from './Virulence.react';
+import CovidVariants from '~/genome-report/analysis/CovidVariants';
 
 // import renderGenericResults from './Generic.react';
 
@@ -20,6 +21,7 @@ function hasSpeciesTypingResult(analysis) {
     analysis.genotyphi ||
     analysis.ngmast ||
     analysis.serotype ||
+    analysis.pangolin ||
     analysis.poppunk ||
     analysis.kleborate ||
     analysis.ngstar ||
@@ -36,6 +38,8 @@ export default genome => {
     kleborate,
     metrics,
     paarsnp,
+    // eslint-disable-next-line camelcase
+    sars_cov2_variants,
     speciator,
     vista,
   } = analysis;
@@ -46,6 +50,13 @@ export default genome => {
     sections.push({
       key: 'Typing',
       component: <Typing genome={genome} />,
+    });
+  }
+  // eslint-disable-next-line camelcase
+  if (sars_cov2_variants) {
+    sections.push({
+      key: 'Variants',
+      component: <CovidVariants genome={genome} />,
     });
   }
   if (paarsnp || kleborate) {

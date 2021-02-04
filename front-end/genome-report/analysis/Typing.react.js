@@ -6,13 +6,18 @@ import NgMast from './NgMast.react';
 import Serotype from './Serotype.react';
 import Strain from './Strain.react';
 import Kleborate from './Kleborate.react';
+import Pangolin from './Pangolin.react';
 import SpnPbpType from './SpnPbpType.react';
 import VistaGenotype from './VistaGenotype.react';
 
 function getSecondaryTyping(genome) {
-  const { genotyphi, ngmast, serotype, poppunk, kleborate, spn_pbp_amr, vista } = genome.analysis;
+  const { genotyphi, ngmast, serotype, poppunk, kleborate, pangolin, spn_pbp_amr, vista } = genome.analysis;
   return (
     <React.Fragment>
+      {!!pangolin &&
+        <div>
+          <Pangolin genome={genome} />
+        </div>}
       {!!poppunk &&
         <div className="pw-genome-report-column one half">
           <Strain genome={genome} />
