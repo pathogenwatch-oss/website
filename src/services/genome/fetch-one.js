@@ -48,7 +48,7 @@ const projection = {
   'analysis.paarsnp.matches': 1,
   'analysis.pangolin': 1,
   'analysis.poppunk.strain': 1,
-  'analysis.sars_cov2_variants': 1,
+  'analysis.sarscov2-variants': 1,
   'analysis.serotype': 1,
   'analysis.speciator': 1,
   'analysis.spn_pbp_amr': 1,

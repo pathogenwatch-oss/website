@@ -399,15 +399,15 @@ const getPangolinSummary = createSelector(
 
 const getSarsCov2VariantsSummary = createSelector(
   getFilterSummaries,
-  state => getFilter(state).sars_cov2_variants,
-  getFilterFn('sars_cov2_variants'),
-  ({ sars_cov2_variants = {} }, filterValue, filterFn) => sortBy(
-    Object.keys(sars_cov2_variants)
+  state => getFilter(state)["sarscov2-variants"],
+  getFilterFn('sarscov2-variants'),
+  ({ "sarscov2-variants": sarscov2Variants = {} }, filterValue, filterFn) => sortBy(
+    Object.keys(sarscov2Variants)
       .filter(filterFn)
       .map(value => ({
         value,
         active: filterValue === value,
-        count: sars_cov2_variants[value].count,
+        count: sarscov2Variants[value].count,
       })),
     'value'
   )
@@ -511,7 +511,7 @@ export const getFilterSummary = createSelector(
       pangolin,
       reference,
       resistance,
-      sars_cov2_variants,
+      sarscov2Variants,
       serotype,
       speciesId,
       strain,
@@ -541,7 +541,7 @@ export const getFilterSummary = createSelector(
       pangolin,
       reference,
       resistance,
-      sars_cov2_variants,
+      "sarscov2-variants": sarscov2Variants,
       serotype,
       speciesId,
       strain,

@@ -10,7 +10,7 @@ import AMR from './AMR.react';
 import Speciator from './Speciator.react';
 import Typing from './Typing.react';
 import Virulence from './Virulence.react';
-import CovidVariants from '~/genome-report/analysis/CovidVariants';
+import CovidVariants from './Sarscov2Variants.react';
 
 // import renderGenericResults from './Generic.react';
 
@@ -38,8 +38,6 @@ export default genome => {
     kleborate,
     metrics,
     paarsnp,
-    // eslint-disable-next-line camelcase
-    sars_cov2_variants,
     speciator,
     vista,
   } = analysis;
@@ -53,7 +51,7 @@ export default genome => {
     });
   }
   // eslint-disable-next-line camelcase
-  if (sars_cov2_variants) {
+  if (analysis["sarscov2-variants"]) {
     sections.push({
       key: 'Variants',
       component: <CovidVariants genome={genome} />,

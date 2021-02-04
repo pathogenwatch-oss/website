@@ -26,7 +26,7 @@ router.post('/paarsnp', require('./paarsnp'));
 router.post('/paarsnp-snps-genes', require('./paarsnp-snps-genes'));
 router.post('/pangolin', require('./pangolin'));
 router.post('/poppunk', require('./poppunk'));
-router.post('/sars_cov2_variants', require('./sars_cov2_variants'));
+router.post('/sarscov2-variants', require('./sarscov2-variants'));
 router.post('/serotype', require('./serotype'));
 router.post('/spn_pbp_amr', require('./spn-pbp-amr'));
 router.post('/speciator', require('./speciator'));

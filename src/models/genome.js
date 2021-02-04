@@ -88,8 +88,8 @@ schema.index({ 'analysis.core.fp.reference': 1 });
 schema.index({ 'analysis.kleborate.typing.K_locus': 1 });
 schema.index({ 'analysis.kleborate.typing.O_locus': 1 });
 schema.index({ 'analysis.pangolin.lineage': 1 });
-schema.index({ 'analysis.sars_cov2_variants.variants.state': 1 });
-schema.index({ 'analysis.sars_cov2_variants.variants.name': 1 });
+schema.index({ 'analysis.sarscov2-variants.variants.state': 1 });
+schema.index({ 'analysis.sarscov2-variants.variants.name': 1 });
 
 schema.statics.uploadTypes = uploadTypes;
 
@@ -240,8 +240,7 @@ schema.statics.getFilterQuery = async function (props) {
     organismId,
     pangolin,
     resistance,
-    // eslint-disable-next-line camelcase
-    sars_cov2_variants,
+    "sarscov2-variants": sarscov2Variants,
     searchText,
     serotype,
     sequenceType,
@@ -344,9 +343,9 @@ schema.statics.getFilterQuery = async function (props) {
   }
 
   // eslint-disable-next-line camelcase
-  if (sars_cov2_variants) {
-    findQuery['analysis.sars_cov2_variants.variants'] = {
-      $elemMatch: { name: sars_cov2_variants, state: 'var' },
+  if (sarscov2Variants) {
+    findQuery['analysis.sarscov2-variants.variants'] = {
+      $elemMatch: { name: sarscov2Variants, state: 'var' },
     };
   }
 
@@ -431,7 +430,7 @@ schema.statics.getForCollection = function (query, user = {}) {
     'analysis.paarsnp.snp': 1,
     'analysis.paarsnp.library': 1,
     'analysis.pangolin': 1,
-    'analysis.sars_cov2_variants': 1,
+    'analysis.sarscov2-variants': 1,
     'analysis.speciator.organismId': 1,
     'analysis.spn_pbp_amr': 1,
     'analysis.vista': 1,

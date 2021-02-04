@@ -6,10 +6,10 @@ const transformer = function (doc) {
   const record = {
     'Genome ID': doc._id.toString(),
     'Genome Name': doc.name,
-    Version: doc.analysis.sars_cov2_variants.__v,
+    Version: "doc.analysis.sarscov2-variants.__v",
   };
 
-  doc.analysis.sars_cov2_variants.variants.forEach((variant) => {
+  doc.analysis["sarscov2-variants"].variants.forEach((variant) => {
     record[variant.name] = variant.state === 'other' ? `${variant.state} (${variant.found})` : variant.state;
   });
 
@@ -19,20 +19,20 @@ const transformer = function (doc) {
 module.exports = (req, res) => {
   const { user } = req;
   const { filename: rawFilename = '' } = req.query;
-  const filename = sanitize(rawFilename) || 'sars_cov2_variants.csv';
+  const filename = sanitize(rawFilename) || 'sars-cov-2-variants.csv';
   const { ids } = req.body;
 
   res.setHeader('Content-Disposition', `attachment; filename=${filename}`);
   res.setHeader('Content-Type', 'text/csv');
 
   const query = Object.assign(
-    { _id: { $in: ids.split(',') }, 'analysis.sars_cov2_variants': { $exists: true } },
+    { _id: { $in: ids.split(',') }, 'analysis.sarscov2-variants': { $exists: true } },
     Genome.getPrefilterCondition({ user })
   );
 
   const projection = {
     name: 1,
-    'analysis.sars_cov2_variants': 1,
+    'analysis.sarscov2-variants': 1,
   };
 
   return Genome.find(query, projection)

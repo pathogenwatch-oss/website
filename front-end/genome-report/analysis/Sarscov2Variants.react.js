@@ -7,7 +7,7 @@ function generateDocLink(variant) {
     <div>
       <p>{variant}
         <ExternalLink
-          to={`/genomes/all?genusId=694002&sars_cov2_variants=${variant}&subspecies=SARS-CoV-2`}
+          to={`/genomes/all?genusId=694002&sarscov2-variants=${variant}&subspecies=SARS-CoV-2`}
         >
           {'PW Search'}
         </ExternalLink>
@@ -34,8 +34,7 @@ function generateColumn(variants, type) {
 }
 
 export default ({ genome }) => {
-  // eslint-disable-next-line camelcase
-  const { sars_cov2_variants } = genome.analysis;
+  const { "sarscov2-variants": sarscov2Variants } = genome.analysis;
   return (
     <React.Fragment>
       <header className="pw-genome-report-section-header">
@@ -49,12 +48,12 @@ export default ({ genome }) => {
             https://cgps.gitlab.io/cog-uk/type_variants/
         </a>
       </header>
-      {sars_cov2_variants.alt_count === 0 && <p>No sentinel variants found.</p>}
-      {sars_cov2_variants.alt_count > 0 &&
+      {sarscov2Variants.alt_count === 0 && <p>No sentinel variants found.</p>}
+      {sarscov2Variants.alt_count > 0 &&
       <dl className="grid">
         {
           [ 'Amino Acid', 'Deletion', 'SNP' ]
-            .map(type => generateColumn(sars_cov2_variants.variants, type))
+            .map(type => generateColumn(sarscov2Variants.variants, type))
         }
       </dl>
       }

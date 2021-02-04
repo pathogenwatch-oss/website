@@ -257,25 +257,25 @@ const summaryFields = [
     ],
   },
   {
-    field: 'sars_cov2_variants',
-    task: 'sars_cov2_variants',
+    field: 'sarscov2-variants',
+    task: 'sarscov2-variants',
     aggregation: ({ query }) => [
       { $project: {
-        sars_cov2_variants: {
+        "sarscov2-variants": {
           $filter: {
-            input: '$analysis.sars_cov2_variants.variants',
+            input: '$analysis.sarscov2-variants.variants',
             as: 'va',
-            cond: query.sars_cov2_variants ?
+            cond: query["sarscov2-variants"] ?
               { $and: [
                 { $eq: [ '$$va.state', 'var' ] },
-                { $eq: [ '$$va.name', query.sars_cov2_variants ] },
+                { $eq: [ '$$va.name', query["sarscov2-variants"] ] },
               ] } :
               { $eq: [ '$$va.state', 'var' ] },
           },
         },
       } },
-      { $unwind: '$sars_cov2_variants' },
-      { $group: { _id: '$sars_cov2_variants.name', count: { $sum: 1 } } },
+      { $unwind: '$sarscov2-variants' },
+      { $group: { _id: '$sarscov2-variants.name', count: { $sum: 1 } } },
     ],
   },
   {

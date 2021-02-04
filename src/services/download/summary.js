@@ -16,7 +16,7 @@ module.exports = function ({ user, ids }) {
     'paarsnp',
     'pangolin',
     'poppunk',
-    'sars_cov2_variants',
+    'sarscov2-variants',
     'serotype',
     'speciator',
     'spn_pbp_amr',
