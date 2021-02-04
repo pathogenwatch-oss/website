@@ -50,7 +50,7 @@ export default genome => {
       component: <Typing genome={genome} />,
     });
   }
-  // eslint-disable-next-line camelcase
+
   if (analysis["sarscov2-variants"]) {
     sections.push({
       key: 'Variants',

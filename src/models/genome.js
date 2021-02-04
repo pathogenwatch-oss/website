@@ -342,7 +342,6 @@ schema.statics.getFilterQuery = async function (props) {
     findQuery['analysis.pangolin.lineage'] = pangolin;
   }
 
-  // eslint-disable-next-line camelcase
   if (sarscov2Variants) {
     findQuery['analysis.sarscov2-variants.variants'] = {
       $elemMatch: { name: sarscov2Variants, state: 'var' },
