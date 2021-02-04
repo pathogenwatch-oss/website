@@ -787,11 +787,11 @@
     ],
     "2697049": [
       {
+        "task": "sarscov2-variants",
         "version": "0.0.9",
         "flags": {
           "COV2_USER": true
         }
-        "task": "sarscov2-variants",
       },
       {
         "task": "pangolin",
