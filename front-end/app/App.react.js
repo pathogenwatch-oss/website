@@ -64,7 +64,7 @@ const App = connect(mapStateToProps, mapDispatchToProps)(React.createClass({
   },
 
   componentDidCatch(e) {
-    console.log(e);
+    console.error(e);
   },
 
   render() {
