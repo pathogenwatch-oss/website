@@ -168,6 +168,7 @@ function handleContainerOutput(container, task, versions, metadata, genomes, res
   container.stdout
     .pipe(es.split())
     .on('data', (data) => {
+      // console.log(data); return;
       if (!data) return;
       try {
         const doc = JSON.parse(data);
@@ -182,14 +183,22 @@ function handleContainerOutput(container, task, versions, metadata, genomes, res
           ScoreCache.update({
             fileId: doc.fileId,
             'versions.core': versions.core,
-            'versions.tree': versions.tree
+            'versions.tree': versions.tree,
           }, update, { upsert: true }).exec();
           const progress = doc.progress * 0.99;
           if ((progress - lastProgress) >= 1) {
             request('collection', 'send-progress', { clientId, payload: { task, name, progress } });
             lastProgress = progress;
           }
-        } else {
+        }
+        else if (doc.progress) {
+          const progress = doc.progress * 0.99;
+          if ((progress - lastProgress) >= 1) {
+            request('collection', 'send-progress', { clientId, payload: { task, name, progress } });
+            lastProgress = progress;
+          }
+        }
+        else {
           let populationSize = 0;
           if (task === 'subtree') {
             for (const { population } of genomes) {
@@ -292,6 +301,8 @@ async function runTask(spec, metadata, timeout) {
   });
 }
 
-module.exports = function handleMessage({ spec, metadata, timeout$: timeout = DEFAULT_TIMEOUT }) {
-  return runTask(spec, metadata, timeout);
-};
+module.exports = runTask;
+
+module.exports.handleContainerOutput = handleContainerOutput;
+module.exports.handleContainerExit = handleContainerExit;
+module.exports.createContainer = createContainer;

@@ -202,6 +202,19 @@
         "version": "v1",
         "workers": 16
       }
+    ],
+    "2697049": [
+      {
+        "requires": [
+          {
+            "task": "alignment",
+            "version": "1"
+          }
+        ],
+        "task": "tree",
+        "timeout": 900,
+        "version": "2"
+      }
     ]
   },
   "genome": {
@@ -783,6 +796,12 @@
       {
         "task": "mlst",
         "version": "202011162044-v2.6.3"
+      }
+    ],
+    "2697049": [
+      {
+        "task": "alignment",
+        "version": "1"
       }
     ],
     "2751": [
