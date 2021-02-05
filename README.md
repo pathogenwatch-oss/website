@@ -4,7 +4,7 @@
 
 1. Start MongoDB
 2. Copy config.json from Keybase/team/cgps.dev/Projects/Pathogenwatch/Config/dev.json
-3. `yarn`
+3. `npm install`
 4. `npm run dev`
 
 ## Scripts

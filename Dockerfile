@@ -17,14 +17,14 @@ WORKDIR /pathogenwatch/
 
 COPY . /pathogenwatch
 
-RUN yarn --production
+RUN npm install --only=production
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
 
 FROM middle-end AS front-end
 
-RUN yarn # installs dev dependencies
-RUN yarn build # runs webpack build
+RUN npm install # installs dev dependencies
+RUN npm run build # runs webpack build
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
 
