@@ -213,7 +213,10 @@
         ],
         "task": "tree",
         "timeout": 900,
-        "version": "2"
+        "version": "alignment-1",
+        "flags": {
+          "COV2_USER": true
+        }
       }
     ]
   },
@@ -801,7 +804,24 @@
     "2697049": [
       {
         "task": "alignment",
-        "version": "1"
+        "version": "1",
+        "flags": {
+          "COV2_USER": true
+        }
+      },
+      {
+        "task": "sarscov2-variants",
+        "version": "0.0.9",
+        "flags": {
+          "COV2_USER": true
+        }
+      },
+      {
+        "task": "pangolin",
+        "version": "v2.1.7_2021-01-20_R2",
+        "flags": {
+          "COV2_USER": true
+        }
       }
     ],
     "2751": [

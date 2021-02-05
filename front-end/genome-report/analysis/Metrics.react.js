@@ -10,26 +10,31 @@ export default ({ result }) => (
         <dt>Genome length</dt>
         <dd>{result.length}</dd>
       </div>
+      {result.contigs !== 1 &&
       <div>
         <dt>No. contigs</dt>
         <dd>{result.contigs}</dd>
-      </div>
+      </div>}
+      {result.contigs !== 1 &&
       <div>
         <dt>Smallest contig</dt>
         <dd>{result.smallestContig}</dd>
-      </div>
+      </div>}
+      {result.contigs !== 1 &&
       <div>
         <dt>Largest contig</dt>
         <dd>{result.largestContig}</dd>
-      </div>
+      </div>}
+      {result.contigs !== 1 &&
       <div>
         <dt>Average contig length</dt>
         <dd>{result.averageContig}</dd>
-      </div>
+      </div>}
+      {result.contigs !== 1 &&
       <div>
         <dt>N50</dt>
         <dd>{result.N50}</dd>
-      </div>
+      </div>}
       <div>
         <dt>Non-ATCG</dt>
         <dd>{result.nonATCG}</dd>
@@ -39,9 +44,9 @@ export default ({ result }) => (
         <dd>{result.gcContent}%</dd>
       </div>
     </dl>
-    <figure>
+    {result.contigs !== 1 && <figure>
       <figcaption>N50 chart</figcaption>
       <N50Chart metrics={result} />
-    </figure>
+    </figure>}
   </React.Fragment>
 );

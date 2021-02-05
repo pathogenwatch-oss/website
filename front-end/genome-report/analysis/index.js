@@ -10,6 +10,7 @@ import AMR from './AMR.react';
 import Speciator from './Speciator.react';
 import Typing from './Typing.react';
 import Virulence from './Virulence.react';
+import CovidVariants from './Sarscov2Variants.react';
 
 // import renderGenericResults from './Generic.react';
 
@@ -20,6 +21,7 @@ function hasSpeciesTypingResult(analysis) {
     analysis.genotyphi ||
     analysis.ngmast ||
     analysis.serotype ||
+    analysis.pangolin ||
     analysis.poppunk ||
     analysis.kleborate ||
     analysis.ngstar ||
@@ -46,6 +48,13 @@ export default genome => {
     sections.push({
       key: 'Typing',
       component: <Typing genome={genome} />,
+    });
+  }
+
+  if (analysis["sarscov2-variants"]) {
+    sections.push({
+      key: 'Variants',
+      component: <CovidVariants genome={genome} />,
     });
   }
   if (paarsnp || kleborate) {

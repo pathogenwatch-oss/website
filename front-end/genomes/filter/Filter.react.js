@@ -100,7 +100,7 @@ const Filter = ({
       hidden={!filterSummary.speciesId.length || filterState.organismId}
       icon="bug_report"
       renderLabel={({ value }) => <React.Fragment>subsp. <em>{value}</em></React.Fragment>}
-      updateFilter={clearDependants(filterState, [ 'serotype' ])}
+      updateFilter={clearDependants(filterState, [ 'serotype', 'pangolin', 'sarscov2-variants' ])}
     />
     <FilterableSection
       filterKey="serotype"
@@ -159,6 +159,16 @@ const Filter = ({
       heading="Genotype"
       icon="label"
       renderLabel={({ value, active }) => (active ? `Genotype ${value}` : value)}
+    />
+    <FilterableSection
+      filterKey="pangolin"
+      heading="Pangolin Lineage"
+      icon="label"
+    />
+    <FilterableSection
+      filterKey="sarscov2-variants"
+      heading="Sentinel Variants"
+      icon="book"
     />
     <FilterableSection
       filterKey="klocus"

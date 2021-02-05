@@ -3,10 +3,8 @@ image: node:10.12.0-alpine
 build:
   only:
     - tags
-  # cache:
-  #   untracked: true
+  # artifacts:
   #   paths:
-  #     - node_modules/
   script:
     - apk add --update docker
     - docker login
