@@ -3,7 +3,7 @@ import '../css/cgps-mdl-theme.css';
 import './utils.css';
 
 import React from 'react';
-import Provider from 'react-redux/lib/components/Provider';
+import { Provider } from "react-redux";
 
 import Router from './router';
 import store from './store';
