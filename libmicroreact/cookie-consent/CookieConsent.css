@@ -1,0 +1,95 @@
+.libmr-CookieConsent {
+  transform-origin: center;
+  transition: .28s cubic-bezier(.4,0,.2,1);
+  transition-property: transform opacity;
+  border-radius: 50%;
+  font-size: 16px;
+  height: 800px;
+  width: 800px;
+  position: fixed;
+  bottom: -520px;
+  right: -280px;
+  z-index: 9999;
+  color: #fff;
+  background-color: var(--libmr-primary-colour);
+}
+
+.libmr-CookieConsent.libmr-appear {
+  transform: scale3d(0, 0, 1);
+}
+
+.libmr-CookieConsent.libmr-appear-active {
+  transform: scale3d(1, 1, 1);
+}
+
+.libmr-CookieConsent.libmr-leave {
+  opacity: 1;
+}
+
+.libmr-CookieConsent.libmr-leave-active {
+  opacity: 0;
+}
+
+.libmr-CookieConsent-message {
+  color: white;
+  display: flex;
+  flex-direction: column;
+  font-size: 16px;
+  height: 400px;
+  line-height: 1.5;
+  width: 304px;
+  margin-left: calc(8px * 23);
+  margin-top: calc(8px * 8);
+  transition: opacity .28s cubic-bezier(.4,0,.2,1);
+}
+
+.libmr-CookieConsent.libmr-appear .libmr-CookieConsent-message {
+  opacity: 0;
+}
+
+.libmr-CookieConsent.libmr-enter-done .libmr-CookieConsent-message {
+  opacity: 1;
+}
+
+.libmr-CookieConsent h2 {
+  font-size: 20px;
+  line-height: 1.3;
+  margin-bottom: 16px;
+  font-family: inherit;
+  font-weight: inherit;
+  color: inherit;
+}
+
+.libmr-CookieConsent p {
+  font-size: 14px;
+}
+
+.libmr-CookieConsent a,
+.libmr-CookieConsent button {
+  background: none;
+  color: inherit;
+  cursor: pointer;
+  display: inline-block;
+  font-size: 14px;
+  font-weight: 500;
+  height: 36px;
+  line-height: 36px;
+  min-width: 0;
+  padding: 0;
+  text-transform: uppercase;
+  vertical-align: middle;
+}
+
+.libmr-CookieConsent a:hover,
+.libmr-CookieConsent a:focus:not(.active),
+.libmr-CookieConsent a:active,
+.libmr-CookieConsent button:hover,
+.libmr-CookieConsent button:focus:not(.active),
+.libmr-CookieConsent button:active {
+  background-color: transparent;
+  opacity: 0.54;
+}
+
+.libmr-CookieConsent-actions * + * {
+  margin-left: 16px;
+}

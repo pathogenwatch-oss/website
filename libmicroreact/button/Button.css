@@ -1,0 +1,13 @@
+@import '~@material/button/dist/mdc.button.css';
+
+.mdc-button {
+  --mdc-theme-primary: var(--libmr-primary-colour);
+}
+
+.mdc-button::before, .mdc-button::after {
+  background-color: var(--libmr-primary-colour-alpha);
+}
+
+.mdc-button__label {
+  letter-spacing: 0;
+}

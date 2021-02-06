@@ -1,0 +1,8 @@
+.tree-demo {
+  border: 1px solid rgba(0, 0, 0, 0.24);
+}
+
+/* panel overflows otherwise */
+.tree-demo .libmr-Panel {
+  border: none;
+}

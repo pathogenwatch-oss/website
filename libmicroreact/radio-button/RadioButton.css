@@ -1,0 +1,18 @@
+@import "~@material/radio/dist/mdc.radio.css";
+@import "~@material/form-field/dist/mdc.form-field.css";
+
+.libmr-RadioButton {
+  --mdc-theme-secondary: var(--libmr-primary-colour);
+  font-size: 14px;
+  letter-spacing: 0;
+}
+
+.libmr-RadioButton label {
+  cursor: pointer;
+  font-size: inherit;
+}
+
+.libmr-RadioButton .mdc-radio::before,
+.libmr-RadioButton .mdc-radio::after {
+  background-color: var(--libmr-primary-colour-alpha);
+}

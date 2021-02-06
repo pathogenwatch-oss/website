@@ -1,0 +1,134 @@
+.microreact-viewer .mr-feedback-button {
+  display: none;
+}
+
+/*#region Save */
+
+.mr-save-project .MuiDialog-paper {
+  position: relative;
+}
+.mr-save-project .MuiLinearProgress-root {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+}
+
+
+.mr-save-project .mr-saved-done {
+  position: absolute;
+  top: calc(50% - 80px);
+  left: calc(50% - 80px);
+  width: 160px;
+  height: 160px;
+  z-index: 3;
+}
+
+.mr-save-project section {
+  margin-bottom: 8px;
+}
+
+.mr-save-project .mr-close-button {
+  position: absolute;
+  top: 12px;
+  right: 8px;
+  padding: 8px;
+}
+
+
+.mr-save-project .mr-project-info {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+}
+.mr-save-project .mr-project-info .MuiTextField-root {
+  margin: 8px 0;
+}
+
+
+.mr-save-project .mr-save-actions {
+  display: flex;
+  justify-content: space-between;
+}
+
+.mr-save-actions .MuiButtonBase-root {
+  text-transform: unset;
+  flex: 1 1 0px;
+  padding: 16px 0;
+}
+
+.mr-save-actions .MuiButtonBase-root + .MuiButtonBase-root {
+  margin-left: 16px;
+}
+
+.mr-save-actions .MuiButtonBase-root .mr-icon-stack {
+  width: 80px;
+  height: 80px;
+  /* margin: 16px 0; */
+}
+
+.mr-download-file .mr-icon-stack {
+  padding: 8px 0;
+}
+
+.mr-save-actions .MuiButtonBase-root .MuiButton-label {
+  display: flex;
+  flex-direction: column;
+}
+
+.mr-save-actions .MuiButtonBase-root p {
+  line-height: 1.2;
+  margin: 16px 0;
+  text-align: center;
+}
+
+/*#region Saving spinner */
+
+.mr-save-actions .MuiButtonBase-root {
+  position: relative;
+}
+.mr-save-actions .MuiCircularProgress-root {
+  position: absolute;
+  top: calc(50% - 60px);
+  left: calc(50% - 60px);
+  /* width: 160px;
+  height: 160px; */
+  z-index: 1;
+}
+
+/*#endregion*/
+
+/*#region Blinder */
+.mr-save-project .MuiDialogContent-root {
+  position: relative;
+}
+.mr-save-project .mr-blinder {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 2;
+  background-color: rgba(255, 255, 255, 0.72);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.mr-save-project .mr-blinder .MuiFormControl-root {
+  position: absolute;
+  bottom: 54px;
+  background-color: var(--background-main);
+  left: 40px;
+  right: 40px;
+}
+
+.mr-save-project .mr-blinder input {
+  cursor: pointer !important;
+}
+
+/*#endregion*/
+
+
+/*#endregion*/
+

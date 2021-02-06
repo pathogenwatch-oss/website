@@ -1,0 +1,1768 @@
+{
+  "width": 480,
+  "height": 333,
+  "controls": false,
+  "data": {
+    "nodes": [
+      {
+        "id": "Case1",
+        "label": "Case1",
+        "x": 435.31225337016366,
+        "y": 470.6280391871987,
+        "fixed": true
+      },
+      {
+        "id": "Case5",
+        "label": "Case5",
+        "x": 468.91806647296085,
+        "y": 363.3784063864777,
+        "fixed": true
+      },
+      {
+        "id": "Case12",
+        "label": "Case12",
+        "x": 336.97118922775206,
+        "y": 383.01728243003987,
+        "fixed": true
+      },
+      {
+        "id": "Case6",
+        "label": "Case6",
+        "x": 460.52117562839186,
+        "y": -57.125510465950775,
+        "fixed": true
+      },
+      {
+        "id": "Case21",
+        "label": "Case21",
+        "x": 446.82287543850435,
+        "y": -188.04005572123268,
+        "fixed": true
+      },
+      {
+        "id": "Case7",
+        "label": "Case7",
+        "x": -94.97089529703128,
+        "y": -515.5031430537672,
+        "fixed": true
+      },
+      {
+        "id": "Case35",
+        "label": "Case35",
+        "x": -112.26566678525799,
+        "y": -368.2646254536063,
+        "fixed": true
+      },
+      {
+        "id": "Case11",
+        "label": "Case11",
+        "x": 433.14078546947195,
+        "y": -318.5498639887293,
+        "fixed": true
+      },
+      {
+        "id": "Case22",
+        "label": "Case22",
+        "x": 194.18728462615852,
+        "y": 327.1786313918886,
+        "fixed": true
+      },
+      {
+        "id": "Case13",
+        "label": "Case13",
+        "x": 91.55825445075332,
+        "y": -109.11320972940113,
+        "fixed": true
+      },
+      {
+        "id": "Case25",
+        "label": "Case25",
+        "x": -69.94713548506384,
+        "y": 13.351195610608817,
+        "fixed": true
+      },
+      {
+        "id": "Case29",
+        "label": "Case29",
+        "x": -83.5620610938013,
+        "y": -138.69571621116208,
+        "fixed": true
+      },
+      {
+        "id": "Case14",
+        "label": "Case14",
+        "x": 7.39993088323881,
+        "y": -219.10175330897542,
+        "fixed": true
+      },
+      {
+        "id": "Case19",
+        "label": "Case19",
+        "x": 52.47363878993835,
+        "y": -177.39232643139945,
+        "fixed": true
+      },
+      {
+        "id": "Case15",
+        "label": "Case15",
+        "x": -197.54079614474335,
+        "y": -311.14913402878096,
+        "fixed": true
+      },
+      {
+        "id": "Case16",
+        "label": "Case16",
+        "x": 100.04970824916963,
+        "y": -30.809113067782288,
+        "fixed": true
+      },
+      {
+        "id": "Case24",
+        "label": "Case24",
+        "x": 64.98370286994054,
+        "y": 108.81803504435537,
+        "fixed": true
+      },
+      {
+        "id": "Case17",
+        "label": "Case17",
+        "x": -235.31431186027314,
+        "y": -98.63312294489374,
+        "fixed": true
+      },
+      {
+        "id": "Case18",
+        "label": "Case18",
+        "x": 32.67818713906378,
+        "y": 254.40484265497292,
+        "fixed": true
+      },
+      {
+        "id": "Case27",
+        "label": "Case27",
+        "x": -123.7657200265722,
+        "y": 163.3934801435913,
+        "fixed": true
+      },
+      {
+        "id": "Case30",
+        "label": "Case30",
+        "x": 39.003205055137705,
+        "y": 416.55846060207995,
+        "fixed": true
+      },
+      {
+        "id": "Case37",
+        "label": "Case37",
+        "x": -19.378862041368798,
+        "y": 210.56506792359875,
+        "fixed": true
+      },
+      {
+        "id": "Case20",
+        "label": "Case20",
+        "x": -206.38222470826196,
+        "y": -159.35494704949542,
+        "fixed": true
+      },
+      {
+        "id": "Case26",
+        "label": "Case26",
+        "x": 60.50960738283808,
+        "y": 32.38079282478921,
+        "fixed": true
+      },
+      {
+        "id": "Case28",
+        "label": "Case28",
+        "x": -239.8328508273178,
+        "y": -35.48564980789404,
+        "fixed": true
+      },
+      {
+        "id": "Case33",
+        "label": "Case33",
+        "x": -259.9232220686875,
+        "y": 97.76260073966627,
+        "fixed": true
+      },
+      {
+        "id": "Case40",
+        "label": "Case40",
+        "x": -249.3255133596149,
+        "y": 158.74425342723057,
+        "fixed": true
+      },
+      {
+        "id": "Case32",
+        "label": "Case32",
+        "x": -194.90438582520397,
+        "y": 328.8096699618748,
+        "fixed": true
+      },
+      {
+        "id": "Case47",
+        "label": "Case47",
+        "x": 702.5802712940706,
+        "y": -153.8510910533189,
+        "fixed": true
+      },
+      {
+        "id": "Case48",
+        "label": "Case48",
+        "x": 701.9195315375811,
+        "y": -27.504342086215804,
+        "fixed": true
+      }
+    ],
+    "edges": [
+      {
+        "from": "Case1",
+        "to": "Case5",
+        "distance": "NA",
+        "Epi link type": "Name-based",
+        "Epi link person": "Relative",
+        "Epi link location": "Household",
+        "Epi link strength": "Definite",
+        "Epi link strength__linestyle": "solid",
+        "Epi link strength__colour": "black",
+        "Epi link type__linewidth": "2",
+        "Epi link type__colour": "#ffffb3",
+        "Epi link person__linewidth": "1",
+        "Epi link person__colour": "#8dd3c7",
+        "Epi link location__colour": "#8dd3c7",
+        "arrowStrikethrough": false,
+        "id": "edge-0"
+      },
+      {
+        "from": "Case1",
+        "to": "Case12",
+        "distance": "4",
+        "Epi link type": "Name-based",
+        "Epi link person": "Relative",
+        "Epi link location": "Household",
+        "Epi link strength": "Definite",
+        "Epi link strength__linestyle": "solid",
+        "Epi link strength__colour": "black",
+        "Epi link type__linewidth": "2",
+        "Epi link type__colour": "#ffffb3",
+        "Epi link person__linewidth": "1",
+        "Epi link person__colour": "#8dd3c7",
+        "Epi link location__colour": "#8dd3c7",
+        "arrowStrikethrough": false,
+        "id": "edge-1"
+      },
+      {
+        "from": "Case5",
+        "to": "Case12",
+        "distance": "NA",
+        "Epi link type": "Name-based",
+        "Epi link person": "Relative",
+        "Epi link location": "Household",
+        "Epi link strength": "Definite",
+        "Epi link strength__linestyle": "solid",
+        "Epi link strength__colour": "black",
+        "Epi link type__linewidth": "2",
+        "Epi link type__colour": "#ffffb3",
+        "Epi link person__linewidth": "1",
+        "Epi link person__colour": "#8dd3c7",
+        "Epi link location__colour": "#8dd3c7",
+        "arrowStrikethrough": false,
+        "id": "edge-2"
+      },
+      {
+        "from": "Case6",
+        "to": "Case21",
+        "distance": "12",
+        "Epi link type": "Location-based",
+        "Epi link person": "",
+        "Epi link location": "School",
+        "Epi link strength": "Possible",
+        "Epi link strength__linestyle": "dotted",
+        "Epi link strength__colour": "grey",
+        "Epi link type__linewidth": "3",
+        "Epi link type__colour": "#bebada",
+        "Epi link person__linewidth": "undefined",
+        "Epi link person__colour": "undefined",
+        "Epi link location__colour": "#b3de69",
+        "arrowStrikethrough": false,
+        "id": "edge-3"
+      },
+      {
+        "from": "Case7",
+        "to": "Case35",
+        "distance": "NA",
+        "Epi link type": "Shared contact",
+        "Epi link person": "",
+        "Epi link location": "",
+        "Epi link strength": "Possible",
+        "Epi link strength__linestyle": "dotted",
+        "Epi link strength__colour": "grey",
+        "Epi link type__linewidth": "4",
+        "Epi link type__colour": "#fb8072",
+        "Epi link person__linewidth": "undefined",
+        "Epi link person__colour": "undefined",
+        "Epi link location__colour": "undefined",
+        "arrowStrikethrough": false,
+        "id": "edge-4"
+      },
+      {
+        "from": "Case11",
+        "to": "Case21",
+        "distance": "3",
+        "Epi link type": "Location-based",
+        "Epi link person": "",
+        "Epi link location": "Neighborhood",
+        "Epi link strength": "Possible",
+        "Epi link strength__linestyle": "dotted",
+        "Epi link strength__colour": "grey",
+        "Epi link type__linewidth": "3",
+        "Epi link type__colour": "#bebada",
+        "Epi link person__linewidth": "undefined",
+        "Epi link person__colour": "undefined",
+        "Epi link location__colour": "#80b1d3",
+        "arrowStrikethrough": false,
+        "id": "edge-5"
+      },
+      {
+        "from": "Case12",
+        "to": "Case22",
+        "distance": "15",
+        "Epi link type": "Location-based",
+        "Epi link person": "",
+        "Epi link location": "Corrections",
+        "Epi link strength": "Probable",
+        "Epi link strength__linestyle": "dashed",
+        "Epi link strength__colour": "grey",
+        "Epi link type__linewidth": "3",
+        "Epi link type__colour": "#bebada",
+        "Epi link person__linewidth": "undefined",
+        "Epi link person__colour": "undefined",
+        "Epi link location__colour": "#ffffb3",
+        "arrowStrikethrough": false,
+        "id": "edge-6"
+      },
+      {
+        "from": "Case13",
+        "to": "Case25",
+        "distance": "0",
+        "Epi link type": "Location-based",
+        "Epi link person": "",
+        "Epi link location": "Healthcare Facility",
+        "Epi link strength": "Probable",
+        "Epi link strength__linestyle": "dashed",
+        "Epi link strength__colour": "grey",
+        "Epi link type__linewidth": "3",
+        "Epi link type__colour": "#bebada",
+        "Epi link person__linewidth": "undefined",
+        "Epi link person__colour": "undefined",
+        "Epi link location__colour": "#fb8072",
+        "arrowStrikethrough": false,
+        "id": "edge-7"
+      },
+      {
+        "from": "Case13",
+        "to": "Case29",
+        "distance": "8",
+        "Epi link type": "Location-based",
+        "Epi link person": "",
+        "Epi link location": "Healthcare Facility",
+        "Epi link strength": "Probable",
+        "Epi link strength__linestyle": "dashed",
+        "Epi link strength__colour": "grey",
+        "Epi link type__linewidth": "3",
+        "Epi link type__colour": "#bebada",
+        "Epi link person__linewidth": "undefined",
+        "Epi link person__colour": "undefined",
+        "Epi link location__colour": "#fb8072",
+        "arrowStrikethrough": false,
+        "id": "edge-8"
+      },
+      {
+        "from": "Case14",
+        "to": "Case19",
+        "distance": "NA",
+        "Epi link type": "Social media",
+        "Epi link person": "Secondary link",
+        "Epi link location": "",
+        "Epi link strength": "Possible",
+        "Epi link strength__linestyle": "dotted",
+        "Epi link strength__colour": "grey",
+        "Epi link type__linewidth": "1",
+        "Epi link type__colour": "#8dd3c7",
+        "Epi link person__linewidth": "5",
+        "Epi link person__colour": "#80b1d3",
+        "Epi link location__colour": "undefined",
+        "arrowStrikethrough": false,
+        "id": "edge-9"
+      },
+      {
+        "from": "Case14",
+        "to": "Case25",
+        "distance": "1",
+        "Epi link type": "Social media",
+        "Epi link person": "Direct link",
+        "Epi link location": "",
+        "Epi link strength": "Probable",
+        "Epi link strength__linestyle": "dashed",
+        "Epi link strength__colour": "grey",
+        "Epi link type__linewidth": "1",
+        "Epi link type__colour": "#8dd3c7",
+        "Epi link person__linewidth": "2",
+        "Epi link person__colour": "#ffffb3",
+        "Epi link location__colour": "undefined",
+        "arrowStrikethrough": false,
+        "id": "edge-10"
+      },
+      {
+        "from": "Case14",
+        "to": "Case29",
+        "distance": "9",
+        "Epi link type": "Social media",
+        "Epi link person": "Direct link",
+        "Epi link location": "",
+        "Epi link strength": "Probable",
+        "Epi link strength__linestyle": "dashed",
+        "Epi link strength__colour": "grey",
+        "Epi link type__linewidth": "1",
+        "Epi link type__colour": "#8dd3c7",
+        "Epi link person__linewidth": "2",
+        "Epi link person__colour": "#ffffb3",
+        "Epi link location__colour": "undefined",
+        "arrowStrikethrough": false,
+        "id": "edge-11"
+      },
+      {
+        "from": "Case15",
+        "to": "Case29",
+        "distance": "10",
+        "Epi link type": "Social media",
+        "Epi link person": "Secondary link",
+        "Epi link location": "",
+        "Epi link strength": "Possible",
+        "Epi link strength__linestyle": "dotted",
+        "Epi link strength__colour": "grey",
+        "Epi link type__linewidth": "1",
+        "Epi link type__colour": "#8dd3c7",
+        "Epi link person__linewidth": "5",
+        "Epi link person__colour": "#80b1d3",
+        "Epi link location__colour": "undefined",
+        "arrowStrikethrough": false,
+        "id": "edge-12"
+      },
+      {
+        "from": "Case15",
+        "to": "Case35",
+        "distance": "NA",
+        "Epi link type": "Social media",
+        "Epi link person": "Direct link",
+        "Epi link location": "",
+        "Epi link strength": "Probable",
+        "Epi link strength__linestyle": "dashed",
+        "Epi link strength__colour": "grey",
+        "Epi link type__linewidth": "1",
+        "Epi link type__colour": "#8dd3c7",
+        "Epi link person__linewidth": "2",
+        "Epi link person__colour": "#ffffb3",
+        "Epi link location__colour": "undefined",
+        "arrowStrikethrough": false,
+        "id": "edge-13"
+      },
+      {
+        "from": "Case16",
+        "to": "Case24",
+        "distance": "NA",
+        "Epi link type": "Location-based",
+        "Epi link person": "",
+        "Epi link location": "Healthcare Facility",
+        "Epi link strength": "Probable",
+        "Epi link strength__linestyle": "dashed",
+        "Epi link strength__colour": "grey",
+        "Epi link type__linewidth": "3",
+        "Epi link type__colour": "#bebada",
+        "Epi link person__linewidth": "undefined",
+        "Epi link person__colour": "undefined",
+        "Epi link location__colour": "#fb8072",
+        "arrowStrikethrough": false,
+        "id": "edge-14"
+      },
+      {
+        "from": "Case16",
+        "to": "Case25",
+        "distance": "NA",
+        "Epi link type": "Location-based",
+        "Epi link person": "",
+        "Epi link location": "Healthcare Facility",
+        "Epi link strength": "Probable",
+        "Epi link strength__linestyle": "dashed",
+        "Epi link strength__colour": "grey",
+        "Epi link type__linewidth": "3",
+        "Epi link type__colour": "#bebada",
+        "Epi link person__linewidth": "undefined",
+        "Epi link person__colour": "undefined",
+        "Epi link location__colour": "#fb8072",
+        "arrowStrikethrough": false,
+        "id": "edge-15"
+      },
+      {
+        "from": "Case16",
+        "to": "Case29",
+        "distance": "NA",
+        "Epi link type": "Location-based",
+        "Epi link person": "",
+        "Epi link location": "Healthcare Facility",
+        "Epi link strength": "Probable",
+        "Epi link strength__linestyle": "dashed",
+        "Epi link strength__colour": "grey",
+        "Epi link type__linewidth": "3",
+        "Epi link type__colour": "#bebada",
+        "Epi link person__linewidth": "undefined",
+        "Epi link person__colour": "undefined",
+        "Epi link location__colour": "#fb8072",
+        "arrowStrikethrough": false,
+        "id": "edge-16"
+      },
+      {
+        "from": "Case17",
+        "to": "Case25",
+        "distance": "5",
+        "Epi link type": "Location-based",
+        "Epi link person": "",
+        "Epi link location": "Healthcare Facility",
+        "Epi link strength": "Probable",
+        "Epi link strength__linestyle": "dashed",
+        "Epi link strength__colour": "grey",
+        "Epi link type__linewidth": "3",
+        "Epi link type__colour": "#bebada",
+        "Epi link person__linewidth": "undefined",
+        "Epi link person__colour": "undefined",
+        "Epi link location__colour": "#fb8072",
+        "arrowStrikethrough": false,
+        "id": "edge-17"
+      },
+      {
+        "from": "Case17",
+        "to": "Case29",
+        "distance": "9",
+        "Epi link type": "Location-based",
+        "Epi link person": "",
+        "Epi link location": "Healthcare Facility",
+        "Epi link strength": "Probable",
+        "Epi link strength__linestyle": "dashed",
+        "Epi link strength__colour": "grey",
+        "Epi link type__linewidth": "3",
+        "Epi link type__colour": "#bebada",
+        "Epi link person__linewidth": "undefined",
+        "Epi link person__colour": "undefined",
+        "Epi link location__colour": "#fb8072",
+        "arrowStrikethrough": false,
+        "id": "edge-18"
+      },
+      {
+        "from": "Case18",
+        "to": "Case22",
+        "distance": "0",
+        "Epi link type": "Location-based",
+        "Epi link person": "",
+        "Epi link location": "Corrections",
+        "Epi link strength": "Definite",
+        "Epi link strength__linestyle": "solid",
+        "Epi link strength__colour": "black",
+        "Epi link type__linewidth": "3",
+        "Epi link type__colour": "#bebada",
+        "Epi link person__linewidth": "undefined",
+        "Epi link person__colour": "undefined",
+        "Epi link location__colour": "#ffffb3",
+        "arrowStrikethrough": false,
+        "id": "edge-19"
+      },
+      {
+        "from": "Case18",
+        "to": "Case25",
+        "distance": "2",
+        "Epi link type": "Location-based",
+        "Epi link person": "",
+        "Epi link location": "Place of worship",
+        "Epi link strength": "Probable",
+        "Epi link strength__linestyle": "dashed",
+        "Epi link strength__colour": "grey",
+        "Epi link type__linewidth": "3",
+        "Epi link type__colour": "#bebada",
+        "Epi link person__linewidth": "undefined",
+        "Epi link person__colour": "undefined",
+        "Epi link location__colour": "#fdb462",
+        "arrowStrikethrough": false,
+        "id": "edge-20"
+      },
+      {
+        "from": "Case18",
+        "to": "Case27",
+        "distance": "5",
+        "Epi link type": "Location-based",
+        "Epi link person": "",
+        "Epi link location": "Place of worship",
+        "Epi link strength": "Probable",
+        "Epi link strength__linestyle": "dashed",
+        "Epi link strength__colour": "grey",
+        "Epi link type__linewidth": "3",
+        "Epi link type__colour": "#bebada",
+        "Epi link person__linewidth": "undefined",
+        "Epi link person__colour": "undefined",
+        "Epi link location__colour": "#fdb462",
+        "arrowStrikethrough": false,
+        "id": "edge-21"
+      },
+      {
+        "from": "Case18",
+        "to": "Case30",
+        "distance": "3",
+        "Epi link type": "Shared contact",
+        "Epi link person": "Shared contact",
+        "Epi link location": "Household",
+        "Epi link strength": "Probable",
+        "Epi link strength__linestyle": "dashed",
+        "Epi link strength__colour": "grey",
+        "Epi link type__linewidth": "4",
+        "Epi link type__colour": "#fb8072",
+        "Epi link person__linewidth": "6",
+        "Epi link person__colour": "#fdb462",
+        "Epi link location__colour": "#8dd3c7",
+        "arrowStrikethrough": false,
+        "id": "edge-22"
+      },
+      {
+        "from": "Case18",
+        "to": "Case37",
+        "distance": "0",
+        "Epi link type": "Name-based",
+        "Epi link person": "Spouse",
+        "Epi link location": "Household",
+        "Epi link strength": "Definite",
+        "Epi link strength__linestyle": "solid",
+        "Epi link strength__colour": "black",
+        "Epi link type__linewidth": "2",
+        "Epi link type__colour": "#ffffb3",
+        "Epi link person__linewidth": "7",
+        "Epi link person__colour": "#b3de69",
+        "Epi link location__colour": "#8dd3c7",
+        "arrowStrikethrough": false,
+        "id": "edge-23"
+      },
+      {
+        "from": "Case19",
+        "to": "Case25",
+        "distance": "NA",
+        "Epi link type": "Location-based",
+        "Epi link person": "",
+        "Epi link location": "Healthcare Facility",
+        "Epi link strength": "Probable",
+        "Epi link strength__linestyle": "dashed",
+        "Epi link strength__colour": "grey",
+        "Epi link type__linewidth": "3",
+        "Epi link type__colour": "#bebada",
+        "Epi link person__linewidth": "undefined",
+        "Epi link person__colour": "undefined",
+        "Epi link location__colour": "#fb8072",
+        "arrowStrikethrough": false,
+        "id": "edge-24"
+      },
+      {
+        "from": "Case19",
+        "to": "Case29",
+        "distance": "NA",
+        "Epi link type": "Location-based",
+        "Epi link person": "",
+        "Epi link location": "Healthcare Facility",
+        "Epi link strength": "Possible",
+        "Epi link strength__linestyle": "dotted",
+        "Epi link strength__colour": "grey",
+        "Epi link type__linewidth": "3",
+        "Epi link type__colour": "#bebada",
+        "Epi link person__linewidth": "undefined",
+        "Epi link person__colour": "undefined",
+        "Epi link location__colour": "#fb8072",
+        "arrowStrikethrough": false,
+        "id": "edge-25"
+      },
+      {
+        "from": "Case20",
+        "to": "Case25",
+        "distance": "4",
+        "Epi link type": "Shared risk factor/location",
+        "Epi link person": "",
+        "Epi link location": "Substance use venue",
+        "Epi link strength": "Possible",
+        "Epi link strength__linestyle": "dotted",
+        "Epi link strength__colour": "grey",
+        "Epi link type__linewidth": "5",
+        "Epi link type__colour": "#80b1d3",
+        "Epi link person__linewidth": "undefined",
+        "Epi link person__colour": "undefined",
+        "Epi link location__colour": "#fccde5",
+        "arrowStrikethrough": false,
+        "id": "edge-26"
+      },
+      {
+        "from": "Case20",
+        "to": "Case29",
+        "distance": "8",
+        "Epi link type": "Shared risk factor/location",
+        "Epi link person": "",
+        "Epi link location": "Substance use venue",
+        "Epi link strength": "Possible",
+        "Epi link strength__linestyle": "dotted",
+        "Epi link strength__colour": "grey",
+        "Epi link type__linewidth": "5",
+        "Epi link type__colour": "#80b1d3",
+        "Epi link person__linewidth": "undefined",
+        "Epi link person__colour": "undefined",
+        "Epi link location__colour": "#fccde5",
+        "arrowStrikethrough": false,
+        "id": "edge-27"
+      },
+      {
+        "from": "Case24",
+        "to": "Case25",
+        "distance": "2",
+        "Epi link type": "Name-based",
+        "Epi link person": "Relative",
+        "Epi link location": "Household",
+        "Epi link strength": "Definite",
+        "Epi link strength__linestyle": "solid",
+        "Epi link strength__colour": "black",
+        "Epi link type__linewidth": "2",
+        "Epi link type__colour": "#ffffb3",
+        "Epi link person__linewidth": "1",
+        "Epi link person__colour": "#8dd3c7",
+        "Epi link location__colour": "#8dd3c7",
+        "arrowStrikethrough": false,
+        "id": "edge-28"
+      },
+      {
+        "from": "Case24",
+        "to": "Case26",
+        "distance": "3",
+        "Epi link type": "Location-based",
+        "Epi link person": "",
+        "Epi link location": "Healthcare Facility",
+        "Epi link strength": "Definite",
+        "Epi link strength__linestyle": "solid",
+        "Epi link strength__colour": "black",
+        "Epi link type__linewidth": "3",
+        "Epi link type__colour": "#bebada",
+        "Epi link person__linewidth": "undefined",
+        "Epi link person__colour": "undefined",
+        "Epi link location__colour": "#fb8072",
+        "arrowStrikethrough": false,
+        "id": "edge-29"
+      },
+      {
+        "from": "Case24",
+        "to": "Case27",
+        "distance": "5",
+        "Epi link type": "Shared contact",
+        "Epi link person": "Family friend",
+        "Epi link location": "Household",
+        "Epi link strength": "Definite",
+        "Epi link strength__linestyle": "solid",
+        "Epi link strength__colour": "black",
+        "Epi link type__linewidth": "4",
+        "Epi link type__colour": "#fb8072",
+        "Epi link person__linewidth": "3",
+        "Epi link person__colour": "#bebada",
+        "Epi link location__colour": "#8dd3c7",
+        "arrowStrikethrough": false,
+        "id": "edge-30"
+      },
+      {
+        "from": "Case25",
+        "to": "Case26",
+        "distance": "1",
+        "Epi link type": "Location-based",
+        "Epi link person": "",
+        "Epi link location": "Healthcare Facility",
+        "Epi link strength": "Definite",
+        "Epi link strength__linestyle": "solid",
+        "Epi link strength__colour": "black",
+        "Epi link type__linewidth": "3",
+        "Epi link type__colour": "#bebada",
+        "Epi link person__linewidth": "undefined",
+        "Epi link person__colour": "undefined",
+        "Epi link location__colour": "#fb8072",
+        "arrowStrikethrough": false,
+        "id": "edge-31"
+      },
+      {
+        "from": "Case25",
+        "to": "Case27",
+        "distance": "3",
+        "Epi link type": "Name-based",
+        "Epi link person": "Friend",
+        "Epi link location": "Household",
+        "Epi link strength": "Definite",
+        "Epi link strength__linestyle": "solid",
+        "Epi link strength__colour": "black",
+        "Epi link type__linewidth": "2",
+        "Epi link type__colour": "#ffffb3",
+        "Epi link person__linewidth": "4",
+        "Epi link person__colour": "#fb8072",
+        "Epi link location__colour": "#8dd3c7",
+        "arrowStrikethrough": false,
+        "id": "edge-32"
+      },
+      {
+        "from": "Case25",
+        "to": "Case28",
+        "distance": "5",
+        "Epi link type": "Location-based",
+        "Epi link person": "",
+        "Epi link location": "Healthcare Facility",
+        "Epi link strength": "Definite",
+        "Epi link strength__linestyle": "solid",
+        "Epi link strength__colour": "black",
+        "Epi link type__linewidth": "3",
+        "Epi link type__colour": "#bebada",
+        "Epi link person__linewidth": "undefined",
+        "Epi link person__colour": "undefined",
+        "Epi link location__colour": "#fb8072",
+        "arrowStrikethrough": false,
+        "id": "edge-33"
+      },
+      {
+        "from": "Case25",
+        "to": "Case29",
+        "distance": "8",
+        "Epi link type": "Name-based",
+        "Epi link person": "Friend",
+        "Epi link location": "Household",
+        "Epi link strength": "Definite",
+        "Epi link strength__linestyle": "solid",
+        "Epi link strength__colour": "black",
+        "Epi link type__linewidth": "2",
+        "Epi link type__colour": "#ffffb3",
+        "Epi link person__linewidth": "4",
+        "Epi link person__colour": "#fb8072",
+        "Epi link location__colour": "#8dd3c7",
+        "arrowStrikethrough": false,
+        "id": "edge-34"
+      },
+      {
+        "from": "Case25",
+        "to": "Case33",
+        "distance": "NA",
+        "Epi link type": "Name-based",
+        "Epi link person": "Family friend",
+        "Epi link location": "Household",
+        "Epi link strength": "Definite",
+        "Epi link strength__linestyle": "solid",
+        "Epi link strength__colour": "black",
+        "Epi link type__linewidth": "2",
+        "Epi link type__colour": "#ffffb3",
+        "Epi link person__linewidth": "3",
+        "Epi link person__colour": "#bebada",
+        "Epi link location__colour": "#8dd3c7",
+        "arrowStrikethrough": false,
+        "id": "edge-35"
+      },
+      {
+        "from": "Case25",
+        "to": "Case37",
+        "distance": "2",
+        "Epi link type": "Location-based",
+        "Epi link person": "",
+        "Epi link location": "Place of worship",
+        "Epi link strength": "Probable",
+        "Epi link strength__linestyle": "dashed",
+        "Epi link strength__colour": "grey",
+        "Epi link type__linewidth": "3",
+        "Epi link type__colour": "#bebada",
+        "Epi link person__linewidth": "undefined",
+        "Epi link person__colour": "undefined",
+        "Epi link location__colour": "#fdb462",
+        "arrowStrikethrough": false,
+        "id": "edge-36"
+      },
+      {
+        "from": "Case25",
+        "to": "Case40",
+        "distance": "1",
+        "Epi link type": "Name-based",
+        "Epi link person": "Family friend",
+        "Epi link location": "Household",
+        "Epi link strength": "Definite",
+        "Epi link strength__linestyle": "solid",
+        "Epi link strength__colour": "black",
+        "Epi link type__linewidth": "2",
+        "Epi link type__colour": "#ffffb3",
+        "Epi link person__linewidth": "3",
+        "Epi link person__colour": "#bebada",
+        "Epi link location__colour": "#8dd3c7",
+        "arrowStrikethrough": false,
+        "id": "edge-37"
+      },
+      {
+        "from": "Case26",
+        "to": "Case29",
+        "distance": "9",
+        "Epi link type": "Location-based",
+        "Epi link person": "",
+        "Epi link location": "Healthcare Facility",
+        "Epi link strength": "Definite",
+        "Epi link strength__linestyle": "solid",
+        "Epi link strength__colour": "black",
+        "Epi link type__linewidth": "3",
+        "Epi link type__colour": "#bebada",
+        "Epi link person__linewidth": "undefined",
+        "Epi link person__colour": "undefined",
+        "Epi link location__colour": "#fb8072",
+        "arrowStrikethrough": false,
+        "id": "edge-38"
+      },
+      {
+        "from": "Case27",
+        "to": "Case29",
+        "distance": "11",
+        "Epi link type": "Name-based",
+        "Epi link person": "Friend",
+        "Epi link location": "Drug House",
+        "Epi link strength": "Definite",
+        "Epi link strength__linestyle": "solid",
+        "Epi link strength__colour": "black",
+        "Epi link type__linewidth": "2",
+        "Epi link type__colour": "#ffffb3",
+        "Epi link person__linewidth": "4",
+        "Epi link person__colour": "#fb8072",
+        "Epi link location__colour": "#bebada",
+        "arrowStrikethrough": false,
+        "id": "edge-39"
+      },
+      {
+        "from": "Case27",
+        "to": "Case32",
+        "distance": "NA",
+        "Epi link type": "Shared contact",
+        "Epi link person": "",
+        "Epi link location": "",
+        "Epi link strength": "Probable",
+        "Epi link strength__linestyle": "dashed",
+        "Epi link strength__colour": "grey",
+        "Epi link type__linewidth": "4",
+        "Epi link type__colour": "#fb8072",
+        "Epi link person__linewidth": "undefined",
+        "Epi link person__colour": "undefined",
+        "Epi link location__colour": "undefined",
+        "arrowStrikethrough": false,
+        "id": "edge-40"
+      },
+      {
+        "from": "Case27",
+        "to": "Case33",
+        "distance": "NA",
+        "Epi link type": "Name-based",
+        "Epi link person": "Relative",
+        "Epi link location": "Household",
+        "Epi link strength": "Definite",
+        "Epi link strength__linestyle": "solid",
+        "Epi link strength__colour": "black",
+        "Epi link type__linewidth": "2",
+        "Epi link type__colour": "#ffffb3",
+        "Epi link person__linewidth": "1",
+        "Epi link person__colour": "#8dd3c7",
+        "Epi link location__colour": "#8dd3c7",
+        "arrowStrikethrough": false,
+        "id": "edge-41"
+      },
+      {
+        "from": "Case27",
+        "to": "Case40",
+        "distance": "4",
+        "Epi link type": "Name-based",
+        "Epi link person": "Relative",
+        "Epi link location": "Household",
+        "Epi link strength": "Definite",
+        "Epi link strength__linestyle": "solid",
+        "Epi link strength__colour": "black",
+        "Epi link type__linewidth": "2",
+        "Epi link type__colour": "#ffffb3",
+        "Epi link person__linewidth": "1",
+        "Epi link person__colour": "#8dd3c7",
+        "Epi link location__colour": "#8dd3c7",
+        "arrowStrikethrough": false,
+        "id": "edge-42"
+      },
+      {
+        "from": "Case28",
+        "to": "Case29",
+        "distance": "9",
+        "Epi link type": "Location-based",
+        "Epi link person": "",
+        "Epi link location": "Healthcare Facility",
+        "Epi link strength": "Definite",
+        "Epi link strength__linestyle": "solid",
+        "Epi link strength__colour": "black",
+        "Epi link type__linewidth": "3",
+        "Epi link type__colour": "#bebada",
+        "Epi link person__linewidth": "undefined",
+        "Epi link person__colour": "undefined",
+        "Epi link location__colour": "#fb8072",
+        "arrowStrikethrough": false,
+        "id": "edge-43"
+      },
+      {
+        "from": "Case29",
+        "to": "Case35",
+        "distance": "NA",
+        "Epi link type": "Social media",
+        "Epi link person": "Secondary link",
+        "Epi link location": "",
+        "Epi link strength": "Possible",
+        "Epi link strength__linestyle": "dotted",
+        "Epi link strength__colour": "grey",
+        "Epi link type__linewidth": "1",
+        "Epi link type__colour": "#8dd3c7",
+        "Epi link person__linewidth": "5",
+        "Epi link person__colour": "#80b1d3",
+        "Epi link location__colour": "undefined",
+        "arrowStrikethrough": false,
+        "id": "edge-44"
+      },
+      {
+        "from": "Case33",
+        "to": "Case40",
+        "distance": "NA",
+        "Epi link type": "Name-based",
+        "Epi link person": "Relative",
+        "Epi link location": "Household",
+        "Epi link strength": "Definite",
+        "Epi link strength__linestyle": "solid",
+        "Epi link strength__colour": "black",
+        "Epi link type__linewidth": "2",
+        "Epi link type__colour": "#ffffb3",
+        "Epi link person__linewidth": "1",
+        "Epi link person__colour": "#8dd3c7",
+        "Epi link location__colour": "#8dd3c7",
+        "arrowStrikethrough": false,
+        "id": "edge-45"
+      },
+      {
+        "from": "Case47",
+        "to": "Case48",
+        "distance": "2",
+        "Epi link type": "Location-based",
+        "Epi link person": "",
+        "Epi link location": "Neighborhood",
+        "Epi link strength": "Possible",
+        "Epi link strength__linestyle": "dotted",
+        "Epi link strength__colour": "grey",
+        "Epi link type__linewidth": "3",
+        "Epi link type__colour": "#bebada",
+        "Epi link person__linewidth": "undefined",
+        "Epi link person__colour": "undefined",
+        "Epi link location__colour": "#80b1d3",
+        "arrowStrikethrough": false,
+        "id": "edge-46"
+      }
+    ]
+  },
+  "edgeStyles": {
+    "edge-0": {
+      "colour": {
+        "color": "#383838"
+      },
+      "dashes": false,
+      "width": 1
+    },
+    "edge-1": {
+      "colour": {
+        "color": "#383838"
+      },
+      "dashes": false,
+      "width": 1
+    },
+    "edge-2": {
+      "colour": {
+        "color": "#383838"
+      },
+      "dashes": false,
+      "width": 1
+    },
+    "edge-3": {
+      "colour": {
+        "color": "#383838"
+      },
+      "dashes": false,
+      "width": 1
+    },
+    "edge-4": {
+      "colour": {
+        "color": "#383838"
+      },
+      "dashes": false,
+      "width": 1
+    },
+    "edge-5": {
+      "colour": {
+        "color": "#383838"
+      },
+      "dashes": false,
+      "width": 1
+    },
+    "edge-6": {
+      "colour": {
+        "color": "#383838"
+      },
+      "dashes": false,
+      "width": 1
+    },
+    "edge-7": {
+      "colour": {
+        "color": "#383838"
+      },
+      "dashes": false,
+      "width": 1
+    },
+    "edge-8": {
+      "colour": {
+        "color": "#383838"
+      },
+      "dashes": false,
+      "width": 1
+    },
+    "edge-9": {
+      "colour": {
+        "color": "#383838"
+      },
+      "dashes": false,
+      "width": 1
+    },
+    "edge-10": {
+      "colour": {
+        "color": "#383838"
+      },
+      "dashes": false,
+      "width": 1
+    },
+    "edge-11": {
+      "colour": {
+        "color": "#383838"
+      },
+      "dashes": false,
+      "width": 1
+    },
+    "edge-12": {
+      "colour": {
+        "color": "#383838"
+      },
+      "dashes": false,
+      "width": 1
+    },
+    "edge-13": {
+      "colour": {
+        "color": "#383838"
+      },
+      "dashes": false,
+      "width": 1
+    },
+    "edge-14": {
+      "colour": {
+        "color": "#383838"
+      },
+      "dashes": false,
+      "width": 1
+    },
+    "edge-15": {
+      "colour": {
+        "color": "#383838"
+      },
+      "dashes": false,
+      "width": 1
+    },
+    "edge-16": {
+      "colour": {
+        "color": "#383838"
+      },
+      "dashes": false,
+      "width": 1
+    },
+    "edge-17": {
+      "colour": {
+        "color": "#383838"
+      },
+      "dashes": false,
+      "width": 1
+    },
+    "edge-18": {
+      "colour": {
+        "color": "#383838"
+      },
+      "dashes": false,
+      "width": 1
+    },
+    "edge-19": {
+      "colour": {
+        "color": "#383838"
+      },
+      "dashes": false,
+      "width": 1
+    },
+    "edge-20": {
+      "colour": {
+        "color": "#383838"
+      },
+      "dashes": false,
+      "width": 1
+    },
+    "edge-21": {
+      "colour": {
+        "color": "#383838"
+      },
+      "dashes": false,
+      "width": 1
+    },
+    "edge-22": {
+      "colour": {
+        "color": "#383838"
+      },
+      "dashes": false,
+      "width": 1
+    },
+    "edge-23": {
+      "colour": {
+        "color": "#383838"
+      },
+      "dashes": false,
+      "width": 1
+    },
+    "edge-24": {
+      "colour": {
+        "color": "#383838"
+      },
+      "dashes": false,
+      "width": 1
+    },
+    "edge-25": {
+      "colour": {
+        "color": "#383838"
+      },
+      "dashes": false,
+      "width": 1
+    },
+    "edge-26": {
+      "colour": {
+        "color": "#383838"
+      },
+      "dashes": false,
+      "width": 1
+    },
+    "edge-27": {
+      "colour": {
+        "color": "#383838"
+      },
+      "dashes": false,
+      "width": 1
+    },
+    "edge-28": {
+      "colour": {
+        "color": "#383838"
+      },
+      "dashes": false,
+      "width": 1
+    },
+    "edge-29": {
+      "colour": {
+        "color": "#383838"
+      },
+      "dashes": false,
+      "width": 1
+    },
+    "edge-30": {
+      "colour": {
+        "color": "#383838"
+      },
+      "dashes": false,
+      "width": 1
+    },
+    "edge-31": {
+      "colour": {
+        "color": "#383838"
+      },
+      "dashes": false,
+      "width": 1
+    },
+    "edge-32": {
+      "colour": {
+        "color": "#383838"
+      },
+      "dashes": false,
+      "width": 1
+    },
+    "edge-33": {
+      "colour": {
+        "color": "#383838"
+      },
+      "dashes": false,
+      "width": 1
+    },
+    "edge-34": {
+      "colour": {
+        "color": "#383838"
+      },
+      "dashes": false,
+      "width": 1
+    },
+    "edge-35": {
+      "colour": {
+        "color": "#383838"
+      },
+      "dashes": false,
+      "width": 1
+    },
+    "edge-36": {
+      "colour": {
+        "color": "#383838"
+      },
+      "dashes": false,
+      "width": 1
+    },
+    "edge-37": {
+      "colour": {
+        "color": "#383838"
+      },
+      "dashes": false,
+      "width": 1
+    },
+    "edge-38": {
+      "colour": {
+        "color": "#383838"
+      },
+      "dashes": false,
+      "width": 1
+    },
+    "edge-39": {
+      "colour": {
+        "color": "#383838"
+      },
+      "dashes": false,
+      "width": 1
+    },
+    "edge-40": {
+      "colour": {
+        "color": "#383838"
+      },
+      "dashes": false,
+      "width": 1
+    },
+    "edge-41": {
+      "colour": {
+        "color": "#383838"
+      },
+      "dashes": false,
+      "width": 1
+    },
+    "edge-42": {
+      "colour": {
+        "color": "#383838"
+      },
+      "dashes": false,
+      "width": 1
+    },
+    "edge-43": {
+      "colour": {
+        "color": "#383838"
+      },
+      "dashes": false,
+      "width": 1
+    },
+    "edge-44": {
+      "colour": {
+        "color": "#383838"
+      },
+      "dashes": false,
+      "width": 1
+    },
+    "edge-45": {
+      "colour": {
+        "color": "#383838"
+      },
+      "dashes": false,
+      "width": 1
+    },
+    "edge-46": {
+      "colour": {
+        "color": "#383838"
+      },
+      "dashes": false,
+      "width": 1
+    }
+  },
+  "highlightedIds": {},
+  "isLayoutRequested": false,
+  "lasso": false,
+  "layout": {
+    "Case1": {
+      "x": 435.31225337016366,
+      "y": 470.6280391871987
+    },
+    "Case5": {
+      "x": 468.91806647296085,
+      "y": 363.3784063864777
+    },
+    "Case12": {
+      "x": 336.97118922775206,
+      "y": 383.01728243003987
+    },
+    "Case6": {
+      "x": 460.52117562839186,
+      "y": -57.125510465950775
+    },
+    "Case21": {
+      "x": 446.82287543850435,
+      "y": -188.04005572123268
+    },
+    "Case7": {
+      "x": -94.97089529703128,
+      "y": -515.5031430537672
+    },
+    "Case35": {
+      "x": -112.26566678525799,
+      "y": -368.2646254536063
+    },
+    "Case11": {
+      "x": 433.14078546947195,
+      "y": -318.5498639887293
+    },
+    "Case22": {
+      "x": 194.18728462615852,
+      "y": 327.1786313918886
+    },
+    "Case13": {
+      "x": 91.55825445075332,
+      "y": -109.11320972940113
+    },
+    "Case25": {
+      "x": -69.94713548506384,
+      "y": 13.351195610608817
+    },
+    "Case29": {
+      "x": -83.5620610938013,
+      "y": -138.69571621116208
+    },
+    "Case14": {
+      "x": 7.39993088323881,
+      "y": -219.10175330897542
+    },
+    "Case19": {
+      "x": 52.47363878993835,
+      "y": -177.39232643139945
+    },
+    "Case15": {
+      "x": -197.54079614474335,
+      "y": -311.14913402878096
+    },
+    "Case16": {
+      "x": 100.04970824916963,
+      "y": -30.809113067782288
+    },
+    "Case24": {
+      "x": 64.98370286994054,
+      "y": 108.81803504435537
+    },
+    "Case17": {
+      "x": -235.31431186027314,
+      "y": -98.63312294489374
+    },
+    "Case18": {
+      "x": 32.67818713906378,
+      "y": 254.40484265497292
+    },
+    "Case27": {
+      "x": -123.7657200265722,
+      "y": 163.3934801435913
+    },
+    "Case30": {
+      "x": 39.003205055137705,
+      "y": 416.55846060207995
+    },
+    "Case37": {
+      "x": -19.378862041368798,
+      "y": 210.56506792359875
+    },
+    "Case20": {
+      "x": -206.38222470826196,
+      "y": -159.35494704949542
+    },
+    "Case26": {
+      "x": 60.50960738283808,
+      "y": 32.38079282478921
+    },
+    "Case28": {
+      "x": -239.8328508273178,
+      "y": -35.48564980789404
+    },
+    "Case33": {
+      "x": -259.9232220686875,
+      "y": 97.76260073966627
+    },
+    "Case40": {
+      "x": -249.3255133596149,
+      "y": 158.74425342723057
+    },
+    "Case32": {
+      "x": -194.90438582520397,
+      "y": 328.8096699618748
+    },
+    "Case47": {
+      "x": 702.5802712940706,
+      "y": -153.8510910533189
+    },
+    "Case48": {
+      "x": 701.9195315375811,
+      "y": -27.504342086215804
+    }
+  },
+  "nodeSize": 14,
+  "nodeStyles": {
+    "Case1": {
+      "size": 14,
+      "fontSize": 16,
+      "colour": "#8dd3c7",
+      "shape": "circle",
+      "label": "Case1",
+      "title": "Case1 (Case1)"
+    },
+    "Case5": {
+      "size": 14,
+      "fontSize": 16,
+      "colour": "#8dd3c7",
+      "shape": "circle",
+      "label": "Case5",
+      "title": "Case5 (Case5)"
+    },
+    "Case12": {
+      "size": 14,
+      "fontSize": 16,
+      "colour": "#8dd3c7",
+      "shape": "circle",
+      "label": "Case12",
+      "title": "Case12 (Case12)"
+    },
+    "Case6": {
+      "size": 14,
+      "fontSize": 16,
+      "colour": "#8dd3c7",
+      "shape": "circle",
+      "label": "Case6",
+      "title": "Case6 (Case6)"
+    },
+    "Case21": {
+      "size": 14,
+      "fontSize": 16,
+      "colour": "#8dd3c7",
+      "shape": "circle",
+      "label": "Case21",
+      "title": "Case21 (Case21)"
+    },
+    "Case7": {
+      "size": 14,
+      "fontSize": 16,
+      "colour": "#ffffb3",
+      "shape": "circle",
+      "label": "Case7",
+      "title": "Case7 (Case7)"
+    },
+    "Case35": {
+      "size": 14,
+      "fontSize": 16,
+      "colour": "#ffffb3",
+      "shape": "circle",
+      "label": "Case35",
+      "title": "Case35 (Case35)"
+    },
+    "Case11": {
+      "size": 14,
+      "fontSize": 16,
+      "colour": "#8dd3c7",
+      "shape": "circle",
+      "label": "Case11",
+      "title": "Case11 (Case11)"
+    },
+    "Case22": {
+      "size": 14,
+      "fontSize": 16,
+      "colour": "#8dd3c7",
+      "shape": "circle",
+      "label": "Case22",
+      "title": "Case22 (Case22)"
+    },
+    "Case13": {
+      "size": 14,
+      "fontSize": 16,
+      "colour": "#8dd3c7",
+      "shape": "circle",
+      "label": "Case13",
+      "title": "Case13 (Case13)"
+    },
+    "Case25": {
+      "size": 14,
+      "fontSize": 16,
+      "colour": "#8dd3c7",
+      "shape": "circle",
+      "label": "Case25",
+      "title": "Case25 (Case25)"
+    },
+    "Case29": {
+      "size": 14,
+      "fontSize": 16,
+      "colour": "#ffffb3",
+      "shape": "circle",
+      "label": "Case29",
+      "title": "Case29 (Case29)"
+    },
+    "Case14": {
+      "size": 14,
+      "fontSize": 16,
+      "colour": "#8dd3c7",
+      "shape": "circle",
+      "label": "Case14",
+      "title": "Case14 (Case14)"
+    },
+    "Case19": {
+      "size": 14,
+      "fontSize": 16,
+      "colour": "#8dd3c7",
+      "shape": "circle",
+      "label": "Case19",
+      "title": "Case19 (Case19)"
+    },
+    "Case15": {
+      "size": 14,
+      "fontSize": 16,
+      "colour": "#ffffb3",
+      "shape": "circle",
+      "label": "Case15",
+      "title": "Case15 (Case15)"
+    },
+    "Case16": {
+      "size": 14,
+      "fontSize": 16,
+      "colour": "#8dd3c7",
+      "shape": "circle",
+      "label": "Case16",
+      "title": "Case16 (Case16)"
+    },
+    "Case24": {
+      "size": 14,
+      "fontSize": 16,
+      "colour": "#8dd3c7",
+      "shape": "circle",
+      "label": "Case24",
+      "title": "Case24 (Case24)"
+    },
+    "Case17": {
+      "size": 14,
+      "fontSize": 16,
+      "colour": "#8dd3c7",
+      "shape": "circle",
+      "label": "Case17",
+      "title": "Case17 (Case17)"
+    },
+    "Case18": {
+      "size": 14,
+      "fontSize": 16,
+      "colour": "#8dd3c7",
+      "shape": "circle",
+      "label": "Case18",
+      "title": "Case18 (Case18)"
+    },
+    "Case27": {
+      "size": 14,
+      "fontSize": 16,
+      "colour": "#ffffb3",
+      "shape": "circle",
+      "label": "Case27",
+      "title": "Case27 (Case27)"
+    },
+    "Case30": {
+      "size": 14,
+      "fontSize": 16,
+      "colour": "#8dd3c7",
+      "shape": "circle",
+      "label": "Case30",
+      "title": "Case30 (Case30)"
+    },
+    "Case37": {
+      "size": 14,
+      "fontSize": 16,
+      "colour": "#8dd3c7",
+      "shape": "circle",
+      "label": "Case37",
+      "title": "Case37 (Case37)"
+    },
+    "Case20": {
+      "size": 14,
+      "fontSize": 16,
+      "colour": "#ffffb3",
+      "shape": "circle",
+      "label": "Case20",
+      "title": "Case20 (Case20)"
+    },
+    "Case26": {
+      "size": 14,
+      "fontSize": 16,
+      "colour": "#8dd3c7",
+      "shape": "circle",
+      "label": "Case26",
+      "title": "Case26 (Case26)"
+    },
+    "Case28": {
+      "size": 14,
+      "fontSize": 16,
+      "colour": "#8dd3c7",
+      "shape": "circle",
+      "label": "Case28",
+      "title": "Case28 (Case28)"
+    },
+    "Case33": {
+      "size": 14,
+      "fontSize": 16,
+      "colour": "#8dd3c7",
+      "shape": "circle",
+      "label": "Case33",
+      "title": "Case33 (Case33)"
+    },
+    "Case40": {
+      "size": 14,
+      "fontSize": 16,
+      "colour": "#8dd3c7",
+      "shape": "circle",
+      "label": "Case40",
+      "title": "Case40 (Case40)"
+    },
+    "Case32": {
+      "size": 14,
+      "fontSize": 16,
+      "colour": "#8dd3c7",
+      "shape": "circle",
+      "label": "Case32",
+      "title": "Case32 (Case32)"
+    },
+    "Case47": {
+      "size": 14,
+      "fontSize": 16,
+      "colour": "#8dd3c7",
+      "shape": "circle",
+      "label": "Case47",
+      "title": "Case47 (Case47)"
+    },
+    "Case48": {
+      "size": 14,
+      "fontSize": 16,
+      "colour": "#8dd3c7",
+      "shape": "circle",
+      "label": "Case48",
+      "title": "Case48 (Case48)"
+    }
+  },
+  "path": null,
+  "showLabels": true
+}

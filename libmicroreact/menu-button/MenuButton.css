@@ -1,0 +1,93 @@
+.libmr-MenuButton {
+  align-items: center;
+  background: #ececec;
+  border-radius: 16px;
+  box-sizing: border-box;
+  box-shadow: 0px 1px 1.5px 0px rgba(0, 0, 0, .08), 0px 1px 1px 0px rgba(0, 0, 0, .16);
+  color: rgba(0,0,0,.72);
+  cursor: pointer;
+  display: inline-flex;
+  font-family:  inherit;
+  font-size: 12px;
+  height: 32px;
+  line-height: 14px;
+  outline: none;
+  padding-left: 12px;
+  padding-right: 6px;
+  transition-property: background, color;
+  transition: .28s cubic-bezier(.4,0,.2,1);
+  user-select: none;
+  white-space: nowrap;
+}
+
+.libmr-MenuButton:hover,
+.libmr-MenuButton:focus,
+.libmr-MenuButton:active {
+  background: #D0D0D0;
+  color: #333;
+}
+
+.libmr-MenuButton > i {
+  color: rgba(0, 0, 0, 0.54);
+}
+
+.libmr-MenuButton:hover > i:last-child,
+.libmr-MenuButton:focus > i:last-child,
+.libmr-MenuButton:active > i:last-child,
+.libmr-MenuButton.open > i:last-child {
+  color: inherit;
+}
+
+.libmr-MenuButton > i:first-child {
+  font-size: 20px;
+  margin-left: -4px;
+  margin-right: 4px;
+}
+
+.libmr-MenuButton.open {
+  background-color: #9E9E9E;
+  color: #fff;
+}
+
+.libmr-MenuButton.open > i {
+  color: inherit;
+}
+
+.libmr-MenuButton.active {
+  color: #fff;
+  background-color: var(--libmr-primary-colour);
+}
+
+.libmr-MenuButton.active:hover,
+.libmr-MenuButton.active:focus {
+  background-color: var(--libmr-primary-colour-shade);
+}
+
+.libmr-MenuButton.active > i {
+  color: inherit;
+}
+
+.libmr-MenuButton.active > i:last-child {
+  color: rgba(255, 255, 255, 0.54);
+}
+
+.libmr-MenuButton-clear {
+  align-items: center;
+  background: none;
+  cursor: pointer;
+  display: inline-flex;
+  margin: 0;
+  margin-left: 4px;
+  padding: 0;
+  outline: none;
+}
+
+.libmr-MenuButton-clear > i {
+  color: rgba(0, 0, 0, 0.54);
+  font-size: 19.2px;
+}
+
+.libmr-MenuButton-clear > i:hover,
+.libmr-MenuButton-clear > i:focus {
+  color: rgba(255, 255, 255, 0.54);
+}

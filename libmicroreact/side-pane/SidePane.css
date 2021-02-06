@@ -1,0 +1,118 @@
+.libmr-SidePane {
+  position: relative;
+  overflow-x: hidden;
+  height: 100%;
+  width: 100%;
+}
+
+
+/* Main content */
+
+.libmr-SidePane-main {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+.libmr-SidePane.active.open .libmr-SidePane-main {
+  width: calc(100% - 240px);
+}
+
+
+/* Aside */
+
+.libmr-SidePane-aside {
+  background-color: #fff;
+  bottom: 0px;
+  border-left: 1px solid rgba(0, 0, 0, 0.24);
+  left: 100%;
+  position: absolute;
+  top: 0px;
+  width: 240px;
+}
+
+/* cascade off aside for specificity */
+.libmr-SidePane-aside .libmr-SidePane-close {
+  color: rgba(0, 0, 0, 0.54);
+  position: absolute;
+  right: 4px;
+  top: 4px;
+  z-index: 1;
+}
+
+/* Contents */
+
+.libmr-SidePane-contents {
+  box-sizing: border-box;
+  background-color: var(--libmr-primary-colour-alpha);
+  display: flex;
+  height: 100%;
+  overflow: hidden;
+  flex-direction: column;
+}
+
+.libmr-SidePane-contents-overflow {
+  box-sizing: border-box;
+  flex-grow: 1;
+  overflow-x: hidden;
+  overflow-y: auto;
+  padding: 16px 20px;
+}
+
+.libmr-SidePane-title + .libmr-SidePane-contents-overflow {
+  padding-top: 0;
+}
+
+.libmr-SidePane-title {
+  color: var(--libmr-primary-colour-shade);
+  font-family: inherit;
+  font-size: 20px;
+  font-weight: 500;
+  line-height: 16px;
+  margin: 16px 20px;
+}
+
+
+/* Nav */
+
+.libmr-SidePane-nav {
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  left: calc(100% - 28px);
+  position: absolute;
+  top: 0;
+  width: 0;
+}
+
+.libmr-SidePane-nav > * + * {
+  margin-top: 4px;
+}
+
+
+/* Animation */
+
+.libmr-SidePane-enter,
+.libmr-SidePane-leave,
+.libmr-SidePane-aside,
+.libmr-SidePane-nav {
+  transition: .28s cubic-bezier(.4,0,.2,1);
+  transition-property: transform;
+  will-change: transform;
+}
+
+.libmr-SidePane-enter.libmr-SidePane-enter-active,
+.libmr-SidePane-leave,
+.libmr-SidePane.open .libmr-SidePane-aside {
+  transform: translateX(-240px);
+}
+
+.libmr-SidePane-enter,
+.libmr-SidePane.open .libmr-SidePane-leave-active {
+  transform: none;
+}
+
+.libmr-SidePane.active .libmr-SidePane-nav {
+  transform: translateX(-228px); /* moves slightly less so buttons are centred */
+}

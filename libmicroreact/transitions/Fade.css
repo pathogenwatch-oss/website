@@ -1,0 +1,22 @@
+
+.libmr-Fade-enter,
+.libmr-Fade-leave {
+  transition: .28s cubic-bezier(.4,0,.2,1);
+  transition-property: opacity;
+}
+
+.libmr-Fade-enter {
+  opacity: 0;
+}
+
+.libmr-Fade-enter-active {
+  opacity: 1;
+}
+
+.libmr-Fade-leave {
+  opacity: 1;
+}
+
+.libmr-Fade-leave-active {
+  opacity: 0;
+}

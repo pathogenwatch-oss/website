@@ -12,7 +12,9 @@ const resolve = {
   alias: {
     '^': srcFolder,
     '~': srcFolder,
+    '@cgps/libmicroreact': path.join(__dirname, 'libmicroreact'),
     react: path.join(srcFolder, 'react-shim.js'),
+    "prop-types": path.resolve(__dirname, 'node_modules/prop-types'),
   },
   modules: [ 'node_modules', path.join(__dirname, 'node_modules') ],
   unsafeCache: true,
@@ -49,8 +51,9 @@ const commonRules = [
     test: /\.js$/,
     loader: `babel-loader?${JSON.stringify(babelSettings)}`,
     include: [
-      /(cgps-commons|libmicroreact)/,
+      /(cgps-commons)/,
       path.join(__dirname, 'front-end'),
+      path.join(__dirname, 'libmicroreact'),
       path.join(__dirname, 'node_modules', 'react-split-pane'),
       path.join(__dirname, 'node_modules', 'promise-file-reader'),
       path.join(__dirname, 'node_modules', 'cgps-commons'),
@@ -71,7 +74,9 @@ const commonRules = [
 
 const commonPlugins = [
   new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
-  new DuplicatePackageCheckerPlugin(),
+  new DuplicatePackageCheckerPlugin({
+    verbose: true,
+  }),
 ];
 
 const devConfig = {

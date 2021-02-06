@@ -1,0 +1,32 @@
+.libmr-Menu-element.libmr-DropdownMenu .libmr-Menu-content {
+  padding: 8px 0;
+}
+
+.libmr-Menu-element.libmr-DropdownMenu .libmr-Menu-content > * {
+  background: none;
+  box-sizing: border-box;
+  color: rgb(34, 34 ,34);
+  cursor: pointer;
+  display: block;
+  font-family: Roboto, Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 40px;
+  padding: 0 24px 0 16px;
+  text-align: left;
+  text-decoration: none;
+  width: 100%;
+}
+
+.libmr-Menu-element.libmr-DropdownMenu .libmr-Menu-content > *:hover,
+.libmr-Menu-element.libmr-DropdownMenu .libmr-Menu-content > *:focus {
+  background-color: #eee;
+}
+
+.libmr-Menu-element.libmr-DropdownMenu .libmr-Menu-content > hr {
+  border-top: 1px solid rgba(0, 0, 0, 0.12);
+  cursor: auto;
+  margin: 8px 0;
+  padding: 0;
+}
+

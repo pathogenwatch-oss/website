@@ -1,0 +1,18 @@
+@import "~@material/checkbox/dist/mdc.checkbox.css";
+@import "~@material/form-field/dist/mdc.form-field.css";
+
+.libmr-Checkbox {
+  --mdc-theme-secondary: var(--libmr-primary-colour);
+  font-size: 14px;
+  letter-spacing: 0;
+}
+
+.libmr-Checkbox label {
+  cursor: pointer;
+  font-size: inherit;
+}
+
+.libmr-Checkbox .mdc-checkbox::before,
+.libmr-Checkbox .mdc-checkbox::after {
+  background-color: var(--libmr-primary-colour-alpha);
+}

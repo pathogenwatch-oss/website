@@ -1,0 +1,42 @@
+.libmr-ZoomControls {
+  user-select: none;
+  box-shadow: 0px 1px 4px -1px rgba(0, 0, 0, 0.3);
+  border-radius: 2px;
+  cursor: pointer;
+  background-color: rgb(255, 255, 255);
+  width: 28px;
+  height: auto;
+  transition-property: opacity;
+  transition: 0.28s cubic-bezier(.4,0,.2,1);
+}
+
+.libmr-ZoomControls-button {
+  position: relative;
+  width: 28px;
+  height: 27px;
+  left: 0px;
+  top: 0px;
+  overflow: hidden;
+}
+
+.libmr-ZoomControls-divider {
+  position: relative;
+  overflow: hidden;
+  width: 67%;
+  height: 1px;
+  left: 16%;
+  background-color: rgb(230, 230, 230);
+  top: 0px;
+}
+
+.libmr-ZoomControls-icon {
+  overflow: hidden;
+  position: absolute;
+  left: 2px;
+  top: 2px;
+  color: #666666;
+}
+
+.libmr-ZoomControls-button:hover .libmr-ZoomControls-icon {
+  color: var(--libmr-primary-colour);
+}

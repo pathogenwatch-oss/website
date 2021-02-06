@@ -1,0 +1,50 @@
+.libmr-Panel {
+  position: relative;
+}
+
+/* cascaded from parent for specificity */
+.libmr-Panel .libmr-Panel-controls-toggler {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+}
+
+.libmr-Panel-primary-controls {
+  display: flex;
+  position: absolute;
+  top: 8px;
+  left: 8px;
+}
+
+.libmr-Panel-primary-controls > * + *,
+.libmr-Panel-primary-controls > .libmr-Panel-control-group > * {
+  margin-left: 4px;
+}
+
+.libmr-Panel-secondary-controls {
+  display: flex;
+  flex-direction: row-reverse;
+  position: absolute;
+  right: 48px;
+  top: 8px;
+}
+
+.libmr-Panel-control-group {
+  display: inherit;
+  flex-direction: inherit;
+}
+
+.libmr-Panel-secondary-controls > * + *,
+.libmr-Panel-secondary-controls > .libmr-Panel-control-group > * {
+  margin-right: 4px;
+}
+
+.libmr-Panel .libmr-ZoomControls {
+  position: absolute;
+  bottom: 8px;
+  right: 8px;
+}
+
+.libmr-Panel .libmr-ControlsMenu-button {
+  box-shadow: 0px 1px 1.5px 0px rgba(0, 0, 0, .08), 0px 1px 1px 0px rgba(0, 0, 0, .16);
+}

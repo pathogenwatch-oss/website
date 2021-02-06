@@ -1,0 +1,17 @@
+.libmr-Timeline {
+  box-sizing: border-box;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.libmr-Timeline-plot {
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.mr-timeline-unit-menu.libmr-Menu-element,
+.mr-timeline-speed-menu.libmr-Menu-element {
+  max-width: 240px;
+}

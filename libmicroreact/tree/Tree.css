@@ -1,0 +1,7 @@
+.libmr-Tree {
+  /* position: relative; */
+}
+
+body ul.phylocanvas-context-menu {
+  z-index: 99;
+}

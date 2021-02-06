@@ -1,0 +1,67 @@
+.libmr-welcome {
+  box-sizing: border-box;
+  color: #673c90;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 48px;
+}
+
+.libmr-welcome h1 {
+  color: #3c7383;
+  font-family: 'Saira Semi Condensed', Roboto, Arial, Helvetica, sans-serif;
+  font-size: 48px;
+  font-weight: 300;
+  line-height: 48px;
+  margin: 0 0 48px;
+}
+
+.libmr-welcome strong {
+  font-weight: 500;
+}
+
+.libmr-welcome img {
+  display: block;
+}
+
+.libmr-welcome p {
+  color: inherit;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 24px;
+}
+
+.libmr-welcome-logo {
+  box-sizing: border-box;
+  height: 48px;
+  margin-bottom: 24px;
+  margin-right: auto;
+  padding-bottom: 3px;
+  padding-top: 3px;
+}
+
+.libmr-welcome-ownership {
+  height: 96px;
+  margin: 0;
+  margin-right: auto;
+  text-align: center;
+}
+
+.libmr-welcome-ownership img {
+  box-sizing: border-box;
+  height: 72px;
+  object-fit: fill;
+  width: 312px;
+}
+
+/* debug */
+.baseline-grid {
+  background-image: linear-gradient(
+    to bottom,
+    rgba(0, 170, 255, 0.3) 1px,
+    transparent 1px
+  );
+  background-position: left top;
+  background-repeat: repeat;
+  background-size: 100% 24px;
+}
