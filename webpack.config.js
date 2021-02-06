@@ -22,7 +22,7 @@ const resolve = {
 };
 
 const babelSettings = {
-  extends: path.join(__dirname, '/.babelrc'),
+  extends: path.join(__dirname, 'babel.config.js'),
   cacheDirectory: true,
 };
 
