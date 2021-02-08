@@ -133,7 +133,7 @@ export const getSpeciesBreakdown = createSelector(
       if (section.analyses) {
         const analysesList = Object.keys(section.analyses).map(key => ({
           key,
-          label: analysisLabels[key],
+          label: analysisLabels[key] || key,
           ...section.analyses[key],
         }));
 
