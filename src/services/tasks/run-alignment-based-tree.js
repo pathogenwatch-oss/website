@@ -45,7 +45,7 @@ function createAlignmentDocumentsStream(genomes, versions, organismId) {
     organismId,
   }, {
     fileId: 1,
-    "results.sam": 1,
+    results: 1,
   }).sort({ fileId: 1 }).lean().cursor();
 
   const reformatCores = es.through(function (core) {
@@ -64,16 +64,16 @@ function createAlignmentDocumentsStream(genomes, versions, organismId) {
 function attachInputStream(container, versions, genomes, organismId) {
   const docsStream = createAlignmentDocumentsStream(genomes, versions, organismId);
 
-  const treeInput = require("fs").createWriteStream("tree-input-3.bson");
-  treeInput.write(
-    bson.serialize({ genomes }),
-    docsStream.pipe(treeInput),
-  );
-
-  // container.stdin.write(
+  // const treeInput = require("fs").createWriteStream("tree-input.bson");
+  // treeInput.write(
   //   bson.serialize({ genomes }),
-  //   docsStream.pipe(container.stdin),
+  //   docsStream.pipe(treeInput),
   // );
+
+  container.stdin.write(
+    bson.serialize({ genomes }),
+    docsStream.pipe(container.stdin),
+  );
 }
 
 async function runTask(spec, metadata, timeout) {
