@@ -90,7 +90,7 @@ const getGenomeDatatypes = createSelector(
         hasAMR = true;
       }
 
-      if (hasMetadata && hasKleborateAMR && hasKleborateAMRGenotypes && hasVista && (isClusterView || (hasAMR))) {
+      if (hasMetadata && hasKleborateAMR && hasKleborateAMRGenotypes && hasVista && hasSarsCov2Variants && (isClusterView || (hasAMR))) {
         break;
       }
     }

@@ -6,7 +6,7 @@ import DropdownMenu from '@cgps/libmicroreact/dropdown-menu';
 import Multi from './Multi.react';
 
 import { hasTyping } from './selectors';
-import { hasMetadata, hasAMR, hasKleborateAMR, hasVista } from '../genomes/selectors';
+import { hasMetadata, hasAMR, hasKleborateAMR, hasSarsCov2Variants, hasVista } from '../genomes/selectors';
 import { hasTimeline } from '../timeline/selectors';
 
 import { setTable } from './actions';
@@ -24,6 +24,7 @@ const icons = {
   [tableKeys.genes]: 'local_pharmacy',
   [tableKeys.kleborateAMR]: 'local_pharmacy',
   [tableKeys.kleborateAMRGenotypes]: 'local_pharmacy',
+  [tableKeys.sarsCov2Variants]: 'local_pharmacy',
   [tableKeys.vista]: 'local_pharmacy',
   [tableKeys.timeline]: 'access_time',
 };
