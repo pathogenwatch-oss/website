@@ -35,6 +35,7 @@ const TableMenu = connect(
       amr: hasAMR(state) && !hasKleborate,
       kleborate: hasKleborate,
       kleborateAMRGenotypes: hasKleborate,
+      sarsCov2Variants: hasSarsCov2Variants(state),
       vista: hasVista(state),
       metadata: hasMetadata(state),
       timeline: hasTimeline(state),
@@ -47,7 +48,7 @@ const TableMenu = connect(
     _showTimeline: visible => dispatch(showTimeline(visible)),
   })
 )(
-  ({ visibleView, showTable, _showTimeline, metadata, timeline, typing, kleborate, vista, amr }) => (
+  ({ visibleView, showTable, _showTimeline, metadata, timeline, typing, kleborate, vista, amr , sarsCov2Variants}) => (
     <DropdownMenu
       direction="up"
       button={
@@ -75,6 +76,7 @@ const TableMenu = connect(
           <button onClick={() => showTable(tableKeys.kleborateAMRGenotypes)}>AMR Genotypes</button>
         </>
       }
+      {sarsCov2Variants && <button onClick={() => showTable(tableKeys.sarsCov2Variants)}>Variants</button>}
       {vista && <hr />}
       {vista && <button onClick={() => showTable(tableKeys.vista)}>Virulence</button>}
       {timeline &&
