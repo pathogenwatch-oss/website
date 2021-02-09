@@ -79,6 +79,12 @@ const ngStarGroup = {
   columns: [ '__ngstar', '__ngstar_profile' ],
 };
 
+const pangolinGroup = {
+  group: true,
+  columnKey: 'pangolin',
+  columns: [ '__pangolin' ],
+};
+
 const genotyphiGroup = {
   group: true,
   columnKey: 'genotyphi',
@@ -101,12 +107,6 @@ const vistaGroup = {
   group: true,
   columnKey: 'vista',
   columns: [ '__vista_biotype', '__vista_serogroup' ],
-};
-
-const pangolinGroup = {
-  group: true,
-  columnKey: 'pangolin',
-  columns: [ '__pangolin_lineage' ],
 };
 
 function fillColumnDefs({ columns, ...group }) {

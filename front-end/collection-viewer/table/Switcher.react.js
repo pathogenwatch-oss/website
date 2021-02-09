@@ -6,7 +6,7 @@ import DropdownMenu from '@cgps/libmicroreact/dropdown-menu';
 import Multi from './Multi.react';
 
 import { hasTyping } from './selectors';
-import { hasMetadata, hasAMR, hasKleborateAMR, hasSarsCov2Variants, hasVista } from '../genomes/selectors';
+import { hasMetadata, hasAMR, hasKleborateAMR, hasSarscov2Variants, hasVista } from '../genomes/selectors';
 import { hasTimeline } from '../timeline/selectors';
 
 import { setTable } from './actions';
@@ -24,7 +24,7 @@ const icons = {
   [tableKeys.genes]: 'local_pharmacy',
   [tableKeys.kleborateAMR]: 'local_pharmacy',
   [tableKeys.kleborateAMRGenotypes]: 'local_pharmacy',
-  [tableKeys.sarsCov2Variants]: 'local_pharmacy',
+  [tableKeys.sarscov2Variants]: 'local_pharmacy',
   [tableKeys.vista]: 'local_pharmacy',
   [tableKeys.timeline]: 'access_time',
 };
@@ -36,7 +36,7 @@ const TableMenu = connect(
       amr: hasAMR(state) && !hasKleborate,
       kleborate: hasKleborate,
       kleborateAMRGenotypes: hasKleborate,
-      sarsCov2Variants: hasSarsCov2Variants(state),
+      sarscov2Variants: hasSarscov2Variants(state),
       vista: hasVista(state),
       metadata: hasMetadata(state),
       timeline: hasTimeline(state),
@@ -49,7 +49,7 @@ const TableMenu = connect(
     _showTimeline: visible => dispatch(showTimeline(visible)),
   })
 )(
-  ({ visibleView, showTable, _showTimeline, metadata, timeline, typing, kleborate, vista, amr , sarsCov2Variants}) => (
+  ({ visibleView, showTable, _showTimeline, metadata, timeline, typing, kleborate, vista, amr, sarscov2Variants }) => (
     <DropdownMenu
       direction="up"
       button={
@@ -77,7 +77,7 @@ const TableMenu = connect(
           <button onClick={() => showTable(tableKeys.kleborateAMRGenotypes)}>AMR Genotypes</button>
         </>
       }
-      {sarsCov2Variants && <button onClick={() => showTable(tableKeys.sarsCov2Variants)}>Variants</button>}
+      {sarscov2Variants && <button onClick={() => showTable(tableKeys.sarscov2Variants)}>Notable Variants</button>}
       {vista && <hr />}
       {vista && <button onClick={() => showTable(tableKeys.vista)}>Virulence</button>}
       {timeline &&

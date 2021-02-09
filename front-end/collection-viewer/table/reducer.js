@@ -1,7 +1,7 @@
 import { combineReducers } from 'redux';
 
 import { metadata, typing, stats } from '../data-tables';
-import { antibiotics, snps, genes, kleborateAMR, kleborateAMRGenotypes, sarsCov2Variants, vista } from '../amr-tables';
+import { antibiotics, snps, genes, kleborateAMR, kleborateAMRGenotypes, sarscov2Variants, vista } from '../amr-tables';
 import report from '../../genome-report/reducer';
 
 import { SET_TABLE, AMR_TOGGLE_MULTI } from './actions';
@@ -63,7 +63,7 @@ export default combineReducers({
     genes,
     kleborateAMR,
     kleborateAMRGenotypes,
-    sarsCov2Variants,
+    sarscov2Variants,
     vista,
     report,
   }),

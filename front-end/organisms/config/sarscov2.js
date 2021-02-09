@@ -23,5 +23,7 @@ export default {
     noPopulation: true,
     noMLST: true,
     noAMR: true,
+    pangolin: true,
+    'sarscov2-variants': true,
   },
 };

@@ -818,7 +818,7 @@
       },
       {
         "task": "pangolin",
-        "version": "v2.1.7_2021-01-20_R2",
+        "version": "v2.2.1",
         "flags": {
           "COV2_USER": true
         }
