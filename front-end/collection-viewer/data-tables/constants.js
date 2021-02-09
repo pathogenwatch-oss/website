@@ -80,6 +80,15 @@ export const systemDataColumns = {
       return <Profile alleles={analysis.mlst.alleles} />;
     },
   },
+  __pangolin: {
+    columnKey: '__pangolin',
+    label: 'LINEAGE',
+    displayName: 'PANGOLIN LINEAGE',
+    valueGetter({ analysis }) {
+      if (!analysis.pangolin) return null;
+      return analysis.pangolin.lineage;
+    },
+  },
   __mlst2: {
     columnKey: '__mlst2',
     label: 'ST',
