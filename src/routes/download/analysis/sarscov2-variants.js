@@ -6,7 +6,7 @@ const transformer = function (doc) {
   const record = {
     'Genome ID': doc._id.toString(),
     'Genome Name': doc.name,
-    Version: "doc.analysis.sarscov2-variants.__v",
+    Version: doc.analysis['sarscov2-variants'].__v,
   };
 
   doc.analysis["sarscov2-variants"].variants.forEach((variant) => {
