@@ -26,7 +26,10 @@ function buildColumns(genomes) {
   Object.values(genomes)[0].analysis['sarscov2-variants'].variants
     .sort((a, b) => {
       if (a.type === b.type) {
-        return a.name - b.name;
+        if (a.name < b.name) {
+          return -1
+        }
+        return 1;
       } else if (a.type === 'Deletion' || a.type === 'SNP') {
         if (a.type === 'SNP') {
           return 1;
