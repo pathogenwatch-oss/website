@@ -381,6 +381,38 @@ const getOlocusSummary = createSelector(
   )
 );
 
+const getPangolinSummary = createSelector(
+  getFilterSummaries,
+  state => getFilter(state).pangolin,
+  getFilterFn('pangolin'),
+  ({ pangolin = {} }, filterValue, filterFn) => sortBy(
+    Object.keys(pangolin)
+      .filter(filterFn)
+      .map(value => ({
+        value,
+        active: filterValue === value,
+        count: pangolin[value].count,
+      })),
+    'value'
+  )
+);
+
+const getSarscov2VariantsSummary = createSelector(
+  getFilterSummaries,
+  state => getFilter(state)["sarscov2-variants"],
+  getFilterFn('sarscov2-variants'),
+  ({ "sarscov2-variants": sarscov2Variants = {} }, filterValue, filterFn) => sortBy(
+    Object.keys(sarscov2Variants)
+      .filter(filterFn)
+      .map(value => ({
+        value,
+        active: filterValue === value,
+        count: sarscov2Variants[value].count,
+      })),
+    'value'
+  )
+);
+
 const getDateSummary = createSelector(
   getFilterSummaries,
   state => getFilter(state).minDate,
@@ -452,8 +484,10 @@ export const getFilterSummary = createSelector(
   getNgstarSummary,
   getOlocusSummary,
   getOrganismSummary,
+  getPangolinSummary,
   getReferenceSummary,
   getResistanceSummary,
+  getSarscov2VariantsSummary,
   getSerotypeSummary,
   getSpeciesIdSummary,
   getStrainSummary,
@@ -474,8 +508,10 @@ export const getFilterSummary = createSelector(
       ngstar,
       olocus,
       organismId,
+      pangolin,
       reference,
       resistance,
+      sarscov2Variants,
       serotype,
       speciesId,
       strain,
@@ -502,8 +538,10 @@ export const getFilterSummary = createSelector(
       ngstar,
       olocus,
       organismId,
+      pangolin,
       reference,
       resistance,
+      "sarscov2-variants": sarscov2Variants,
       serotype,
       speciesId,
       strain,

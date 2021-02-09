@@ -40,4 +40,5 @@ export const generateAMRSNPs = convertTableToCSV(tableKeys.snps);
 export const generateAMRGenes = convertTableToCSV(tableKeys.genes);
 export const generateKleborateAMRProfiles = convertTableToCSV(tableKeys.kleborateAMR);
 export const generateKleborateAMRGenotypes = convertTableToCSV(tableKeys.kleborateAMRGenotypes);
+export const generateSarscov2Variants = convertTableToCSV(tableKeys.sarscov2Variants);
 export const generateVistaFile = convertTableToCSV(tableKeys.vista);

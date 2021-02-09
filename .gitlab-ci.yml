@@ -1,12 +1,10 @@
-image: node:10.12.0-alpine
+image: docker:19.03.1
 
 build:
   only:
     - tags
-  # cache:
-  #   untracked: true
-  #   paths:
-  #     - node_modules/
+  services:
+    - docker:19.03.1-dind
   script:
     - apk add --update docker
     - docker login

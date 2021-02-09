@@ -24,6 +24,7 @@ export const amrTables = new Set([
   tableKeys.genes,
   tableKeys.kleborateAMR,
   tableKeys.kleborateAMRGenotypes,
+  tableKeys.sarscov2Variants,
   tableKeys.vista,
 ]);
 

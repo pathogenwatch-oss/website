@@ -87,6 +87,9 @@ schema.index({ 'analysis.genotyphi.genotype': 1 });
 schema.index({ 'analysis.core.fp.reference': 1 });
 schema.index({ 'analysis.kleborate.typing.K_locus': 1 });
 schema.index({ 'analysis.kleborate.typing.O_locus': 1 });
+schema.index({ 'analysis.pangolin.lineage': 1 });
+schema.index({ 'analysis.sarscov2-variants.variants.state': 1 });
+schema.index({ 'analysis.sarscov2-variants.variants.name': 1 });
 
 schema.statics.uploadTypes = uploadTypes;
 
@@ -235,7 +238,9 @@ schema.statics.getFilterQuery = async function (props) {
     ngstar,
     olocus,
     organismId,
+    pangolin,
     resistance,
+    "sarscov2-variants": sarscov2Variants,
     searchText,
     serotype,
     sequenceType,
@@ -333,6 +338,16 @@ schema.statics.getFilterQuery = async function (props) {
     findQuery['analysis.kleborate.typing.O_locus'] = olocus;
   }
 
+  if (pangolin) {
+    findQuery['analysis.pangolin.lineage'] = pangolin;
+  }
+
+  if (sarscov2Variants) {
+    findQuery['analysis.sarscov2-variants.variants'] = {
+      $elemMatch: { name: sarscov2Variants, state: 'var' },
+    };
+  }
+
   if (strain) {
     findQuery['analysis.poppunk.strain'] = strain;
   }
@@ -413,6 +428,8 @@ schema.statics.getForCollection = function (query, user = {}) {
     'analysis.paarsnp.paar': 1,
     'analysis.paarsnp.snp': 1,
     'analysis.paarsnp.library': 1,
+    'analysis.pangolin': 1,
+    'analysis.sarscov2-variants': 1,
     'analysis.speciator.organismId': 1,
     'analysis.spn_pbp_amr': 1,
     'analysis.vista': 1,

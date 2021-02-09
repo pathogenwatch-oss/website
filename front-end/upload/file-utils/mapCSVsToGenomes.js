@@ -14,6 +14,7 @@ const ASSEMBLY_FILENAME_REGEX = new RegExp(
 );
 
 import config from '~/app/config';
+import processMultiFastaFile from './multi-fasta';
 const { maxGenomeFileSize = 20 } = config;
 const MAX_ASSEMBLY_FILE_SIZE = maxGenomeFileSize * 1048576;
 
@@ -29,7 +30,11 @@ function validateAssemblySize(file) {
   }
 }
 
-export default function (files, assemblerUsage) {
+function isMultiFastaFile(file) {
+  return file.name && /\.mfa$/i.test(file.name);
+}
+
+export default async function (files, assemblerUsage) {
   const csvFiles = [];
   const assemblies = [];
   const reads = [];
@@ -44,7 +49,14 @@ export default function (files, assemblerUsage) {
       } catch (e) {
         return Promise.reject(e);
       }
-      assemblies.push(file);
+      if (isMultiFastaFile(file)) {
+        const chunks = await processMultiFastaFile(file);
+        for (const chunk of chunks) {
+          assemblies.push(chunk);
+        }
+      } else {
+        assemblies.push(file);
+      }
       continue;
     } else if (readsElligible && READS_FILENAME_REGEX.test(file.name)) {
       reads.push(file);

@@ -29,27 +29,36 @@ module.exports = async function ({ genomeIds, organismId, user }) {
     throw new ServiceRequestError('Too many genome IDs provided');
   }
 
+  const completeGenomesQuery = {};
+  const erroredGenomesQuery = {};
+  for (const dependency of task.requires) {
+    completeGenomesQuery[`analysis.${dependency.task}`] = { $exists: true };
+    erroredGenomesQuery[`analysis.${dependency.task}`] = false;
+  }
+
   const [ complete, errors ] = await Promise.all([
     Genome.count({
       _id: { $in: genomeIds },
       'analysis.speciator.organismId': organismId,
-      'analysis.core': { $exists: true },
+      // 'analysis.core': { $exists: true },
+      ...completeGenomesQuery,
     }),
     Genome.count({
       _id: { $in: genomeIds },
       'analysis.speciator.organismId': organismId,
-      'analysis.core': false,
+      // 'analysis.core': false,
+      ...erroredGenomesQuery,
     }),
   ]);
 
   if (errors > 0) {
-    throw new ServiceRequestErrorJSON('Core results failed', {
+    throw new ServiceRequestErrorJSON(`${task.requires.map((x) => x.task)} results failed`, {
       status: 'ERROR',
     });
   }
 
   if (complete !== size) {
-    throw new ServiceRequestErrorJSON('Core results pending', {
+    throw new ServiceRequestErrorJSON(`${task.requires.map((x) => x.task)} results pending`, {
       status: 'NOT_READY',
       pending: size - complete,
     });

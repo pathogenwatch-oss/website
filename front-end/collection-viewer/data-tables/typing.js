@@ -79,6 +79,12 @@ const ngStarGroup = {
   columns: [ '__ngstar', '__ngstar_profile' ],
 };
 
+const pangolinGroup = {
+  group: true,
+  columnKey: 'pangolin',
+  columns: [ '__pangolin' ],
+};
+
 const genotyphiGroup = {
   group: true,
   columnKey: 'genotyphi',
@@ -123,13 +129,14 @@ function getTypingColumnGroups({ isClusterView }, uiOptions, hasAltMLST) {
     uiOptions.inctyper ? inctyperGroup : null,
     uiOptions.kleborate ? kleborateGroup : null,
     uiOptions.vista ? vistaGroup : null,
+    uiOptions.pangolin ? pangolinGroup : null,
   ]
     .filter(_ => _) // removes the nulls
     .map(fillColumnDefs);
 }
 
-export function hasTyping({ noPopulation, noMLST, ngMast, genotyphi, vista }) {
-  if (noPopulation && noMLST && !ngMast && !genotyphi && !vista) return false;
+export function hasTyping({ noPopulation, noMLST, ngMast, genotyphi, vista, pangolin }) {
+  if (noPopulation && noMLST && !ngMast && !genotyphi && !vista && !pangolin) return false;
   return true;
 }
 

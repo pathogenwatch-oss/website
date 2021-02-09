@@ -24,6 +24,7 @@ export const getAnalysisList = createSelector(
 function getAnalysisBreakdown(analysis) {
   const breakdown = {};
   const sts = {};
+  const lineages = {};
 
   for (const analyses of analysis) {
     for (const key of Object.keys(analyses)) {
@@ -36,6 +37,10 @@ function getAnalysisBreakdown(analysis) {
         const { st } = analyses.mlst;
         sts[st] = (sts[st] || 0) + 1;
       }
+      if (key === 'pangolin' && analyses.pangolin) {
+        const { lineage } = analyses.pangolin;
+        lineages[lineage] = (lineages[lineage] || 0) + 1;
+      }
       if (analyses[key] && analyses[key].source) {
         breakdown[key].source = analyses[key].source;
       }
@@ -47,7 +52,6 @@ function getAnalysisBreakdown(analysis) {
       label: `ST ${st}`,
       total: sts[st],
     }));
-
     if (breakdown.mlst.errors) {
       breakdown.mlst.sequenceTypes.push({
         label: 'Error',
@@ -56,6 +60,14 @@ function getAnalysisBreakdown(analysis) {
       });
     }
   }
+
+  if (breakdown.pangolin) {
+    breakdown.pangolin.lineages = Object.keys(lineages).map(lineage => ({
+      label: lineage,
+      total: lineages[lineage],
+    }));
+  }
+
 
   return breakdown;
 }
@@ -121,7 +133,7 @@ export const getSpeciesBreakdown = createSelector(
       if (section.analyses) {
         const analysesList = Object.keys(section.analyses).map(key => ({
           key,
-          label: analysisLabels[key],
+          label: analysisLabels[key] || key,
           ...section.analyses[key],
         }));
 
@@ -181,7 +193,7 @@ const getAnalysisChartData = createSelector(
       organisms.total += total;
 
       let sum = total;
-      const { mlst = {} } = analyses;
+      const { mlst = {}, pangolin = {} } = analyses;
       const { sequenceTypes = [] } = mlst;
       for (const st of sequenceTypes) {
         sts.data.push(st.total);
@@ -191,6 +203,16 @@ const getAnalysisChartData = createSelector(
         sts.tooltips.push(`${st.total} / ${total}, ${(st.total / total * 100).toFixed(1)}%`);
         sum -= st.total;
       }
+      const { lineages = [] } = pangolin;
+      for (const lineage of lineages) {
+        sts.data.push(lineage.total);
+        sts.backgroundColor.push(lineage.colour || getLightColour(colour));
+        sts.labels.push(lineage.label);
+        sts.parents.push(organismIndex);
+        sts.tooltips.push(`${lineage.total} / ${total}, ${(lineage.total / total * 100).toFixed(1)}%`);
+        sum -= lineage.total;
+      }
+
       if (sum > 0) {
         sts.data.push(sum);
         sts.backgroundColor.push('#fefefe');

@@ -12,6 +12,8 @@ function getNotification(analysis) {
       return { task, version, result: { st: results.st, source: results.source }, error };
     case 'cgmlst':
       return { task, version, result: { source: results.source }, error };
+    case 'pangolin':
+      return { task, version, result: { lineage: results.lineage }, error };
     default:
       return { task, version, error };
   }

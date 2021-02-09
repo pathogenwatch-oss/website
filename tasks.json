@@ -202,6 +202,22 @@
         "version": "v1",
         "workers": 16
       }
+    ],
+    "2697049": [
+      {
+        "requires": [
+          {
+            "task": "alignment",
+            "version": "2"
+          }
+        ],
+        "task": "tree",
+        "timeout": 900,
+        "version": "alignment-2",
+        "flags": {
+          "COV2_USER": true
+        }
+      }
     ]
   },
   "genome": {
@@ -783,6 +799,29 @@
       {
         "task": "mlst",
         "version": "202011162044-v2.6.3"
+      }
+    ],
+    "2697049": [
+      {
+        "task": "alignment",
+        "version": "2",
+        "flags": {
+          "COV2_USER": true
+        }
+      },
+      {
+        "task": "sarscov2-variants",
+        "version": "0.0.9",
+        "flags": {
+          "COV2_USER": true
+        }
+      },
+      {
+        "task": "pangolin",
+        "version": "v2.2.1",
+        "flags": {
+          "COV2_USER": true
+        }
       }
     ],
     "2751": [

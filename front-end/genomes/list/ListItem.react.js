@@ -65,7 +65,7 @@ const ListItem = ({
   className,
   onMouseOver,
 }) => {
-  const { name, st, st2, country } = genome;
+  const { name, st, st2, pangolin, country } = genome;
   const countryName = country ? getCountryName(country) : null;
   const date = genome.year ? getFormattedDateString(genome) : null;
 
@@ -92,7 +92,7 @@ const ListItem = ({
       <Cell>
         <OrganismCell genome={genome} />
       </Cell>
-      {st ? (
+      { st && (
         <Cell>
           <ST id={st} />
           {!!st2 &&
@@ -100,7 +100,13 @@ const ListItem = ({
               &nbsp;/&nbsp;<ST id={st2} />
             </React.Fragment>}
         </Cell>
-      ) : (
+      )}
+      {pangolin && (
+        <Cell>
+          <ST id={pangolin} />
+        </Cell>
+      )}
+      {!st && !pangolin && (
         EmptyCell
       )}
       {country ? (
