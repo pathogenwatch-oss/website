@@ -397,7 +397,7 @@ const getPangolinSummary = createSelector(
   )
 );
 
-const getSarsCov2VariantsSummary = createSelector(
+const getSarscov2VariantsSummary = createSelector(
   getFilterSummaries,
   state => getFilter(state)["sarscov2-variants"],
   getFilterFn('sarscov2-variants'),
@@ -487,7 +487,7 @@ export const getFilterSummary = createSelector(
   getPangolinSummary,
   getReferenceSummary,
   getResistanceSummary,
-  getSarsCov2VariantsSummary,
+  getSarscov2VariantsSummary,
   getSerotypeSummary,
   getSpeciesIdSummary,
   getStrainSummary,

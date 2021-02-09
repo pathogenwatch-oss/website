@@ -75,7 +75,7 @@ export function getValueLabel(value, table) {
     table === tableKeys.snps ||
     table === tableKeys.genes ||
     table === tableKeys.kleborateAMR ||
-    table === tableKeys.sarsCov2Variants ||
+    table === tableKeys.sarscov2Variants ||
     table === tableKeys.vista
   ) {
     return value === nonResistantColour ? 'ABSENT' : 'PRESENT';

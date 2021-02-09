@@ -59,7 +59,7 @@ const getGenomeDatatypes = createSelector(
     let hasAMR = false;
     let hasKleborateAMR = false;
     let hasKleborateAMRGenotypes = false;
-    let hasSarsCov2Variants = false;
+    let hasSarscov2Variants = false;
     let hasVista = false;
 
     for (const genome of genomes) {
@@ -78,8 +78,8 @@ const getGenomeDatatypes = createSelector(
         hasAMR = true;
       }
 
-      if (!hasSarsCov2Variants && genome.analysis.sarsCov2Variants) {
-        hasSarsCov2Variants = true;
+      if (!hasSarscov2Variants && genome.analysis['sarscov2-variants']) {
+        hasSarscov2Variants = true;
       }
 
       if (!hasVista && genome.analysis.vista) {
@@ -90,7 +90,7 @@ const getGenomeDatatypes = createSelector(
         hasAMR = true;
       }
 
-      if (hasMetadata && hasKleborateAMR && hasKleborateAMRGenotypes && hasVista && hasSarsCov2Variants && (isClusterView || (hasAMR))) {
+      if (hasMetadata && hasKleborateAMR && hasKleborateAMRGenotypes && hasVista && hasSarscov2Variants && (isClusterView || (hasAMR))) {
         break;
       }
     }
@@ -100,7 +100,7 @@ const getGenomeDatatypes = createSelector(
       hasAMR,
       hasKleborateAMR,
       hasKleborateAMRGenotypes,
-      hasSarsCov2Variants,
+      hasSarscov2Variants,
       hasVista,
     };
   }
@@ -126,10 +126,11 @@ export const hasKleborateAMRGenotypes = createSelector(
   datatypes => datatypes.hasKleborateAMRGenotypes
 );
 
-export const hasSarsCov2Variants = createSelector(
+export const hasSarscov2Variants = createSelector(
   getGenomeDatatypes,
-  datatypes => datatypes.hasSarsCov2Variants
-)
+  datatypes => datatypes.hasSarscov2Variants
+);
+
 export const hasVista = createSelector(
   getGenomeDatatypes,
   datatypes => datatypes.hasVista

@@ -15,7 +15,7 @@ export const tableKeys = {
   genes: 'genes',
   kleborateAMR: 'kleborateAMR',
   kleborateAMRGenotypes: 'kleborateAMRGenotypes',
-  sarsCov2Variants: 'sarsCov2Variants',
+  sarscov2Variants: 'sarscov2Variants',
   timeline: 'timeline',
   vista: 'vista',
 };
@@ -26,7 +26,7 @@ export const tableDisplayNames = {
   [tableKeys.kleborateAMR]: 'Antibiotics',
   [tableKeys.kleborateAMRGenotypes]: 'AMR Genotypes',
   [tableKeys.metadata]: 'Metadata',
-  [tableKeys.sarsCov2Variants]: 'Sentinel Variants',
+  [tableKeys.sarscov2Variants]: 'Notable Variants',
   [tableKeys.stats]: 'Stats',
   [tableKeys.snps]: 'SNPs',
   [tableKeys.timeline]: 'Timeline',
