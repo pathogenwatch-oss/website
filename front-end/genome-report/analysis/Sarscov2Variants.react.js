@@ -6,11 +6,6 @@ function generateDocLink(variant) {
   return (
     <div>
       <p>{variant}
-        <ExternalLink
-          to={`/genomes/all?genusId=694002&sarscov2-variants=${variant}&subspecies=SARS-CoV-2`}
-        >
-          {'PW Search'}
-        </ExternalLink>
         <ExternalLink to={`https://cgps.gitlab.io/cog-uk/type_variants/#${variant}`}>
           {'Source'}
         </ExternalLink>
