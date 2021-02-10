@@ -20,7 +20,8 @@ export default ({ hasScrollbar = true }) => (
         </SortBy>
       </span>
       <Sort sortKey="organism">Organism</Sort>
-      <Sort sortKey="mlst">MLST/Lineage</Sort>
+      <Sort sortKey="mlst">Type</Sort>
+      <Sort sortKey="source">Typing Schema</Sort>
       <Sort sortKey="country">Country</Sort>
       <Sort sortKey="date">Date</Sort>
       <Sort sortKey="access">Access</Sort>
