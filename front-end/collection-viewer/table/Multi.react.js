@@ -27,9 +27,9 @@ const ButtonGroup = ({ visible, active, toggle }) => {
       active={active}
       className="pw-multi-button"
       onClick={() => toggle()}
-      title="Toggle multiple resistance"
+      title="Toggle 'All/Any' colouring when multiple colmns selected "
     >
-      MDR
+      ALL
     </ControlsButton>
   );
 };
