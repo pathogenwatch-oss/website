@@ -109,7 +109,7 @@ const ListItem = ({
       {!type && (
           EmptyCell
       )}
-      {!type && (
+      {!typeSource && (
         EmptyCell
       )}
       {country ? (
