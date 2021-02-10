@@ -14,6 +14,7 @@ import { getCountryName } from '~/utils/country';
 
 import { showGenomeReport } from '~/genome-report';
 import { ST } from '~/mlst';
+import { analysisLabels } from '~/app/constants';
 
 const Cell = ({ title, icon, children, onClick }) => (
   <span
@@ -102,7 +103,7 @@ const ListItem = ({
             </React.Fragment>}
         </Cell>
         <Cell>
-         {typeSource.toUpperCase()}
+         {analysisLabels[typeSource]}
         </Cell>
         </React.Fragment>
       )}
