@@ -2,6 +2,7 @@ const Genome = require('models/genome');
 
 module.exports = async function ({ user, query }) {
   const projection = {
+    'analysis.alignment.__v': 1,
     'analysis.cgmlst.__v': 1,
     'analysis.cgmlst.source': 1,
     'analysis.core.__v': 1,
