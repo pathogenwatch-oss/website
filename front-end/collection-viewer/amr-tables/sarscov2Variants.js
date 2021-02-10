@@ -20,6 +20,10 @@ const isMac =
     navigator.platform.toUpperCase().indexOf('MAC') >= 0);
 const modifierKey = isMac ? 'Cmd' : 'Ctrl';
 
+function hasVariant(name, analysis) {
+  return analysis['sarscov2-variants'].variants.find(element => element.name === name).state === 'var'
+}
+
 function buildColumns(genomes) {
   const columns = [];
   // Need to gather into phenotypes
@@ -45,9 +49,9 @@ function buildColumns(genomes) {
         columnKey: `${variant.name}`,
         addState({ genomes }) {
           if (!genomes.length) return this;
-          // this.hidden = data.every(({ analysis }) =>
-          //   !analysis.paarsnp || notPresent(analysis.paarsnp[profileKey], key)
-          // );
+          this.hidden = genomes.every(({ analysis }) =>
+            !analysis['sarscov2-variants'] || !hasVariant(variant.name, analysis)
+          );
           this.width = this.getWidth() + this.cellPadding;
           return this;
         },
@@ -62,7 +66,7 @@ function buildColumns(genomes) {
           return measureHeadingText(variant.name);
         },
         getCellContents(props, { analysis }) {
-          return analysis['sarscov2-variants'].variants.find(element => element.name === variant.name).state === 'var' ? (
+          return hasVariant(variant.name, analysis) ? (
             <i
               className="material-icons wgsa-resistance-icon"
               style={{ color: effectColour }}
@@ -72,7 +76,7 @@ function buildColumns(genomes) {
             </i>
           ) : null;
         },
-        valueGetter: genome => (genome.analysis['sarscov2-variants'].variants.find(element => element.name === variant.name).state === 'var' ?
+        valueGetter: genome => (hasVariant(variant.name, genome.analysis) ?
           effectColour :
           amr.nonResistantColour),
         onHeaderClick,

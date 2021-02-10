@@ -22,7 +22,7 @@ export function hasElement(genome, element) {
   return false;
 }
 
-function createAdvancedViewColumn(key, element, bufferSize) {
+function createColumn(element, key, bufferSize) {
   return {
     addState({ genomes }) {
       if (!genomes.length) return this;
@@ -96,7 +96,7 @@ function buildColumns(genomes) {
       columns: Array.from(elementsInResults[antibiotic])
         .filter(element => element !== '-')
         .sort()
-        .map((element) => createAdvancedViewColumn(
+        .map((element) => createColumn(
           `kleborateAMRGenotypes_${antibiotic}_${element}`, element, bufferSize
         )),
     });
