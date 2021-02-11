@@ -164,3 +164,11 @@
   margin-bottom: 8px;
   color: hsl(270, 8%, 49%);
 }
+
+.wgsa-upload-progress code {
+  padding: 2px 3px 1px;
+  border: 1px solid var(--saf-0);
+  border-radius: 3px;
+  background-color: rgba(29, 28, 29, 0.04);
+  color: #e01e5a;
+}
