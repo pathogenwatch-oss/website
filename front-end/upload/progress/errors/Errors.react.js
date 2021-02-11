@@ -30,7 +30,7 @@ const Errors = ({ assemblerErrors, validationErrors, numOtherErrors, uploadPendi
         <i className="material-icons">error_outline</i>
         <div>
           <h5>{filename}</h5>
-          <Markdown source={error.message} />
+          { (error.isMarkdown) ? <Markdown source={error.message} /> : error.message }
         </div>
       </article>
     ))}

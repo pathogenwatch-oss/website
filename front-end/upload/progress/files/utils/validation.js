@@ -1,5 +1,6 @@
 export function InvalidGenomeError(message) {
   this.message = message;
+  this.isMarkdown = true;
 }
 
 const sequenceDataRegex = /^[ACGTURYKMSWBDHVN]+$/i;
