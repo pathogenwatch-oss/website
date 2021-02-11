@@ -7,7 +7,7 @@ import OrganismCell from './OrganismCell.react';
 
 import { getLastSelectedIndex } from '../selection/selectors';
 
-import { toggleSelection, selectRange } from '../selection/actions';
+import { selectRange, toggleSelection } from '../selection/actions';
 
 import { getFormattedDateString } from '~/utils/Date';
 import { getCountryName } from '~/utils/country';
@@ -57,14 +57,14 @@ const displayAccessLevel = props => {
 };
 
 const ListItem = ({
-  index,
-  genome,
-  onClick,
-  style,
-  onViewGenome,
-  className,
-  onMouseOver,
-}) => {
+                    index,
+                    genome,
+                    onClick,
+                    style,
+                    onViewGenome,
+                    className,
+                    onMouseOver,
+                  }) => {
   const { name, st, st2, pangolin, country } = genome;
   const countryName = country ? getCountryName(country) : null;
   const date = genome.year ? getFormattedDateString(genome) : null;
@@ -92,19 +92,32 @@ const ListItem = ({
       <Cell>
         <OrganismCell genome={genome} />
       </Cell>
-      { st && (
+      {st && (
+        <React.Fragment>
         <Cell>
           <ST id={st} />
           {!!st2 &&
-            <React.Fragment>
+          <React.Fragment>
               &nbsp;/&nbsp;<ST id={st2} />
             </React.Fragment>}
         </Cell>
+        <Cell>
+         MLST
+        </Cell>
+        </React.Fragment>
       )}
       {pangolin && (
+        <React.Fragment>
         <Cell>
           <ST id={pangolin} />
         </Cell>
+        <Cell>
+         Pangolin
+        </Cell>
+        </React.Fragment>
+      )}
+      {!st && !pangolin && (
+          EmptyCell
       )}
       {!st && !pangolin && (
         EmptyCell

@@ -44,7 +44,7 @@ function notPresent(profileSection, element) {
   return profileSection.indexOf(element) === -1;
 }
 
-export function createAdvancedViewColumn(element, profileKey, profiles) {
+export function createPaarsnpAdvancedViewColumn(element, profileKey, profiles) {
   const { key, displayName, label, effect } = element;
   return {
     addState({ genomes }) {

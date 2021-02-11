@@ -61,6 +61,7 @@ const getGenomeDatatypes = createSelector(
     let hasKleborateAMRGenotypes = false;
     let hasSarscov2Variants = false;
     let hasVista = false;
+    let hasCore = false;
 
     for (const genome of genomes) {
       if (!hasMetadata) {
@@ -72,6 +73,9 @@ const getGenomeDatatypes = createSelector(
 
       if (!genome.analysis) continue;
 
+      if (!hasCore && genome.analysis.core) {
+        hasCore = true;
+      }
       if (!hasAMR && !hasKleborateAMRGenotypes && !hasKleborateAMR && genome.analysis.kleborate) {
         hasKleborateAMR = true;
         hasKleborateAMRGenotypes = true;
@@ -98,6 +102,7 @@ const getGenomeDatatypes = createSelector(
     return {
       hasMetadata,
       hasAMR,
+      hasCore,
       hasKleborateAMR,
       hasKleborateAMRGenotypes,
       hasSarscov2Variants,
@@ -116,6 +121,10 @@ export const hasAMR = createSelector(
   datatypes => datatypes.hasAMR
 );
 
+export const hasCore = createSelector(
+  getGenomeDatatypes,
+  datatypes => datatypes.hasCore
+)
 export const hasKleborateAMR = createSelector(
   getGenomeDatatypes,
   datatypes => datatypes.hasKleborateAMR

@@ -54,6 +54,7 @@ export const statuses = {
 };
 
 export const analysisLabels = {
+  alignment: 'Reference alignment',
   cgmlst: 'cgMLST',
   core: 'Core Summary',
   genotyphi: 'Genotyphi',
@@ -67,9 +68,9 @@ export const analysisLabels = {
   paarsnp: 'AMR',
   pangolin: 'Pangolin',
   poppunk: 'Strain',
-  "sarscov2-variants": 'Notable Variants',
+  "sarscov2-variants": 'Notable variants',
   serotype: 'Serotype',
   speciator: 'Species prediction',
   spn_pbp_amr: 'AMR (PBPs)',
-  vista: 'Vista Virulence',
+  vista: 'Vista virulence',
 };

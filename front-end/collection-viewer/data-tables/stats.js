@@ -19,6 +19,10 @@ const initialState = {
   onHeaderClick,
 };
 
+function hasCore(payload) {
+  return !!payload.result.genomes[0].analysis.core;
+}
+
 export default function (state = initialState, { type, payload }) {
   switch (type) {
     case FETCH_COLLECTION.SUCCESS: {
@@ -28,7 +32,7 @@ export default function (state = initialState, { type, payload }) {
           constants.leftSpacerColumn,
           constants.downloadColumnProps,
           constants.nameColumnProps,
-          ...(payload.result.isClusterView ? [] : coreColumns),
+          ...(payload.result.isClusterView || !hasCore(payload) ? [] : coreColumns),
           systemDataColumns.__genome_length,
           systemDataColumns.__n50,
           systemDataColumns['__no._contigs'],

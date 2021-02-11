@@ -1,7 +1,7 @@
 const { onHeaderClick } = require('./thunks');
 
 import { tableKeys } from '../constants';
-import { createAdvancedViewColumn, getAntibioticLabel } from './utils';
+import { createPaarsnpAdvancedViewColumn, getAntibioticLabel } from './utils';
 import Organisms from '../../organisms';
 
 function applyPaarOverrides(paar) {
@@ -37,7 +37,7 @@ export function buildColumns({ paar = {}, antibiotics }, profiles) {
         headerTitle: fullName,
         onHeaderClick,
         columns: paar[key]
-          .map(({ element, effect }) => createAdvancedViewColumn(
+          .map(({ element, effect }) => createPaarsnpAdvancedViewColumn(
             { key: element, label: element, effect }, 'paar', profiles
           )),
       });

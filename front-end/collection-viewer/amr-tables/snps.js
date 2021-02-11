@@ -1,7 +1,7 @@
 const { onHeaderClick } = require('./thunks');
 
 import { measureHeadingText } from '../table/columnWidth';
-import { createAdvancedViewColumn, getAntibioticLabel } from './utils';
+import { createPaarsnpAdvancedViewColumn, getAntibioticLabel } from './utils';
 
 import { tableKeys } from '../constants';
 
@@ -45,7 +45,7 @@ export function buildColumns({ snp = {}, antibiotics }, profiles) {
               snp[key][gene]
                 .map(({ snpName, effect }) => {
                   const id = `${gene}_${snpName}`;
-                  return createAdvancedViewColumn(
+                  return createPaarsnpAdvancedViewColumn(
                     { key: id, displayName: id, label: snpName, effect },
                     'snp',
                     profiles,
