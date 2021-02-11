@@ -208,12 +208,12 @@
         "requires": [
           {
             "task": "alignment",
-            "version": "2"
+            "version": "3"
           }
         ],
         "task": "tree",
         "timeout": 900,
-        "version": "alignment-2",
+        "version": "alignment-3",
         "flags": {
           "COV2_USER": true
         }
@@ -804,7 +804,7 @@
     "2697049": [
       {
         "task": "alignment",
-        "version": "2",
+        "version": "3",
         "flags": {
           "COV2_USER": true
         }
