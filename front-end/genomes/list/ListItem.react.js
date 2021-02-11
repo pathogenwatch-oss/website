@@ -14,6 +14,7 @@ import { getCountryName } from '~/utils/country';
 
 import { showGenomeReport } from '~/genome-report';
 import { ST } from '~/mlst';
+import { analysisLabels } from '~/app/constants';
 
 const Cell = ({ title, icon, children, onClick }) => (
   <span
@@ -65,7 +66,7 @@ const ListItem = ({
                     className,
                     onMouseOver,
                   }) => {
-  const { name, st, st2, pangolin, country } = genome;
+  const { name, type, type2, typeSource, typeSource2, country } = genome;
   const countryName = country ? getCountryName(country) : null;
   const date = genome.year ? getFormattedDateString(genome) : null;
 
@@ -92,34 +93,28 @@ const ListItem = ({
       <Cell>
         <OrganismCell genome={genome} />
       </Cell>
-      {st && (
+      {type && (
         <React.Fragment>
         <Cell>
-          <ST id={st} />
-          {!!st2 &&
+          <ST id={type} />
+          {!!type2 &&
           <React.Fragment>
-              &nbsp;/&nbsp;<ST id={st2} />
+              &nbsp;/&nbsp;<ST id={type2} />
             </React.Fragment>}
         </Cell>
         <Cell>
-         MLST
+         {analysisLabels[typeSource]}
+          {!!type2 &&
+          <React.Fragment>
+              &nbsp;/&nbsp;{analysisLabels[typeSource2]}
+            </React.Fragment>}
         </Cell>
         </React.Fragment>
       )}
-      {pangolin && (
-        <React.Fragment>
-        <Cell>
-          <ST id={pangolin} />
-        </Cell>
-        <Cell>
-         Pangolin
-        </Cell>
-        </React.Fragment>
-      )}
-      {!st && !pangolin && (
+      {!type && (
           EmptyCell
       )}
-      {!st && !pangolin && (
+      {!typeSource && (
         EmptyCell
       )}
       {country ? (

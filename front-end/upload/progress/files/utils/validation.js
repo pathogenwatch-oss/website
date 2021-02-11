@@ -1,5 +1,6 @@
 export function InvalidGenomeError(message) {
   this.message = message;
+  this.isMarkdown = true;
 }
 
 const sequenceDataRegex = /^[ACGTURYKMSWBDHVN]+$/i;
@@ -22,7 +23,12 @@ export function validateGenomeContent(genomeContent) {
       throw new InvalidGenomeError('First contig header not found');
     }
     if (!isSequenceData) {
-      throw new InvalidGenomeError(`Invalid sequence data at line ${i + 1}`);
+      const invalidCharRegex = /[^ACGTURYKMSWBDHVN]/gi;
+      const invalidChars = new Set();
+      for (const match of line.matchAll(invalidCharRegex)) {
+        invalidChars.add(`\`${match[0]}\``);
+      }
+      throw new InvalidGenomeError(`Invalid sequence character(s) at line ${i + 1}. Please replace the following character(s): ${Array.from(invalidChars).join(" ")}`);
     }
   }
   return cleanContent;
