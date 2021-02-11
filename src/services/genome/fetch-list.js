@@ -4,8 +4,8 @@ const { getCollectionSchemes } = require('manifest');
 const MAX_PAGE_SIZE = 100;
 
 const preferredTypingSchemes = [
-  {analysis: 'pangolin', field:'lineage' },
-  {analysis: 'genotyphi', field: 'genotype' }
+  { analysis: 'pangolin', field:'lineage' },
+  { analysis: 'genotyphi', field: 'genotype' }
   ];
 
 function inferScheme(analysis) {
@@ -18,13 +18,13 @@ function inferScheme(analysis) {
   }
   if (analysis.hasOwnProperty('mlst2')) {
     return {
-      type: {analysis: 'mlst', field: 'st' },
-      type2: {analysis: 'mlst2', field: 'st' }
+      type: { analysis: 'mlst', field: 'st' },
+      type2: { analysis: 'mlst2', field: 'st' }
     };
   }
   if (analysis.hasOwnProperty('mlst')) {
     return {
-      type: {analysis: 'mlst', field: 'st' },
+      type: { analysis: 'mlst', field: 'st' },
     };
   }
   return {};

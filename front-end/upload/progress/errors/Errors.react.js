@@ -1,4 +1,5 @@
 import React from 'react';
+import Markdown from 'react-markdown';
 import { connect } from 'react-redux';
 
 import {
@@ -29,7 +30,7 @@ const Errors = ({ assemblerErrors, validationErrors, numOtherErrors, uploadPendi
         <i className="material-icons">error_outline</i>
         <div>
           <h5>{filename}</h5>
-          <p>{error.message}</p>
+          <Markdown source={error.message} />
         </div>
       </article>
     ))}
