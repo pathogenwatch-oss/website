@@ -11,9 +11,16 @@ const preferredTypingSchemes = [
 function inferScheme(analysis) {
   for (const scheme of preferredTypingSchemes) {
     if (analysis.hasOwnProperty(scheme.analysis)) {
-      return {
+      const schemes = {
         type: scheme,
       }
+      if (analysis.hasOwnProperty('mlst')) {
+        return {
+          ...schemes,
+          type2: {analysis: 'mlst', field: 'st'}
+        }
+      }
+      return schemes
     }
   }
   if (analysis.hasOwnProperty('mlst2')) {
@@ -22,6 +29,7 @@ function inferScheme(analysis) {
       type2: { analysis: 'mlst2', field: 'st' }
     };
   }
+
   if (analysis.hasOwnProperty('mlst')) {
     return {
       type: { analysis: 'mlst', field: 'st' },
@@ -72,6 +80,7 @@ module.exports = async function (props) {
         formattedGenome.type = !!preferredTypingSchemes.type ? analysis[preferredTypingSchemes.type.analysis][preferredTypingSchemes.type.field] : null;
         formattedGenome.typeSource = !!preferredTypingSchemes.type ? preferredTypingSchemes.type.analysis : null;
         formattedGenome.type2 = !!preferredTypingSchemes.type2 ? analysis[preferredTypingSchemes.type2.analysis][preferredTypingSchemes.type2.field] : null;
+        formattedGenome.typeSource2 = !!preferredTypingSchemes.type2 ? preferredTypingSchemes.type2.analysis : null;
         formattedGenome.organismId = speciator.organismId;
         formattedGenome.speciesName = speciator.speciesName;
         formattedGenome.subspecies = speciator.organismId === '2697049' ? 'SARS-CoV-2' : serotype.subspecies;
