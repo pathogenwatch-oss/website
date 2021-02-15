@@ -1,4 +1,4 @@
-const createAsyncExpressApp = require("../server/create-async-express-app");
+const createAsyncExpressApp = require("./server/create-async-express-app");
 const createServer = require("./server/index");
 const { BaseLogger } = require("./services/logger");
 
