@@ -22,7 +22,7 @@ export function hasElement(genome, element) {
   return false;
 }
 
-function createColumn(element, key, bufferSize) {
+function createColumn(key, element, bufferSize) {
   return {
     addState({ genomes }) {
       if (!genomes.length) return this;

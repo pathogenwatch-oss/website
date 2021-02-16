@@ -32,9 +32,6 @@ function buildColumns(genomes) {
       columnKey: `kleborate_${record.key}`,
       addState({ genomes }) {
         if (!genomes.length) return this;
-        // this.hidden = data.every(({ analysis }) =>
-        //   !analysis.paarsnp || notPresent(analysis.paarsnp[profileKey], key)
-        // );
         this.width = this.getWidth() + this.cellPadding;
         return this;
       },
@@ -42,8 +39,6 @@ function buildColumns(genomes) {
       headerTitle: `${record.name} - ${modifierKey} + click to select multiple`,
       cellClasses: 'wgsa-table-cell--resistance',
       cellPadding: 16,
-      // flexGrow: 0,
-      // displayName: agent.name,
       label: record.name,
       getWidth() {
         return measureHeadingText(record.name);
