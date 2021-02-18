@@ -1,0 +1,78 @@
+.libmr-Menu {
+  outline: none;
+}
+
+.libmr-Menu-element {
+  background: #fff;
+  border-radius: 3px;
+  box-shadow: rgba(0, 0, 0, 0.14) 0px 8px 10px 1px, rgba(0, 0, 0, 0.12) 0px 3px 14px 2px, rgba(0, 0, 0, 0.2) 0px 5px 5px -3px;
+  outline: none;
+  overflow-x: auto;
+  overflow-y: auto;
+  transition-property: opacity transform;
+  transition: .28s cubic-bezier(.4,0,.2,1);
+}
+
+.libmr-Menu-element.down {
+  margin-top: 4px;
+}
+
+.libmr-Menu-element.up {
+  margin-bottom: 4px;
+}
+
+.libmr-Menu-element.libmr-enter {
+  opacity: 0;
+  transform: scale3d(0.75, 0.75, 1);
+}
+
+.libmr-Menu-element.libmr-enter-active {
+  opacity: 1;
+  transform: scale3d(1, 1, 1);
+}
+
+.libmr-Menu-element.libmr-leave {
+  opacity: 1;
+  transform: scale3d(1, 1, 1);
+}
+
+.libmr-Menu-element.libmr-leave-active {
+  opacity: 0;
+  transform: scale3d(0.75, 0.75, 1);
+}
+
+.libmr-Menu-content {
+  padding: 16px;
+}
+
+.libmr-Menu.caret > button::after {
+  /* sorting these breaks it */
+  border-color: transparent;
+  border-bottom-color: #fff;
+
+  background-color: transparent;
+  border-radius: 0;
+  border-style: dashed dashed solid;
+  border-width: 0 8px 8px;
+  bottom: -8px;
+  content: "";
+  height: 0;
+  left: calc(50% - 8px);
+  opacity: 0;
+  position: absolute;
+  top: auto;
+  transition-property: opacity;
+  transition: .28s cubic-bezier(.4,0,.2,1);
+  visibility: hidden;
+  width: 0;
+  z-index: 1;
+}
+
+.libmr-Menu.caret.open > button::after {
+  opacity: 1;
+  visibility: visible;
+}
+
+.libmr-Menu-element.caret {
+  margin-top: 8px;
+}

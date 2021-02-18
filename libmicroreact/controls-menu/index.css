@@ -1,0 +1,19 @@
+@import './ControlsMenu.css';
+@import './ControlsMenu-search.css';
+
+.libmr-ControlsMenu-group {
+  display: flex;
+}
+
+.libmr-ControlsMenu-group .libmr-Menu {
+  margin-left: 2px;
+  margin-right: 2px;
+}
+
+.libmr-ControlsMenu-group.stacked {
+  flex-direction: column;
+}
+
+.libmr-ControlsMenu-group.stacked .libmr-Menu {
+  margin-bottom: 4px;
+}

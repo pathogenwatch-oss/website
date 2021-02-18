@@ -1,0 +1,55 @@
+.libmr-ControlsButton {
+  box-shadow: 0px 1px 1.5px 0px rgba(0, 0, 0, .12), 0px 1px 1px 0px rgba(0, 0, 0, .24);
+  align-items: center;
+  border-radius: 50%;
+  display: inline-flex;
+  justify-content: center;
+  user-select: none;
+}
+
+/* override MDC */
+.mdc-icon-button.libmr-ControlsButton {
+  background-color: #ececec;
+}
+
+.libmr-ControlsButton::before,
+.libmr-ControlsButton::after {
+  display: none;
+}
+
+.libmr-ControlsButton:focus {
+  background-color: #e1e1e1;
+}
+
+.libmr-ControlsButton svg {
+  width: 22px;
+  height: 22px;
+}
+
+.libmr-ControlsButton svg path {
+  fill: #222;
+  stroke: none;
+  image-rendering: auto;
+}
+
+.libmr-ControlsButton.active {
+  color: #fff;
+  background-color: var(--libmr-primary-colour);
+}
+
+.libmr-ControlsButton.active:hover,
+.libmr-ControlsButton.active:focus {
+  background-color: var(--libmr-primary-colour-shade);
+}
+
+.libmr-ControlsButton.active svg path {
+  fill: #ffffff;
+}
+
+.libmr-ControlsButton:not(.active):hover {
+  color: var(--libmr-primary-colour);
+}
+
+.libmr-ControlsButton:not(.active):hover path {
+  fill: var(--libmr-primary-colour);
+}

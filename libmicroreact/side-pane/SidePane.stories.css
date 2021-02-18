@@ -1,0 +1,21 @@
+.libmr-SidePane {
+  border: 1px solid rgba(0, 0, 0, 0.24);
+}
+
+.libmr-SidePane main {
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.12);
+  color: rgba(0, 0, 0, 0.54);
+  display: flex;
+  font-weight: 500;
+  height: 100%;
+  justify-content: center;
+  width: 100%;
+}
+
+.libmr-SidePane p {
+  color: rgba(0, 0, 0, 0.87);
+  font-size: 14px;
+  font-weight: 400;
+  margin: 0;
+}

@@ -1,0 +1,18 @@
+.libmr-search-input {
+  position: absolute;
+  border: none;
+  color: #fff;
+  font-size: inherit;
+  font-family: inherit;
+  width: calc(100% - 104px);
+  display: block;
+  outline: none;
+}
+
+.libmr-search-input::placeholder {
+  color: rgba(255, 255, 255, 0.54);
+}
+
+.libmr-Menu-element .libmr-search-input {
+  background-color: var(--libmr-primary-colour);
+}

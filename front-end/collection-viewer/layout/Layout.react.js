@@ -1,7 +1,7 @@
 import './styles.css';
 
 import React from 'react';
-import SplitPane from 'react-split-pane/src';
+import SplitPane from 'react-split-pane';
 import { connect } from 'react-redux';
 
 import AutoSizer from '@cgps/libmicroreact/auto-sizer';

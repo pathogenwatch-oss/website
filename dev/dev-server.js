@@ -3,12 +3,13 @@
 
 process.env.NODE_ENV = "dev";
 
-const express = require("express");
 const webpack = require("webpack");
 
 const createServer = require("../server");
+const createAsyncExpressApp = require("../server/create-async-express-app");
 
 const config = require("../webpack.config.js");
+
 const compiler = webpack(config);
 
 function createDevServer(app) {
@@ -26,7 +27,7 @@ function createDevServer(app) {
   return app;
 }
 
-Promise.resolve(new express())
+Promise.resolve(createAsyncExpressApp())
   .then(createDevServer)
   .then(createServer)
   .then(() => console.info("*** Dev server started ***"))

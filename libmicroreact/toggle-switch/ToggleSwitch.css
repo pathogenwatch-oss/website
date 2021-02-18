@@ -1,0 +1,21 @@
+@import "~@material/switch/dist/mdc.switch.css";
+@import "~@material/form-field/dist/mdc.form-field.css";
+
+.libmr-ToggleSwitch {
+  --mdc-theme-secondary: var(--libmr-primary-colour);
+  font-size: 14px;
+  letter-spacing: 0;
+  display: flex;
+  height: 24px;
+  align-items: center;
+}
+
+.libmr-ToggleSwitch label {
+  margin: 0;
+}
+
+.libmr-ToggleSwitch label:not(:empty) {
+  cursor: pointer;
+  flex-grow: 1;
+  padding: 0;
+}

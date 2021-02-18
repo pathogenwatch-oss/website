@@ -1,0 +1,16 @@
+@import '~@material/icon-button/dist/mdc.icon-button.css';
+
+.mdc-icon-button {
+  align-items: center;
+  display: inline-flex;
+  height: 32px;
+  justify-content: center;
+  padding: 0;
+  width: 32px;
+  outline: none;
+}
+
+.mdc-icon-button::before,
+.mdc-icon-button::after {
+  background-color: currentColor;
+}

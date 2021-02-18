@@ -1,0 +1,42 @@
+.libmr-MultiSelect ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.libmr-MultiSelect li {
+  align-items: center;
+  display: flex;
+  height: 32px;
+  line-height: 1;
+  position: relative;
+}
+
+.libmr-MultiSelect .mdc-form-field {
+  overflow: hidden;
+}
+
+.libmr-MultiSelect label {
+  font-size: 15px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.libmr-MultiSelect .only-toggle {
+  background: #fff;
+  color: var(--libmr-primary-colour);
+  display: none;
+  font-size: 13px;
+  font-weight: 500;
+  height: 100%;
+  padding: 0 8px;
+  position: absolute;
+  right: 16px;
+  text-transform: uppercase;
+}
+
+.libmr-MultiSelect li:hover .only-toggle {
+  cursor: pointer;
+  display: block;
+}

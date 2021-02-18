@@ -1,0 +1,79 @@
+.libmr-AreaChart {
+  position: relative;
+}
+
+.libmr-AreaChart-slider {
+  background: rgba(255, 255, 255, 0.28);  
+  border-top: 1px solid #C2C2C2;
+  border-bottom: 1px solid #C2C2C2;
+  cursor: grab !important;
+}
+
+.libmr-AreaChart-slider:active {
+  cursor: grabbing !important;
+}
+
+.libmr-AreaChart-slider label {
+  align-items: center;
+  background: rgba(0, 0, 0, 0.74);
+  border-radius: 2px;
+  color: #ffffff;
+  display: flex;
+  font-family: inherit;
+  font-size: 12px;
+  line-height: 20px;
+  opacity: 0;
+  padding: 0 4px;
+  position: absolute;
+  top: 0;
+  transition-property: opacity;
+  transition: .28s cubic-bezier(.4,0,.2,1);  
+  user-select: none;
+  visibility: hidden;
+}
+
+.libmr-AreaChart-slider.has-labels label {
+  opacity: 1;
+  visibility: visible;
+  z-index: 2;
+}
+
+.libmr-AreaChart-label-min {
+  left: 2px;
+}
+.libmr-AreaChart-label-max {
+  right: 2px;
+}
+
+.libmr-AreaChart-slider.stacked .libmr-AreaChart-label-min {
+  top: auto;
+  bottom: 100%;
+}
+
+.libmr-AreaChart-slider.stacked-right .libmr-AreaChart-label-max {
+  right: auto;
+  left: 3px;
+}
+
+.libmr-AreaChart-slider.stacked-left .libmr-AreaChart-label-min {
+  right: 3px;
+  left: auto;
+}
+
+.libmr-AreaChart-resize-handler:after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 3px;
+  width: 4px;
+  background:#C2C2C2;
+  z-index: 3;
+}
+
+.libmr-AreaChart-resize-handler:hover:after ,
+.libmr-AreaChart-resize-handler:active:after  {
+  background: var(--libmr-primary-colour);
+  left: 2px;
+  width: 6px;
+}

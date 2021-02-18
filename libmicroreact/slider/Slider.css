@@ -1,0 +1,138 @@
+/*
+  https://css-tricks.com/sliding-nightmare-understanding-range-input/
+
+  Code adapted from https://codepen.io/thebabydino/pen/goYYrN.
+*/
+
+.libmr-Slider {
+  --range: calc(var(--max) - var(--min));
+	--ratio: calc((var(--val) - var(--min)) / var(--range));
+  --sx: calc(6px + var(--ratio) * (100% - 12px));
+
+  position: relative;
+  height: 40px;
+}
+
+.libmr-Slider label {
+  display: block;
+  font-size: 14px;
+  line-height: 20px;
+}
+
+.libmr-Slider [type='range'] {
+	margin: 0;
+	padding: 0;
+	width: 100%; height: 16px;
+  background: transparent;
+  cursor: pointer;
+  outline: none;
+}
+
+.libmr-Slider [type='range'], .libmr-Slider [type='range']::-webkit-slider-thumb {
+  -webkit-appearance: none;
+}
+
+.libmr-Slider-focus-ring {
+  position: absolute;
+  height: 32px;
+  width: 32px;
+  border-radius: 50%;
+  background-color: var(--libmr-primary-colour-alpha);
+  left: calc(var(--ratio) * 100% - 16px + (6px - (var(--ratio) * 12px)));
+  bottom: 0;
+  pointer-events: none;
+  transform: scale3d(0, 0, 0);
+  transition: 90ms cubic-bezier(0.4, 0, 0.2, 1);
+  transition-property: transform;
+}
+.libmr-Slider [type='range']:focus:not(:active) + .libmr-Slider-focus-ring {
+  transform: scale3d(1, 1, 1) translateY(4px);
+}
+.libmr-Slider [type='range']:active + .libmr-Slider-focus-ring {
+  transition: none;
+}
+
+/*
+  N.B. the below rules need to be duplicated, don't know why.
+*/
+
+.libmr-Slider [type='range']::-webkit-slider-runnable-track {
+  box-sizing: border-box;
+	border: none;
+	width: 100%; height: 2px;
+	background: rgba(0, 0, 0, 0.28);
+}
+.libmr-Slider [type='range']::-moz-range-track {
+  box-sizing: border-box;
+	border: none;
+	width: 100%; height: 2px;
+	background: rgba(0, 0, 0, 0.28);
+}
+.libmr-Slider [type='range']::-ms-track {
+  box-sizing: border-box;
+	border: none;
+	width: 100%; height: 2px;
+	background: rgba(0, 0, 0, 0.28);
+}
+
+.libmr-Slider [type='range']::-webkit-slider-runnable-track {
+  background: linear-gradient(var(--libmr-primary-colour), var(--libmr-primary-colour))
+				0/ var(--sx) 100% no-repeat rgba(0, 0, 0, 0.28)
+}
+.libmr-Slider [type='range']::-moz-range-progress {
+  height: 2px;
+	background: var(--libmr-primary-colour);
+}
+.libmr-Slider [type='range']::-ms-fill-lower {
+  height: 2px;
+	background: var(--libmr-primary-colour);
+}
+
+.libmr-Slider [type='range']::-webkit-slider-thumb {
+  box-sizing: border-box;
+	border: none;
+	width: 12px; height: 12px;
+	border-radius: 50%;
+  background: var(--libmr-primary-colour);
+  transition: .28s cubic-bezier(.4,0,.2,1);
+  transition-property: transform;
+  z-index: 1;
+
+  margin-top: calc(.5 * (2px - 12px));
+}
+.libmr-Slider [type='range']::-moz-range-thumb {
+  box-sizing: border-box;
+	border: none;
+	width: 12px; height: 12px;
+	border-radius: 50%;
+  background: var(--libmr-primary-colour);
+  transition: .28s cubic-bezier(.4,0,.2,1);
+  transition-property: transform;
+  z-index: 1;
+}
+.libmr-Slider [type='range']::-ms-thumb {
+  box-sizing: border-box;
+	border: none;
+	width: 12px; height: 12px;
+	border-radius: 50%;
+  background: var(--libmr-primary-colour);
+  transition: 90ms cubic-bezier(0.4, 0, 0.2, 1);
+  transition-property: transform;
+  z-index: 1;
+
+  margin-top: 0;
+}
+
+.libmr-Slider [type='range']:active::-webkit-slider-thumb {
+  transform: scale3d(1.5, 1.5, 1);
+}
+.libmr-Slider [type='range']:active::-moz-range-thumb {
+  transform: scale3d(1.5, 1.5, 1);
+}
+.libmr-Slider [type='range']:active::-ms-thumb {
+  transform: scale3d(1.5, 1.5, 1);
+}
+
+.libmr-Slider [type='range']::-ms-tooltip {
+  display: none
+}

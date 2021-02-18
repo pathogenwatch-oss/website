@@ -1,0 +1,61 @@
+.libmr-ControlsMenu header {
+  position: relative;
+}
+
+.libmr-ControlsMenu.libmr-Menu-element {
+  box-shadow: 0 15px 12px rgba(0,0,0,0.22), 0 0 38px rgba(0,0,0,0.30);
+  overflow-x: hidden;
+}
+
+.libmr-ControlsMenu.libmr-Menu-element.standard {
+  width: 320px;
+}
+.libmr-ControlsMenu.libmr-Menu-element.narrow {
+  width: 240px;
+}
+
+.libmr-ControlsMenu.libmr-Menu-element > header {
+  background-color: var(--libmr-primary-colour);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 56px;
+  padding: 0 8px 0 16px;
+}
+
+.libmr-ControlsMenu.libmr-Menu-element h3 {
+  color: inherit;
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 1;
+  margin: 0 auto 0 0;
+}
+
+.libmr-ControlsMenu .libmr-Menu-content hr {
+  border-top: 1px solid #e0e0e0;
+  margin: 16px -16px 16px -16px;
+}
+
+.libmr-ControlsMenu.scrollable-content .libmr-Menu-content {
+  display: flex;
+  flex-direction: column;
+}
+
+.libmr-ControlsMenu.scrollable-content .libmr-scrollable {
+  flex-grow: 1;
+  overflow-x: hidden;
+  overflow-y: auto;
+  margin-right: -16px;
+  margin-bottom: -16px;
+}
+
+.libmr-ControlsMenu.scrollable-content .libmr-scrollable > :first-child {
+  padding-bottom: 8px;
+  width: calc(320px - 16px);
+}
+
+.libmr-ControlsMenu .libmr-ToggleSwitch + * {
+  margin-top: 8px;
+}

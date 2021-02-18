@@ -1,9 +1,6 @@
 import React from 'react';
 
-import { assemblyPipelineStatus } from './actions';
-
-import store from '~/app/store';
-import { fetchSession, fetchProgress } from './api';
+import { fetchSession } from './api';
 
 export const useAssemblerSession = (uploadedAt, token) => {
   const [ session, setSession ] = React.useState(null);

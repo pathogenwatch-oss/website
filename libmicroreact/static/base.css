@@ -1,0 +1,10 @@
+html {
+  font-size: 0.875rem; /* 14px */
+  line-height: 1.428571; /* 20px */
+  font-family: Roboto, Arial, Helvetica, sans-serif;
+}
+
+button {
+  border: none;
+  font-family: inherit;
+}
