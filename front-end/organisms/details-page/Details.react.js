@@ -33,7 +33,7 @@ const Details = React.createClass({
 
   render() {
     const { organismId, totalGenomes, totalCollections } = this.props;
-    const { nickname, formattedName, definitionText, desc, imageCredit, taxonomy, name } = taxIdMap.get(organismId);
+    const { nickname, formattedName, definitionText, desc, imageCredit, name, uiOptions } = taxIdMap.get(organismId);
     return (
       <div className="wgsa-page mdl-grid">
         <DocumentTitle>{name}</DocumentTitle>
@@ -65,21 +65,6 @@ const Details = React.createClass({
             <h2 className="wgsa-section-title">About</h2>
             {desc}
           </div>
-          {/*<div className="wgsa-section-divider">*/}
-          {/*  <h2 className="wgsa-section-title">Taxonomy</h2>*/}
-          {/*  <ul>*/}
-          {/*    {*/}
-          {/*      taxonomy.map(({ taxId, scientificName, rank }) =>*/}
-          {/*        <li key={taxId}>*/}
-          {/*          <a href={`https://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?mode=Info&id=${taxId}`} target="_blank" rel="noopener">*/}
-          {/*            {scientificName}*/}
-          {/*          </a>*/}
-          {/*          { rank !== 'no rank' && ` (${rank})` }*/}
-          {/*        </li>*/}
-          {/*      )*/}
-          {/*    }*/}
-          {/*  </ul>*/}
-          {/*</div>*/}
         </div>
         <div className="mdl-cell mdl-cell--3-col">
           <div className="wgsa-section-divider">
@@ -98,9 +83,8 @@ const Details = React.createClass({
             <h3 className="wgsa-section-title">Reference Downloads</h3>
             <ul>
               <li><a href={`/download/organism/${nickname}/core_representatives.csv`}>Core Representatives</a></li>
-              <li><a href={`/download/organism/${nickname}/reference_fastas.zip`}>Sequences</a></li>
-              <li><a href={`/download/organism/${nickname}/reference_annotations.zip`}>Annotations</a></li>
-              <li><a href={`/download/organism/${nickname}/reference_metadata.csv`}>Metadata</a></li>
+              <li><a href={`/download/organism/${nickname}/reference_fastas.zip`}>Genome Sequences</a></li>
+              {!uiOptions.noPopulation && <li><a href={`/genomes/all?access=reference&organismId=${organismId}`}>View in Pathogenwatch</a></li>}
             </ul>
           </div>
         </div>
