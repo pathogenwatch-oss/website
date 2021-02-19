@@ -7,16 +7,10 @@ import { onHeaderClick } from './thunks';
 import * as amr from '../amr-utils';
 import { measureHeadingText } from '../table/columnWidth';
 import { spacerGroup, systemGroup } from './utils';
-import Organism from '../../organisms';
 
 import { statuses, tableKeys } from '../constants';
 
 export const name = tableKeys.vista;
-
-function findElement(genome, geneName) {
-  return genome.analysis.vista.virulenceGenes
-    .find(gene => gene.name === geneName);
-}
 
 function selectColour(status) {
   if (!status) {
@@ -99,8 +93,9 @@ export function createReducer() {
   return function (state = initialState, { type, payload }) {
     switch (type) {
       case FETCH_COLLECTION.SUCCESS: {
-        const { genomes, status, isClusterView } = payload.result;
-        if (status !== statuses.READY || isClusterView || !Organism.uiOptions.vista) return state;
+        const { genomes, status } = payload.result;
+        const hasVistaResults = !!genomes[0].analysis.vista;
+        if (status !== statuses.READY || !hasVistaResults) return state;
         return {
           ...state,
           columns: [

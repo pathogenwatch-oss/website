@@ -42,23 +42,6 @@ const DownloadsMenu = ({ collection, genomeIds, prefix }) => (
     >
       Kleborate
     </DownloadForm> }
-    { Organisms.uiOptions['sarscov2-variants'] &&
-    <DownloadForm
-      link={`${prefix}/sarscov2Variants`}
-      filename={formatCollectionFilename(collection, 'sarscov2Variants.csv')}
-      genomeIds={genomeIds}
-    >
-      Notable Variants
-    </DownloadForm> }
-    { Organisms.uiOptions.vista &&
-    <DownloadForm
-      link={`${prefix}/vista`}
-      filename={formatCollectionFilename(collection, 'vista.csv')}
-      genomeIds={genomeIds}
-    >
-      Virulence
-    </DownloadForm> }
-
   </React.Fragment>
 );
 

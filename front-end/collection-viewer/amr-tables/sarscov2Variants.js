@@ -7,7 +7,6 @@ import { onHeaderClick } from './thunks';
 import * as amr from '../amr-utils';
 import { measureHeadingText } from '../table/columnWidth';
 import { spacerGroup, systemGroup } from './utils';
-import Organism from '../../organisms';
 
 import { statuses, tableKeys } from '../constants';
 
@@ -95,7 +94,8 @@ export function createReducer() {
     switch (type) {
       case FETCH_COLLECTION.SUCCESS: {
         const { genomes, status } = payload.result;
-        if (status !== statuses.READY || !Organism.uiOptions['sarscov2-variants']) return state;
+        const hasResult = !!genomes[0].analysis['sarscov2-variants'];
+        if (status !== statuses.READY || !hasResult) return state;
         return {
           ...state,
           columns: [
