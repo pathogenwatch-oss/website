@@ -32,7 +32,8 @@ export default ({ genome }) => {
           <dt>Status</dt>
           <dd>{pangolin.status}</dd>
         </div>
-        <div><dt>Version</dt><dd>{pangolin.__v}</dd></div>
+        <div><dt>Pangolin version</dt><dd>{pangolin.__v}</dd></div>
+        <div><dt>PangoLEARN version</dt><dd>{pangolin.pangoLEARN_version}</dd></div>
       </dl>
       <dl>
         <dt>Lineage Links</dt>
