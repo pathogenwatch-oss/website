@@ -100,7 +100,7 @@ export function createReducer() {
     switch (type) {
       case FETCH_COLLECTION.SUCCESS: {
         const { genomes, status, isClusterView } = payload.result;
-        if (status !== statuses.READY || isClusterView || !Organism.uiOptions.vista) return state;
+        if (status !== statuses.READY || !Organism.uiOptions.vista) return state;
         return {
           ...state,
           columns: [
