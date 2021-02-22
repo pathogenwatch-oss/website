@@ -34,7 +34,7 @@ function selectColour({ name, state }) {
   } else if (state === 'var') {
     return variantPresentColour;
   }
-  return name.endsWith('?') ? variantPresentColour : alternativePresentColour;
+  return name.endsWith('*') ? variantPresentColour : alternativePresentColour;
 }
 
 function buildColumns(genomes) {
