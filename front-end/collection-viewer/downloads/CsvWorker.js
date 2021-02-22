@@ -6,6 +6,7 @@ import { systemDataColumns } from '../data-tables/constants';
 import { createCode } from '../../mlst/utils';
 
 import { hasElement, kleborateHasElement, isResistant, kleborateIsResistant } from '../amr-utils';
+import { hasVariant } from '~/collection-viewer/amr-tables/sarscov2Variants';
 
 const nameColumn = {
   columnKey: '__name',
@@ -67,7 +68,14 @@ const valueGettersByTable = {
     (kleborateIsResistant(kleborate, antibiotic.replace('kleborate_', '')) ? 1 : 0),
   kleborateAMRGenotypes: (element, { analysis: { kleborate } }) =>
     (kleborateHasElement(kleborate, element.replace('kleborateAMRGenotypes_', '').split('_')[0], element.replace('kleborateAMRGenotypes_', '').split('_').slice(1).join('_')) ? 1 : 0),
+  sarscov2Variants: (element, { analysis }) =>
+    (mapSarscov2VariantState(element, analysis)),
 };
+
+function mapSarscov2VariantState(element, analysis) {
+  const variant = analysis['sarscov2-variants'].variants.find(variant => variant.name === element);
+  return variant.state === 'other' ? `${variant.state} (${variant.found})` : variant.state;
+}
 
 function mapToGetters(columns, table) {
   return columns.map(({ key }) => {

@@ -19,7 +19,7 @@ const isMac =
     navigator.platform.toUpperCase().indexOf('MAC') >= 0);
 const modifierKey = isMac ? 'Cmd' : 'Ctrl';
 
-function hasVariant(name, analysis) {
+export function hasVariant(name, analysis) {
   return analysis['sarscov2-variants'].variants.find(element => element.name === name).state === 'var'
 }
 
@@ -75,9 +75,9 @@ function buildColumns(genomes) {
             </i>
           ) : null;
         },
-        valueGetter: genome => (hasVariant(variant.name, genome.analysis) ?
+        valueGetter: genome => hasVariant(variant.name, genome.analysis) ?
           effectColour :
-          amr.nonResistantColour),
+          amr.nonResistantColour,
         onHeaderClick,
       });
     });
