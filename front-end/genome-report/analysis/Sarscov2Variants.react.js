@@ -5,8 +5,8 @@ import ExternalLink from '../ExternalLink.react';
 function generateDocLink(variant) {
   return (
     <div>
-      <p>{variant}
-        <ExternalLink to={`https://cgps.gitlab.io/cog-uk/type_variants/#${variant}`}>
+      <p>{variant.state !== 'other' ? variant.name : `${variant.name} (${variant.found})` }
+        <ExternalLink to={`https://cgps.gitlab.io/cog-uk/type_variants/#${variant.name}`}>
           {'Source'}
         </ExternalLink>
       </p>
@@ -23,7 +23,7 @@ function generateColumn(variants, type) {
           .filter(variant => variant.state !== 'ref')
           .filter(variant => variant.type === type)
           .sort((a,b) => a.name < b.name ? -1 : 1)
-          .map(variant => generateDocLink(variant.name))
+          .map(variant => generateDocLink(variant))
       }</dd>
     </div>
   );

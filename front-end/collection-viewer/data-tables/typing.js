@@ -8,6 +8,7 @@ import { tableKeys } from '../constants';
 
 import Organisms from '~/organisms';
 import { sources, resetSources } from './utils';
+import { hasVista } from '~/collection-viewer/genomes/selectors';
 
 const initialState = {
   name: tableKeys.typing,
@@ -118,7 +119,7 @@ function fillColumnDefs({ columns, ...group }) {
   };
 }
 
-function getTypingColumnGroups({ isClusterView }, uiOptions, hasAltMLST) {
+function getTypingColumnGroups({ isClusterView }, uiOptions, hasAltMLST, hasVista, hasPangolin) {
   return [
     isClusterView || uiOptions.noPopulation ? null : referenceGroup,
     uiOptions.noMLST ? null : mlstGroup,
@@ -128,16 +129,15 @@ function getTypingColumnGroups({ isClusterView }, uiOptions, hasAltMLST) {
     uiOptions.genotyphi ? genotyphiGroup : null,
     uiOptions.inctyper ? inctyperGroup : null,
     uiOptions.kleborate ? kleborateGroup : null,
-    uiOptions.vista ? vistaGroup : null,
-    uiOptions.pangolin ? pangolinGroup : null,
+    hasVista ? vistaGroup : null,
+    hasPangolin ? pangolinGroup : null,
   ]
     .filter(_ => _) // removes the nulls
     .map(fillColumnDefs);
 }
 
-export function hasTyping({ noPopulation, noMLST, ngMast, genotyphi, vista, pangolin }) {
-  if (noPopulation && noMLST && !ngMast && !genotyphi && !vista && !pangolin) return false;
-  return true;
+export function hasTyping({ noPopulation, noMLST, ngMast, genotyphi }, hasVista, hasPangolin) {
+  return !(noPopulation && noMLST && !ngMast && !genotyphi && !hasVista && !hasPangolin);
 }
 
 function updateTypingSettings({ genomes }) {
@@ -159,7 +159,10 @@ function updateTypingSettings({ genomes }) {
 export default function (state = initialState, { type, payload }) {
   switch (type) {
     case FETCH_COLLECTION.SUCCESS: {
-      const active = hasTyping(Organisms.uiOptions);
+
+      const hasVista = !!payload.result.genomes[0].analysis.vista;
+      const hasPangolin = !!payload.result.genomes[0].analysis.pangolin;
+      const active = hasTyping(Organisms.uiOptions, hasVista, hasPangolin);
 
       if (!active) {
         return {
@@ -169,13 +172,12 @@ export default function (state = initialState, { type, payload }) {
       }
 
       const hasAltMLST = updateTypingSettings(payload.result);
-
       return {
         ...state,
         active,
         columns: [
           leadingSystemGroup,
-          ...getTypingColumnGroups(payload.result, Organisms.uiOptions, hasAltMLST),
+          ...getTypingColumnGroups(payload.result, Organisms.uiOptions, hasAltMLST, hasVista, hasPangolin),
           trailingSystemGroup,
         ],
       };

@@ -7,21 +7,34 @@ import { onHeaderClick } from './thunks';
 import * as amr from '../amr-utils';
 import { measureHeadingText } from '../table/columnWidth';
 import { spacerGroup, systemGroup } from './utils';
-import Organism from '../../organisms';
 
 import { statuses, tableKeys } from '../constants';
 
 export const name = tableKeys.sarscov2Variants;
 
-const effectColour = amr.getEffectColour('RESISTANT');
+const variantPresentColour = amr.getEffectColour('RESISTANT');
+const alternativePresentColour = amr.getEffectColour('INTERMEDIATE');
 
 const isMac =
   (navigator && navigator.platform &&
     navigator.platform.toUpperCase().indexOf('MAC') >= 0);
 const modifierKey = isMac ? 'Cmd' : 'Ctrl';
 
-function hasVariant(name, analysis) {
-  return analysis['sarscov2-variants'].variants.find(element => element.name === name).state === 'var'
+export function hasVariant(record) {
+  return record.state !== 'ref';
+}
+
+function findVariant(name, analysis) {
+  return analysis['sarscov2-variants'].variants.find(variant => variant.name === name);
+}
+
+function selectColour({ name, state }) {
+  if (state === 'ref' ) {
+    return amr.nonResistantColour;
+  } else if (state === 'var') {
+    return variantPresentColour;
+  }
+  return name.endsWith('?') ? variantPresentColour : alternativePresentColour;
 }
 
 function buildColumns(genomes) {
@@ -50,7 +63,7 @@ function buildColumns(genomes) {
         addState({ genomes }) {
           if (!genomes.length) return this;
           this.hidden = genomes.every(({ analysis }) =>
-            !analysis['sarscov2-variants'] || !hasVariant(variant.name, analysis)
+            !analysis['sarscov2-variants'] || !hasVariant(findVariant(variant.name, analysis))
           );
           this.width = this.getWidth() + this.cellPadding;
           return this;
@@ -59,26 +72,23 @@ function buildColumns(genomes) {
         headerTitle: `${variant.name} - ${modifierKey} + click to select multiple`,
         cellClasses: 'wgsa-table-cell--resistance',
         cellPadding: 16,
-        // flexGrow: 0,
-        // displayName: agent.name,
         label: variant.name,
         getWidth() {
           return measureHeadingText(variant.name);
         },
         getCellContents(props, { analysis }) {
-          return hasVariant(variant.name, analysis) ? (
+          const record = findVariant(variant.name, analysis);
+          return hasVariant(record) ? (
             <i
               className="material-icons wgsa-resistance-icon"
-              style={{ color: effectColour }}
+              style={{ color: selectColour(record) }}
               title={variant.name}
             >
             lens
             </i>
           ) : null;
         },
-        valueGetter: genome => (hasVariant(variant.name, genome.analysis) ?
-          effectColour :
-          amr.nonResistantColour),
+        valueGetter: genome => (selectColour(findVariant(variant.name, genome.analysis))),
         onHeaderClick,
       });
     });
@@ -95,7 +105,8 @@ export function createReducer() {
     switch (type) {
       case FETCH_COLLECTION.SUCCESS: {
         const { genomes, status } = payload.result;
-        if (status !== statuses.READY || !Organism.uiOptions['sarscov2-variants']) return state;
+        const hasResult = !!genomes[0].analysis['sarscov2-variants'];
+        if (status !== statuses.READY || !hasResult) return state;
         return {
           ...state,
           columns: [

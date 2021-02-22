@@ -7,16 +7,10 @@ import { onHeaderClick } from './thunks';
 import * as amr from '../amr-utils';
 import { measureHeadingText } from '../table/columnWidth';
 import { spacerGroup, systemGroup } from './utils';
-import Organism from '../../organisms';
 
 import { statuses, tableKeys } from '../constants';
 
 export const name = tableKeys.vista;
-
-function findElement(genome, geneName) {
-  return genome.analysis.vista.virulenceGenes
-    .find(gene => gene.name === geneName);
-}
 
 function selectColour(status) {
   if (!status) {
@@ -31,11 +25,12 @@ function selectColour(status) {
   return amr.nonResistantColour;
 }
 
-// const effectColour = amr.getEffectColour('RESISTANT');
-function hasCluster(genome, clusterName, field) {
-  return genome.analysis.vista &&
-    genome.analysis.vista[field]
-      .find(cluster => cluster.name === clusterName && cluster.status !== 'Not found');
+export function findCluster(clusterName, vistaField) {
+  return vistaField.find(cluster => cluster.name === clusterName);
+}
+
+function hasCluster({ vista }, clusterName, field) {
+  return vista && findCluster(clusterName, vista[field]).status !== 'Not found';
 }
 
 const isMac =
@@ -64,19 +59,19 @@ function buildColumnGroup(field, genomes) {
         const textWidth = measureHeadingText(record.name);
         return textWidth < 32 ? 48 : textWidth + 16;
       },
-      getCellContents(props, genome) {
-        return hasCluster(genome, record.name, field) ? (
+      getCellContents(props, { analysis }) {
+        return hasCluster(analysis, record.name, field) ? (
           <i
             className="material-icons wgsa-resistance-icon"
-            style={{ color: selectColour(hasCluster(genome, record.name, field).status) }}
+            style={{ color: selectColour(findCluster(record.name, analysis.vista[field]).status) }}
             title={`${record.name} (${record.type})`}
           >
             lens
           </i>
         ) : null;
       },
-      valueGetter: (genome) => {
-        const value = hasCluster(genome, record.name, field);
+      valueGetter: ( { analysis }) => {
+        const value = findCluster(record.name, analysis.vista[field]);
         return !!value ? selectColour(value.status) : amr.nonResistantColour;
       },
       onHeaderClick,
@@ -99,8 +94,9 @@ export function createReducer() {
   return function (state = initialState, { type, payload }) {
     switch (type) {
       case FETCH_COLLECTION.SUCCESS: {
-        const { genomes, status, isClusterView } = payload.result;
-        if (status !== statuses.READY || !Organism.uiOptions.vista) return state;
+        const { genomes, status } = payload.result;
+        const hasVistaResults = !!genomes[0].analysis.vista;
+        if (status !== statuses.READY || !hasVistaResults) return state;
         return {
           ...state,
           columns: [

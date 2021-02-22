@@ -76,10 +76,9 @@ const getGenomeDatatypes = createSelector(
       if (!hasCore && genome.analysis.core) {
         hasCore = true;
       }
-      if (!hasAMR && !hasKleborateAMRGenotypes && !hasKleborateAMR && genome.analysis.kleborate) {
+      if (!hasKleborateAMRGenotypes && !hasKleborateAMR && genome.analysis.kleborate) {
         hasKleborateAMR = true;
         hasKleborateAMRGenotypes = true;
-        hasAMR = true;
       }
 
       if (!hasSarscov2Variants && genome.analysis['sarscov2-variants']) {
