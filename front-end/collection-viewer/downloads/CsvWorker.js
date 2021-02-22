@@ -5,8 +5,8 @@ import { getUserDefinedValue } from '../table/utils';
 import { systemDataColumns } from '../data-tables/constants';
 import { createCode } from '../../mlst/utils';
 
-import { hasElement, kleborateHasElement, isResistant, kleborateIsResistant } from '../amr-utils';
-import { hasVariant } from '~/collection-viewer/amr-tables/sarscov2Variants';
+import { hasElement, isResistant, kleborateHasElement, kleborateIsResistant } from '../amr-utils';
+import { findCluster, hasCluster } from '~/collection-viewer/amr-tables/vista';
 
 const nameColumn = {
   columnKey: '__name',
@@ -70,7 +70,17 @@ const valueGettersByTable = {
     (kleborateHasElement(kleborate, element.replace('kleborateAMRGenotypes_', '').split('_')[0], element.replace('kleborateAMRGenotypes_', '').split('_').slice(1).join('_')) ? 1 : 0),
   sarscov2Variants: (element, { analysis }) =>
     (mapSarscov2VariantState(element, analysis)),
+  vista: (element, { analysis }) => (mapVistaState(element.replace('vista_', ''), analysis)),
 };
+
+function mapVistaState(element, { vista }) {
+  const geneRecord = findCluster(element, vista.virulenceGenes);
+  if (!!geneRecord) {
+    return geneRecord.status;
+  } else {
+    return findCluster(element, vista.virulenceClusters).status;
+  }
+}
 
 function mapSarscov2VariantState(element, analysis) {
   const variant = analysis['sarscov2-variants'].variants.find(variant => variant.name === element);

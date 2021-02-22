@@ -25,11 +25,12 @@ function selectColour(status) {
   return amr.nonResistantColour;
 }
 
-// const effectColour = amr.getEffectColour('RESISTANT');
-function hasCluster(genome, clusterName, field) {
-  return genome.analysis.vista &&
-    genome.analysis.vista[field]
-      .find(cluster => cluster.name === clusterName && cluster.status !== 'Not found');
+export function findCluster(clusterName, vistaField) {
+  return vistaField.find(cluster => cluster.name === clusterName);
+}
+
+function hasCluster({ vista }, clusterName, field) {
+  return vista && findCluster(clusterName, vista[field]).status !== 'Not found';
 }
 
 const isMac =
@@ -58,19 +59,19 @@ function buildColumnGroup(field, genomes) {
         const textWidth = measureHeadingText(record.name);
         return textWidth < 32 ? 48 : textWidth + 16;
       },
-      getCellContents(props, genome) {
-        return hasCluster(genome, record.name, field) ? (
+      getCellContents(props, { analysis }) {
+        return hasCluster(analysis, record.name, field) ? (
           <i
             className="material-icons wgsa-resistance-icon"
-            style={{ color: selectColour(hasCluster(genome, record.name, field).status) }}
+            style={{ color: selectColour(findCluster(record.name, analysis.vista[field]).status) }}
             title={`${record.name} (${record.type})`}
           >
             lens
           </i>
         ) : null;
       },
-      valueGetter: (genome) => {
-        const value = hasCluster(genome, record.name, field);
+      valueGetter: ( { analysis }) => {
+        const value = findCluster(record.name, analysis.vista[field]);
         return !!value ? selectColour(value.status) : amr.nonResistantColour;
       },
       onHeaderClick,
