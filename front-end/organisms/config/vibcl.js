@@ -30,5 +30,6 @@ export default {
   collections: [],
   uiOptions: {
     vista: true,
+    inctyper: true,
   },
 };
