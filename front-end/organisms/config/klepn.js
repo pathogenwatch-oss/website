@@ -33,6 +33,5 @@ export default {
   uiOptions: {
     noPopulation: true,
     noAMR: true,
-    kleborate: true,
   },
 };
