@@ -101,7 +101,7 @@ const DownloadsMenu = ({ collection, genomeIds, path, filename, tree, core }) =>
 
 DownloadsMenu.propTypes = {
   collection: React.PropTypes.object,
-  core: React.PropTypes.string,
+  core: React.PropTypes.bool,
   genomeIds: React.PropTypes.array,
   prefix: React.PropTypes.string,
   tree: React.PropTypes.string,
