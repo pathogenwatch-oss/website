@@ -119,7 +119,7 @@ function fillColumnDefs({ columns, ...group }) {
   };
 }
 
-function getTypingColumnGroups({ isClusterView }, uiOptions, hasAltMLST, hasVista, hasPangolin) {
+function getTypingColumnGroups({ isClusterView }, uiOptions, hasAltMLST, hasInctyper, hasPangolin, hasVista) {
   return [
     isClusterView || uiOptions.noPopulation ? null : referenceGroup,
     uiOptions.noMLST ? null : mlstGroup,
@@ -127,7 +127,7 @@ function getTypingColumnGroups({ isClusterView }, uiOptions, hasAltMLST, hasVist
     uiOptions.ngMast ? ngStarGroup : null,
     uiOptions.ngMast ? ngMastGroup : null,
     uiOptions.genotyphi ? genotyphiGroup : null,
-    uiOptions.inctyper ? inctyperGroup : null,
+    hasInctyper ? inctyperGroup : null,
     uiOptions.kleborate ? kleborateGroup : null,
     hasVista ? vistaGroup : null,
     hasPangolin ? pangolinGroup : null,
@@ -136,7 +136,7 @@ function getTypingColumnGroups({ isClusterView }, uiOptions, hasAltMLST, hasVist
     .map(fillColumnDefs);
 }
 
-export function hasTyping({ noPopulation, noMLST, ngMast, genotyphi }, hasVista, hasPangolin) {
+export function hasTyping({ noPopulation, noMLST, ngMast, genotyphi }, hasInctyper, hasPangolin, hasVista) {
   return !(noPopulation && noMLST && !ngMast && !genotyphi && !hasVista && !hasPangolin);
 }
 
@@ -160,9 +160,10 @@ export default function (state = initialState, { type, payload }) {
   switch (type) {
     case FETCH_COLLECTION.SUCCESS: {
 
-      const hasVista = !!payload.result.genomes[0].analysis.vista;
+      const hasInctyper = !!payload.result.genomes[0].analysis.inctyper;
       const hasPangolin = !!payload.result.genomes[0].analysis.pangolin;
-      const active = hasTyping(Organisms.uiOptions, hasVista, hasPangolin);
+      const hasVista = !!payload.result.genomes[0].analysis.vista;
+      const active = hasTyping(Organisms.uiOptions, hasInctyper, hasPangolin, hasVista);
 
       if (!active) {
         return {
@@ -177,7 +178,7 @@ export default function (state = initialState, { type, payload }) {
         active,
         columns: [
           leadingSystemGroup,
-          ...getTypingColumnGroups(payload.result, Organisms.uiOptions, hasAltMLST, hasVista, hasPangolin),
+          ...getTypingColumnGroups(payload.result, Organisms.uiOptions, hasAltMLST, hasInctyper, hasPangolin, hasVista),
           trailingSystemGroup,
         ],
       };

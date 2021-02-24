@@ -35,5 +35,4 @@ export default {
     noMLST: true,
     noAMR: true,
   },
-  inctyper: true,
 };

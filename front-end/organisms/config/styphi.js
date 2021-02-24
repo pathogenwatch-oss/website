@@ -63,7 +63,5 @@ export default {
   },
   uiOptions: {
     genotyphi: true,
-    inctyper: true,
-    // defaultTree: 'radial',
   },
 };

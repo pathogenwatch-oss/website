@@ -34,6 +34,5 @@ export default {
     noPopulation: true,
     noAMR: true,
     kleborate: true,
-    inctyper: true,
   },
 };
