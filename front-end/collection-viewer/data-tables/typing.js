@@ -8,6 +8,7 @@ import { tableKeys } from '../constants';
 
 import Organisms from '~/organisms';
 import { resetSources, sources } from './utils';
+import { getGenomeDatatypes } from '~/collection-viewer/genomes/selectors';
 
 const initialState = {
   name: tableKeys.typing,
@@ -118,13 +119,13 @@ function fillColumnDefs({ columns, ...group }) {
   };
 }
 
-function getTypingColumnGroups({ isClusterView }, uiOptions, hasAltMLST, { genotyphi, inctyper, kleborate, pangolin, vista }) {
+function getTypingColumnGroups({ isClusterView }, uiOptions, hasAltMLST, { genotyphi, inctyper, kleborate, ngmast, ngstar, pangolin, vista }) {
   return [
     isClusterView || uiOptions.noPopulation ? null : referenceGroup,
     uiOptions.noMLST ? null : mlstGroup,
     hasAltMLST ? mlst2Group : null,
-    uiOptions.ngMast ? ngStarGroup : null,
-    uiOptions.ngMast ? ngMastGroup : null,
+    ngstar ? ngStarGroup : null,
+    ngmast ? ngMastGroup : null,
     genotyphi ? genotyphiGroup : null,
     inctyper ? inctyperGroup : null,
     kleborate ? kleborateGroup : null,
@@ -135,8 +136,8 @@ function getTypingColumnGroups({ isClusterView }, uiOptions, hasAltMLST, { genot
     .map(fillColumnDefs);
 }
 
-export function hasTyping({ noPopulation, noMLST, ngMast }, { genotyphi, inctyper, kleborate, pangolin, vista }) {
-  return !(noPopulation && noMLST && !ngMast && !genotyphi && !inctyper && !kleborate && !pangolin && !vista);
+export function hasTyping({ noPopulation, noMLST }, { genotyphi, inctyper, kleborate, ngmast, ngstar, pangolin, vista }) {
+  return !(noPopulation && noMLST && !genotyphi && !inctyper && !kleborate && !ngmast && !ngstar && !pangolin && !vista);
 }
 
 function updateTypingSettings({ genomes }) {
@@ -163,7 +164,7 @@ export default function (state = initialState, { type, payload }) {
   switch (type) {
     case FETCH_COLLECTION.SUCCESS: {
 
-      const foundAnalyses = checkAnalysesPresent(payload.result, ['genotyphi', 'inctyper', 'kleborate', 'pangolin', 'vista']);
+      const foundAnalyses = checkAnalysesPresent(payload.result, ['genotyphi', 'inctyper', 'kleborate', 'ngmast', 'ngstar', 'pangolin', 'vista']);
       const active = hasTyping(Organisms.uiOptions, foundAnalyses);
 
       if (!active) {

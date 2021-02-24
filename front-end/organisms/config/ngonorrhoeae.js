@@ -30,7 +30,6 @@ export default {
   publicMetadataColumnNames: [],
   collections: [],
   uiOptions: {
-    ngMast: true,
     noPopulation: true,
   },
 };
