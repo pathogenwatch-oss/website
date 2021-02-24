@@ -7,8 +7,7 @@ import * as constants from '../table/constants';
 import { tableKeys } from '../constants';
 
 import Organisms from '~/organisms';
-import { sources, resetSources } from './utils';
-import { hasVista } from '~/collection-viewer/genomes/selectors';
+import { resetSources, sources } from './utils';
 
 const initialState = {
   name: tableKeys.typing,
@@ -119,7 +118,7 @@ function fillColumnDefs({ columns, ...group }) {
   };
 }
 
-function getTypingColumnGroups({ isClusterView }, uiOptions, hasAltMLST, hasInctyper, hasPangolin, hasVista) {
+function getTypingColumnGroups({ isClusterView }, uiOptions, hasAltMLST, { inctyper, kleborate, pangolin, vista }) {
   return [
     isClusterView || uiOptions.noPopulation ? null : referenceGroup,
     uiOptions.noMLST ? null : mlstGroup,
@@ -127,17 +126,17 @@ function getTypingColumnGroups({ isClusterView }, uiOptions, hasAltMLST, hasInct
     uiOptions.ngMast ? ngStarGroup : null,
     uiOptions.ngMast ? ngMastGroup : null,
     uiOptions.genotyphi ? genotyphiGroup : null,
-    hasInctyper ? inctyperGroup : null,
-    uiOptions.kleborate ? kleborateGroup : null,
-    hasVista ? vistaGroup : null,
-    hasPangolin ? pangolinGroup : null,
+    inctyper ? inctyperGroup : null,
+    kleborate ? kleborateGroup : null,
+    vista ? vistaGroup : null,
+    pangolin ? pangolinGroup : null,
   ]
     .filter(_ => _) // removes the nulls
     .map(fillColumnDefs);
 }
 
-export function hasTyping({ noPopulation, noMLST, ngMast, genotyphi }, hasInctyper, hasPangolin, hasVista) {
-  return !(noPopulation && noMLST && !ngMast && !genotyphi && !hasVista && !hasPangolin);
+export function hasTyping({ noPopulation, noMLST, ngMast, genotyphi }, { inctyper, kleborate, pangolin, vista }) {
+  return !(noPopulation && noMLST && !ngMast && !genotyphi && !inctyper && !kleborate && !pangolin && !vista);
 }
 
 function updateTypingSettings({ genomes }) {
@@ -156,14 +155,16 @@ function updateTypingSettings({ genomes }) {
   return false;
 }
 
+function checkAnalysesPresent({ genomes }, analyses) {
+  return analyses.reduce((memo, analysis) => {memo[analysis] = !!genomes[0].analysis[analysis]; return memo;}, {});
+}
+
 export default function (state = initialState, { type, payload }) {
   switch (type) {
     case FETCH_COLLECTION.SUCCESS: {
 
-      const hasInctyper = !!payload.result.genomes[0].analysis.inctyper;
-      const hasPangolin = !!payload.result.genomes[0].analysis.pangolin;
-      const hasVista = !!payload.result.genomes[0].analysis.vista;
-      const active = hasTyping(Organisms.uiOptions, hasInctyper, hasPangolin, hasVista);
+      const foundAnalyses = checkAnalysesPresent(payload.result, ['inctyper', 'kleborate', 'pangolin', 'vista']);
+      const active = hasTyping(Organisms.uiOptions, foundAnalyses);
 
       if (!active) {
         return {
@@ -178,7 +179,7 @@ export default function (state = initialState, { type, payload }) {
         active,
         columns: [
           leadingSystemGroup,
-          ...getTypingColumnGroups(payload.result, Organisms.uiOptions, hasAltMLST, hasInctyper, hasPangolin, hasVista),
+          ...getTypingColumnGroups(payload.result, Organisms.uiOptions, hasAltMLST, foundAnalyses),
           trailingSystemGroup,
         ],
       };

@@ -51,7 +51,7 @@ export const getGenomeList = createSelector(
   (genomes, ids) => Array.from(ids).map(id => genomes[id])
 );
 
-const getGenomeDatatypes = createSelector(
+export const getGenomeDatatypes = createSelector(
   getGenomeList,
   getCollection,
   (genomes, { isClusterView }) => {
