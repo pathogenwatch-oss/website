@@ -20,6 +20,5 @@ export default {
   publicMetadataColumnNames: [],
   uiOptions: {
     noPopulation: true,
-    noAMR: true,
   },
 };

@@ -30,6 +30,5 @@ export default {
   uiOptions: {
     noPopulation: true,
     noMLST: true,
-    noAMR: true,
   },
 };

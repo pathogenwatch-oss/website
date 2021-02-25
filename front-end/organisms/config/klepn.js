@@ -32,6 +32,5 @@ export default {
   collections: [],
   uiOptions: {
     noPopulation: true,
-    noAMR: true,
   },
 };

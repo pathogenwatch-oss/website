@@ -33,6 +33,5 @@ export default {
   collections: [],
   uiOptions: {
     noMLST: true,
-    noAMR: true,
   },
 };
