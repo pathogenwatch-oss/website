@@ -36,14 +36,12 @@ router.post('/:token/fastas', require('./fastas'));
 router.get('/:token/annotations', require('./annotations'));
 router.post('/:token/annotations', require('./annotations'));
 
-router.post('/:token/:type-matrix', require('./matrix'));
-
 router.post('/:token/core-allele-distribution', require('./core-allele-distribution'));
-
-router.get('/:token/variance-summary', require('./variance-summary'));
-
-router.post('/:token/speciator', require('./speciator'));
 router.post('/:token/kleborate', require('./kleborate'));
+router.post('/:token/pangolin', require('./pangolin'));
+router.post('/:token/speciator', require('./speciator'));
+router.post('/:token/:type-matrix', require('./matrix'));
+router.get('/:token/variance-summary', require('./variance-summary'));
 router.post('/:token/vista', require('./vista'));
 
 module.exports = router;

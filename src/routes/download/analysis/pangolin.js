@@ -2,19 +2,7 @@ const sanitize = require('sanitize-filename');
 const csv = require('csv');
 const Genome = require('models/genome');
 
-const transformer = function (doc) {
-  const record = {
-    'Genome ID': doc._id.toString(),
-    'Genome Name': doc.name,
-    Version: doc.analysis.pangolin.__v,
-  };
-
-  Object.keys(doc.analysis.pangolin).filter(field => field !== '__v').forEach((item) => {
-    record[item] = doc.analysis.pangolin[item];
-  });
-
-  return record;
-};
+const { transformer } = require('../utils/pangolin');
 
 module.exports = (req, res) => {
   const { user } = req;

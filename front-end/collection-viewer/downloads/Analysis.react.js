@@ -26,7 +26,7 @@ const DownloadForm = ({ link, filename, title, genomeIds, children }) => (
   </form>
 );
 
-const DownloadsMenu = ({ collection, genomeIds, prefix, datatypes: { hasKleborateAMR, hasVista } }) => (
+const DownloadsMenu = ({ collection, genomeIds, prefix, datatypes: { hasKleborateAMR, hasVista, hasPangolin } }) => (
   <React.Fragment>
     <DownloadForm
       link={`${prefix}/speciator`}
@@ -50,6 +50,14 @@ const DownloadsMenu = ({ collection, genomeIds, prefix, datatypes: { hasKleborat
       genomeIds={genomeIds}
     >
       Vista
+    </DownloadForm> }
+    { hasPangolin &&
+    <DownloadForm
+      link={`${prefix}/pangolin`}
+      filename={formatCollectionFilename(collection, 'pangolin.csv')}
+      genomeIds={genomeIds}
+    >
+      Pangolin
     </DownloadForm> }
   </React.Fragment>
 );
