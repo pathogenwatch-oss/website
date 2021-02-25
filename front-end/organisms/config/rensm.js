@@ -32,6 +32,6 @@ export default {
   publicMetadataColumnNames: [],
   collections: [],
   uiOptions: {
-    noMLST: true,
+    hasPopulation: true,
   },
 };

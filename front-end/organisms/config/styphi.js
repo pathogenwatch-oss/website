@@ -61,5 +61,7 @@ export default {
       { gene: 'tetR(B)', from: 'SIL', to: 'TCY' },
     ],
   },
-  uiOptions: {},
+  uiOptions: {
+    hasPopulation: true,
+  },
 };

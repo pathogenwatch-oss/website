@@ -119,10 +119,10 @@ function fillColumnDefs({ columns, ...group }) {
   };
 }
 
-function getTypingColumnGroups({ isClusterView }, uiOptions, hasAltMLST, { genotyphi, inctyper, kleborate, ngmast, ngstar, pangolin, vista }) {
+function getTypingColumnGroups({ isClusterView }, uiOptions, hasAltMLST, { genotyphi, inctyper, kleborate, mlst, ngmast, ngstar, pangolin, vista }) {
   return [
     isClusterView || uiOptions.noPopulation ? null : referenceGroup,
-    uiOptions.noMLST ? null : mlstGroup,
+    mlst ? mlstGroup : null,
     hasAltMLST ? mlst2Group : null,
     ngstar ? ngStarGroup : null,
     ngmast ? ngMastGroup : null,
@@ -136,8 +136,8 @@ function getTypingColumnGroups({ isClusterView }, uiOptions, hasAltMLST, { genot
     .map(fillColumnDefs);
 }
 
-export function hasTyping({ noPopulation, noMLST }, { genotyphi, inctyper, kleborate, ngmast, ngstar, pangolin, vista }) {
-  return !(noPopulation && noMLST && !genotyphi && !inctyper && !kleborate && !ngmast && !ngstar && !pangolin && !vista);
+export function hasTyping({ noPopulation }, { genotyphi, inctyper, kleborate, mlst, ngmast, ngstar, pangolin, vista }) {
+  return !(noPopulation && !mlst && !genotyphi && !inctyper && !kleborate && !ngmast && !ngstar && !pangolin && !vista);
 }
 
 function updateTypingSettings({ genomes }) {
@@ -164,7 +164,7 @@ export default function (state = initialState, { type, payload }) {
   switch (type) {
     case FETCH_COLLECTION.SUCCESS: {
 
-      const foundAnalyses = checkAnalysesPresent(payload.result, ['genotyphi', 'inctyper', 'kleborate', 'ngmast', 'ngstar', 'pangolin', 'vista']);
+      const foundAnalyses = checkAnalysesPresent(payload.result, ['genotyphi', 'inctyper', 'kleborate', 'mlst', 'ngmast', 'ngstar', 'pangolin', 'vista']);
       const active = hasTyping(Organisms.uiOptions, foundAnalyses);
 
       if (!active) {
