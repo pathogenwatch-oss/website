@@ -121,7 +121,7 @@ function fillColumnDefs({ columns, ...group }) {
 
 function getTypingColumnGroups({ isClusterView }, uiOptions, hasAltMLST, { genotyphi, inctyper, kleborate, mlst, ngmast, ngstar, pangolin, vista }) {
   return [
-    isClusterView || uiOptions.noPopulation ? null : referenceGroup,
+    isClusterView || !uiOptions.hasPopulation ? null : referenceGroup,
     mlst ? mlstGroup : null,
     hasAltMLST ? mlst2Group : null,
     ngstar ? ngStarGroup : null,
@@ -136,8 +136,8 @@ function getTypingColumnGroups({ isClusterView }, uiOptions, hasAltMLST, { genot
     .map(fillColumnDefs);
 }
 
-export function hasTyping({ noPopulation }, { genotyphi, inctyper, kleborate, mlst, ngmast, ngstar, pangolin, vista }) {
-  return !(noPopulation && !mlst && !genotyphi && !inctyper && !kleborate && !ngmast && !ngstar && !pangolin && !vista);
+export function hasTyping({ hasPopulation }, { genotyphi, inctyper, kleborate, mlst, ngmast, ngstar, pangolin, vista }) {
+  return !(!hasPopulation && !mlst && !genotyphi && !inctyper && !kleborate && !ngmast && !ngstar && !pangolin && !vista);
 }
 
 function updateTypingSettings({ genomes }) {
