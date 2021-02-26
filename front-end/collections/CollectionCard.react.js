@@ -45,13 +45,13 @@ export default ({ item, footerLink }) => {
         <CardMetadata tooltip={createdAt.toLocaleString()} icon="access_time">
           {dateSince(createdAt, now)} ago
         </CardMetadata>
-        { status !== 'READY' &&
-          <CardMetadata title="Status" icon={statusIcons[status]}>
+        {status !== 'READY' &&
+        <CardMetadata title="Status" icon={statusIcons[status]}>
             {statusText[status]}
           </CardMetadata>
         }
       </span>
-      { item.title ?
+      {item.title ?
         <MarkdownHeading
           level="2"
           className="wgsa-card-title wgsa-overflow-fade"
@@ -63,7 +63,7 @@ export default ({ item, footerLink }) => {
       <p className="wgsa-card-subtitle">
         <FormattedName organismId={item.organismId} />
       </p>
-      { item.description ?
+      {item.description ?
         <Markdown className="wgsa-card-description" source={item.description} /> :
         <p>(no description)</p>
       }
@@ -74,7 +74,13 @@ export default ({ item, footerLink }) => {
         >
           View Collection
         </Link>
-        { footerLink || getFooterLink(item) }
+        <Link
+          className="mdl-button mdl-button--primary wgsa-button--text"
+          to={`/genomes/all?collection=${item.token}&organismId=${item.organismId}`}
+        >
+          List Genomes
+        </Link>
+        {footerLink || getFooterLink(item)}
       </div>
     </Card>
   );
