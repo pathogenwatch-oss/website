@@ -20,7 +20,7 @@ function generateColumn(variants, type) {
       <dt>{type}</dt>
       <dd>{
         variants
-          .filter(variant => variant.state !== 'ref')
+          .filter(variant => variant.state === 'var' || variant.state === 'other')
           .filter(variant => variant.type === type)
           .sort((a,b) => a.name < b.name ? -1 : 1)
           .map(variant => generateDocLink(variant))
