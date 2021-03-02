@@ -84,7 +84,7 @@ const Details = React.createClass({
             <ul>
               <li><a href={`/download/organism/${nickname}/core_representatives.csv`}>Core Representatives</a></li>
               <li><a href={`/download/organism/${nickname}/reference_fastas.zip`}>Genome Sequences</a></li>
-              {!uiOptions.noPopulation && <li><a href={`/genomes/all?access=reference&organismId=${organismId}`}>View in Pathogenwatch</a></li>}
+              {uiOptions.hasPopulation && <li><a href={`/genomes/all?access=reference&organismId=${organismId}`}>View references in Pathogenwatch</a></li>}
             </ul>
           </div>
         </div>

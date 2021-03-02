@@ -71,7 +71,7 @@ const CreateCollection = ({ selectedGenomeSummary, deployedOrganisms, onClick })
     const count = genomes.length;
     const { uiOptions = {} } = taxIdMap.get(organismId);
 
-    if (uiOptions.noPopulation && count < 3) {
+    if (!uiOptions.hasPopulation && count < 3) {
       return <NotEnoughGenomes organismId={organismId} deficit={3 - count} />;
     }
     return (

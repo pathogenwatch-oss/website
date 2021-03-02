@@ -20,8 +20,8 @@ const isMac =
     navigator.platform.toUpperCase().indexOf('MAC') >= 0);
 const modifierKey = isMac ? 'Cmd' : 'Ctrl';
 
-export function hasVariant(record) {
-  return record.state !== 'ref';
+function hasVariant(record) {
+  return record.state !== 'ref' && record.state !== 'sequence error';
 }
 
 function findVariant(name, analysis) {
@@ -29,7 +29,7 @@ function findVariant(name, analysis) {
 }
 
 function selectColour({ name, state }) {
-  if (state === 'ref' ) {
+  if (state === 'ref'||  state === 'sequence error' ) {
     return amr.nonResistantColour;
   } else if (state === 'var') {
     return variantPresentColour;
@@ -63,7 +63,7 @@ function buildColumns(genomes) {
         addState({ genomes }) {
           if (!genomes.length) return this;
           this.hidden = genomes.every(({ analysis }) =>
-            !analysis['sarscov2-variants'] || !hasVariant(findVariant(variant.name, analysis))
+            !analysis['sarscov2-variants'] || findVariant(variant.name, analysis).state !== 'ref'
           );
           this.width = this.getWidth() + this.cellPadding;
           return this;
@@ -86,7 +86,14 @@ function buildColumns(genomes) {
             >
             lens
             </i>
-          ) : null;
+          ) : (record.state === 'sequence error' ? (
+            <i
+              className="material-icons wgsa-resistance-icon"
+              title={variant.name}
+            >
+            help_outline
+            </i>
+          ) : null);
         },
         valueGetter: genome => (selectColour(findVariant(variant.name, genome.analysis))),
         onHeaderClick,

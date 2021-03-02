@@ -31,9 +31,5 @@ export default {
   publicMetadataColumnNames: [],
   collections: [],
   uiOptions: {
-    noPopulation: true,
-    noAMR: true,
-    kleborate: true,
-    inctyper: true,
   },
 };

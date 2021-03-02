@@ -811,7 +811,7 @@
       },
       {
         "task": "sarscov2-variants",
-        "version": "0.0.9",
+        "version": "0.1.0",
         "flags": {
           "COV2_USER": true
         }

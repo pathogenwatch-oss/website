@@ -30,8 +30,8 @@ export const getCollectionMetadata = createSelector(
 export const getSingleTree = createSelector(
   getCollection,
   (collection) => {
+    if (!Organisms.uiOptions.hasPopulation) return COLLECTION;
     if (collection.size < 3) return POPULATION;
-    if (Organisms.uiOptions.noPopulation) return COLLECTION;
     return null;
   }
 );

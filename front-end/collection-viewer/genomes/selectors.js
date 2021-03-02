@@ -51,7 +51,7 @@ export const getGenomeList = createSelector(
   (genomes, ids) => Array.from(ids).map(id => genomes[id])
 );
 
-const getGenomeDatatypes = createSelector(
+export const getGenomeDatatypes = createSelector(
   getGenomeList,
   getCollection,
   (genomes, { isClusterView }) => {
@@ -59,9 +59,11 @@ const getGenomeDatatypes = createSelector(
     let hasAMR = false;
     let hasKleborateAMR = false;
     let hasKleborateAMRGenotypes = false;
+    let hasMLST = false;
     let hasSarscov2Variants = false;
     let hasVista = false;
     let hasCore = false;
+    let hasPangolin = false;
 
     for (const genome of genomes) {
       if (!hasMetadata) {
@@ -76,6 +78,14 @@ const getGenomeDatatypes = createSelector(
       if (!hasCore && genome.analysis.core) {
         hasCore = true;
       }
+
+      if (!hasMLST && genome.analysis.mlst) {
+        hasMLST = true;
+      }
+      if (!hasPangolin && genome.analysis.pangolin) {
+        hasPangolin = true;
+      }
+
       if (!hasKleborateAMRGenotypes && !hasKleborateAMR && genome.analysis.kleborate) {
         hasKleborateAMR = true;
         hasKleborateAMRGenotypes = true;
@@ -102,8 +112,10 @@ const getGenomeDatatypes = createSelector(
       hasMetadata,
       hasAMR,
       hasCore,
+      hasPangolin,
       hasKleborateAMR,
       hasKleborateAMRGenotypes,
+      hasMLST,
       hasSarscov2Variants,
       hasVista,
     };
@@ -124,6 +136,12 @@ export const hasCore = createSelector(
   getGenomeDatatypes,
   datatypes => datatypes.hasCore
 )
+
+export const hasPangolin = createSelector(
+  getGenomeDatatypes,
+  datatypes => datatypes.hasPangolin
+)
+
 export const hasKleborateAMR = createSelector(
   getGenomeDatatypes,
   datatypes => datatypes.hasKleborateAMR
@@ -132,6 +150,11 @@ export const hasKleborateAMR = createSelector(
 export const hasKleborateAMRGenotypes = createSelector(
   getGenomeDatatypes,
   datatypes => datatypes.hasKleborateAMRGenotypes
+);
+
+export const hasMLST = createSelector(
+  getGenomeDatatypes,
+  datatypes => datatypes.hasMLST
 );
 
 export const hasSarscov2Variants = createSelector(

@@ -29,7 +29,6 @@ export default {
   publicMetadataColumnNames: [],
   collections: [],
   uiOptions: {
-    vista: true,
-    inctyper: true,
+    hasPopulation: true,
   },
 };

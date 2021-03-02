@@ -95,8 +95,7 @@ export function createReducer() {
     switch (type) {
       case FETCH_COLLECTION.SUCCESS: {
         const { genomes, status } = payload.result;
-        const hasVistaResults = !!genomes[0].analysis.vista;
-        if (status !== statuses.READY || !hasVistaResults) return state;
+        if (status !== statuses.READY || !genomes[0].analysis.vista) return state;
         return {
           ...state,
           columns: [

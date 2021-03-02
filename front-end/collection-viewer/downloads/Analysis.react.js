@@ -8,6 +8,7 @@ import { getActiveGenomeIds } from '../selectors/active';
 import { formatCollectionFilename } from './utils';
 
 import Organisms from '~/organisms';
+import { getGenomeDatatypes } from '~/collection-viewer/genomes/selectors';
 
 const DownloadForm = ({ link, filename, title, genomeIds, children }) => (
   <form
@@ -25,7 +26,7 @@ const DownloadForm = ({ link, filename, title, genomeIds, children }) => (
   </form>
 );
 
-const DownloadsMenu = ({ collection, genomeIds, prefix }) => (
+const DownloadsMenu = ({ collection, genomeIds, prefix, datatypes: { hasKleborateAMR, hasVista, hasPangolin } }) => (
   <React.Fragment>
     <DownloadForm
       link={`${prefix}/speciator`}
@@ -34,7 +35,7 @@ const DownloadsMenu = ({ collection, genomeIds, prefix }) => (
     >
       Species prediction
     </DownloadForm>
-    { Organisms.uiOptions.kleborate &&
+    { hasKleborateAMR &&
     <DownloadForm
       link={`${prefix}/kleborate`}
       filename={formatCollectionFilename(collection, 'kleborate.csv')}
@@ -42,11 +43,28 @@ const DownloadsMenu = ({ collection, genomeIds, prefix }) => (
     >
       Kleborate
     </DownloadForm> }
+    { hasVista &&
+    <DownloadForm
+      link={`${prefix}/vista`}
+      filename={formatCollectionFilename(collection, 'vista.csv')}
+      genomeIds={genomeIds}
+    >
+      Vista
+    </DownloadForm> }
+    { hasPangolin &&
+    <DownloadForm
+      link={`${prefix}/pangolin`}
+      filename={formatCollectionFilename(collection, 'pangolin.csv')}
+      genomeIds={genomeIds}
+    >
+      Pangolin
+    </DownloadForm> }
   </React.Fragment>
 );
 
 DownloadsMenu.propTypes = {
   collection: React.PropTypes.object,
+  datatypes: React.PropTypes.object,
   genomeIds: React.PropTypes.array,
   prefix: React.PropTypes.string,
 };
@@ -54,6 +72,7 @@ DownloadsMenu.propTypes = {
 function mapStateToProps(state) {
   return {
     collection: getCollection(state),
+    datatypes: getGenomeDatatypes(state),
     genomeIds: getActiveGenomeIds(state),
     prefix: getDownloadPath(state),
   };

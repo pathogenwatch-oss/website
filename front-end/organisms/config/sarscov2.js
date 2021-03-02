@@ -20,8 +20,5 @@ export default {
   maxGenomeSize: 15000,
   publicMetadataColumnNames: [],
   uiOptions: {
-    noPopulation: true,
-    noMLST: true,
-    noAMR: true,
   },
 };
