@@ -62,9 +62,7 @@ function buildColumns(genomes) {
         columnKey: `${variant.name}`,
         addState({ genomes }) {
           if (!genomes.length) return this;
-          this.hidden = genomes.every(({ analysis }) =>
-            !analysis['sarscov2-variants'] || findVariant(variant.name, analysis).state !== 'ref'
-          );
+          this.hidden = genomes.every(({ analysis }) => !analysis['sarscov2-variants'] || findVariant(variant.name, analysis).state === 'ref');
           this.width = this.getWidth() + this.cellPadding;
           return this;
         },
