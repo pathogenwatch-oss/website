@@ -110,7 +110,7 @@ const DownloadsMenu = (props) => {
         genomeIds={genomeIds}
         generateFile={() => generateSarscov2Variants( {genomes, genomeIds, tables})}
       >
-      Notable Variants
+      Notable Mutations
     </DownloadButton> }
     </React.Fragment>
   );

@@ -34,7 +34,7 @@ export default ({ genome }) => {
   return (
     <React.Fragment>
       <header className="pw-genome-report-section-header">
-        <h2>Notable Variants</h2>
+        <h2>Notable Mutations</h2>
         <a
           href="https://cgps.gitlab.io/cog-uk/type_variants/"
           target="_blank"
@@ -44,7 +44,7 @@ export default ({ genome }) => {
             https://cgps.gitlab.io/cog-uk/type_variants/
         </a>
       </header>
-      {sarscov2Variants.alt_count === 0 && <p>No notable variants found.</p>}
+      {sarscov2Variants.alt_count === 0 && <p>No notable mutations found.</p>}
       {sarscov2Variants.alt_count > 0 &&
       <dl className="grid">
         {

@@ -77,7 +77,7 @@ const TableMenu = connect(
           <button onClick={() => showTable(tableKeys.kleborateAMRGenotypes)}>AMR Genotypes</button>
         </>
       }
-      {sarscov2Variants && <button onClick={() => showTable(tableKeys.sarscov2Variants)}>Notable Variants</button>}
+      {sarscov2Variants && <button onClick={() => showTable(tableKeys.sarscov2Variants)}>Notable Mutations</button>}
       {vista && <hr />}
       {vista && <button onClick={() => showTable(tableKeys.vista)}>Virulence</button>}
       {timeline &&

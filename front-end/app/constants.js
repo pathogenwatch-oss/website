@@ -69,7 +69,7 @@ export const analysisLabels = {
   paarsnp: 'AMR',
   pangolin: 'Pangolin',
   poppunk: 'Strain',
-  "sarscov2-variants": 'Notable variants',
+  "sarscov2-variants": 'Notable mutations',
   serotype: 'Serotype',
   speciator: 'Species prediction',
   spn_pbp_amr: 'AMR (PBPs)',
