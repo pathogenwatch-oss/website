@@ -167,7 +167,7 @@ const Filter = ({
     />
     <FilterableSection
       filterKey="sarscov2-variants"
-      heading="Notable Variants"
+      heading="Notable Mutations"
       icon="book"
     />
     <FilterableSection
