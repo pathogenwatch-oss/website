@@ -506,7 +506,7 @@
       {
         "task": "kleborate",
         "timeout": 900,
-        "version": "v2.2.0"
+        "version": "v2.2.1"
       }
     ],
     "1624": [
@@ -1194,7 +1194,7 @@
       {
         "task": "kleborate",
         "timeout": 900,
-        "version": "v2.2.0"
+        "version": "v2.2.1"
       },
       {
         "flags": {
