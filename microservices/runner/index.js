@@ -57,10 +57,9 @@ function subscribeToQueue(queueName, queueType = queueName) {
         const { taskId } = metadata;
         const { version } = spec;
         LOGGER.info('Got result', spec.task, spec.version, metadata);
-        await request('clustering', 'delete-prior', { relatedBy, metadata, version });
         return await request('clustering', 'send-progress', { taskId, payload: { status: 'READY' } });
       },
-      message => request('clustering', 'error', message)
+      message => LOGGER.error(message)
     );
   }
 }

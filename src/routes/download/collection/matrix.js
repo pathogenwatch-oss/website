@@ -1,7 +1,7 @@
 const Genome = require('models/genome');
-const ScoreCache = require('models/scoreCache');
 const transform = require('stream-transform');
 const sanitize = require('sanitize-filename');
+const store = require('utils/object-store');
 
 const { request } = require('services');
 const { ServiceRequestError } = require('utils/errors');
@@ -17,29 +17,6 @@ function getCollectionGenomes({ genomes }, genomeIds) {
   return Genome
     .find(query, { fileId: 1, name: 1 }, { sort: { name: 1 } })
     .lean();
-}
-
-function getCache(tree, genomes, type) {
-  const fieldName = (type === 'score') ? 'scores' : 'differences';
-  const { versions } = tree;
-  return ScoreCache.find(
-    { fileId: { $in: genomes.map(_ => _.fileId) }, 'versions.core': versions.core, 'versions.tree': versions.tree },
-    genomes.reduce(
-      (projection, { fileId }) => {
-        projection[`${fieldName}.${fileId}`] = 1;
-        return projection;
-      },
-      { fileId: 1 }
-    ),
-    { sort: { fileId: 1 } }
-  )
-  .then(cache => {
-    const cacheByFileId = {};
-    for (const doc of cache) {
-      cacheByFileId[doc.fileId] = doc[fieldName];
-    }
-    return cacheByFileId;
-  });
 }
 
 function writeMatrixHeader(genomes, stream) {
@@ -116,7 +93,8 @@ module.exports = (req, res, next) => {
         throw new ServiceRequestError('Tree not found');
       }
 
-      const cache = await getCache(tree, genomes, type);
+      const fileIds = genomes.map(_ => _.fileId);
+      const cache = await store.getScoreCache(fileIds, tree.versions, type);
       return { genomes, cache };
     })
     .then(data => generateMatrix(data, stream))

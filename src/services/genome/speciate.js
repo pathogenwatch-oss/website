@@ -1,6 +1,6 @@
-const Analysis = require('models/analysis');
 const Genome = require('models/genome');
 const User = require('models/user');
+const store = require('utils/object-store');
 
 const { request } = require('services');
 const { getSpeciatorTask, getTasksByOrganism } = require('manifest');
@@ -12,10 +12,12 @@ async function submitTasks({ genomeId, fileId, uploadedAt, clientId, userId }, d
   const { organismId, speciesId, genusId, superkingdomId } = speciatorResult;
   const user = await User.findById(userId, { flags: 1 });
   const tasks = getTasksByOrganism(speciatorResult, user);
-  const cachedResults = await Analysis.find({
-    fileId,
-    $or: tasks.map(({ task, version }) => ({ task, version, organismId })),
-  }).lean();
+
+  const analysisKeys = tasks.map(({ task, version }) => store.analysisKey(task, version, fileId))
+  const cachedResults = [];
+  for await (const value of store.iterGet(analysisKeys)) {
+    cachedResults.push(JSON.parse(value));
+  }
 
   await Genome.addAnalysisResults(genomeId, doc, ...cachedResults);
 
@@ -27,7 +29,7 @@ async function submitTasks({ genomeId, fileId, uploadedAt, clientId, userId }, d
     notify({ genomeId, clientId, uploadedAt, tasks: existingTasks });
   }
 
-  if (missingTasks.length === 0) return Promise.resolve();
+  if (missingTasks.length === 0) return;
 
   return request('tasks', 'enqueue-genome', {
     genomeId,
@@ -53,7 +55,8 @@ module.exports = async function findTask(message, retries = 0) {
   const { genomeId, fileId, uploadedAt, clientId } = message.metadata;
   const { task, version, timeout = defaultTimeout } = speciatorTask;
 
-  const doc = await Analysis.findOne({ fileId, task, version }).lean();
+  const value = await store.getAnalysis(task, version, fileId)
+  const doc = JSON.parse(value);
   const { precache = false } = message;
   if (doc && !precache) {
     return submitTasks(message.metadata, doc);

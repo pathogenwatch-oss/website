@@ -12,10 +12,11 @@ const mongoConnection = require('utils/mongoConnection');
 
 const Genome = require('models/genome');
 const Collection = require('models/collection');
-const Analysis = require('models/analysis');
 const Organism = require('models/organism');
+const store = require('utils/object-store');
 
-const { ObjectId } = require('mongoose').Types
+const { ObjectId } = require('mongoose').Types;
+const { mode } = require('webpack.config');
 
 function deserialize(rawDoc) {
   return BSON.deserialize(Buffer.from(rawDoc, 'base64'))
@@ -33,7 +34,7 @@ async function process(line) {
       model = Collection
       break
     case 'analysis':
-      model = Analysis
+      model = 'Analysis'
       break
     case 'organism':
       model = Organism
@@ -55,6 +56,7 @@ async function process(line) {
   // I tried doing a traditional "upsert" but had a problem with some documents
   // and a date field.  This seems to be quick and actually work.
   try {
+    if (model === 'Analysis') return await store.putAnalysis(doc.task, doc.version, doc.fileId, doc);
     return await model.collection.findOneAndReplace({_id: ObjectId(_id)}, rest, { upsert: true })
   } catch (err) {
     err.doc = { _id, type }

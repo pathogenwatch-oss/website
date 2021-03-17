@@ -1,9 +1,9 @@
 const fs = require('fs');
 const fastaStorage = require('../../utils/fasta-store');
 
-const Analysis = require('models/analysis');
 const TaskLog = require('models/taskLog');
 const Genome = require('models/genome');
+const store = require('utils/object-store');
 
 const notify = require('services/genome/notify');
 const docker = require('../docker');
@@ -87,7 +87,11 @@ module.exports = async function ({ task, version, metadata, timeout$: timeout = 
     clientId,
     userId,
   } = metadata;
-  let doc = await Analysis.findOne({ fileId, task, version, organismId }).lean();
+  
+  const value = await store.getAnalysis(task, version, fileId);
+  let doc = value === undefined ? undefined : JSON.parse(value);
+  doc = (doc.organismId != organismId) ? undefined : doc;
+  
   if (!doc) {
     // The results weren't in the cache
     const results = await runTask({
@@ -99,11 +103,8 @@ module.exports = async function ({ task, version, metadata, timeout$: timeout = 
       genusId,
       timeout,
     });
-    await Analysis.update(
-      { fileId, task, version, organismId },
-      { fileId, task, version, organismId, results },
-      { upsert: true }
-    ).exec();
+
+    await store.putAnalysis(task, version, fileId, { fileId, task, version, organismId, results });
     doc = { fileId, task, version, organismId, results };
   }
 

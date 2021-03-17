@@ -10,8 +10,8 @@ const mongoConnection = require('utils/mongoConnection');
 const BSON = new bson();
 const Genome = require('models/genome');
 const Collection = require('models/collection');
-const Analysis = require('models/analysis');
 const Organism = require('models/organism');
+const store = require('utils/object-store');
 
 function append(path, type, ...docs) {
   docs.forEach(doc => fs.appendFileSync(path, JSON.stringify({ type, doc: doc.toString('base64') })+'\n'))
@@ -35,9 +35,11 @@ async function main() {
     const { fileId } = genome;
     for (let task of tasks) {
       const { __v: version } = genome.analysis[task];
-      const key = `${fileId}|${task}|${version}`
+      const key = store.analysisKey(task, version, fileId)
       if (seenAnalysis.has(key)) continue;
-      const doc = await Analysis.collection.findOne({ fileId, task, version }, { raw: true });
+      const value = await store.getAnalysis(task, version, fileId);
+      if (value === undefined) continue;
+      const doc = bson.serialize(JSON.parse(value))
       append(output, 'analysis', doc)
       seenAnalysis.add(key)
     }

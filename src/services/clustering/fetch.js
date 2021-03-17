@@ -1,22 +1,15 @@
-const Clustering = require('../../models/clustering');
 const Genome = require('../../models/genome');
 const { NotFoundError } = require('../../utils/errors');
+const store = require('../../utils/object-store');
 
 async function getClusteringData({ scheme, user }) {
-  const query = { scheme, 'STs.1': { $exists: true } };
-  if (user) {
-    query.user = user._id;
-  } else {
-    query.public = true;
-  }
-  const projection = {
-    pi: 1,
-    lambda: 1,
-    STs: 1,
-    version: 1,
-    threshold: 1,
-  };
-  return await Clustering.findOne(query, projection);
+  let value
+  if (user) value = await store.getAnalysis('cgmlst-clustering', `${version}_${scheme}`, user._id);
+  if (value === undefined) value = await store.getAnalysis('cgmlst-clustering', `${version}_${scheme}`, 'public');
+  if (value === undefined) return undefined;
+  
+  const { edges, ...doc } = JSON.parse(value);
+  return doc
 }
 
 async function mapStsToGenomeNames({ genomeId, sts, user }) {

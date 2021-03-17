@@ -1,17 +1,15 @@
 const transform = require('stream-transform');
 const ZipStream = require('zip-stream');
 const sanitize = require('sanitize-filename');
-const es = require('event-stream');
-const { Writable } = require('stream');
+const { Writable, Readable } = require('stream');
 
 const Genome = require('models/genome');
-const Analysis = require('models/analysis');
+const store = require('utils/object-store');
 const { request } = require('services');
-const LOGGER = require('utils/logging').createLogger('Downloads');
 
 const header = '##gff-version 3.2.1';
 
-function getGenomeSummaries(query) {
+async function getGenomeSummaries(query) {
   const projection = {
     name: 1,
     fileId: 1,
@@ -24,62 +22,50 @@ function getGenomeSummaries(query) {
   const fileIds = new Set();
   const genomeLookup = {};
   const coreVersionMap = {};
-  return new Promise((resolve, reject) => {
-    genomes.on('data', genome => {
-      const { fileId, analysis: { core } } = genome;
-      genomeLookup[fileId] = genomeLookup[fileId] || [];
-      genomeLookup[fileId].push(genome);
-      if (core) {
-        coreVersionMap[core.__v] = coreVersionMap[core.__v] || [];
-        coreVersionMap[core.__v].push(fileId);
-      }
-      fileIds.add(fileId);
-    });
-    genomes.on('error', err => reject(err));
-    genomes.on('end', () => resolve({
-      fileIds: [ ...fileIds ],
-      genomeLookup,
-      coreVersionMap,
-    }));
-  });
+  for await (const genome of genomes) {
+    const { fileId, analysis: { core } } = genome;
+    genomeLookup[fileId] = genomeLookup[fileId] || [];
+    genomeLookup[fileId].push(genome);
+    if (core) {
+      coreVersionMap[core.__v] = coreVersionMap[core.__v] || [];
+      coreVersionMap[core.__v].push(fileId);
+    }
+    fileIds.add(fileId);
+  }
+  return {
+    fileIds: [ ...fileIds ],
+    genomeLookup,
+    coreVersionMap,
+  }
 }
 
-function getGenomes(fileIds, genomeLookup, coreVersionMap) {
-  const query = {
-    task: 'core',
-    $or: [],
-  };
-
+function getGenomes(genomeLookup, coreVersionMap) {
+  const analysisKeys = [];
+  
   for (const version of Object.keys(coreVersionMap)) {
-    query.$or.push({ version, fileId: { $in: coreVersionMap[version] } });
-    coreVersionMap[version] = null;
+    for (const fileId of coreVersionMap[version]) {
+      analysisKeys.push(store.analysisKey('core', version, fileId))
+    }
   }
 
-  const cores = Analysis.find(query, {
-    fileId: 1,
-    version: 1,
-    results: 1,
-  }).lean().cursor();
-
-  const coreFormatter = es.through(function (core) {
-    const { fileId, version, results } = core;
-    const genomes = genomeLookup[fileId] || [];
-    for (const genome of genomes) {
-      if (!genome.analysis || !genome.analysis.core) continue;
-      if (genome.analysis.core.__v === version) {
-        this.emit('data', {
-          ...genome,
-          analysis: {
-            ...genome.analysis,
-            core: results,
-          },
-        });
+  async function* cores() {
+    for (const value of store.iterGet(analysisKeys)) {
+      const { fileId, version, results } = JSON.parse(value)
+      const genomes = genomeLookup[fileId] || [];
+      for (const genome of genomes) {
+        if (!genome.analysis || !genome.analysis.core) continue;
+        if (genome.analysis.core.__v === version) yield {
+            ...genome,
+            analysis: {
+              ...genome.analysis,
+              core: results,
+            }
+          }
       }
     }
-    genomeLookup[fileId] = null;
-  });
+  }
 
-  return cores.pipe(coreFormatter);
+  return Readable.from(cores());
 }
 
 async function getCollectionGenomes({ genomes }, genomeIds) {
@@ -91,8 +77,8 @@ async function getCollectionGenomes({ genomes }, genomeIds) {
     ],
   };
   const summaries = await getGenomeSummaries(query);
-  const { fileIds, genomeLookup, coreVersionMap } = summaries;
-  return getGenomes(fileIds, genomeLookup, coreVersionMap);
+  const { genomeLookup, coreVersionMap } = summaries;
+  return getGenomes(genomeLookup, coreVersionMap);
 }
 
 function gffTransformer(input) {

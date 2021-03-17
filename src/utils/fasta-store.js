@@ -1,76 +1,63 @@
-const path = require('path');
 const fs = require('fs');
-const uuid = require('uuid/v4');
-const zlib = require('zlib');
 const crypto = require('crypto');
+const temp = require('temp').track();
 const ZipStream = require('zip-stream');
+const objectStore = require('utils/object-store');
 
-const { Transform, PassThrough } = require('stream');
+const { PassThrough, Readable } = require('stream');
 
-const {fastaStoragePath, maxGenomeFileSize = 10} = require('configuration');
+const { maxGenomeFileSize = 10} = require('configuration');
+const { promisify } = require('util');
 const maxGenomeFileSizeBytes = maxGenomeFileSize * 1048576;
 
-async function setup() {
-  await mkdirp(path.join(fastaStoragePath, 'tmp'));
-  await mkdirp(path.join(fastaStoragePath, 'archives'));
+const mkdir = promisify(temp.mkdir)
+async function rm(p) {
+  try {
+    return await fs.promises.unlink(p)
+  } catch (err) {
+    // pass
+  }
 }
 
-function lookupPath(fileId, compressed = true) {
-  const base = path.join(fastaStoragePath, fileId.slice(0, 2), fileId.slice(2));
-  return compressed ? `${base}.gz` : base;
+let fastaDir = undefined;
+async function setupFastaDir() {
+  if (fastaDir === undefined) fastaDir = await mkdir({ prefix: 'pw-fasta' });
+  return fastaDir;
 }
 
 async function store(stream) {
-  await setup();
-  const tempPath = path.join(fastaStoragePath, 'tmp', uuid());
-  const tempFile = fs.createWriteStream(tempPath);
+  await setupFastaDir();
+  const tempPath = temp.path({ dir: fastaDir, suffix: '.fa' });
+  
+  const fileId = await new Promise(async (resolve, reject) => {
+    let length = 0;
+    const hash = crypto.createHash('sha1');
 
-  let length = 0;
-  const hash = crypto.createHash('sha1');
-  const hashAndCountBytes = new Transform({
-    transform(chunk, _, callback) {
-      length += chunk.length;
-      if (length > maxGenomeFileSizeBytes) return callback(new MaxLengthError(length, maxGenomeFileSizeBytes))
-      hash.update(chunk);
-      return callback(null, chunk);
-    },
-  });
+    async function* passthrough() {
+      for await (const chunk of stream) {
+        length += chunk.length;
+        if (length > maxGenomeFileSizeBytes) throw new MaxLengthError(length, maxGenomeFileSizeBytes)
+        hash.update(chunk);
+        yield chunk;
+      }
+      resolve(hash.digest('hex'))
+    }
 
-  const fileId = await new Promise((resolve, reject) => {
-    stream
-      .pipe(hashAndCountBytes)
-      .on('error', error => {
-        fs.unlink(tempPath);
-        reject(error);
-      })
-      .pipe(zlib.createGzip())
-      .pipe(tempFile)
-      .on('close', () => resolve(hash.digest('hex')));
-  });
+    try {
+      Readable.from(passthrough()).pipe(fs.createWriteStream(tempPath));
+    } catch (error) {
+      reject(error)
+    }
+  })
 
-  const filePath = lookupPath(fileId);
-  await mkdirp(path.dirname(filePath));
-  await fs.promises.rename(tempPath, filePath);
-  return { fileId, filePath };
+  const fastaKey = await objectStore.putFasta(fileId, fs.createReadStream(tempPath));
+  await rm(tempPath);
+  return { fileId, fastaKey };
 }
 
 function fetch(fileId) {
   const outStream = new PassThrough();
-  (async () => {
-    const filePathCompressed = lookupPath(fileId, true);
-    const compressed = await exists(filePathCompressed);
-    if (compressed) {
-      return fs
-        .createReadStream(filePathCompressed)
-        .pipe(zlib.createGunzip())
-        .pipe(outStream);
-    }
-    return fs
-      .createReadStream(lookupPath(fileId, false))
-      .pipe(outStream);
-  })().catch(err => {
-    outStream.destroy(err);
-  });
+  objectStore.getFasta(fileId, { outStream });
   return outStream;
 }
 
@@ -102,18 +89,6 @@ class MaxLengthError extends Error {
   constructor(length, maxLength) {
     super(`Stream length of ${length} is greater than ${maxLength}`);
   }
-}
-
-function mkdirp(filepath) {
-  return fs.promises.mkdir(filepath, {recursive: true});
-}
-
-function exists(filepath) {
-  return new Promise((resolve) => {
-    fs.access(filepath, fs.constants.R_OK, (err) => {
-      resolve(!err);
-    });
-  });
 }
 
 module.exports = {

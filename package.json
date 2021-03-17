@@ -44,6 +44,7 @@
     "seneca": "^3.5.0",
     "slug": "^0.9.1",
     "stream-transform": "^0.1.2",
+    "temp": "^0.9.4",
     "zip-stream": "^1.2.0"
   },
   "devDependencies": {

@@ -1,51 +1,28 @@
-const es = require('event-stream');
 const sanitize = require('sanitize-filename');
+const { Readable } = require('stream');
 
-const Analysis = require('models/analysis');
 const Genome = require('models/genome');
 const Collection = require('models/collection');
-const ScoreCache = require('models/scoreCache');
+const store = require('utils/object-store');
 
 const { request } = require('services');
 const { ServiceRequestError } = require('utils/errors');
 
 const { calculateStats } = require('utils/stats');
 
-function getCache(genomes, versions) {
-  return ScoreCache.find(
-    { fileId: { $in: genomes.map(_ => _.fileId) }, 'versions.core': versions.core, 'versions.tree': versions.tree },
-    genomes.reduce(
-      (projection, { fileId }) => {
-        projection[`scores.${fileId}`] = 1;
-        return projection;
-      },
-      { fileId: 1 }
-    ),
-    { sort: { fileId: 1 } }
-  )
-    .then(cache => {
-      const cacheByFileId = {};
-      for (const doc of cache) {
-        cacheByFileId[doc.fileId] = doc.scores;
-      }
-      return cacheByFileId;
-    });
-}
-
-
 function generateTreeStats(genomes, cache) {
   const scores = [];
 
   for (let a = 0; a < genomes.length; a++) {
     const genomeA = genomes[a];
-    for (let b = 0; b <= a; b++) {
+    for (let b = 0; b < a; b++) {
       const genomeB = genomes[b];
-      if (a === b) {
-        continue;
-      } else if (genomeA.fileId === genomeB.fileId) {
+      if (genomeA.fileId === genomeB.fileId) {
         scores.push(0);
       } else if (genomeA.fileId in cache && genomeB.fileId in cache[genomeA.fileId]) {
         scores.push(cache[genomeA.fileId][genomeB.fileId]);
+      } else if (genomeB.fileId in cache && genomeA.fileId in cache[genomeB.fileId]) {
+        scores.push(cache[genomeB.fileId][genomeA.fileId]);
       } else {
         throw new ServiceRequestError(`Missing score for ${genomeA.fileId} ${genomeB.fileId}`);
       }
@@ -57,71 +34,67 @@ function generateTreeStats(genomes, cache) {
   return stats;
 }
 
-async function generateTreeSites(genomes, collectionGenomeIds) {
+async function* generateTreeSites(genomes, collectionGenomeIds) {
   const sitesByFamilyId = {};
   let genomesLength = 0;
 
-  await new Promise((resolve, reject) => {
-    genomes.on('error', err => reject(err));
-    genomes.on('end', () => resolve());
-    genomes.on('data', genomeA => {
-      genomesLength += 1;
-      const isCollectionGenome = collectionGenomeIds.has(genomeA._id.toString());
-      for (const profile of genomeA.analysis.core.profile) {
-        if (!sitesByFamilyId[profile.id]) {
-          sitesByFamilyId[profile.id] = {
-            userFiltered: {},
-            publicFiltered: {},
-            userUnfiltered: {},
-            publicUnfiltered: {},
-            userRepresentative: new Set(),
-            publicRepresentative: new Set(),
-          };
-        }
+  for await (const genomeA of genomes) {
+    genomesLength += 1;
+    const isCollectionGenome = collectionGenomeIds.has(genomeA._id.toString());
+    for (const profile of genomeA.analysis.core.profile) {
+      if (!sitesByFamilyId[profile.id]) {
+        sitesByFamilyId[profile.id] = {
+          userFiltered: {},
+          publicFiltered: {},
+          userUnfiltered: {},
+          publicUnfiltered: {},
+          userRepresentative: new Set(),
+          publicRepresentative: new Set(),
+        };
+      }
 
-        const sites = sitesByFamilyId[profile.id];
-        const filteredPositions = new Set();
-        const unfilteredPositions = new Set();
-        const unfilteredMutations = new Set();
-        for (const allele of profile.alleles) {
-          for (const position of Object.keys(allele.mutations)) {
-            if (profile.filter === false && allele.filter === false) {
-              filteredPositions.add(position);
-            }
-
-            unfilteredPositions.add(position);
-            unfilteredMutations.add(position + allele.mutations[position]);
-
-            sites.userFiltered[position] = 0;
-            sites.publicFiltered[position] = 0;
-            sites.userUnfiltered[position] = 0;
-            sites.publicUnfiltered[position] = 0;
+      const sites = sitesByFamilyId[profile.id];
+      const filteredPositions = new Set();
+      const unfilteredPositions = new Set();
+      const unfilteredMutations = new Set();
+      for (const allele of profile.alleles) {
+        for (const position of Object.keys(allele.mutations)) {
+          if (profile.filter === false && allele.filter === false) {
+            filteredPositions.add(position);
           }
-        }
 
-        for (const position of filteredPositions) {
-          if (isCollectionGenome) {
-            sites.userFiltered[position]++;
-          }
-          sites.publicFiltered[position]++;
-        }
+          unfilteredPositions.add(position);
+          unfilteredMutations.add(position + allele.mutations[position]);
 
-        for (const position of unfilteredPositions) {
-          if (isCollectionGenome) {
-            sites.userUnfiltered[position]++;
-          }
-          sites.publicUnfiltered[position]++;
-        }
-
-        for (const mutation of unfilteredMutations) {
-          if (isCollectionGenome) {
-            sites.userRepresentative.add(mutation);
-          }
-          sites.publicRepresentative.add(mutation);
+          sites.userFiltered[position] = 0;
+          sites.publicFiltered[position] = 0;
+          sites.userUnfiltered[position] = 0;
+          sites.publicUnfiltered[position] = 0;
         }
       }
-    });
-  });
+
+      for (const position of filteredPositions) {
+        if (isCollectionGenome) {
+          sites.userFiltered[position]++;
+        }
+        sites.publicFiltered[position]++;
+      }
+
+      for (const position of unfilteredPositions) {
+        if (isCollectionGenome) {
+          sites.userUnfiltered[position]++;
+        }
+        sites.publicUnfiltered[position]++;
+      }
+
+      for (const mutation of unfilteredMutations) {
+        if (isCollectionGenome) {
+          sites.userRepresentative.add(mutation);
+        }
+        sites.publicRepresentative.add(mutation);
+      }
+    }
+  }
 
   const result = {
     userFiltered: 0,
@@ -182,47 +155,51 @@ async function getGenomeSummaries(genomeIds) {
 
 function createGenomeStream(genomeSummaries, versions) {
   const fileIds = genomeSummaries.map(({ fileId }) => fileId);
-  const genomeIds = genomeSummaries.reduce((acc, { fileId, _id }) => {
-    acc[fileId] = acc[fileId] || [];
-    acc[fileId].push(_id);
-    return acc;
-  }, {});
-
-  const query = {
-    fileId: { $in: fileIds },
-    task: 'core',
-    version: versions.core,
-  };
-  const projection = {
-    fileId: 1,
-    'results.profile.id': 1,
-    'results.profile.filter': 1,
-    'results.profile.alleles.filter': 1,
-    'results.profile.alleles.mutations': 1,
-  };
-  const options = {
-    sort: { fileId: 1 },
-  };
-  const cores = Analysis.find(query, projection, options).lean().cursor();
-  const coreFormatter = es.through(function ({ fileId, results }) {
+  fileIds.sort();
+  
+  const genomeIds = {}
+  for (const { fileId, _id } of genomeSummaries) {
     genomeIds[fileId] = genomeIds[fileId] || [];
-    for (const genomeId of genomeIds[fileId]) {
-      const genome = {
-        _id: genomeId,
-        fileId,
-        analysis: { core: results },
-      };
-      this.emit('data', genome);
+    genomeIds[fileId].push(_id);
+    return genomeIds;
+  };
+
+  const analysisKeys = fileIds.map(fileId => store.analysisKey('core', versions.core, fileId));
+  async function* gen() {
+    for await (const value of store.iterGet(analysisKeys)) {
+      const { fileId, results } = JSON.parse(value);
+      for (const genomeId of genomeIds[fileId] || []) {
+        yield {
+          _id: genomeId,
+          fileId,
+          analysis: {
+            core: {
+              profile: {
+                id: results.profile.id,
+                filter: results.profile.filter,
+                alleles: {
+                  filter: results.profile.alleles.filter,
+                  mutations: results.profile.alleles.mutations
+                }
+              }
+            }
+          },
+        };
+      }
+      genomeIds[fileId] = [];
     }
-    genomeIds[fileId] = [];
-  });
-  return cores.pipe(coreFormatter);
+  }
+  
+  return Readable.from(gen())
 }
 
 async function generateTreeData(tree, treeGenomeIds, collectionGenomeIds) {
   const genomeSummaries = await getGenomeSummaries(treeGenomeIds);
 
-  const cache = await getCache(genomeSummaries, tree.versions);
+  const fileIds = genomes.map(_ => _.fileId);
+  fileIds.sort();
+  const cache = await store.getScoreCache(fileIds, tree.versions, 'score')
+  
   const stats = generateTreeStats(genomeSummaries, cache);
 
   const genomes = createGenomeStream(genomeSummaries, tree.versions);

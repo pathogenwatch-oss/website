@@ -2,10 +2,10 @@
 /* eslint no-params: 0 */
 /* eslint max-params: 0 */
 
-const es = require("event-stream");
 const BSON = require("bson");
+const { Readable } = require('stream');
 
-const Analysis = require("models/analysis");
+const store = require('utils/object-store');
 const Collection = require("../../models/collection");
 const Genome = require("../../models/genome");
 
@@ -37,43 +37,26 @@ async function getGenomes(task, metadata) {
   }));
 }
 
-function createAlignmentDocumentsStream(genomes, versions, organismId) {
-  const cores = Analysis.find({
-    fileId: { $in: genomes.map((x) => x.fileId) },
-    task: "alignment",
-    version: versions.alignment,
-    organismId,
-  }, {
-    fileId: 1,
-    results: 1,
-  }).sort({ fileId: 1 }).lean().cursor();
+async function createInputStream(genomes, versions, organismId) {
+  const fileIds = genomes.map(_ => _.fileId);
+  fileIds.sort();
 
-  const reformatCores = es.through(function (core) {
-    const { fileId, results } = core;
-    const genome = {
-      fileId,
-      analysis: { alignment: results },
-    };
-    this.emit("data", genome);
-  });
+  const analysisKeys = fileIds.map(fileId => store.analysisKey('alignment', versions.alignment, fileId))
+  async function* gen() {
+    yield bson.serialize({ genomes })
+    for await (const value of store.iterGet(analysisKeys)) {
+      const core = JSON.parse(value);
+      if (core.organismId !== organismId) continue;
+      const { fileId, results } = core;
+      const genome = {
+        fileId,
+        analysis: { alignment: results },
+      };
+      yield bson.serialize(genome)
+    }
+  }
 
-  const toRaw = es.map((doc, cb) => cb(null, bson.serialize(doc)));
-  return cores.pipe(reformatCores).pipe(toRaw);
-}
-
-function attachInputStream(container, versions, genomes, organismId) {
-  const docsStream = createAlignmentDocumentsStream(genomes, versions, organismId);
-
-  // const treeInput = require("fs").createWriteStream("tree-input.bson");
-  // treeInput.write(
-  //   bson.serialize({ genomes }),
-  //   docsStream.pipe(treeInput),
-  // );
-
-  container.stdin.write(
-    bson.serialize({ genomes }),
-    docsStream.pipe(container.stdin),
-  );
+  return Readable.from(gen());
 }
 
 async function runTask(spec, metadata, timeout) {
@@ -85,12 +68,9 @@ async function runTask(spec, metadata, timeout) {
 
   return new Promise((resolve, reject) => {
     const container = createContainer(spec, metadata, timeout);
-
     handleContainerOutput(container, task, versions, metadata, genomes, resolve, reject);
-
     handleContainerExit(container, task, versions, metadata, reject);
-
-    attachInputStream(container, versions, genomes, metadata.organismId);
+    createInputStream(genomes, versions, organismId).pipe(container.stdin)
   });
 }
 
