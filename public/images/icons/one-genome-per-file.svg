@@ -1,103 +1,18 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<svg
-   xmlns:dc="http://purl.org/dc/elements/1.1/"
-   xmlns:cc="http://creativecommons.org/ns#"
-   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-   xmlns:svg="http://www.w3.org/2000/svg"
-   xmlns="http://www.w3.org/2000/svg"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   version="1.1"
-   id="Capa_1"
-   x="0px"
-   y="0px"
-   viewBox="0 0 317.001 317.001"
-   style="enable-background:new 0 0 317.001 317.001;"
-   xml:space="preserve"
-   sodipodi:docname="one-genome-per-file.svg"
-   inkscape:version="1.0.1 (c497b03c, 2020-09-10)"><metadata
-   id="metadata118"><rdf:RDF><cc:Work
-       rdf:about=""><dc:format>image/svg+xml</dc:format><dc:type
-         rdf:resource="http://purl.org/dc/dcmitype/StillImage" /><dc:title></dc:title></cc:Work></rdf:RDF></metadata><defs
-   id="defs116" /><sodipodi:namedview
-   pagecolor="#ffffff"
-   bordercolor="#666666"
-   borderopacity="1"
-   objecttolerance="10"
-   gridtolerance="10"
-   guidetolerance="10"
-   inkscape:pageopacity="0"
-   inkscape:pageshadow="2"
-   inkscape:window-width="1763"
-   inkscape:window-height="1224"
-   id="namedview114"
-   showgrid="false"
-   inkscape:zoom="1.8287447"
-   inkscape:cx="171.16222"
-   inkscape:cy="232.94783"
-   inkscape:window-x="0"
-   inkscape:window-y="23"
-   inkscape:window-maximized="0"
-   inkscape:current-layer="layer2" />
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<g
-   inkscape:groupmode="layer"
-   id="layer3"
-   inkscape:label="Layer 3"
-   style="display:inline" /><g
-   id="layer1"
-   inkscape:label="Layer 1"
-   style="display:inline"
-   sodipodi:insensitive="true"
-   transform="matrix(1.4525308,0,0,2.7947954,-40.641977,-471.21092)" /><g
-   inkscape:groupmode="layer"
-   id="layer2"
-   inkscape:label="Layer 2"
-   style="display:inline"><path
-     d="M 313.13884,139.74989 271.55897,92.332321 c -1.44614,-1.648873 -3.5324,-2.594532 -5.7257,-2.594532 h -105.0233 c -4.86652,0 -8.81219,3.945679 -8.81219,8.812201 v 207.09406 c 0,4.86723 3.94567,8.8122 8.81219,8.8122 h 145.40586 c 4.86723,0 8.81291,-3.94568 8.81291,-8.81291 V 144.77095 c 0,-1.84736 -0.67132,-3.63163 -1.8899,-5.02106 z M 160.80997,306.00062 V 98.55069 h 102.07928 v 45.08604 c 0,2.4322 1.97072,4.40645 4.40646,4.40645 h 38.92012 l 0.004,157.95744 z"
-     id="path81-7"
-     style="stroke-width:0.708889" /><rect
-     style="fill:#ffffff;stroke-width:0.316538"
-     id="rect145"
-     width="36.060081"
-     height="140.58752"
-     x="126.04968"
-     y="80.40197" /><path
-     d="M 164.00859,51.751626 122.42872,4.3340568 c -1.44614,-1.648873 -3.5324,-2.5945321 -5.7257,-2.5945321 H 11.67972 c -4.8665201,0 -8.8121901,3.9456791 -8.8121901,8.8122013 V 217.64579 c 0,4.86723 3.94567,8.8122 8.8121901,8.8122 h 145.40586 c 4.86723,0 8.81291,-3.94568 8.81291,-8.81291 V 56.772686 c 0,-1.84736 -0.67132,-3.63163 -1.8899,-5.02106 z M 11.67972,218.00236 V 10.552426 H 113.759 v 45.08604 c 0,2.4322 1.97072,4.40645 4.40646,4.40645 h 38.92012 l 0.004,157.957444 z"
-     id="path81-7-0"
-     style="display:inline;stroke-width:0.708889" /><text
-     xml:space="preserve"
-     style="font-style:normal;font-weight:normal;font-size:24px;line-height:1.25;font-family:sans-serif;fill:#000000;fill-opacity:1;stroke:none"
-     x="169.5807"
-     y="295.62808"
-     id="text122-6"><tspan
-       sodipodi:role="line"
-       id="tspan120-0"
-       x="169.5807"
-       y="295.62808"
-       style="font-size:24px">genome b</tspan></text><text
-     xml:space="preserve"
-     style="font-style:normal;font-weight:normal;font-size:24px;line-height:1.25;font-family:sans-serif;fill:#000000;fill-opacity:1;stroke:none"
-     x="26.955416"
-     y="208.61095"
-     id="text122"><tspan
-       sodipodi:role="line"
-       id="tspan120"
-       x="26.955416"
-       y="208.61095"
-       style="font-size:24px">genome a</tspan></text></g></svg>
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0" y="0" width="403.2" height="512" viewBox="0, 0, 403.2, 512">
+  <g id="Layer_1">
+    <path d="M23,14 C23,14 201,16 201,14 C201,12 260,76 260,73 C260,70 333,72 333,71 C333,70 331,123 334,123 C337,123 385,121 385,123 C385,125 386,491 386,491 C386,491 121,488 121,493 C121,498 123,450 121,450 C113,450 71,449 71,449 L72,384 L23,384 L23,14 z" fill="#FFFFFF"/>
+    <path d="M367.381,512 L141.522,512 C121.74,511.992 105.633,495.91 105.614,476.143 L105.614,459.215 L88.654,459.215 C68.872,459.205 52.765,443.117 52.75,423.358 L52.75,406.418 L35.802,406.418 C16.007,406.412 -0.081,390.337 -0.101,370.56 L-0.08,35.852 C-0.101,16.072 16.007,-0.009 35.803,-0 L194.483,0 C205.562,0 216.195,4.366 224.066,12.149 L265.174,52.787 L314.498,52.787 C334.329,52.776 350.435,68.859 350.421,88.634 L350.421,105.58 L367.38,105.58 C387.195,105.571 403.301,121.656 403.282,141.423 L403.301,476.142 C403.282,495.919 387.196,511.992 367.381,512 z M269.213,104.868 L227.642,104.868 C222.672,104.868 217.962,103.864 213.663,102.044 C200.782,96.593 191.735,83.837 191.72,69.002 L191.72,68.991 L191.72,68.969 L191.735,28.317 L35.803,28.317 C31.662,28.317 28.268,31.693 28.254,35.85 L28.254,370.56 C28.254,374.715 31.661,378.109 35.802,378.109 L261.665,378.099 C265.824,378.099 269.212,374.715 269.212,370.577 L269.212,104.868 z M322.066,88.634 C322.045,84.49 318.658,81.106 314.499,81.106 L294.217,81.106 C295.411,82.379 297.587,85.029 297.587,90.688 C297.587,160.656 297.587,370.56 297.587,370.56 C297.568,390.33 281.463,406.412 261.647,406.418 L81.122,406.418 L81.122,423.364 C81.122,427.502 84.496,430.886 88.635,430.886 L314.499,430.896 C318.658,430.896 322.066,427.502 322.066,423.357 L322.066,88.634 z M374.932,141.423 C374.912,137.277 371.526,133.893 367.38,133.893 L350.421,133.893 L350.435,423.357 C350.42,443.123 334.329,459.205 314.498,459.214 L133.988,459.214 L133.988,476.15 C133.988,480.297 137.377,483.673 141.502,483.673 L367.381,483.681 C371.525,483.681 374.933,480.297 374.933,476.142 L374.933,141.423 z" fill="#000000"/>
+    <text transform="matrix(1, 0, 0, 1, 217.458, 203.96)">
+      <tspan x="-181.4" y="-135" font-family="ArialMT" font-size="36" fill="#000000">&gt;contig1</tspan>
+      <tspan x="-181.4" y="-93" font-family="ArialMT" font-size="36" fill="#000000">cactcgatga.....</tspan>
+      <tspan x="-181.4" y="-51" font-family="ArialMT" font-size="36" fill="#000000">&gt;contig2</tspan>
+      <tspan x="-181.4" y="-9" font-family="ArialMT" font-size="36" fill="#000000">aagtgcagc.....</tspan>
+      <tspan x="-181.4" y="33" font-family="ArialMT" font-size="36" fill="#000000">&gt;contig3</tspan>
+      <tspan x="-181.4" y="75" font-family="ArialMT" font-size="36" fill="#000000">ggaatcgatg.....</tspan>
+      <tspan x="-181.4" y="117" font-family="ArialMT" font-size="36" fill="#000000">&gt;contig4</tspan>
+      <tspan x="-181.4" y="159" font-family="ArialMT" font-size="36" fill="#000000">ttgctgaatgc.....</tspan>
+    </text>
+  </g>
+</svg>

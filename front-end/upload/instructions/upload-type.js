@@ -38,7 +38,7 @@ const Instructions = ({ onFiles, fetchPreviousUploads }) => {
             className="pw-upload-card"
           >
             <figure>
-              <img src="/images/icons/one-genome-per-file.svg" />
+              <img width="80px" src="/images/icons/one-genome-per-file.svg" />
             </figure>
             <h3>FASTA</h3>
             <p>
@@ -55,7 +55,7 @@ const Instructions = ({ onFiles, fetchPreviousUploads }) => {
             className="pw-upload-card"
           >
             <figure>
-              <img src="/images/icons/multiple-genomes-per-file.svg" />
+              <img width="80px" src="/images/icons/multiple-genomes-per-file.svg" />
             </figure>
             <h3>Multi FASTA</h3>
             <p>
@@ -72,7 +72,7 @@ const Instructions = ({ onFiles, fetchPreviousUploads }) => {
             className="pw-upload-card"
           >
             <figure>
-              <img src="/images/icons/file.svg" />
+              <img width="140px" src="/images/icons/read-files.svg" />
             </figure>
             <h3>FASTQ</h3>
             <p>
