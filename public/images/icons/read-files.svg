@@ -30,25 +30,25 @@
       <path d="M379.483,16.35 L623.009,16.35 L709.061,102.402 C709.061,102.402 711.642,417.35 709.061,417.35 C706.479,417.35 379.483,419.071 379.483,417.35 C379.483,415.629 379.483,16.35 379.483,16.35 z" fill="#FFFFFF"/>
       <path d="M717.115,86.603 L634.506,3.993 C631.908,1.416 628.39,-0.02 624.73,0 L404.438,0 C381.626,0 363.134,18.493 363.134,41.305 L363.134,399.279 C363.134,422.092 381.626,440.584 404.438,440.584 L679.803,440.584 C702.615,440.584 721.108,422.092 721.108,399.279 L721.108,96.378 C721.129,92.718 719.692,89.201 717.115,86.603 z M693.571,399.279 C693.571,406.884 687.407,413.048 679.803,413.048 L404.438,413.048 C396.834,413.048 390.67,406.884 390.67,399.279 L390.67,41.305 C390.67,33.701 396.834,27.537 404.438,27.537 L610.962,27.537 L610.962,82.61 C610.962,97.818 623.29,110.146 638.498,110.146 L693.571,110.146 L693.571,399.279 z" fill="#673C90"/>
     </g>
-    <text transform="matrix(1, 0, 0, 1, 198.544, 389.008)">
-      <tspan x="-155.544" y="-255.982" font-family="Courier" font-size="32" fill="#000000">@HX5_1:19645/2</tspan>
-      <tspan x="-155.544" y="-216.982" font-family="Courier" font-size="32" fill="#000000">AGGAGAAAGA...</tspan>
-      <tspan x="-155.544" y="-177.982" font-family="Courier" font-size="32" fill="#000000">+</tspan>
-      <tspan x="-155.544" y="-138.982" font-family="Courier" font-size="32" fill="#000000">AAFAFJJJJJ...</tspan>
-      <tspan x="-155.544" y="-99.982" font-family="Courier" font-size="32" fill="#000000">@HX5_2:43026/2</tspan>
-      <tspan x="-155.544" y="-60.982" font-family="Courier" font-size="32" fill="#000000">AGTTAAACGC...</tspan>
-      <tspan x="-155.544" y="-21.982" font-family="Courier" font-size="32" fill="#000000">+</tspan>
-      <tspan x="-155.544" y="17.018" font-family="Courier" font-size="32" fill="#000000">&lt;-&lt;-AA&lt;---...</tspan>
+    <text transform="matrix(1, 0, 0, 1, 559.544, 339.008)">
+      <tspan x="-155.544" y="-251.982" font-family="RobotoMono-Regular" font-size="33" fill="#000000">@HX5_1:9/2</tspan>
+      <tspan x="-155.544" y="-207.982" font-family="RobotoMono-Regular" font-size="33" fill="#000000">AGGAGAAAGA...</tspan>
+      <tspan x="-155.544" y="-163.982" font-family="RobotoMono-Regular" font-size="33" fill="#000000">+</tspan>
+      <tspan x="-155.544" y="-119.982" font-family="RobotoMono-Regular" font-size="33" fill="#000000">AAFAFJJJJJ...</tspan>
+      <tspan x="-155.544" y="-75.982" font-family="RobotoMono-Regular" font-size="33" fill="#000000">@HX5_2:3/2</tspan>
+      <tspan x="-155.544" y="-31.982" font-family="RobotoMono-Regular" font-size="33" fill="#000000">AGTTAAACGC...</tspan>
+      <tspan x="-155.544" y="12.018" font-family="RobotoMono-Regular" font-size="33" fill="#000000">+</tspan>
+      <tspan x="-155.544" y="56.018" font-family="RobotoMono-Regular" font-size="33" fill="#000000">&lt;-&lt;-AA&lt;---...</tspan>
     </text>
-    <text transform="matrix(1, 0, 0, 1, 556.564, 389.008)">
-      <tspan x="-155.544" y="-255.982" font-family="Courier" font-size="32" fill="#000000">@HX5_1:19645/1</tspan>
-      <tspan x="-155.544" y="-216.982" font-family="Courier" font-size="32" fill="#000000">TATCTGTTAGT...</tspan>
-      <tspan x="-155.544" y="-177.982" font-family="Courier" font-size="32" fill="#000000">+</tspan>
-      <tspan x="-155.544" y="-138.982" font-family="Courier" font-size="32" fill="#000000">AAAFAJJFJJJ...</tspan>
-      <tspan x="-155.544" y="-99.982" font-family="Courier" font-size="32" fill="#000000">@HX5_2:43026/1</tspan>
-      <tspan x="-155.544" y="-60.982" font-family="Courier" font-size="32" fill="#000000">TAAGTGGATAA...</tspan>
-      <tspan x="-155.544" y="-21.982" font-family="Courier" font-size="32" fill="#000000">+</tspan>
-      <tspan x="-155.544" y="17.018" font-family="Courier" font-size="32" fill="#000000">BAAA&lt;&lt;FA-&lt;&lt;...</tspan>
+    <text transform="matrix(1, 0, 0, 1, 192.541, 339.008)">
+      <tspan x="-155.544" y="-251.982" font-family="RobotoMono-Regular" font-size="33" fill="#000000">@HX5_1:9/1</tspan>
+      <tspan x="-155.544" y="-207.982" font-family="RobotoMono-Regular" font-size="33" fill="#000000">TATCTGTTAGT...</tspan>
+      <tspan x="-155.544" y="-163.982" font-family="RobotoMono-Regular" font-size="33" fill="#000000">+</tspan>
+      <tspan x="-155.544" y="-119.982" font-family="RobotoMono-Regular" font-size="33" fill="#000000">AAAFAJJFJJJ...</tspan>
+      <tspan x="-155.544" y="-75.982" font-family="RobotoMono-Regular" font-size="33" fill="#000000">@HX5_2:3/1</tspan>
+      <tspan x="-155.544" y="-31.982" font-family="RobotoMono-Regular" font-size="33" fill="#000000">TAAGTGGATAA...</tspan>
+      <tspan x="-155.544" y="12.018" font-family="RobotoMono-Regular" font-size="33" fill="#000000">+</tspan>
+      <tspan x="-155.544" y="56.018" font-family="RobotoMono-Regular" font-size="33" fill="#000000">BAAA&lt;&lt;FA-&lt;&lt;...</tspan>
     </text>
   </g>
 </svg>

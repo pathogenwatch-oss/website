@@ -14,13 +14,13 @@
       <path d="M32,18 C32,18 303,20 303,18 C303,16 409,124 409,124 C409,124 422,488 409,488 C396,488 32,488 32,488 L32,18 z" fill="#FFFFFF"/>
       <path d="M411.359,100.64 L315.359,4.64 C312.34,1.645 308.253,-0.024 304,0 L48,0 C21.49,0 0,21.49 0,48 L0,464 C0,490.51 21.49,512 48,512 L367.999,512 C394.509,512 415.999,490.51 415.999,464 L415.999,112 C416.024,107.747 414.354,103.66 411.359,100.64 z M383.999,464 C383.999,472.837 376.836,480 367.999,480 L48,480 C39.163,480 32,472.837 32,464 L32,48 C32,39.163 39.163,32 48,32 L288,32 L288,96 C288,113.673 302.327,128 319.999,128 L383.999,128 L383.999,464 z" fill="#673C90"/>
     </g>
-    <text transform="matrix(1, 0, 0, 1, 240.6, 264.96)">
-      <tspan x="-181.4" y="-149" font-family="ArialMT" font-size="54" fill="#000000">&gt;contig1</tspan>
-      <tspan x="-181.4" y="-87" font-family="ArialMT" font-size="54" fill="#000000">cactcga.....</tspan>
-      <tspan x="-181.4" y="-25" font-family="ArialMT" font-size="54" fill="#000000">&gt;contig2</tspan>
-      <tspan x="-181.4" y="37" font-family="ArialMT" font-size="54" fill="#000000">aagtgc.....</tspan>
-      <tspan x="-181.4" y="99" font-family="ArialMT" font-size="54" fill="#000000">&gt;contig3</tspan>
-      <tspan x="-181.4" y="161" font-family="ArialMT" font-size="54" fill="#000000">ggaatcg.....</tspan>
+    <text transform="matrix(1, 0, 0, 1, 245.4, 269)">
+      <tspan x="-181.4" y="-131" font-family="RobotoMono-Regular" font-size="45" fill="#000000">&gt;Contig1</tspan>
+      <tspan x="-181.4" y="-72" font-family="RobotoMono-Regular" font-size="45" fill="#000000">cactcgag...</tspan>
+      <tspan x="-181.4" y="-13" font-family="RobotoMono-Regular" font-size="45" fill="#000000">&gt;Contig2</tspan>
+      <tspan x="-181.4" y="46" font-family="RobotoMono-Regular" font-size="45" fill="#000000">aagtgcat...</tspan>
+      <tspan x="-181.4" y="105" font-family="RobotoMono-Regular" font-size="45" fill="#000000">&gt;Contig3</tspan>
+      <tspan x="-181.4" y="164" font-family="RobotoMono-Regular" font-size="45" fill="#000000">ggaatcga...</tspan>
     </text>
   </g>
 </svg>
