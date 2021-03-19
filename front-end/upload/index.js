@@ -44,16 +44,9 @@ const Router = connect(mapStateToProps)(
 );
 
 export default (
-  <Route
+  <AuthRoute
+    authMessage="Please sign in to upload genomes."
     path="/upload"
     component={Router}
   />
 );
-
-// export default (
-//   <AuthRoute
-//     authMessage="Please sign in to upload genomes."
-//     path="/upload"
-//     component={Router}
-//   />
-// );
