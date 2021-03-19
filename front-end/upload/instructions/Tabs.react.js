@@ -1,4 +1,5 @@
 import React from 'react';
+import classnames from "classnames";
 import { connect } from 'react-redux';
 
 import Assemblies from './Assemblies.react';
@@ -10,7 +11,7 @@ import { useAssemblerUsage } from '../hooks';
 import { getAssemblerUsage } from '../selectors';
 import { useAuthToken } from '~/auth/hooks';
 
-const Tabs = ({ usage, token }) => {
+const Tabs = ({ usage, token, uploadType }) => {
   useAuthToken(true);
   useAssemblerUsage(token);
 
@@ -30,20 +31,71 @@ const Tabs = ({ usage, token }) => {
         className="mdl-tabs mdl-js-tabs mdl-js-ripple-effect"
       >
         <div className="mdl-tabs__tab-bar">
-          <a href="#assemblies-panel" className="mdl-tabs__tab is-active">
-            Assemblies
+          <a
+            href="#fasta-panel"
+            className={
+              classnames(
+                "mdl-tabs__tab",
+                uploadType === "fasta" ? "is-active" : null
+              )
+            }
+          >
+            Assemblies (FASTA)
           </a>
-          <a href="#reads-panel" className="mdl-tabs__tab">
+          <a
+            href="#multi-fasta-panel"
+            className={
+              classnames(
+                "mdl-tabs__tab",
+                uploadType === "multi-fasta" ? "is-active" : null
+              )
+            }
+          >
+            Assemblies (Multi-FASTA)
+          </a>
+          <a
+            href="#reads-panel"
+            className={
+              classnames(
+                "mdl-tabs__tab",
+                uploadType === "reads" ? "is-active" : null
+              )
+            }
+          >
             <Badge text="Beta" color="turquoise">
-              Reads
+              Reads (FASTQ)
             </Badge>
           </a>
         </div>
 
-        <div className="mdl-tabs__panel is-active" id="assemblies-panel">
+        <div
+          className={
+            classnames(
+              "mdl-tabs__panel",
+              uploadType === "fasta" ? "is-active" : null
+            )
+          }
+          id="fasta-panel">
           <Assemblies />
         </div>
-        <div className="mdl-tabs__panel" id="reads-panel">
+        <div
+          className={
+            classnames(
+              "mdl-tabs__panel",
+              uploadType === "multi-fasta" ? "is-active" : null
+            )
+          }
+          id="multi-fasta-panel">
+          <Assemblies />
+        </div>
+        <div
+          className={
+            classnames(
+              "mdl-tabs__panel",
+              uploadType === "reads" ? "is-active" : null
+            )
+          }
+          id="reads-panel">
           <Reads remaining={!!usage && !!usage.remaining ? usage.remaining : 0} />
         </div>
       </div>

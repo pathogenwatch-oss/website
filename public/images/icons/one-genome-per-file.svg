@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   version="1.1"
+   id="Capa_1"
+   x="0px"
+   y="0px"
+   viewBox="0 0 317.001 317.001"
+   style="enable-background:new 0 0 317.001 317.001;"
+   xml:space="preserve"
+   sodipodi:docname="one-genome-per-file.svg"
+   inkscape:version="1.0.1 (c497b03c, 2020-09-10)"><metadata
+   id="metadata118"><rdf:RDF><cc:Work
+       rdf:about=""><dc:format>image/svg+xml</dc:format><dc:type
+         rdf:resource="http://purl.org/dc/dcmitype/StillImage" /><dc:title></dc:title></cc:Work></rdf:RDF></metadata><defs
+   id="defs116" /><sodipodi:namedview
+   pagecolor="#ffffff"
+   bordercolor="#666666"
+   borderopacity="1"
+   objecttolerance="10"
+   gridtolerance="10"
+   guidetolerance="10"
+   inkscape:pageopacity="0"
+   inkscape:pageshadow="2"
+   inkscape:window-width="1763"
+   inkscape:window-height="1224"
+   id="namedview114"
+   showgrid="false"
+   inkscape:zoom="1.8287447"
+   inkscape:cx="171.16222"
+   inkscape:cy="232.94783"
+   inkscape:window-x="0"
+   inkscape:window-y="23"
+   inkscape:window-maximized="0"
+   inkscape:current-layer="layer2" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<g
+   inkscape:groupmode="layer"
+   id="layer3"
+   inkscape:label="Layer 3"
+   style="display:inline" /><g
+   id="layer1"
+   inkscape:label="Layer 1"
+   style="display:inline"
+   sodipodi:insensitive="true"
+   transform="matrix(1.4525308,0,0,2.7947954,-40.641977,-471.21092)" /><g
+   inkscape:groupmode="layer"
+   id="layer2"
+   inkscape:label="Layer 2"
+   style="display:inline"><path
+     d="M 313.13884,139.74989 271.55897,92.332321 c -1.44614,-1.648873 -3.5324,-2.594532 -5.7257,-2.594532 h -105.0233 c -4.86652,0 -8.81219,3.945679 -8.81219,8.812201 v 207.09406 c 0,4.86723 3.94567,8.8122 8.81219,8.8122 h 145.40586 c 4.86723,0 8.81291,-3.94568 8.81291,-8.81291 V 144.77095 c 0,-1.84736 -0.67132,-3.63163 -1.8899,-5.02106 z M 160.80997,306.00062 V 98.55069 h 102.07928 v 45.08604 c 0,2.4322 1.97072,4.40645 4.40646,4.40645 h 38.92012 l 0.004,157.95744 z"
+     id="path81-7"
+     style="stroke-width:0.708889" /><rect
+     style="fill:#ffffff;stroke-width:0.316538"
+     id="rect145"
+     width="36.060081"
+     height="140.58752"
+     x="126.04968"
+     y="80.40197" /><path
+     d="M 164.00859,51.751626 122.42872,4.3340568 c -1.44614,-1.648873 -3.5324,-2.5945321 -5.7257,-2.5945321 H 11.67972 c -4.8665201,0 -8.8121901,3.9456791 -8.8121901,8.8122013 V 217.64579 c 0,4.86723 3.94567,8.8122 8.8121901,8.8122 h 145.40586 c 4.86723,0 8.81291,-3.94568 8.81291,-8.81291 V 56.772686 c 0,-1.84736 -0.67132,-3.63163 -1.8899,-5.02106 z M 11.67972,218.00236 V 10.552426 H 113.759 v 45.08604 c 0,2.4322 1.97072,4.40645 4.40646,4.40645 h 38.92012 l 0.004,157.957444 z"
+     id="path81-7-0"
+     style="display:inline;stroke-width:0.708889" /><text
+     xml:space="preserve"
+     style="font-style:normal;font-weight:normal;font-size:24px;line-height:1.25;font-family:sans-serif;fill:#000000;fill-opacity:1;stroke:none"
+     x="169.5807"
+     y="295.62808"
+     id="text122-6"><tspan
+       sodipodi:role="line"
+       id="tspan120-0"
+       x="169.5807"
+       y="295.62808"
+       style="font-size:24px">genome b</tspan></text><text
+     xml:space="preserve"
+     style="font-style:normal;font-weight:normal;font-size:24px;line-height:1.25;font-family:sans-serif;fill:#000000;fill-opacity:1;stroke:none"
+     x="26.955416"
+     y="208.61095"
+     id="text122"><tspan
+       sodipodi:role="line"
+       id="tspan120"
+       x="26.955416"
+       y="208.61095"
+       style="font-size:24px">genome a</tspan></text></g></svg>
