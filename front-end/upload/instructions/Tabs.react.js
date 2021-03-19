@@ -1,6 +1,7 @@
 import React from 'react';
 import classnames from "classnames";
 import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 
 import Assemblies from './Assemblies.react';
 import Reads from './Reads.react';
@@ -15,24 +16,14 @@ const Tabs = ({ usage, token, uploadType }) => {
   useAuthToken(true);
   useAssemblerUsage(token);
 
-  const tabsRef = React.useRef();
-  React.useEffect(() => {
-    if (tabsRef.current && !tabsRef.current.MaterialTabs) {
-      componentHandler.upgradeElement(tabsRef.current);
-    }
-  }, []);
-
   return (
     <React.Fragment>
       <div
-        ref={el => {
-          tabsRef.current = el;
-        }}
         className="mdl-tabs mdl-js-tabs mdl-js-ripple-effect"
       >
         <div className="mdl-tabs__tab-bar">
-          <a
-            href="#fasta-panel"
+          <Link
+            to="/upload/fasta"
             className={
               classnames(
                 "mdl-tabs__tab",
@@ -41,9 +32,9 @@ const Tabs = ({ usage, token, uploadType }) => {
             }
           >
             Assemblies (FASTA)
-          </a>
-          <a
-            href="#multi-fasta-panel"
+          </Link>
+          <Link
+            to="/upload/multi-fasta"
             className={
               classnames(
                 "mdl-tabs__tab",
@@ -52,9 +43,9 @@ const Tabs = ({ usage, token, uploadType }) => {
             }
           >
             Assemblies (Multi-FASTA)
-          </a>
-          <a
-            href="#reads-panel"
+          </Link>
+          <Link
+            to="/upload/reads"
             className={
               classnames(
                 "mdl-tabs__tab",
@@ -65,39 +56,30 @@ const Tabs = ({ usage, token, uploadType }) => {
             <Badge text="Beta" color="turquoise">
               Reads (FASTQ)
             </Badge>
-          </a>
+          </Link>
         </div>
 
-        <div
-          className={
-            classnames(
-              "mdl-tabs__panel",
-              uploadType === "fasta" ? "is-active" : null
-            )
-          }
-          id="fasta-panel">
-          <Assemblies />
-        </div>
-        <div
-          className={
-            classnames(
-              "mdl-tabs__panel",
-              uploadType === "multi-fasta" ? "is-active" : null
-            )
-          }
-          id="multi-fasta-panel">
-          <Assemblies />
-        </div>
-        <div
-          className={
-            classnames(
-              "mdl-tabs__panel",
-              uploadType === "reads" ? "is-active" : null
-            )
-          }
-          id="reads-panel">
-          <Reads remaining={!!usage && !!usage.remaining ? usage.remaining : 0} />
-        </div>
+        {
+          (uploadType === "fasta") && (
+            <div className="mdl-tabs__panel">
+              <Assemblies />
+            </div>
+          )
+        }
+        {
+          (uploadType === "multi-fasta") && (
+            <div className="mdl-tabs__panel">
+              <Assemblies />
+            </div>
+          )
+        }
+        {
+          (uploadType === "reads") && (
+            <div className="mdl-tabs__panel">
+              <Reads remaining={!!usage && !!usage.remaining ? usage.remaining : 0} />
+            </div>
+          )
+        }
       </div>
     </React.Fragment>
   );

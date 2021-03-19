@@ -33,7 +33,11 @@ export default React.createClass({
   style: {},
 
   handleFiles(fileList) {
-    this.props.onFiles(Array.from(fileList));
+    const files = Array.from(fileList);
+    for (const file of files) {
+      file.isMultiFasta = this.props.isMultiFasta;
+    }
+    this.props.onFiles(files);
   },
 
   handleDrop(event) {

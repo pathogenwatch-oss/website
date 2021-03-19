@@ -106,7 +106,7 @@ ul.inline li:last-child::after {
   z-index: 0;
 }
 
-.wgsa-upload-instructions .mdl-tabs .mdl-tabs__panel.is-active {
+.wgsa-upload-instructions .mdl-tabs .mdl-tabs__panel {
   display: flex;
   justify-content: space-between;
 }

@@ -24,7 +24,6 @@ export const ASSEMBLY_FILE_EXTENSIONS = [
   '.genome',
   '.contig',
   '.dna',
-  '.mfa',
 ];
 
 export const DEFAULT = {

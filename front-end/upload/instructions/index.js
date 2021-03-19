@@ -25,6 +25,7 @@ const Instructions = ({ onFiles, fetchPreviousUploads, location }) => {
       onFiles={onFiles}
       readsEligible={readsEligible}
       accept={getUploadAccepts(readsEligible)}
+      isMultiFasta={uploadType === "multi-fasta"}
     >
       <DocumentTitle>Upload</DocumentTitle>
       <Summary />
