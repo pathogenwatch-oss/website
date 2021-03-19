@@ -3,16 +3,14 @@
 <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0" y="0" width="416" height="512" viewBox="0, 0, 416, 512">
   <g id="Layer_1">
     <path d="M32,18 C32,18 303,20 303,18 C303,16 409,124 409,124 C409,124 422,488 409,488 C396,488 32,488 32,488 L32,18 z" fill="#FFFFFF"/>
-    <path d="M411.36,100.64 L315.36,4.64 C312.341,1.645 308.253,-0.024 304,0 L48,0 C21.49,0 -0,21.49 -0,48 L-0,464 C-0,490.51 21.49,512 48,512 L368,512 C394.51,512 416,490.51 416,464 L416,112 C416.025,107.747 414.355,103.66 411.36,100.64 z M384,464 C384,472.837 376.837,480 368,480 L48,480 C39.163,480 32,472.837 32,464 L32,48 C32,39.163 39.163,32 48,32 L288,32 L288,96 C288,113.673 302.327,128 320,128 L384,128 L384,464 z" fill="#000000"/>
-    <text transform="matrix(1, 0, 0, 1, 220, 261)">
-      <tspan x="-163.594" y="-178" font-family="ArialMT" font-size="46" fill="#000000">&gt;genome1</tspan>
-      <tspan x="-163.594" y="-124" font-family="ArialMT" font-size="46" fill="#000000">gatcaatgtcc.....</tspan>
-      <tspan x="-163.594" y="-70" font-family="ArialMT" font-size="46" fill="#000000">&gt;genome2</tspan>
-      <tspan x="-163.594" y="-16" font-family="ArialMT" font-size="46" fill="#000000">atcagatcgat.....</tspan>
-      <tspan x="-163.594" y="38" font-family="ArialMT" font-size="46" fill="#000000">&gt;genome3</tspan>
-      <tspan x="-163.594" y="92" font-family="ArialMT" font-size="46" fill="#000000">cctatacgatg.....</tspan>
-      <tspan x="-163.594" y="146" font-family="ArialMT" font-size="46" fill="#000000">&gt;genome4</tspan>
-      <tspan x="-163.594" y="200" font-family="ArialMT" font-size="46" fill="#000000">tacgactcga.....</tspan>
+    <path d="M411.36,100.64 L315.36,4.64 C312.341,1.645 308.253,-0.024 304,0 L48,0 C21.49,0 -0,21.49 -0,48 L-0,464 C-0,490.51 21.49,512 48,512 L368,512 C394.51,512 416,490.51 416,464 L416,112 C416.025,107.747 414.355,103.66 411.36,100.64 z M384,464 C384,472.837 376.837,480 368,480 L48,480 C39.163,480 32,472.837 32,464 L32,48 C32,39.163 39.163,32 48,32 L288,32 L288,96 C288,113.673 302.327,128 320,128 L384,128 L384,464 z" fill="#673C90"/>
+    <text transform="matrix(1, 0, 0, 1, 274.406, 317.5)">
+      <tspan x="-236.594" y="-190.5" font-family="ArialMT" font-size="54" fill="#000000">&gt;genome1</tspan>
+      <tspan x="-236.594" y="-128.5" font-family="ArialMT" font-size="54" fill="#000000">gatcaatg.....</tspan>
+      <tspan x="-236.594" y="-66.5" font-family="ArialMT" font-size="54" fill="#000000">&gt;genome2</tspan>
+      <tspan x="-236.594" y="-4.5" font-family="ArialMT" font-size="54" fill="#000000">atcagatc.....</tspan>
+      <tspan x="-236.594" y="57.5" font-family="ArialMT" font-size="54" fill="#000000">&gt;genome3</tspan>
+      <tspan x="-236.594" y="119.5" font-family="ArialMT" font-size="54" fill="#000000">cctatacg.....</tspan>
     </text>
   </g>
 </svg>
