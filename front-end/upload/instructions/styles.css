@@ -162,6 +162,10 @@ ul.inline li:last-child::after {
   width: 33%;
 }
 
+.pw-upload-card:hover {
+  background-color: rgba(103, 60, 144, 0.02);
+}
+
 .pw-upload-card h3 {
   margin-top: 16px;
   color: #202124;
