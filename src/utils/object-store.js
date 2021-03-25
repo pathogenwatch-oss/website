@@ -129,24 +129,26 @@ class ObjectStore {
     return this.get(key, params)
   }
 
-  async* getScoreCache(fileIds, versions, type) {
+  async getScoreCache(genomes, versions, type) {
+    const cacheByFileId = {};
     const fieldName = (type === 'score') ? 'scores' : 'differences';
-    for (const fileId of fileIds) {
+    for (const { fileId } of genomes) {
       cacheByFileId[fileId] = {};
     }
 
-    const orderedFileIds = [...fileIds];
-    orderedFileIds.sort();
+    const orderedGenomes = [...genomes];
+    orderedGenomes.sort((a, b) => a.fileId < b.fileId ? -1 : 1)
   
-    const analysisKeys = orderedFileIds.map(fileId => store.analysisKey('tree-score', `${versions.core}_${versions.tree}`, fileId))
-    for await (const value of store.iterGet(analysisKeys)) {
+    const analysisKeys = orderedGenomes.map(({ fileId, organismId }) => this.analysisKey('tree-score', `${versions.core}_${versions.tree}`, fileId, organismId))
+    for await (const value of this.iterGet(analysisKeys)) {
       if (value === undefined) continue
       const doc = JSON.parse(value);
       if (doc.versions.core != versions.core) continue;
       if (doc.versions.tree != versions.tree) continue;
       
-      for (const fileId of fileIds) {
-        cacheByFileId[doc.fileId][fileId] = doc[fieldName][fileId];
+      for (const genome of orderedGenomes) {
+        const { fileId } = genome;
+        if (doc[fieldName][fileId] !== undefined) cacheByFileId[doc.fileId][fileId] = doc[fieldName][fileId];
       }
     }
     return cacheByFileId;
