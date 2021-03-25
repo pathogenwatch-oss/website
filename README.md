@@ -2,10 +2,13 @@
 
 ## Development
 
-1. Start MongoDB
-2. Create a `config.json` (use Keybase/team/cgps.dev/Projects/Pathogenwatch/Config/dev.json)
-3. `npm install`
-4. `npm run dev`
+1. Start MongoDB (e.g. `docker run -m 1g -d -p 127.0.0.1:27017:27017 mongo:3.6.6`)
+2. Create a `config.json` (use ../deployment/dev/config.json)
+3. `export REPO_USER=YOUR_GITLAB_USER REPO_TOKEN=YOUR_TOKEN`
+4. `git config --global url.https://$REPO_USER:$REPO_TOKEN@gitlab.com/.insteadOf git://gitlab.com/ && git config --global url.https://$REPO_USER:$REPO_TOKEN@gitlab.com/cgps.insteadOf git@gitlab.com:cgps &&  git config --global url.https://$REPO_USER:$REPO_TOKEN@gitlab.com/cgps/.insteadOf https://gitlab.com/cgps/`
+5. `npm install`
+6. `npm run dev`
+7. Start a worker `npm run runner`
 
 ## Scripts
 
