@@ -16,6 +16,7 @@ async function getGenomeSummaries(query) {
     'analysis.core.__v': 1,
     'analysis.mlst.matches': 1,
     'analysis.paarsnp': 1,
+    'analysis.speciator.organismId': 1,
   };
   const options = { sort: { name: 1 } };
   const genomes = Genome.find(query, projection, options).lean().cursor();
@@ -24,11 +25,12 @@ async function getGenomeSummaries(query) {
   const coreVersionMap = {};
   for await (const genome of genomes) {
     const { fileId, analysis: { core } } = genome;
+    const organismId = details.analysis.speciator.organismId;
     genomeLookup[fileId] = genomeLookup[fileId] || [];
     genomeLookup[fileId].push(genome);
     if (core) {
       coreVersionMap[core.__v] = coreVersionMap[core.__v] || [];
-      coreVersionMap[core.__v].push(fileId);
+      coreVersionMap[core.__v].push({ fileId, organismId });
     }
     fileIds.add(fileId);
   }
@@ -43,13 +45,14 @@ function getGenomes(genomeLookup, coreVersionMap) {
   const analysisKeys = [];
   
   for (const version of Object.keys(coreVersionMap)) {
-    for (const fileId of coreVersionMap[version]) {
-      analysisKeys.push(store.analysisKey('core', version, fileId))
+    for (const { fileId, organismId } of coreVersionMap[version]) {
+      analysisKeys.push(store.analysisKey('core', version, fileId, organismId))
     }
   }
 
   async function* cores() {
     for (const value of store.iterGet(analysisKeys)) {
+      if (value === undefined) continue;
       const { fileId, version, results } = JSON.parse(value)
       const genomes = genomeLookup[fileId] || [];
       for (const genome of genomes) {

@@ -28,15 +28,13 @@ module.exports = async (req, res) => {
 
   const genomeDetails = await Genome.find(query, projection).lean();
   const organismIds = []
-  for (const details of genomeDetails) {
-    organismIds.push(details.analysis.speciator.organismId);
-  };
-
   const analysisKeys = [];
   for (const details of genomeDetails) {
+    const organismId = details.analysis.speciator.organismId;
+    organismIds.push(organismId);
     const version = details.analysis.cgmlst.__v;
     const { fileId } = details;
-    analysisKeys.push(store.analysisKey('cgmlst', version, fileId))
+    analysisKeys.push(store.analysisKey('cgmlst', version, fileId, organismId))
   }
 
   async function* generate() {

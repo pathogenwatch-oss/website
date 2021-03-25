@@ -1,4 +1,3 @@
-const transform = require('stream-transform');
 const { Readable } = require('stream');
 const sanitize = require('sanitize-filename');
 const Genome = require('models/genome');
@@ -88,7 +87,7 @@ function getGenomes(cores, genomeLookup) {
 async function getColumns(cores) {
   let columns = new Set();
 
-  for (const { results } of cores) {
+  for await (const { results } of cores) {
     const newColumns = (results.profile || []).map(({ id }) => id);
     columns = new Set([ ...columns, ...newColumns ]);
   }
@@ -111,10 +110,10 @@ async function getGenomeSummaries(query) {
 }
 
 async function* getCores(fileIds, version, organismId) {
-  const analysisKeys = fileIds.map(fileId => store.analysisKey('core', version, fileId))
+  const analysisKeys = fileIds.map(fileId => store.analysisKey('core', version, fileId, organismId))
   for await (const value of store.iterGet(analysisKeys)) {
     const doc = JSON.parse(value);
-    if (doc.organismId === organismId) yield doc;
+    if (doc) yield doc;
   }
 }
 

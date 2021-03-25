@@ -10,13 +10,13 @@ const { ServiceRequestError } = require('utils/errors');
 
 const { calculateStats } = require('utils/stats');
 
-function generateTreeStats(genomes, cache) {
+function generateTreeStats(genomeSummaries, cache) {
   const scores = [];
 
-  for (let a = 0; a < genomes.length; a++) {
-    const genomeA = genomes[a];
+  for (let a = 0; a < genomeSummaries.length; a++) {
+    const genomeA = genomeSummaries[a];
     for (let b = 0; b < a; b++) {
-      const genomeB = genomes[b];
+      const genomeB = genomeSummaries[b];
       if (genomeA.fileId === genomeB.fileId) {
         scores.push(0);
       } else if (genomeA.fileId in cache && genomeB.fileId in cache[genomeA.fileId]) {
@@ -142,20 +142,22 @@ async function getGenomeSummaries(genomeIds) {
   };
   const projection = {
     fileId: 1,
+    'analysis.speciator.organismId': 1,
   };
   const options = {
     sort: { fileId: 1 },
   };
   const results = await Genome.find(query, projection, options).lean();
-  return results.map(({ _id, fileId }) => ({
-    _id,
-    fileId,
+  return results.map(doc => ({
+    _id: doc._id,
+    fileId: doc.fileId,
+    organismId: doc.analysis.speciator.organismId,
   }));
 }
 
 function createGenomeStream(genomeSummaries, versions) {
-  const fileIds = genomeSummaries.map(({ fileId }) => fileId);
-  fileIds.sort();
+  const genomes = [...genomeSummaries]
+  genomes.sort((a,b) => a.fileId < b.fileId ? -1 : 1)
   
   const genomeIds = {}
   for (const { fileId, _id } of genomeSummaries) {
@@ -164,7 +166,7 @@ function createGenomeStream(genomeSummaries, versions) {
     return genomeIds;
   };
 
-  const analysisKeys = fileIds.map(fileId => store.analysisKey('core', versions.core, fileId));
+  const analysisKeys = genomes.map(({ fileId, organismId }) => store.analysisKey('core', versions.core, fileId, organismId));
   async function* gen() {
     for await (const value of store.iterGet(analysisKeys)) {
       const { fileId, results } = JSON.parse(value);
@@ -196,9 +198,7 @@ function createGenomeStream(genomeSummaries, versions) {
 async function generateTreeData(tree, treeGenomeIds, collectionGenomeIds) {
   const genomeSummaries = await getGenomeSummaries(treeGenomeIds);
 
-  const fileIds = genomes.map(_ => _.fileId);
-  fileIds.sort();
-  const cache = await store.getScoreCache(fileIds, tree.versions, 'score')
+  const cache = await store.getScoreCache(genomeSummaries, tree.versions, 'score')
   
   const stats = generateTreeStats(genomeSummaries, cache);
 

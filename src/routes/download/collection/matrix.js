@@ -6,7 +6,7 @@ const store = require('utils/object-store');
 const { request } = require('services');
 const { ServiceRequestError } = require('utils/errors');
 
-function getCollectionGenomes({ genomes }, genomeIds) {
+async function getCollectionGenomes({ genomes }, genomeIds) {
   const query = {
     _id: { $in: genomeIds },
     $or: [
@@ -14,9 +14,16 @@ function getCollectionGenomes({ genomes }, genomeIds) {
       { public: true },
     ],
   };
-  return Genome
-    .find(query, { fileId: 1, name: 1 }, { sort: { name: 1 } })
-    .lean();
+  const projection = {
+    fileId: 1,
+    name: 1,
+    'analysis.speciator.organismId': 1,
+  }
+  const result = await Genome
+    .find(query, projection, { sort: { name: 1 } })
+    .lean()
+  return result
+    .map(d => ({ fileId: d.fileId, name: d.name, organismId: d.analysis.speciator.organismId }));
 }
 
 function writeMatrixHeader(genomes, stream) {
@@ -93,8 +100,7 @@ module.exports = (req, res, next) => {
         throw new ServiceRequestError('Tree not found');
       }
 
-      const fileIds = genomes.map(_ => _.fileId);
-      const cache = await store.getScoreCache(fileIds, tree.versions, type);
+      const cache = await store.getScoreCache(genomes, tree.versions, type);
       return { genomes, cache };
     })
     .then(data => generateMatrix(data, stream))
