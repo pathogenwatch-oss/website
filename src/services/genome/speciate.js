@@ -13,9 +13,10 @@ async function submitTasks({ genomeId, fileId, uploadedAt, clientId, userId }, d
   const user = await User.findById(userId, { flags: 1 });
   const tasks = getTasksByOrganism(speciatorResult, user);
 
-  const analysisKeys = tasks.map(({ task, version }) => store.analysisKey(task, version, fileId))
+  const analysisKeys = tasks.map(({ task, version }) => store.analysisKey(task, version, fileId, organismId))
   const cachedResults = [];
   for await (const value of store.iterGet(analysisKeys)) {
+    if (value === undefined) continue;
     cachedResults.push(JSON.parse(value));
   }
 
@@ -55,8 +56,8 @@ module.exports = async function findTask(message, retries = 0) {
   const { genomeId, fileId, uploadedAt, clientId } = message.metadata;
   const { task, version, timeout = defaultTimeout } = speciatorTask;
 
-  const value = await store.getAnalysis(task, version, fileId)
-  const doc = JSON.parse(value);
+  const value = await store.getAnalysis(task, version, fileId, undefined)
+  const doc = value === undefined ? undefined : JSON.parse(value);
   const { precache = false } = message;
   if (doc && !precache) {
     return submitTasks(message.metadata, doc);

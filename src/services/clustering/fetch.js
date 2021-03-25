@@ -4,8 +4,8 @@ const store = require('../../utils/object-store');
 
 async function getClusteringData({ scheme, user }) {
   let value
-  if (user) value = await store.getAnalysis('cgmlst-clustering', `${version}_${scheme}`, user._id);
-  if (value === undefined) value = await store.getAnalysis('cgmlst-clustering', `${version}_${scheme}`, 'public');
+  if (user) value = await store.getAnalysis('cgmlst-clustering', `${version}_${scheme}`, user._id, undefined);
+  if (value === undefined) value = await store.getAnalysis('cgmlst-clustering', `${version}_${scheme}`, 'public', undefined);
   if (value === undefined) return undefined;
   
   const { edges, ...doc } = JSON.parse(value);

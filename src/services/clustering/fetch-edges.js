@@ -3,8 +3,8 @@ const { NotFoundError } = require('../../utils/errors');
 const store = require('../../utils/object-store');
 
 async function getEdges({ userId, scheme, version, sts, threshold }) {
-  let value = await store.getAnalysis('cgmlst-clustering', `${version}_${scheme}`, userId);
-  if (value === undefined) value = await store.getAnalysis('cgmlst-clustering', `${version}_${scheme}`, userId || 'public', results);
+  let value = await store.getAnalysis('cgmlst-clustering', `${version}_${scheme}`, userId, undefined);
+  if (value === undefined) value = await store.getAnalysis('cgmlst-clustering', `${version}_${scheme}`, 'public', undefined);
   if (value === undefined) throw new NotFoundError(`No cluster edges at threshold ${threshold}`);
 
   const clusteringDoc = JSON.parse(value);
