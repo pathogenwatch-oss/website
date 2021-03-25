@@ -8,7 +8,6 @@ const { PassThrough, Readable } = require('stream');
 
 const { maxGenomeFileSize = 10} = require('configuration');
 const { promisify } = require('util');
-const maxGenomeFileSizeBytes = maxGenomeFileSize * 1048576;
 
 const mkdir = promisify(temp.mkdir)
 async function rm(p) {
@@ -25,7 +24,8 @@ async function setupFastaDir() {
   return fastaDir;
 }
 
-async function store(stream) {
+async function store(stream, maxMb=maxGenomeFileSize) {
+  const maxGenomeFileSizeBytes = maxMb * 1048576;
   await setupFastaDir();
   const tempPath = temp.path({ dir: fastaDir, suffix: '.fa' });
   
@@ -43,11 +43,9 @@ async function store(stream) {
       resolve(hash.digest('hex'))
     }
 
-    try {
-      Readable.from(passthrough()).pipe(fs.createWriteStream(tempPath));
-    } catch (error) {
-      reject(error)
-    }
+    const outstream = Readable.from(passthrough())
+    outstream.on('error', reject)
+    outstream.pipe(fs.createWriteStream(tempPath));
   })
 
   const fastaKey = await objectStore.putFasta(fileId, fs.createReadStream(tempPath));
