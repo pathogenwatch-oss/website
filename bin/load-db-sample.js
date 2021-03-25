@@ -1,13 +1,11 @@
 // Loads DB records into a test environment
 // Records should be dumped with dump-db-sample.js
 
-const bson = require('bson');
 const fs = require('fs');
 const argv = require('named-argv');
 const es = require('event-stream');
 const { Writable } = require('stream');
 
-const BSON = new bson();
 const mongoConnection = require('utils/mongoConnection');
 
 const Genome = require('models/genome');
@@ -16,15 +14,10 @@ const Organism = require('models/organism');
 const store = require('utils/object-store');
 
 const { ObjectId } = require('mongoose').Types;
-const { mode } = require('webpack.config');
-
-function deserialize(rawDoc) {
-  return BSON.deserialize(Buffer.from(rawDoc, 'base64'))
-}
 
 async function process(line) {
   const data = JSON.parse(line);
-  const { doc: rawDoc, type } = data;
+  const { doc, type } = data;
   let model
   switch (type) {
     case 'genome':
@@ -43,20 +36,13 @@ async function process(line) {
      return
   }
 
-  let doc
-  try {
-    doc = deserialize(rawDoc);
-  } catch (err) {
-    err.doc = { _id: `like ${rawDoc.slice(0, 100)}`, type: type || "unknown" }
-    throw err
-  }
   const { _id, ...rest } = doc;
   if (!_id) return; // not sure why this happened but it's not good
 
   // I tried doing a traditional "upsert" but had a problem with some documents
   // and a date field.  This seems to be quick and actually work.
   try {
-    if (model === 'Analysis') return await store.putAnalysis(doc.task, doc.version, doc.fileId, doc);
+    if (model === 'Analysis') return await store.putAnalysis(doc.task, doc.version, doc.fileId, doc.organismId, doc);
     return await model.collection.findOneAndReplace({_id: ObjectId(_id)}, rest, { upsert: true })
   } catch (err) {
     err.doc = { _id, type }
