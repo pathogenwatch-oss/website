@@ -99,17 +99,18 @@ class ObjectStore {
     this.queue = [];
   }
 
-  analysisKey(task, version, fileId) {
-    return `${config.prefix || ''}analysis/${task}/${version}/${fileId.slice(0, 2)}/${fileId}.json.gz`
+  analysisKey(task, version, fileId, organismId) {
+    if (organismId === undefined) return `${config.prefix || ''}analysis/${task}/${version}/${fileId.slice(0, 2)}/${fileId}.json.gz`
+    return `${config.prefix || ''}analysis/${task}/${version}/${fileId.slice(0, 2)}/${fileId}-${organismId}.json.gz`
   }
 
-  putAnalysis(task, version, fileId, data, params={}) {
-    const key = this.analysisKey(task, version, fileId);
+  putAnalysis(task, version, fileId, organismId, data, params={}) {
+    const key = this.analysisKey(task, version, fileId, organismId);
     return this.put(key, data, params)
   }
 
-  getAnalysis(task, version, fileId, params={}) {
-    const key = this.analysisKey(task, version, fileId);
+  getAnalysis(task, version, fileId, organismId, params={}) {
+    const key = this.analysisKey(task, version, fileId, organismId);
     return this.get(key, params)
   }
 
