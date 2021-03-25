@@ -13,11 +13,15 @@ const { getImageName } = require('manifest.js');
 const LOGGER = require('utils/logging').createLogger('runner');
 
 function runTask({ fileId, task, version, organismId, speciesId, genusId, timeout }) {
+  if (process.env.KEEP_TASK_CONTAINERS === 'true') {
+    LOGGER.warn(`Creating a container which will not be removed on completion`);
+  }
   return new Promise((resolve, reject) => {
     const startTime = process.hrtime();
     const container = docker(
       getImageName(task, version),
       {
+        remove: process.env.KEEP_TASK_CONTAINERS === 'true' ? false : true,
         env: {
           PW_ORGANISM_TAXID: organismId,
           PW_SPECIES_TAXID: speciesId,
