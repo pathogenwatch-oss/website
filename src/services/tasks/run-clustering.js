@@ -3,6 +3,7 @@
 /* eslint max-params: 0 */
 
 const BSON = require('bson');
+const bson = new BSON();
 const { Readable } = require('stream');
 const readline = require('readline');
 
@@ -16,7 +17,6 @@ const { getImageName } = require('../../manifest.js');
 const { request } = require('../../services');
 
 const LOGGER = require('../../utils/logging').createLogger('runner');
-const bson = new BSON();
 
 const DEFAULT_THRESHOLD = 50;
 
@@ -26,8 +26,15 @@ async function getCgmlstKeys({ userId, scheme }) {
     'analysis.cgmlst.scheme': scheme,
   };
 
+  const projection = {
+    fileId: 1,
+    'analysis.cgmlst.st': 1,
+    'analysis.cgmlst.__v': 1,
+    'analysis.speciator.organismId': 1,
+  }
+
   const docs = await Genome
-    .find(query, { fileId: 1, 'analysis.cgmlst.st': 1, 'analysis.cgmlst.__v': 1 })
+    .find(query, projection)
     .lean()
     .cursor();
 
@@ -37,7 +44,8 @@ async function getCgmlstKeys({ userId, scheme }) {
     const doc = JSON.parse(value);
     const { st, __v: version } = doc.analysis.cgmlst;
     const { fileId } = doc;
-    analysisKeys[st] = store.analysisKey('cgmlst', version, fileId);
+    const organismId = doc.analysis.speciator.organismId;
+    analysisKeys[st] = store.analysisKey('cgmlst', version, fileId, organismId);
   }
 
   if (Object.keys(analysisKeys).length < 2) {
@@ -57,8 +65,8 @@ async function attachInputStream(container, spec, metadata, cgmlstKeys) {
       maxThreshold: DEFAULT_THRESHOLD,
     })
 
-    let clustering = await store.getAnalysis('cgmlst-clustering', `${version}_${scheme}`, userId);
-    if (clustering === undefined) clustering = await store.getAnalysis('cgmlst-clustering', `${version}_${scheme}`, 'public');
+    let clustering = await store.getAnalysis('cgmlst-clustering', `${version}_${scheme}`, userId, undefined);
+    if (clustering === undefined) clustering = await store.getAnalysis('cgmlst-clustering', `${version}_${scheme}`, 'public', undefined);
     if (clustering !== undefined) {
       yield bson.serialize(JSON.parse(clustering))
     }
@@ -111,7 +119,7 @@ async function handleContainerOutput(container, spec, metadata) {
       throw e;
     }
   }
-  await store.putAnalysis('cgmlst-clustering', `${version}_${scheme}`, userId || 'public', results);
+  await store.putAnalysis('cgmlst-clustering', `${version}_${scheme}`, userId || 'public', undefined, results);
 }
 
 function handleContainerExit(container, spec, metadata) {

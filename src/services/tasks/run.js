@@ -88,9 +88,9 @@ module.exports = async function ({ task, version, metadata, timeout$: timeout = 
     userId,
   } = metadata;
   
-  const value = await store.getAnalysis(task, version, fileId);
+  const value = await store.getAnalysis(task, version, fileId, organismId);
   let doc = value === undefined ? undefined : JSON.parse(value);
-  doc = (doc.organismId != organismId) ? undefined : doc;
+  doc = (doc && doc.organismId === organismId) ? doc : undefined;
   
   if (!doc) {
     // The results weren't in the cache
@@ -104,8 +104,8 @@ module.exports = async function ({ task, version, metadata, timeout$: timeout = 
       timeout,
     });
 
-    await store.putAnalysis(task, version, fileId, { fileId, task, version, organismId, results });
     doc = { fileId, task, version, organismId, results };
+    await store.putAnalysis(task, version, fileId, organismId, doc);
   }
 
   if (!precache) {

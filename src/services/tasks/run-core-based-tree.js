@@ -3,7 +3,9 @@
 /* eslint max-params: 0 */
 
 const BSON = require('bson');
+const bson = new BSON();
 const { Readable } = require('stream');
+const readline = require('readline');
 
 const Collection = require('../../models/collection');
 const Genome = require('../../models/genome');
@@ -15,7 +17,6 @@ const { getImageName } = require('../../manifest.js');
 const { request } = require('../../services');
 
 const LOGGER = require('../../utils/logging').createLogger('runner');
-const bson = new BSON();
 
 async function getGenomes(task, metadata) {
   const { collectionId, name: refName, organismId } = metadata;
@@ -52,80 +53,67 @@ async function* createGenomesStream(genomes, uncachedFileIds, versions, organism
   const genomeLookup = {}
   for (const genome of genomes) {
     const { fileId } = genome;
-    if (!uncachedFileIds.has(fileId)) break;
+    if (!uncachedFileIds.has(fileId)) continue;
     genomeLookup[fileId] = genomeLookup[fileId] || [];
     genomeLookup[fileId].push(genome);
   }
 
   const fileIds = Array.from(uncachedFileIds);
   fileIds.sort()
-  
-  const format = doc => ({
-    fileId: doc.fileId,
-    organismId: doc.organismId,
-    results: {
-      profile: {
-        filter: doc.results.profile.filter,
-        id: doc.results.profile.id,
-        alleles: {
-          id: doc.results.profile.alleles.id,
-          rstart: doc.results.profile.alleles.rstart,
-          rstop: doc.results.profile.alleles.rstop,
-          mutations: doc.results.profile.alleles.mutations,
-          filter: doc.results.profile.alleles.filter
-        }
-      }
-    }
-  })
-  
-  const analysisKeys = fileIds.map(fileId => store.analysisKey('core', versions.core, fileId))
+
+  const analysisKeys = fileIds.map(fileId => store.analysisKey('core', versions.core, fileId, organismId))
   for await (const value of store.iterGet(analysisKeys)) {
-    const { organismId: docOrganismId, ...core } = format(JSON.parse(value));
-    if (docOrganismId !== organismId) continue;
-    const { fileId, results } = core;
+    if (value === undefined) continue;
+    const { fileId, results } = JSON.parse(value);
     genomeLookup[fileId] = genomeLookup[fileId] || [];
     for (const genomeDetails of genomeLookup[fileId]) {
       const genome = {
         ...genomeDetails,
-        analysis: { core: results },
+        analysis: { 
+          core: {
+            profile: results.profile,
+          },
+        },
       };
-      yield genome
+      yield genome;
     }
     genomeLookup[fileId] = [];
   }
 }
 
-async function* createScoreCacheStream(versions, fileIds) {
-  const analysisKeys = fileIds.map(fileId => store.analysisKey('tree-score', `${versions.core}_${versions.tree}`, fileId))
+async function* createScoreCacheStream(versions, organismId, fileIds) {
+  const analysisKeys = fileIds.map(fileId => store.analysisKey('tree-score', `${versions.core}_${versions.tree}`, fileId, organismId))
   function formater(doc) {
     out = { fileId: doc.fileId, scores: {} }
     for (const fileId of fileIds) {
-      out.scores[fileId] = doc.scores[fileId]
+      if (doc.scores[fileId] !== undefined) out.scores[fileId] = doc.scores[fileId]
     }
     return out
   }
-  for await (const value of store.iterGet(analysisKeys)) {
-    if (value === undefined) yield undefined;
-    else yield formater(JSON.parse(value))
+  const cache = store.iterGet(analysisKeys);
+  for (let i=0; i<fileIds.length; i++) {
+    const { value, done } = await cache.next();
+    if (done) break;
+    if (value === undefined) {
+      const fileId = fileIds[i];
+      yield { fileId, scores: {} };
+    } else yield formater(JSON.parse(value))
   }
 }
 
 function attachInputStream(container, versions, genomes, organismId) {
   const fileIds = genomes.map(_ => _.fileId);
   fileIds.sort();
+  const seen = new Set();
 
   async function* gen() {
     yield bson.serialize({ genomes })
     
     let uncachedFileIds = new Set();
-    for await (const doc of createScoreCacheStream(versions, fileIds)) {
+    for await (const doc of createScoreCacheStream(versions, organismId, fileIds)) {
       yield bson.serialize(doc)
       
-      if (doc === undefined) {
-        uncachedFileIds = new Set(fileIds);
-        continue;
-      };
-
+      seen.add(doc.fileId)
       for (const fileId of fileIds) {
         if (fileId >= doc.fileId) break;
         if (doc.scores[fileId] === undefined) {
@@ -134,6 +122,14 @@ function attachInputStream(container, versions, genomes, organismId) {
         }
       }
     }
+
+    for (const fileId of fileIds) {
+      if (!seen.has(fileId)) {
+        uncachedFileIds = new Set(fileIds);
+        break;
+      }
+    }
+    LOGGER.info(`Tree needs ${uncachedFileIds.size} of ${new Set(fileIds).size} genomes`)
     
     for await (const doc of createGenomesStream(genomes, uncachedFileIds, versions, organismId)) {
       yield bson.serialize(doc);
@@ -157,17 +153,18 @@ async function handleContainerOutput(container, task, versions, metadata, genome
   for await (const line of lines) {
     if (!line) continue;
     try {
-      const doc = JSON.parse(data);
+      const doc = JSON.parse(line);
       if (doc.fileId && doc.scores) {
-        const value = await store.getAnalysis('tree-score', `${versions.core}_${versions.tree}`, doc.fileId);
+        const value = await store.getAnalysis('tree-score', `${versions.core}_${versions.tree}`, doc.fileId, metadata.organismId);
         const update = value === undefined ? { fileId: doc.fileId, scores: {}, differences: {} } : JSON.parse(value);
+        update.versions = versions;
         for (const fileId in doc.scores) {
           update.scores[fileId] = doc.scores[fileId];
         }
         for (const fileId in doc.differences) {
           update.differences[fileId] = doc.differences[fileId];
         }
-        await store.putAnalysis('tree-score', `${versions.core}_${versions.tree}`, fileId, update)
+        await store.putAnalysis('tree-score', `${versions.core}_${versions.tree}`, doc.fileId, metadata.organismId, update)
         const progress = doc.progress * 0.99;
         if ((progress - lastProgress) >= 1) {
           request('collection', 'send-progress', { clientId, payload: { task, name, progress } });

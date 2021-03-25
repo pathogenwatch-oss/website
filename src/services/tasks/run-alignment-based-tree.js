@@ -3,6 +3,7 @@
 /* eslint max-params: 0 */
 
 const BSON = require("bson");
+const bson = new BSON();
 const { Readable } = require('stream');
 
 const store = require('utils/object-store');
@@ -11,8 +12,6 @@ const Genome = require("../../models/genome");
 
 const runCoreBasedTree = require("./run-core-based-tree");
 const { createContainer, handleContainerOutput, handleContainerExit } = runCoreBasedTree;
-
-const bson = new BSON();
 
 async function getGenomes(task, metadata) {
   const { genomes } = await Collection.findOne(
@@ -41,12 +40,11 @@ async function createInputStream(genomes, versions, organismId) {
   const fileIds = genomes.map(_ => _.fileId);
   fileIds.sort();
 
-  const analysisKeys = fileIds.map(fileId => store.analysisKey('alignment', versions.alignment, fileId))
+  const analysisKeys = fileIds.map(fileId => store.analysisKey('alignment', versions.alignment, fileId, organismId))
   async function* gen() {
     yield bson.serialize({ genomes })
     for await (const value of store.iterGet(analysisKeys)) {
       const core = JSON.parse(value);
-      if (core.organismId !== organismId) continue;
       const { fileId, results } = core;
       const genome = {
         fileId,
