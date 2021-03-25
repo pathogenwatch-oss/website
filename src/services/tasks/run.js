@@ -12,6 +12,11 @@ const { getImageName } = require('manifest.js');
 
 const LOGGER = require('utils/logging').createLogger('runner');
 
+// Based on https://stackoverflow.com/a/12502559
+// by https://stackoverflow.com/users/569544/jar-jar-beans
+// This is not a secure random number
+const random = () => Math.random().toString(36).slice(2,10)
+
 function runTask({ fileId, task, version, organismId, speciesId, genusId, timeout }) {
   if (process.env.KEEP_TASK_CONTAINERS === 'true') {
     LOGGER.warn(`Creating a container which will not be removed on completion`);
@@ -21,6 +26,7 @@ function runTask({ fileId, task, version, organismId, speciesId, genusId, timeou
     const container = docker(
       getImageName(task, version),
       {
+        name: `${task}_${random()}`,
         remove: process.env.KEEP_TASK_CONTAINERS === 'true' ? false : true,
         env: {
           PW_ORGANISM_TAXID: organismId,
