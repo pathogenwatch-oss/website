@@ -40,14 +40,14 @@ const Instructions = ({ onFiles, fetchPreviousUploads }) => {
             <figure>
               <img width="80px" src="/images/icons/one-genome-per-file.svg" />
             </figure>
-            <h3>FASTA</h3>
+            <h3>Single Genome FASTAs</h3>
             <p>
-              One genome per file
+              One or more FASTA files, one genome per FASTA file.
               <br />
               (e.g. bacterial genomes)
             </p>
             <span>
-              Upload FASTA
+              Upload FASTA(s)
             </span>
           </Link>
           <Link
@@ -57,14 +57,14 @@ const Instructions = ({ onFiles, fetchPreviousUploads }) => {
             <figure>
               <img width="80px" src="/images/icons/multiple-genomes-per-file.svg" />
             </figure>
-            <h3>Multi FASTA</h3>
+            <h3>Multi-genome FASTAs</h3>
             <p>
-              Multiple genomes per file
+              Multiple genomes per file, one genome per record.
               <br />
               (e.g. viral genomes)
             </p>
             <span>
-              Upload Multi FASTA
+              Upload FASTA(s)
             </span>
           </Link>
           <Link
@@ -76,16 +76,14 @@ const Instructions = ({ onFiles, fetchPreviousUploads }) => {
             </figure>
             <h3>FASTQ</h3>
             <p>
-              Pairs of read files
-              <br />
-              in FASTQ format
+              One or more pairs of read files in FASTQ format.
             </p>
             <span>
-              Upload FASTQ
+              Upload FASTQ(s).
             </span>
           </Link>
         </div>
-        
+
       </section>
     </div>
   );
