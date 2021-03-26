@@ -31,7 +31,7 @@ function validateAssemblySize(file) {
 }
 
 function isMultiFastaFile(file) {
-  return file.name && /\.mfa$/i.test(file.name);
+  return file.isMultiFasta;
 }
 
 export default async function (files, assemblerUsage) {
