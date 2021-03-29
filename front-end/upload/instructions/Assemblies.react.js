@@ -27,9 +27,8 @@ export default () => (
       </ul>
       <p>
         Files should contain <strong>assembled DNA sequences</strong> of{' '}
-        <strong>whole genomes</strong>. Please ensure that there is{' '}
-        <strong>one file per genome</strong> as metagenomic samples are not
-        supported.
+        <strong>whole genomes</strong>. Please note that metagenomic samples are not
+        supported and results should not be considered reliable.
       </p>
       <h2>Settings</h2>
       <p>
@@ -94,10 +93,10 @@ export default () => (
         </li>
         <li>
           <a
-            href="/pathogenwatch-metadata-template-typhi.csv"
-            download="pathogenwatch-metadata-template-typhi.csv"
+            href="/pathogenwatch-metadata-template-example.csv"
+            download="pathogenwatch-metadata-template-example.csv"
           >
-            <FormattedName organismId="90370" />
+            Full example
           </a>
         </li>
       </ul>

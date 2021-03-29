@@ -7,7 +7,7 @@ const ZipStream = require('zip-stream');
 
 const { Transform, PassThrough } = require('stream');
 
-const {fastaStoragePath, maxGenomeFileSize = 10} = require('configuration');
+const {fastaStoragePath, maxGenomeFileSize = 20} = require('configuration');
 const maxGenomeFileSizeBytes = maxGenomeFileSize * 1048576;
 
 async function setup() {

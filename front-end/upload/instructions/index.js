@@ -14,23 +14,26 @@ import { fetchUploads } from '../previous/actions';
 
 import { isReadsEligible, getUploadAccepts } from '../file-utils';
 
-const Instructions = ({ onFiles, fetchPreviousUploads }) => {
+const Instructions = ({ onFiles, fetchPreviousUploads, location }) => {
   React.useEffect(() => {
     fetchPreviousUploads();
   }, []);
-
+  const uploadType = location.pathname.split("/").find((_, index, array) => index === array.length - 1);
   const readsEligible = isReadsEligible();
   return (
     <FileDragAndDrop
       onFiles={onFiles}
       readsEligible={readsEligible}
       accept={getUploadAccepts(readsEligible)}
+      isMultiFasta={uploadType === "multi-fasta"}
     >
       <DocumentTitle>Upload</DocumentTitle>
       <Summary />
       <section className="wgsa-page wgsa-compact-page wgsa-upload-instructions">
         <h1>Drag and drop files to begin.</h1>
-        {readsEligible ? <Tabs /> : <Assemblies />}
+        <Tabs
+          uploadType={uploadType}
+        />
       </section>
     </FileDragAndDrop>
   );
