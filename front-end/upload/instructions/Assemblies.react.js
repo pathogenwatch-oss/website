@@ -5,7 +5,7 @@ import { FormattedName } from '../../organisms';
 
 import { ASSEMBLY_FILE_EXTENSIONS } from '../../app/constants';
 
-export default () => (
+export default ({csvText}) => (
   <React.Fragment>
     <div className="pw-upload-instructions-column">
       <h2>Genomic Data</h2>
@@ -61,9 +61,7 @@ export default () => (
           href="https://cgps.gitbook.io/pathogenwatch/how-to-use-pathogenwatch/editing-metadata"
         >see here for instructions</a></p>
       <p>
-        Files should contain a <strong>filename</strong> column to match each
-        row to its respective genomic data. Please use the name of the file{' '}
-        <strong>including extension</strong>.
+        {csvText}
       </p>
       <p>
         To make full use of metadata, we strongly recommend including the
