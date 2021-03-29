@@ -93,10 +93,10 @@ export default () => (
         </li>
         <li>
           <a
-            href="/pathogenwatch-metadata-template-typhi.csv"
-            download="pathogenwatch-metadata-template-typhi.csv"
+            href="/pathogenwatch-metadata-template-example.csv"
+            download="pathogenwatch-metadata-template-example.csv"
           >
-            <FormattedName organismId="90370" />
+            Full example
           </a>
         </li>
       </ul>
