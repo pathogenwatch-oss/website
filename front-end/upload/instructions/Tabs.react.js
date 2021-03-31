@@ -62,14 +62,19 @@ const Tabs = ({ usage, token, uploadType }) => {
         {
           (uploadType === "fasta") && (
             <div className="mdl-tabs__panel">
-              <Assemblies />
+              <Assemblies csvText={(<React.Fragment>Files should contain a <strong>filename</strong> column to match each
+                row to its respective genomic data. Please use the name of the file{' '}
+                <strong>including extension</strong>.</React.Fragment>)}/>
             </div>
           )
         }
         {
           (uploadType === "multi-fasta") && (
             <div className="mdl-tabs__panel">
-              <Assemblies />
+              <Assemblies csvText={(<React.Fragment>Files should contain a <strong>filename</strong> column to match each
+                row to its respective genomic data. Please use the name given in the{' '}
+                <strong>header line of the individual FASTA records</strong> -{' '}
+                not the actual filename.</React.Fragment>)}/>
             </div>
           )
         }
