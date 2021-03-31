@@ -74,7 +74,6 @@
   }
 
   /* hide unnecessary elements */
-  .pw-genome-report-external-link,
   a::after,
   .wgsa-genome-report dd .pw-genome-report-secondary-link,
   .pw-genome-report-noprint {
