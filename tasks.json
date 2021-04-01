@@ -213,10 +213,7 @@
         ],
         "task": "tree",
         "timeout": 900,
-        "version": "alignment-3",
-        "flags": {
-          "COV2_USER": true
-        }
+        "version": "alignment-3"
       }
     ]
   },
@@ -804,24 +801,15 @@
     "2697049": [
       {
         "task": "alignment",
-        "version": "3",
-        "flags": {
-          "COV2_USER": true
-        }
+        "version": "3"
       },
       {
         "task": "sarscov2-variants",
-        "version": "0.1.0",
-        "flags": {
-          "COV2_USER": true
-        }
+        "version": "0.1.0"
       },
       {
         "task": "pangolin",
-        "version": "v2.3.5",
-        "flags": {
-          "COV2_USER": true
-        }
+        "version": "v2.3.5"
       }
     ],
     "2751": [
