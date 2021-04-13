@@ -14,10 +14,11 @@ module.exports = async (req, res) => {
   res.setHeader('Content-Disposition', `attachment; filename=${filename}`);
   res.setHeader('Content-Type', 'text/csv');
 
-  const query = Object.assign(
-    { _id: { $in: ids.split(',') }, 'analysis.cgmlst': { $exists: true } },
-    Genome.getPrefilterCondition({ user })
-  );
+  const query = {
+    _id: { $in: ids.split(',') },
+    'analysis.cgmlst': { $exists: true },
+    ...Genome.getPrefilterCondition({ user }),
+  };
 
   const projection = {
     name: 1,
@@ -27,7 +28,7 @@ module.exports = async (req, res) => {
   };
 
   const genomeDetails = await Genome.find(query, projection).lean();
-  const organismIds = []
+  const organismIds = [];
   const analysisKeys = [];
   for (const details of genomeDetails) {
     const organismId = details.analysis.speciator.organismId;

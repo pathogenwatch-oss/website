@@ -18,12 +18,12 @@ async function getCollectionGenomes({ genomes }, genomeIds) {
     fileId: 1,
     name: 1,
     'analysis.speciator.organismId': 1,
-  }
+  };
   const result = await Genome
     .find(query, projection, { sort: { name: 1 } })
-    .lean()
+    .lean();
   return result
-    .map(d => ({ fileId: d.fileId, name: d.name, organismId: d.analysis.speciator.organismId }));
+    .map((d) => ({ fileId: d.fileId, name: d.name, organismId: d.analysis.speciator.organismId }));
 }
 
 function writeMatrixHeader(genomes, stream) {
@@ -83,7 +83,7 @@ module.exports = (req, res, next) => {
     'Content-type': 'text/csv',
   });
 
-  const stream = transform(data => data.join(',') + '\n');
+  const stream = transform((data) => `${data.join(',')}\n`);
   stream.pipe(res);
 
   request('collection', 'authorise', { user, token, projection: { genomes: 1, 'tree.versions': 1, 'subtrees.versions': 1, 'subtrees.name': 1 } })
@@ -93,7 +93,7 @@ module.exports = (req, res, next) => {
       writeMatrixHeader(genomes, stream);
 
       const tree = subtree ?
-        collection.subtrees.find(_ => _.name === subtree) :
+        collection.subtrees.find((_) => _.name === subtree) :
         collection.tree;
 
       if (!tree) {
@@ -103,6 +103,6 @@ module.exports = (req, res, next) => {
       const cache = await store.getScoreCache(genomes, tree.versions, type);
       return { genomes, cache };
     })
-    .then(data => generateMatrix(data, stream))
+    .then((data) => generateMatrix(data, stream))
     .catch(next);
 };

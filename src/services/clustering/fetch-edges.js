@@ -1,20 +1,21 @@
-const Genome = require('../../models/genome');
-const { NotFoundError } = require('../../utils/errors');
-const store = require('../../utils/object-store');
+const Genome = require('models/genome');
+const { NotFoundError } = require('utils/errors');
+const { request } = require('services');
+const { getClusteringTask } = require('manifest');
 
 async function getEdges({ userId, scheme, version, sts, threshold }) {
   let value = await store.getAnalysis('cgmlst-clustering', `${version}_${scheme}`, userId, undefined);
   if (value === undefined) value = await store.getAnalysis('cgmlst-clustering', `${version}_${scheme}`, 'public', undefined);
   if (value === undefined) throw new NotFoundError(`No cluster edges at threshold ${threshold}`);
 
-  const clusteringDoc = JSON.parse(value);
   if (clusteringDoc.threshold <= threshold) throw new NotFoundError(`No cluster edges at threshold ${threshold}`);
-  for (let t=0; i<= threshold; i++) {
+  for (let t = 0; t <= threshold; t++) {
     if (clusteringDoc.edges[t] === undefined) throw new Error(`Edges are missing for threshold of ${t}`);
   }
-  
+
   const clusterToQueryMap = {};
-  for (let queryIdx=0; queryIdx < sts.length; queryIdx++) {
+  const nSts = sts.length;
+  for (let queryIdx = 0; queryIdx < nSts; queryIdx++) {
     const st = sts[queryIdx];
     const clusterIdx = clusteringDoc.STs.indexOf(st);
     if (clusterIdx === -1) throw new NotFoundError(`${st} not in clustering`);
@@ -47,7 +48,6 @@ async function getEdges({ userId, scheme, version, sts, threshold }) {
 
   return edges;
 }
-
 
 module.exports = async function ({ user, genomeId, scheme, version, sts, threshold }) {
   // We need to check that the user is allowed to get the edges for these STs

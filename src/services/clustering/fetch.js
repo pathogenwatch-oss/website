@@ -1,16 +1,7 @@
-const Genome = require('../../models/genome');
-const { NotFoundError } = require('../../utils/errors');
-const store = require('../../utils/object-store');
-
-async function getClusteringData({ scheme, user }) {
-  let value
-  if (user) value = await store.getAnalysis('cgmlst-clustering', `${version}_${scheme}`, user._id, undefined);
-  if (value === undefined) value = await store.getAnalysis('cgmlst-clustering', `${version}_${scheme}`, 'public', undefined);
-  if (value === undefined) return undefined;
-  
-  const { edges, ...doc } = JSON.parse(value);
-  return doc
-}
+const Genome = require('models/genome');
+const { NotFoundError } = require('utils/errors');
+const { request } = require('services');
+const { getClusteringTask } = require('manifest');
 
 async function mapStsToGenomeNames({ genomeId, sts, user }) {
   const namesQuery = {
@@ -39,7 +30,7 @@ async function mapStsToGenomeNames({ genomeId, sts, user }) {
     if (!foundSts.has(st)) throw new NotFoundError(`User nolonger has a genome with st ${st}`);
   }
 
-  const genome = genomes.find(_ => _._id.toString() === genomeId);
+  const genome = genomes.find((_) => _._id.toString() === genomeId);
   const genomeSt = genome ? genome.analysis.cgmlst.st : null;
   const genomeIdx = sts.indexOf(genomeSt);
 

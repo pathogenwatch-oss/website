@@ -46,24 +46,24 @@ function getGenomes(genomeLookup, coreVersionMap) {
   
   for (const version of Object.keys(coreVersionMap)) {
     for (const { fileId, organismId } of coreVersionMap[version]) {
-      analysisKeys.push(store.analysisKey('core', version, fileId, organismId))
+      analysisKeys.push(store.analysisKey('core', version, fileId, organismId));
     }
   }
 
   async function* cores() {
     for (const value of store.iterGet(analysisKeys)) {
       if (value === undefined) continue;
-      const { fileId, version, results } = JSON.parse(value)
+      const { fileId, version, results } = JSON.parse(value);
       const genomes = genomeLookup[fileId] || [];
       for (const genome of genomes) {
         if (!genome.analysis || !genome.analysis.core) continue;
-        if (genome.analysis.core.__v === version) yield {
+        if (genome.analysis.core.__v === version) { yield {
             ...genome,
             analysis: {
               ...genome.analysis,
               core: results,
-            }
-          }
+          },
+        }; }
       }
     }
   }
@@ -96,10 +96,10 @@ function gffTransformer(input) {
     input.reversed !== null ? (input.reversed ? '-' : '+') : null,
     input.phase,
     Object.keys(input.attributes)
-      .map(key => `${key}=${input.attributes[key]}`)
+      .map((key) => `${key}=${input.attributes[key]}`)
       .join(';'),
   ]
-  .map(value => (value === null ? '.' : value));
+    .map((value) => (value === null ? '.' : value));
 
   return `${output.join('\t')}\n`;
 }
@@ -111,7 +111,7 @@ function convertDocumentToGFF(doc, stream) {
 
    // https://github.com/sanger-pathogens/Artemis/blob/master/etc/feature_keys_gff
   if (core) {
-    const profile = core.profile.map(x => x.id).sort().map(x => core.profile.find(y => y.id === x));
+    const profile = core.profile.map((x) => x.id).sort().map((x) => core.profile.find((y) => y.id === x));
     for (const { id, rlength, alleles } of profile) {
       for (const allele of alleles) {
         stream.write({
@@ -141,7 +141,7 @@ function convertDocumentToGFF(doc, stream) {
 
   if (mlst) {
     for (const { gene, id, start, end, contig } of mlst.matches) {
-      const [qStart, qEnd] = [start, end].sort((a, b)=>{return a-b});
+      const [qStart, qEnd] = [start, end].sort((a, b) => { return a - b; });
       stream.write({
         sequence: contig,
         source: 'Pathogenwatch_MLST',
@@ -234,7 +234,7 @@ async function generateData(collection, genomeIds, filename, res, next) {
     stream.on('error', next);
     stream.pipe(res);
 
-    genomes.on('data', doc => {
+    genomes.on('data', (doc) => {
       res.setHeader('Content-Disposition', `attachment; filename=${filename || `${doc.name}.gff`}`);
       res.setHeader('Content-Type', 'text/plain');
       convertDocumentToGFF(doc, stream);

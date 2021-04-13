@@ -10,11 +10,11 @@ function writeLines(columns, genomes, res) {
   const totalSequences = {};
 
   function format(line) {
-    return line.join(',') + '\n';
+    return `${line.join(',')}\n`;
   }
 
   async function* gen() {
-    yield format(['Family ID,', ...columns])
+    yield format(['Family ID,', ...columns]);
     for await (const genome of genomes) {
       const line = [];
       line.push(genome.name);
@@ -65,7 +65,7 @@ function writeLines(columns, genomes, res) {
     yield format(line);
   }
 
-  Readable.from(gen()).pipe(res)
+  Readable.from(gen()).pipe(res);
 }
 
 function getGenomes(cores, genomeLookup) {
@@ -76,7 +76,7 @@ function getGenomes(cores, genomeLookup) {
         yield {
           name,
           analysis: { core: results },
-        }
+        };
       }
       genomeLookup[fileId] = [];
     }
@@ -106,11 +106,11 @@ async function getGenomeSummaries(query) {
     genomeLookup[fileId].push(genome);
     fileIds.add(fileId);
   }
-  return { fileIds: [ ...fileIds ], genomeLookup }
+  return { fileIds: [ ...fileIds ], genomeLookup };
 }
 
 async function* getCores(fileIds, version, organismId) {
-  const analysisKeys = fileIds.map(fileId => store.analysisKey('core', version, fileId, organismId))
+  const analysisKeys = fileIds.map((fileId) => store.analysisKey('core', version, fileId, organismId));
   for await (const value of store.iterGet(analysisKeys)) {
     const doc = JSON.parse(value);
     if (doc) yield doc;
@@ -139,8 +139,8 @@ module.exports = async (req, res, next) => {
   const collection = await request('collection', 'authorise', { user, token, projection: { genomes: 1, organismId: 1, 'tree.versions': 1, 'subtrees.versions': 1, 'subtrees.name': 1 } });
   try {
     const tree = subtree ?
-        collection.subtrees.find(_ => _.name === subtree) :
-        collection.tree;
+      collection.subtrees.find((_) => _.name === subtree) :
+      collection.tree;
 
     const coreVersion = tree && tree.versions && tree.versions.core;
     if (!coreVersion) throw new Error("Couldn't create download without core version");

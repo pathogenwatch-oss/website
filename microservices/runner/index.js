@@ -14,7 +14,7 @@ if (type && !(type in queues)) {
   process.exit(1);
 }
 
-process.on('uncaughtException', err => console.error('uncaught', err));
+process.on('uncaughtException', (err) => console.error('uncaught', err));
 
 taskQueue.setMaxWorkers(argv.opts.workers || 1);
 
@@ -23,7 +23,7 @@ function subscribeToQueue(queueName, queueType = queueName) {
     taskQueue.dequeue(
       queueName,
       ({ metadata, timeout }) => request('genome', 'speciate', { timeout$: timeout * 1000, metadata, precache }),
-      message => request('genome', 'add-error', message)
+      (message) => request('genome', 'add-error', message)
     );
   }
 
@@ -32,7 +32,7 @@ function subscribeToQueue(queueName, queueType = queueName) {
       queueName,
       ({ task, version, timeout, metadata }) =>
         request('tasks', 'run', { task, version, timeout$: timeout * 1000, metadata, precache }),
-      message => request('genome', 'add-error', message)
+      (message) => request('genome', 'add-error', message)
     );
   }
 
@@ -41,11 +41,11 @@ function subscribeToQueue(queueName, queueType = queueName) {
       queueName,
       ({ spec, metadata, timeout }) =>
         request('tasks', 'run-collection', { spec, metadata, timeout$: timeout * 1000 })
-          .then(result => {
+          .then((result) => {
             LOGGER.info('Got result', metadata.collectionId, spec.task, spec.version);
             return request('collection', 'add-analysis', { spec, metadata, result });
           }),
-      message => request('collection', 'add-error', message)
+      (message) => request('collection', 'add-error', message)
     );
   }
 
@@ -53,13 +53,12 @@ function subscribeToQueue(queueName, queueType = queueName) {
     taskQueue.dequeue(
       queueName,
       async ({ spec, metadata, timeout }) => {
-        const { relatedBy } = await request('tasks', 'run-clustering', { spec, metadata, timeout$: timeout * 1000 });
+        await request('tasks', 'run-clustering', { spec, metadata, timeout$: timeout * 1000 });
         const { taskId } = metadata;
-        const { version } = spec;
         LOGGER.info('Got result', spec.task, spec.version, metadata);
-        return await request('clustering', 'send-progress', { taskId, payload: { status: 'READY' } });
+        return request('clustering', 'send-progress', { taskId, payload: { status: 'READY' } });
       },
-      message => LOGGER.error(message)
+      (message) => LOGGER.error(message)
     );
   }
 }
@@ -67,7 +66,7 @@ function subscribeToQueue(queueName, queueType = queueName) {
 function pullImages() {
   if (pull === '0') return Promise.resolve();
   return pullTaskImages({ queue: type })
-    .catch(err => {
+    .catch((err) => {
       LOGGER.error(err);
       process.exit(1);
     });
@@ -77,6 +76,6 @@ module.exports = function () {
   pullImages()
     .then(() => {
       if (queue) subscribeToQueue(queue, type);
-      else Object.keys(queues).map(queueName => subscribeToQueue(queueName));
+      else Object.keys(queues).map((queueName) => subscribeToQueue(queueName));
     });
 };

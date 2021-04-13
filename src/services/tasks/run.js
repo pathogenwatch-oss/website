@@ -1,13 +1,12 @@
-const fs = require('fs');
-const fastaStorage = require('../../utils/fasta-store');
+const fastaStorage = require('utils/fasta-store');
 
 const TaskLog = require('models/taskLog');
 const Genome = require('models/genome');
 const store = require('utils/object-store');
 
 const notify = require('services/genome/notify');
-const docker = require('../docker');
-const { DEFAULT_TIMEOUT } = require('../bus');
+const docker = require('services/docker');
+const { DEFAULT_TIMEOUT } = require('services/bus');
 const { getImageName } = require('manifest.js');
 
 const LOGGER = require('utils/logging').createLogger('runner');
@@ -15,9 +14,9 @@ const LOGGER = require('utils/logging').createLogger('runner');
 // Based on https://stackoverflow.com/a/12502559
 // by https://stackoverflow.com/users/569544/jar-jar-beans
 // This is not a secure random number
-const random = () => Math.random().toString(36).slice(2,10)
+const random = () => Math.random().toString(36).slice(2, 10);
 
-const slugify = task => task.replace(/[^a-zA-Z0-9]+/g, '_').replace(/[_]+/g, '_').replace(/_$/g, '')
+const slugify = (task) => task.replace(/[^a-zA-Z0-9]+/g, '_').replace(/[_]+/g, '_').replace(/_$/g, '');
 
 function runTask({ fileId, task, version, organismId, speciesId, genusId, timeout }) {
   if (process.env.KEEP_TASK_CONTAINERS === 'true') {
@@ -29,7 +28,7 @@ function runTask({ fileId, task, version, organismId, speciesId, genusId, timeou
       getImageName(task, version),
       {
         name: `${slugify(task)}_${random()}`,
-        remove: process.env.KEEP_TASK_CONTAINERS === 'true' ? false : true,
+        remove: process.env.KEEP_TASK_CONTAINERS !== 'true',
         env: {
           PW_ORGANISM_TAXID: organismId,
           PW_SPECIES_TAXID: speciesId,
@@ -46,7 +45,7 @@ function runTask({ fileId, task, version, organismId, speciesId, genusId, timeou
     );
     try {
       const stream = fastaStorage.fetch(fileId);
-      stream.on('error', err => {
+      stream.on('error', (err) => {
         LOGGER.info('Error in input stream, destroying container.');
         container.destroy(() => reject(err));
       });
@@ -56,10 +55,10 @@ function runTask({ fileId, task, version, organismId, speciesId, genusId, timeou
       return container.destroy(() => reject(err));
     }
     const buffer = [];
-    container.stdout.on('data', data => {
+    container.stdout.on('data', (data) => {
       buffer.push(data.toString());
     });
-    container.on('exit', exitCode => {
+    container.on('exit', (exitCode) => {
       LOGGER.info('exit', exitCode);
 
       const [ durationS, durationNs ] = process.hrtime(startTime);
@@ -68,23 +67,24 @@ function runTask({ fileId, task, version, organismId, speciesId, genusId, timeou
 
       if (exitCode !== 0) {
         container.stderr.setEncoding('utf8');
-        reject(new Error(container.stderr.read()));
+        return reject(new Error(container.stderr.read()));
       } else if (buffer.length === 0) {
-        reject(new Error('No output received.'));
+        return reject(new Error('No output received.'));
       } else {
         let output;
         try {
           output = JSON.parse(buffer.join(''));
         } catch (e) {
-          reject(e);
+          return reject(e);
         }
-        resolve(output);
+        return resolve(output);
       }
     });
-    container.on('spawn', containerId => {
+    container.on('spawn', (containerId) => {
       LOGGER.info('spawn', containerId, 'for task', task, 'file', fileId, 'organismId', organismId);
     });
     container.on('error', reject);
+    return undefined;
   });
 }
 
@@ -99,11 +99,11 @@ module.exports = async function ({ task, version, metadata, timeout$: timeout = 
     clientId,
     userId,
   } = metadata;
-  
+
   const value = await store.getAnalysis(task, version, fileId, organismId);
   let doc = value === undefined ? undefined : JSON.parse(value);
   doc = (doc && doc.organismId === organismId) ? doc : undefined;
-  
+
   if (!doc) {
     // The results weren't in the cache
     const results = await runTask({

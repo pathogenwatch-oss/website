@@ -1,7 +1,7 @@
-const Genome = require('../../models/genome');
-const { queues, Queue } = require('../taskQueue');
+const Genome = require('models/genome');
+const { queues, Queue } = require('services/taskQueue');
 
-const { getClusteringTask } = require('../../manifest');
+const { getClusteringTask } = require('manifest');
 
 function getJobStatus(doc) {
   if (!doc) return 'NOT_QUEUED';

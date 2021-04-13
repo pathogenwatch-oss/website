@@ -5,7 +5,7 @@ const store = require('utils/object-store');
 const { request } = require('services');
 const { getSpeciatorTask, getTasksByOrganism } = require('manifest');
 const notify = require('services/genome/notify');
-const { summariseAnalysis } = require('../../utils/analysis');
+const { summariseAnalysis } = require('utils/analysis');
 
 async function submitTasks({ genomeId, fileId, uploadedAt, clientId, userId }, doc) {
   const speciatorResult = summariseAnalysis(doc);
@@ -13,7 +13,7 @@ async function submitTasks({ genomeId, fileId, uploadedAt, clientId, userId }, d
   const user = await User.findById(userId, { flags: 1 });
   const tasks = getTasksByOrganism(speciatorResult, user);
 
-  const analysisKeys = tasks.map(({ task, version }) => store.analysisKey(task, version, fileId, organismId))
+  const analysisKeys = tasks.map(({ task, version }) => store.analysisKey(task, version, fileId, organismId));
   const cachedResults = [];
   for await (const value of store.iterGet(analysisKeys)) {
     if (value === undefined) continue;
@@ -23,14 +23,14 @@ async function submitTasks({ genomeId, fileId, uploadedAt, clientId, userId }, d
   await Genome.addAnalysisResults(genomeId, doc, ...cachedResults);
 
   const existingTasks = [ doc, ...cachedResults ];
-  const existingTaskNames = new Set(cachedResults.map(_ => _.task));
-  const missingTasks = tasks.filter(_ => !existingTaskNames.has(_.task));
+  const existingTaskNames = new Set(cachedResults.map((_) => _.task));
+  const missingTasks = tasks.filter((_) => !existingTaskNames.has(_.task));
 
   if (clientId && existingTasks.length > 0) {
     notify({ genomeId, clientId, uploadedAt, tasks: existingTasks });
   }
 
-  if (missingTasks.length === 0) return;
+  if (missingTasks.length === 0) return undefined;
 
   return request('tasks', 'enqueue-genome', {
     genomeId,
@@ -47,6 +47,7 @@ async function submitTasks({ genomeId, fileId, uploadedAt, clientId, userId }, d
 }
 
 const config = require('configuration');
+
 const defaultTimeout = config.tasks.timeout || 30;
 const maxRetries = config.tasks.retries || 3;
 
@@ -56,7 +57,7 @@ module.exports = async function findTask(message, retries = 0) {
   const { genomeId, fileId, uploadedAt, clientId } = message.metadata;
   const { task, version, timeout = defaultTimeout } = speciatorTask;
 
-  const value = await store.getAnalysis(task, version, fileId, undefined)
+  const value = await store.getAnalysis(task, version, fileId, undefined);
   const doc = value === undefined ? undefined : JSON.parse(value);
   const { precache = false } = message;
   if (doc && !precache) {

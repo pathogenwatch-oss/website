@@ -2,21 +2,23 @@
 /* eslint no-params: 0 */
 /* eslint max-params: 0 */
 
+const slug = require('slug');
 const BSON = require('bson');
-const bson = new BSON();
 const { Readable } = require('stream');
 const readline = require('readline');
 
+const bson = new BSON();
+
 const store = require('utils/object-store');
-const Genome = require('../../models/genome');
-const TaskLog = require('../../models/taskLog');
-const docker = require('../docker');
-const { DEFAULT_TIMEOUT } = require('../bus');
+const Genome = require('models/genome');
+const TaskLog = require('models/taskLog');
+const docker = require('services/docker');
+const { DEFAULT_TIMEOUT } = require('services/bus');
 
-const { getImageName } = require('../../manifest.js');
-const { request } = require('../../services');
+const { getImageName } = require('manifest.js');
+const { request } = require('services');
 
-const LOGGER = require('../../utils/logging').createLogger('runner');
+const LOGGER = require('utils/logging').createLogger('runner');
 
 const DEFAULT_THRESHOLD = 50;
 
@@ -31,7 +33,7 @@ async function getCgmlstKeys({ userId, scheme }) {
     'analysis.cgmlst.st': 1,
     'analysis.cgmlst.__v': 1,
     'analysis.speciator.organismId': 1,
-  }
+  };
 
   const docs = await Genome
     .find(query, projection)
@@ -63,7 +65,7 @@ async function attachInputStream(container, spec, metadata, cgmlstKeys) {
     yield bson.serialize({
       STs: Object.keys(cgmlstKeys),
       maxThreshold: DEFAULT_THRESHOLD,
-    })
+    });
 
     let clustering = await store.getAnalysis('cgmlst-clustering', `${version}_${scheme}`, userId, undefined);
     if (clustering === undefined) clustering = await store.getAnalysis('cgmlst-clustering', `${version}_${scheme}`, 'public', undefined);
@@ -73,7 +75,7 @@ async function attachInputStream(container, spec, metadata, cgmlstKeys) {
 
     for await (const value of store.iterGet(Object.values(cgmlstKeys))) {
       const { _id, results } = JSON.parse(value);
-      yield bson.serialize({ _id, results })
+      yield bson.serialize({ _id, results });
     }
   }
 
@@ -86,12 +88,12 @@ async function handleContainerOutput(container, spec, metadata) {
 
   const lines = readline.createInterface({
     input: container.stdout,
-    crlfDelay: Infinity
+    crlfDelay: Infinity,
   });
 
   await request('clustering', 'send-progress', { taskId, payload: { task, status: 'IN PROGRESS' } });
 
-  let results = { edges: {} };
+  const results = { edges: {} };
   for await (const line of lines) {
     if (!line) continue;
     if (line.indexOf('progress') === -1 && line.indexOf('lambda') === -1) continue;

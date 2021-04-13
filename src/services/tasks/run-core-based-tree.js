@@ -3,20 +3,21 @@
 /* eslint max-params: 0 */
 
 const BSON = require('bson');
+
 const bson = new BSON();
 const { Readable } = require('stream');
 const readline = require('readline');
 
-const Collection = require('../../models/collection');
-const Genome = require('../../models/genome');
-const TaskLog = require('../../models/taskLog');
-const docker = require('../docker');
-const store = require('../../utils/object-store');
+const Collection = require('models/collection');
+const Genome = require('models/genome');
+const TaskLog = require('models/taskLog');
+const docker = require('services/docker');
+const store = require('utils/object-store');
 
-const { getImageName } = require('../../manifest.js');
-const { request } = require('../../services');
+const { getImageName } = require('manifest.js');
+const { request } = require("services");
 
-const LOGGER = require('../../utils/logging').createLogger('runner');
+const LOGGER = require('utils/logging').createLogger('runner');
 
 async function getGenomes(task, metadata) {
   const { collectionId, name: refName, organismId } = metadata;
@@ -39,7 +40,7 @@ async function getGenomes(task, metadata) {
     .find(query, { fileId: 1, name: 1 }, { sort: { fileId: 1 } })
     .lean();
 
-  const ids = new Set(genomes.map(_ => _.toString()));
+  const ids = new Set(genomes.map((_) => _.toString()));
 
   return docs.map(({ _id, fileId, name }) => ({
     _id,
@@ -50,7 +51,7 @@ async function getGenomes(task, metadata) {
 }
 
 async function* createGenomesStream(genomes, uncachedFileIds, versions, organismId) {
-  const genomeLookup = {}
+  const genomeLookup = {};
   for (const genome of genomes) {
     const { fileId } = genome;
     if (!uncachedFileIds.has(fileId)) continue;
@@ -59,9 +60,9 @@ async function* createGenomesStream(genomes, uncachedFileIds, versions, organism
   }
 
   const fileIds = Array.from(uncachedFileIds);
-  fileIds.sort()
+  fileIds.sort();
 
-  const analysisKeys = fileIds.map(fileId => store.analysisKey('core', versions.core, fileId, organismId))
+  const analysisKeys = fileIds.map((fileId) => store.analysisKey('core', versions.core, fileId, organismId));
   for await (const value of store.iterGet(analysisKeys)) {
     if (value === undefined) continue;
     const { fileId, results } = JSON.parse(value);
@@ -69,7 +70,7 @@ async function* createGenomesStream(genomes, uncachedFileIds, versions, organism
     for (const genomeDetails of genomeLookup[fileId]) {
       const genome = {
         ...genomeDetails,
-        analysis: { 
+        analysis: {
           core: {
             profile: results.profile,
           },
@@ -82,43 +83,43 @@ async function* createGenomesStream(genomes, uncachedFileIds, versions, organism
 }
 
 async function* createScoreCacheStream(versions, organismId, fileIds) {
-  const analysisKeys = fileIds.map(fileId => store.analysisKey('tree-score', `${versions.core}_${versions.tree}`, fileId, organismId))
+  const analysisKeys = fileIds.map((fileId) => store.analysisKey('tree-score', `${versions.core}_${versions.tree}`, fileId, organismId));
   function formater(doc) {
-    out = { fileId: doc.fileId, scores: {} }
+    const out = { fileId: doc.fileId, scores: {} };
     for (const fileId of fileIds) {
-      if (doc.scores[fileId] !== undefined) out.scores[fileId] = doc.scores[fileId]
+      if (doc.scores[fileId] !== undefined) out.scores[fileId] = doc.scores[fileId];
     }
-    return out
+    return out;
   }
   const cache = store.iterGet(analysisKeys);
-  for (let i=0; i<fileIds.length; i++) {
+  for (let i = 0; i < fileIds.length; i++) {
     const { value, done } = await cache.next();
     if (done) break;
     if (value === undefined) {
       const fileId = fileIds[i];
       yield { fileId, scores: {} };
-    } else yield formater(JSON.parse(value))
+    } else yield formater(JSON.parse(value));
   }
 }
 
 function attachInputStream(container, versions, genomes, organismId) {
-  const fileIds = genomes.map(_ => _.fileId);
+  const fileIds = genomes.map((_) => _.fileId);
   fileIds.sort();
   const seen = new Set();
 
   async function* gen() {
-    yield bson.serialize({ genomes })
-    
+    yield bson.serialize({ genomes });
+
     let uncachedFileIds = new Set();
     for await (const doc of createScoreCacheStream(versions, organismId, fileIds)) {
-      yield bson.serialize(doc)
-      
-      seen.add(doc.fileId)
+      yield bson.serialize(doc);
+
+      seen.add(doc.fileId);
       for (const fileId of fileIds) {
         if (fileId >= doc.fileId) break;
         if (doc.scores[fileId] === undefined) {
-          uncachedFileIds.add(doc.fileId)
-          uncachedFileIds.add(fileId)
+          uncachedFileIds.add(doc.fileId);
+          uncachedFileIds.add(fileId);
         }
       }
     }
@@ -129,25 +130,26 @@ function attachInputStream(container, versions, genomes, organismId) {
         break;
       }
     }
-    LOGGER.info(`Tree needs ${uncachedFileIds.size} of ${new Set(fileIds).size} genomes`)
-    
+    LOGGER.info(`Tree needs ${uncachedFileIds.size} of ${new Set(fileIds).size} genomes`);
+
     for await (const doc of createGenomesStream(genomes, uncachedFileIds, versions, organismId)) {
+    // for await (const doc of createGenomesStream(genomes, new Set(fileIds), versions, organismId)) {
       yield bson.serialize(doc);
     }
   }
 
-  Readable.from(gen()).pipe(container.stdin)
+  Readable.from(gen()).pipe(container.stdin);
 }
 
 async function handleContainerOutput(container, task, versions, metadata, genomes, resolve, reject) {
   const { clientId, name } = metadata;
   request('collection', 'send-progress', { clientId, payload: { task, name, status: 'IN PROGRESS' } });
-  
+
   const lines = readline.createInterface({
     input: container.stdout,
-    crlfDelay: Infinity
+    crlfDelay: Infinity,
   });
-  
+
   let lastProgress = 0;
 
   for await (const line of lines) {
@@ -158,13 +160,13 @@ async function handleContainerOutput(container, task, versions, metadata, genome
         const value = await store.getAnalysis('tree-score', `${versions.core}_${versions.tree}`, doc.fileId, metadata.organismId);
         const update = value === undefined ? { fileId: doc.fileId, scores: {}, differences: {} } : JSON.parse(value);
         update.versions = versions;
-        for (const fileId in doc.scores) {
+        for (const fileId of Object.keys(doc.scores)) {
           update.scores[fileId] = doc.scores[fileId];
         }
-        for (const fileId in doc.differences) {
+        for (const fileId of Object.keys(doc.differences)) {
           update.differences[fileId] = doc.differences[fileId];
         }
-        await store.putAnalysis('tree-score', `${versions.core}_${versions.tree}`, doc.fileId, metadata.organismId, update)
+        await store.putAnalysis('tree-score', `${versions.core}_${versions.tree}`, doc.fileId, metadata.organismId, update);
         const progress = doc.progress * 0.99;
         if ((progress - lastProgress) >= 1) {
           request('collection', 'send-progress', { clientId, payload: { task, name, progress } });
@@ -183,7 +185,7 @@ async function handleContainerOutput(container, task, versions, metadata, genome
         if (task === 'subtree') {
           for (const { population } of genomes) {
             if (population) {
-              populationSize++;
+              populationSize += 1;
             }
           }
         }
@@ -253,7 +255,7 @@ function createContainer(spec, metadata, timeout) {
 
 async function runTask(spec, metadata, timeout) {
   const { task, version, requires: taskRequires = [] } = spec;
-  const coreVersion = taskRequires.find(_ => _.task === 'core').version;
+  const coreVersion = taskRequires.find((_) => _.task === 'core').version;
   const versions = { tree: version, core: coreVersion };
 
   const genomes = await getGenomes(task, metadata);
@@ -263,7 +265,7 @@ async function runTask(spec, metadata, timeout) {
     return {
       newick: `(${genomes[0]._id}:0.5,${genomes[1]._id}:0.5);`,
       size: 2,
-      populationSize: genomes.filter(_ => _.population).length,
+      populationSize: genomes.filter((_) => _.population).length,
       name: metadata.name,
     };
   }

@@ -75,16 +75,16 @@ async function* generateTreeSites(genomes, collectionGenomeIds) {
 
       for (const position of filteredPositions) {
         if (isCollectionGenome) {
-          sites.userFiltered[position]++;
+          sites.userFiltered[position] += 1;
         }
-        sites.publicFiltered[position]++;
+        sites.publicFiltered[position] += 1;
       }
 
       for (const position of unfilteredPositions) {
         if (isCollectionGenome) {
-          sites.userUnfiltered[position]++;
+          sites.userUnfiltered[position] += 1;
         }
-        sites.publicUnfiltered[position]++;
+        sites.publicUnfiltered[position] += 1;
       }
 
       for (const mutation of unfilteredMutations) {
@@ -110,22 +110,22 @@ async function* generateTreeSites(genomes, collectionGenomeIds) {
 
     for (const count of Object.values(sites.userFiltered)) {
       if (count > 0 && count < genomesLength) {
-        result.userFiltered++;
+        result.userFiltered += 1;
       }
     }
     for (const count of Object.values(sites.publicFiltered)) {
       if (count > 0 && count < genomesLength) {
-        result.publicFiltered++;
+        result.publicFiltered += 1;
       }
     }
     for (const count of Object.values(sites.userUnfiltered)) {
       if (count > 0 && count < genomesLength) {
-        result.userUnfiltered++;
+        result.userUnfiltered += 1;
       }
     }
     for (const count of Object.values(sites.publicUnfiltered)) {
       if (count > 0 && count < genomesLength) {
-        result.publicUnfiltered++;
+        result.publicUnfiltered += 1;
       }
     }
 
@@ -148,7 +148,7 @@ async function getGenomeSummaries(genomeIds) {
     sort: { fileId: 1 },
   };
   const results = await Genome.find(query, projection, options).lean();
-  return results.map(doc => ({
+  return results.map((doc) => ({
     _id: doc._id,
     fileId: doc.fileId,
     organismId: doc.analysis.speciator.organismId,
@@ -156,15 +156,15 @@ async function getGenomeSummaries(genomeIds) {
 }
 
 function createGenomeStream(genomeSummaries, versions) {
-  const genomes = [...genomeSummaries]
-  genomes.sort((a,b) => a.fileId < b.fileId ? -1 : 1)
-  
-  const genomeIds = {}
+  const genomes = [...genomeSummaries];
+  genomes.sort((a, b) => (a.fileId < b.fileId ? -1 : 1));
+
+  const genomeIds = {};
   for (const { fileId, _id } of genomeSummaries) {
     genomeIds[fileId] = genomeIds[fileId] || [];
     genomeIds[fileId].push(_id);
     return genomeIds;
-  };
+  }
 
   const analysisKeys = genomes.map(({ fileId, organismId }) => store.analysisKey('core', versions.core, fileId, organismId));
   async function* gen() {
@@ -181,25 +181,25 @@ function createGenomeStream(genomeSummaries, versions) {
                 filter: results.profile.filter,
                 alleles: {
                   filter: results.profile.alleles.filter,
-                  mutations: results.profile.alleles.mutations
-                }
-              }
-            }
+                  mutations: results.profile.alleles.mutations,
+                },
+              },
+            },
           },
         };
       }
       genomeIds[fileId] = [];
     }
   }
-  
-  return Readable.from(gen())
+
+  return Readable.from(gen());
 }
 
 async function generateTreeData(tree, treeGenomeIds, collectionGenomeIds) {
   const genomeSummaries = await getGenomeSummaries(treeGenomeIds);
 
-  const cache = await store.getScoreCache(genomeSummaries, tree.versions, 'score')
-  
+  const cache = await store.getScoreCache(genomeSummaries, tree.versions, 'score');
+
   const stats = generateTreeStats(genomeSummaries, cache);
 
   const genomes = createGenomeStream(genomeSummaries, tree.versions);
@@ -269,7 +269,7 @@ function writeMatrixFooter(stream) {
 
 async function generateData({ genomes, tree, subtrees = [] }, stream) {
   subtrees = subtrees === null ? [] : subtrees;
-  const collectionGenomeIds = new Set(genomes.map(id => id.toString()));
+  const collectionGenomeIds = new Set(genomes.map((id) => id.toString()));
   if (tree) {
     const collectionTree = {
       name: 'collection',
@@ -309,6 +309,6 @@ module.exports = (req, res, next) => {
   });
 
   request('collection', 'authorise', { user, token, projection: { genomes: 1, 'tree.versions': 1, subtrees: 1 } })
-    .then(results => generateMatrix(results, res))
+    .then((results) => generateMatrix(results, res))
     .catch(next);
 };
