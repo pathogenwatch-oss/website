@@ -25,7 +25,7 @@ async function getGenomeSummaries(query) {
   const coreVersionMap = {};
   for await (const genome of genomes) {
     const { fileId, analysis: { core } } = genome;
-    const organismId = details.analysis.speciator.organismId;
+    const organismId = genome.analysis.speciator.organismId;
     genomeLookup[fileId] = genomeLookup[fileId] || [];
     genomeLookup[fileId].push(genome);
     if (core) {
@@ -38,12 +38,12 @@ async function getGenomeSummaries(query) {
     fileIds: [ ...fileIds ],
     genomeLookup,
     coreVersionMap,
-  }
+  };
 }
 
 function getGenomes(genomeLookup, coreVersionMap) {
   const analysisKeys = [];
-  
+
   for (const version of Object.keys(coreVersionMap)) {
     for (const { fileId, organismId } of coreVersionMap[version]) {
       analysisKeys.push(store.analysisKey('core', version, fileId, organismId));
@@ -58,10 +58,10 @@ function getGenomes(genomeLookup, coreVersionMap) {
       for (const genome of genomes) {
         if (!genome.analysis || !genome.analysis.core) continue;
         if (genome.analysis.core.__v === version) { yield {
-            ...genome,
-            analysis: {
-              ...genome.analysis,
-              core: results,
+          ...genome,
+          analysis: {
+            ...genome.analysis,
+            core: results,
           },
         }; }
       }
@@ -109,7 +109,7 @@ function convertDocumentToGFF(doc, stream) {
 
   stream.write(header);
 
-   // https://github.com/sanger-pathogens/Artemis/blob/master/etc/feature_keys_gff
+  // https://github.com/sanger-pathogens/Artemis/blob/master/etc/feature_keys_gff
   if (core) {
     const profile = core.profile.map((x) => x.id).sort().map((x) => core.profile.find((y) => y.id === x));
     for (const { id, rlength, alleles } of profile) {

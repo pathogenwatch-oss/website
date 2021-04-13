@@ -99,8 +99,9 @@ class ObjectStore {
   }
 
   analysisKey(task, version, fileId, organismId) {
-    if (organismId === undefined) return `${config.prefix || ''}analysis/${task}/${version}/${fileId.slice(0, 2)}/${fileId}.json.gz`
-    return `${config.prefix || ''}analysis/${task}/${version}/${fileId.slice(0, 2)}/${fileId}-${organismId}.json.gz`
+    if (fileId === 'public') return `${config.prefix || ''}analysis/${task}/${version}/${fileId}.json.gz`;
+    if (organismId === undefined) return `${config.prefix || ''}analysis/${task}/${version}/${fileId.slice(0, 2)}/${fileId}.json.gz`;
+    return `${config.prefix || ''}analysis/${task}/${version}/${fileId.slice(0, 2)}/${fileId}-${organismId}.json.gz`;
   }
 
   putAnalysis(task, version, fileId, organismId, data, params = {}) {

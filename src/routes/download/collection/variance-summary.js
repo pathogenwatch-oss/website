@@ -34,7 +34,7 @@ function generateTreeStats(genomeSummaries, cache) {
   return stats;
 }
 
-async function* generateTreeSites(genomes, collectionGenomeIds) {
+async function generateTreeSites(genomes, collectionGenomeIds) {
   const sitesByFamilyId = {};
   let genomesLength = 0;
 

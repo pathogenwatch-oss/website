@@ -46,14 +46,16 @@ async function mapStsToGenomeNames({ genomeId, sts, user }) {
   };
 }
 
-module.exports = async function ({ user, genomeId }) {
-  const scheme = await Genome.lookupCgMlstScheme(genomeId, user);
-  const clusters = await getClusteringData({ scheme, user });
+module.exports = async function ({ user, scheme, id: genomeId }) {
+  const { version } = getClusteringTask(scheme);
+  if (version === undefined) throw new NotFoundError('No matching clustering result');
+
+  const clusters = await request('clustering', 'cluster-details', { scheme, version, userId: user._id });
   if (!clusters) {
     throw new NotFoundError('No matching clustering result');
   }
 
-  const { pi, lambda, STs: sts = [], threshold, version } = clusters;
+  const { pi, lambda, STs: sts = [], threshold } = clusters;
   if (sts.length === 0) {
     throw new NotFoundError('No matching clustering result');
   }

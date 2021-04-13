@@ -42,8 +42,7 @@ async function getCgmlstKeys({ userId, scheme }) {
 
   const analysisKeys = {};
 
-  for await (const value of docs) {
-    const doc = JSON.parse(value);
+  for await (const doc of docs) {
     const { st, __v: version } = doc.analysis.cgmlst;
     const { fileId } = doc;
     const organismId = doc.analysis.speciator.organismId;
@@ -58,8 +57,8 @@ async function getCgmlstKeys({ userId, scheme }) {
 }
 
 async function attachInputStream(container, spec, metadata, cgmlstKeys) {
+  const { userId = 'public', scheme } = metadata;
   const { version } = spec;
-  const { userId, scheme } = metadata;
 
   async function* gen() {
     yield bson.serialize({
@@ -67,10 +66,9 @@ async function attachInputStream(container, spec, metadata, cgmlstKeys) {
       maxThreshold: DEFAULT_THRESHOLD,
     });
 
-    let clustering = await store.getAnalysis('cgmlst-clustering', `${version}_${scheme}`, userId, undefined);
-    if (clustering === undefined) clustering = await store.getAnalysis('cgmlst-clustering', `${version}_${scheme}`, 'public', undefined);
-    if (clustering !== undefined) {
-      yield bson.serialize(JSON.parse(clustering))
+    const clustering = await request('clustering', 'cluster-details', { scheme, version, userId });
+    if (clustering !== undefined && clustering !== null) {
+      yield bson.serialize(clustering);
     }
 
     for await (const value of store.iterGet(Object.values(cgmlstKeys))) {
@@ -84,7 +82,7 @@ async function attachInputStream(container, spec, metadata, cgmlstKeys) {
 
 async function handleContainerOutput(container, spec, metadata) {
   const { task, version } = spec;
-  const { taskId, userId } = metadata;
+  const { taskId, userId, scheme } = metadata;
 
   const lines = readline.createInterface({
     input: container.stdout,
@@ -94,11 +92,14 @@ async function handleContainerOutput(container, spec, metadata) {
   await request('clustering', 'send-progress', { taskId, payload: { task, status: 'IN PROGRESS' } });
 
   const results = { edges: {} };
+  const hasContent = (a) => Array.isArray(a) && a.length > 0;
+
+  let lastProgress = 0;
   for await (const line of lines) {
     if (!line) continue;
     if (line.indexOf('progress') === -1 && line.indexOf('lambda') === -1) continue;
     try {
-      const doc = JSON.parse(data);
+      const doc = JSON.parse(line);
       if (doc.progress) {
         const progress = doc.progress * 0.99;
         if ((progress - lastProgress) >= 0.1) {
@@ -106,14 +107,11 @@ async function handleContainerOutput(container, spec, metadata) {
           lastProgress = progress;
         }
       } else if (doc.STs) {
-        const { pi, lambda, STs, edges, threshold } = doc;
-        results = {
-          pi: results.pi || pi,
-          lambda: results.lambda || lambda,
-          STs: results.STs || STs,
-          edges: { ...results.edges, ...edges },
-          threshold: results.threshold || threshold,
-        }
+        results.edges = { ...doc.edges, ...results.edges };
+        results.threshold = results.threshold || doc.threshold;
+        if (hasContent(doc.pi)) results.pi = doc.pi;
+        if (hasContent(doc.lambda)) results.lambda = doc.lambda;
+        if (hasContent(doc.STs)) results.STs = doc.STs;
       }
     } catch (e) {
       LOGGER.error(e);
@@ -121,7 +119,8 @@ async function handleContainerOutput(container, spec, metadata) {
       throw e;
     }
   }
-  await store.putAnalysis('cgmlst-clustering', `${version}_${scheme}`, userId || 'public', undefined, results);
+  const fullVersion = `${version}-${slug(scheme, { lower: true })}`;
+  await store.putAnalysis('cgmlst-clustering', fullVersion, userId ? userId.toString() : 'public', undefined, results);
 }
 
 function handleContainerExit(container, spec, metadata) {
@@ -175,17 +174,24 @@ function createContainer(spec, timeout) {
 
 async function runTask(spec, metadata, timeout) {
   const cgmlstKeys = await getCgmlstKeys(metadata);
-  
+
   const container = createContainer(spec, timeout);
   const whenOutput = handleContainerOutput(container, spec, metadata);
   const whenExit = handleContainerExit(container, spec, metadata);
   await attachInputStream(container, spec, metadata, cgmlstKeys);
 
   await whenExit;
-  const results = await whenOutput;
-  return results;
+  await whenOutput;
 }
 
-module.exports = function handleMessage({ spec, metadata, timeout$: timeout = DEFAULT_TIMEOUT }) {
-  return runTask(spec, metadata, timeout);
+module.exports = async function handleMessage({ spec, metadata, timeout$: timeout = DEFAULT_TIMEOUT }) {
+  const { taskId } = metadata;
+  const { task } = spec;
+  try {
+    await runTask(spec, metadata, timeout);
+    return;
+  } catch (error) {
+    request('clustering', 'send-progress', { taskId, payload: { task, status: 'ERROR' } });
+    throw error;
+  }
 };

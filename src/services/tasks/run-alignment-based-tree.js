@@ -60,6 +60,7 @@ async function createInputStream(genomes, versions, organismId) {
 }
 
 async function runTask(spec, metadata, timeout) {
+  const { organismId } = metadata;
   const genomes = await getGenomes(spec.task, metadata);
 
   const { task, version, requires: taskRequires = [] } = spec;
@@ -70,7 +71,7 @@ async function runTask(spec, metadata, timeout) {
     const container = createContainer(spec, metadata, timeout);
     handleContainerOutput(container, task, versions, metadata, genomes, resolve, reject);
     handleContainerExit(container, task, versions, metadata, reject);
-    createInputStream(genomes, versions, organismId).pipe(container.stdin)
+    createInputStream(genomes, versions, organismId).pipe(container.stdin);
   });
 }
 

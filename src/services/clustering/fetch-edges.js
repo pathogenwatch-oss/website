@@ -3,10 +3,11 @@ const { NotFoundError } = require('utils/errors');
 const { request } = require('services');
 const { getClusteringTask } = require('manifest');
 
-async function getEdges({ userId, scheme, version, sts, threshold }) {
-  let value = await store.getAnalysis('cgmlst-clustering', `${version}_${scheme}`, userId, undefined);
-  if (value === undefined) value = await store.getAnalysis('cgmlst-clustering', `${version}_${scheme}`, 'public', undefined);
-  if (value === undefined) throw new NotFoundError(`No cluster edges at threshold ${threshold}`);
+async function getEdges({ userId, scheme, sts, threshold }) {
+  const { version } = getClusteringTask(scheme);
+  if (version === undefined) throw new NotFoundError(`No clustering for scheme '${scheme}'`);
+  const clusteringDoc = await request('clustering', 'cluster-details', { scheme, version, userId });
+  if (clusteringDoc === undefined) throw new NotFoundError(`No cluster edges at threshold ${threshold}`);
 
   if (clusteringDoc.threshold <= threshold) throw new NotFoundError(`No cluster edges at threshold ${threshold}`);
   for (let t = 0; t <= threshold; t++) {

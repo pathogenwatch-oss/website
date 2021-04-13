@@ -459,6 +459,7 @@ schema.statics.lookupCgMlstScheme = async function (genomeId, user) {
   };
   const projection = { 'analysis.cgmlst.scheme': 1 };
   const genome = await this.findOne(query, projection);
+  if (user && genome === undefined) return this.lookupCgMlstScheme(genomeId, undefined);
   return genome ? genome.analysis.cgmlst.scheme : undefined;
 };
 
