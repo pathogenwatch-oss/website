@@ -8,8 +8,8 @@ const bson = new BSON();
 const { Readable } = require('stream');
 
 const store = require('utils/object-store');
-const Collection = require("../../models/collection");
-const Genome = require("../../models/genome");
+const Collection = require("models/collection");
+const Genome = require("models/genome");
 
 const runCoreBasedTree = require("./run-core-based-tree");
 

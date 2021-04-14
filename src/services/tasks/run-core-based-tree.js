@@ -83,7 +83,7 @@ async function* createGenomesStream(genomes, uncachedFileIds, versions, organism
 }
 
 async function* createScoreCacheStream(versions, organismId, fileIds) {
-  const analysisKeys = fileIds.map((fileId) => store.analysisKey('tree-score', `${versions.core}_${versions.tree}`, fileId, organismId));
+  const analysisKeys = fileIds.map((fileId) => store.analysisKey('core-tree-score', `${versions.core}_${versions.tree}`, fileId, organismId));
   function formater(doc) {
     const out = { fileId: doc.fileId, scores: {} };
     for (const fileId of fileIds) {
@@ -157,7 +157,7 @@ async function handleContainerOutput(container, task, versions, metadata, genome
     try {
       const doc = JSON.parse(line);
       if (doc.fileId && doc.scores) {
-        const value = await store.getAnalysis('tree-score', `${versions.core}_${versions.tree}`, doc.fileId, metadata.organismId);
+        const value = await store.getAnalysis('core-tree-score', `${versions.core}_${versions.tree}`, doc.fileId, metadata.organismId);
         const update = value === undefined ? { fileId: doc.fileId, scores: {}, differences: {} } : JSON.parse(value);
         update.versions = versions;
         for (const fileId of Object.keys(doc.scores)) {
@@ -166,7 +166,7 @@ async function handleContainerOutput(container, task, versions, metadata, genome
         for (const fileId of Object.keys(doc.differences)) {
           update.differences[fileId] = doc.differences[fileId];
         }
-        await store.putAnalysis('tree-score', `${versions.core}_${versions.tree}`, doc.fileId, metadata.organismId, update);
+        await store.putAnalysis('core-tree-score', `${versions.core}_${versions.tree}`, doc.fileId, metadata.organismId, update);
         const progress = doc.progress * 0.99;
         if ((progress - lastProgress) >= 1) {
           request('collection', 'send-progress', { clientId, payload: { task, name, progress } });
