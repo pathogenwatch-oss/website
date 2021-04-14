@@ -5,7 +5,7 @@ import { FormattedName } from '../../organisms';
 
 import { ASSEMBLY_FILE_EXTENSIONS } from '../../app/constants';
 
-export default () => (
+export default ({csvText}) => (
   <React.Fragment>
     <div className="pw-upload-instructions-column">
       <h2>Genomic Data</h2>
@@ -27,9 +27,8 @@ export default () => (
       </ul>
       <p>
         Files should contain <strong>assembled DNA sequences</strong> of{' '}
-        <strong>whole genomes</strong>. Please ensure that there is{' '}
-        <strong>one file per genome</strong> as metagenomic samples are not
-        supported.
+        <strong>whole genomes</strong>. Please note that metagenomic samples are not
+        supported and results should not be considered reliable.
       </p>
       <h2>Settings</h2>
       <p>
@@ -62,9 +61,7 @@ export default () => (
           href="https://cgps.gitbook.io/pathogenwatch/how-to-use-pathogenwatch/editing-metadata"
         >see here for instructions</a></p>
       <p>
-        Files should contain a <strong>filename</strong> column to match each
-        row to its respective genomic data. Please use the name of the file{' '}
-        <strong>including extension</strong>.
+        {csvText}
       </p>
       <p>
         To make full use of metadata, we strongly recommend including the
@@ -94,10 +91,10 @@ export default () => (
         </li>
         <li>
           <a
-            href="/pathogenwatch-metadata-template-typhi.csv"
-            download="pathogenwatch-metadata-template-typhi.csv"
+            href="/pathogenwatch-metadata-template-example.csv"
+            download="pathogenwatch-metadata-template-example.csv"
           >
-            <FormattedName organismId="90370" />
+            Full example
           </a>
         </li>
       </ul>

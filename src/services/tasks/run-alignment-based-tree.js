@@ -63,6 +63,18 @@ async function runTask(spec, metadata, timeout) {
   const { organismId } = metadata;
   const genomes = await getGenomes(spec.task, metadata);
 
+  if (genomes.length <= 1) {
+    throw new Error("Not enough genomes to make a tree");
+  }
+  else if (genomes.length === 2) {
+    return {
+      newick: `(${genomes[0]._id}:0.5,${genomes[1]._id}:0.5);`,
+      size: 2,
+      populationSize: genomes.filter(_ => _.population).length,
+      name: metadata.name,
+    };
+  }
+
   const { task, version, requires: taskRequires = [] } = spec;
   const alignmentVersion = taskRequires.find((x) => x.task === "alignment").version;
   const versions = { tree: version, alignment: alignmentVersion };

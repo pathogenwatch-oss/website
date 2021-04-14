@@ -1,3 +1,5 @@
+import Bottleneck from 'bottleneck'
+
 import { createAsyncConstants } from '~/actions';
 
 import * as selectors from './selectors';
@@ -11,6 +13,18 @@ import { upload } from '../assembly/api';
 import { fileTypes } from '../../constants';
 
 export const GENOME_UPLOAD_PROGRESS = 'GENOME_UPLOAD_PROGRESS';
+
+const uploadLimiter = new Bottleneck({
+  maxConcurrent: 7,
+  minTime: 125
+});
+
+// Listen to the "failed" event
+uploadLimiter.on("failed", async (error, jobInfo) => {
+  if (jobInfo.retryCount <= 1) { // Retry twice (3 total attempts).
+    return 25; // Pause 25ms
+  }
+});
 
 export function genomeUploadProgress(id, progress) {
   return {
@@ -45,7 +59,7 @@ export function uploadGenome(genome, data) {
       type: UPLOAD_GENOME,
       payload: {
         id,
-        promise: api.upload(genome, data, progressFn).then(uploadResult => {
+        promise: uploadLimiter.schedule(() => api.upload(genome, data, progressFn)).then(uploadResult => {
           if (metadata) {
             return api
               .update(uploadResult.id, metadata)

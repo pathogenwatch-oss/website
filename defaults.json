@@ -1,29 +1,21 @@
 {
-	"baseUrl": "http://localhost:8001/",
-
-	"downloadFileLocation": "/path/to/files/",
-
+  "baseUrl": "http://localhost:8001/",
+  "downloadFileLocation": "/path/to/files/",
   "fastaStoragePath": "./fastas",
-
-	"googleMapsKey": "",
-
+  "googleMapsKey": "",
   "mapboxKey": "",
-
-	"maxCollectionSize": 1000,
-	"maxGenomeFileSize": 10,
+  "maxCollectionSize": 1000,
+  "maxGenomeFileSize": 20,
   "maxDownloadSize": 2500,
-
   "mongodb": {
-		"host": "localhost",
-		"port": 27017,
-		"database": "pathogenwatch"
+    "host": "localhost",
+    "port": 27017,
+    "database": "pathogenwatch"
   },
-
   "node": {
     "port": "80",
-		"sessionSecret": "-"
-	},
-	
+    "sessionSecret": "-"
+  },
   "organisms": [
     {
       "taxId": "90370",
@@ -63,52 +55,48 @@
       ]
     }
   ],
-
-	"pagination": {
+  "pagination": {
     "max": 2500,
     "min": 100
   },
-
   "passport": {
-		"url": "http://localhost:8001",
-		"strategies": {
-			"facebook": {
-				"clientID": "",
-				"clientSecret": ""
-			},
-			"google": {
-				"clientID": "",
-				"clientSecret": ""
-			},
-			"twitter": {
-				"consumerKey": "",
-				"consumerSecret": ""
-			},
-			"passwordless": {
-				"mongoStore": "mongodb://localhost:27017/pathogenwatch",
-				"smtp": {
-					"user": "e@mail.com",
-	        "password": "",
-	        "host": "smtp.mail.com",
-	        "port": "465",
-	        "ssl": true
-				},
-				"from": "WGSA <e@mail.com>",
-				"subject": "Login token for WGSA",
-				"text": "You have successfully set up your WGSA account and you can now access it by clicking on the following link: http://localhost:8001/auth/passwordless/callback?token=<%= tokenToSend %>&uid=",
-				"html": "views/emails/passwordless.html"
-			}
-		}
-	},
-
+    "url": "http://localhost:8001",
+    "strategies": {
+      "facebook": {
+        "clientID": "",
+        "clientSecret": ""
+      },
+      "google": {
+        "clientID": "",
+        "clientSecret": ""
+      },
+      "twitter": {
+        "consumerKey": "",
+        "consumerSecret": ""
+      },
+      "passwordless": {
+        "mongoStore": "mongodb://localhost:27017/pathogenwatch",
+        "smtp": {
+          "user": "e@mail.com",
+          "password": "",
+          "host": "smtp.mail.com",
+          "port": "465",
+          "ssl": true
+        },
+        "from": "WGSA <e@mail.com>",
+        "subject": "Login token for WGSA",
+        "text": "You have successfully set up your WGSA account and you can now access it by clicking on the following link: http://localhost:8001/auth/passwordless/callback?token=<%= tokenToSend %>&uid=",
+        "html": "views/emails/passwordless.html"
+      }
+    }
+  },
   "pusher": {
     "appId": "",
     "key": "",
-		"proxy": "",
+    "proxy": "",
     "secret": "",
-		"useTLS": true
+    "useTLS": true
   },
-
   "tasks": {
     "retries": 3,
     "registry": {
@@ -121,5 +109,4 @@
     },
     "timeout": 300
   }
-
 }

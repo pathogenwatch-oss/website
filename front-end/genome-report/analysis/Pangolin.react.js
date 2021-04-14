@@ -39,6 +39,11 @@ export default ({ genome }) => {
         <dt>Lineage Links</dt>
         <dd>
           <ExternalLink
+            to={`https://cov-lineages.org/lineages/lineage_${pangolin.lineage}.html`}
+          >
+          View {pangolin.lineage} at PANGO lineages.
+          </ExternalLink>
+          <ExternalLink
             to={`https://microreact.org/project/cogconsortium-pangolin-global/?dfc=lineage&dfo=equals&dfv=${pangolin.lineage}`}
           >
             View {pangolin.lineage} in the COG-UK Global Microreact.

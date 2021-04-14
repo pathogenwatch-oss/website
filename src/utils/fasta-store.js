@@ -6,7 +6,7 @@ const objectStore = require('utils/object-store');
 
 const { PassThrough, Readable } = require('stream');
 
-const { maxGenomeFileSize = 10 } = require('configuration');
+const { maxGenomeFileSize = 20 } = require('configuration');
 const { promisify } = require('util');
 
 class MaxLengthError extends Error {
