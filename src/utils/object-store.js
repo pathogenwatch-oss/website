@@ -23,7 +23,7 @@ const s3 = new aws.S3({
   accessKeyId: config.accessKeyId,
   secretAccessKey: config.secretAccessKey,
   httpOptions: {
-    agent: new https.Agent({ keepAlive: true, timeout: 100 }),
+    agent: new https.Agent({ keepAlive: true }),
   },
   maxRetries: 0,
 });
@@ -63,7 +63,7 @@ class Throttle {
 
   __updateDelay() {
     const now = new Date();
-    if (this.errors > 5) {
+    if (this.errors > 3) {
       this.delay = this.delay > 50 ? this.delay * 1.2 : 50;
       this.errors = 0;
       this.counterStart = now;
@@ -271,6 +271,7 @@ class ObjectStore {
       } catch (error) {
         const { statusCode, code: statusMessage } = error;
         r = { statusCode, statusMessage, error };
+        if (error.code === 'SlowDown' || statusCode === 503) await sleep(50);
       }
 
       r.attempt = attempt;
