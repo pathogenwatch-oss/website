@@ -1302,7 +1302,7 @@
           "V_CHOLERAE_EXPERIMENT_USER": true
         },
         "task": "vista",
-        "version": "v0.0.5"
+        "version": "v0.0.6"
       },
       {
         "task": "mlst",
