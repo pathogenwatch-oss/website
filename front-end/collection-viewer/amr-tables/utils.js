@@ -11,6 +11,12 @@ import { statuses } from '../../collection-viewer/constants';
 
 import Organisms from '../../organisms';
 
+const isMac =
+  (navigator && navigator.platform &&
+    navigator.platform.toUpperCase().indexOf('MAC') >= 0);
+
+export const modifierKey = isMac ? 'Cmd' : 'Ctrl';
+
 export const systemGroup = {
   group: true,
   system: true,
@@ -39,48 +45,6 @@ export const spacerGroup = {
     },
   ],
 };
-
-function notPresent(profileSection, element) {
-  return profileSection.indexOf(element) === -1;
-}
-
-export function createPaarsnpAdvancedViewColumn(element, profileKey, profiles) {
-  const { key, displayName, label, effect } = element;
-  return {
-    addState({ genomes }) {
-      if (!genomes.length) return this;
-      this.hidden = genomes.every(({ analysis }) =>
-        !analysis.paarsnp || notPresent(analysis.paarsnp[profileKey], key)
-      );
-      this.width = this.getWidth() + 16;
-      return this;
-    },
-    columnKey: key,
-    displayName,
-    label,
-    cellClasses: 'wgsa-table-cell--resistance',
-    flexGrow: 0,
-    getWidth() {
-      return measureHeadingText(label);
-    },
-    getCellContents(props, genome) {
-      return amr.hasElement(genome, profileKey, key) ? (
-        <i
-          className="material-icons wgsa-resistance-icon"
-          style={{ color: amr.getEffectColour(effect) }}
-        >
-          lens
-        </i>
-      ) : null;
-    },
-    headerClasses: 'wgsa-table-header--expanded',
-    hidden: profiles.every(profile => notPresent(profile[profileKey], key)),
-    valueGetter: genome =>
-      amr.getAdvancedColour(element, profileKey, genome),
-    onHeaderClick,
-  };
-}
-
 function getPaarsnpResults(genomes) {
   return genomes.reduce((results, { analysis }) => {
     if (!analysis.paarsnp) return results;
@@ -98,11 +62,12 @@ export function createReducer({ name, buildColumns }) {
   return function (state = initialState, { type, payload }) {
     switch (type) {
       case FETCH_COLLECTION.SUCCESS: {
-        const { genomes, organism, status, isClusterView } = payload.result;
-        if (status !== statuses.READY || isClusterView) return state;
+        const { genomes, status } = payload.result;
+        if (status !== statuses.READY ) return state;
 
         const paarsnpResults = getPaarsnpResults(genomes);
-        const columns = buildColumns(organism.resistance, paarsnpResults);
+        if (paarsnpResults.length === 0) return state;
+        const columns = buildColumns(paarsnpResults);
         return {
           ...state,
           columns:
@@ -125,9 +90,11 @@ export function createReducer({ name, buildColumns }) {
   };
 }
 
-export function getAntibioticLabel({ key, displayName }) {
-  if (displayName) return displayName;
-  // provide backwards compatibility
-  const { customLabels = {} } = Organisms.current.amrOptions || {};
-  return customLabels[key] || key;
+export function calculateHeaderWidth(label, numChildren) {
+  const minWidth = measureHeadingText(label) + 16;
+  const childWidth = numChildren * 16;
+  return minWidth < childWidth ?
+    { fixedWidth: childWidth, bufferSize: 0 } :
+    { fixedWidth: minWidth, bufferSize: (minWidth - childWidth) / numChildren };
 }
+

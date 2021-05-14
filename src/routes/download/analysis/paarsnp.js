@@ -10,8 +10,8 @@ const transformer = function (doc) {
     Version: __v,
     'Library Version': library.source === 'PUBLIC' ? library.version : `${library.source}: ${library.version}`
   };
-  for (const { state, fullName } of doc.analysis.paarsnp.antibiotics) {
-    result[fullName] = state;
+  for (const { state, agent } of doc.analysis.paarsnp.resistanceProfile) {
+    result[agent.name] = state;
   }
   return result;
 };
@@ -33,7 +33,7 @@ module.exports = (req, res) => {
     name: 1,
     'analysis.paarsnp.__v': 1,
     'analysis.paarsnp.library': 1,
-    'analysis.paarsnp.antibiotics': 1,
+    'analysis.paarsnp.resistanceProfile': 1,
   };
 
   return Genome.find(query, projection)

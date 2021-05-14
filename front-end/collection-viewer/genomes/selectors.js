@@ -99,11 +99,11 @@ export const getGenomeDatatypes = createSelector(
         hasVista = true;
       }
 
-      if (!isClusterView && !hasAMR && genome.analysis.paarsnp) {
+      if (!hasAMR && genome.analysis.paarsnp) {
         hasAMR = true;
       }
 
-      if (hasMetadata && hasKleborateAMR && hasKleborateAMRGenotypes && hasVista && hasSarscov2Variants && (isClusterView || (hasAMR))) {
+      if (hasMetadata && hasKleborateAMR && hasKleborateAMRGenotypes && hasVista && hasSarscov2Variants && hasAMR) {
         break;
       }
     }

@@ -36,14 +36,14 @@ const projection = {
   'analysis.mlst2.st': 1,
   'analysis.mlst2.url': 1,
   'analysis.ngmast': 1,
+  'analysis.ngono-markers.__v': 1,
+  'analysis.ngono-markers.status': 1,
   'analysis.ngstar.__v': 1,
   'analysis.ngstar.alleles': 1,
   'analysis.ngstar.st': 1,
   'analysis.ngstar.url': 1,
   'analysis.paarsnp.__v': 1,
-  'analysis.paarsnp.antibiotics': 1,
-  'analysis.paarsnp.paar': 1,
-  'analysis.paarsnp.snp': 1,
+  'analysis.paarsnp.resistanceProfile': 1,
   'analysis.paarsnp.library': 1,
   'analysis.paarsnp.matches': 1,
   'analysis.pangolin': 1,
@@ -56,25 +56,8 @@ const projection = {
   'upload.type': 1,
 };
 
-// const taskNames = [
-//   'speciator', 'metrics', 'mlst', 'paarsnp', 'genotyphi', 'ngmast', 'core',
-// ];
-
 module.exports = async ({ user, id, collectionId }) => {
   if (!id) throw new ServiceRequestError('Missing Id');
 
-  const genome = await request('genome', 'authorise', { user, id, collectionId, projection });
-  // TODO: Add task versions back when version-switching added to front-end
-  // TODO: Check if there are any relevant flags which disable tasks.
-  return genome;
-  // const promises = [
-  // Analysis.find(
-  //   { fileId: genome.fileId, task: { $in: taskNames } },
-  //   { _id: 0, task: 1, version: 1 }
-  // ).lean(),
-  // ];
-
-  // const [ /* tasks,*/ clustering = null ] = await Promise.all(promises);
-
-  // return Object.assign(genome, { tasks });
+  return await request('genome', 'authorise', { user, id, collectionId, projection });
 };

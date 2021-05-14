@@ -15,7 +15,7 @@ import { kleborateIsResistant } from '../amr-utils';
 
 export const name = tableKeys.kleborateAMR;
 
-const effectColour = amr.getEffectColour('RESISTANT');
+const effectColour = amr.getStateColour('RESISTANT');
 
 const isMac =
   (navigator && navigator.platform &&

@@ -5,6 +5,14 @@ const stateColours = {
   INDUCIBLE: '#E68D44',
   INTERMEDIATE: DEFAULT.WARNING_COLOUR,
 };
+
+const effectColours = {
+  RESISTANCE: DEFAULT.DANGER_COLOUR,
+  CONTRIBUTES: DEFAULT.WARNING_COLOUR,
+  INDUCED: '#E68D44',
+  REDUCES: '#008080',
+}
+
 export const nonResistantColour = '#fff';
 const stateColourMap = Object.keys(stateColours).reduce(
   (map, key) => map.set(stateColours[key], key),
@@ -14,14 +22,38 @@ const stateColourMap = Object.keys(stateColours).reduce(
 );
 export const getColourState = colour => stateColourMap.get(colour);
 
-export function getEffectColour(effect) {
-  return stateColours[effect] || stateColours.RESISTANT;
+export function getStateColour(state) {
+  return stateColours[state] || stateColours.RESISTANT;
 }
 
-export function isResistant({ antibiotics }, antibiotic) {
-  if (!(antibiotic in antibiotics)) return false;
-  const { state } = antibiotics[antibiotic];
-  return state in stateColours;
+// This would be better in CSS.
+export function formatEffect(effect) {
+  return effect.charAt(0) + effect.toLowerCase().slice(1);
+}
+
+export function getEffectColour(effect) {
+  return effectColours[effect] || effectColours.RESISTANCE;
+}
+
+export function findState({ resistanceProfile }, antibioticKey) {
+  for (const profile of resistanceProfile) {
+    if (profile.agent.key === antibioticKey) {
+      return profile.state;
+    }
+  }
+}
+
+export function hasResistanceState(state) {
+  return state.toUpperCase() !== 'NOT_FOUND'
+}
+
+export function isResistant({ resistanceProfile }, antibioticKey) {
+  for (const profile of resistanceProfile) {
+    if (profile.agent.key === antibioticKey) {
+      return profile.state in stateColours;
+    }
+  }
+  return false;
 }
 
 export function hasElement(genome, type, element) {
@@ -70,10 +102,8 @@ export function getColour(antibiotic, genome) {
     return defaultColourGetter(genome);
   }
 
-  if (isResistant(paarsnp, antibiotic)) {
-    return getEffectColour(paarsnp.antibiotics[antibiotic].state);
-  }
-  return nonResistantColour;
+  const state = findState(paarsnp, antibiotic);
+  return hasResistanceState(state) ? getStateColour(state) : nonResistantColour;
 }
 
 export function getAdvancedColour({ key, effect }, type, genome) {
