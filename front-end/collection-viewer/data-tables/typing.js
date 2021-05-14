@@ -8,7 +8,6 @@ import { tableKeys } from '../constants';
 
 import Organisms from '~/organisms';
 import { resetSources, sources } from './utils';
-import { getGenomeDatatypes } from '~/collection-viewer/genomes/selectors';
 
 const initialState = {
   name: tableKeys.typing,
@@ -74,6 +73,12 @@ const ngMastGroup = {
   columns: [ '__ng-mast', '__por', '__tbpb' ],
 };
 
+const ngonoMarkersGroup = {
+  group: true,
+  columnKey: 'other',
+  columns: [ '__porA' ],
+};
+
 const ngStarGroup = {
   group: true,
   columnKey: 'ng-star',
@@ -119,13 +124,24 @@ function fillColumnDefs({ columns, ...group }) {
   };
 }
 
-function getTypingColumnGroups({ isClusterView }, uiOptions, hasAltMLST, { genotyphi, inctyper, kleborate, mlst, ngmast, ngstar, pangolin, vista }) {
+function getTypingColumnGroups({ isClusterView }, uiOptions, hasAltMLST, {
+  genotyphi,
+  inctyper,
+  kleborate,
+  mlst,
+  ngmast,
+  "ngono-markers": ngonoMarkers,
+  ngstar,
+  pangolin,
+  vista
+}) {
   return [
-    isClusterView || !uiOptions.hasPopulation ? null : referenceGroup,
+    !uiOptions.hasPopulation ? null : referenceGroup,
     mlst ? mlstGroup : null,
     hasAltMLST ? mlst2Group : null,
     ngstar ? ngStarGroup : null,
     ngmast ? ngMastGroup : null,
+    ngonoMarkers ? ngonoMarkersGroup : null,
     genotyphi ? genotyphiGroup : null,
     inctyper ? inctyperGroup : null,
     kleborate ? kleborateGroup : null,
@@ -136,8 +152,18 @@ function getTypingColumnGroups({ isClusterView }, uiOptions, hasAltMLST, { genot
     .map(fillColumnDefs);
 }
 
-export function hasTyping({ hasPopulation }, { genotyphi, inctyper, kleborate, mlst, ngmast, ngstar, pangolin, vista }) {
-  return !(!hasPopulation && !mlst && !genotyphi && !inctyper && !kleborate && !ngmast && !ngstar && !pangolin && !vista);
+export function hasTyping({ hasPopulation }, {
+  genotyphi,
+  inctyper,
+  kleborate,
+  mlst,
+  "ngono-markers": ngonoMarkers,
+  ngmast,
+  ngstar,
+  pangolin,
+  vista
+}) {
+  return !(!hasPopulation && !mlst && !genotyphi && !inctyper && !kleborate && !ngmast && !!ngonoMarkers && !ngstar && !pangolin && !vista);
 }
 
 function updateTypingSettings({ genomes }) {
@@ -156,15 +182,18 @@ function updateTypingSettings({ genomes }) {
   return false;
 }
 
-function checkAnalysesPresent({ genomes }, analyses) {
-  return analyses.reduce((memo, analysis) => {memo[analysis] = !!genomes[0].analysis[analysis]; return memo;}, {});
+function checkAnalysesPresent({ exclude = [] }, { genomes }, analyses) {
+  return analyses.filter(analysis => !exclude.includes(analysis)).reduce((memo, analysis) => {
+    memo[analysis] = !!genomes[0].analysis[analysis];
+    return memo;
+  }, {});
 }
 
 export default function (state = initialState, { type, payload }) {
   switch (type) {
     case FETCH_COLLECTION.SUCCESS: {
 
-      const foundAnalyses = checkAnalysesPresent(payload.result, ['genotyphi', 'inctyper', 'kleborate', 'mlst', 'ngmast', 'ngstar', 'pangolin', 'vista']);
+      const foundAnalyses = checkAnalysesPresent(Organisms.uiOptions, payload.result, [ 'genotyphi', 'inctyper', 'kleborate', 'mlst', 'ngmast', 'ngono-markers', 'ngstar', 'pangolin', 'vista' ]);
       const active = hasTyping(Organisms.uiOptions, foundAnalyses);
 
       if (!active) {

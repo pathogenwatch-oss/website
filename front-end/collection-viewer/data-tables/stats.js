@@ -32,7 +32,7 @@ export default function (state = initialState, { type, payload }) {
           constants.leftSpacerColumn,
           constants.downloadColumnProps,
           constants.nameColumnProps,
-          ...(payload.result.isClusterView || !hasCore(payload) ? [] : coreColumns),
+          ...(!hasCore(payload) ? [] : coreColumns),
           systemDataColumns.__genome_length,
           systemDataColumns.__n50,
           systemDataColumns['__no._contigs'],

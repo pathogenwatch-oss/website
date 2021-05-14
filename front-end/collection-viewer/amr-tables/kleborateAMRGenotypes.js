@@ -1,7 +1,6 @@
 import { FETCH_COLLECTION } from '^/collection-viewer/actions';
 import { statuses, tableKeys } from '^/collection-viewer/constants';
-import Organism from '^/organisms/config';
-import { spacerGroup, systemGroup } from '^/collection-viewer/amr-tables/utils';
+import { calculateHeaderWidth, spacerGroup, systemGroup } from '^/collection-viewer/amr-tables/utils';
 import { SET_COLOUR_COLUMNS } from '^/collection-viewer/table/actions';
 import { measureHeadingText } from '^/collection-viewer/table/columnWidth';
 import * as amr from '^/collection-viewer/amr-utils';
@@ -11,7 +10,7 @@ import React from '^/react-shim';
 
 export const name = tableKeys.kleborateAMRGenotypes;
 
-const effectColour = amr.getEffectColour('RESISTANT');
+const effectColour = amr.getStateColour('RESISTANT');
 
 export function hasElement(genome, element) {
   for (const phenotype of Object.values(genome.analysis.kleborate.amr.profile)) {
@@ -50,14 +49,6 @@ function createColumn(key, element, bufferSize) {
     valueGetter: genome => (hasElement(genome, element) ? effectColour : amr.nonResistantColour),
     onHeaderClick,
   };
-}
-
-function calculateHeaderWidth(label, numChildren) {
-  const minWidth = measureHeadingText(label) + 16;
-  const childWidth = numChildren * 16;
-  return minWidth < childWidth ?
-    { fixedWidth: childWidth, bufferSize: 0 } :
-    { fixedWidth: minWidth, bufferSize: (minWidth - childWidth) / numChildren };
 }
 
 function buildColumns(genomes) {

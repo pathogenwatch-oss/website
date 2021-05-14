@@ -64,6 +64,7 @@ export const analysisLabels = {
   mlst: 'MLST',
   mlst2: 'MLST',
   ngmast: 'NG-MAST',
+  "ngono-markers": 'Ngono markers',
   ngstar: 'NG-STAR',
   paarsnp: 'AMR',
   pangolin: 'Pangolin',

@@ -14,11 +14,6 @@ const schema = new Schema({
     name: String,
     uuid: String,
   } ],
-  resistance: {
-    antibiotics: Schema.Types.Mixed,
-    paar: Schema.Types.Mixed,
-    snp: Schema.Types.Mixed,
-  },
 });
 
 setToObjectOptions(schema);

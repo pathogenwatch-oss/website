@@ -122,19 +122,19 @@ const summaryFields = [
       { $project: {
         antibiotics: {
           $filter: {
-            input: '$analysis.paarsnp.antibiotics',
+            input: '$analysis.paarsnp.resistanceProfile',
             as: 'ab',
             cond: query.resistance ?
               { $and: [
                 { $eq: [ '$$ab.state', 'RESISTANT' ] },
-                { $eq: [ '$$ab.fullName', query.resistance ] },
+                { $eq: [ '$$ab.agent.name', query.resistance ] },
               ] } :
               { $eq: [ '$$ab.state', 'RESISTANT' ] },
           },
         },
       } },
       { $unwind: '$antibiotics' },
-      { $group: { _id: '$antibiotics.fullName', count: { $sum: 1 } } },
+      { $group: { _id: '$antibiotics.agent.name', count: { $sum: 1 } } },
     ],
   },
   {

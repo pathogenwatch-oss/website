@@ -159,6 +159,14 @@ export const systemDataColumns = {
       return <Profile alleles={analysis.ngstar.alleles} />;
     },
   },
+  __porA: {
+    columnKey: '__porA',
+    displayName: 'porA',
+    valueGetter({ analysis}) {
+      if (! analysis['ngono-markers']) return null;
+      return analysis['ngono-markers'].status.toUpperCase() === 'PRESENT' ? 'Complete' : '';
+    }
+  },
   __inc_types: {
     columnKey: '__inc_types',
     displayName: 'Inc Types',

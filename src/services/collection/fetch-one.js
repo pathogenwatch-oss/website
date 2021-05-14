@@ -29,7 +29,6 @@ module.exports = ({ user, token }) =>
       collection
         .populate('_organism', {
           tree: 1,
-          resistance: 1,
           'references.name': 1,
           'references.uuid': 1,
         })

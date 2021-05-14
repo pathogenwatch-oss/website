@@ -186,17 +186,19 @@ export const getClusterNodeColors = createSelector(
     if (!clusterView) {
       return defaultColours;
     }
-    const filterColours = [ DEFAULT.DANGER_COLOUR, DEFAULT.WARNING_COLOUR, DEFAULT.COLOUR, nonResistantColour ];
+    const filterColours = [ NODE_COLORS[0], NODE_COLORS[1], NODE_COLORS[-1] ];
     const testColour = styles[Object.keys(styles)[0]].colour;
-    if (!filterColours.includes(testColour)) {
+    if (filterColours.includes(testColour)) {
       return defaultColours;
     }
     // This is slightly over-engineered to support creating pie chart nodes.
     return nodes
-      .map(node => node.ids) // genome IDs in each node
+      .map(node => node.ids) // genome IDs in each nodew
       .map(ids => {
         const colours = ids.flat()
-          .map(genomeId => genomeId in styles ? styles[genomeId].colour : nonResistantColour)
+          .filter(genomeId => genomeId in styles && styles[genomeId].colour !== nonResistantColour)
+          .map(genomeId => styles[genomeId].colour)
+          // .filter(genomeId => genomeId in styles ? styles[genomeId].colour : nonResistantColour)
           .reduce((memo, colour) => {
             if (!memo.hasOwnProperty(colour)) {
               memo[colour] = 0;
@@ -204,13 +206,30 @@ export const getClusterNodeColors = createSelector(
             memo[colour] += 1;
             return memo;
           }, {});
+
+        const colourList = Object.keys(colours);
+        const colourCount = colourList.length;
+
+        if (colourCount === 0) {
+          return nonResistantColour;
+        }
+        if (colourCount === 1) {
+          return colourList[0];
+        }
         if (DEFAULT.DANGER_COLOUR in colours) {
           return DEFAULT.DANGER_COLOUR;
         }
         if (DEFAULT.WARNING_COLOUR in colours) {
           return DEFAULT.WARNING_COLOUR;
         }
-        return nonResistantColour;
+        const mostCommon = Object.entries(colours).reduce((current, entry) => {
+          if (entry[1] > current.max) {
+            current.max = entry[1];
+            current.best = entry[0];
+          }
+          return current;
+        }, {best: nonResistantColour, max: 0});
+        return mostCommon.best;
       });
   }
 );

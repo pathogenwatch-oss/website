@@ -28,7 +28,7 @@ export const tableDisplayNames = {
   [tableKeys.metadata]: 'Metadata',
   [tableKeys.sarscov2Variants]: 'Notable Mutations',
   [tableKeys.stats]: 'Stats',
-  [tableKeys.snps]: 'SNPs',
+  [tableKeys.snps]: 'Variants',
   [tableKeys.timeline]: 'Timeline',
   [tableKeys.typing]: 'Typing',
   [tableKeys.vista]: 'Virulence',

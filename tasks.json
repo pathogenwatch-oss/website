@@ -271,7 +271,7 @@
       },
       {
         "task": "paarsnp",
-        "version": "v2.4.13"
+        "version": "v3.0.1"
       },
       {
         "task": "core",
@@ -337,7 +337,7 @@
       },
       {
         "task": "paarsnp",
-        "version": "v2.4.7"
+        "version": "v3.0.1"
       },
       {
         "task": "poppunk",
@@ -415,7 +415,7 @@
           "GHRU_USER": true
         },
         "task": "paarsnp",
-        "version": "v2.2.3"
+        "version": "v3.0.1"
       }
     ],
     "138": [
@@ -452,7 +452,7 @@
           "ESBL_CPE_EXPERIMENT_USER": true
         },
         "task": "paarsnp",
-        "version": "v2.4.5"
+        "version": "v3.0.1"
       },
       {
         "task": "mlst",
@@ -570,7 +570,7 @@
           "MTB_EXPERIMENT_USER": true
         },
         "task": "paarsnp",
-        "version": "v2.2.3"
+        "version": "v3.0.1"
       }
     ],
     "1827": [
@@ -594,7 +594,7 @@
     "194": [
       {
         "task": "paarsnp",
-        "version": "v2.4.6"
+        "version": "v3.0.1"
       }
     ],
     "195": [
@@ -661,7 +661,7 @@
           "ESBL_CPE_EXPERIMENT_USER": true
         },
         "task": "paarsnp",
-        "version": "v2.4.5"
+        "version": "v3.0.1"
       },
       {
         "task": "mlst",
@@ -696,7 +696,7 @@
           "H_PYLORI_EXPERIMENT_USER": true
         },
         "task": "paarsnp",
-        "version": "v2.2.4"
+        "version": "v3.0.1"
       }
     ],
     "2100": [
@@ -769,7 +769,7 @@
           "ESBL_CPE_EXPERIMENT_USER": true
         },
         "task": "paarsnp",
-        "version": "v2.4.5"
+        "version": "v3.0.1"
       },
       {
         "task": "mlst",
@@ -809,7 +809,7 @@
       },
       {
         "task": "pangolin",
-        "version": "v2.4_2021-04-28"
+        "version": "v3.1.0"
       }
     ],
     "2751": [
@@ -870,7 +870,7 @@
           "GHRU_USER": true
         },
         "task": "paarsnp",
-        "version": "v2.4.7"
+        "version": "v3.0.1"
       }
     ],
     "28898": [
@@ -893,7 +893,7 @@
           "ESBL_CPE_EXPERIMENT_USER": true
         },
         "task": "paarsnp",
-        "version": "v2.4.5"
+        "version": "v3.0.1"
       }
     ],
     "28903": [
@@ -1010,7 +1010,7 @@
           "GHRU_USER": true
         },
         "task": "paarsnp",
-        "version": "v2.4.7"
+        "version": "v3.0.1"
       }
     ],
     "480": [
@@ -1032,11 +1032,15 @@
       },
       {
         "task": "paarsnp",
-        "version": "v2.4.12"
+        "version": "v3.0.2"
       },
       {
         "task": "ngmast",
         "version": "v1"
+      },
+      {
+        "task": "ngono-markers",
+        "version": "v0.0.1"
       },
       {
         "task": "ngstar",
@@ -1065,7 +1069,7 @@
           "C_AURIS_EXPERIMENT_USER": true
         },
         "task": "paarsnp",
-        "version": "v2.2.5"
+        "version": "v3.0.1"
       },
       {
         "flags": {
@@ -1157,7 +1161,7 @@
           "GHRU_USER": true
         },
         "task": "paarsnp",
-        "version": "v2.4.7"
+        "version": "v3.0.1"
       }
     ],
     "562": [
@@ -1175,7 +1179,7 @@
           "GHRU_USER": true
         },
         "task": "paarsnp",
-        "version": "v2.4.5"
+        "version": "v3.0.1"
       }
     ],
     "570": [
@@ -1189,7 +1193,7 @@
           "ESBL_CPE_EXPERIMENT_USER": true
         },
         "task": "paarsnp",
-        "version": "v2.4.5"
+        "version": "v3.0.1"
       }
     ],
     "571": [
@@ -1222,7 +1226,7 @@
           "ESBL_CPE_EXPERIMENT_USER": true
         },
         "task": "paarsnp",
-        "version": "v2.4.5"
+        "version": "v3.0.1"
       }
     ],
     "590": [
@@ -1232,7 +1236,7 @@
           "GHRU_USER": true
         },
         "task": "paarsnp",
-        "version": "v2.4.5"
+        "version": "v3.0.1"
       },
       {
         "task": "serotype",
@@ -1295,7 +1299,7 @@
           "V_CHOLERAE_EXPERIMENT_USER": true
         },
         "task": "paarsnp",
-        "version": "v2.4.5"
+        "version": "v3.0.1"
       },
       {
         "flags": {
@@ -1344,7 +1348,7 @@
           "H_INFLUENZA_EXPERIMENT_USER": true
         },
         "task": "paarsnp",
-        "version": "v2.2.4"
+        "version": "v3.0.1"
       }
     ],
     "738": [
@@ -1444,7 +1448,7 @@
     "90370": [
       {
         "task": "paarsnp",
-        "version": "v2.4.12"
+        "version": "v3.0.2"
       },
       {
         "task": "genotyphi",

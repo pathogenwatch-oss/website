@@ -17,7 +17,7 @@ function getGenomeSummaries(query) {
     fileId: 1,
     'analysis.core.__v': 1,
     'analysis.mlst.matches': 1,
-    'analysis.paarsnp': 1,
+    'analysis.paarsnp.matches': 1,
   };
   const options = { sort: { name: 1 } };
   const genomes = Genome.find(query, projection, options).lean().cursor();
@@ -110,7 +110,7 @@ function gffTransformer(input) {
       .map(key => `${key}=${input.attributes[key]}`)
       .join(';'),
   ]
-  .map(value => (value === null ? '.' : value));
+    .map(value => (value === null ? '.' : value));
 
   return `${output.join('\t')}\n`;
 }
@@ -120,7 +120,7 @@ function convertDocumentToGFF(doc, stream) {
 
   stream.write(header);
 
-   // https://github.com/sanger-pathogens/Artemis/blob/master/etc/feature_keys_gff
+  // https://github.com/sanger-pathogens/Artemis/blob/master/etc/feature_keys_gff
   if (core) {
     const profile = core.profile.map(x => x.id).sort().map(x => core.profile.find(y => y.id === x));
     for (const { id, rlength, alleles } of profile) {
@@ -152,7 +152,9 @@ function convertDocumentToGFF(doc, stream) {
 
   if (mlst) {
     for (const { gene, id, start, end, contig } of mlst.matches) {
-      const [qStart, qEnd] = [start, end].sort((a, b)=>{return a-b});
+      const [ qStart, qEnd ] = [ start, end ].sort((a, b) => {
+        return a - b
+      });
       stream.write({
         sequence: contig,
         source: 'Pathogenwatch_MLST',
@@ -176,60 +178,41 @@ function convertDocumentToGFF(doc, stream) {
 
   if (paarsnp) {
     for (const match of paarsnp.matches) {
-      if (match.source.indexOf('PAAR') !== -1) {
-        stream.write({
-          sequence: match.query.id,
-          source: 'Pathogenwatch_PAAR',
-          type: 'CDS',
-          start: match.query.start,
-          end: match.query.stop,
-          score: match.identity || match.percentIdentity,
-          reversed: match.reversed,
-          phase: (match.query.start - 1) % 3,
-          attributes: {
-            ID: `PAAR_${match.query.id}_${match.query.start}_${match.query.stop}`,
-            Name: match.id,
-            Target: `${match.id} ${match.library.start} ${match.library.stop}`,
-            TargetLength: match.library.length,
-            note: match.agents.join(','),
-            evalue: match.evalue,
-          },
-        });
-      } else if (match.type === 'point_mutation') {
-        stream.write({
-          sequence: match.id,
-          source: 'Pathogenwatch_SNPAR',
-          type: 'sequence_difference',
-          start: match.queryLocation,
-          end: match.queryLocation,
-          score: null,
-          reversed: match.reversed,
-          phase: null,
-          attributes: {
-            ID: `SNPAR_${match.id}_${match.queryLocation}_${match.name}`,
-            Name: match.name,
-            // parent: `SNPAR_${match.id}`,
-            Target: `${match.name} ${match.referenceLocation} ${match.referenceLocation}`,
-            note: match.agents.join(', '),
-          },
-        });
-      } else {
-        stream.write({
-          sequence: match.query.id,
-          source: 'Pathogenwatch_SNPAR',
-          type: 'CDS',
-          start: match.query.start,
-          end: match.query.stop,
-          score: match.identity || match.percentIdentity,
-          reversed: match.reversed,
-          phase: (match.query.start - 1) % 3,
-          attributes: {
-            ID: `SNPAR_${match.query.id}_${match.query.start}_${match.query.stop}`,
-            Name: match.id,
-            Target: `${match.library.id} ${match.library.start} ${match.library.stop}`,
-            TargetLength: match.library.length,
-            evalue: match.evalue,
-          },
+      stream.write({
+        sequence: match.queryId,
+        source: 'Pathogenwatch_AMR',
+        type: 'CDS',
+        start: match.queryStart,
+        end: match.queryStop,
+        score: match.pid,
+        reversed: match.strand !== 'FORWARD',
+        phase: (match.refStart - 1) % 3,
+        attributes: {
+          ID: `AMR_${match.queryId}_${match.queryStart}_${match.queryStop}`,
+          Name: match.refId,
+          Target: `${match.refId} ${match.refStart} ${match.refStop}`,
+          TargetLength: match.refLength,
+          note: "",
+          evalue: match.evalue,
+        }
+      });
+      if (match.resistanceVariants.length !== 0) {
+        match.resistanceVariants.forEach(({ name, queryStart, queryEnd, refStart, refEnd }) => {
+          stream.write({
+            sequence: match.queryId,
+            source: 'Pathogenwatch_AMR',
+            type: 'sequence_difference',
+            start: queryStart,
+            end: queryEnd,
+            score: null,
+            reversed: match.strand !== 'FORWARD',
+            phase: null,
+            attributes: {
+              ID: `AMR_${match.queryId}_${queryStart}_${name}`,
+              Name: name,
+              Target: `${match.queryId} ${refStart} ${refEnd}`,
+            }
+          });
         });
       }
     }

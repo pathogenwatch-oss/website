@@ -11,6 +11,8 @@ import Speciator from './Speciator.react';
 import Typing from './Typing.react';
 import Virulence from './Virulence.react';
 import CovidVariants from './Sarscov2Variants.react';
+import {taxIdMap} from '~/organisms';
+import Organisms from '~/organisms';
 
 // import renderGenericResults from './Generic.react';
 
@@ -31,6 +33,9 @@ function hasSpeciesTypingResult(analysis) {
 
 export default genome => {
   const { analysis = {}, owner = '' } = genome;
+  if (taxIdMap.has(analysis.speciator.organismId) && !!taxIdMap.get(analysis.speciator.organismId).uiOptions.exclude) {
+    taxIdMap.get(analysis.speciator.organismId).uiOptions.exclude.forEach(excluded => delete analysis[excluded]);
+  }
   const {
     cgmlst,
     core,
