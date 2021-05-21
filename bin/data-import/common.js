@@ -5,7 +5,7 @@ module.exports.b64encode = function (value) {
 };
 
 module.exports.hashGenome = function (genome) {
-  const { analysis, ...data } = genome;
+  const { analysis={}, ...data } = genome;
   data.analysis = {};
   for (const task of Object.keys(analysis)) {
     const { organismId, __v } = analysis[task];

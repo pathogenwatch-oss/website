@@ -4,14 +4,18 @@
 const { URL } = require('url');
 const https = require('https');
 const fetch = require('node-fetch');
+const mongoose = require('mongoose');
 
 const mongoConnection = require('utils/mongoConnection');
 const Genome = require('models/genome');
 const Analysis = require('models/analysis');
 const fastaStore = require('utils/fasta-store');
 
+const Pool = require('./concurrentWorkers');
 const { b64encode, hashGenome } = require('./common');
 const { name, pass, baseUrl: _url } = require('./env.json');
+
+const { ObjectId } = mongoose.Types;
 
 const baseUrl = new URL(_url);
 const httpsAgent = new https.Agent({
@@ -63,10 +67,11 @@ function postJson(path, data) {
 }
 
 function listAnalyses(genome) {
-  const { fileId, analysis } = genome;
+  const { fileId, analysis={} } = genome;
   const genomeId = genome._id.toString();
   const output = {};
-  const { organismId } = analysis.speciator;
+  const { organismId } = analysis.speciator || {};
+  if (organismId === undefined) return {};
   for (const task of Object.keys(analysis)) {
     const { __v: version } = analysis[task];
     const key = `${task}|${version}|${organismId}|${fileId}`;
@@ -113,8 +118,16 @@ async function sendAnalysis({ task, version, fileId, organismId }) {
   }
 }
 
-async function batch({ number = 10, last }) {
-  const query = { public: true };
+let genomeCount = 0;
+let errorCount = 0;
+async function fetchMissing({ number = 10, last }) {
+  console.log({ fetchMissing: last });
+  const query = {
+    $or: [
+      { public: true },
+      { _user: ObjectId("59e4ddbf97ad4b00013f2ef0") }
+    ]
+  };
   if (last) query._id = { $gt: last };
 
   const genomes = Genome
@@ -134,6 +147,9 @@ async function batch({ number = 10, last }) {
   let more = false;
   const genomesDocs = {};
   for await (const genome of genomes) {
+    if (genome.fileId === undefined) continue;
+    if (((genome.analysis || {}).speciator || {}).organismId === undefined) continue;
+    genomeCount += 1;
     more = true;
     const genomeId = genome._id.toString();
     lastGenomeId = genomeId;
@@ -185,56 +201,63 @@ function decrementHex(value) {
   return prefix + (suffixInt - 1).toString(16).padStart(suffix.length, '0');
 }
 
+async function runBatch(pool, last) {
+  const r = await fetchMissing({ number: 100, last });
+  if (r.more && r.last) pool.enqueue(r.last).catch(() => console.log(`Error ${r.last}`));
+
+  const { needed, errors: fetchErrors } = r;
+  errorCount += fetchErrors.length;
+  if (fetchErrors.length > 0) {
+    console.log({ fetchErrors });
+    await sleep(10 * 1000);
+    pool.enqueue(last).catch(() => console.log(`Error ${last}`));
+    return;
+  }
+
+  console.log(`Found ${needed.length} things to update`);
+  const errors = [];
+  let count = 0;
+  for (const { type, genomeId, params } of needed) {
+    let ok = false;
+    if (type === 'genome') ok = await sendGenome(params);
+    else if (type === 'fasta') ok = await sendFasta(params);
+    else if (type === 'analysis') ok = await sendAnalysis(params);
+    if (!ok) {
+      errors.push({ genomeId, type });
+      errorCount += 1;
+      console.log({ error: { genomeId, type } });
+      if (errors.length > 100) {
+        const nextId = decrementHex(genomeId);
+        pool.enqueue(nextId).catch(() => console.log(`Error ${nextId}`));
+        console.log(`Starting again from ${nextId} after ${errors.length} errors`);
+        await sleep(10 * 1000);
+        return;
+      }
+    }
+    count += 1;
+    if (count % 100 === 0) console.log({ genomeCount, count, ok: { genomeId, type }});
+  }
+
+  const allErrors = [ ...errors, ...fetchErrors ];
+  allErrors.forEach((error, errorNum) => console.log({ errorNum, of: allErrors.length, error }));
+
+  console.log({ genomeCount, more: r.more, last: r.last, newErrors: errors.length, errors: errorCount });
+}
+
 async function main() {
+  const pool = new Pool(() => {}, 10);
+  pool.fn = (g) => runBatch(pool, g).catch((error) => console.log({ error, pool }));
+
   let last;
   if (/^[a-z0-9]{24}$/.test(process.argv[2])) {
     last = process.argv[2];
     console.log(`Starting from ${last}`);
+    pool.enqueue(last).catch(() => console.log(`Error ${last}`));
+  } else {
+    pool.enqueue(undefined).catch(() => console.log(`Error ${undefined}`));
   }
 
-  for (let i = 0; i < 10000; i++) {
-    const r = await batch({ number: 100, last });
-    const { needed, errors: fetchErrors, more } = r;
-    if (fetchErrors.length > 0) {
-      console.log({ fetchErrors });
-      await sleep(10 * 1000);
-      continue;
-    }
-    console.log(`Found ${needed.length} things to update`);
-    const errors = [];
-    let count = 0;
-    for (const { type, genomeId, params } of needed) {
-      let ok = false;
-      if (type === 'genome') ok = await sendGenome(params);
-      else if (type === 'fasta') ok = await sendFasta(params);
-      else if (type === 'analysis') ok = await sendAnalysis(params);
-      if (!ok) {
-        errors.push({ genomeId, type });
-        console.log({ error: { genomeId, type } });
-        if (errors.length > 100) {
-          last = decrementHex(genomeId);
-          console.log(`Starting again from ${genomeId} after ${errors.length} errors`);
-          await sleep(10 * 1000);
-          break;
-        }
-      }
-      count += 1;
-      if (count % 100 === 0) console.log({ count, ok: { genomeId, type }});
-    }
-
-    const allErrors = [ ...errors, ...fetchErrors ]
-    allErrors.forEach((error, errorNum) => console.log({ errorNum, of: allErrors.length, error }));
-
-    console.log({ more: r.more, last: r.last, errors: errors.length });
-    if (more) last = r.last;
-    else break;
-  }
-}
-
-async function main2() {
-  console.log(1);
-  const doc = await sendGenome('58ac0dfb72251e0001021d4d');
-  console.dir(doc);
+  await pool.wait();
 }
 
 if (require.main === module) {
