@@ -1,4 +1,7 @@
+const BSON = require('bson');
 const { createHash } = require("crypto");
+
+const bson = new BSON();
 
 module.exports.b64encode = function (value) {
   return Buffer.from(value).toString('base64');
@@ -30,3 +33,11 @@ module.exports.hashGenome = function (genome) {
   const s = JSON.stringify(data, sortObjects, 0);
   return createHash('sha1').update(s).digest().slice(0, 8);
 };
+
+module.exports.serializeGenome = function (genome) {
+  return bson.serialize(genome).toString('base64');
+}
+
+module.exports.deserializeGenome = function (genomeBytes) {
+  return bson.deserialize(Buffer.from(genomeBytes, 'base64'));
+}

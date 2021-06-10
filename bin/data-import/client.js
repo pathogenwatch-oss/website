@@ -12,7 +12,7 @@ const Analysis = require('models/analysis');
 const fastaStore = require('utils/fasta-store');
 
 const Pool = require('./concurrentWorkers');
-const { b64encode, hashGenome } = require('./common');
+const { b64encode, hashGenome, serializeGenome } = require('./common');
 const { name, pass, baseUrl: _url } = require('./env.json');
 
 const { ObjectId } = mongoose.Types;
@@ -57,7 +57,7 @@ async function request(path, args = {}) {
     }
     await sleep(2000);
   }
-  if (DEBUG) console.log({ error, r });
+  if (DEBUG) console.log({ path, error: (error || {}).message, status: (r || {}).status });
   if (error !== undefined) throw error;
   return r;
 }
@@ -71,7 +71,7 @@ function listAnalyses(genome) {
   const genomeId = genome._id.toString();
   const output = {};
   const { organismId } = analysis.speciator || {};
-  if (organismId === undefined) return {};
+  if (organismId === undefined || fileId === undefined) return {};
   for (const task of Object.keys(analysis)) {
     const { __v: version } = analysis[task];
     const key = `${task}|${version}|${organismId}|${fileId}`;
@@ -80,13 +80,19 @@ function listAnalyses(genome) {
   return output;
 }
 
+const additions = {
+  fasta: 0,
+  genome: 0,
+  analysis: 0
+}
+
 async function sendFasta(fileId) {
   try {
     const stream = fastaStore.fetch(fileId);
     const r = await request(`fasta/${fileId}`, { method: 'POST', body: stream, headers: { 'Content-Type': 'application/octet-stream' } });
+    additions.fasta += 1;
     return r.status === 200;
   } catch (err) {
-    if (DEBUG) console.log(err);
     return false;
   }
 }
@@ -94,11 +100,10 @@ async function sendFasta(fileId) {
 async function sendGenome(genome) {
   try {
     const genomeId = genome._id.toString();
-    genome._id = genomeId;
-    const r = await postJson(`genome/${genomeId}`, genome);
+    const r = await postJson(`genome/${genomeId}`, { genome: serializeGenome(genome) });
+    additions.genome += 1;
     return r.status === 200;
   } catch (err) {
-    if (DEBUG) console.log(err);
     return false;
   }
 }
@@ -111,9 +116,9 @@ async function sendAnalysis({ task, version, fileId, organismId }) {
     if (doc === undefined || doc === null) return false;
     delete doc._id;
     const r = await postJson(`analysis/${task}/${version}/${fileId}/${organismId}`, doc);
+    additions.analysis += 1;
     return r.status === 200;
   } catch (err) {
-    if (DEBUG) console.log(err);
     return false;
   }
 }
@@ -147,8 +152,6 @@ async function fetchMissing({ number = 10, last }) {
   let more = false;
   const genomesDocs = {};
   for await (const genome of genomes) {
-    if (genome.fileId === undefined) continue;
-    if (((genome.analysis || {}).speciator || {}).organismId === undefined) continue;
     genomeCount += 1;
     more = true;
     const genomeId = genome._id.toString();
@@ -156,7 +159,7 @@ async function fetchMissing({ number = 10, last }) {
     genomesDocs[genomeId] = genome;
     offer[genomeId] = hashGenome(genome).toString('base64');
     // needed.genomes.push(genomeId);
-    fileIds[genome.fileId] = fileIds[genome.fileId] || genomeId;
+    if (genome.fileId) fileIds[genome.fileId] = fileIds[genome.fileId] || genomeId;
     analyses = { ...analyses, ...listAnalyses(genome) };
   }
 
@@ -191,19 +194,18 @@ async function fetchMissing({ number = 10, last }) {
   return { needed, errors, last: lastGenomeId, more };
 }
 
-function decrementHex(value) {
-  if (!value) return '';
-  const suffixStart = value.length > 12 ? value.length - 12 : 0;
-  const prefix = value.slice(0, suffixStart)
-  const suffix = value.slice(suffixStart);
-  const suffixInt = parseInt(suffix, 16);
-  if (suffixInt === 0) return decrementHex(prefix) + "".padStart(suffix.length, 'f');
-  return prefix + (suffixInt - 1).toString(16).padStart(suffix.length, '0');
-}
+// function decrementHex(value) {
+//   if (!value) return '';
+//   const suffixStart = value.length > 12 ? value.length - 12 : 0;
+//   const prefix = value.slice(0, suffixStart)
+//   const suffix = value.slice(suffixStart);
+//   const suffixInt = parseInt(suffix, 16);
+//   if (suffixInt === 0) return decrementHex(prefix) + "".padStart(suffix.length, 'f');
+//   return prefix + (suffixInt - 1).toString(16).padStart(suffix.length, '0');
+// }
 
 async function runBatch(pool, last) {
   const r = await fetchMissing({ number: 100, last });
-  if (r.more && r.last) pool.enqueue(r.last).catch(() => console.log(`Error ${r.last}`));
 
   const { needed, errors: fetchErrors } = r;
   errorCount += fetchErrors.length;
@@ -213,6 +215,8 @@ async function runBatch(pool, last) {
     pool.enqueue(last).catch(() => console.log(`Error ${last}`));
     return;
   }
+
+  if (r.more && r.last) pool.enqueue(r.last).catch(() => console.log(`Error ${r.last}`));
 
   console.log(`Found ${needed.length} things to update`);
   const errors = [];
@@ -226,22 +230,22 @@ async function runBatch(pool, last) {
       errors.push({ genomeId, type });
       errorCount += 1;
       console.log({ error: { genomeId, type } });
-      if (errors.length > 100) {
-        const nextId = decrementHex(genomeId);
-        pool.enqueue(nextId).catch(() => console.log(`Error ${nextId}`));
-        console.log(`Starting again from ${nextId} after ${errors.length} errors`);
+      if (errors.length > 20) {
+        // const nextId = decrementHex(genomeId);
+        console.log(`Starting again from ${last} after ${errors.length} errors`);
         await sleep(10 * 1000);
+        pool.enqueue(last).catch(() => console.log(`Error ${nextId}`));
         return;
       }
     }
     count += 1;
-    if (count % 100 === 0) console.log({ genomeCount, count, ok: { genomeId, type }});
+    if (count % 100 === 0) console.log({ genomeCount, count, ok: { genomeId, type }, additions, queue: pool.size });
   }
 
-  const allErrors = [ ...errors, ...fetchErrors ];
-  allErrors.forEach((error, errorNum) => console.log({ errorNum, of: allErrors.length, error }));
+  // const allErrors = [ ...errors, ...fetchErrors ];
+  // allErrors.forEach((error, errorNum) => console.log({ errorNum, of: allErrors.length, error }));
 
-  console.log({ genomeCount, more: r.more, last: r.last, newErrors: errors.length, errors: errorCount });
+  console.log({ genomeCount, more: r.more, last: r.last, newErrors: errors.length, errors: errorCount, additions, queue: pool.size  });
 }
 
 async function main() {
@@ -258,6 +262,7 @@ async function main() {
   }
 
   await pool.wait();
+  console.log("End", { genomeCount, errors: errorCount, additions, queue: pool.size  });
 }
 
 if (require.main === module) {

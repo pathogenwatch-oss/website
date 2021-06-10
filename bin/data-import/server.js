@@ -4,14 +4,13 @@ const { randomBytes, timingSafeEqual } = require("crypto");
 const fs = require('fs');
 const https = require('https');
 const path = require('path');
-const { URL } = require('url');
 const morgan = require("morgan");
 
 const mongoConnection = require('utils/mongoConnection');
 const Genome = require('models/genome');
 const objectStore = require('utils/object-store');
 
-const { hashGenome } = require('./common.js');
+const { hashGenome, deserializeGenome } = require('./common.js');
 
 function newPass() {
   return randomBytes(32)
@@ -103,8 +102,9 @@ app.post('/genome/status', asyncWrapper(async (req, res, next) => {
 
 app.post('/genome/:genomeId', asyncWrapper(async (req, res, next) => {
   const data = req.body;
-  await Genome.collection.replaceOne({ _id: data._id }, data, { upsert: true });
-  return res.send({ genomeId: data._id });
+  const genome = deserializeGenome(data.genome);
+  await Genome.collection.replaceOne({ _id: genome._id }, genome, { upsert: true });
+  return res.send({ genomeId: genome._id });
 }));
 
 app.post('/analysis/status', asyncWrapper(async (req, res, next) => {
