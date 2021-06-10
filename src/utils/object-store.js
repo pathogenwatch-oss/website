@@ -6,6 +6,7 @@ const zlib = require('zlib');
 const { promisify } = require('util');
 
 const { objectStore: config } = require('configuration');
+const Pool = require('utils/concurrentWorkers');
 
 if (config.bucket === undefined) throw new Error('objectStore.bucket must be in config');
 
@@ -94,8 +95,7 @@ class ObjectStore {
     this.throttle = new Throttle();
     this.requests = 0;
     this.counterStart = new Date();
-    this.inProgress = [];
-    this.queue = [];
+    this.pool = new Pool(this.__next.bind(this), MAX_CONCURRENCY);
   }
 
   analysisKey(task, version, fileId, organismId) {
@@ -215,57 +215,44 @@ class ObjectStore {
     }
   }
 
-  async request(method, params = {}) {
-    const job = { method, params };
-    const output = new Promise(async (resolve, reject) => {
-      job.pass = (v) => { this.requests += 1; return resolve(v); };
-      job.fail = (e) => { this.requests += 1; return reject(e); };
-    });
-    this.queue.push(job);
-    this.__next();
-    return output;
+  request(method, params = {}) {
+    return this.pool.enqueue({ method, params });
   }
 
-  async __next() {
-    if (this.inProgress.length >= MAX_CONCURRENCY) return undefined;
-
-    const job = this.queue.shift();
-    if (job === undefined) return undefined;
-    this.inProgress.push(job);
-
+  async __next({ method, params }) {
     let r;
     for (let attempt = 0; attempt < MAX_ATTEMPTS; attempt++) {
       await this.throttle.wait();
 
-      if (attempt >= 3) job.params.timeout *= 2;
+      if (attempt >= 3) params.timeout *= 2;
       try {
         const s3Params = {
           Bucket: config.bucket,
-          Key: job.params.key,
+          Key: params.key,
         };
-        if (job.method === 'get') {
+        if (method === 'get') {
           const req = s3.getObject(s3Params);
-          if (job.params.outStream) {
+          if (params.outStream) {
             r = await new Promise((resolve, reject) => {
               req.on('complete', (resp) => {
                 const { statusCode, statusMessage } = resp.httpResponse;
                 resolve({ statusCode, statusMessage });
               }).on('error', (error) => reject(error));
-              req.createReadStream().pipe(job.params.outStream);
+              req.createReadStream().pipe(params.outStream);
             });
           } else {
             r = await req.promise();
           }
-        } else if (job.method === 'put') {
-          r = await s3.upload({ ...s3Params, Body: job.params.data, ACL: 'private' }).promise();
-        } else if (job.method === 'copy') {
-          r = await s3.copyObject({ ...s3Params, CopySource: `/${config.bucket}/${job.params.srcKey}` }).promise();
-        } else if (job.method === 'delete') {
+        } else if (method === 'put') {
+          r = await s3.upload({ ...s3Params, Body: params.data, ACL: 'private' }).promise();
+        } else if (method === 'copy') {
+          r = await s3.copyObject({ ...s3Params, CopySource: `/${config.bucket}/${params.srcKey}` }).promise();
+        } else if (method === 'delete') {
           r = await s3.deleteObject(s3Params).promise();
-        } else if (job.method === 'list') {
-          r = await s3.listObjectsV2(job.params).promise();
+        } else if (method === 'list') {
+          r = await s3.listObjectsV2(params).promise();
         } else {
-          throw new Error(`Unknown method ${job.method}`);
+          throw new Error(`Unknown method ${method}`);
         }
         r.statusCode = 200;
       } catch (error) {
@@ -281,13 +268,9 @@ class ObjectStore {
     }
 
     if (r.statusCode === 200) {
-      job.pass(r);
-    } else {
-      job.fail(r.error ? r.error : new Error(`Status ${r.statusCode}: ${r.statusMessage || "Unknown"}`));
+      return r;
     }
-
-    remove(this.inProgress, job);
-    return this.__next();
+    throw r.error ? r.error : new Error(`Status ${r.statusCode}: ${r.statusMessage || "Unknown"}`);
   }
 
   async* iterGet(keys, { maxConcurrent = 10, ...params } = {}) {
