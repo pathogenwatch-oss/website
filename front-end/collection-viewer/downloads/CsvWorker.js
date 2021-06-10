@@ -62,8 +62,8 @@ const valueGettersByTable = {
   stats: getUserDefinedValue,
   antibiotics: (antibiotic, { analysis: { paarsnp } }) =>
     (!!paarsnp && isResistant(paarsnp, antibiotic) ? 1 : 0),
-  snps: (snp, genome) => (hasElement(genome, 'snp', snp) ? 1 : 0),
-  genes: (gene, genome) => (hasElement(genome, 'paar', gene) ? 1 : 0),
+  snps: (snp, genome) => (hasElement(genome, 'variants', snp) ? 1 : 0),
+  genes: (gene, genome) => (hasElement(genome, 'acquired', gene) ? 1 : 0),
   kleborateAMR: (antibiotic, { analysis: { kleborate } }) =>
     (kleborateIsResistant(kleborate, antibiotic.replace('kleborate_', '')) ? 1 : 0),
   kleborateAMRGenotypes: (element, { analysis: { kleborate } }) =>

@@ -16,6 +16,7 @@ module.exports = async function ({ user, query }) {
     'analysis.mlst2.__v': 1,
     'analysis.mlst2.source': 1,
     'analysis.ngmast.__v': 1,
+    'analysis.ngono-markers.__v': 1,
     'analysis.ngstar.__v': 1,
     'analysis.paarsnp.__v': 1,
     'analysis.pangolin.__v': 1,

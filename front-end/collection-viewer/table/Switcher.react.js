@@ -68,8 +68,8 @@ const TableMenu = connect(
       {amr &&
       <>
           <button onClick={() => showTable(tableKeys.antibiotics)}>Antibiotics</button>
-          <button onClick={() => showTable(tableKeys.snps)}>SNPs</button>
           <button onClick={() => showTable(tableKeys.genes)}>Genes</button>
+          <button onClick={() => showTable(tableKeys.snps)}>Variants</button>
         </>
       }
       {kleborate && <>

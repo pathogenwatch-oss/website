@@ -1,49 +1,41 @@
 import React from 'react';
+import * as amr from '../amr-utils';
+import { tableKeys } from '../constants';
+import { measureHeadingText } from '../table/columnWidth';
+import { modifierKey } from '~/collection-viewer/amr-tables/utils';
+import { formatEffect } from '../amr-utils';
 
 const { onHeaderClick } = require('./thunks');
 
-import * as amr from '../amr-utils';
-import { tableKeys } from '../constants';
-import Organisms from '../../organisms';
-import { getAntibioticLabel } from './utils';
-import { measureHeadingText } from '../table/columnWidth';
-
-const isMac =
-  (navigator && navigator.platform &&
-    navigator.platform.toUpperCase().indexOf('MAC') >= 0);
-const modifierKey = isMac ? 'Cmd' : 'Ctrl';
-
-function createColumn(antibiotic) {
-  const columnKey = antibiotic.key;
-  const hoverName = antibiotic.fullName || columnKey;
+function createColumn( { agent } ) {
+  const columnKey = agent.key;
 
   return {
     columnKey,
     headerClasses: 'wgsa-table-header--expanded',
-    headerTitle: `${hoverName ? `${hoverName} - ` : ''}${modifierKey} + click to select multiple`,
+    headerTitle: `${modifierKey} + click to select multiple`,
     cellClasses: 'wgsa-table-cell--resistance',
     cellPadding: 16,
     flexGrow: 0,
-    label: getAntibioticLabel(antibiotic),
+    label: agent.key,
     addState() {
       this.width = this.getWidth();
       return this;
     },
     getWidth() {
-      const textWidth = measureHeadingText(antibiotic.key);
+      const textWidth = measureHeadingText(agent.name);
       return textWidth < 32 ? 48 : textWidth + 16;
     },
     getCellContents(props, { analysis }) {
       if (!analysis.paarsnp) return null;
+      const state = amr.findState(analysis.paarsnp, props.columnKey);
 
-      const { antibiotics } = analysis.paarsnp;
-      const isResistant =
-        amr.isResistant(analysis.paarsnp, props.columnKey);
-      if (isResistant) {
-        const { state } = antibiotics[props.columnKey];
+      if (amr.hasResistanceState(state)) {
         return (
           <i
             className={`material-icons wgsa-resistance-icon wgsa-amr--${state.toLowerCase()}`}
+            style={{ color: amr.getStateColour(state) }}
+            title={ formatEffect(state) }
           >
             lens
           </i>
@@ -58,11 +50,6 @@ function createColumn(antibiotic) {
 
 export const name = tableKeys.antibiotics;
 
-export function buildColumns({ antibiotics }) {
-  const { hiddenColumns = new Set() } = Organisms.current.amrOptions || {};
-  return (
-    antibiotics
-      .filter(({ key }) => !hiddenColumns.has(key))
-      .map(createColumn)
-  );
+export function buildColumns(results) {
+  return results[0].resistanceProfile.map(createColumn);
 }

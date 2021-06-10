@@ -12,8 +12,8 @@ import { statuses, tableKeys } from '../constants';
 
 export const name = tableKeys.sarscov2Variants;
 
-const variantPresentColour = amr.getEffectColour('RESISTANT');
-const alternativePresentColour = amr.getEffectColour('INTERMEDIATE');
+const variantPresentColour = amr.getStateColour('RESISTANT');
+const alternativePresentColour = amr.getStateColour('INTERMEDIATE');
 
 const isMac =
   (navigator && navigator.platform &&

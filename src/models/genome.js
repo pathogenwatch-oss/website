@@ -365,8 +365,8 @@ schema.statics.getFilterQuery = async function (props) {
   }
 
   if (resistance) {
-    findQuery['analysis.paarsnp.antibiotics'] = {
-      $elemMatch: { fullName: resistance, state: 'RESISTANT' },
+    findQuery['analysis.paarsnp.resistanceProfile'] = {
+      $elemMatch: { 'agent.name': resistance, state: 'RESISTANT' },
     };
   }
 
@@ -421,12 +421,14 @@ schema.statics.getForCollection = function (query, user = {}) {
     'analysis.mlst2.source': 1,
     'analysis.mlst2.st': 1,
     'analysis.ngmast': 1,
+    'analysis.ngono-markers.status': 1,
     'analysis.ngstar.alleles': 1,
     'analysis.ngstar.source': 1,
     'analysis.ngstar.st': 1,
-    'analysis.paarsnp.antibiotics': 1,
-    'analysis.paarsnp.paar': 1,
-    'analysis.paarsnp.snp': 1,
+    'analysis.paarsnp.__v': 1,
+    'analysis.paarsnp.resistanceProfile': 1,
+    'analysis.paarsnp.acquired': 1,
+    'analysis.paarsnp.variants': 1,
     'analysis.paarsnp.library': 1,
     'analysis.pangolin': 1,
     'analysis.sarscov2-variants': 1,

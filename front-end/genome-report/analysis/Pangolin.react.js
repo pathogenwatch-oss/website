@@ -24,15 +24,21 @@ export default ({ genome }) => {
           <dt>Lineage</dt>
           <dd>{pangolin.lineage}</dd>
         </div>
-        <div>
-          <dt>Probability</dt>
-          <dd>{pangolin.probability}</dd>
-        </div>
+        {!!pangolin.probability ?
+          (<div>
+            <dt>Probability</dt>
+            <dd>{pangolin.probability}</dd>
+          </div>) :
+          (<div>
+            <dt>Conflict</dt>
+            <dd>{pangolin.conflict}</dd>
+          </div>)
+        }
         <div>
           <dt>Status</dt>
           <dd>{pangolin.status}</dd>
         </div>
-        <div><dt>Pangolin version</dt><dd>{pangolin.__v}</dd></div>
+        <div><dt>Pangolin version</dt><dd>{pangolin.pangolin_version}</dd></div>
         <div><dt>PangoLEARN version</dt><dd>{pangolin.pangoLEARN_version}</dd></div>
       </dl>
       <dl>

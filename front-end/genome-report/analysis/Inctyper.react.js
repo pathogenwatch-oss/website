@@ -49,7 +49,7 @@ export default ({ analysis }) => {
   }
 
   // Group inc matches by contig
-  const groupedMatches = inctyper['Inc Matches'].reduce((groups, match) => {
+  const contigMatches = inctyper['Inc Matches'].reduce((groups, match) => {
     const updatedGroups = groups;
     if (!updatedGroups.hasOwnProperty(match.Contig)) {
       updatedGroups[match.Contig] = [];
@@ -59,25 +59,21 @@ export default ({ analysis }) => {
   }, {});
 
   // Create a set order of the contigs for alternative row styling
-  const contigOrder = Object.keys(groupedMatches).sort();
+  const contigOrder = Object.keys(contigMatches).sort();
 
-  // matches.sort((a, b) => a.Contig.localeCompare(b.Contig));
-
-  const amrMatches = {};
-
-  for (const match of paarsnp.matches) {
-    // Snp annotations don't have the query field.
-    if (!match.query) {
-      continue;
-    }
-    if ((paarsnp.hasOwnProperty('paar') && paarsnp.paar.includes(match.id)) ||
-      (paarsnp.hasOwnProperty('snp') && paarsnp.snp.includes(match.id))) {
-      if (!(match.query.id in amrMatches)) {
-        amrMatches[match.query.id] = [];
+  const amrMatches = paarsnp.matches
+    .filter(({ queryId }) => queryId in contigMatches)
+    .reduce((memo, { queryId, refId}) => {
+      // Skip matches not in relevant contigs.
+      // Only keep matches that are either are the acquired determinants list or contain a determinant variant.
+      if (!(queryId in memo)) {
+        memo[queryId] = [];
       }
-      amrMatches[match.query.id].push(match.id);
-    }
-  }
+      if (paarsnp.hasOwnProperty('acquired') && paarsnp.acquired.includes(refId)) {
+        memo[queryId].push(queryId);
+      }
+      return memo;
+    }, {});
 
   return (
     <React.Fragment>
@@ -103,12 +99,12 @@ export default ({ analysis }) => {
             <th>% Coverage</th>
           </tr>
         </thead>
-        {Object.keys(groupedMatches).length ? (
+        {Object.keys(contigMatches).length ? (
           contigOrder.map((contigId, index) => (
             <InctyperContig
               amrMatches={amrMatches[contigId]}
               library={inctyper.Library}
-              matches={groupedMatches[contigId]}
+              matches={contigMatches[contigId]}
               setBackground={index % 2 === 0}
               displayAmr={paarsnp.library !== ''}
             />

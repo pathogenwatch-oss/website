@@ -17,10 +17,10 @@ function selectColour(status) {
     return amr.nonResistantColour;
   }
   if (status === 'Present') {
-    return amr.getEffectColour('RESISTANT');
+    return amr.getStateColour('RESISTANT');
   }
   if (status === 'Incomplete') {
-    return amr.getEffectColour('INTERMEDIATE');
+    return amr.getStateColour('INTERMEDIATE');
   }
   return amr.nonResistantColour;
 }

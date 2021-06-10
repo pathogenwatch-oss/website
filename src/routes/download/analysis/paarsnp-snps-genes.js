@@ -12,8 +12,8 @@ const transformer = function (doc) {
     Version: __v,
     'Library Version': library.source === 'PUBLIC' ?
       library.version : `${library.source}: ${library.version}`,
-    SNPs: doc.analysis.paarsnp.snp.sort(sort).join(','),
-    Genes: doc.analysis.paarsnp.paar.sort(sort).join(','),
+    Variants: doc.analysis.paarsnp.variants.sort(sort).join(','),
+    Acquired: doc.analysis.paarsnp.acquired.sort(sort).join(','),
   };
 };
 
@@ -34,8 +34,8 @@ module.exports = (req, res) => {
     name: 1,
     'analysis.paarsnp.__v': 1,
     'analysis.paarsnp.library': 1,
-    'analysis.paarsnp.paar': 1,
-    'analysis.paarsnp.snp': 1,
+    'analysis.paarsnp.acquired': 1,
+    'analysis.paarsnp.variants': 1,
   };
 
   return Genome.find(query, projection)
