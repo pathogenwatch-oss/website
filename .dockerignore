@@ -5,3 +5,4 @@ config.json
 *config.json
 fastas
 htpasswd
+node_modules
