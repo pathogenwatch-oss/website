@@ -246,7 +246,7 @@ class ObjectStore {
         } else if (method === 'put') {
           r = await s3.upload({ ...s3Params, Body: params.data, ACL: 'private' }).promise();
         } else if (method === 'copy') {
-          r = await s3.copyObject({ ...s3Params, CopySource: `/${config.bucket}/${params.srcKey}` }).promise();
+          r = await s3.copyObject({ ...s3Params, CopySource: `/${config.bucket}/${params.srcKey}`, ACL: 'private' }).promise();
         } else if (method === 'delete') {
           r = await s3.deleteObject(s3Params).promise();
         } else if (method === 'list') {
