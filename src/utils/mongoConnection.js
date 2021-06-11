@@ -11,8 +11,12 @@ const hostname = mongoConfig.host || DEFAULT_HOSTNAME;
 const port = mongoConfig.port || DEFAULT_PORT;
 const database = mongoConfig.database || DEFAULT_DATABASE;
 const replicaset = mongoConfig.replicaset;
+const mongoUser = mongoConfig.user;
+const mongoPassword = mongoConfig.password;
 
-const dbUrl = `mongodb://${hostname}:${port}/${database}${replicaset ? `?replicaSet=${replicaset}` : ''}`;
+
+const userAuth = !!mongoUser && !!mongoPassword ? `${mongoUser}:${mongoPassword}@` : '';
+const dbUrl = `mongodb://${userAuth}${hostname}:${port}/${database}${replicaset ? `?replicaSet=${replicaset}` : ''}`;
 
 const handleError = error => {
   LOGGER.error(error);
@@ -32,7 +36,7 @@ function connect(callback) {
   }
 
   LOGGER.info(`Connecting to mongodb: ${dbUrl}`);
-  return mongoose.connect(dbUrl);
+  return mongoose.connect(dbUrl, { useMongoClient: true });
 }
 
 mongoose.set('debug', (collection, ...args) => {
