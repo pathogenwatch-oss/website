@@ -16,6 +16,10 @@ module.exports.hashGenome = function (genome) {
     if (organismId !== undefined) data.analysis[task].organismId = organismId;
   }
 
+  return hashDocument(data);
+}
+
+module.exports.hashDocument = function (data) {
   function sortObjects(key, value) {
     if (value === null) return value;
     if (typeof value === 'object') {
@@ -34,10 +38,10 @@ module.exports.hashGenome = function (genome) {
   return createHash('sha1').update(s).digest().slice(0, 8);
 };
 
-module.exports.serializeGenome = function (genome) {
-  return bson.serialize(genome).toString('base64');
+module.exports.serializeBSON = function (doc) {
+  return bson.serialize(doc).toString('base64');
 }
 
-module.exports.deserializeGenome = function (genomeBytes) {
-  return bson.deserialize(Buffer.from(genomeBytes, 'base64'));
+module.exports.deserializeBSON = function (docBytes) {
+  return bson.deserialize(Buffer.from(docBytes, 'base64'));
 }

@@ -12,7 +12,7 @@ const Analysis = require('models/analysis');
 const fastaStore = require('utils/fasta-store');
 
 const Pool = require('./concurrentWorkers');
-const { b64encode, hashGenome, serializeGenome } = require('./common');
+const { b64encode, hashGenome, serializeBSON } = require('./common');
 const { name, pass, baseUrl: _url } = require('./env.json');
 
 const { ObjectId } = mongoose.Types;
@@ -83,7 +83,10 @@ function listAnalyses(genome) {
 const additions = {
   fasta: 0,
   genome: 0,
-  analysis: 0
+  analysis: 0,
+  user: 0,
+  collection: 0,
+  score: 0,
 }
 
 async function sendFasta(fileId) {
@@ -100,8 +103,43 @@ async function sendFasta(fileId) {
 async function sendGenome(genome) {
   try {
     const genomeId = genome._id.toString();
-    const r = await postJson(`genome/${genomeId}`, { genome: serializeGenome(genome) });
+    const r = await postJson(`genome/${genomeId}`, { genome: serializeBSON(genome) });
     additions.genome += 1;
+    return r.status === 200;
+  } catch (err) {
+    return false;
+  }
+}
+
+async function sendUser(user) {
+  try {
+    const userId = user._id.toString();
+    const r = await postJson(`user/${userId}`, { user: serializeBSON(user) });
+    additions.user += 1;
+    return r.status === 200;
+  } catch (err) {
+    return false;
+  }
+}
+
+async function sendCollection(collection) {
+  try {
+    const collectionId = collection._id.toString();
+    const r = await postJson(`collection/${collectionId}`, { collection: serializeBSON(collection) });
+    additions.collection += 1;
+    return r.status === 200;
+  } catch (err) {
+    return false;
+  }
+}
+
+async function sendScoreCache(score) {
+  const { versions, fileId } = score;
+  const task = 'core-tree-score';
+  const version = `${versions.core}_${versions.tree}`;
+  try {
+    const r = await postJson(`analysis/${task}/${version}/${fileId}/`, doc);
+    additions.analyscoresis += 1;
     return r.status === 200;
   } catch (err) {
     return false;
@@ -125,13 +163,13 @@ async function sendAnalysis({ task, version, fileId, organismId }) {
 
 let genomeCount = 0;
 let errorCount = 0;
-async function fetchMissing({ number = 10, last }) {
-  console.log({ fetchMissing: last });
+async function fetchMissingAnalysis({ number = 10, last }) {
+  console.log({ fetchMissingAnalysis: last });
   const query = {
-    $or: [
-      { public: true },
-      { _user: ObjectId("59e4ddbf97ad4b00013f2ef0") }
-    ]
+    // $or: [
+    //   { public: true },
+    //   { _user: ObjectId("59e4ddbf97ad4b00013f2ef0") }
+    // ]
   };
   if (last) query._id = { $gt: last };
 
@@ -194,18 +232,8 @@ async function fetchMissing({ number = 10, last }) {
   return { needed, errors, last: lastGenomeId, more };
 }
 
-// function decrementHex(value) {
-//   if (!value) return '';
-//   const suffixStart = value.length > 12 ? value.length - 12 : 0;
-//   const prefix = value.slice(0, suffixStart)
-//   const suffix = value.slice(suffixStart);
-//   const suffixInt = parseInt(suffix, 16);
-//   if (suffixInt === 0) return decrementHex(prefix) + "".padStart(suffix.length, 'f');
-//   return prefix + (suffixInt - 1).toString(16).padStart(suffix.length, '0');
-// }
-
-async function runBatch(pool, last) {
-  const r = await fetchMissing({ number: 100, last });
+async function sendAnalysisBatch(pool, last) {
+  const r = await fetchMissingAnalysis({ number: 100, last });
 
   const { needed, errors: fetchErrors } = r;
   errorCount += fetchErrors.length;
@@ -231,7 +259,6 @@ async function runBatch(pool, last) {
       errorCount += 1;
       console.log({ error: { genomeId, type } });
       if (errors.length > 20) {
-        // const nextId = decrementHex(genomeId);
         console.log(`Starting again from ${last} after ${errors.length} errors`);
         await sleep(10 * 1000);
         pool.enqueue(last).catch(() => console.log(`Error ${nextId}`));
@@ -242,15 +269,102 @@ async function runBatch(pool, last) {
     if (count % 100 === 0) console.log({ genomeCount, count, ok: { genomeId, type }, additions, queue: pool.size });
   }
 
-  // const allErrors = [ ...errors, ...fetchErrors ];
-  // allErrors.forEach((error, errorNum) => console.log({ errorNum, of: allErrors.length, error }));
-
   console.log({ genomeCount, more: r.more, last: r.last, newErrors: errors.length, errors: errorCount, additions, queue: pool.size  });
 }
 
+async function sendUsers() {
+  const users = await User
+    .find({})
+    .lean()
+    .cursor();
+
+  let i = 0;
+  let errors = 0;
+  let usersDocs = {};
+  let offer = {};
+  let offerSize = 0;
+  for await (user of users) {
+    const userId = user._id.toString();
+    usersDocs[userId] = user;
+    offer[userId] = hashDocument(user).toString('base64');
+    offerSize += 1;
+
+    if (offerSize >= 100) {
+      let resp = await postJson('user/status', { users: offer });
+      if (resp.status === 200) {
+        const neededUserIDs = (await resp.json()).users;
+        for (const userId of neededUserIDs) {
+          const ok = await sendUser(usersDocs[userId]);
+          if (!ok) errors += 1;
+        };
+      }
+      else errors += offerSize;
+      console.log({ userCount: i, userErrors: errors, additions })
+      usersDocs = {};
+      offer = {};
+      offerSize = 0;
+    }
+  }
+  console.log({ userCount: i, userErrors: errors, additions })
+}
+
+async function sendCollections() {
+  const collections = await Collection
+    .find({})
+    .lean()
+    .cursor();
+
+  let i = 0;
+  let errors = 0;
+  let collectionsDocs = {};
+  let offer = {};
+  let offerSize = 0;
+  for await (collection of collections) {
+    const collectionId = collection._id.toString();
+    collectionsDocs[collectionId] = collection;
+    offer[collectionId] = hashDocument(collection).toString('base64');
+    offerSize += 1;
+
+    if (offerSize >= 100) {
+      let resp = await postJson('collection/status', { collections: offer });
+      if (resp.status === 200) {
+        const neededCollectionIDs = (await resp.json()).collections;
+        for (const collectionId of neededCollectionIDs) {
+          const ok = await sendCollection(collectionsDocs[collectionId]);
+          if (!ok) errors += 1;
+        };
+      }
+      else errors += offerSize;
+      console.log({ collectionCount: i, collectionErrors: errors, additions })
+      collectionsDocs = {};
+      offer = {};
+      offerSize = 0;
+    }
+  }
+  console.log({ collectionCount: i, collectionErrors: errors, additions })
+}
+
+async function sendScoreCaches() {
+  const scores = await ScoreCache
+    .find({})
+    .lean()
+    .cursor();
+
+  let i = 0;
+  let errors = 0;
+  for await (score of scores) {
+    const ok = await sendScoreCache(score);
+    if (!ok) errors += 1;
+    if (i % 100 == 0) console.log({ scoreCount: i, scoreErrors: errors, additions })
+  }
+}
+
 async function main() {
+  tasks = [sendUsers(), sendCollections(), sendScoreCaches()]
+  await Promise.all(tasks);
+
   const pool = new Pool(() => {}, 10);
-  pool.fn = (g) => runBatch(pool, g).catch((error) => console.log({ error, pool }));
+  pool.fn = (g) => sendAnalysisBatch(pool, g).catch((error) => console.log({ error, pool }));
 
   let last;
   if (/^[a-z0-9]{24}$/.test(process.argv[2])) {

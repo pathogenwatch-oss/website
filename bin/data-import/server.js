@@ -8,9 +8,11 @@ const morgan = require("morgan");
 
 const mongoConnection = require('utils/mongoConnection');
 const Genome = require('models/genome');
+const Collection = require('models/collection');
+const User = require('models/user');
 const objectStore = require('utils/object-store');
 
-const { hashGenome, deserializeGenome } = require('./common.js');
+const { hashGenome, hashDocument, deserializeBSON } = require('./common.js');
 
 function newPass() {
   return randomBytes(32)
@@ -102,7 +104,7 @@ app.post('/genome/status', asyncWrapper(async (req, res, next) => {
 
 app.post('/genome/:genomeId', asyncWrapper(async (req, res, next) => {
   const data = req.body;
-  const genome = deserializeGenome(data.genome);
+  const genome = deserializeBSON(data.genome);
   await Genome.collection.replaceOne({ _id: genome._id }, genome, { upsert: true });
   return res.send({ genomeId: genome._id });
 }));
@@ -127,12 +129,56 @@ app.post('/analysis/status', asyncWrapper(async (req, res, next) => {
   return res.status(200).send(output);
 }));
 
-app.post('/analysis/:task/:version/:fileId/:organismId', asyncWrapper(async (req, res, next) => {
+app.post('/analysis/:task/:version/:fileId/:organismId?', asyncWrapper(async (req, res, next) => {
   const data = req.body;
   const { task, version, fileId, organismId } = req.params;
   await objectStore.putAnalysis(task, version, fileId, organismId, data);
   storeCache.add(objectStore.analysisKey(task, version, fileId, organismId));
   return res.send({ ok: true });
+}));
+
+app.post('/collection/status', asyncWrapper(async (req, res, next) => {
+  const offer = req.body.collections;
+  const collectionIds = Object.keys(offer);
+  const missing = new Set(collectionIds);
+  if (collectionIds.length > 1000) return res.status(400).send(`Expected fewer than 1000 collection, got ${collectionIds.length}`);
+  const collections = Collection.find({ _id: { $in: collectionIds } }).lean().cursor();
+  for await (const collection of collections) {
+    const collectionId = collection._id.toString();
+    const digest = hashDocument(collection).toString('base64');
+    if (offer[collectionId] === digest) missing.delete(collectionId);
+    missing.delete(collectionId);
+  }
+  return res.status(200).send({ count: missing.size, collections: [ ...missing ] });
+}));
+
+app.post('/collection/:collectionId', asyncWrapper(async (req, res, next) => {
+  const data = req.body;
+  const collection = deserializeBSON(data.collection);
+  await Collection.collection.replaceOne({ _id: collection._id }, collection, { upsert: true });
+  return res.send({ collectionId: collection._id });
+}));
+
+app.post('/user/status', asyncWrapper(async (req, res, next) => {
+  const offer = req.body.users;
+  const userIds = Object.keys(offer);
+  const missing = new Set(userIds);
+  if (userIds.length > 1000) return res.status(400).send(`Expected fewer than 1000 user, got ${userIds.length}`);
+  const users = User.find({ _id: { $in: userIds } }).lean().cursor();
+  for await (const user of users) {
+    const userId = user._id.toString();
+    const digest = hashDocument(user).toString('base64');
+    if (offer[userId] === digest) missing.delete(userId);
+    missing.delete(userId);
+  }
+  return res.status(200).send({ count: missing.size, users: [ ...missing ] });
+}));
+
+app.post('/user/:userId', asyncWrapper(async (req, res, next) => {
+  const data = req.body;
+  const user = deserializeBSON(data.user);
+  await User.collection.replaceOne({ _id: user._id }, user, { upsert: true });
+  return res.send({ userId: user._id });
 }));
 
 app.post('/fasta/status', asyncWrapper(async (req, res, next) => {
