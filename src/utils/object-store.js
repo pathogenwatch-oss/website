@@ -139,7 +139,7 @@ class ObjectStore {
     const orderedGenomes = [...genomes];
     orderedGenomes.sort((a, b) => (a.fileId < b.fileId ? -1 : 1));
 
-    const analysisKeys = orderedGenomes.map(({ fileId, organismId }) => this.analysisKey('core-tree-score', `${versions.core}_${versions.tree}`, fileId, organismId));
+    const analysisKeys = orderedGenomes.map(({ fileId }) => this.analysisKey('core-tree-score', `${versions.core}_${versions.tree}`, fileId, undefined));
     for await (const value of this.iterGet(analysisKeys)) {
       if (value === undefined) continue;
       const doc = JSON.parse(value);

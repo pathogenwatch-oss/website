@@ -89,7 +89,7 @@ async function readScoreCache(versions, organismId, fileIds) {
   const sortedFileIds = [ ...fileIds ];
   sortedFileIds.sort();
 
-  const analysisKeys = sortedFileIds.map((fileId) => store.analysisKey('core-tree-score', `${versions.core}_${versions.tree}`, fileId, organismId));
+  const analysisKeys = sortedFileIds.map((fileId) => store.analysisKey('core-tree-score', `${versions.core}_${versions.tree}`, fileId, undefined));
 
   const fileIdLookup = {};
   sortedFileIds.forEach((fileId, i) => { fileIdLookup[fileId] = i; });
@@ -250,7 +250,7 @@ function planCacheLocations(cache) {
   }
 }
 
-async function updateScoreCache(versions, organismId, cache) {
+async function updateScoreCache(versions, cache) {
   planCacheLocations(cache);
 
   let updated = 0;
@@ -259,7 +259,7 @@ async function updateScoreCache(versions, organismId, cache) {
     const fileId = cache.fileIds[aIdx];
 
     // Fetch the existing cache for this fileId
-    const value = await store.getAnalysis('core-tree-score', `${versions.core}_${versions.tree}`, fileId, organismId);
+    const value = await store.getAnalysis('core-tree-score', `${versions.core}_${versions.tree}`, fileId, undefined);
     const update = value === undefined ? { fileId, versions, scores: {}, differences: {} } : JSON.parse(value);
 
     // Loop over the fileIds we've compared with it and descide if the cache will go into this document
@@ -295,7 +295,7 @@ async function updateScoreCache(versions, organismId, cache) {
     }
 
     if (cache.wasUpdated[aIdx]) {
-      await store.putAnalysis('core-tree-score', `${versions.core}_${versions.tree}`, fileId, organismId, update);
+      await store.putAnalysis('core-tree-score', `${versions.core}_${versions.tree}`, fileId, undefined, update);
       updated += 1;
     }
   }
@@ -396,7 +396,7 @@ async function handleContainerOutput(container, task, versions, metadata, genome
   }
 
   try {
-    await updateScoreCache(versions, metadata.organismId, cache);
+    await updateScoreCache(versions, cache);
   } catch (e) {
     request('collection', 'send-progress', { clientId, payload: { task, name, status: 'ERROR' } });
     reject(e);
