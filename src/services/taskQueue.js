@@ -17,10 +17,6 @@ mQueue.maxWorkers = 1;
 
 mQueue.databasePromise = () => Q.resolve(mongoose.connection);
 
-module.exports.setMaxWorkers = function (max = 1) {
-  mQueue.maxWorkers = max;
-};
-
 const queues = {
   clustering: 'clustering',
   collection: 'collection',
@@ -30,6 +26,67 @@ const queues = {
 
 module.exports.Queue = Queue;
 module.exports.queues = queues;
+
+class ResourceManager {
+  constructor (available) {
+    this.available = available;
+    this.allocated = {};
+    this.queue = [];
+    this.running = [];
+    this.nextId = 0;
+  }
+
+  request(resources) {
+    for (const key in resources) {
+      if ((this.available[key] || 0) < resources[key]) {
+        throw new Error(`key is limited to ${this.available[key]}; can never supply ${resources[key]}`)
+      }
+    }
+    const job = {
+      id = this.nextId++,
+      resources,
+    }
+
+    const releaseFn = (() => this.release(job.id)).bind(this)
+    output = new Promise(resolve => {
+      job.onReady = () => resolve(releaseFn);
+    })
+
+    this.queue.push(job);
+    this.__next();
+    return output
+  }
+
+  release(jobId) {
+    const job = this.running.find(j => j.id == jobId);
+    if (job === undefined) return this.__next();
+
+    this.running = this.running.filter(j => j.id !== jobId);
+    for (const key of job.resources) {
+      if (this.available[key] === undefined) continue
+      this.allocated[key] = Math.min(this.available[key], this.allocated[key] + job.resources[key])
+    }
+    this.__next();
+  }
+
+  __next() {
+    if (this.queue.length === 0) return;
+    
+    const nextJob = this.queue[0];
+    for (const key of nextJob.resources) {
+      if (this.available[key] < (this.allocated[key] + nextJob.resources[key])) return;
+    }
+    
+    this.queue.shift();
+    this.running.push(nextJob)
+    nextJob.onReady()
+  }
+}
+
+let resources;
+module.exports.setResources = (r) => {
+  resources = new ResourceManager(r);
+}
 
 module.exports.enqueue = function (queue, message, type = queue) {
   if (!(type in queues)) {
