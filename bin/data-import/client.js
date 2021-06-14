@@ -87,6 +87,7 @@ const additions = {
   user: 0,
   collection: 0,
   score: 0,
+  organism: 0,
 }
 
 async function sendFasta(fileId) {
@@ -127,6 +128,17 @@ async function sendCollection(collection) {
     const collectionId = collection._id.toString();
     const r = await postJson(`collection/${collectionId}`, { collection: serializeBSON(collection) });
     additions.collection += 1;
+    return r.status === 200;
+  } catch (err) {
+    return false;
+  }
+}
+
+async function sendOrganism(organism) {
+  try {
+    const organismId = organism._id.toString();
+    const r = await postJson(`organism/${organismId}`, { organism: serializeBSON(organism) });
+    additions.organism += 1;
     return r.status === 200;
   } catch (err) {
     return false;
@@ -357,10 +369,34 @@ async function sendScoreCaches() {
     if (!ok) errors += 1;
     if (i % 100 == 0) console.log({ scoreCount: i, scoreErrors: errors, additions })
   }
+
+  console.log({ scoreCount: i, scoreErrors: errors, additions })
+}
+
+async function sendOrganisms() {
+  const organisms = await Organism
+    .find({})
+    .lean()
+    .cursor();
+
+  let i = 0;
+  let errors = 0;
+  for await (organism of organisms) {
+    const ok = await sendOrganism(organism);
+    if (!ok) errors += 1;
+    if (i % 100 == 0) console.log({ organismCount: i, organismErrors: errors, additions })
+  }
+
+  console.log({ organismCount: i, organismErrors: errors, additions })
 }
 
 async function main() {
-  tasks = [sendUsers(), sendCollections(), sendScoreCaches()]
+  tasks = [
+    sendOrganisms(),
+    sendUsers(),
+    sendCollections(),
+    sendScoreCaches(),
+  ]
   await Promise.all(tasks);
 
   const pool = new Pool(() => {}, 10);

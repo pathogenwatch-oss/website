@@ -9,6 +9,7 @@ const morgan = require("morgan");
 const mongoConnection = require('utils/mongoConnection');
 const Genome = require('models/genome');
 const Collection = require('models/collection');
+const Organism = require('models/organism');
 const User = require('models/user');
 const objectStore = require('utils/object-store');
 
@@ -157,6 +158,13 @@ app.post('/collection/:collectionId', asyncWrapper(async (req, res, next) => {
   const collection = deserializeBSON(data.collection);
   await Collection.collection.replaceOne({ _id: collection._id }, collection, { upsert: true });
   return res.send({ collectionId: collection._id });
+}));
+
+app.post('/organism/:organismId', asyncWrapper(async (req, res, next) => {
+  const data = req.body;
+  const organism = deserializeBSON(data.organism);
+  await Organism.organism.replaceOne({ _id: organism._id }, organism, { upsert: true });
+  return res.send({ organismId: organism._id });
 }));
 
 app.post('/user/status', asyncWrapper(async (req, res, next) => {
