@@ -163,7 +163,7 @@ app.post('/collection/:collectionId', asyncWrapper(async (req, res, next) => {
 app.post('/organism/:organismId', asyncWrapper(async (req, res, next) => {
   const data = req.body;
   const organism = deserializeBSON(data.organism);
-  await Organism.organism.replaceOne({ _id: organism._id }, organism, { upsert: true });
+  await Organism.collection.replaceOne({ _id: organism._id }, organism, { upsert: true });
   return res.send({ organismId: organism._id });
 }));
 

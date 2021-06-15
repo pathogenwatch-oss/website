@@ -8,11 +8,15 @@ const mongoose = require('mongoose');
 
 const mongoConnection = require('utils/mongoConnection');
 const Genome = require('models/genome');
+const Collection = require('models/collection');
+const Organism = require('models/organism');
+const User = require('models/user');
+const ScoreCache = require('models/scoreCache');
 const Analysis = require('models/analysis');
 const fastaStore = require('utils/fasta-store');
 
 const Pool = require('./concurrentWorkers');
-const { b64encode, hashGenome, serializeBSON } = require('./common');
+const { b64encode, hashGenome, hashDocument, serializeBSON } = require('./common');
 const { name, pass, baseUrl: _url } = require('./env.json');
 
 const { ObjectId } = mongoose.Types;
@@ -54,11 +58,12 @@ async function request(path, args = {}) {
       if (r.status >= 200 && r.status < 500) return r;
     } catch (e) {
       error = e;
+      if ('timeout' in error) updatedArgs.timeout *= 1.5;
     }
     await sleep(2000);
   }
   if (DEBUG) console.log({ path, error: (error || {}).message, status: (r || {}).status });
-  if (error !== undefined) throw error;
+  if (error !== undefined) return { status: 500, error };
   return r;
 }
 
@@ -80,23 +85,37 @@ function listAnalyses(genome) {
   return output;
 }
 
-const additions = {
-  fasta: 0,
-  genome: 0,
-  analysis: 0,
-  user: 0,
-  collection: 0,
-  score: 0,
-  organism: 0,
+const stats = {
+  additions: {
+    fasta: 0,
+    genome: 0,
+    user: 0,
+    collection: 0,
+    organism: 0,
+    score: 0,
+    analysis: 0,
+  },
+  errors: {
+    fasta: 0,
+    genome: 0,
+    user: 0,
+    collection: 0,
+    organism: 0,
+    score: 0,
+    analysis: 0,
+    status: 0,
+  }
 }
 
 async function sendFasta(fileId) {
   try {
     const stream = fastaStore.fetch(fileId);
     const r = await request(`fasta/${fileId}`, { method: 'POST', body: stream, headers: { 'Content-Type': 'application/octet-stream' } });
-    additions.fasta += 1;
+    if (r.status === 200) stats.additions.fasta += 1;
+    else stats.errors.fasta += 1;
     return r.status === 200;
   } catch (err) {
+    stats.errors.fasta += 1;
     return false;
   }
 }
@@ -105,9 +124,11 @@ async function sendGenome(genome) {
   try {
     const genomeId = genome._id.toString();
     const r = await postJson(`genome/${genomeId}`, { genome: serializeBSON(genome) });
-    additions.genome += 1;
+    if (r.status === 200) stats.additions.genome += 1;
+    else stats.errors.genome += 1;
     return r.status === 200;
   } catch (err) {
+    stats.errors.genome += 1;
     return false;
   }
 }
@@ -116,9 +137,11 @@ async function sendUser(user) {
   try {
     const userId = user._id.toString();
     const r = await postJson(`user/${userId}`, { user: serializeBSON(user) });
-    additions.user += 1;
+    if (r.status === 200) stats.additions.user += 1;
+    else stats.errors.user += 1;
     return r.status === 200;
   } catch (err) {
+    stats.errors.user += 1;
     return false;
   }
 }
@@ -127,9 +150,11 @@ async function sendCollection(collection) {
   try {
     const collectionId = collection._id.toString();
     const r = await postJson(`collection/${collectionId}`, { collection: serializeBSON(collection) });
-    additions.collection += 1;
+    if (r.status === 200) stats.additions.collection += 1;
+    else stats.errors.collection += 1;
     return r.status === 200;
   } catch (err) {
+    stats.errors.collection += 1;
     return false;
   }
 }
@@ -138,9 +163,11 @@ async function sendOrganism(organism) {
   try {
     const organismId = organism._id.toString();
     const r = await postJson(`organism/${organismId}`, { organism: serializeBSON(organism) });
-    additions.organism += 1;
+    if (r.status === 200) stats.additions.organism += 1;
+    else stats.errors.organism += 1;
     return r.status === 200;
   } catch (err) {
+    stats.errors.organism += 1;
     return false;
   }
 }
@@ -150,10 +177,12 @@ async function sendScoreCache(score) {
   const task = 'core-tree-score';
   const version = `${versions.core}_${versions.tree}`;
   try {
-    const r = await postJson(`analysis/${task}/${version}/${fileId}/`, doc);
-    additions.analyscoresis += 1;
+    const r = await postJson(`analysis/${task}/${version}/${fileId}/`, score);
+    if (r.status === 200) stats.additions.score += 1;
+    else stats.errors.score += 1;
     return r.status === 200;
   } catch (err) {
+    stats.errors.score += 1;
     return false;
   }
 }
@@ -166,9 +195,11 @@ async function sendAnalysis({ task, version, fileId, organismId }) {
     if (doc === undefined || doc === null) return false;
     delete doc._id;
     const r = await postJson(`analysis/${task}/${version}/${fileId}/${organismId}`, doc);
-    additions.analysis += 1;
+    if (r.status === 200) stats.additions.analysis += 1;
+    else stats.errors.analysis += 1;
     return r.status === 200;
   } catch (err) {
+    stats.errors.analysis += 1;
     return false;
   }
 }
@@ -185,7 +216,7 @@ async function fetchMissingAnalysis({ number = 10, last }) {
   };
   if (last) query._id = { $gt: last };
 
-  const genomes = Genome
+  const cursor = Genome
     .find(query)
     .sort('_id')
     .limit(number)
@@ -201,7 +232,7 @@ async function fetchMissingAnalysis({ number = 10, last }) {
   let lastGenomeId;
   let more = false;
   const genomesDocs = {};
-  for await (const genome of genomes) {
+  for (let genome = await cursor.next(); genome !== null; genome = await cursor.next()) {
     genomeCount += 1;
     more = true;
     const genomeId = genome._id.toString();
@@ -216,6 +247,7 @@ async function fetchMissingAnalysis({ number = 10, last }) {
   let resp = await postJson('genome/status', { genomes: offer });
   if (resp.status === 200) {
     const neededGenomeIDs = (await resp.json()).genomes;
+    stats.additions.genome += (Object.keys(offer).length - neededGenomeIDs.length)
     for (const genomeId of neededGenomeIDs) needed.push({ type: 'genome', genomeId, params: genomesDocs[genomeId] });
   }
   else errors.push('fetch genomes');
@@ -223,6 +255,7 @@ async function fetchMissingAnalysis({ number = 10, last }) {
   resp = await postJson('analysis/status', { analyses: Object.values(analyses) });
   if (resp.status === 200) {
     const neededAnalyses = (await resp.json()).analyses;
+    stats.additions.analysis += (Object.keys(analyses).length - neededAnalyses.length)
     for (const { genomeId, ...params } of neededAnalyses) needed.push({ type: 'analysis', genomeId, params });
   }
   else errors.push('fetch analyses');
@@ -230,6 +263,7 @@ async function fetchMissingAnalysis({ number = 10, last }) {
   resp = await postJson('fasta/status', { fileIds: Object.keys(fileIds) });
   if (resp.status === 200) {
     const neededFileIds = (await resp.json()).fileIds;
+    stats.additions.fasta += (Object.keys(fileIds).length - neededFileIds.length)
     for (const fileId of neededFileIds) needed.push({ type: 'fasta', genomeId: fileIds[fileId], params: fileId })
   }
   else errors.push('fetch fileIds');
@@ -245,10 +279,10 @@ async function fetchMissingAnalysis({ number = 10, last }) {
 }
 
 async function sendAnalysisBatch(pool, last) {
-  const r = await fetchMissingAnalysis({ number: 100, last });
+  const r = await fetchMissingAnalysis({ number: 10, last });
 
   const { needed, errors: fetchErrors } = r;
-  errorCount += fetchErrors.length;
+  stats.errors.status += fetchErrors.length;
   if (fetchErrors.length > 0) {
     console.log({ fetchErrors });
     await sleep(10 * 1000);
@@ -268,7 +302,6 @@ async function sendAnalysisBatch(pool, last) {
     else if (type === 'analysis') ok = await sendAnalysis(params);
     if (!ok) {
       errors.push({ genomeId, type });
-      errorCount += 1;
       console.log({ error: { genomeId, type } });
       if (errors.length > 20) {
         console.log(`Starting again from ${last} after ${errors.length} errors`);
@@ -278,24 +311,24 @@ async function sendAnalysisBatch(pool, last) {
       }
     }
     count += 1;
-    if (count % 100 === 0) console.log({ genomeCount, count, ok: { genomeId, type }, additions, queue: pool.size });
+    if (count % 100 === 0) console.log({ genomeCount, count, ok: { genomeId, type }, stats, queue: pool.size });
   }
 
-  console.log({ genomeCount, more: r.more, last: r.last, newErrors: errors.length, errors: errorCount, additions, queue: pool.size  });
+  console.log({ genomeCount, more: r.more, last: r.last, newErrors: errors.length, stats, queue: pool.size  });
 }
 
 async function sendUsers() {
-  const users = await User
+  const usersExpected = await User.count({});
+  const cursor = User
     .find({})
     .lean()
     .cursor();
 
   let i = 0;
-  let errors = 0;
   let usersDocs = {};
   let offer = {};
   let offerSize = 0;
-  for await (user of users) {
+  for (let user = await cursor.next(); user !== null; user = await cursor.next()) {
     const userId = user._id.toString();
     usersDocs[userId] = user;
     offer[userId] = hashDocument(user).toString('base64');
@@ -305,33 +338,34 @@ async function sendUsers() {
       let resp = await postJson('user/status', { users: offer });
       if (resp.status === 200) {
         const neededUserIDs = (await resp.json()).users;
+        stats.additions.user += (Object.keys(offer).length - neededUserIDs.length)
         for (const userId of neededUserIDs) {
-          const ok = await sendUser(usersDocs[userId]);
-          if (!ok) errors += 1;
+          await sendUser(usersDocs[userId]);
+          i++;
         };
       }
-      else errors += offerSize;
-      console.log({ userCount: i, userErrors: errors, additions })
+      else stats.errors.status += offerSize;
+      console.log({ userCount: i, usersExpected, stats })
       usersDocs = {};
       offer = {};
       offerSize = 0;
     }
   }
-  console.log({ userCount: i, userErrors: errors, additions })
+  console.log({ userCount: i, usersExpected, stats })
 }
 
 async function sendCollections() {
-  const collections = await Collection
+  const collectionExpected = await Collection.count({});
+  const cursor = Collection
     .find({})
     .lean()
     .cursor();
 
   let i = 0;
-  let errors = 0;
   let collectionsDocs = {};
   let offer = {};
   let offerSize = 0;
-  for await (collection of collections) {
+  for (let collection = await cursor.next(); collection !== null; collection = await cursor.next()) {
     const collectionId = collection._id.toString();
     collectionsDocs[collectionId] = collection;
     offer[collectionId] = hashDocument(collection).toString('base64');
@@ -341,63 +375,75 @@ async function sendCollections() {
       let resp = await postJson('collection/status', { collections: offer });
       if (resp.status === 200) {
         const neededCollectionIDs = (await resp.json()).collections;
+        stats.additions.collection += (Object.keys(offer).length - neededCollectionIDs.length)
         for (const collectionId of neededCollectionIDs) {
-          const ok = await sendCollection(collectionsDocs[collectionId]);
-          if (!ok) errors += 1;
+          await sendCollection(collectionsDocs[collectionId]);
+          i++;
         };
       }
       else errors += offerSize;
-      console.log({ collectionCount: i, collectionErrors: errors, additions })
+      console.log({ collectionCount: i, collectionExpected, stats })
       collectionsDocs = {};
       offer = {};
       offerSize = 0;
     }
   }
-  console.log({ collectionCount: i, collectionErrors: errors, additions })
+  console.log({ collectionCount: i, collectionExpected, stats })
 }
 
 async function sendScoreCaches() {
-  const scores = await ScoreCache
+  const scoreExpected = await ScoreCache.count({});
+  const cursor = ScoreCache
     .find({})
     .lean()
     .cursor();
 
-  let i = 0;
-  let errors = 0;
-  for await (score of scores) {
-    const ok = await sendScoreCache(score);
-    if (!ok) errors += 1;
-    if (i % 100 == 0) console.log({ scoreCount: i, scoreErrors: errors, additions })
+  async function* gen() {
+    for (let score = await cursor.next(); score !== null; score = await cursor.next()) {
+      yield score
+    }
   }
 
-  console.log({ scoreCount: i, scoreErrors: errors, additions })
+  const scores = gen()
+  
+  let i = 0;
+  async function worker() {
+    for await (const score of scores) {
+      await sendScoreCache(score);
+      i++
+      if (i % 100 == 0) console.log({ scoreCount: i, scoreExpected, stats })
+    }
+  }
+
+  const workers = []
+  for (let i = 0; i < 10; i++) workers.push(worker())
+  await Promise.all(workers)
+
+  console.log({ scoreCount: i, scoreExpected, stats })
 }
 
 async function sendOrganisms() {
-  const organisms = await Organism
-    .find({})
-    .lean()
-    .cursor();
-
+  const organismExpected = await Organism.count({});
+  const cursor = Organism.find({}).lean().cursor();
   let i = 0;
-  let errors = 0;
-  for await (organism of organisms) {
-    const ok = await sendOrganism(organism);
-    if (!ok) errors += 1;
-    if (i % 100 == 0) console.log({ organismCount: i, organismErrors: errors, additions })
+  
+  for (let organism = await cursor.next(); organism !== null; organism = await cursor.next()) {
+    await sendOrganism(organism);
+    i++
+    if (i % 100 == 0) console.log({ organismCount: i, stats })
   }
 
-  console.log({ organismCount: i, organismErrors: errors, additions })
+  console.log({ organismCount: i, organismExpected, stats })
 }
 
 async function main() {
-  tasks = [
+  const tasks = [
     sendOrganisms(),
     sendUsers(),
     sendCollections(),
-    sendScoreCaches(),
   ]
   await Promise.all(tasks);
+  // await sendScoreCaches()
 
   const pool = new Pool(() => {}, 10);
   pool.fn = (g) => sendAnalysisBatch(pool, g).catch((error) => console.log({ error, pool }));
@@ -412,7 +458,7 @@ async function main() {
   }
 
   await pool.wait();
-  console.log("End", { genomeCount, errors: errorCount, additions, queue: pool.size  });
+  console.log("End", { genomeCount, stats, queue: pool.size  });
 }
 
 if (require.main === module) {
