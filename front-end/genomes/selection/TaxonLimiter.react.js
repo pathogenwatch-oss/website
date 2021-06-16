@@ -12,7 +12,7 @@ const TaxonLimiter = ({ type, organismId, amount, children }) => {
 
   if (amount > limit) {
     return (
-      <Sorry type={'maxCollectionSize'} amount={amount} limit={limit} />
+      <Sorry type={'maxCollectionSize'} amount={amount} limit={limit} feature={'collections of this organism'} />
     );
   }
 

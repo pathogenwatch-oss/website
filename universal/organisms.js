@@ -9,5 +9,5 @@ module.exports = [
   { id: '498019', speciesId: '498019', genusId: '36910', nickname: 'canar' },
   { id: '64320', speciesId: '64320', genusId: '11051', nickname: 'zikv', simple: true },
   { id: '90370', speciesId: '28901', genusId: '590', nickname: 'styphi' },
-  { id: '2697049', speciesId: '694009', genusId: '694002', nickname: 'sarscov2', maxCollectionSize: 5 },
+  { id: '2697049', speciesId: '694009', genusId: '694002', nickname: 'sarscov2', maxCollectionSize: 1000 },
 ];
