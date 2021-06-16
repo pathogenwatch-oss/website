@@ -3,6 +3,7 @@ const manifest = require('../../manifest');
 const { ServiceRequestError, ServiceRequestErrorJSON } = require('utils/errors');
 
 const { maxCollectionSize = 1000 } = require('configuration');
+const organismConfigs = require('../../../universal/organisms');
 
 module.exports = async function ({ genomeIds, organismId, user }) {
   if (!user) {
@@ -24,9 +25,15 @@ module.exports = async function ({ genomeIds, organismId, user }) {
   if (!task) throw new ServiceRequestError('Unsupported organism');
 
   const size = genomeIds.length;
-  const maxSize = user.limits && user.limits.maxCollectionSize || maxCollectionSize;
+  // Should be unnecessary as is set the middleware function.
+
+  const config = organismConfigs.find(({ id }) => id === organismId);
+  const systemMaxSize = 'maxCollectionSize' in config ? config.maxCollectionSize : maxCollectionSize;
+  const maxSize = user.limits && user.limits.maxCollectionSize && user.limits.maxCollectionSize[organismId] || systemMaxSize;
   if (maxSize !== null && size > maxSize) {
-    throw new ServiceRequestError('Too many genome IDs provided');
+    throw new ServiceRequestErrorJSON(`Too many assemblies provided - the maximum collection size for this organism is ${maxSize}. Please reduce the size of your selection and try again.`, {
+      status: 'ERROR',
+    });
   }
 
   const completeGenomesQuery = {};
@@ -52,7 +59,7 @@ module.exports = async function ({ genomeIds, organismId, user }) {
   ]);
 
   if (errors > 0) {
-    throw new ServiceRequestErrorJSON(`${task.requires.map((x) => x.task)} results failed`, {
+    throw new ServiceRequestErrorJSON(`${task.requires.map((x) => x.task)} results failed. Please resubmit your genomes to try again.`, {
       status: 'ERROR',
     });
   }

@@ -3,7 +3,6 @@
 module.exports = {
   "extends": [
     "cgps",
-    "cgps/react",
   ],
 
   "parser": "babel-eslint",

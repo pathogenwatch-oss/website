@@ -29,4 +29,11 @@ export const getCollectionSummary = createSelector(
   }
 );
 
+export const getCollectionSummaryOrganismId = createSelector(
+  getCollectionSummary,
+  (summary) => {
+    return summary.organismId;
+  }
+);
+
 export const getCollectionMetadata = state => state.genomes.collectionMetadata;

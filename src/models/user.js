@@ -11,7 +11,7 @@ const schema = new Schema({
   lastAccessedAt: Date,
   lastUpdatedAt: Date,
   limits: {
-    maxCollectionSize: Number,
+    maxCollectionSize: Object,
     maxDownloadSize: Number,
   },
   name: String,
