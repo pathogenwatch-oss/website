@@ -4,7 +4,7 @@
 
 const slug = require('slug');
 const BSON = require('bson');
-const { Readable } = require('stream');
+const { Readable, Writable } = require('stream');
 const readline = require('readline');
 
 const bson = new BSON();
@@ -95,87 +95,78 @@ async function handleContainerOutput(container, spec, metadata) {
   const hasContent = (a) => Array.isArray(a) && a.length > 0;
 
   let lastProgress = 0;
-  for await (const line of lines) {
-    if (!line) continue;
-    if (line.indexOf('progress') === -1 && line.indexOf('lambda') === -1) continue;
-    try {
-      const doc = JSON.parse(line);
-      if (doc.progress) {
-        const progress = doc.progress * 0.99;
-        if ((progress - lastProgress) >= 0.1) {
-          await request('clustering', 'send-progress', { taskId, payload: { task, status: 'IN PROGRESS', message: doc.message, progress } });
-          lastProgress = progress;
+
+  const handler = new Writable({
+    objectMode: true,
+    async write(line, _, done) {
+      if (!line) return done();
+      if (line.indexOf('progress') === -1 && line.indexOf('lambda') === -1) return done();
+      try {
+        const doc = JSON.parse(line);
+        if (doc.progress) {
+          const progress = doc.progress * 0.99;
+          if ((progress - lastProgress) >= 0.1) {
+            await request('clustering', 'send-progress', { taskId, payload: { task, status: 'IN PROGRESS', message: doc.message, progress } });
+            lastProgress = progress;
+          }
+        } else if (doc.STs) {
+          results.edges = { ...doc.edges, ...results.edges };
+          results.threshold = results.threshold || doc.threshold;
+          if (hasContent(doc.pi)) results.pi = doc.pi;
+          if (hasContent(doc.lambda)) results.lambda = doc.lambda;
+          if (hasContent(doc.STs)) results.STs = doc.STs;
         }
-      } else if (doc.STs) {
-        results.edges = { ...doc.edges, ...results.edges };
-        results.threshold = results.threshold || doc.threshold;
-        if (hasContent(doc.pi)) results.pi = doc.pi;
-        if (hasContent(doc.lambda)) results.lambda = doc.lambda;
-        if (hasContent(doc.STs)) results.STs = doc.STs;
+      } catch (e) {
+        LOGGER.error(e);
+        await request('clustering', 'send-progress', { taskId, payload: { task, status: 'ERROR' } });
+        return done(e);
       }
-    } catch (e) {
-      LOGGER.error(e);
-      await request('clustering', 'send-progress', { taskId, payload: { task, status: 'ERROR' } });
-      throw e;
     }
-  }
-  const fullVersion = `${version}-${slug(scheme, { lower: true })}`;
-  await store.putAnalysis('cgmlst-clustering', fullVersion, userId ? userId.toString() : 'public', undefined, results);
+  })
+
+  handler.on('error', () => {});
+  handler.on('close', () => {
+    const fullVersion = `${version}-${slug(scheme, { lower: true })}`;
+    await store.putAnalysis('cgmlst-clustering', fullVersion, userId ? userId.toString() : 'public', undefined, results);
+  })
+  Readable.from(lines).pipe(handler)
 }
 
-function handleContainerExit(container, spec, metadata) {
+async function handleContainerExit(container, spec, metadata) {
   const { task, version } = spec;
   const { userId, scheme, taskId } = metadata;
-  let startTime = process.hrtime();
-  let resolve;
-  let reject;
-  const output = new Promise((_resolve, _reject) => {
-    resolve = _resolve;
-    reject = _reject;
-  });
 
-  container.on('spawn', (containerId) => {
-    startTime = process.hrtime();
-    LOGGER.info('spawn', containerId, 'running task', task);
-  });
+  await container.start();
+  startTime = process.hrtime();
+  LOGGER.info('spawn', container.id, 'running task', task);
 
-  container.on('exit', (exitCode) => {
-    LOGGER.info('exit', exitCode);
+  const { StatusCode: statusCode } = await container.wait()
 
-    const [ durationS, durationNs ] = process.hrtime(startTime);
-    const duration = Math.round(durationS * 1000 + durationNs / 1e6);
-    TaskLog.create({ task, version, userId, scheme, duration, exitCode });
+  LOGGER.info('exit', statusCode);
 
-    if (exitCode !== 0) {
-      request('clustering', 'send-progress', { taskId, payload: { task, status: 'ERROR' } });
-      container.stderr.setEncoding('utf8');
-      reject(new Error(container.stderr.read()));
-    } else {
-      resolve();
-    }
-  });
+  const [ durationS, durationNs ] = process.hrtime(startTime);
+  const duration = Math.round(durationS * 1000 + durationNs / 1e6);
+  TaskLog.create({ task, version, userId, scheme, duration, statusCode });
 
-  container.on('error', (e) => {
-    request('clustering', 'send-progress', { taskId, payload: { task, status: 'ERROR' } });
-    reject(e);
-  });
-
-  return output;
+  if (statusCode !== 0) {
+    await request('clustering', 'send-progress', { taskId, payload: { task, status: 'ERROR' } });
+    container.stderr.setEncoding('utf8');
+    throw new Error(container.stderr.read());
+  }
 }
 
-function createContainer(spec, timeout) {
+function createContainer(spec, timeout, resources={}) {
   const { task, version } = spec;
-
   LOGGER.debug(`Starting container of ${task}:${version}`);
-  const container = docker(getImageName(task, version), {}, timeout);
+  const container = docker(getImageName(task, version), {}, timeout, resources);
 
   return container;
 }
 
-async function runTask(spec, metadata, timeout) {
+async function runTask(spec, metadata, timeout, resources) {
   const cgmlstKeys = await getCgmlstKeys(metadata);
 
-  const container = createContainer(spec, timeout);
+  const container = createContainer(spec, timeout, resources);
   const whenOutput = handleContainerOutput(container, spec, metadata);
   const whenExit = handleContainerExit(container, spec, metadata);
   await attachInputStream(container, spec, metadata, cgmlstKeys);
@@ -184,11 +175,11 @@ async function runTask(spec, metadata, timeout) {
   await whenOutput;
 }
 
-module.exports = async function handleMessage({ spec, metadata, timeout$: timeout = DEFAULT_TIMEOUT }) {
+module.exports = async function handleMessage({ spec, metadata, timeout$: timeout = DEFAULT_TIMEOUT, resources }) {
   const { taskId } = metadata;
   const { task } = spec;
   try {
-    await runTask(spec, metadata, timeout);
+    await runTask(spec, metadata, timeout, resources);
     return;
   } catch (error) {
     request('clustering', 'send-progress', { taskId, payload: { task, status: 'ERROR' } });

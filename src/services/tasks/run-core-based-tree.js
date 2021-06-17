@@ -5,7 +5,7 @@
 const BSON = require('bson');
 
 const bson = new BSON();
-const { Readable } = require('stream');
+const { Readable, Writable } = require('stream');
 const readline = require('readline');
 
 const Collection = require('models/collection');
@@ -357,96 +357,94 @@ async function handleContainerOutput(container, task, versions, metadata, genome
   let lastProgress = 0;
   let newick;
 
-  for await (const line of lines) {
-    if (!line) continue;
+  const handler = new Writable({
+    objectMode: true,
+    async write(line, _, done) {
+      if (!line) return done();
+      try {
+        const doc = JSON.parse(line);
+        if (doc.fileId && doc.scores) {
+          cache.update(doc);
+          const progress = doc.progress * 0.99;
+          if ((progress - lastProgress) >= 1) {
+            request('collection', 'send-progress', { clientId, payload: { task, name, progress } });
+            lastProgress = progress;
+          }
+        }
+        else if (doc.progress) {
+          const progress = doc.progress * 0.99;
+          if ((progress - lastProgress) >= 1) {
+            request('collection', 'send-progress', { clientId, payload: { task, name, progress } });
+            lastProgress = progress;
+          }
+        }
+        else {
+          newick = doc.newick;
+          return done();
+        }
+      } catch (e) {
+        request('collection', 'send-progress', { clientId, payload: { task, name, status: 'ERROR' } });
+        reject(e);
+      }
+    }
+  })
+
+  handler.on('close', () => {
+    let populationSize = 0;
+    if (task === 'subtree') {
+      for (const { population } of genomes) {
+        if (population) {
+          populationSize += 1;
+        }
+      }
+    }
+
     try {
-      const doc = JSON.parse(line);
-      if (doc.fileId && doc.scores) {
-        cache.update(doc);
-        const progress = doc.progress * 0.99;
-        if ((progress - lastProgress) >= 1) {
-          request('collection', 'send-progress', { clientId, payload: { task, name, progress } });
-          lastProgress = progress;
-        }
-      }
-      else if (doc.progress) {
-        const progress = doc.progress * 0.99;
-        if ((progress - lastProgress) >= 1) {
-          request('collection', 'send-progress', { clientId, payload: { task, name, progress } });
-          lastProgress = progress;
-        }
-      }
-      else {
-        newick = doc.newick;
-        break;
-      }
+      await updateScoreCache(versions, cache);
     } catch (e) {
       request('collection', 'send-progress', { clientId, payload: { task, name, status: 'ERROR' } });
       reject(e);
     }
-  }
 
-  let populationSize = 0;
-  if (task === 'subtree') {
-    for (const { population } of genomes) {
-      if (population) {
-        populationSize += 1;
-      }
-    }
-  }
-
-  try {
-    await updateScoreCache(versions, cache);
-  } catch (e) {
-    request('collection', 'send-progress', { clientId, payload: { task, name, status: 'ERROR' } });
-    reject(e);
-  }
-
-  resolve({
-    newick,
-    populationSize,
-    name: metadata.name,
-    size: genomes.length,
-    versions,
-  });
-
+    resolve({
+      newick,
+      populationSize,
+      name: metadata.name,
+      size: genomes.length,
+      versions,
+    });
+  })
+  Readable.from(lines).pipe(handler);
 }
 
-function handleContainerExit(container, task, versions, metadata, reject) {
+async function handleContainerExit(container, task, versions, metadata, reject) {
   const { organismId, collectionId, clientId, name } = metadata;
-  let startTime = process.hrtime();
 
-  container.on('spawn', (containerId) => {
-    startTime = process.hrtime();
-    LOGGER.info('spawn', containerId, 'running task', task, 'for collection', collectionId);
-  });
+  await container.start();
+  const startTime = process.hrtime();
+  LOGGER.info('spawn', container.id, 'running task', task, 'for collection', collectionId);
 
-  container.on('exit', (exitCode) => {
-    LOGGER.info('exit', exitCode);
+  const { StatusCode: statusCode } = await container.wait();
+  LOGGER.info('exit', exitCode);
 
-    const [ durationS, durationNs ] = process.hrtime(startTime);
-    const duration = Math.round(durationS * 1000 + durationNs / 1e6);
-    TaskLog.create({ collectionId, task, version: versions.tree, organismId, duration, exitCode });
+  const [ durationS, durationNs ] = process.hrtime(startTime);
+  const duration = Math.round(durationS * 1000 + durationNs / 1e6);
+  TaskLog.create({ collectionId, task, version: versions.tree, organismId, duration, exitCode });
 
-    if (exitCode !== 0) {
-      request('collection', 'send-progress', { clientId, payload: { task, name, status: 'ERROR' } });
-      container.stderr.setEncoding('utf8');
-      reject(new Error(container.stderr.read()));
-    }
-  });
-
-  container.on('error', (e) => {
+  if (exitCode !== 0) {
     request('collection', 'send-progress', { clientId, payload: { task, name, status: 'ERROR' } });
-    reject(e);
-  });
+    container.stderr.setEncoding('utf8');
+    reject(new Error(container.stderr.read()));
+  }
 }
 
-function createContainer(spec, metadata, timeout) {
+function createContainer(spec, metadata, timeout, resources) {
   const { task, version, workers } = spec;
   const { organismId, collectionId } = metadata;
 
-  const container = docker(getImageName(task, version), {
-    env: {
+  const container = docker(
+    getImageName(task, version),
+    {
       PW_ORGANISM_TAXID: organismId,
       PW_COLLECTION_ID: collectionId,
       PW_WORKERS: workers,
@@ -455,13 +453,15 @@ function createContainer(spec, metadata, timeout) {
       WGSA_COLLECTION_ID: collectionId,
       WGSA_WORKERS: workers,
     },
-  }, timeout);
+    timeout,
+    resources,
+  );
 
   return container;
 }
 
 async function runTask(spec, metadata, timeout) {
-  const { task, version, requires: taskRequires = [] } = spec;
+  const { task, version, requires: taskRequires = [], resources={} } = spec;
   const coreVersion = taskRequires.find((_) => _.task === 'core').version;
   const versions = { tree: version, core: coreVersion };
 
@@ -478,7 +478,7 @@ async function runTask(spec, metadata, timeout) {
   }
 
   return new Promise((resolve, reject) => {
-    const container = createContainer(spec, metadata, timeout);
+    const container = createContainer(spec, metadata, timeout, resources);
     let onCache;
     const cachePromise = new Promise((_) => { onCache = _; });
 

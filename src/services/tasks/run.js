@@ -1,3 +1,5 @@
+const { Writable } = require("stream");
+
 const fastaStorage = require('utils/fasta-store');
 
 const TaskLog = require('models/taskLog');
@@ -18,74 +20,78 @@ const random = () => Math.random().toString(36).slice(2, 10);
 
 const slugify = (task) => task.replace(/[^a-zA-Z0-9]+/g, '_').replace(/[_]+/g, '_').replace(/_$/g, '');
 
-function runTask({ fileId, task, version, organismId, speciesId, genusId, timeout }) {
+async function runTask({ fileId, task, version, organismId, speciesId, genusId, timeout }) {
   if (process.env.KEEP_TASK_CONTAINERS === 'true') {
     LOGGER.warn(`Creating a container which will not be removed on completion`);
   }
-  return new Promise((resolve, reject) => {
-    const startTime = process.hrtime();
-    const container = docker(
-      getImageName(task, version),
-      {
-        name: `${slugify(task)}_${random()}`,
-        remove: process.env.KEEP_TASK_CONTAINERS !== 'true',
-        env: {
-          PW_ORGANISM_TAXID: organismId,
-          PW_SPECIES_TAXID: speciesId,
-          PW_GENUS_TAXID: genusId,
-          PW_FILE_ID: fileId,
-          // TODO: remove old API
-          WGSA_ORGANISM_TAXID: organismId,
-          WGSA_SPECIES_TAXID: speciesId,
-          WGSA_GENUS_TAXID: genusId,
-          WGSA_FILE_ID: fileId,
-        },
-      },
-      timeout
-    );
-    try {
-      const stream = fastaStorage.fetch(fileId);
-      stream.on('error', (err) => {
-        LOGGER.info('Error in input stream, destroying container.');
-        container.destroy(() => reject(err));
-      });
-      stream.pipe(container.stdin);
-    } catch (err) {
-      LOGGER.info('Error at input stage, destroying container.');
-      return container.destroy(() => reject(err));
+
+  const container = docker(
+    getImageName(task, version),
+    {
+      PW_ORGANISM_TAXID: organismId,
+      PW_SPECIES_TAXID: speciesId,
+      PW_GENUS_TAXID: genusId,
+      PW_FILE_ID: fileId,
+      // TODO: remove old API
+      WGSA_ORGANISM_TAXID: organismId,
+      WGSA_SPECIES_TAXID: speciesId,
+      WGSA_GENUS_TAXID: genusId,
+      WGSA_FILE_ID: fileId,
+    },
+    timeout,
+    resources,
+    {
+      name: `${slugify(task)}_${random()}`,
+      AutoRemove: process.env.KEEP_TASK_CONTAINERS !== 'true',
     }
-    const buffer = [];
-    container.stdout.on('data', (data) => {
-      buffer.push(data.toString());
-    });
-    container.on('exit', (exitCode) => {
-      LOGGER.info('exit', exitCode);
+  );
 
-      const [ durationS, durationNs ] = process.hrtime(startTime);
-      const duration = Math.round(durationS * 1000 + durationNs / 1e6);
-      TaskLog.create({ fileId, task, version, organismId, speciesId, genusId, duration, exitCode });
+  let buffer = [];
+  const bufferOutput = new Writable({
+    write(chunk, _, next) {
+      buffer.push(chunk);
+      next();
+    }
+  })
+  container.stdout.pipe(bufferOutput);
 
-      if (exitCode !== 0) {
-        container.stderr.setEncoding('utf8');
-        return reject(new Error(container.stderr.read()));
-      } else if (buffer.length === 0) {
-        return reject(new Error('No output received.'));
-      } else {
-        let output;
-        try {
-          output = JSON.parse(buffer.join(''));
-        } catch (e) {
-          return reject(e);
-        }
-        return resolve(output);
-      }
+  const startTime = process.hrtime();
+  await container.start();
+  LOGGER.info('spawn', container.id, 'for task', task, 'file', fileId, 'organismId', organismId);
+  
+  try {
+    const stream = fastaStorage.fetch(fileId);
+    stream.on('error', (err) => {
+      LOGGER.info('Error in input stream, destroying container.');
+      container.kill();
     });
-    container.on('spawn', (containerId) => {
-      LOGGER.info('spawn', containerId, 'for task', task, 'file', fileId, 'organismId', organismId);
-    });
-    container.on('error', reject);
-    return undefined;
-  });
+    stream.pipe(container.stdin);
+  } catch (err) {
+    LOGGER.info('Error at input stage, destroying container.');
+    return container.kill();
+  }
+
+  const { StatusCode: statusCode } = await container.wait();
+  LOGGER.info('exit', statusCode);
+
+  const [ durationS, durationNs ] = process.hrtime(startTime);
+  const duration = Math.round(durationS * 1000 + durationNs / 1e6);
+  TaskLog.create({ fileId, task, version, organismId, speciesId, genusId, duration, statusCode });
+
+  if (statusCode !== 0) {
+    container.stderr.setEncoding('utf8');
+    throw new Error(container.stderr.read());
+  } else if (buffer.length === 0) {
+    throw new Error('No output received.');
+  } else {
+    let output;
+    try {
+      output = JSON.parse(buffer.join(''));
+    } catch (e) {
+      throw e;
+    }
+    return output;
+  }
 }
 
 module.exports = async function ({ task, version, metadata, timeout$: timeout = DEFAULT_TIMEOUT, precache = false }) {
