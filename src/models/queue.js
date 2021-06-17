@@ -72,7 +72,7 @@ const ackWindow = 30;
 
 schema.statics.dequeue = async function(limits = {}, constraints={}, queue = 'normal') {
   const resourceQuery = {}
-  for (const key in limits) resourceQuery[`message.resources.${key}`] = { $lte: limits[value] }
+  for (const key in limits) resourceQuery[`message.resources.${key}`] = { $lte: limits[key] }
   const fullQuery = {
     ...resourceQuery,
     ...constraints,

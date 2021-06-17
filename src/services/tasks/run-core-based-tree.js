@@ -389,7 +389,7 @@ async function handleContainerOutput(container, task, versions, metadata, genome
     }
   })
 
-  handler.on('close', () => {
+  handler.on('close', async () => {
     let populationSize = 0;
     if (task === 'subtree') {
       for (const { population } of genomes) {

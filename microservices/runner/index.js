@@ -10,7 +10,12 @@ const MB = 1024 ** 2;
 const DEFAULT_AVAILABLE_MEMORY = Math.floor(os.totalmem() / MB) - 500 * MB
 const DEFAULT_AVAILABLE_CPUS = os.cpus().length;
 
-const Queue, { taskTypes } = require('models/queue');
+function sleep(t) {
+  return new Promise((resolve) => setTimeout(() => resolve(), t))
+}
+
+const Queue = require('models/queue');
+const { taskTypes } = Queue;
 const { queue = 'normal', type, pull = 1, precache = false, availableMemory = DEFAULT_AVAILABLE_MEMORY, availableCPUs = DEFAULT_AVAILABLE_CPUS } = argv.opts;
 
 process.on('uncaughtException', (err) => console.error('uncaught', err));
@@ -86,17 +91,22 @@ async function runJob(job, releaseResources) {
   }
 }
 
-function subscribeToQueue(queueName, taskType) {
+async function subscribeToQueue(queueName, taskType) {
   const constraints = {};
   if (taskType) constraints['message.taskType'] = taskType;
   while (true) {
-    const job = Queue.dequeue(
+    const job = await Queue.dequeue(
       resourceManager.available, // Only give us a job which fits on this worker
       constraints, // Some additional constrains if we only want some tasks
       queueName // The queue to pull jobs from.
     )
 
-    const releaseResources = resourceManager.request(job.resources);
+    if (job === null) {
+      LOGGER.info(`No jobs found in ${queueName} queue, waiting...`);
+      await sleep(10000);
+      continue;
+    }
+    const releaseResources = await resourceManager.request(job.resources);
 
     // When we got the job, we were only granted exclusivity for a short window
     // That might be 30s or so.  We 'ack' the job to say that we're actually

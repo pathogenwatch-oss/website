@@ -124,8 +124,7 @@ async function handleContainerOutput(container, spec, metadata) {
     }
   })
 
-  handler.on('error', () => {});
-  handler.on('close', () => {
+  handler.on('close', async () => {
     const fullVersion = `${version}-${slug(scheme, { lower: true })}`;
     await store.putAnalysis('cgmlst-clustering', fullVersion, userId ? userId.toString() : 'public', undefined, results);
   })

@@ -1,5 +1,6 @@
 const Genome = require('models/genome');
-const Queue, { taskTypes } = require('models/queue');
+const Queue = require('models/queue');
+const { taskTypes } = Queue;
 
 const { getClusteringTask } = require('manifest');
 

@@ -6,7 +6,7 @@ const GB = 1024 ** 3;
 const defaultTimeout = config.tasks.timeout || 60;
 
 function addTaskDefaults(task) {
-  const defaultMemory = 1*GB;
+  let defaultMemory = 1*GB;
   if (task.task === 'speciator') defaultMemory = 0.5*GB;
   else if (task.task === 'cgmlst') defaultMemory = 3*GB;
   else if (task.task === 'core') defaultMemory = 2*GB;
