@@ -2,6 +2,21 @@ const tasks = require('../tasks.json');
 
 const config = require('configuration');
 
+const GB = 1024 ** 3;
+const defaultTimeout = config.tasks.timeout || 60;
+
+function addTaskDefaults(task) {
+  const defaultMemory = 1*GB;
+  if (task.task === 'speciator') defaultMemory = 0.5*GB;
+  else if (task.task === 'cgmlst') defaultMemory = 3*GB;
+  else if (task.task === 'core') defaultMemory = 2*GB;
+  else if (task.task === 'tree' || task.task === 'subtree') defaultMemory = 5*GB;
+  else if (task.task === 'clustering') defaultMemory = 15*GB;
+  task.resources = { memory: defaultMemory, cpu: 1, ...(task.resources || {})}
+  task.timeout = task.timeout || defaultTimeout;
+  return task;
+}
+
 function getImageName(task, version) {
   return `registry.gitlab.com/cgps/pathogenwatch-tasks/${task}:${version}`;
 }
@@ -73,7 +88,7 @@ module.exports.getTasksByOrganism = function (
     }
   }
 
-  return Object.keys(uniqueTasks).map(_ => uniqueTasks[_]);
+  return Object.values(uniqueTasks).map(addTaskDefaults)
 };
 
 module.exports.getCollectionTask = function (organismId, task) {
@@ -81,14 +96,15 @@ module.exports.getCollectionTask = function (organismId, task) {
 
   if (organismId in collectionTasks) {
     const list = collectionTasks[organismId];
-    return list.find(_ => _.task === task);
+    const taskDetails = list.find(_ => _.task === task);
+    return addTaskDefaults(taskDetails)
   }
 
   return null;
 };
 
 module.exports.getClusteringTask = function () {
-  return tasks.clustering;
+  return addTaskDefaults(tasks.clustering);
 };
 
 module.exports.getCollectionSchemes = function (user = defaultUser) {
