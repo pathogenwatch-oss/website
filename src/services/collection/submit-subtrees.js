@@ -1,8 +1,8 @@
-const Collection = require('../../models/collection');
+const Collection = require('models/collection');
 
-const { enqueue, queues } = require('../taskQueue');
+const { enqueue, taskTypes } = require('models/queue');
 
-const { getCollectionTask } = require('../../manifest');
+const { getCollectionTask } = require('manifest');
 
 function getSubtrees(collectionId) {
   return Collection.findOne({ _id: collectionId }, { 'subtrees.name': 1 })
@@ -16,10 +16,7 @@ module.exports = function ({ organismId, collectionId, clientId }) {
   return getSubtrees(collectionId)
     .then(subtrees => Promise.all(
       subtrees.map(({ name }) =>
-        enqueue(
-          queues.collection,
-          { spec, metadata: { organismId, collectionId, name, clientId } }
-        )
+        enqueue(taskTypes.collection, spec, { organismId, collectionId, name, clientId })
       )
     ));
 };

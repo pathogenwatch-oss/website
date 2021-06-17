@@ -1,5 +1,5 @@
 const { request } = require('services');
-const { queues } = require('../taskQueue');
+const { taskTypes } = require('models/queue')
 
 const { NotFoundError } = require('../../utils/errors');
 
@@ -13,6 +13,6 @@ module.exports = async function ({ taskId, user, genomeId }) {
     // unsure of the status here, potentially 409 Conflict?
     throw new Error('Clustering job failed');
   }
-  const { position } = await request('tasks', 'queue-position', { until: doc.createdAt, type: queues.clustering });
+  const { position } = await request('tasks', 'queue-position', { until: doc.createdAt, type: taskTypes.clustering });
   return { position, date: until };
 };
