@@ -2,17 +2,17 @@ const assert = require('assert').strict;
 const docker = require('services/docker');
 const { Readable, Writable } = require("stream");
 const readline = require('readline');
-const es = require('event-stream');
 
 describe('docker', function() {
-  // before(async function(done) {
-  //   this.timeout(5000);
-  //   const stream = await docker.pull('alpine:3')
-  //   stream.pipe(process.stdout);
-  //   done()
-  // })
+  before(function(done) {
+    this.timeout(5000);
+    docker.pull('alpine:3').then((stream) => {
+      stream.pipe(process.stdout);
+      stream.on('close', () => done())
+    })
+  })
 
-  it('runs docker', async function(done) {
+  it('runs docker', async function() {
     const container = await docker(
       'alpine:3',
       { foo: 'bar' },
@@ -37,10 +37,9 @@ describe('docker', function() {
     
     assert.equal(StatusCode, 0);
     assert.equal(outputText, 'bar\na\nb\nc\n')
-    done()
   });
 
-  it('fails gracefully', async function(done) {
+  it('fails gracefully', async function() {
     const container = await docker(
       'alpine:3',
       { foo: 'bar' },
@@ -57,10 +56,9 @@ describe('docker', function() {
     assert.equal(StatusCode, 1);
     container.stderr.setEncoding('utf8');
     assert.equal(container.stderr.read(), 'bar\n');
-    done()
   });
 
-  it('writes nice lines', async function(done) {
+  it('writes nice lines', async function() {
     this.timeout(5000);
     const container = await docker(
       'alpine:3',
@@ -94,25 +92,23 @@ describe('docker', function() {
 
     await container.wait();
     assert.equal(i, 3);
-    done()
   })
 
-  it('limits memory', async function(done) {
+  it('limits memory', async function() {
     const container = await docker(
       'alpine:3',
       { foo: 'bar' },
       5000,
       { memory: 10 * 1024 ** 2 },
-      { Cmd: ['sh', '-c', 'foo=$(dd if=/dev/random bs=1M count=20); sleep 5;'] }
+      { Cmd: ['sh', '-c', 'foo=$(dd if=/dev/random bs=1M count=20); sleep 1;'] }
     )
 
     await container.start();
     Readable.from(['a\n', 'b\n', 'c\n']).pipe(container.stdin);
-    
+    container.stdout.pipe(process.stdout);
+    container.stderr.pipe(process.stderr);
     const { StatusCode } = await container.wait();
 
     assert.equal(StatusCode, 137);
-    done()
-    
   })
 })

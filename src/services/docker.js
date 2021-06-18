@@ -5,7 +5,7 @@ const Docker = require('dockerode');
 const docker = new Docker();
 
 module.exports = async function (image, environment, timeout, resources, dockerOpts={}) {
-  const { Env=[], HostConfig={}, ...otherOpts } = dockerOpts;
+  const { Env=[], HostConfig={ AutoRemove: true }, ...otherOpts } = dockerOpts;
   
   const opts = {
     Image: image,
@@ -16,7 +16,6 @@ module.exports = async function (image, environment, timeout, resources, dockerO
     Tty: false,
     OpenStdin: true,
     StdinOnce: true,
-    AutoRemove: true,
     
     Env,
     HostConfig,
