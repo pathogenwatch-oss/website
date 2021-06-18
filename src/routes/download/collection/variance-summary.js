@@ -57,7 +57,24 @@ function generateTreeStats(genomes, cache) {
   return stats;
 }
 
-async function generateTreeSites(genomes, collectionGenomeIds) {
+function getFamilyStatsStore(hasPublicData = false) {
+  return hasPublicData ?
+    {
+      userFiltered: {},
+      userUnfiltered: {},
+      userRepresentative: new Set(),
+    } :
+    {
+      userFiltered: {},
+      publicFiltered: {},
+      userUnfiltered: {},
+      publicUnfiltered: {},
+      userRepresentative: new Set(),
+      publicRepresentative: new Set(),
+    };
+}
+
+async function generateTreeSites(genomes, collectionGenomeIds, hasPublicData) {
   const sitesByFamilyId = {};
   let genomesLength = 0;
 
@@ -69,14 +86,7 @@ async function generateTreeSites(genomes, collectionGenomeIds) {
       const isCollectionGenome = collectionGenomeIds.has(genomeA._id.toString());
       for (const profile of genomeA.analysis.core.profile) {
         if (!sitesByFamilyId[profile.id]) {
-          sitesByFamilyId[profile.id] = {
-            userFiltered: {},
-            publicFiltered: {},
-            userUnfiltered: {},
-            publicUnfiltered: {},
-            userRepresentative: new Set(),
-            publicRepresentative: new Set(),
-          };
+          sitesByFamilyId[profile.id] = getFamilyStatsStore();
         }
 
         const sites = sitesByFamilyId[profile.id];
@@ -93,9 +103,11 @@ async function generateTreeSites(genomes, collectionGenomeIds) {
             unfilteredMutations.add(position + allele.mutations[position]);
 
             sites.userFiltered[position] = 0;
-            sites.publicFiltered[position] = 0;
             sites.userUnfiltered[position] = 0;
-            sites.publicUnfiltered[position] = 0;
+            if (hasPublicData) {
+              sites.publicFiltered[position] = 0;
+              sites.publicUnfiltered[position] = 0;
+            }
           }
         }
 
@@ -103,21 +115,21 @@ async function generateTreeSites(genomes, collectionGenomeIds) {
           if (isCollectionGenome) {
             sites.userFiltered[position]++;
           }
-          sites.publicFiltered[position]++;
+          if (hasPublicData) sites.publicFiltered[position]++;
         }
 
         for (const position of unfilteredPositions) {
           if (isCollectionGenome) {
             sites.userUnfiltered[position]++;
           }
-          sites.publicUnfiltered[position]++;
+          if (hasPublicData) sites.publicUnfiltered[position]++;
         }
 
         for (const mutation of unfilteredMutations) {
           if (isCollectionGenome) {
             sites.userRepresentative.add(mutation);
           }
-          sites.publicRepresentative.add(mutation);
+          if (hasPublicData) sites.publicRepresentative.add(mutation);
         }
       }
     });
@@ -140,24 +152,30 @@ async function generateTreeSites(genomes, collectionGenomeIds) {
         result.userFiltered++;
       }
     }
-    for (const count of Object.values(sites.publicFiltered)) {
-      if (count > 0 && count < genomesLength) {
-        result.publicFiltered++;
-      }
-    }
     for (const count of Object.values(sites.userUnfiltered)) {
       if (count > 0 && count < genomesLength) {
         result.userUnfiltered++;
       }
     }
-    for (const count of Object.values(sites.publicUnfiltered)) {
-      if (count > 0 && count < genomesLength) {
-        result.publicUnfiltered++;
-      }
-    }
-
     result.userRepresentative += sites.userRepresentative.size;
-    result.publicRepresentative += sites.publicRepresentative.size;
+
+    if (hasPublicData) {
+      for (const count of Object.values(sites.publicFiltered)) {
+        if (count > 0 && count < genomesLength) {
+          result.publicFiltered++;
+        }
+      }
+      for (const count of Object.values(sites.publicUnfiltered)) {
+        if (count > 0 && count < genomesLength) {
+          result.publicUnfiltered++;
+        }
+      }
+      result.publicRepresentative += sites.publicRepresentative.size;
+    } else {
+      result.publicFiltered = result.userFiltered;
+      result.publicUnfiltered = result.userUnfiltered;
+      result.publicRepresentative = result.userRepresentative;
+    }
   }
 
   return result;
@@ -222,11 +240,10 @@ function createGenomeStream(genomeSummaries, versions) {
 async function generateTreeData(tree, treeGenomeIds, collectionGenomeIds) {
   const genomeSummaries = await getGenomeSummaries(treeGenomeIds);
 
-  const cache = await getCache(genomeSummaries, tree.versions);
-  const stats = generateTreeStats(genomeSummaries, cache);
+  const stats = generateTreeStats(genomeSummaries, await getCache(genomeSummaries, tree.versions));
 
   const genomes = createGenomeStream(genomeSummaries, tree.versions);
-  const sites = await generateTreeSites(genomes, collectionGenomeIds);
+  const sites = await generateTreeSites(genomes, collectionGenomeIds, tree.populationSize === 0);
 
   const result = {
     label: tree.name,
