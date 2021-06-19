@@ -39,6 +39,24 @@ describe('docker', function() {
     assert.equal(outputText, 'bar\na\nb\nc\n')
   });
 
+  it("doesn't need stdin", async function() {
+    const container = await docker(
+      'alpine:3',
+      { foo: 'bar' },
+      5000,
+      { memory: 500 * 1024 ** 2 },
+      { Cmd: ['sh', '-c', 'echo -n $foo'] }
+    )
+
+    await container.start();
+    container.stdout.setEncoding('utf8')
+    const output = await container.stdout.read();
+    const { StatusCode } = await container.wait();
+    
+    assert.equal(StatusCode, 0);
+    assert.equal(output, 'bar')
+  });
+
   it('fails gracefully', async function() {
     const container = await docker(
       'alpine:3',
@@ -95,12 +113,13 @@ describe('docker', function() {
   })
 
   it('limits memory', async function() {
+    this.timeout(5000)
     const container = await docker(
       'alpine:3',
       { foo: 'bar' },
       5000,
       { memory: 10 * 1024 ** 2 },
-      { Cmd: ['sh', '-c', 'foo=$(dd if=/dev/random bs=1M count=20); sleep 1;'] }
+      { Cmd: ['sh', '-c', 'foo=$(dd if=/dev/urandom bs=1M count=20); sleep 1;'] }
     )
 
     await container.start();

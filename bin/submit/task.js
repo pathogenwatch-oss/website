@@ -6,7 +6,7 @@ require('services');
 const Genome = require('models/genome');
 const User = require('models/user');
 const manifest = require('manifest.js');
-const { enqueue } = require('services/taskQueue');
+const { enqueue } = require('models/queue');
 
 const limit = 1;
 
@@ -38,7 +38,6 @@ function submitTasks(genomes) {
 
     const { organismId, speciesId, genusId, superkingdomId } = speciator;
     if (requestedTask) {
-      const { version, retries, timeout } = requestedTask;
       const metadata = {
         genomeId,
         fileId,
@@ -48,7 +47,7 @@ function submitTasks(genomes) {
         superkingdomId,
         uploadedAt: new Date(uploadedAt),
       };
-      return enqueue(queue, { task, version, retries, timeout, metadata }, 'task');
+      return enqueue(requestedTask, metadata, queue);
     }
   });
 }

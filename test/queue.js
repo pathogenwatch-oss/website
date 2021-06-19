@@ -16,10 +16,10 @@ describe("Queue", async function() {
     await Queue.deleteMany({ queue: testQueue });
     for (let i = 0; i < 5; i++) {
       await Queue.enqueue(
-        'testTask',
         { 
           task: 'test',
           version: 0,
+          taskType: 'testTask',
           timeout: 10,
           resources: { cpu: 1, memory: (100 - i) * 1024**2 },
           retries: 3,

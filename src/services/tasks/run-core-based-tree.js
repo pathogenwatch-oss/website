@@ -302,13 +302,8 @@ async function updateScoreCache(versions, cache) {
   LOGGER.info(`Updated ${updated} of ${cache.fileIds.length} documents (${Math.round(100 * updated / cache.fileIds.length)}%)`);
 }
 
-async function attachInputStream(container, versions, genomes, organismId, onCache) {
-  const fileIds = genomes.map((_) => _.fileId);
-  fileIds.sort();
+async function attachInputStream(container, versions, genomes, organismId, fileIds, stream) {
   const seen = new Set();
-
-  const { cache, stream } = await readScoreCache(versions, organismId, fileIds);
-  onCache(cache);
 
   async function* gen() {
     yield bson.serialize({ genomes });
@@ -343,19 +338,23 @@ async function attachInputStream(container, versions, genomes, organismId, onCac
   Readable.from(gen()).pipe(container.stdin);
 }
 
-async function handleContainerOutput(container, task, versions, metadata, genomes, cachePromise, resolve, reject) {
+async function handleContainerOutput(container, task, versions, metadata, genomes, cache) {
   const { clientId, name } = metadata;
   request('collection', 'send-progress', { clientId, payload: { task, name, status: 'IN PROGRESS' } });
-
-  const cache = await cachePromise;
 
   const lines = readline.createInterface({
     input: container.stdout,
     crlfDelay: Infinity,
   });
 
+  let onNewick;
+  let onError;
+  const whenNewick = new Promise((resolve, reject) => {
+    onNewick = resolve;
+    onError = reject;
+  })
+  
   let lastProgress = 0;
-  let newick;
 
   const handler = new Writable({
     objectMode: true,
@@ -379,52 +378,53 @@ async function handleContainerOutput(container, task, versions, metadata, genome
           }
         }
         else {
-          newick = doc.newick;
-          return done();
+          onNewick(doc.newick);
         }
+        return done();
       } catch (e) {
         request('collection', 'send-progress', { clientId, payload: { task, name, status: 'ERROR' } });
-        reject(e);
+        onError(e);
+        done(e)
       }
     }
   })
 
-  handler.on('close', async () => {
-    let populationSize = 0;
-    if (task === 'subtree') {
-      for (const { population } of genomes) {
-        if (population) {
-          populationSize += 1;
-        }
-      }
-    }
-
-    try {
-      await updateScoreCache(versions, cache);
-    } catch (e) {
-      request('collection', 'send-progress', { clientId, payload: { task, name, status: 'ERROR' } });
-      reject(e);
-    }
-
-    resolve({
-      newick,
-      populationSize,
-      name: metadata.name,
-      size: genomes.length,
-      versions,
-    });
-  })
   Readable.from(lines).pipe(handler);
+  const newick = await whenNewick;
+  
+  let populationSize = 0;
+  if (task === 'subtree') {
+    for (const { population } of genomes) {
+      if (population) {
+        populationSize += 1;
+      }
+    }
+  }
+  
+  try {
+    await updateScoreCache(versions, cache);
+  } catch (e) {
+    request('collection', 'send-progress', { clientId, payload: { task, name, status: 'ERROR' } });
+    throw e;
+  }
+
+  return {
+    newick,
+    populationSize,
+    name: metadata.name,
+    size: genomes.length,
+    versions,
+  };
 }
 
-async function handleContainerExit(container, task, versions, metadata, reject) {
+async function handleContainerExit(container, task, versions, metadata) {
   const { organismId, collectionId, clientId, name } = metadata;
 
   await container.start();
   const startTime = process.hrtime();
   LOGGER.info('spawn', container.id, 'running task', task, 'for collection', collectionId);
 
-  const { StatusCode: statusCode } = await container.wait();
+  const { StatusCode: exitCode } = await container.wait();
   LOGGER.info('exit', exitCode);
 
   const [ durationS, durationNs ] = process.hrtime(startTime);
@@ -434,7 +434,7 @@ async function handleContainerExit(container, task, versions, metadata, reject) 
   if (exitCode !== 0) {
     request('collection', 'send-progress', { clientId, payload: { task, name, status: 'ERROR' } });
     container.stderr.setEncoding('utf8');
-    reject(new Error(container.stderr.read()));
+    throw new Error(container.stderr.read());
   }
 }
 
@@ -442,7 +442,7 @@ function createContainer(spec, metadata, timeout, resources) {
   const { task, version, workers } = spec;
   const { organismId, collectionId } = metadata;
 
-  const container = docker(
+  return docker(
     getImageName(task, version),
     {
       PW_ORGANISM_TAXID: organismId,
@@ -456,8 +456,6 @@ function createContainer(spec, metadata, timeout, resources) {
     timeout,
     resources,
   );
-
-  return container;
 }
 
 async function runTask(spec, metadata, timeout) {
@@ -477,17 +475,24 @@ async function runTask(spec, metadata, timeout) {
     };
   }
 
-  return new Promise((resolve, reject) => {
-    const container = createContainer(spec, metadata, timeout, resources);
-    let onCache;
-    const cachePromise = new Promise((_) => { onCache = _; });
+  const fileIds = genomes.map((_) => _.fileId);
+  fileIds.sort();
 
-    handleContainerOutput(container, task, versions, metadata, genomes, cachePromise, resolve, (e) => { container.destroy(); reject(e); });
+  const { organismId } = metadata;
+  const { cache, stream } = await readScoreCache(versions, organismId, fileIds);
+  const container = await createContainer(spec, metadata, timeout, resources);
 
-    handleContainerExit(container, task, versions, metadata, reject);
+  const whenContainerOutput = handleContainerOutput(container, task, versions, metadata, genomes, cache);
+  attachInputStream(container, versions, genomes, organismId, fileIds, stream);
+  
+  const whenContainerExit = handleContainerExit(container, task, versions, metadata);
 
-    attachInputStream(container, versions, genomes, metadata.organismId, onCache);
-  });
+  const [output, _] = await Promise.all([
+    whenContainerOutput,
+    whenContainerExit
+  ])
+
+  return output;
 }
 
 module.exports = runTask;

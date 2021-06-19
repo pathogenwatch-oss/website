@@ -63,39 +63,3 @@ class ResourceManager {
 }
 
 module.exports = ResourceManager
-
-
-module.exports.dequeue = function (queue, fn, reject) {
-  mQueue.registerWorker(queue, async (queueItem) => {
-    LOGGER.info('Handling message', queueItem, 'from', queue);
-    // await updateReceivableTime({ message: { timeout: 20 * 60 }});
-    
-    let releaseResources;
-    try {
-      const { resources } = queueItem.message || defaultResources;
-      releaseResources = await resourceManager.request(resources);
-    } catch (err) {
-      queueItem.rejectionReason = 'Insufficient resources to run this task';
-      if (reject) reject(queueItem.message);
-      return 'Rejected';
-    }
-
-    try {
-      await fn(queueItem.message);
-      releaseResources();
-      return 'Completed'
-    } catch (err) {
-      LOGGER.error(err);
-      releaseResources();
-      const { retries = 1 } = queueItem.message;
-      queueItem.releasedReason = err.message;
-      if ((queueItem.retryCount || 0) < retries - 1) {
-        queueItem.nextReceivableTime = new Date(Date.now() + (30 * 1000));
-        return 'Retry';
-      }
-      queueItem.rejectionReason = `Gave up after ${retries} retries.`;
-      if (reject) reject(queueItem.message);
-      return 'Rejected';
-    }
-  });
-};

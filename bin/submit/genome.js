@@ -3,7 +3,7 @@ const argv = require('named-argv');
 const mapLimit = require('promise-map-limit');
 const User = require('models/user');
 const { getTasksByOrganism } = require('manifest');
-const { enqueue } = require('services/taskQueue');
+const { enqueue } = require('models/queue');
 
 require('services');
 const Genome = require('models/genome');
@@ -41,7 +41,6 @@ async function cleanGenome(genome, userId, update) {
   if (update) {
     const uploadedAt = new Date();
     for (const task of tasks) {
-      const { version, retries, timeout } = task;
       const metadata = {
         genomeId: genome._id,
         fileId: genome.fileId,
@@ -51,7 +50,7 @@ async function cleanGenome(genome, userId, update) {
         superkingdomId,
         uploadedAt: new Date(uploadedAt),
       };
-      enqueue(queue, { task: task.task, version, retries, timeout, metadata }, 'task');
+      enqueue(task, metadata, queue);
     }
   }
 }

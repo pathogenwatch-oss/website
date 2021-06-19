@@ -79,12 +79,16 @@ async function runTask(spec, metadata, timeout) {
   const alignmentVersion = taskRequires.find((x) => x.task === "alignment").version;
   const versions = { tree: version, alignment: alignmentVersion };
 
-  return new Promise((resolve, reject) => {
-    const container = createContainer(spec, metadata, timeout);
-    handleContainerOutput(container, task, versions, metadata, genomes, resolve, reject);
-    handleContainerExit(container, task, versions, metadata, reject);
-    createInputStream(genomes, versions, organismId).pipe(container.stdin);
-  });
+  const container = await createContainer(spec, metadata, timeout);
+  const whenContainerOutput = handleContainerOutput(container, task, versions, metadata, genomes, resolve, reject);
+  const whenContainerExit = handleContainerExit(container, task, versions, metadata, reject);
+  createInputStream(genomes, versions, organismId).pipe(container.stdin);
+
+  const [output, _] = await Proomise.all([
+    whenContainerOutput,
+    whenContainerExit
+  ])
+  return output;
 }
 
 module.exports = runTask;

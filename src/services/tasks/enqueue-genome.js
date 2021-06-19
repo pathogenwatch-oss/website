@@ -21,7 +21,7 @@ module.exports = function ({ genomeId, fileId, organismId, speciesId, genusId, t
   return Genome.addPendingTasks(genomeId, taskNames)
     .then(() => Promise.all(
       tasks.map((spec) =>
-        enqueue(taskTypes.task, spec, metadata)
+        enqueue(spec, metadata)
       )
     ));
 };

@@ -14,7 +14,7 @@ module.exports = async function ({ taskId, user, genomeId, projection = {} }) {
   let scheme;
   let spec;
   const queueQuery = {
-    type: taskTypes.clustering,
+    'message.spec.taskType': taskTypes.clustering,
   };
   if (taskId) {
     queueQuery['message.metadata.taskId'] = taskId;

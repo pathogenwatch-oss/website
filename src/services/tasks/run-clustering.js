@@ -56,7 +56,7 @@ async function getCgmlstKeys({ userId, scheme }) {
   return analysisKeys;
 }
 
-async function attachInputStream(container, spec, metadata, cgmlstKeys) {
+function attachInputStream(container, spec, metadata, cgmlstKeys) {
   const { userId = 'public', scheme } = metadata;
   const { version } = spec;
 
@@ -81,8 +81,8 @@ async function attachInputStream(container, spec, metadata, cgmlstKeys) {
 }
 
 async function handleContainerOutput(container, spec, metadata) {
-  const { task, version } = spec;
-  const { taskId, userId, scheme } = metadata;
+  const { task } = spec;
+  const { taskId } = metadata;
 
   const lines = readline.createInterface({
     input: container.stdout,
@@ -109,13 +109,14 @@ async function handleContainerOutput(container, spec, metadata) {
             await request('clustering', 'send-progress', { taskId, payload: { task, status: 'IN PROGRESS', message: doc.message, progress } });
             lastProgress = progress;
           }
-        } else if (doc.STs) {
+        } else if ((doc.STs !== undefined) || (doc.edges !== undefined)) {
           results.edges = { ...doc.edges, ...results.edges };
           results.threshold = results.threshold || doc.threshold;
           if (hasContent(doc.pi)) results.pi = doc.pi;
           if (hasContent(doc.lambda)) results.lambda = doc.lambda;
           if (hasContent(doc.STs)) results.STs = doc.STs;
         }
+        return done();
       } catch (e) {
         LOGGER.error(e);
         await request('clustering', 'send-progress', { taskId, payload: { task, status: 'ERROR' } });
@@ -124,11 +125,16 @@ async function handleContainerOutput(container, spec, metadata) {
     }
   })
 
-  handler.on('close', async () => {
-    const fullVersion = `${version}-${slug(scheme, { lower: true })}`;
-    await store.putAnalysis('cgmlst-clustering', fullVersion, userId ? userId.toString() : 'public', undefined, results);
-  })
-  Readable.from(lines).pipe(handler)
+  Readable.from(lines).pipe(handler);
+  await container.wait();
+  return results;
+}
+
+async function uploadResults(results, spec, metadata) {
+  const { version } = spec;
+  const { userId, scheme } = metadata;
+  const fullVersion = `${version}-${slug(scheme, { lower: true })}`;
+  await store.putAnalysis('cgmlst-clustering', fullVersion, userId ? userId.toString() : 'public', undefined, results);
 }
 
 async function handleContainerExit(container, spec, metadata) {
@@ -152,34 +158,35 @@ async function handleContainerExit(container, spec, metadata) {
     container.stderr.setEncoding('utf8');
     throw new Error(container.stderr.read());
   }
+
+  return statusCode;
 }
 
 function createContainer(spec, timeout, resources={}) {
   const { task, version } = spec;
   LOGGER.debug(`Starting container of ${task}:${version}`);
-  const container = docker(getImageName(task, version), {}, timeout, resources);
-
-  return container;
+  return docker(getImageName(task, version), {}, timeout, resources);
 }
 
 async function runTask(spec, metadata, timeout, resources) {
   const cgmlstKeys = await getCgmlstKeys(metadata);
 
-  const container = createContainer(spec, timeout, resources);
-  const whenOutput = handleContainerOutput(container, spec, metadata);
-  const whenExit = handleContainerExit(container, spec, metadata);
-  await attachInputStream(container, spec, metadata, cgmlstKeys);
+  const container = await createContainer(spec, timeout, resources);
+  const whenResults = handleContainerOutput(container, spec, metadata);
+  attachInputStream(container, spec, metadata, cgmlstKeys);
+  const statusCode = await handleContainerExit(container, spec, metadata);
 
-  await whenExit;
-  await whenOutput;
+  const results = await whenResults;
+  await uploadResults(results, spec, metadata);
+  return statusCode;
 }
 
 module.exports = async function handleMessage({ spec, metadata, timeout$: timeout = DEFAULT_TIMEOUT, resources }) {
   const { taskId } = metadata;
   const { task } = spec;
   try {
-    await runTask(spec, metadata, timeout, resources);
-    return;
+    const statusCode = await runTask(spec, metadata, timeout, resources);
+    return { statusCode };
   } catch (error) {
     request('clustering', 'send-progress', { taskId, payload: { task, status: 'ERROR' } });
     throw error;

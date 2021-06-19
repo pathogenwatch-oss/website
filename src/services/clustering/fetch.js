@@ -46,7 +46,7 @@ async function mapStsToGenomeNames({ genomeId, sts, user }) {
   };
 }
 
-module.exports = async function ({ user, scheme, id: genomeId }) {
+module.exports = async function ({ user={}, scheme, id: genomeId }) {
   const { version } = getClusteringTask(scheme);
   if (version === undefined) throw new NotFoundError('No matching clustering result');
 

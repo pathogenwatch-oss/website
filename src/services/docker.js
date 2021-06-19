@@ -5,7 +5,8 @@ const Docker = require('dockerode');
 const docker = new Docker();
 
 module.exports = async function (image, environment, timeout, resources, dockerOpts={}) {
-  const { Env=[], HostConfig={ AutoRemove: true }, ...otherOpts } = dockerOpts;
+  const { Env=[], HostConfig={}, ...otherOpts } = dockerOpts;
+  if (process.env.KEEP_TASK_CONTAINERS !== 'true') HostConfig.AutoRemove = HostConfig.AutoRemove || true;
   
   const opts = {
     Image: image,
@@ -30,12 +31,13 @@ module.exports = async function (image, environment, timeout, resources, dockerO
   for (const key in environment) opts.Env.push(`${key}=${environment[key]}`)
 
   const container = await docker.createContainer(opts);
-
-  const stream = await container.attach({stream: true, hijack: true, stdout: true, stderr: true, stdin: true});
   container.stdout = new PassThrough();
   container.stderr = new PassThrough();
+  container.stdin = new PassThrough();
+
+  const stream = await container.attach({stream: true, hijack: true, stdout: true, stderr: true, stdin: true});
   container.modem.demuxStream(stream, container.stdout, container.stderr);
-  container.stdin = stream;
+  container.stdin.pipe(stream);
 
   if (timeout) {
     const t = setTimeout(() => {

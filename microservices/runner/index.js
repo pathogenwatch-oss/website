@@ -7,7 +7,7 @@ const { request } = require('services');
 const pullTaskImages = require('services/tasks/pull');
 
 const MB = 1024 ** 2;
-const DEFAULT_AVAILABLE_MEMORY = Math.floor(os.totalmem() / MB) - 500 * MB
+const DEFAULT_AVAILABLE_MEMORY = os.totalmem() - 500 * MB
 const DEFAULT_AVAILABLE_CPUS = os.cpus().length;
 
 function sleep(t) {
@@ -16,7 +16,15 @@ function sleep(t) {
 
 const Queue = require('models/queue');
 const { taskTypes } = Queue;
-const { queue = 'normal', type, pull = 1, precache = false, availableMemory = DEFAULT_AVAILABLE_MEMORY, availableCPUs = DEFAULT_AVAILABLE_CPUS } = argv.opts;
+const {
+  queue = 'normal',
+  type,
+  pull = 1,
+  precache = false,
+  availableMemory = DEFAULT_AVAILABLE_MEMORY,
+  availableCPUs = DEFAULT_AVAILABLE_CPUS,
+  once = 'false', // If true, it only runs one task.  Useful for debugging.
+} = argv.opts;
 
 process.on('uncaughtException', (err) => console.error('uncaught', err));
 
@@ -25,53 +33,50 @@ const resourceManager = new ResourceManager({ cpu: availableCPUs, memory: availa
 
 async function runJob(job, releaseResources) {
   try {
-    const { message = {} } = job;
-    const { taskType = taskTypes.task } = message;
+    const { spec, metadata } = job;
+    const { taskType, timeout, task, version } = spec;
   
     if (taskType === taskTypes.genome) {
       try {
-        const { metadata, timeout } = message;
         await request('genome', 'speciate', { timeout$: timeout * 1000, metadata, precache })
         await Queue.handleSuccess(job);
       } catch (err) {
         LOGGER.error(err);
         await Queue.handleFailure(job, err.message);
-        await request('genome', 'add-error', message)
+        await request('genome', 'add-error', { spec, metadata });
       }
     }
   
     else if (taskType === taskTypes.task) {
       try {
-        const { task, version, timeout, metadata } = message;
-        await request('tasks', 'run', { task, version, timeout$: timeout * 1000, metadata, precache })
+        await request('tasks', 'run', { spec, timeout$: timeout * 1000, metadata, precache })
         await Queue.handleSuccess(job);
       } catch (err) {
         LOGGER.error(err);
         await Queue.handleFailure(job, err.message);
-        await request('genome', 'add-error', message);
+        await request('genome', 'add-error', { spec, metadata });
       }
     }
   
     else if (taskType === taskTypes.collection) {
       try {
-        const { spec, metadata, timeout } = message;
-        const result = await request('tasks', 'run-collection', { spec, metadata, timeout$: timeout * 1000 });
-        LOGGER.info('Got result', metadata.collectionId, spec.task, spec.version);
-        await request('collection', 'add-analysis', { spec, metadata, result });
+        const { clientId, name } = metadata;
+        await request('tasks', 'run-collection', { spec, metadata, timeout$: timeout * 1000 });
+        LOGGER.info('Got result', metadata.collectionId, task, version);
+        await request('collection', 'send-progress', { clientId, payload: { task, name, status: 'READY' } });
         await Queue.handleSuccess(job);
       } catch (err) {
         LOGGER.error(err);
         await Queue.handleFailure(job, err.message);
-        await request('collection', 'add-error', message);
+        await request('collection', 'add-error', { spec, metadata });
       }
     }
   
     else if (taskType === taskTypes.clustering) {
       try {
-        const { spec, metadata, timeout } = message;
-        await await request('tasks', 'run-clustering', { spec, metadata, timeout$: timeout * 1000 });
+        const result = await request('tasks', 'run-clustering', { spec, metadata, timeout$: timeout * 1000 });
         const { taskId } = metadata;
-        LOGGER.info('Got result', spec.task, spec.version, metadata);
+        LOGGER.info('Got result', spec.task, spec.version, metadata, result);
         await request('clustering', 'send-progress', { taskId, payload: { status: 'READY' } });
         await Queue.handleSuccess(job);
       } catch (err) {
@@ -81,7 +86,7 @@ async function runJob(job, releaseResources) {
     }
   
     else {
-      const errMessage = `Don't know how to handle job of type ${taskType}`
+      const errMessage = `Don't know how to handle job of type ${taskType} (task=${task} version=${version})`
       LOGGER.error(errMessage);
       await Queue.handleFailure(job, errMessage);
     }
@@ -102,11 +107,13 @@ async function subscribeToQueue(queueName, taskType) {
     )
 
     if (job === null) {
-      LOGGER.info(`No jobs found in ${queueName} queue, waiting...`);
+      LOGGER.info(`No jobs found in ${queueName} queue which fit on machine with cpu=${availableCPUs} memory=${availableMemory}`);
       await sleep(10000);
       continue;
     }
-    const releaseResources = await resourceManager.request(job.resources);
+    
+    LOGGER.debug({ job });
+    const releaseResources = await resourceManager.request(job.spec.resources);
 
     // When we got the job, we were only granted exclusivity for a short window
     // That might be 30s or so.  We 'ack' the job to say that we're actually
@@ -120,7 +127,11 @@ async function subscribeToQueue(queueName, taskType) {
       continue;
     }
 
-    runJob(job, releaseResources) // Don't await this, we want to start another job if we can
+    const r = runJob(job, releaseResources) // Don't await this, we want to start another job if we can
+    if (once === 'true') {
+      LOGGER.warn("Exiting because called with --once='true' flag")
+      return r
+    };
   }
 }
 

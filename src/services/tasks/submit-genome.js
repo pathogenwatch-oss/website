@@ -1,4 +1,4 @@
-const { enqueue, taskTypes } = require('models/queue');
+const { enqueue } = require('models/queue');
 
 const { getSpeciatorTask } = require('../../manifest');
 
@@ -11,5 +11,5 @@ module.exports = function ({ genomeId, fileId, uploadedAt, clientId, userId, que
     clientId,
     userId,
   };
-  return enqueue(taskTypes.genome, speciatorTask, metadata, queue);
+  return enqueue(speciatorTask, metadata, queue);
 };

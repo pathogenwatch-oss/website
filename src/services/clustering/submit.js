@@ -18,6 +18,6 @@ module.exports = async function ({ user, genomeId, clientId }) {
     metadata.public = true;
   }
 
-  await enqueue(taskTypes.clustering, spec, metadata);
+  await enqueue(spec, metadata);
   return { ok: 1, taskId };
 };
