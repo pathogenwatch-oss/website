@@ -7,23 +7,23 @@ const { username = 'anon', password = '' } = tasks.registry || {};
 const dockerPull = require('docker-pull');
 const mapLimit = require('promise-map-limit');
 
-const { queues } = require('../taskQueue');
+const { taskTypes } = require('models/queue');
 
-function getImageNames(queue) {
+function getImageNames(taskType) {
   const speciator = getSpeciatorTask();
   const speciatorImage = getImageName(speciator.task, speciator.version);
   const clustering = getClusteringTask();
   const clusteringImage = getImageName(clustering.task, clustering.version);
 
-  if (queue === queues.genome) {
+  if (taskType === taskTypes.genome) {
     return [ speciatorImage ];
   }
 
-  if (queue === queues.collection) return getImages('collection');
+  if (taskType === taskTypes.collection) return getImages('collection');
 
-  if (queue === queues.task) return getImages('genome');
+  if (taskType === taskTypes.task) return getImages('genome');
 
-  if (queue === queues.clustering) {
+  if (taskType === taskTypes.clustering) {
     return [ clusteringImage ];
   }
 
@@ -55,9 +55,9 @@ function pullImages(imageNames) {
   return mapLimit(imageNames, LIMIT, pullImage);
 }
 
-module.exports = function ({ queue }) {
+module.exports = function ({ taskType }) {
   return (
-    Promise.resolve(queue)
+    Promise.resolve(taskType)
       .then(getImageNames)
       .then(pullImages)
       .then(() => LOGGER.info('All images have been pulled'))

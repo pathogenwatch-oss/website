@@ -1,7 +1,8 @@
-const Genome = require('../../models/genome');
-const { queues, Queue } = require('../taskQueue');
+const Genome = require('models/genome');
+const Queue = require('models/queue');
+const { taskTypes } = Queue;
 
-const { getClusteringTask } = require('../../manifest');
+const { getClusteringTask } = require('manifest');
 
 function getJobStatus(doc) {
   if (!doc) return 'NOT_QUEUED';
@@ -13,7 +14,7 @@ module.exports = async function ({ taskId, user, genomeId, projection = {} }) {
   let scheme;
   let spec;
   const queueQuery = {
-    type: queues.clustering,
+    'message.spec.taskType': taskTypes.clustering,
   };
   if (taskId) {
     queueQuery['message.metadata.taskId'] = taskId;

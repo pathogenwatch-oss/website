@@ -27,7 +27,7 @@ router.get('/genome/stats', (req, res, next) => {
   const { user, query } = req;
   services
     .request('genome', 'fetch-stats', { user, query })
-    .then(response => res.json(response))
+    .then((response) => res.json(response))
     .catch(next);
 });
 
@@ -37,7 +37,7 @@ router.get('/genome/map', (req, res, next) => {
   const { user, query } = req;
   services
     .request('genome', 'fetch-map', { user, query })
-    .then(response => res.json(response))
+    .then((response) => res.json(response))
     .catch(next);
 });
 
@@ -47,7 +47,7 @@ router.post('/genome/at-locations', (req, res, next) => {
   const { coordinates } = req.body;
   services
     .request('genome', 'at-locations', { user, coordinates, query })
-    .then(response => res.json(response))
+    .then((response) => res.json(response))
     .catch(next);
 });
 
@@ -58,7 +58,7 @@ router.get('/genome/:id', (req, res, next) => {
   LOGGER.info(`Received request to get single genome ${id}`);
   services
     .request('genome', 'fetch-one', { user, id, collectionId })
-    .then(response => res.json(response))
+    .then((response) => res.json(response))
     .catch(next);
 });
 
@@ -70,8 +70,8 @@ router.get('/genome/:id/clusters/position', (req, res, next) => {
   LOGGER.info(`Received request to get cluster queue position for genome ${id}`);
   services
     .request('clustering', 'fetch-position', { user, genomeId: id, taskId })
-    .then(response => res.json(response))
-    .catch(e => next(e));
+    .then((response) => res.json(response))
+    .catch((e) => next(e));
 });
 
 router.get('/genome/:id/clusters', (req, res, next) => {
@@ -81,7 +81,7 @@ router.get('/genome/:id/clusters', (req, res, next) => {
   LOGGER.info(`Received request to get clusters for genome ${id}`);
   services
     .request('genome', 'fetch-clusters', { user, id })
-    .then(response => res.json(response))
+    .then((response) => res.json(response))
     .catch(next);
 });
 
@@ -137,7 +137,7 @@ router.post('/genome/selection', (req, res, next) => {
   const { user, query } = req;
   services
     .request('genome', 'selection', { user, query })
-    .then(response => res.json(response))
+    .then((response) => res.json(response))
     .catch(next);
 });
 
@@ -147,7 +147,7 @@ router.get('/genome', (req, res, next) => {
   const { user, query } = req;
   services
     .request('genome', 'fetch-list', { user, query })
-    .then(response => res.json(response))
+    .then((response) => res.json(response))
     .catch(next);
 });
 
@@ -172,7 +172,7 @@ router.put('/genome', (req, res, next) => {
 
   services
     .request('genome', 'initialise', { user, data: body, uploadedAt })
-    .then(response => res.json(response))
+    .then((response) => res.json(response))
     .catch(next);
 });
 
@@ -218,7 +218,7 @@ router.put(
         user,
         clientId,
       })
-      .then(response => res.json(response))
+      .then((response) => res.json(response))
       .catch(next);
   }
 );
@@ -231,7 +231,7 @@ router.post('/genome/bin', (req, res, next) => {
 
   services
     .request('genome', 'bin', { ids, user, status })
-    .then(response => res.json(response))
+    .then((response) => res.json(response))
     .catch(next);
 });
 
@@ -242,7 +242,7 @@ router.post('/genome/:id/uploaded', (req, res, next) => {
 
   services
     .request('genome', 'uploaded', { id, user })
-    .then(response => res.json(response))
+    .then((response) => res.json(response))
     .catch(next);
 });
 
@@ -253,7 +253,7 @@ router.post('/genome/:id', (req, res, next) => {
   const { body, user } = req;
   services
     .request('genome', 'edit', { id, user, metadata: body })
-    .then(response => res.json(response))
+    .then((response) => res.json(response))
     .catch(next);
 });
 
@@ -264,7 +264,7 @@ router.post('/genome', (req, res, next) => {
 
   services
     .request('genome', 'edit-many', { user, data: body })
-    .then(response => res.json(response))
+    .then((response) => res.json(response))
     .catch(next);
 });
 

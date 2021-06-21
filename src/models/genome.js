@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
-const { Schema } = mongoose;
 const escapeRegex = require('escape-string-regexp');
+
+const { Schema } = mongoose;
 
 const Collection = require('./collection');
 
@@ -93,9 +94,9 @@ schema.index({ 'analysis.sarscov2-variants.variants.name': 1 });
 
 schema.statics.uploadTypes = uploadTypes;
 
-schema.statics.taxonomy = genome => {
+schema.statics.taxonomy = (genome) => {
   const speciator = (genome.analysis || {}).speciator || {};
-  const includes = taxid =>
+  const includes = (taxid) =>
     taxid && [ speciator.organismId, speciator.speciesId, speciator.genusId ].includes(taxid);
   return {
     includes,
@@ -222,7 +223,6 @@ schema.statics.getPrefilterCondition = function ({ user, query = {} }) {
 
   throw new Error(`Invalid genome prefilter: '${prefilter}'`);
 };
-
 
 schema.statics.getFilterQuery = async function (props) {
   const { user, query = {} } = props;
@@ -450,7 +450,7 @@ schema.statics.getForCollection = function (query, user = {}) {
     _user: 1,
   })
     .lean()
-    .then(genomes => genomes.map(doc => toObject(doc, user)));
+    .then((genomes) => genomes.map((doc) => toObject(doc, user)));
 };
 
 schema.statics.lookupCgMlstScheme = async function (genomeId, user) {
@@ -461,6 +461,7 @@ schema.statics.lookupCgMlstScheme = async function (genomeId, user) {
   };
   const projection = { 'analysis.cgmlst.scheme': 1 };
   const genome = await this.findOne(query, projection);
+  if (user && genome === undefined) return this.lookupCgMlstScheme(genomeId, undefined);
   return genome ? genome.analysis.cgmlst.scheme : undefined;
 };
 

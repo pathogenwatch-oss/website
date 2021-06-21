@@ -1,7 +1,7 @@
-const { enqueue, queues } = require('../taskQueue');
-const Genome = require('../../models/genome');
+const { enqueue, taskTypes } = require('models/queue');
+const Genome = require('models/genome');
 
-const LOGGER = require('../../utils/logging').createLogger('runner');
+const LOGGER = require('utils/logging').createLogger('runner');
 
 module.exports = function ({ genomeId, fileId, organismId, speciesId, genusId, tasks, uploadedAt, clientId, userId }) {
   const taskNames = tasks.map(_ => _.task);
@@ -20,11 +20,8 @@ module.exports = function ({ genomeId, fileId, organismId, speciesId, genusId, t
 
   return Genome.addPendingTasks(genomeId, taskNames)
     .then(() => Promise.all(
-      tasks.map(({ task, version, retries, timeout }) =>
-        enqueue(
-          task in queues ? task : queues.task,
-          { task, version, spec: { retries, timeout }, metadata }
-        )
+      tasks.map((spec) =>
+        enqueue(spec, metadata)
       )
     ));
 };

@@ -1,85 +1,74 @@
 const transform = require('stream-transform');
 const ZipStream = require('zip-stream');
 const sanitize = require('sanitize-filename');
-const es = require('event-stream');
-const { Writable } = require('stream');
+const { Writable, Readable } = require('stream');
 
 const Genome = require('models/genome');
-const Analysis = require('models/analysis');
+const store = require('utils/object-store');
 const { request } = require('services');
-const LOGGER = require('utils/logging').createLogger('Downloads');
 
 const header = '##gff-version 3.2.1';
 
-function getGenomeSummaries(query) {
+async function getGenomeSummaries(query) {
   const projection = {
     name: 1,
     fileId: 1,
     'analysis.core.__v': 1,
     'analysis.mlst.matches': 1,
     'analysis.paarsnp.matches': 1,
+    'analysis.speciator.organismId': 1,
   };
   const options = { sort: { name: 1 } };
   const genomes = Genome.find(query, projection, options).lean().cursor();
   const fileIds = new Set();
   const genomeLookup = {};
   const coreVersionMap = {};
-  return new Promise((resolve, reject) => {
-    genomes.on('data', genome => {
-      const { fileId, analysis: { core } } = genome;
-      genomeLookup[fileId] = genomeLookup[fileId] || [];
-      genomeLookup[fileId].push(genome);
-      if (core) {
-        coreVersionMap[core.__v] = coreVersionMap[core.__v] || [];
-        coreVersionMap[core.__v].push(fileId);
-      }
-      fileIds.add(fileId);
-    });
-    genomes.on('error', err => reject(err));
-    genomes.on('end', () => resolve({
-      fileIds: [ ...fileIds ],
-      genomeLookup,
-      coreVersionMap,
-    }));
-  });
+  for await (const genome of genomes) {
+    const { fileId, analysis: { core } } = genome;
+    const organismId = genome.analysis.speciator.organismId;
+    genomeLookup[fileId] = genomeLookup[fileId] || [];
+    genomeLookup[fileId].push(genome);
+    if (core) {
+      coreVersionMap[core.__v] = coreVersionMap[core.__v] || [];
+      coreVersionMap[core.__v].push({ fileId, organismId });
+    }
+    fileIds.add(fileId);
+  }
+  return {
+    fileIds: [ ...fileIds ],
+    genomeLookup,
+    coreVersionMap,
+  };
 }
 
-function getGenomes(fileIds, genomeLookup, coreVersionMap) {
-  const query = {
-    task: 'core',
-    $or: [],
-  };
+function getGenomes(genomeLookup, coreVersionMap) {
+  const analysisKeys = [];
 
   for (const version of Object.keys(coreVersionMap)) {
-    query.$or.push({ version, fileId: { $in: coreVersionMap[version] } });
-    coreVersionMap[version] = null;
+    for (const { fileId, organismId } of coreVersionMap[version]) {
+      analysisKeys.push(store.analysisKey('core', version, fileId, organismId));
+    }
   }
 
-  const cores = Analysis.find(query, {
-    fileId: 1,
-    version: 1,
-    results: 1,
-  }).lean().cursor();
-
-  const coreFormatter = es.through(function (core) {
-    const { fileId, version, results } = core;
-    const genomes = genomeLookup[fileId] || [];
-    for (const genome of genomes) {
-      if (!genome.analysis || !genome.analysis.core) continue;
-      if (genome.analysis.core.__v === version) {
-        this.emit('data', {
+  async function* cores() {
+    for (const value of store.iterGet(analysisKeys)) {
+      if (value === undefined) continue;
+      const { fileId, version, results } = JSON.parse(value);
+      const genomes = genomeLookup[fileId] || [];
+      for (const genome of genomes) {
+        if (!genome.analysis || !genome.analysis.core) continue;
+        if (genome.analysis.core.__v === version) { yield {
           ...genome,
           analysis: {
             ...genome.analysis,
             core: results,
           },
-        });
+        }; }
       }
     }
-    genomeLookup[fileId] = null;
-  });
+  }
 
-  return cores.pipe(coreFormatter);
+  return Readable.from(cores());
 }
 
 async function getCollectionGenomes({ genomes }, genomeIds) {
@@ -91,8 +80,8 @@ async function getCollectionGenomes({ genomes }, genomeIds) {
     ],
   };
   const summaries = await getGenomeSummaries(query);
-  const { fileIds, genomeLookup, coreVersionMap } = summaries;
-  return getGenomes(fileIds, genomeLookup, coreVersionMap);
+  const { genomeLookup, coreVersionMap } = summaries;
+  return getGenomes(genomeLookup, coreVersionMap);
 }
 
 function gffTransformer(input) {
@@ -107,10 +96,10 @@ function gffTransformer(input) {
     input.reversed !== null ? (input.reversed ? '-' : '+') : null,
     input.phase,
     Object.keys(input.attributes)
-      .map(key => `${key}=${input.attributes[key]}`)
+      .map((key) => `${key}=${input.attributes[key]}`)
       .join(';'),
   ]
-    .map(value => (value === null ? '.' : value));
+    .map((value) => (value === null ? '.' : value));
 
   return `${output.join('\t')}\n`;
 }
@@ -122,7 +111,7 @@ function convertDocumentToGFF(doc, stream) {
 
   // https://github.com/sanger-pathogens/Artemis/blob/master/etc/feature_keys_gff
   if (core) {
-    const profile = core.profile.map(x => x.id).sort().map(x => core.profile.find(y => y.id === x));
+    const profile = core.profile.map((x) => x.id).sort().map((x) => core.profile.find((y) => y.id === x));
     for (const { id, rlength, alleles } of profile) {
       for (const allele of alleles) {
         stream.write({
@@ -228,7 +217,7 @@ async function generateData(collection, genomeIds, filename, res, next) {
     stream.on('error', next);
     stream.pipe(res);
 
-    genomes.on('data', doc => {
+    genomes.on('data', (doc) => {
       res.setHeader('Content-Disposition', `attachment; filename=${filename || `${doc.name}.gff`}`);
       res.setHeader('Content-Type', 'text/plain');
       convertDocumentToGFF(doc, stream);

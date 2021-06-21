@@ -1,29 +1,9 @@
 const sanitize = require('sanitize-filename');
 const csv = require('csv');
 const Genome = require('models/genome');
-const Analysis = require('models/analysis');
+const store = require('utils/object-store');
 
-const transformer = (versions) => (doc, callback) => {
-  const result = [];
-  const { fileId, version, results: cgmlst } = doc;
-  const genomes = (versions[fileId] || {})[version] || [];
-  for (const { _id, name } of genomes) {
-    for (const { gene, id, start, end, contig } of cgmlst.matches) {
-      result.push({
-        'Genome ID': _id.toString(),
-        'Genome Name': name,
-        Version: version,
-        Gene: gene,
-        'Allele ID': id,
-        Start: start,
-        End: end,
-        Contig: contig,
-        Direction: start > end ? 'reverse' : 'forwards',
-      });
-    }
-  }
-  callback(null, ...result);
-};
+const { Readable } = require('stream');
 
 module.exports = async (req, res) => {
   const { user } = req;
@@ -34,10 +14,11 @@ module.exports = async (req, res) => {
   res.setHeader('Content-Disposition', `attachment; filename=${filename}`);
   res.setHeader('Content-Type', 'text/csv');
 
-  const query = Object.assign(
-    { _id: { $in: ids.split(',') }, 'analysis.cgmlst': { $exists: true } },
-    Genome.getPrefilterCondition({ user })
-  );
+  const query = {
+    _id: { $in: ids.split(',') },
+    'analysis.cgmlst': { $exists: true },
+    ...Genome.getPrefilterCondition({ user }),
+  };
 
   const projection = {
     name: 1,
@@ -47,29 +28,46 @@ module.exports = async (req, res) => {
   };
 
   const genomeDetails = await Genome.find(query, projection).lean();
-  const organismIds = genomeDetails.reduce((acc, details) => {
-    acc.push(details.analysis.speciator.organismId);
-    return acc;
-  }, []);
-  const versions = genomeDetails.reduce((acc, details) => {
+  const organismIds = [];
+  const analysisKeys = [];
+  const versions = {};
+  for (const details of genomeDetails) {
+    const organismId = details.analysis.speciator.organismId;
+    organismIds.push(organismId);
     const version = details.analysis.cgmlst.__v;
     const { fileId } = details;
-    acc[fileId] = acc[fileId] || {};
-    acc[fileId][version] = acc[fileId][version] || [];
-    acc[fileId][version].push(details);
-    return acc;
-  }, {});
-  const fileIds = Object.keys(versions);
+    analysisKeys.push(store.analysisKey('cgmlst', version, fileId, organismId));
+    versions[fileId] = versions[fileId] || {};
+    versions[fileId][version] = versions[fileId][version] || [];
+    versions[fileId][version].push(details);
+  }
 
-  const analysisQuery = {
-    fileId: { $in: fileIds },
-    task: 'cgmlst',
-    organismId: { $in: organismIds },
-  };
+  async function* generate() {
+    for await (const value of store.iterGet(analysisKeys)) {
+      const doc = JSON.parse(value);
+      if (!organismIds.includes(doc.organismId)) continue;
 
-  return Analysis.find(analysisQuery)
-    .cursor()
-    .pipe(csv.transform(transformer(versions)))
+      const { fileId, version, results: cgmlst } = doc;
+      for (const { _id, name } of versions[fileId][version]) {
+        for (const { gene, id, start, end, contig } of cgmlst.matches) {
+          yield {
+            'Genome ID': _id.toString(),
+            'Genome Name': name,
+            Version: version,
+            Gene: gene,
+            'Allele ID': id,
+            Start: start,
+            End: end,
+            Contig: contig,
+            Direction: start > end ? 'reverse' : 'forwards',
+          };
+        }
+      }
+      versions[fileId][version] = [];
+    }
+  }
+
+  return Readable.from(generate())
     .pipe(csv.stringify({ header: true, quotedString: true }))
     .pipe(res);
 };

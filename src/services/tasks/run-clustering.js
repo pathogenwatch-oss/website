@@ -2,216 +2,193 @@
 /* eslint no-params: 0 */
 /* eslint max-params: 0 */
 
-const es = require('event-stream');
+const slug = require('slug');
 const BSON = require('bson');
-const { Writable } = require('stream');
-const { ObjectId } = require('mongoose').Types;
+const { Readable, Writable } = require('stream');
+const readline = require('readline');
 
-const Genome = require('../../models/genome');
-const Analysis = require('../../models/analysis');
-const Clustering = require('../../models/clustering');
-const TaskLog = require('../../models/taskLog');
-const docker = require('../docker');
-const { DEFAULT_TIMEOUT } = require('../bus');
-
-const { getImageName } = require('../../manifest.js');
-const { request } = require('../../services');
-
-const LOGGER = require('../../utils/logging').createLogger('runner');
 const bson = new BSON();
+
+const store = require('utils/object-store');
+const Genome = require('models/genome');
+const TaskLog = require('models/taskLog');
+const docker = require('services/docker');
+const { DEFAULT_TIMEOUT } = require('services/bus');
+
+const { getImageName } = require('manifest.js');
+const { request } = require('services');
+
+const LOGGER = require('utils/logging').createLogger('runner');
 
 const DEFAULT_THRESHOLD = 50;
 
-async function getGenomes(spec, metadata) {
-  const { userId, scheme } = metadata;
-
+async function getCgmlstKeys({ userId, scheme }) {
   const query = {
     ...Genome.getPrefilterCondition({ user: userId ? { _id: userId } : null }),
     'analysis.cgmlst.scheme': scheme,
   };
 
-  const docs = await Genome
-    .find(query, { 'analysis.cgmlst.st': 1 })
-    .lean();
+  const projection = {
+    fileId: 1,
+    'analysis.cgmlst.st': 1,
+    'analysis.cgmlst.__v': 1,
+    'analysis.speciator.organismId': 1,
+  };
 
-  if (docs.length < 2) {
+  const docs = await Genome
+    .find(query, projection)
+    .lean()
+    .cursor();
+
+  const analysisKeys = {};
+
+  for await (const doc of docs) {
+    const { st, __v: version } = doc.analysis.cgmlst;
+    const { fileId } = doc;
+    const organismId = doc.analysis.speciator.organismId;
+    analysisKeys[st] = store.analysisKey('cgmlst', version, fileId, organismId);
+  }
+
+  if (Object.keys(analysisKeys).length < 2) {
     throw new Error('Not enough genomes to cluster');
   }
 
-  return docs;
+  return analysisKeys;
 }
 
-async function attachInputStream(container, spec, metadata, allSts) {
+function attachInputStream(container, spec, metadata, cgmlstKeys) {
+  const { userId = 'public', scheme } = metadata;
   const { version } = spec;
-  const { userId, scheme } = metadata;
 
-  const profilesStream = Analysis
-    .find(
-      { task: 'cgmlst', 'results.st': { $in: allSts }, 'results.scheme': scheme },
-      { results: 1 },
-      { raw: true },
-    )
-    .lean()
-    .cursor();
-  profilesStream.pause();
+  async function* gen() {
+    yield bson.serialize({
+      STs: Object.keys(cgmlstKeys),
+      maxThreshold: DEFAULT_THRESHOLD,
+    });
 
-  const cluster = await Clustering
-    .find(
-      { scheme, version, $or: [ { user: userId }, { public: true } ] },
-      { _id: 1, relatedBy: 1 }
-    )
-    .sort({ public: 1 })
-    .limit(1);
+    const clustering = await request('clustering', 'cluster-details', { scheme, version, userId });
+    if (clustering !== undefined && clustering !== null) {
+      yield bson.serialize(clustering);
+    }
 
-  let relatedBy;
-  if (cluster.length > 0) {
-    relatedBy = cluster[0].relatedBy;
-  } else {
-    relatedBy = new ObjectId();
+    for await (const value of store.iterGet(Object.values(cgmlstKeys))) {
+      const { _id, results } = JSON.parse(value);
+      yield bson.serialize({ _id, results });
+    }
   }
 
-  const clusteringStream = Clustering
-    .find(
-      { relatedBy },
-      { pi: 1, lambda: 1, STs: 1, threshold: 1, edges: 1 },
-      { raw: true }
-    )
-    .lean()
-    .cursor();
-  clusteringStream.on('end', () => profilesStream.resume());
-
-  const requestStream = es.through();
-
-  const stream = es.merge(
-    requestStream,
-    clusteringStream,
-    profilesStream
-  );
-
-  stream
-    .pipe(container.stdin);
-    // .pipe(require('fs').createWriteStream('input.bson'));
-
-  const clusteringRequest = {
-    STs: allSts,
-    maxThreshold: DEFAULT_THRESHOLD,
-  };
-  requestStream.end(bson.serialize(clusteringRequest), () => clusteringStream.resume());
+  Readable.from(gen()).pipe(container.stdin);
 }
 
 async function handleContainerOutput(container, spec, metadata) {
-  const { task, version } = spec;
+  const { task } = spec;
   const { taskId } = metadata;
-  let resolve;
-  let reject;
-  const output = new Promise((_resolve, _reject) => {
-    resolve = _resolve;
-    reject = _reject;
+
+  const lines = readline.createInterface({
+    input: container.stdout,
+    crlfDelay: Infinity,
   });
-  const relatedBy = new ObjectId();
+
   await request('clustering', 'send-progress', { taskId, payload: { task, status: 'IN PROGRESS' } });
+
+  const results = { edges: {} };
+  const hasContent = (a) => Array.isArray(a) && a.length > 0;
+
   let lastProgress = 0;
-  const consumer = new Writable({
+
+  const handler = new Writable({
     objectMode: true,
-    async write(data, _, callback) {
-      if (!data) return callback();
-      if (data.indexOf('progress') === -1 && data.indexOf('lambda') === -1) return callback();
+    async write(line, _, done) {
+      if (!line) return done();
+      if (line.indexOf('progress') === -1 && line.indexOf('lambda') === -1) return done();
       try {
-        const doc = JSON.parse(data);
+        const doc = JSON.parse(line);
         if (doc.progress) {
           const progress = doc.progress * 0.99;
           if ((progress - lastProgress) >= 0.1) {
             await request('clustering', 'send-progress', { taskId, payload: { task, status: 'IN PROGRESS', message: doc.message, progress } });
             lastProgress = progress;
-            return callback();
           }
-        } else if (doc.STs) {
-          doc.relatedBy = relatedBy;
-          await request('clustering', 'save-results', { results: doc, metadata, version });
-          return callback();
+        } else if ((doc.STs !== undefined) || (doc.edges !== undefined)) {
+          results.edges = { ...doc.edges, ...results.edges };
+          results.threshold = results.threshold || doc.threshold;
+          if (hasContent(doc.pi)) results.pi = doc.pi;
+          if (hasContent(doc.lambda)) results.lambda = doc.lambda;
+          if (hasContent(doc.STs)) results.STs = doc.STs;
         }
+        return done();
       } catch (e) {
         LOGGER.error(e);
         await request('clustering', 'send-progress', { taskId, payload: { task, status: 'ERROR' } });
-        reject(e);
-        return callback(e);
+        return done(e);
       }
-      return callback();
-    },
-    final(callback) {
-      resolve({ relatedBy });
-      return callback();
-    },
-  });
-  container.stdout
-    .pipe(es.split())
-    .pipe(consumer);
-  return output;
-}
-
-function handleContainerExit(container, spec, metadata) {
-  const { task, version } = spec;
-  const { userId, scheme, taskId } = metadata;
-  let startTime = process.hrtime();
-  let resolve;
-  let reject;
-  const output = new Promise((_resolve, _reject) => {
-    resolve = _resolve;
-    reject = _reject;
-  });
-
-  container.on('spawn', (containerId) => {
-    startTime = process.hrtime();
-    LOGGER.info('spawn', containerId, 'running task', task);
-  });
-
-  container.on('exit', (exitCode) => {
-    LOGGER.info('exit', exitCode);
-
-    const [ durationS, durationNs ] = process.hrtime(startTime);
-    const duration = Math.round(durationS * 1000 + durationNs / 1e6);
-    TaskLog.create({ task, version, userId, scheme, duration, exitCode });
-
-    if (exitCode !== 0) {
-      request('clustering', 'send-progress', { taskId, payload: { task, status: 'ERROR' } });
-      container.stderr.setEncoding('utf8');
-      reject(new Error(container.stderr.read()));
-    } else {
-      resolve();
     }
-  });
+  })
 
-  container.on('error', (e) => {
-    request('clustering', 'send-progress', { taskId, payload: { task, status: 'ERROR' } });
-    reject(e);
-  });
-
-  return output;
-}
-
-function createContainer(spec, timeout) {
-  const { task, version } = spec;
-
-  LOGGER.debug(`Starting container of ${task}:${version}`);
-  const container = docker(getImageName(task, version), {}, timeout);
-
-  return container;
-}
-
-async function runTask(spec, metadata, timeout) {
-  const genomes = await getGenomes(spec, metadata);
-  const allSts = [ ...new Set(genomes.map(_ => _.analysis.cgmlst.st)) ];
-
-  const container = createContainer(spec, timeout);
-  const whenOutput = handleContainerOutput(container, spec, metadata);
-  const whenExit = handleContainerExit(container, spec, metadata);
-  await attachInputStream(container, spec, metadata, allSts);
-
-  await whenExit;
-  const results = await whenOutput;
+  Readable.from(lines).pipe(handler);
+  await container.wait();
   return results;
 }
 
-module.exports = function handleMessage({ spec, metadata, timeout$: timeout = DEFAULT_TIMEOUT }) {
-  return runTask(spec, metadata, timeout);
+async function uploadResults(results, spec, metadata) {
+  const { version } = spec;
+  const { userId, scheme } = metadata;
+  const fullVersion = `${version}-${slug(scheme, { lower: true })}`;
+  await store.putAnalysis('cgmlst-clustering', fullVersion, userId ? userId.toString() : 'public', undefined, results);
+}
+
+async function handleContainerExit(container, spec, metadata) {
+  const { task, version } = spec;
+  const { userId, scheme, taskId } = metadata;
+
+  await container.start();
+  startTime = process.hrtime();
+  LOGGER.info('spawn', container.id, 'running task', task);
+
+  const { StatusCode: statusCode } = await container.wait()
+
+  LOGGER.info('exit', statusCode);
+
+  const [ durationS, durationNs ] = process.hrtime(startTime);
+  const duration = Math.round(durationS * 1000 + durationNs / 1e6);
+  TaskLog.create({ task, version, userId, scheme, duration, statusCode });
+
+  if (statusCode !== 0) {
+    await request('clustering', 'send-progress', { taskId, payload: { task, status: 'ERROR' } });
+    container.stderr.setEncoding('utf8');
+    throw new Error(container.stderr.read());
+  }
+
+  return statusCode;
+}
+
+function createContainer(spec, timeout, resources={}) {
+  const { task, version } = spec;
+  LOGGER.debug(`Starting container of ${task}:${version}`);
+  return docker(getImageName(task, version), {}, timeout, resources);
+}
+
+async function runTask(spec, metadata, timeout, resources) {
+  const cgmlstKeys = await getCgmlstKeys(metadata);
+
+  const container = await createContainer(spec, timeout, resources);
+  const whenResults = handleContainerOutput(container, spec, metadata);
+  attachInputStream(container, spec, metadata, cgmlstKeys);
+  const statusCode = await handleContainerExit(container, spec, metadata);
+
+  const results = await whenResults;
+  await uploadResults(results, spec, metadata);
+  return statusCode;
+}
+
+module.exports = async function handleMessage({ spec, metadata, timeout$: timeout = DEFAULT_TIMEOUT, resources }) {
+  const { taskId } = metadata;
+  const { task } = spec;
+  try {
+    const statusCode = await runTask(spec, metadata, timeout, resources);
+    return { statusCode };
+  } catch (error) {
+    request('clustering', 'send-progress', { taskId, payload: { task, status: 'ERROR' } });
+    throw error;
+  }
 };

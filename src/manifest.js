@@ -1,8 +1,60 @@
 const tasks = require('../tasks.json');
+const assert = require('assert').strict;
+const { taskTypes } = require('models/queue');
 
 const config = require('configuration');
 
+const GB = 1024 ** 3;
+const defaultTimeout = config.tasks.timeout || 60;
+
+function addTaskDefaults(task) {
+  const { resources={} } = task;
+  resources.cpu = resources.cpu || 1;
+
+  switch(task.task) {
+    case 'speciator':
+      resources.memory = resources.memory || 0.5*GB;
+      break;
+    case 'cgmlst':
+      resources.memory = resources.memory || 3*GB;
+      break;
+    case 'core':
+      resources.memory = resources.memory || 2*GB;
+      break;
+    case 'tree':
+    case 'subtree':
+      resources.memory = resources.memory || 5*GB;
+      break;
+    case 'clustering':
+      resources.memory = resources.memory || 15*GB;
+      break;
+    default:
+      resources.memory = resources.memory || 1*GB;
+  }
+
+  switch(task.task) {
+    case 'speciator':
+      task.taskType = taskTypes.genome;
+      break;
+    case 'tree':
+    case 'subtree':
+      task.taskType = taskTypes.collection;
+      break;
+    case 'clustering':
+      task.taskType = taskTypes.clustering;
+      break;
+    default:
+      task.taskType = taskTypes.task;
+  }
+  
+  task.resources = resources;
+  task.timeout = task.timeout || defaultTimeout;
+  return task;
+}
+
 function getImageName(task, version) {
+  assert.ok(task, "Need task to be defined");
+  assert.ok(version, "Need version to be defined");
   return `registry.gitlab.com/cgps/pathogenwatch-tasks/${task}:${version}`;
 }
 
@@ -28,7 +80,7 @@ module.exports.getImages = function (sectionName) {
 module.exports.getSpeciatorTask = function () {
   const { speciation = {} } = config.tasks || {};
   const { task = 'speciator', version = 'v3.0.1' } = speciation;
-  return { task, version };
+  return addTaskDefaults({ task, version });
 };
 
 function hasFlags(task) {
@@ -73,7 +125,7 @@ module.exports.getTasksByOrganism = function (
     }
   }
 
-  return Object.keys(uniqueTasks).map(_ => uniqueTasks[_]);
+  return Object.values(uniqueTasks).map(addTaskDefaults)
 };
 
 module.exports.getCollectionTask = function (organismId, task) {
@@ -81,14 +133,16 @@ module.exports.getCollectionTask = function (organismId, task) {
 
   if (organismId in collectionTasks) {
     const list = collectionTasks[organismId];
-    return list.find(_ => _.task === task);
+    const taskDetails = list.find(_ => _.task === task);
+    if (taskDetails === undefined) return null;
+    return addTaskDefaults(taskDetails)
   }
 
   return null;
 };
 
 module.exports.getClusteringTask = function () {
-  return tasks.clustering;
+  return addTaskDefaults(tasks.clustering);
 };
 
 module.exports.getCollectionSchemes = function (user = defaultUser) {
