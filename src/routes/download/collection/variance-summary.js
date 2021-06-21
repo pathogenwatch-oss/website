@@ -29,9 +29,7 @@ function generateTreeStats(genomeSummaries, cache) {
     }
   }
 
-  const stats = calculateStats(scores.sort((a, b) => a - b));
-
-  return stats;
+  return calculateStats(scores.sort((a, b) => a - b));
 }
 
 function getFamilyStatsStore(hasPublicData = false) {
@@ -107,52 +105,50 @@ async function generateTreeSites(genomes, collectionGenomeIds, hasPublicData) {
       }
     }
   }
-}
 
-const result = {
-  userFiltered: 0,
-  publicFiltered: 0,
-  userUnfiltered: 0,
-  publicUnfiltered: 0,
-  userRepresentative: 0,
-  publicRepresentative: 0,
-};
+  const result = {
+    userFiltered: 0,
+    publicFiltered: 0,
+    userUnfiltered: 0,
+    publicUnfiltered: 0,
+    userRepresentative: 0,
+    publicRepresentative: 0,
+  };
 
-for (const id of Object.keys(sitesByFamilyId)) {
-  const sites = sitesByFamilyId[id];
+  for (const id of Object.keys(sitesByFamilyId)) {
+    const sites = sitesByFamilyId[id];
 
-  for (const count of Object.values(sites.userFiltered)) {
-    if (count > 0 && count < genomesLength) {
-      result.userFiltered += 1;
-    }
-  }
-  for (const count of Object.values(sites.userUnfiltered)) {
-    if (count > 0 && count < genomesLength) {
-      result.userUnfiltered += 1;
-    }
-  }
-  result.userRepresentative += sites.userRepresentative.size;
-
-  if (hasPublicData) {
-    for (const count of Object.values(sites.publicFiltered)) {
+    for (const count of Object.values(sites.userFiltered)) {
       if (count > 0 && count < genomesLength) {
-        result.publicFiltered += 1;
+        result.userFiltered += 1;
       }
     }
-    for (const count of Object.values(sites.publicUnfiltered)) {
+    for (const count of Object.values(sites.userUnfiltered)) {
       if (count > 0 && count < genomesLength) {
-        result.publicUnfiltered += 1;
+        result.userUnfiltered += 1;
       }
     }
-    result.publicRepresentative += sites.publicRepresentative.size;
-  } else {
-    result.publicFiltered = result.userFiltered;
-    result.publicUnfiltered = result.userUnfiltered;
-    result.publicRepresentative = result.userRepresentative;
-  }
-}
+    result.userRepresentative += sites.userRepresentative.size;
 
-return result;
+    if (hasPublicData) {
+      for (const count of Object.values(sites.publicFiltered)) {
+        if (count > 0 && count < genomesLength) {
+          result.publicFiltered += 1;
+        }
+      }
+      for (const count of Object.values(sites.publicUnfiltered)) {
+        if (count > 0 && count < genomesLength) {
+          result.publicUnfiltered += 1;
+        }
+      }
+      result.publicRepresentative += sites.publicRepresentative.size;
+    } else {
+      result.publicFiltered = result.userFiltered;
+      result.publicUnfiltered = result.userUnfiltered;
+      result.publicRepresentative = result.userRepresentative;
+    }
+  }
+  return result;
 }
 
 async function getGenomeSummaries(genomeIds) {
