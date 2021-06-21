@@ -178,7 +178,6 @@ function createGenomeStream(genomeSummaries, versions) {
   for (const { fileId, _id } of genomeSummaries) {
     genomeIds[fileId] = genomeIds[fileId] || [];
     genomeIds[fileId].push(_id);
-    return genomeIds;
   }
 
   const analysisKeys = genomes.map(({
