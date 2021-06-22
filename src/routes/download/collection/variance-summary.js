@@ -194,14 +194,7 @@ function createGenomeStream(genomeSummaries, versions) {
           fileId,
           analysis: {
             core: {
-              profile: {
-                id: results.profile.id,
-                filter: results.profile.filter,
-                alleles: {
-                  filter: results.profile.alleles.filter,
-                  mutations: results.profile.alleles.mutations,
-                },
-              },
+              profile: results.profile
             },
           },
         };

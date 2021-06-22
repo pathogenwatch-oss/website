@@ -1,6 +1,7 @@
 /* eslint-disable class-methods-use-this */
 
 const aws = require('aws-sdk');
+const http = require('http');
 const https = require('https');
 const zlib = require('zlib');
 const { promisify } = require('util');
@@ -16,17 +17,21 @@ function isJSONable(a) {
   // By Zupa: https://stackoverflow.com/users/926988/zupa
   return (!!a) && (a.constructor === Object);
 }
+
 const gzip = promisify(zlib.gzip);
 const gunzip = promisify(zlib.gunzip);
+const { extraS3Params = {} } = config;
 
+const endpoint = config.endpoint ? new aws.Endpoint(config.endpoint) : undefined;
 const s3 = new aws.S3({
-  endpoint: config.endpoint ? new aws.Endpoint(config.endpoint) : undefined,
+  endpoint,
   accessKeyId: config.accessKeyId,
   secretAccessKey: config.secretAccessKey,
   httpOptions: {
-    agent: new https.Agent({ keepAlive: true }),
+    agent: endpoint.protocol === 'http:' ? new http.Agent({ keepAlive: true }) : new https.Agent( {keepAlive: true}),
   },
   maxRetries: 0,
+  ...extraS3Params,
 });
 
 const MIN_DELAY = 5;
@@ -98,6 +103,11 @@ class ObjectStore {
     this.pool = new Pool(this.__next.bind(this), MAX_CONCURRENCY);
   }
 
+  get rps() {
+    const now = new Date();
+    return this.requests * 1000 / (now - this.counterStart);
+  }
+
   analysisKey(task, version, fileId, organismId) {
     if (fileId === 'public') return `${config.prefix || ''}analysis/${task}/${version}/${fileId}.json.gz`;
     if (organismId === undefined) return `${config.prefix || ''}analysis/${task}/${version}/${fileId.slice(0, 2)}/${fileId}.json.gz`;
@@ -136,7 +146,7 @@ class ObjectStore {
       cacheByFileId[fileId] = {};
     }
 
-    const orderedGenomes = [...genomes];
+    const orderedGenomes = [ ...genomes ];
     orderedGenomes.sort((a, b) => (a.fileId < b.fileId ? -1 : 1));
 
     const analysisKeys = orderedGenomes.map(({ fileId }) => this.analysisKey('core-tree-score', `${versions.core}_${versions.tree}`, fileId, undefined));
@@ -244,9 +254,17 @@ class ObjectStore {
             r = await req.promise();
           }
         } else if (method === 'put') {
+          // const bar = await s3.createBucket({ Bucket: config.bucket })
+          // const foo = await s3.listBuckets().promise();
+          // const bar = await s3.listObjectsV2({ Bucket: s3Params.Bucket }).promise();
+          // const ree = await s3.getBucketAcl({ Bucket: s3Params.Bucket }).promise();
           r = await s3.upload({ ...s3Params, Body: params.data, ACL: 'private' }).promise();
         } else if (method === 'copy') {
-          r = await s3.copyObject({ ...s3Params, CopySource: `/${config.bucket}/${params.srcKey}`, ACL: 'private' }).promise();
+          r = await s3.copyObject({
+            ...s3Params,
+            CopySource: `/${config.bucket}/${params.srcKey}`,
+            ACL: 'private'
+          }).promise();
         } else if (method === 'delete') {
           r = await s3.deleteObject(s3Params).promise();
         } else if (method === 'list') {
@@ -301,11 +319,6 @@ class ObjectStore {
       yield await nextDone;
       nextTodo = await shift();
     }
-  }
-
-  get rps() {
-    const now = new Date();
-    return this.requests * 1000 / (now - this.counterStart);
   }
 
   resetCounter() {

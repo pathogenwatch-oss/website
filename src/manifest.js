@@ -13,7 +13,7 @@ function addTaskDefaults(task) {
 
   switch(task.task) {
     case 'speciator':
-      resources.memory = resources.memory || 0.5*GB;
+      resources.memory = resources.memory || 1*GB;
       break;
     case 'cgmlst':
       resources.memory = resources.memory || 3*GB;
@@ -46,7 +46,7 @@ function addTaskDefaults(task) {
     default:
       task.taskType = taskTypes.task;
   }
-  
+
   task.resources = resources;
   task.timeout = task.timeout || defaultTimeout;
   return task;
