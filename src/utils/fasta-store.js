@@ -6,7 +6,7 @@ const objectStore = require('utils/object-store');
 
 const { PassThrough, Readable } = require('stream');
 
-const { maxGenomeFileSize = 20 } = require('configuration');
+const { maxGenomeFileSize = 20, maxReadsFileSize = 100 } = require('configuration');
 const { promisify } = require('util');
 
 class MaxLengthError extends Error {
@@ -24,40 +24,83 @@ async function rm(p) {
   }
 }
 
-let fastaDir;
-async function setupFastaDir() {
-  if (fastaDir === undefined) fastaDir = await mkdir({ prefix: 'pw-fasta' });
-  return fastaDir;
+let tmpUploadDir;
+async function setupTmpDir() {
+  if (tmpUploadDir === undefined) tmpUploadDir = await mkdir({ prefix: 'pw-tmp' });
+  return tmpUploadDir;
+}
+
+async function createTempFile(suffix) {
+  await setupTmpDir();
+  const d = new Date();
+  return temp.path({
+    dir: tmpUploadDir,
+    prefix: `${d.getFullYear()}${d.getUTCMonth()}${d.getUTCDay()}.`,
+    suffix
+  });
 }
 
 async function store(stream, maxMb = maxGenomeFileSize) {
   const maxGenomeFileSizeBytes = maxMb * 1048576;
-  await setupFastaDir();
-  const tempPath = temp.path({ dir: fastaDir, suffix: '.fa' });
+  tempPath = await createTempFile('.fa');
 
-  /* eslint-disable no-async-promise-executor */
-  const fileId = await new Promise(async (resolve, reject) => {
-    let length = 0;
-    const hash = crypto.createHash('sha1');
-
-    async function* passthrough() {
-      for await (const chunk of stream) {
-        length += chunk.length;
-        if (length > maxGenomeFileSizeBytes) throw new MaxLengthError(length, maxGenomeFileSizeBytes);
-        hash.update(chunk);
-        yield chunk;
+  try {
+    /* eslint-disable no-async-promise-executor */
+    const fileId = await new Promise(async (resolve, reject) => {
+      let length = 0;
+      const hash = crypto.createHash('sha1');
+  
+      async function* passthrough() {
+        for await (const chunk of stream) {
+          length += chunk.length;
+          if (length > maxGenomeFileSizeBytes) throw new MaxLengthError(length, maxGenomeFileSizeBytes);
+          hash.update(chunk);
+          yield chunk;
+        }
+        resolve(hash.digest('hex'));
       }
-      resolve(hash.digest('hex'));
-    }
+  
+      const outstream = Readable.from(passthrough());
+      outstream.on('error', reject);
+      outstream.pipe(fs.createWriteStream(tempPath));
+    });
+  
+    const fastaKey = await objectStore.putFasta(fileId, fs.createReadStream(tempPath));
+    return { fileId, fastaKey };
+  } finally {
+    await rm(tempPath);
+  }
+}
 
-    const outstream = Readable.from(passthrough());
-    outstream.on('error', reject);
-    outstream.pipe(fs.createWriteStream(tempPath));
-  });
+async function storeReads({ genomeId, stream, fileNumber, maxMb = maxGenomeFileSize }) {
+  const maxGenomeFileSizeBytes = maxMb * 1048576;
+  tempPath = await createTempFile('.fastq.gz');
 
-  const fastaKey = await objectStore.putFasta(fileId, fs.createReadStream(tempPath));
-  await rm(tempPath);
-  return { fileId, fastaKey };
+  try {
+    /* eslint-disable no-async-promise-executor */
+    await new Promise(async (resolve, reject) => {
+      let length = 0;
+
+      async function* passthrough() {
+        for await (const chunk of stream) {
+          length += chunk.length;
+          if (length > maxGenomeFileSizeBytes) throw new MaxLengthError(length, maxGenomeFileSizeBytes);
+          yield chunk;
+        }
+        resolve();
+      }
+
+      const outstream = Readable.from(passthrough());
+      outstream.on('error', reject);
+      outstream.pipe(fs.createWriteStream(tempPath));
+    });
+
+    const fastaKey = await objectStore.putReads(genomeId, fileNumber, fs.createReadStream(tempPath));
+    return { fastaKey };
+  } finally {
+    await rm(tempPath);
+  }
+
 }
 
 function fetch(fileId) {
@@ -92,6 +135,7 @@ function archive(files) {
 
 module.exports = {
   store,
+  storeReads,
   fetch,
   archive,
 };

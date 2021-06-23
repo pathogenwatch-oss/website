@@ -139,6 +139,31 @@ class ObjectStore {
     return this.get(key, params);
   }
 
+  readsKey(genomeId, fileNumber) {
+    return `${config.prefix || ''}reads/${genomeId.slice(0, 2)}/${genomeId}_${fileNumber}.fastq.gz`;
+  }
+
+  async putReads(genomeId, fileNumber, data) {
+    const key = this.readsKey(genomeId, fileNumber);
+    await this.put(key, data);
+    return key;
+  }
+
+  getReads(genomeId, fileNumber) {
+    const key = this.readsKey(genomeId, fileNumber);
+    return this.get(key);
+  }
+
+  async countReads(genomeId) {
+    const prefix = `${config.prefix || ''}reads/${genomeId.slice(0, 2)}/${genomeId}_`;
+    let count = 0;
+    for await (const { Key, type } of this.list(prefix)) {
+      if (type !== 'file') continue;
+      if (/\d+.fastq.gz$/.test(Key)) count++;
+    }
+    return count;
+  }
+  
   async getScoreCache(genomes, versions, type) {
     const cacheByFileId = {};
     const fieldName = (type === 'score') ? 'scores' : 'differences';

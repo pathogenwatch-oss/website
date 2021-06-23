@@ -1,8 +1,11 @@
+const Busboy = require('busboy');
 const express = require('express');
 const zlib = require('zlib');
 const contentLength = require('express-content-length-validator');
 
 const services = require('services');
+const { asyncWrapper } = require('utils/routes');
+const { ServiceRequestError } = require('utils/errors');
 
 const router = express.Router();
 const LOGGER = require('utils/logging').createLogger('Genome');
@@ -190,24 +193,6 @@ router.put(
     const { user } = req;
     const { id } = req.params;
 
-    if (req.is('application/json')) {
-      LOGGER.info('Received status notification of genome assembly');
-      const { type, payload } = req.body;
-      if (type === 'ERROR') {
-        services
-          .request('genome', 'assembler-error', {
-            id,
-            user,
-            error: payload.error,
-          })
-          .then(() => res.sendStatus(200))
-          .catch(next);
-      } else {
-        res.sendStatus(200);
-      }
-      return;
-    }
-
     LOGGER.info('Received request to upload genome assembly');
     const { clientId } = req.query;
     services
@@ -222,6 +207,44 @@ router.put(
       .catch(next);
   }
 );
+
+router.put(
+  '/genome/:id/reads',
+  contentLength.validateMax({ max: (config.maxReadsFileSize || 100) * 1048576 }),
+  asyncWrapper((req, res, next) => {
+    const { user } = req;
+    const { id } = req.params;
+    const busboy = new Busboy({ headers: req.headers });
+
+    LOGGER.info('Received request to upload genome assembly');
+    const { clientId } = req.query;
+
+    let whenResponse = null;
+    busboy.on('file', async (fieldname, file, filename, encoding, mimetype) => {
+      if (whenResponse !== null) {
+        whenResponse = new ServiceRequestError("Did not expect more than one file in upload");
+      }
+      whenResponse = services
+        .request('genome', 'upload-reads', {
+          timeout$: 1000 * 60 * 30,
+          stream: file,
+          filename,
+          id,
+          user,
+          clientId,
+        })
+    })
+
+    await new Promise((resolve) => {
+      busboy.on('finish', () => resolve());
+    })
+
+    if (whenResponse === null) return next(new ServiceRequestError("Invalid read file"))
+    return whenResponse
+      .then((response) => res.json(response))
+      .catch(next);
+  }
+));
 
 router.post('/genome/bin', (req, res, next) => {
   const { user, body } = req;

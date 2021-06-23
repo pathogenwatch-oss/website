@@ -1,5 +1,3 @@
-import Resumable from 'resumablejs';
-import hashWorker from 'workerize-loader?name=hash.[hash]!./hashWorker';
 import { uploadComplete } from '../files/api';
 import config from '~/app/config';
 

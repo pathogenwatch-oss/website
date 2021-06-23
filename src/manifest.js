@@ -12,6 +12,9 @@ function addTaskDefaults(task) {
   resources.cpu = resources.cpu || 1;
 
   switch(task.task) {
+    case 'assembly':
+      resources.memory = resources.memory || 3*GB;
+      break;
     case 'speciator':
       resources.memory = resources.memory || 1*GB;
       break;
@@ -33,6 +36,9 @@ function addTaskDefaults(task) {
   }
 
   switch(task.task) {
+    case 'assembly':
+      task.taskType = taskTypes.assembly;
+      break;
     case 'speciator':
       task.taskType = taskTypes.genome;
       break;
@@ -79,8 +85,16 @@ module.exports.getImages = function (sectionName) {
 
 module.exports.getSpeciatorTask = function () {
   const { speciation = {} } = config.tasks || {};
-  const { task = 'speciator', version = 'v3.0.1' } = speciation;
-  return addTaskDefaults({ task, version });
+  
+  speciation.task = speciation.task || 'speciator';
+  speciation.version = speciation.version || 'v3.0.1';
+
+  return addTaskDefaults(speciation);
+};
+
+module.exports.getAssemblyTask = function () {
+  const { assembly = {} } = config.tasks || {};
+  return addTaskDefaults(assembly);
 };
 
 function hasFlags(task) {

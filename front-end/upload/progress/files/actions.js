@@ -8,7 +8,6 @@ import { getSettingValue } from '../../selectors';
 
 import * as api from './api';
 import { compress, validateAssembly } from './utils';
-import { upload } from '../assembly/api';
 
 import { fileTypes } from '../../constants';
 
@@ -59,7 +58,7 @@ export function uploadGenome(genome, data) {
       type: UPLOAD_GENOME,
       payload: {
         id,
-        promise: uploadLimiter.schedule(() => api.upload(genome, data, progressFn)).then(uploadResult => {
+        promise: uploadLimiter.schedule(() => api.uploadAssembly(genome, data, progressFn)).then(uploadResult => {
           if (metadata) {
             return api
               .update(uploadResult.id, metadata)
@@ -83,11 +82,34 @@ function processAssembly(dispatch, getState, genome) {
     .then(data => dispatch(uploadGenome(genome, data)));
 }
 
+export function uploadReads(genome) {
+  return dispatch => {
+    const { id, metadata } = genome;
+    const progressFn = percent => dispatch(genomeUploadProgress(id, percent));
+
+    return dispatch({
+      type: UPLOAD_GENOME,
+      payload: {
+        id,
+        promise: uploadLimiter.schedule(() => api.uploadReads(genome, progressFn)).then(uploadResult => {
+          if (metadata) {
+            return api
+              .update(uploadResult.id, metadata)
+              .then(updateResult => ({ ...uploadResult, ...updateResult }));
+          }
+          return uploadResult;
+        }),
+      },
+    });
+  };
+}
+
 function processReads(dispatch, getState, genome) {
   const state = getState();
   const uploadedAt = getUploadedAt(state);
-  const token = state.auth.token;
-  return upload(genome, { token, uploadedAt }, dispatch);
+  const { files: [] } = genome;
+  if (files.length !== 2) throw new InvalidGenomeError(`Expected a pair of read files, got ${files.length}`);
+  return uploadReads(genome, { uploadedAt }, dispatch);
 }
 
 export const PROCESS_GENOME = createAsyncConstants('PROCESS_GENOME');

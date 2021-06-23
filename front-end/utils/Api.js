@@ -29,7 +29,7 @@ export function fetchJson(method, path, data, headers) {
   });
 }
 
-export function fetchRaw(method, path, contentType, data, progressFn) {
+export function fetchRaw({ method, path, contentType, data, progressFn, ...opts }) {
   return ajax({
     type: method,
     url: getServerPath(path),
@@ -37,6 +37,7 @@ export function fetchRaw(method, path, contentType, data, progressFn) {
     data,
     processData: false,
     dataType: 'json',
+    ...opts,
     xhr: progressFn
       ? function () {
         const xhr = new window.XMLHttpRequest();

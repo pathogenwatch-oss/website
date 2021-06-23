@@ -14,6 +14,7 @@ const taskTypes = {
   task: 'task',
   collection: 'collection',
   clustering: 'clustering',
+  assembly: 'assembly',
 }
 
 const schema = new Schema({
