@@ -27,7 +27,7 @@ function uploadReadsProgress(stage, id, filename, progress) {
   };
 }
 
-export function upload(genome, { token, uploadedAt }, dispatch) {
+export function upload(genome, { uploadedAt }, dispatch) {
   const worker = hashWorker();
   worker.onmessage = ({ data }) => {
     if (data.progress) {
