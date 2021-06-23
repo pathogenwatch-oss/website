@@ -21,7 +21,7 @@ module.exports = (req, res, next) => {
   });
 
   request('collection', 'authorise', { user, token, projection: { genomes: 1 } })
-    .then(collection => {
+    .then((collection) => {
       const query = {
         _id: { $in: genomeIds },
         'analysis.kleborate': { $exists: true },

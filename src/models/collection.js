@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+
 const { Schema } = mongoose;
 const rand = require('rand-token');
 const escapeRegex = require('escape-string-regexp');
@@ -174,7 +175,7 @@ schema.statics.getFilterQuery = function (props) {
     );
   }
 
-  if (publicationYear && !isNaN(publicationYear)) {
+  if (publicationYear && !Number.isNaN(publicationYear)) {
     findQuery.publicationYear = Number(publicationYear);
   }
 
@@ -218,6 +219,7 @@ schema.statics.addAnalysisResult = function (_id, task, result) {
       },
     });
   }
+  return undefined;
 };
 
 schema.statics.getSubtreeIds = function (subtree) {
@@ -237,7 +239,7 @@ schema.statics.getGenomeIds = function (token, props) {
   return (
     this.findOne(query, { genomes: 1 })
       .lean()
-      .then(doc => (doc ? doc.genomes : []))
+      .then((doc) => (doc ? doc.genomes : []))
   );
 };
 

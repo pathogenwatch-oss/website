@@ -1,10 +1,10 @@
 const Genome = require('models/genome');
 
 module.exports = async function (props) {
-  const query = Object.assign(
-    { 'analysis.metrics': { $exists: true } },
-    await Genome.getFilterQuery(props)
-  );
+  const query = {
+    'analysis.metrics': { $exists: true },
+    ...await Genome.getFilterQuery(props),
+  };
   return (
     Genome
       .find(query, {
@@ -19,7 +19,7 @@ module.exports = async function (props) {
       })
       .lean()
       .then(
-        docs => docs.map(({ _id, name, analysis }) => ({
+        (docs) => docs.map(({ _id, name, analysis }) => ({
           id: _id,
           name,
           length: analysis.metrics.length,

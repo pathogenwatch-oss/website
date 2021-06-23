@@ -21,7 +21,7 @@ router.get('/upload/:uploadedAt/position', (req, res, next) => {
   const { uploadedAt } = req.params;
   services
     .request('tasks', 'queue-position', { uploadedAt })
-    .then(result => res.json(result))
+    .then((result) => res.json(result))
     .catch(next);
 });
 
@@ -42,7 +42,7 @@ router.get('/upload', (req, res, next) => {
   const { user } = req;
   services
     .request('genome', 'fetch-upload-list', { user })
-    .then(response => res.json(response))
+    .then((response) => res.json(response))
     .catch(next);
 });
 

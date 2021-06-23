@@ -36,20 +36,20 @@ async function createTempFile(suffix) {
   return temp.path({
     dir: tmpUploadDir,
     prefix: `${d.getFullYear()}${d.getUTCMonth()}${d.getUTCDay()}.`,
-    suffix
+    suffix,
   });
 }
 
 async function store(stream, maxMb = maxGenomeFileSize) {
   const maxGenomeFileSizeBytes = maxMb * 1048576;
-  tempPath = await createTempFile('.fa');
+  const tempPath = await createTempFile('.fa');
 
   try {
     /* eslint-disable no-async-promise-executor */
     const fileId = await new Promise(async (resolve, reject) => {
       let length = 0;
       const hash = crypto.createHash('sha1');
-  
+
       async function* passthrough() {
         for await (const chunk of stream) {
           length += chunk.length;
@@ -59,12 +59,12 @@ async function store(stream, maxMb = maxGenomeFileSize) {
         }
         resolve(hash.digest('hex'));
       }
-  
+
       const outstream = Readable.from(passthrough());
       outstream.on('error', reject);
       outstream.pipe(fs.createWriteStream(tempPath));
     });
-  
+
     const fastaKey = await objectStore.putFasta(fileId, fs.createReadStream(tempPath));
     return { fileId, fastaKey };
   } finally {
@@ -72,9 +72,9 @@ async function store(stream, maxMb = maxGenomeFileSize) {
   }
 }
 
-async function storeReads({ genomeId, stream, fileNumber, maxMb = maxGenomeFileSize }) {
+async function storeReads({ genomeId, stream, fileNumber, maxMb = maxReadsFileSize }) {
   const maxGenomeFileSizeBytes = maxMb * 1048576;
-  tempPath = await createTempFile('.fastq.gz');
+  const tempPath = await createTempFile('.fastq.gz');
 
   try {
     /* eslint-disable no-async-promise-executor */

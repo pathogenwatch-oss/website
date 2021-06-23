@@ -1,12 +1,12 @@
 const express = require('express');
+
 const router = express.Router();
 
 const { request } = require('services');
+const LOGGER = require('utils/logging').createLogger('Organism Downloads');
 
 const downloads = require('utils/organismDownloads');
 const downloadUtils = require('../../../universal/downloads');
-
-const LOGGER = require('utils/logging').createLogger('Organism Downloads');
 
 router.get('/:nickname/:type', (req, res, next) => {
   const { nickname, type } = req.params;
@@ -20,13 +20,13 @@ router.get('/:nickname/:type', (req, res, next) => {
     'Content-Type': contentType,
   });
 
-  request('download', 'get-organism-file', { nickname, type }).
-    then(stream => {
-      stream.on('error', error => next(error));
+  request('download', 'get-organism-file', { nickname, type })
+    .then((stream) => {
+      stream.on('error', (error) => next(error));
 
       stream.pipe(res);
-    }).
-    catch(error => next(error));
+    })
+    .catch((error) => next(error));
 });
 
 module.exports = router;

@@ -13,7 +13,7 @@ const transformer = function (doc) {
     .sort((a, b) => {
       if (a.type === b.type) {
         if (a.name < b.name) {
-          return -1
+          return -1;
         }
         return 1;
       } else if (a.type === 'Deletion' || a.type === 'SNP') {
@@ -41,10 +41,11 @@ module.exports = (req, res) => {
   res.setHeader('Content-Disposition', `attachment; filename=${filename}`);
   res.setHeader('Content-Type', 'text/csv');
 
-  const query = Object.assign(
-    { _id: { $in: ids.split(',') }, 'analysis.sarscov2-variants': { $exists: true } },
-    Genome.getPrefilterCondition({ user })
-  );
+  const query = {
+    _id: { $in: ids.split(',') },
+    'analysis.sarscov2-variants': { $exists: true },
+    ...Genome.getPrefilterCondition({ user }),
+  };
 
   const projection = {
     name: 1,

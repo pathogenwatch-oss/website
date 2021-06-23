@@ -45,19 +45,19 @@ async function runTask({ fileId, task, version, resources, organismId, speciesId
     }
   );
 
-  let buffer = [];
+  const buffer = [];
   const bufferOutput = new Writable({
     write(chunk, _, next) {
       buffer.push(chunk);
       next();
-    }
-  })
+    },
+  });
   container.stdout.pipe(bufferOutput);
 
   const startTime = process.hrtime();
   await container.start();
   LOGGER.info('spawn', container.id, 'for task', task, 'file', fileId, 'organismId', organismId);
-  
+
   try {
     const stream = fastaStorage.fetch(fileId);
     stream.on('error', (err) => {
@@ -83,13 +83,7 @@ async function runTask({ fileId, task, version, resources, organismId, speciesId
   } else if (buffer.length === 0) {
     throw new Error('No output received.');
   } else {
-    let output;
-    try {
-      output = JSON.parse(buffer.join(''));
-    } catch (e) {
-      throw e;
-    }
-    return output;
+    return JSON.parse(buffer.join(''));
   }
 }
 

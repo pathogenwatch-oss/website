@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+
 const { Schema } = mongoose;
 
 const { addPreSaveHook } = require('./utils');
@@ -25,7 +26,7 @@ addPreSaveHook(schema);
 
 schema.virtual('canRun').get(function () {
   const userFlags = this.flags || {};
-  const experiments = Object.keys(userFlags).filter(_ => userFlags[_]);
+  const experiments = Object.keys(userFlags).filter((_) => userFlags[_]);
   return (task) => {
     const { flags = {} } = task;
     if (Object.keys(flags).length === 0) return true;

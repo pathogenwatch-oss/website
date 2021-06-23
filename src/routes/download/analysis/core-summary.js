@@ -25,10 +25,11 @@ module.exports = (req, res) => {
   res.setHeader('Content-Disposition', `attachment; filename=${filename}`);
   res.setHeader('Content-Type', 'text/csv');
 
-  const query = Object.assign(
-    { _id: { $in: ids.split(',') }, 'analysis.core': { $exists: true } },
-    Genome.getPrefilterCondition({ user })
-  );
+  const query = {
+    _id: { $in: ids.split(',') },
+    'analysis.core': { $exists: true },
+    ...Genome.getPrefilterCondition({ user }),
+  };
   const projection = {
     name: 1,
     'analysis.core.__v': 1,

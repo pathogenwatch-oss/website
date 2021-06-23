@@ -1,8 +1,8 @@
 const Genome = require('models/genome');
-const manifest = require('../../manifest');
 const { ServiceRequestError, ServiceRequestErrorJSON } = require('utils/errors');
 
 const { maxCollectionSize = 1000 } = require('configuration');
+const manifest = require('../../manifest');
 const organismConfigs = require('../../../universal/organisms');
 
 module.exports = async function ({ genomeIds, organismId, user }) {

@@ -17,7 +17,7 @@ class Pool {
     return {
       queue: this.queue.length,
       inProgress: this.inProgress.length,
-      total: this.queue.length + this.inProgress.length
+      total: this.queue.length + this.inProgress.length,
     };
   }
 

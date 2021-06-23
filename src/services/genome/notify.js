@@ -4,7 +4,7 @@ const { summariseAnalysis } = require('../../utils/analysis');
 
 function getNotification(analysis) {
   const { task, version, results, error } = analysis;
-  if (error) return { task, version, result: error, error }
+  if (error) return { task, version, result: error, error };
   switch (task) {
     case 'speciator':
       return { task, version, result: summariseAnalysis(analysis), error };

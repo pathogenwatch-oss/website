@@ -9,7 +9,7 @@ module.exports = function ({ token, user, status }) {
 
   return Collection
     .findOne({ token, _user: user._id }, { binned: 1 })
-    .then(collection => {
+    .then((collection) => {
       if (!collection) throw new NotFoundError('Incorrect id and user combination.');
 
       if (status === collection.binned) {
@@ -21,10 +21,10 @@ module.exports = function ({ token, user, status }) {
           { token, _user: user._id },
           { binned: status, binnedDate: status ? new Date() : null }
         )
-        .then(response => {
-          if (response.ok !== 1) throw new ServiceRequestError('Failed to complete bin action');
-          return {};
-        })
+          .then((response) => {
+            if (response.ok !== 1) throw new ServiceRequestError('Failed to complete bin action');
+            return {};
+          })
       );
     });
 };

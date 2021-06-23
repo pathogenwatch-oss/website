@@ -25,7 +25,7 @@ const projection = {
 
 module.exports = ({ user, token }) =>
   request('collection', 'authorise', { user, token, projection })
-    .then(collection =>
+    .then((collection) =>
       collection
         .populate('_organism', {
           tree: 1,
@@ -34,7 +34,7 @@ module.exports = ({ user, token }) =>
         })
         .execPopulate()
         .then(() => Genome.getForCollection({ _id: { $in: collection.genomes } }, user))
-        .then(genomes => {
+        .then((genomes) => {
           const doc = collection.toObject({ user });
           doc.genomes = genomes;
           doc.status = 'READY';

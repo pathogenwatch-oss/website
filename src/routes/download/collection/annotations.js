@@ -142,7 +142,7 @@ function convertDocumentToGFF(doc, stream) {
   if (mlst) {
     for (const { gene, id, start, end, contig } of mlst.matches) {
       const [ qStart, qEnd ] = [ start, end ].sort((a, b) => {
-        return a - b
+        return a - b;
       });
       stream.write({
         sequence: contig,
@@ -183,7 +183,7 @@ function convertDocumentToGFF(doc, stream) {
           TargetLength: match.refLength,
           note: "",
           evalue: match.evalue,
-        }
+        },
       });
       if (match.resistanceVariants.length !== 0) {
         match.resistanceVariants.forEach(({ name, queryStart, queryEnd, refStart, refEnd }) => {
@@ -200,7 +200,7 @@ function convertDocumentToGFF(doc, stream) {
               ID: `AMR_${match.queryId}_${queryStart}_${name}`,
               Name: name,
               Target: `${match.queryId} ${refStart} ${refEnd}`,
-            }
+            },
           });
         });
       }

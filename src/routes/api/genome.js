@@ -211,7 +211,7 @@ router.put(
 router.put(
   '/genome/:id/reads',
   contentLength.validateMax({ max: (config.maxReadsFileSize || 100) * 1048576 }),
-  asyncWrapper((req, res, next) => {
+  asyncWrapper(async (req, res, next) => {
     const { user } = req;
     const { id } = req.params;
     const busboy = new Busboy({ headers: req.headers });
@@ -232,19 +232,19 @@ router.put(
           id,
           user,
           clientId,
-        })
-    })
+        });
+    });
 
     await new Promise((resolve) => {
       busboy.on('finish', () => resolve());
-    })
+    });
 
-    if (whenResponse === null) return next(new ServiceRequestError("Invalid read file"))
+    if (whenResponse === null) return next(new ServiceRequestError("Invalid read file"));
     return whenResponse
       .then((response) => res.json(response))
       .catch(next);
   }
-));
+  ));
 
 router.post('/genome/bin', (req, res, next) => {
   const { user, body } = req;

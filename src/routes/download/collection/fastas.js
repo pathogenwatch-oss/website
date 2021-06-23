@@ -3,7 +3,7 @@ const sanitize = require('sanitize-filename');
 const Genome = require('models/genome');
 const { request } = require('services');
 const { createFastaFileName } = require('services/utils');
-const fastaStorage = require('../../../utils/fasta-store')
+const fastaStorage = require('../../../utils/fasta-store');
 
 function getCollectionGenomes({ genomes }, genomeIds) {
   const query = {
@@ -37,7 +37,7 @@ function createGenomeDownload(genome, res, next) {
 
 function createGenomeArchive(genomes, filename, res, next) {
   return request('download', 'create-genome-archive', { genomes })
-    .then(stream => {
+    .then((stream) => {
       stream.on('error', next);
       res.setHeader('Content-Disposition', `attachment; filename=${filename}`);
       res.setHeader('Content-Type', 'application/zip');
@@ -54,8 +54,8 @@ module.exports = (req, res, next) => {
   const genomeIds = ids ? ids.split(',') : null;
 
   request('collection', 'authorise', { user, token, projection: { genomes: 1 } })
-    .then(collection => getCollectionGenomes(collection, genomeIds))
-    .then(genomes => {
+    .then((collection) => getCollectionGenomes(collection, genomeIds))
+    .then((genomes) => {
       if (genomes.length === 1) {
         createGenomeDownload(genomes[0], res, next);
       } else {

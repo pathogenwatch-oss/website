@@ -28,7 +28,7 @@ const s3 = new aws.S3({
   accessKeyId: config.accessKeyId,
   secretAccessKey: config.secretAccessKey,
   httpOptions: {
-    agent: endpoint.protocol === 'http:' ? new http.Agent({ keepAlive: true }) : new https.Agent( {keepAlive: true}),
+    agent: endpoint.protocol === 'http:' ? new http.Agent({ keepAlive: true }) : new https.Agent({ keepAlive: true }),
   },
   maxRetries: 0,
   ...extraS3Params,
@@ -85,11 +85,6 @@ class Throttle {
       this.counterStart = now;
     }
   }
-}
-
-function remove(arr, el) {
-  const index = arr.indexOf(el);
-  if (index > -1) arr.splice(index, 1);
 }
 
 const MAX_CONCURRENCY = 5;
@@ -159,11 +154,11 @@ class ObjectStore {
     let count = 0;
     for await (const { Key, type } of this.list(prefix)) {
       if (type !== 'file') continue;
-      if (/\d+.fastq.gz$/.test(Key)) count++;
+      if (/\d+.fastq.gz$/.test(Key)) count += 1;
     }
     return count;
   }
-  
+
   async getScoreCache(genomes, versions, type) {
     const cacheByFileId = {};
     const fieldName = (type === 'score') ? 'scores' : 'differences';
@@ -288,7 +283,7 @@ class ObjectStore {
           r = await s3.copyObject({
             ...s3Params,
             CopySource: `/${config.bucket}/${params.srcKey}`,
-            ACL: 'private'
+            ACL: 'private',
           }).promise();
         } else if (method === 'delete') {
           r = await s3.deleteObject(s3Params).promise();

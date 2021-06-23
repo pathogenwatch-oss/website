@@ -1,4 +1,5 @@
 const config = require('../configuration');
+
 const { organisms = [] } = config;
 
 function getSubspecies(taxId) {

@@ -1,6 +1,5 @@
-const fastaStorage = require('../../utils/fasta-store')
-
 const { ServiceRequestError } = require('utils/errors');
+const fastaStorage = require('../../utils/fasta-store');
 
 module.exports = ({ stream }) => {
   if (!stream) {

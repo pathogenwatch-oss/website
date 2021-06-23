@@ -1,5 +1,4 @@
 /* eslint no-param-reassign: ["error", { "props": false }] */
-/* eslint no-params: 0 */
 /* eslint max-params: 0 */
 
 const slug = require('slug');
@@ -122,8 +121,8 @@ async function handleContainerOutput(container, spec, metadata) {
         await request('clustering', 'send-progress', { taskId, payload: { task, status: 'ERROR' } });
         return done(e);
       }
-    }
-  })
+    },
+  });
 
   Readable.from(lines).pipe(handler);
   await container.wait();
@@ -142,10 +141,10 @@ async function handleContainerExit(container, spec, metadata) {
   const { userId, scheme, taskId } = metadata;
 
   await container.start();
-  startTime = process.hrtime();
+  const startTime = process.hrtime();
   LOGGER.info('spawn', container.id, 'running task', task);
 
-  const { StatusCode: statusCode } = await container.wait()
+  const { StatusCode: statusCode } = await container.wait();
 
   LOGGER.info('exit', statusCode);
 
@@ -162,7 +161,7 @@ async function handleContainerExit(container, spec, metadata) {
   return statusCode;
 }
 
-function createContainer(spec, timeout, resources={}) {
+function createContainer(spec, timeout, resources = {}) {
   const { task, version } = spec;
   LOGGER.debug(`Starting container of ${task}:${version}`);
   return docker(getImageName(task, version), {}, timeout, resources);

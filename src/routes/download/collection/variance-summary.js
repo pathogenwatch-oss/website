@@ -181,9 +181,9 @@ function createGenomeStream(genomeSummaries, versions) {
   }
 
   const analysisKeys = genomes.map(({
-                                      fileId,
-                                      organismId
-                                    }) => store.analysisKey('core', versions.core, fileId, organismId));
+    fileId,
+    organismId,
+  }) => store.analysisKey('core', versions.core, fileId, organismId));
 
   async function* gen() {
     for await (const value of store.iterGet(analysisKeys)) {
@@ -194,7 +194,7 @@ function createGenomeStream(genomeSummaries, versions) {
           fileId,
           analysis: {
             core: {
-              profile: results.profile
+              profile: results.profile,
             },
           },
         };

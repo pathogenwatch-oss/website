@@ -1,5 +1,4 @@
 /* eslint no-param-reassign: ["error", { "props": false }] */
-/* eslint no-params: 0 */
 /* eslint max-params: 0 */
 
 const BSON = require("bson");
@@ -70,7 +69,7 @@ async function runTask(spec, metadata, timeout) {
     return {
       newick: `(${genomes[0]._id}:0.5,${genomes[1]._id}:0.5);`,
       size: 2,
-      populationSize: genomes.filter(_ => _.population).length,
+      populationSize: genomes.filter((_) => _.population).length,
       name: metadata.name,
     };
   }
@@ -80,14 +79,14 @@ async function runTask(spec, metadata, timeout) {
   const versions = { tree: version, alignment: alignmentVersion };
 
   const container = await createContainer(spec, metadata, timeout);
-  const whenContainerOutput = handleContainerOutput(container, task, versions, metadata, genomes, resolve, reject);
-  const whenContainerExit = handleContainerExit(container, task, versions, metadata, reject);
+  const whenContainerOutput = handleContainerOutput(container, task, versions, metadata, genomes);
+  const whenContainerExit = handleContainerExit(container, task, versions, metadata);
   createInputStream(genomes, versions, organismId).pipe(container.stdin);
 
-  const [output, _] = await Proomise.all([
+  const [output] = await Promise.all([
     whenContainerOutput,
-    whenContainerExit
-  ])
+    whenContainerExit,
+  ]);
   return output;
 }
 

@@ -1,5 +1,5 @@
 const { request } = require('services');
-const { enqueue, taskTypes } = require('models/queue');
+const { enqueue } = require('models/queue');
 const rand = require('rand-token');
 
 module.exports = async function ({ user, genomeId, clientId }) {

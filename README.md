@@ -2,8 +2,8 @@
 
 ## Development
 
-1. Start MongoDB (e.g. `docker run -m 1g -d -p 127.0.0.1:27017:27017 mongo:3.6.6`)
-2. Create a `config.json` (use ../deployment/dev/config.json)
+1. Start MongoDB and Minio (cd ../deployment/dev; ./deploy.sh local)
+2. Create a `config.json` (use ../deployment/dev/config.json and change urls to use localhost)
 3. `export REPO_USER=YOUR_GITLAB_USER REPO_TOKEN=YOUR_TOKEN`
 4. `git config --global url.https://$REPO_USER:$REPO_TOKEN@gitlab.com/.insteadOf git://gitlab.com/ && git config --global url.https://$REPO_USER:$REPO_TOKEN@gitlab.com/cgps.insteadOf git@gitlab.com:cgps &&  git config --global url.https://$REPO_USER:$REPO_TOKEN@gitlab.com/cgps/.insteadOf https://gitlab.com/cgps/`
 5. `npm install`

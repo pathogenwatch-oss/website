@@ -1,5 +1,6 @@
 const express = require('express');
 const sanitize = require('sanitize-filename');
+
 const router = express.Router();
 
 const services = require('services');
@@ -27,7 +28,7 @@ router.get('/:id/fasta', (req, res, next) => {
         'Content-type': 'text/plain',
       });
       stream.pipe(res);
-      stream.on('close', () => resolve())
+      stream.on('close', () => resolve());
     }))
     .catch(next);
 });
@@ -50,8 +51,8 @@ router.post('/fasta', (req, res, next) => {
       ids: splitIds,
       projection: { name: 1, fileId: 1 },
     })
-    .then(genomes => services.request('download', 'create-genome-archive', { genomes }))
-    .then(stream => {
+    .then((genomes) => services.request('download', 'create-genome-archive', { genomes }))
+    .then((stream) => {
       stream.on('error', next);
       res.setHeader('Content-Disposition', `attachment; filename=${filename}`);
       res.setHeader('Content-Type', 'application/zip');
@@ -60,6 +61,6 @@ router.post('/fasta', (req, res, next) => {
     .catch(next);
 });
 
-router.post('/metadata', require('../genome/metadata'));
+router.post('/metadata', require("./metadata"));
 
 module.exports = router;

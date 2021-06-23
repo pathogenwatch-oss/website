@@ -1,4 +1,4 @@
-const { enqueue, taskTypes } = require('models/queue');
+const { enqueue } = require('models/queue');
 
 const { getCollectionTask } = require('../../manifest');
 

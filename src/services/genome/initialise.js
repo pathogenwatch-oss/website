@@ -25,7 +25,7 @@ module.exports = async function ({ user, data, uploadedAt }) {
   }
 
   return Genome.bulkWrite(
-    data.map(row => ({
+    data.map((row) => ({
       insertOne: {
         document: {
           name: row.id,
@@ -40,7 +40,7 @@ module.exports = async function ({ user, data, uploadedAt }) {
         },
       },
     }))
-  ).then(result => {
+  ).then((result) => {
     const idMap = {};
     for (let i = 0; i < data.length; i++) {
       idMap[data[i].id] = result.insertedIds[i];

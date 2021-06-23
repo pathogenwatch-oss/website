@@ -1,8 +1,9 @@
 const express = require('express');
+
 const router = express.Router();
 
 const services = require('services');
-const { NotFoundError } = require('../../utils/errors');
+const { NotFoundError } = require('utils/errors');
 
 const LOGGER = require('utils/logging').createLogger('Summary');
 

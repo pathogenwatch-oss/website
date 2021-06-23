@@ -4,29 +4,29 @@ const { getCollectionSchemes } = require('manifest');
 const MAX_PAGE_SIZE = 100;
 
 const preferredTypingSchemes = [
-  { analysis: 'pangolin', field:'lineage' },
-  { analysis: 'genotyphi', field: 'genotype' }
-  ];
+  { analysis: 'pangolin', field: 'lineage' },
+  { analysis: 'genotyphi', field: 'genotype' },
+];
 
 function inferScheme(analysis) {
   for (const scheme of preferredTypingSchemes) {
     if (analysis.hasOwnProperty(scheme.analysis)) {
       const schemes = {
         type: scheme,
-      }
+      };
       if (analysis.hasOwnProperty('mlst')) {
         return {
           ...schemes,
-          type2: {analysis: 'mlst', field: 'st'}
-        }
+          type2: { analysis: 'mlst', field: 'st' },
+        };
       }
-      return schemes
+      return schemes;
     }
   }
   if (analysis.hasOwnProperty('mlst2')) {
     return {
       type: { analysis: 'mlst', field: 'st' },
-      type2: { analysis: 'mlst2', field: 'st' }
+      type2: { analysis: 'mlst2', field: 'st' },
     };
   }
 
@@ -71,16 +71,16 @@ module.exports = async function (props) {
     }
   )
     .lean()
-    .then(genomes =>
-      genomes.map(genome => {
+    .then((genomes) =>
+      genomes.map((genome) => {
         const formattedGenome = Genome.toObject(genome, user);
         const { analysis = {} } = genome;
         const { speciator = {}, serotype = {} } = analysis;
-        const preferredTypingSchemes = inferScheme(analysis);
-        formattedGenome.type = !!preferredTypingSchemes.type ? analysis[preferredTypingSchemes.type.analysis][preferredTypingSchemes.type.field] : null;
-        formattedGenome.typeSource = !!preferredTypingSchemes.type ? preferredTypingSchemes.type.analysis : null;
-        formattedGenome.type2 = !!preferredTypingSchemes.type2 ? analysis[preferredTypingSchemes.type2.analysis][preferredTypingSchemes.type2.field] : null;
-        formattedGenome.typeSource2 = !!preferredTypingSchemes.type2 ? preferredTypingSchemes.type2.analysis : null;
+        const scheme = inferScheme(analysis);
+        formattedGenome.type = scheme.type ? analysis[scheme.type.analysis][scheme.type.field] : null;
+        formattedGenome.typeSource = scheme.type ? scheme.type.analysis : null;
+        formattedGenome.type2 = scheme.type2 ? analysis[scheme.type2.analysis][scheme.type2.field] : null;
+        formattedGenome.typeSource2 = scheme.type2 ? scheme.type2.analysis : null;
         formattedGenome.organismId = speciator.organismId;
         formattedGenome.speciesName = speciator.speciesName;
         formattedGenome.subspecies = speciator.organismId === '2697049' ? 'SARS-CoV-2' : serotype.subspecies;

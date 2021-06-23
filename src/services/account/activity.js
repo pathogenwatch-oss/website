@@ -17,8 +17,8 @@ function findRecentCollections(user) {
   const options = { user, query: { prefilter: 'user', limit } };
   return (
     services.request('collection', 'fetch-list', options)
-      .then(collections =>
-        collections.map(_ => ({
+      .then((collections) =>
+        collections.map((_) => ({
           date: _.createdAt,
           type: 'collection',
           size: _.size,
@@ -35,9 +35,9 @@ module.exports = ({ user }) =>
     findRecentCollections(user),
     findRecentUploadSessions(user),
   ])
-  .then(([ collections, uploads ]) =>
-    collections
-      .concat(uploads)
-      .sort((a, b) => b.date - a.date)
-      .slice(0, limit) // ensures combined items capped to limit
-  );
+    .then(([ collections, uploads ]) =>
+      collections
+        .concat(uploads)
+        .sort((a, b) => b.date - a.date)
+        .slice(0, limit) // ensures combined items capped to limit
+    );

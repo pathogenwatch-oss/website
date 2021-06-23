@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+
 mongoose.Promise = global.Promise;
 
 const mongoConfig = require('configuration').mongodb || {};
@@ -14,11 +15,10 @@ const replicaset = mongoConfig.replicaset;
 const mongoUser = mongoConfig.user;
 const mongoPassword = mongoConfig.password;
 
-
 const userAuth = !!mongoUser && !!mongoPassword ? `${mongoUser}:${mongoPassword}@` : '';
 const dbUrl = `mongodb://${userAuth}${hostname}:${port}/${database}${replicaset ? `?replicaSet=${replicaset}` : ''}`;
 
-const handleError = error => {
+const handleError = (error) => {
   LOGGER.error(error);
   process.exit(1);
 };
@@ -29,7 +29,7 @@ function connect(callback) {
   mongoose.connection.on('error', handleError);
   mongoose.connection.on('disconnected', () => {
     if (disconnectExpected) return;
-    handleError('disconnected event')
+    handleError('disconnected event');
   });
   if (callback) {
     mongoose.connection.once('open', callback);

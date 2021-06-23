@@ -1,5 +1,5 @@
-const { DEFAULT_TIMEOUT } = require("../bus");
 const { request } = require('services/bus');
+const { DEFAULT_TIMEOUT } = require("../bus");
 
 const runCoreBasedTree = require("./run-core-based-tree");
 const runAlignmentBasedTree = require("./run-alignment-based-tree");

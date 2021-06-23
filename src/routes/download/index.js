@@ -1,4 +1,5 @@
 const express = require('express');
+
 const router = express.Router();
 
 const services = require('services');
@@ -20,13 +21,13 @@ router.get('/file/:filename',
       'Content-type': 'application/zip',
     });
 
-    services.request('download', 'get-file', { filename }).
-      then(stream => {
-        stream.on('error', error => next(error));
+    services.request('download', 'get-file', { filename })
+      .then((stream) => {
+        stream.on('error', (error) => next(error));
 
         stream.pipe(res);
-      }).
-      catch(next);
+      })
+      .catch(next);
   }
 );
 

@@ -1,4 +1,5 @@
 const express = require('express');
+
 const router = express.Router();
 
 const services = require('services');
@@ -15,7 +16,7 @@ router.post('/download', (req, res, next) => {
   }
 
   return services.request('download', 'summary', { user, ids })
-    .then(result => res.json(result))
+    .then((result) => res.json(result))
     .catch(next);
 });
 

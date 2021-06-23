@@ -39,7 +39,7 @@ module.exports = async function ({ user, query }) {
     uploadedAt: 1,
   };
   const genomes = await Genome.find({ ...query, _user: user._id }, projection).lean();
-  return genomes.map(doc => {
+  return genomes.map((doc) => {
     const { analysis = {}, upload = { complete: true, type: Genome.uploadTypes.ASSEMBLY } } = doc;
     const genome = {
       analysis,

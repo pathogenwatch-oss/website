@@ -47,10 +47,10 @@ module.exports = async (req, res) => {
   res.setHeader('Content-Disposition', `attachment; filename=${filename}`);
   res.setHeader('Content-Type', 'text/csv');
 
-  const query = Object.assign(
-    { _id: { $in: ids.split(',').map(id => new ObjectId(id)) } },
-    Genome.getPrefilterCondition({ user })
-  );
+  const query = {
+    _id: { $in: ids.split(',').map((id) => new ObjectId(id)) },
+    ...Genome.getPrefilterCondition({ user }),
+  };
   const projection = {
     country: 1,
     day: 1,

@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+
 const { Schema } = mongoose;
 
 const config = require('configuration');
@@ -15,7 +16,7 @@ const taskTypes = {
   collection: 'collection',
   clustering: 'clustering',
   assembly: 'assembly',
-}
+};
 
 const schema = new Schema({
   ack: Schema.Types.ObjectId,
@@ -48,48 +49,48 @@ schema.index({ queue: 1, rejectedTime: 1, 'message.spec.resources.memory': 1, 'm
 
 const ackWindow = 30;
 
-schema.statics.dequeue = async function(limits = {}, constraints={}, queue = 'normal') {
-  const resourceQuery = {}
-  for (const key in limits) resourceQuery[`message.spec.resources.${key}`] = { $lte: limits[key] }
+schema.statics.dequeue = async function (limits = {}, constraints = {}, queue = 'normal') {
+  const resourceQuery = {};
+  for (const key of Object.keys(limits)) resourceQuery[`message.spec.resources.${key}`] = { $lte: limits[key] };
   const fullQuery = {
     ...resourceQuery,
     ...constraints,
     queue,
     rejectedTime: null,
     $or: [{ nextReceivableTime: null }, { nextReceivableTime: { $lte: now() } }],
-  }
+  };
 
   const doc = await this.findOneAndUpdate(
     fullQuery,
-    { $set: { ack: new mongoose.Types.ObjectId(), nextReceivableTime: now() + ackWindow }},
-    { new: true, sort: { '_id': 1 } },
+    { $set: { ack: new mongoose.Types.ObjectId(), nextReceivableTime: now() + ackWindow } },
+    { new: true, sort: { _id: 1 } },
   ).lean();
 
   if (doc) return { ack: doc.ack, ...doc.message };
   return null;
-}
+};
 
-schema.statics.handleFailure = async function(job, rejectionReason ) {
+schema.statics.handleFailure = async function (job, rejectionReason) {
   const { ack, spec = {} } = job;
   const { resources = {}, timeout } = spec;
   const { memory } = resources;
 
-  const update = { 
+  const update = {
     nextReceivableTime: now() + 10,
     rejectionReason,
-  }
+  };
 
   if (timeout) update['message.spec.timeout'] = timeout * 2;
   if (memory) update['message.spec.resources.memory'] = Math.floor(MAX_MEMORY, memory * 2);
-  
+
   const doc = await this.findOneAndUpdate(
-    { ack, $expr: { $gt: [ "$maxAttempts", "$attempts" ]} },
-    { 
+    { ack, $expr: { $gt: [ "$maxAttempts", "$attempts" ] } },
+    {
       $unset: { ack: 1 },
       $set: update,
     },
     { new: true }
-  )
+  );
 
   if (doc !== null) return true; // It will be retried
   await this.findOneAndUpdate(
@@ -99,54 +100,55 @@ schema.statics.handleFailure = async function(job, rejectionReason ) {
       $set: { rejectionReason, rejectedTime: now() },
       $inc: { attempts: 1 },
     }
-  )
+  );
   return false; // It will not be retried
-}
+};
 
-schema.statics.handleSuccess = async function({ ack }) {
+schema.statics.handleSuccess = async function ({ ack }) {
   const doc = await this.findOneAndRemove(
     { ack },
-    { projection: { ack: 1 }},
-  )
+    { projection: { ack: 1 } },
+  );
   return doc !== null;
-}
+};
 
-schema.statics.ack = async function(job) {
+schema.statics.ack = async function (job) {
   const { ack = 'invalid', spec = {} } = job;
   const { timeout } = spec;
   const doc = await this.findOneAndUpdate(
     { ack },
-    { 
+    {
       $set: { nextReceivableTime: now() + timeout + 10 },
       $inc: { attempts: 1 },
     }
-  )
+  );
   return doc !== null;
-}
+};
 
-schema.statics.queueLength = async function(limits = {}, constraints={}, queue = 'normal') {
-  const resourceQuery = {}
-  for (const key in limits) resourceQuery[`message.spec.resources.${key}`] = { $lte: limits[value] }
+schema.statics.queueLength = async function (limits = {}, constraints = {}, queue = 'normal') {
+  const resourceQuery = {};
+  for (const key of Object.keys(limits)) resourceQuery[`message.spec.resources.${key}`] = { $lte: limits[key] };
   const fullQuery = {
     ...resourceQuery,
     ...constraints,
     queue,
     rejectedTime: null,
     $or: [{ nextReceivableTime: null }, { nextReceivableTime: { $lte: now() } }],
-  }
+  };
 
   return this.count(fullQuery);
-}
+};
 
 const model = mongoose.model('Queue', schema, 'queue');
-module.exports = model; 
+module.exports = model;
 module.exports.taskTypes = taskTypes;
 module.exports.ackWindow = ackWindow;
-module.exports.overideNow = fn => { now = fn }; // used for testing
+module.exports.overideNow = (fn) => { now = fn; }; // used for testing
 
-module.exports.enqueue = async function(spec, metadata, queue = 'normal') {
-  maxAttempts = spec.retries || defaultRetries;
-  
+module.exports.enqueue = async function (spec, metadata, queue = 'normal') {
+  const maxAttempts = spec.retries || defaultRetries;
+
+  // eslint-disable-next-line new-cap
   const item = new model({
     message: {
       metadata,
@@ -154,6 +156,6 @@ module.exports.enqueue = async function(spec, metadata, queue = 'normal') {
     },
     queue,
     maxAttempts,
-  })
+  });
   await item.save();
-}
+};

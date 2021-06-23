@@ -1,6 +1,6 @@
 const Collection = require('models/collection');
 
-const { enqueue, taskTypes } = require('models/queue');
+const { enqueue } = require('models/queue');
 
 const { getCollectionTask } = require('manifest');
 
@@ -14,7 +14,7 @@ module.exports = function ({ organismId, collectionId, clientId }) {
   const spec = getCollectionTask(organismId, 'subtree');
   if (!spec) return Promise.resolve();
   return getSubtrees(collectionId)
-    .then(subtrees => Promise.all(
+    .then((subtrees) => Promise.all(
       subtrees.map(({ name }) =>
         enqueue(spec, { organismId, collectionId, name, clientId })
       )

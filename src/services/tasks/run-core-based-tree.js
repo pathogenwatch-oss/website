@@ -1,5 +1,4 @@
 /* eslint no-param-reassign: ["error", { "props": false }] */
-/* eslint no-params: 0 */
 /* eslint max-params: 0 */
 
 const BSON = require('bson');
@@ -352,8 +351,8 @@ async function handleContainerOutput(container, task, versions, metadata, genome
   const whenNewick = new Promise((resolve, reject) => {
     onNewick = resolve;
     onError = reject;
-  })
-  
+  });
+
   let lastProgress = 0;
 
   const handler = new Writable({
@@ -363,7 +362,7 @@ async function handleContainerOutput(container, task, versions, metadata, genome
       try {
         const doc = JSON.parse(line);
         if (doc.fileId && doc.scores) {
-          cache.update(doc);
+          if (cache) cache.update(doc);
           const progress = doc.progress * 0.99;
           if ((progress - lastProgress) >= 1) {
             request('collection', 'send-progress', { clientId, payload: { task, name, progress } });
@@ -384,14 +383,14 @@ async function handleContainerOutput(container, task, versions, metadata, genome
       } catch (e) {
         request('collection', 'send-progress', { clientId, payload: { task, name, status: 'ERROR' } });
         onError(e);
-        done(e)
+        return done(e);
       }
-    }
-  })
+    },
+  });
 
   Readable.from(lines).pipe(handler);
   const newick = await whenNewick;
-  
+
   let populationSize = 0;
   if (task === 'subtree') {
     for (const { population } of genomes) {
@@ -400,9 +399,9 @@ async function handleContainerOutput(container, task, versions, metadata, genome
       }
     }
   }
-  
+
   try {
-    await updateScoreCache(versions, cache);
+    if (cache) await updateScoreCache(versions, cache);
   } catch (e) {
     request('collection', 'send-progress', { clientId, payload: { task, name, status: 'ERROR' } });
     throw e;
@@ -459,7 +458,7 @@ function createContainer(spec, metadata, timeout, resources) {
 }
 
 async function runTask(spec, metadata, timeout) {
-  const { task, version, requires: taskRequires = [], resources={} } = spec;
+  const { task, version, requires: taskRequires = [], resources = {} } = spec;
   const coreVersion = taskRequires.find((_) => _.task === 'core').version;
   const versions = { tree: version, core: coreVersion };
 
@@ -484,13 +483,13 @@ async function runTask(spec, metadata, timeout) {
 
   const whenContainerOutput = handleContainerOutput(container, task, versions, metadata, genomes, cache);
   attachInputStream(container, versions, genomes, organismId, fileIds, stream);
-  
+
   const whenContainerExit = handleContainerExit(container, task, versions, metadata);
 
-  const [output, _] = await Promise.all([
+  const [output] = await Promise.all([
     whenContainerOutput,
-    whenContainerExit
-  ])
+    whenContainerExit,
+  ]);
 
   return output;
 }

@@ -2,14 +2,14 @@ module.exports.transformer = function (doc) {
   const record = {
     'Genome ID': doc._id.toString(),
     'Genome Name': doc.name,
-    'Version': doc.analysis.vista.__v
+    Version: doc.analysis.vista.__v,
   };
 
-  doc.analysis.vista.virulenceGenes.forEach(gene => {
+  doc.analysis.vista.virulenceGenes.forEach((gene) => {
     record[gene.name] = gene.status;
   });
 
-  doc.analysis.vista.virulenceClusters.forEach(cluster => {
+  doc.analysis.vista.virulenceClusters.forEach((cluster) => {
     record[cluster.name] = cluster.status;
   });
 

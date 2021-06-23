@@ -1,41 +1,41 @@
-const tasks = require('../tasks.json');
 const assert = require('assert').strict;
 const { taskTypes } = require('models/queue');
 
 const config = require('configuration');
+const tasks = require('../tasks.json');
 
 const GB = 1024 ** 3;
 const defaultTimeout = config.tasks.timeout || 60;
 
 function addTaskDefaults(task) {
-  const { resources={} } = task;
+  const { resources = {} } = task;
   resources.cpu = resources.cpu || 1;
 
-  switch(task.task) {
+  switch (task.task) {
     case 'assembly':
-      resources.memory = resources.memory || 3*GB;
+      resources.memory = resources.memory || 3 * GB;
       break;
     case 'speciator':
-      resources.memory = resources.memory || 1*GB;
+      resources.memory = resources.memory || 1 * GB;
       break;
     case 'cgmlst':
-      resources.memory = resources.memory || 3*GB;
+      resources.memory = resources.memory || 3 * GB;
       break;
     case 'core':
-      resources.memory = resources.memory || 2*GB;
+      resources.memory = resources.memory || 2 * GB;
       break;
     case 'tree':
     case 'subtree':
-      resources.memory = resources.memory || 5*GB;
+      resources.memory = resources.memory || 5 * GB;
       break;
     case 'clustering':
-      resources.memory = resources.memory || 15*GB;
+      resources.memory = resources.memory || 15 * GB;
       break;
     default:
-      resources.memory = resources.memory || 1*GB;
+      resources.memory = resources.memory || 1 * GB;
   }
 
-  switch(task.task) {
+  switch (task.task) {
     case 'assembly':
       task.taskType = taskTypes.assembly;
       break;
@@ -85,7 +85,7 @@ module.exports.getImages = function (sectionName) {
 
 module.exports.getSpeciatorTask = function () {
   const { speciation = {} } = config.tasks || {};
-  
+
   speciation.task = speciation.task || 'speciator';
   speciation.version = speciation.version || 'v3.0.1';
 
@@ -103,7 +103,7 @@ function hasFlags(task) {
 }
 
 const defaultUser = {
-  canRun: task => !hasFlags(task),
+  canRun: (task) => !hasFlags(task),
 };
 
 module.exports.getTasksByOrganism = function (
@@ -139,7 +139,7 @@ module.exports.getTasksByOrganism = function (
     }
   }
 
-  return Object.values(uniqueTasks).map(addTaskDefaults)
+  return Object.values(uniqueTasks).map(addTaskDefaults);
 };
 
 module.exports.getCollectionTask = function (organismId, task) {
@@ -147,9 +147,9 @@ module.exports.getCollectionTask = function (organismId, task) {
 
   if (organismId in collectionTasks) {
     const list = collectionTasks[organismId];
-    const taskDetails = list.find(_ => _.task === task);
+    const taskDetails = list.find((_) => _.task === task);
     if (taskDetails === undefined) return null;
-    return addTaskDefaults(taskDetails)
+    return addTaskDefaults(taskDetails);
   }
 
   return null;
@@ -162,7 +162,7 @@ module.exports.getClusteringTask = function () {
 module.exports.getCollectionSchemes = function (user = defaultUser) {
   const schemes = [];
   for (const [ taxId, collectionTasks ] of Object.entries(tasks.collection)) {
-    const treeTask = collectionTasks.find(_ => _.task === 'tree');
+    const treeTask = collectionTasks.find((_) => _.task === 'tree');
     if (treeTask && user.canRun(treeTask)) {
       schemes.push(taxId);
     }
@@ -173,7 +173,7 @@ module.exports.getCollectionSchemes = function (user = defaultUser) {
 module.exports.organismHasTask = function (taskname, taxIds, user = defaultUser) {
   for (const taxId of taxIds) {
     if (taxId in tasks.genome) {
-      const task = tasks.genome[taxId].find(_ => _.task === taskname);
+      const task = tasks.genome[taxId].find((_) => _.task === taskname);
       if (task) {
         return user.canRun(task);
       }
@@ -185,7 +185,7 @@ module.exports.organismHasTask = function (taskname, taxIds, user = defaultUser)
 module.exports.organismHasPopulation = function (taxIds, user = defaultUser) {
   for (const taxId of taxIds) {
     if (taxId in tasks.collection) {
-      const task = tasks.collection[taxId].find(_ => _.task === 'subtree');
+      const task = tasks.collection[taxId].find((_) => _.task === 'subtree');
       if (task) {
         return user.canRun(task);
       }

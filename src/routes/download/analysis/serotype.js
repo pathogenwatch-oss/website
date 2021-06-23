@@ -31,16 +31,17 @@ module.exports = (req, res) => {
   res.setHeader('Content-Disposition', `attachment; filename=${filename}`);
   res.setHeader('Content-Type', 'text/csv');
 
-  const query = Object.assign(
-    { _id: { $in: ids.split(',') }, 'analysis.serotype': { $exists: true } },
-    Genome.getPrefilterCondition({ user })
-  );
+  const query = {
+    _id: { $in: ids.split(',') },
+    'analysis.serotype': { $exists: true },
+    ...Genome.getPrefilterCondition({ user }),
+  };
   const projection = {
     name: 1,
     'analysis.serotype': 1,
   };
 
-  const transform = doc => transformer(doc, labels[speciesId] || labels.general);
+  const transform = (doc) => transformer(doc, labels[speciesId] || labels.general);
 
   return Genome.find(query, projection)
     .cursor()

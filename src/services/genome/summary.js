@@ -323,9 +323,9 @@ module.exports = async function (props) {
   if (props.query.subspecies && props.query.subspecies === 'SARS-CoV-2') {
     props.query.organismId = '2697049';
   }
-  const tasks = getTasksByOrganism(props.query, props.user).map(_ => _.task);
+  const tasks = getTasksByOrganism(props.query, props.user).map((_) => _.task);
   const summary = await Genome.getSummary(
-    summaryFields.filter(_ => (_.task ? tasks.includes(_.task) : true)),
+    summaryFields.filter((_) => (_.task ? tasks.includes(_.task) : true)),
     { ...props, deployedOrganisms }
   );
 
@@ -369,7 +369,7 @@ module.exports = async function (props) {
 
     if (missingTasks.length) {
       const extraSummary = await Genome.getSummary(
-        summaryFields.filter(_ => missingTasks.includes(_.task)),
+        summaryFields.filter((_) => missingTasks.includes(_.task)),
         { ...props, query, deployedOrganisms, tasks: missingTasks }
       );
 

@@ -1,5 +1,5 @@
-const Genome = require('../../models/genome');
 const { ServiceRequestError } = require('utils/errors');
+const Genome = require('../../models/genome');
 
 module.exports = async function ({ user, coordinates, query }) {
   if (!Array.isArray(coordinates) || !coordinates.length) {
