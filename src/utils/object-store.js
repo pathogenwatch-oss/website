@@ -43,7 +43,7 @@ const s3 = new aws.S3({
   ...extraS3Params,
 });
 
-const MAX_CONCURRENCY = 5;
+const MAX_CONCURRENCY = 10;
 const MAX_ATTEMPTS = 10;
 
 class ObjectStore {

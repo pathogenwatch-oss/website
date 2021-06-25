@@ -86,7 +86,7 @@ app.use(
   // bodyParser.raw({ limit: "40mb" }),
   basicAuth,
   // logReqStart,
-  rateLimit,
+  // rateLimit,
 );
 
 app.get('/status', (req, res) => {
@@ -94,9 +94,21 @@ app.get('/status', (req, res) => {
 });
 
 const cacheFile = './cache.json';
+function saveCache() {
+  return fs.promises.writeFile(cacheFile, JSON.stringify({ cache: [ ...storeCache ] }));
+}
+async function loadCache() {
+  try {
+    const contents = await fs.promises.readFile(cacheFile);
+    const { cache: keys = [] } = JSON.parse(contents);
+    for (const key of keys) storeCache.add(key);
+  } catch (_) {
+    // pass
+  }
+}
 
 app.get('/cache', asyncWrapper(async (req, res) => {
-  await fs.promises.writeFile(cacheFile, JSON.stringify({ cache: [ ...storeCache ] }));
+  await saveCache();
   return res.status(200).send({ ok: true });
 }));
 
@@ -229,13 +241,7 @@ app.post('/fasta/:fileId', asyncWrapper(async (req, res) => {
 }));
 
 async function populateCache() {
-  try {
-    const contents = await fs.promises.readFile(cacheFile);
-    const { cache: keys = [] } = JSON.parse(contents);
-    for (const key of keys) storeCache.add(key);
-  } catch (_) {
-    // pass
-  }
+  await loadCache();
 
   console.log(`cacheSize=${storeCache.size}`);
   const docs = objectStore.list(config.prefix, null);
@@ -245,7 +251,8 @@ async function populateCache() {
     i += 1;
     if (i % 100000 === 0) console.log(`cacheSize=${storeCache.size} latest=${Key}`);
   }
-  await fs.promises.writeFile(cacheFile, JSON.stringify({ cache: [ ...storeCache ] }));
+
+  await saveCache();
 }
 
 async function main() {
@@ -256,6 +263,9 @@ async function main() {
     console.log({ inProgress: objectStore.pool.inProgress.map((_) => `${_.token}:${_.params[0].method}:${_.params[0].params.key}`) });
   }, 5000);
   populateCache().then(() => console.log("Cache prepopulated")).catch((err) => console.log(`Error populating cache: ${err}`));
+  setInterval(() => {
+    saveCache().then(() => console.log("Cache saved")).catch(() => {});
+  }, 10 * 60 * 1000);
   https.createServer({
     key: fs.readFileSync(path.join(__dirname, 'certs', 'privkey.pem')),
     cert: fs.readFileSync(path.join(__dirname, 'certs', 'fullchain.pem')),

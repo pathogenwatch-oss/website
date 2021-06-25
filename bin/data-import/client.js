@@ -18,7 +18,6 @@ const fastaStore = require('utils/fasta-store');
 
 const { b64encode, hashGenome, hashDocument, serializeBSON } = require('./common');
 const { name, pass, baseUrl: _url } = require('./env.json');
-const Throttle = require('./throttle');
 
 const baseUrl = new URL(_url);
 const httpsAgent = new https.Agent({
@@ -55,8 +54,6 @@ const stats = {
   },
 };
 
-const throttle = new Throttle({ maxDelay: 20000, minDelay: 50, initialDelay: 500 });
-
 async function request(path, args = {}) {
   const url = `${baseUrl.origin}${baseUrl.pathname.replace(/\/+/g, '/')}${path}${baseUrl.search}`;
   const { headers: originalHeaders = {} } = args;
@@ -71,22 +68,27 @@ async function request(path, args = {}) {
   let r;
   let error;
   for (let retry = 0; retry < MAX_RETRIES; retry++) {
+
+    let reqType = 'unknown-type';
+    if (path.includes('fasta')) reqType = 'fasta';
+    else if (path.includes('genome')) reqType = 'genome';
+    else if (path.includes('collection')) reqType = 'collection';
+    else if (path.includes('user')) reqType = 'user';
+    else if (path.includes('organism')) reqType = 'organism';
+
+    if (retry > 0) stats.inc(`retry.${reqType}`);
+
     try {
-      // if (DEBUG) console.log({ retry, url, method: args.method });
-      await throttle.wait();
       if (typeof args.body === 'function') updatedArgs.body = args.body();
       r = await fetch(url, updatedArgs);
       if (r.status === 503) throw new Error('Back off');
       if (r.status >= 200 && r.status < 500) {
-        throttle.succeed();
         return r;
       }
     } catch (e) {
       error = e;
       if (error.message && (error.message.includes('timeout') || error.message.includes('Back off'))) {
-        throttle.fail();
-        if (path.includes('fasta')) stats.inc('timeout.fasta');
-        if (path.includes('analysis')) stats.inc('timeout.analysis');
+        stats.inc(`timeout.${reqType}`);
         updatedArgs.timeout *= 1.5;
       }
     }
@@ -342,9 +344,10 @@ async function sendAnalysisBatch(offset) {
       if (errors > 20) {
         console.log(`Received ${errors} errors starting at ${offset}; pausing`);
       }
+      if (sliceEnd % 100 === 0 || sliceEnd === requests.length) console.log({ stats: stats.format() });
     }
     if (errors) {
-      await sleep(10 * 1000);
+      await sleep(1000);
       errorBatches.append(offset);
     }
   }
@@ -354,23 +357,23 @@ async function sendAnalysisBatch(offset) {
 
 async function sendAnalysisBatches(from) {
   const batches = batchOffsets(from);
-  // async function worker(w) {
-  //   await sleep(w * 2 * 1000);
-  for await (const genomeId of batches) {
-    try {
-      await sendAnalysisBatch(genomeId);
-    } catch (err) {
-      console.log(`Error processing batch ${genomeId}`);
+  async function worker(w) {
+    await sleep(w * 2 * 1000);
+    for await (const genomeId of batches) {
+      try {
+        await sendAnalysisBatch(genomeId);
+      } catch (err) {
+        console.log(`Error processing batch ${genomeId}`);
+      }
     }
   }
-  // }
 
-  // const workers = [];
-  // for (let w = 0; w < 10; w++) {
-  //   workers.push(worker(w));
-  // }
+  const workers = [];
+  for (let w = 0; w < 3; w++) {
+    workers.push(worker(w));
+  }
 
-  // await Promise.all(workers);
+  await Promise.all(workers);
 }
 
 async function sendUsers() {
