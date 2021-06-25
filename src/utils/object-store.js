@@ -3,13 +3,22 @@
 const aws = require('aws-sdk');
 const http = require('http');
 const https = require('https');
+const { PassThrough } = require('stream');
 const zlib = require('zlib');
 const { promisify } = require('util');
+const LOGGER = require('utils/logging').createLogger('object-store');
 
 const { objectStore: config } = require('configuration');
 const Pool = require('utils/concurrentWorkers');
+const Throttle = require('utils/throttle');
 
 if (config.bucket === undefined) throw new Error('objectStore.bucket must be in config');
+
+function sleep(t) {
+  return new Promise((resolve) => {
+    setTimeout(() => resolve(), t);
+  });
+}
 
 function isJSONable(a) {
   if (Array.isArray(a)) return true;
@@ -33,59 +42,6 @@ const s3 = new aws.S3({
   maxRetries: 0,
   ...extraS3Params,
 });
-
-const MIN_DELAY = 5;
-const MAX_DELAY = 100;
-const INITIAL_DELAY = 1000 / 75;
-
-function sleep(t) {
-  return new Promise((resolve) => {
-    setTimeout(() => resolve(), t);
-  });
-}
-
-class Throttle {
-  constructor() {
-    this.delay = INITIAL_DELAY;
-    this.errors = 0;
-    this.counterStart = new Date();
-    this.last = Promise.resolve();
-  }
-
-  /* eslint-disable no-async-promise-executor */
-  async wait() {
-    this.last = new Promise(async (resolve) => {
-      await this.last;
-      this.__updateDelay();
-      await sleep(this.delay);
-      resolve();
-    });
-    return this.last;
-  }
-
-  fail() {
-    this.errors += 1;
-  }
-
-  __updateDelay() {
-    const now = new Date();
-    if (this.errors > 3) {
-      this.delay = this.delay > 50 ? this.delay * 1.2 : 50;
-      this.errors = 0;
-      this.counterStart = now;
-    } else if (now - this.counterStart > 100) {
-      if (this.errors > 0) {
-        this.delay *= 1.2;
-        this.delay = this.delay > MAX_DELAY ? MAX_DELAY : this.delay;
-      } else {
-        this.delay *= 0.9;
-        this.delay = this.delay < MIN_DELAY ? MIN_DELAY : this.delay;
-      }
-      this.errors = 0;
-      this.counterStart = now;
-    }
-  }
-}
 
 const MAX_CONCURRENCY = 5;
 const MAX_ATTEMPTS = 10;
@@ -192,7 +148,7 @@ class ObjectStore {
     }
     let resp;
     try {
-      resp = await this.request('get', { key, timeout: 50, ...params });
+      resp = await this.request('get', { key, timeout: 200, ...params });
     } catch (err) {
       return undefined;
     }
@@ -208,10 +164,18 @@ class ObjectStore {
 
   async put(key, data, { compress = true, ...params } = {}) {
     let rawData = isJSONable(data) ? JSON.stringify(data) : data;
-    if (compress) {
-      rawData = rawData.pipe ? rawData.pipe(zlib.createGzip()) : await gzip(rawData);
+    if (rawData.pipe) {
+      const outStream = compress ? zlib.createGzip() : new PassThrough();
+      let ended = false;
+      rawData.on('ended', () => { ended = true; });
+      rawData.on('close', () => { if (!ended) outStream.emit('error', new Error('not ended')); });
+      rawData = rawData.pipe(outStream);
+      params.attempts = 1;
     }
-    return this.request('put', { key, timeout: 200, ...params, data: rawData });
+
+    const timeout = rawData.pipe ? 2000 : 500;
+    const updatedParams = { key, timeout, ...params, data: rawData };
+    return this.request('put', updatedParams);
   }
 
   async copy(srcKey, destKey) {
@@ -251,7 +215,8 @@ class ObjectStore {
 
   async __next({ method, params }) {
     let r;
-    for (let attempt = 0; attempt < MAX_ATTEMPTS; attempt++) {
+    const { attempts = MAX_ATTEMPTS } = params;
+    for (let attempt = 0; attempt < attempts; attempt++) {
       await this.throttle.wait();
 
       if (attempt >= 3) params.timeout *= 2;
@@ -274,11 +239,14 @@ class ObjectStore {
             r = await req.promise();
           }
         } else if (method === 'put') {
-          // const bar = await s3.createBucket({ Bucket: config.bucket })
-          // const foo = await s3.listBuckets().promise();
-          // const bar = await s3.listObjectsV2({ Bucket: s3Params.Bucket }).promise();
-          // const ree = await s3.getBucketAcl({ Bucket: s3Params.Bucket }).promise();
-          r = await s3.upload({ ...s3Params, Body: params.data, ACL: 'private' }).promise();
+          r = await new Promise((resolve, reject) => {
+            const { data: Body } = params;
+            if (Body.pipe) Body.on('error', reject);
+            s3.upload({ ...s3Params, Body, ACL: 'private' }, (err, data) => {
+              if (err) return reject(err);
+              resolve(data);
+            });
+          });
         } else if (method === 'copy') {
           r = await s3.copyObject({
             ...s3Params,
@@ -295,7 +263,7 @@ class ObjectStore {
         r.statusCode = 200;
       } catch (error) {
         const { statusCode, code: statusMessage } = error;
-        r = { statusCode, statusMessage, error };
+        r = { method, statusCode, statusMessage, error };
         if (error.code === 'SlowDown' || statusCode === 503) await sleep(50);
       }
 
@@ -306,6 +274,7 @@ class ObjectStore {
     }
 
     if (r.statusCode === 200) {
+      this.throttle.succeed();
       return r;
     }
     throw r.error ? r.error : new Error(`Status ${r.statusCode}: ${r.statusMessage || "Unknown"}`);

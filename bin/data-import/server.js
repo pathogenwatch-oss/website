@@ -12,6 +12,7 @@ const Collection = require('models/collection');
 const Organism = require('models/organism');
 const User = require('models/user');
 const objectStore = require('utils/object-store');
+const { objectStore: config } = require('configuration');
 
 const { hashGenome, hashDocument, deserializeBSON } = require('./common.js');
 
@@ -22,6 +23,8 @@ function newPass() {
     .replace(/\//g, '_')
     .replace(/=+$/, '');
 }
+
+const DEBUG = process.env.DEBUG === 'true';
 
 const { name = 'user', pass = newPass(), baseUrl } = require("./env.json");
 
@@ -56,37 +59,46 @@ function asyncWrapper(handler) {
 }
 
 const storeCache = new Set();
-async function checkStore(keys) {
-  const missing = {};
+function checkStore(keys) {
+  const output = new Set();
   for (const key of keys) {
-    if (storeCache.has(key)) continue;
-    const prefix = key.replace(/[^/]+$/, '');
-    missing[prefix] = missing[prefix] || new Set();
-    missing[prefix].add(key);
-  }
-
-  let output = [];
-  for (const prefix of Object.keys(missing)) {
-    for await (const { Key: key } of objectStore.list(prefix)) {
-      storeCache.add(key);
-      missing[prefix].delete(key);
-    }
-    output = [...output, ...missing[prefix]];
+    if (!storeCache.has(key)) output.add(key);
   }
   return output;
 }
 
+function logReqStart(req, res, next) {
+  if (DEBUG) console.log(`> [${new Date().toISOString()}] ${req.method} ${req.path}`);
+  return next();
+}
+
+function rateLimit(req, res, next) {
+  if (objectStore.pool.size.queue > 20) return res.status(503).send("Back off");
+  return next();
+}
+
 const app = express();
+app.disable('etag').disable('x-powered-by');
 app.use(
-  morgan("dev"),
+  morgan('dev'),
+  // morgan('[:date[iso]] :method :url :status :res[content-length] :response-time ms'),
   express.json({ limit: "20mb" }),
   // bodyParser.raw({ limit: "40mb" }),
-  basicAuth
+  basicAuth,
+  // logReqStart,
+  rateLimit,
 );
 
 app.get('/status', (req, res) => {
   return res.status(200).send({ ok: true, cache: storeCache.size });
 });
+
+const cacheFile = './cache.json';
+
+app.get('/cache', asyncWrapper(async (req, res) => {
+  await fs.promises.writeFile(cacheFile, JSON.stringify({ cache: [ ...storeCache ] }));
+  return res.status(200).send({ ok: true });
+}));
 
 app.post('/genome/status', asyncWrapper(async (req, res, next) => {
   const offer = req.body.genomes;
@@ -117,7 +129,8 @@ app.post('/analysis/status', asyncWrapper(async (req, res, next) => {
   for (const { task, version, organismId, fileId } of offer) {
     keys.add(objectStore.analysisKey(task, version, fileId, organismId));
   }
-  const missing = new Set(await checkStore(keys));
+
+  const missing = checkStore(keys);
   const output = { analyses: [] };
   for (const params of offer) {
     const { task, version, organismId, fileId } = params;
@@ -196,7 +209,8 @@ app.post('/fasta/status', asyncWrapper(async (req, res, next) => {
   for (const fileId of fileIds) {
     keys.add(objectStore.fastaKey(fileId));
   }
-  const missing = new Set(await checkStore(keys));
+  // const missing = new Set(await checkStore(keys));
+  const missing = checkStore(keys);
   const output = { fileIds: [] };
   for (const fileId of fileIds) {
     const key = objectStore.fastaKey(fileId);
@@ -214,9 +228,34 @@ app.post('/fasta/:fileId', asyncWrapper(async (req, res) => {
   res.send({ ok: true });
 }));
 
+async function populateCache() {
+  try {
+    const contents = await fs.promises.readFile(cacheFile);
+    const { cache: keys = [] } = JSON.parse(contents);
+    for (const key of keys) storeCache.add(key);
+  } catch (_) {
+    // pass
+  }
+
+  console.log(`cacheSize=${storeCache.size}`);
+  const docs = objectStore.list(config.prefix, null);
+  let i = 0;
+  for await (const { Key, Size, type } of docs) {
+    if (type === 'file' && Size > 0) storeCache.add(Key);
+    i += 1;
+    if (i % 100000 === 0) console.log(`cacheSize=${storeCache.size} latest=${Key}`);
+  }
+  await fs.promises.writeFile(cacheFile, JSON.stringify({ cache: [ ...storeCache ] }));
+}
+
 async function main() {
   const port = 443;
   await mongoConnection.connect();
+  setInterval(() => {
+    console.log(`Pool size`, objectStore.pool.size);
+    console.log({ inProgress: objectStore.pool.inProgress.map((_) => `${_.token}:${_.params[0].method}:${_.params[0].params.key}`) });
+  }, 5000);
+  populateCache().then(() => console.log("Cache prepopulated")).catch((err) => console.log(`Error populating cache: ${err}`));
   https.createServer({
     key: fs.readFileSync(path.join(__dirname, 'certs', 'privkey.pem')),
     cert: fs.readFileSync(path.join(__dirname, 'certs', 'fullchain.pem')),
