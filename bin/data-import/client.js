@@ -230,8 +230,7 @@ async function sendAnalysis({ task, version, fileId, organismId }) {
 }
 
 const BATCH_SIZE = 100;
-async function* batchOffsets(from) {
-  const query = {};
+async function* batchOffsets(from, query = {}) {
   if (from) query._id = { $gte: from };
   let doc = await Genome.findOne(query, { _id: 1 }).sort('_id').lean();
   while (doc) {
@@ -246,14 +245,8 @@ async function* batchOffsets(from) {
 }
 
 let genomeCount = 0;
-async function fetchMissingAnalysis({ offset }) {
+async function fetchMissingAnalysis({ offset, query = {} }) {
   console.log({ fetchMissingAnalysis: offset });
-  const query = {
-    // $or: [
-    //   { public: true },
-    //   { _user: ObjectId("59e4ddbf97ad4b00013f2ef0") }
-    // ]
-  };
   if (offset) query._id = { $gt: offset };
 
   const cursor = Genome
@@ -316,9 +309,9 @@ async function fetchMissingAnalysis({ offset }) {
 }
 
 const errorBatches = [];
-async function sendAnalysisBatch(offset) {
+async function sendAnalysisBatch(offset, query = {}) {
   let errors = 0;
-  const r = await fetchMissingAnalysis({ number: 100, offset });
+  const r = await fetchMissingAnalysis({ number: 100, offset, query });
 
   const { needed, errors: fetchErrors } = r;
   stats.inc('errors.status', fetchErrors.length);
@@ -355,13 +348,13 @@ async function sendAnalysisBatch(offset) {
   console.log({ genomeCount, errors, errorBatches: errorBatches.length, stats: stats.format() });
 }
 
-async function sendAnalysisBatches(from) {
-  const batches = batchOffsets(from);
+async function sendAnalysisBatches(from, query = {}) {
+  const batches = batchOffsets(from, query);
   async function worker(w) {
     await sleep(w * 2 * 1000);
     for await (const genomeId of batches) {
       try {
-        await sendAnalysisBatch(genomeId);
+        await sendAnalysisBatch(genomeId, query);
       } catch (err) {
         console.log(`Error processing batch ${genomeId}`);
       }
@@ -496,12 +489,12 @@ async function sendOrganisms() {
 }
 
 async function main() {
-  // const tasks = [
-  //   sendOrganisms(),
-  //   sendUsers(),
-  //   sendCollections(),
-  // ];
-  // await Promise.all(tasks);
+  const tasks = [
+    sendOrganisms(),
+    sendUsers(),
+    sendCollections(),
+  ];
+  await Promise.all(tasks);
   // await sendScoreCaches()
 
   let last;
@@ -509,6 +502,7 @@ async function main() {
     last = process.argv[2];
     console.log(`Starting from ${last}`);
   }
+  await sendAnalysisBatches(last, { public: true });
   await sendAnalysisBatches(last);
 
   console.log("End", { genomeCount, stats: stats.format() });
