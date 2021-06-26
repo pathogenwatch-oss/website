@@ -4,6 +4,7 @@
 const { URL } = require('url');
 const https = require('https');
 const fetch = require('node-fetch');
+const fs = require('fs');
 const pLimit = require('p-limit');
 const zlib = require('zlib');
 
@@ -32,7 +33,7 @@ function sleep(t) {
   return new Promise((r) => setTimeout(r, t));
 }
 
-const statusLimit = pLimit(2);
+const statusLimit = pLimit(15);
 const uploadLimit = pLimit(15);
 
 const DEBUG = process.env.DEBUG === 'true';
@@ -322,29 +323,21 @@ async function sendAnalysisBatch(offset, query = {}) {
   }
 
   console.log(`Found ${needed.length} things to update`);
-  const requests = [];
+  let count = 0;
   for (const { type, params } of needed) {
-    if (type === 'genome') requests.push(sendGenome(params).then((ok) => ({ ok, type })));
-    else if (type === 'fasta') requests.push(sendFasta(params).then((ok) => ({ ok, type })));
-    else if (type === 'analysis') requests.push(sendAnalysis(params).then((ok) => ({ ok, type })));
+    let ok = false;
+    if (type === 'genome') ok = await sendGenome(params);
+    else if (type === 'fasta') ok = await sendFasta(params);
+    else if (type === 'analysis') ok = await sendAnalysis(params);
+    if (!ok) errors += 1;
+    count += 1;
+    if (errors > 0 && errors % 20 === 0) console.log(`Received ${errors} errors starting at ${offset}`);
+    if (count % 100 === 0) console.log({ stats: stats.format() });
   }
-
-  if (requests.length) {
-    for (let sliceStart = 0; sliceStart < requests.length; sliceStart += 10) {
-      const sliceEnd = Math.min(sliceStart + 10, requests.length);
-      const responses = await Promise.all(requests.slice(sliceStart, sliceEnd));
-      errors += responses.filter((_) => !_.ok).length;
-      if (errors > 20) {
-        console.log(`Received ${errors} errors starting at ${offset}; pausing`);
-      }
-      if (sliceEnd % 100 === 0 || sliceEnd === requests.length) console.log({ stats: stats.format() });
-    }
-    if (errors) {
-      await sleep(1000);
-      errorBatches.append(offset);
-    }
+  if (errors) {
+    await sleep(1000);
+    errorBatches.append(offset);
   }
-
   console.log({ genomeCount, errors, errorBatches: errorBatches.length, stats: stats.format() });
 }
 
@@ -358,11 +351,17 @@ async function sendAnalysisBatches(from, query = {}) {
       } catch (err) {
         console.log(`Error processing batch ${genomeId}`);
       }
+      try {
+        await fs.promises.writeFile(`./latestGenomeId.${w}.txt`, genomeId.toString());
+        await fs.promises.rename(`./latestGenomeId.${w}.txt`, `./latestGenomeId.txt`);
+      } catch (err) {
+        console.log(`Error saving progress (batch ${genomeId})`);
+      }
     }
   }
 
   const workers = [];
-  for (let w = 0; w < 3; w++) {
+  for (let w = 0; w < 10; w++) {
     workers.push(worker(w));
   }
 
@@ -489,6 +488,15 @@ async function sendOrganisms() {
 }
 
 async function main() {
+  let last;
+  try {
+    last = (await fs.promises.readFile(`./latestGenomeId.txt`)).toString('utf8');
+  } catch (err) {
+    console.log(`Error loading progress file: ${err}`);
+  } finally {
+    console.log(`Starting from ${last || 'beginning'}`);
+  }
+
   const tasks = [
     sendOrganisms(),
     sendUsers(),
@@ -497,12 +505,7 @@ async function main() {
   await Promise.all(tasks);
   // await sendScoreCaches()
 
-  let last;
-  if (/^[a-z0-9]{24}$/.test(process.argv[2])) {
-    last = process.argv[2];
-    console.log(`Starting from ${last}`);
-  }
-  await sendAnalysisBatches(last, { public: true });
+  // await sendAnalysisBatches(last, { public: true });
   await sendAnalysisBatches(last);
 
   console.log("End", { genomeCount, stats: stats.format() });
