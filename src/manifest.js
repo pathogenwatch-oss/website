@@ -93,8 +93,7 @@ module.exports.getSpeciatorTask = function () {
 };
 
 module.exports.getAssemblyTask = function () {
-  const { assembly = {} } = config.tasks || {};
-  return addTaskDefaults(assembly);
+  return addTaskDefaults(tasks.assembly);
 };
 
 function hasFlags(task) {

@@ -1,5 +1,3 @@
-/* global $ */
-
 import CONFIG from '../app/config';
 
 export function getServerPath(path) {
@@ -13,8 +11,8 @@ function ajax(config) {
         ? config
         : { ...config, xhrFields: { withCredentials: true } }
     )
-      .done(data => resolve(data))
-      .fail(error => reject(error));
+      .done((data) => resolve(data))
+      .fail((error) => reject(error));
   });
 }
 
@@ -46,7 +44,7 @@ export function fetchRaw({ method, path, contentType, data, progressFn, ...opts 
 
         xhr.upload.addEventListener(
           'progress',
-          evt => {
+          (evt) => {
             if (evt.lengthComputable) {
               const percentComplete = (evt.loaded / evt.total) * 100;
               const percentRounded = Math.floor(percentComplete / 10) * 10;

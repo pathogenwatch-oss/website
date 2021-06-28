@@ -15,30 +15,9 @@ const AssemblySessionRecovery = ({
   uploadedAt,
   token,
 }) => {
-  useAuthToken();
-  useAssemblerUsage(token);
-  const [ session, error ] = useAssemblerSession(uploadedAt, token);
+  // FIXME
 
-  return (
-    <Loading
-      complete={session || error}
-      placeholder={
-        <section className="pw-upload-page pw-centre-text">
-          <Spinner />
-        </section>
-      }
-    >
-      { error ?
-        <section key="error" className="pw-upload-page">
-          <h1>Sorry, there's a problem.</h1>
-          {typeof error.message === 'string' ?
-            (<p>{error.message}</p>) :
-            error.message }
-        </section> :
-        <Recovery key="loaded" session={session} />
-      }
-    </Loading>
-  );
+  return null;
 };
 
 function mapStateToProps(state) {

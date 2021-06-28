@@ -100,7 +100,6 @@ async function storeReads({ genomeId, stream, fileNumber, maxMb = maxReadsFileSi
   } finally {
     await rm(tempPath);
   }
-
 }
 
 function fetch(fileId) {

@@ -219,30 +219,26 @@ router.put(
     LOGGER.info('Received request to upload genome assembly');
     const { clientId } = req.query;
 
-    let whenResponse = null;
-    busboy.on('file', async (fieldname, file, filename, encoding, mimetype) => {
-      if (whenResponse !== null) {
-        whenResponse = new ServiceRequestError("Did not expect more than one file in upload");
-      }
-      whenResponse = services
-        .request('genome', 'upload-reads', {
-          timeout$: 1000 * 60 * 30,
-          stream: file,
-          filename,
-          id,
-          user,
-          clientId,
-        });
+    const whenStream = new Promise((resolve, reject) => {
+      busboy.on('file', (fieldname, file, filename, encoding, mimetype) => {
+        resolve({ file, filename });
+      });
     });
 
-    await new Promise((resolve) => {
-      busboy.on('finish', () => resolve());
-    });
+    req.pipe(busboy);
+    const { file, filename } = await whenStream;
 
-    if (whenResponse === null) return next(new ServiceRequestError("Invalid read file"));
-    return whenResponse
-      .then((response) => res.json(response))
-      .catch(next);
+    const response = await services
+      .request('genome', 'upload-reads', {
+        timeout$: 1000 * 60 * 30,
+        stream: file,
+        filename,
+        id,
+        user,
+        clientId,
+      });
+
+    return res.json(response);
   }
   ));
 

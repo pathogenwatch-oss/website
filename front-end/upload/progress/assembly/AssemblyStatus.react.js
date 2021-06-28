@@ -21,34 +21,7 @@ const Status = ({
   token,
   uploadedAt,
 }) => {
-  useAuthToken();
-  React.useEffect(() => {
-    if (listening && token) {
-      fetchProgress(uploadedAt, token)
-        .then(payload => {
-          handleStatusUpdate({
-            type: 'STATUS',
-            payload,
-          });
-        })
-        .catch(console.error);
-      const channelId = `${config.clientId}-assembly`;
-      subscribe(
-        channelId, uploadedAt, handleStatusUpdate
-      );
-      return () => unsubscribe(channelId);
-    }
-  }, [ listening, token ]);
-
-  React.useEffect(() => {
-    if (assemblyInProgress) {
-      const interval = setInterval(
-        progressTick,
-        2000
-      );
-      return () => clearInterval(interval);
-    }
-  }, [ assemblyInProgress ]);
+  //  FIXME
   return null;
 };
 

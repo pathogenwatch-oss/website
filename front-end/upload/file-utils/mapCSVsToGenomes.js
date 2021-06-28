@@ -1,20 +1,19 @@
-import { parseMetadata } from '~/utils/Metadata';
-import { isReadsEligible } from '../file-utils';
+import { parseMetadata, CSV_FILENAME_REGEX } from '~/utils/Metadata';
 import pairReadsFiles from './pairReadsFiles';
 import getCsvRows from './getCsvRows';
 
 import { fileTypes } from '../constants';
 import { ASSEMBLY_FILE_EXTENSIONS } from '~/app/constants';
 
-import { CSV_FILENAME_REGEX } from '~/utils/Metadata';
+import config from '~/app/config';
+import processMultiFastaFile from './multi-fasta';
+
 const READS_FILENAME_REGEX = /^(.*)[_\.]R?[12]\.fastq\.gz$/;
 const ASSEMBLY_FILENAME_REGEX = new RegExp(
   `(${ASSEMBLY_FILE_EXTENSIONS.join('|')})$`,
   'i'
 );
 
-import config from '~/app/config';
-import processMultiFastaFile from './multi-fasta';
 const { maxGenomeFileSize = 20 } = config;
 const MAX_ASSEMBLY_FILE_SIZE = maxGenomeFileSize * 1048576;
 
@@ -38,7 +37,6 @@ export default async function (files, assemblerUsage) {
   const csvFiles = [];
   const assemblies = [];
   const reads = [];
-  const readsElligible = isReadsEligible();
   for (const file of files) {
     if (CSV_FILENAME_REGEX.test(file.name)) {
       csvFiles.push(file);
@@ -58,7 +56,7 @@ export default async function (files, assemblerUsage) {
         assemblies.push(file);
       }
       continue;
-    } else if (readsElligible && READS_FILENAME_REGEX.test(file.name)) {
+    } else if (READS_FILENAME_REGEX.test(file.name)) {
       reads.push(file);
       continue;
     }
@@ -79,10 +77,10 @@ export default async function (files, assemblerUsage) {
   }
 
   return getCsvRows(csvFiles)
-    .then(rows => [
+    .then((rows) => [
       ...assemblies.map((file, index) => {
         const name = file.name.replace(ASSEMBLY_FILENAME_REGEX, '');
-        const row = rows.find(r => r.filename === file.name || r.filename === name);
+        const row = rows.find((r) => r.filename === file.name || r.filename === name);
         return {
           files: [ file ],
           id: `${file.name}__${Date.now()}_${index}`,
@@ -94,7 +92,7 @@ export default async function (files, assemblerUsage) {
       ...Object.entries(readsPairs).map(([ id, filesByName ], index) => {
         const fileNames = Object.keys(filesByName);
         const row = rows.find(
-          r => r.filename === id || fileNames.includes(r.filename)
+          (r) => r.filename === id || fileNames.includes(r.filename)
         );
         return {
           files: Object.values(filesByName),

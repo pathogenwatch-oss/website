@@ -1,4 +1,9 @@
 {
+  "assembly": {
+    "task": "assembly",
+    "version": "0",
+    "timeout": 1800000
+  },
   "clustering": {
     "task": "clustering",
     "timeout": 1800,

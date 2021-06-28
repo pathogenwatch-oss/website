@@ -8,21 +8,10 @@ import Recovery from './Recovery.react';
 
 import { hasReads } from '../genomes/selectors';
 
-import { isReadsEligible } from '../../file-utils';
-
 const RecoveryPage = ({
   uploadedAt,
   sessionHasReads,
 }) => {
-  const readsEligible = isReadsEligible();
-
-  if (readsEligible && sessionHasReads) {
-    return (
-      <AssemblerSessionRecovery
-        uploadedAt={uploadedAt}
-      />
-    );
-  }
 
   return <Recovery />;
 };

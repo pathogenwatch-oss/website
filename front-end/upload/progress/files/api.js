@@ -1,6 +1,7 @@
-import { fetchJson, fetchRaw, getServerPath } from '~/utils/Api';
+import { fetchJson, fetchRaw } from '~/utils/Api';
 
 import config from '~/app/config';
+
 const { clientId } = config;
 
 export function uploadAssembly({ id }, data, progressFn) {
@@ -9,32 +10,32 @@ export function uploadAssembly({ id }, data, progressFn) {
     path: `/api/genome/${id}/assembly?${$.param({ clientId })}`,
     contentType: data instanceof Uint8Array ? 'application/zip' : 'text/plain',
     data,
-    progressFn
+    progressFn,
   });
 }
 
 export async function uploadReads(genome, progressFn) {
-  const { id, files: [] } = genome;
+  // FIXME do some retries
+  const { id, files = [] } = genome;
 
   const progressPerFile = Math.floor(100 / files.length);
 
   for (let i = 0; i < files.length; i++) {
-    const fileProgress = (p) => { progressFn(progressPerFile * (i + p / 100)) }
+    const fileProgress = (p) => { progressFn(progressPerFile * (i + p / 100)); };
 
     const file = files[i];
-    const { name: fileName } =  file;
+    const { name: fileName, handle } = file;
     const formData = new FormData();
     formData.append('fileName', fileName);
-    formData.append('content', file);
+    formData.append('content', handle);
 
     await fetchRaw({
       method: 'PUT',
       path: `/api/genome/${id}/reads?${$.param({ clientId })}`,
-      contentType: "application/octet-stream",
+      contentType: false,
       data: formData,
       processData: false,
-      contentType: false,
-      progressFn: fileProgress
+      progressFn: fileProgress,
     });
   }
 }

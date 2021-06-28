@@ -4,7 +4,7 @@ const Genome = require('models/genome');
 
 const { ServiceRequestError } = require('utils/errors');
 
-module.exports = async ({ timeout$, stream, fileName, user, id, clientId }) => {
+module.exports = async ({ timeout$, stream, filename, user, id, clientId }) => {
   if (!stream) {
     throw new ServiceRequestError('No stream provided');
   }
@@ -13,17 +13,18 @@ module.exports = async ({ timeout$, stream, fileName, user, id, clientId }) => {
     throw new ServiceRequestError('Not authorised');
   }
 
-  const doc = await Genome.findOne({ _user: user, _id: id }, { files: 1, uploadedAt: 1 }).lean();
+  const doc = await Genome.findOne({ _user: user, _id: id }, { upload: 1, uploadedAt: 1 }).lean();
   if (doc === null) {
     throw new ServiceRequestError('Not authorised');
   }
 
-  const { files = [] } = doc;
-  const fileNumber = files.indexOf(fileName) + 1;
+  const { upload = {} } = doc;
+  const { files = [] } = upload;
+  const fileNumber = files.indexOf(filename) + 1;
   if (fileNumber === 0) throw new ServiceRequestError('Not authorised');
 
   await request('genome', 'store-reads', { genomeId: id, timeout$, stream, fileNumber });
-  const readsKeys = await request('genome', 'check-reads', { genomeId: id });
+  const readsKeys = await request('genome', 'list-available-reads', { genomeId: id });
   if (readsKeys.length < files.length) return { ok: 1, message: "waiting for more reads" };
   if (readsKeys.length > files.length) throw new ServiceRequestError('Got too many reads');
 

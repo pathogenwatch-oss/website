@@ -43,6 +43,15 @@ const s3 = new aws.S3({
   ...extraS3Params,
 });
 
+async function createBucket() {
+  try {
+    await s3.headBucket({ Bucket: config.bucket }).promise();
+    return;
+  } catch (err) {
+    await s3.createBucket({ Bucket: config.bucket }).promise();
+  }
+}
+
 const MAX_CONCURRENCY = 10;
 const MAX_ATTEMPTS = 10;
 
@@ -52,6 +61,7 @@ class ObjectStore {
     this.requests = 0;
     this.counterStart = new Date();
     this.pool = new Pool(this.__next.bind(this), MAX_CONCURRENCY);
+    this.created = createBucket();
   }
 
   get rps() {
@@ -105,14 +115,14 @@ class ObjectStore {
     return this.get(key);
   }
 
-  async countReads(genomeId) {
+  async listReads(genomeId) {
     const prefix = `${config.prefix || ''}reads/${genomeId.slice(0, 2)}/${genomeId}_`;
-    let count = 0;
+    const readFiles = [];
     for await (const { Key, type } of this.list(prefix)) {
       if (type !== 'file') continue;
-      if (/\d+.fastq.gz$/.test(Key)) count += 1;
+      if (/\d+.fastq.gz$/.test(Key)) readFiles.push(Key);
     }
-    return count;
+    return readFiles;
   }
 
   async getScoreCache(genomes, versions, type) {
@@ -168,6 +178,7 @@ class ObjectStore {
       const outStream = compress ? zlib.createGzip() : new PassThrough();
       let ended = false;
       rawData.on('ended', () => { ended = true; });
+      rawData.on('end', () => { ended = true; });
       rawData.on('close', () => { if (!ended) outStream.emit('error', new Error('not ended')); });
       rawData = rawData.pipe(outStream);
       params.attempts = 1;
@@ -214,6 +225,8 @@ class ObjectStore {
   }
 
   async __next({ method, params }) {
+    await this.created;
+
     let r;
     const { attempts = MAX_ATTEMPTS } = params;
     for (let attempt = 0; attempt < attempts; attempt++) {

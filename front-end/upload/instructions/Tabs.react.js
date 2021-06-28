@@ -13,9 +13,6 @@ import { getAssemblerUsage } from '../selectors';
 import { useAuthToken } from '~/auth/hooks';
 
 const Tabs = ({ usage, token, uploadType }) => {
-  useAuthToken(true);
-  useAssemblerUsage(token);
-
   return (
     <React.Fragment>
       <div

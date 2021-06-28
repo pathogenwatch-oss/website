@@ -28,124 +28,15 @@ function uploadReadsProgress(stage, id, filename, progress) {
 }
 
 export function upload(genome, { uploadedAt }, dispatch) {
-  const worker = hashWorker();
-  worker.onmessage = ({ data }) => {
-    if (data.progress) {
-      dispatch(
-        uploadReadsProgress('IDENTIFY', genome.id, data.file, data.progress)
-      );
-    }
-  };
-  const headers = {
-    Authorization: `Bearer ${token}`,
-  };
-  const r = new Resumable({
-    target: `${config.assemblerAddress}/chunks`,
-    simultaneousUploads: 5,
-    generateUniqueIdentifier: file => worker.hash(file),
-    headers,
-  });
-  r.on('chunkingProgress', (file, message) => {
-    dispatch(
-      uploadReadsProgress('PREPARE', genome.id, file.fileName, message * 100)
-    );
-  });
-  r.on('chunkingComplete', file => {
-    dispatch(uploadReadsProgress('PREPARE', genome.id, file.fileName, 100));
-  });
-  r.on('fileProgress', file => {
-    dispatch(
-      uploadReadsProgress(
-        'UPLOAD',
-        genome.id,
-        file.fileName,
-        file.progress() * 100
-      )
-    );
-  });
-  return new Promise((resolve, reject) => {
-    let alreadyAssembled = false;
-    r.on('error', (message, file) => {
-      reject({ message, file });
-    });
-    r.on('complete', () => {
-      const promises = [ uploadComplete(genome.id) ];
-      if (!alreadyAssembled) {
-        promises.push(
-          send('PATCH', '/api/pipelines', headers, {
-            session: uploadedAt,
-            genomeId: genome.id,
-            status: 'READS_UPLOADED',
-          }).then(response => {
-            if (response.status !== 200) {
-              reject({ message: response.statusText });
-            }
-          })
-        );
-      }
-      Promise.all(promises)
-        .then(resolve)
-        .catch(reject);
-    });
-    r.on('filesAdded', addedFiles => {
-      if (genome.recovery) {
-        for (const { fileId } of genome.recovery) {
-          let filename = null;
-          for (const file of addedFiles) {
-            if (file.uniqueIdentifier === fileId) {
-              filename = null;
-              break;
-            }
-            filename = file.fileName;
-          }
-          if (filename) {
-            reject({
-              message: `${filename} does not match the original file, please try again.`,
-            });
-            return;
-          }
-        }
-        r.upload();
-        return;
-      }
 
-      send('POST', '/api/pipelines', headers, {
-        session: uploadedAt,
-        genomeId: genome.id,
-        callback: `${origin}/api/genome/${
-          genome.id
-        }/assembly?clientId=${clientId}`,
-        progress: {
-          channel: `${clientId}-assembly`,
-          topic: uploadedAt,
-        },
-        files: addedFiles.map(f => ({
-          filename: f.fileName,
-          fileId: f.uniqueIdentifier,
-          totalChunks: f.chunks.length,
-        })),
-      })
-        .then(response => {
-          if (response.status === 304) {
-            alreadyAssembled = true;
-            r.fire('complete');
-          } else if (response.status !== 201) {
-            reject({ message: response.statusText });
-          } else {
-            r.upload();
-          }
-        })
-        .catch(e => reject({ message: e.message }));
-    });
-    r.addFiles(genome.files.map(_ => _.handle));
-  });
+  throw new Error('FIXME');
 }
 
 export function fetchSession(uploadedAt, token) {
   return new Promise((resolve, reject) =>
     send('GET', `/api/sessions/${uploadedAt}`, {
       Authorization: `Bearer ${token}`,
-    }).then(response => {
+    }).then((response) => {
       if (response.status === 200) {
         resolve(response.json());
       } else if (response.status === 404) {
@@ -161,7 +52,7 @@ export function fetchProgress(uploadedAt, token) {
   return new Promise((resolve, reject) =>
     send('GET', `/api/sessions/${uploadedAt}/progress`, {
       Authorization: `Bearer ${token}`,
-    }).then(response => {
+    }).then((response) => {
       if (response.status === 200) {
         resolve(response.json());
       } else {
