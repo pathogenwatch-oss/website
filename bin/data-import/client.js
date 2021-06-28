@@ -15,7 +15,7 @@ const Organism = require('models/organism');
 const User = require('models/user');
 const ScoreCache = require('models/scoreCache');
 const Analysis = require('models/analysis');
-const fastaStore = require('utils/fasta-store');
+const fastaStore = require('./localFasta');
 
 const { b64encode, hashGenome, hashDocument, serializeBSON } = require('./common');
 const { name, pass, baseUrl: _url } = require('./env.json');
@@ -120,11 +120,7 @@ function listAnalyses(genome) {
 
 async function sendFasta(fileId) {
   try {
-    const body = () => {
-      const output = zlib.createGzip();
-      fastaStore.fetch(fileId).pipe(output);
-      return output;
-    };
+    const body = () => fastaStore.fetch(fileId);
     const r = await uploadLimit(() => request(`fasta/${fileId}`, { timeout: 20000, method: 'POST', body, headers: { 'Content-Type': 'application/octet-stream' } }));
     if (r.status === 200) stats.inc('additions.fasta');
     else stats.inc('errors.fasta');
@@ -366,6 +362,8 @@ async function sendAnalysisBatches(from, query = {}) {
   }
 
   await Promise.all(workers);
+  await fs.promises.writeFile(`./latestGenomeId.complete.txt`, 'complete');
+  await fs.promises.rename(`./latestGenomeId.complete.txt`, `./latestGenomeId.txt`);
 }
 
 async function sendUsers() {
@@ -497,13 +495,20 @@ async function main() {
     console.log(`Starting from ${last || 'beginning'}`);
   }
 
-  const tasks = [
-    sendOrganisms(),
-    sendUsers(),
-    sendCollections(),
-  ];
-  await Promise.all(tasks);
-  // await sendScoreCaches()
+  if (last === 'complete') {
+    console.log("Already finished");
+    return;
+  }
+
+  if (last === undefined) {
+    const tasks = [
+      sendOrganisms(),
+      sendUsers(),
+      sendCollections(),
+    ];
+    await Promise.all(tasks);
+    await sendScoreCaches();
+  }
 
   // await sendAnalysisBatches(last, { public: true });
   await sendAnalysisBatches(last);
