@@ -182,7 +182,7 @@ class ObjectStore {
       rawData.on('close', () => { if (!ended) outStream.emit('error', new Error('not ended')); });
       rawData = rawData.pipe(outStream);
       params.attempts = 1;
-    }
+    } else if (compress) rawData = await gzip(rawData);
 
     const timeout = rawData.pipe ? 2000 : 500;
     const updatedParams = { key, timeout, ...params, data: rawData };
@@ -195,6 +195,7 @@ class ObjectStore {
 
   async delete(key) {
     const r = await this.request('delete', { key });
+    if (Array.isArray(key)) return r;
     return { Key: key, ...r };
   }
 
@@ -267,7 +268,17 @@ class ObjectStore {
             ACL: 'private',
           }).promise();
         } else if (method === 'delete') {
-          r = await s3.deleteObject(s3Params).promise();
+          if (Array.isArray(params.key)) {
+            const deleteParams = {
+              Bucket: config.bucket,
+              Delete: {
+                Objects: params.key.map((k) => ({ Key: k })),
+                Quiet: false,
+              },
+            };
+            r = await s3.deleteObjects(deleteParams).promise();
+          }
+          else r = await s3.deleteObject(s3Params).promise();
         } else if (method === 'list') {
           r = await s3.listObjectsV2(params).promise();
         } else {
@@ -298,7 +309,22 @@ class ObjectStore {
   }
 
   async* iterDelete(keys, { maxConcurrent = 10, ...params } = {}) {
-    yield* this.iter(this.delete.bind(this), keys, { maxConcurrent, ...params });
+    async function* batches() {
+      let batch = [];
+      for await (const key of keys) {
+        batch.push(key);
+        if (batch.length === 1000) {
+          yield batch;
+          batch = [];
+        }
+      }
+      if (batch.length > 0) yield batch;
+    }
+    const batchResponses = this.iter(this.delete.bind(this), batches(), { maxConcurrent, ...params });
+    for await (const responses of batchResponses) {
+      for (const response of responses.Deleted) yield ({ error: false, ...response });
+      for (const response of responses.Errors) yield ({ error: true, ...response });
+    }
   }
 
   async* iterPut(docs, { maxConcurrent = 10, ...params } = {}) {
