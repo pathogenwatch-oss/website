@@ -59,6 +59,7 @@ const schema = new Schema({
 });
 
 schema.index({ name: 1 });
+schema.index({ name: 'text' });
 schema.index({ public: 1, reference: 1 });
 schema.index({ _user: 1, binned: 1 });
 schema.index({ 'analysis.mlst.st': 1 });
@@ -69,7 +70,13 @@ schema.index({
 });
 schema.index({ 'analysis.cgmlst.st': 1 });
 schema.index({ 'analysis.paarsnp.antibiotics.state': 1 });
+schema.index({ 'analysis.paarsnp.antibiotics.fullName': 1 });
+schema.index({
+  'analysis.paarsnp.antibiotics.fullName': 1,
+  'analysis.paarsnp.antibiotics.state': 1,
+});
 schema.index({ 'analysis.speciator.organismId': 1 });
+schema.index({ 'analysis.speciator.organismName': 1 });
 schema.index({ 'analysis.speciator.speciesId': 1 });
 schema.index({ 'analysis.speciator.genusId': 1 });
 schema.index({ 'analysis.serotype.subspecies': 1 });
