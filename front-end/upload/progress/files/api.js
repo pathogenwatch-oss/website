@@ -18,13 +18,10 @@ export async function uploadReads(genome, progressFn) {
   // FIXME do some retries
   const { id, files = [] } = genome;
 
-  const progressPerFile = Math.floor(100 / files.length);
-
-  for (let i = 0; i < files.length; i++) {
-    const fileProgress = (p) => { progressFn(progressPerFile * (i + p / 100)); };
-
-    const file = files[i];
+  for (const file of files) {
     const { name: fileName, handle } = file;
+    const fileProgress = (p) => { progressFn(fileName, p); };
+
     const formData = new FormData();
     formData.append('fileName', fileName);
     formData.append('content', handle);
@@ -41,7 +38,7 @@ export async function uploadReads(genome, progressFn) {
 }
 
 export function uploadComplete(id) {
-  return fetchJson('POST', `/api/genome/${id}/uploaded`);
+  return fetchJson('POST', `/api/genome/${id}/uploaded?${$.param({ clientId })}`);
 }
 
 export function update(id, metadata) {

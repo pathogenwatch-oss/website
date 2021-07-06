@@ -7,6 +7,7 @@ import { getUploadedAt, getGenome } from '../selectors';
 import { getSettingValue } from '../../selectors';
 
 import * as api from './api';
+import { uploadReadsProgress } from '../assembly/api';
 import { compress, validateAssembly } from './utils';
 import { InvalidGenomeError } from './utils/validation';
 
@@ -86,20 +87,20 @@ function processAssembly(dispatch, getState, genome) {
 
 export function uploadReads(genome) {
   return (dispatch) => {
-    const { id, metadata } = genome;
-    const progressFn = (percent) => dispatch(genomeUploadProgress(id, percent));
+    const { id } = genome;
+    const progressFn = (fileName, progress) => dispatch(uploadReadsProgress(
+      'UPLOAD',
+      id,
+      fileName,
+      progress,
+    ));
 
     return dispatch({
       type: UPLOAD_GENOME,
       payload: {
         id,
         promise: uploadLimiter.schedule(() => api.uploadReads(genome, progressFn)).then((uploadResult) => {
-          if (metadata) {
-            return api
-              .update(uploadResult.id, metadata)
-              .then((updateResult) => ({ ...uploadResult, ...updateResult }));
-          }
-          return uploadResult;
+          return api.uploadComplete(id).then(() => uploadResult);
         }),
       },
     });
