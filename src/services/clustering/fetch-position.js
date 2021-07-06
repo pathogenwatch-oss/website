@@ -1,5 +1,5 @@
 const { request } = require('services');
-const { taskTypes } = require('models/queue');
+const { taskTypes } = require('manifest');
 
 const { NotFoundError } = require('../../utils/errors');
 

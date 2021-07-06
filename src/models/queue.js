@@ -3,20 +3,13 @@ const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
 const config = require('configuration');
+const { formatMemory, formatTime } = require('manifest');
 
-const GB = 1024 ** 3;
-const MAX_MEMORY = 30 * GB;
+const MAX_MEMORY = formatMemory(process.env.MAX_MEMORY || '30g');
+const MAX_TIMEOUT = formatTime('1h');
 const defaultRetries = config.tasks.retries || 3;
 
 let now = () => Math.floor(new Date() / 1000);
-
-const taskTypes = {
-  genome: 'genome',
-  task: 'task',
-  collection: 'collection',
-  clustering: 'clustering',
-  assembly: 'assembly',
-};
 
 const schema = new Schema({
   ack: Schema.Types.ObjectId,
@@ -66,7 +59,7 @@ schema.statics.dequeue = async function (limits = {}, constraints = {}, queue = 
     { new: true, sort: { _id: 1 } },
   ).lean();
 
-  if (doc) return { ack: doc.ack, ...doc.message };
+  if (doc) return { ack: doc.ack, ackWindow, ...doc.message };
   return null;
 };
 
@@ -80,7 +73,7 @@ schema.statics.handleFailure = async function (job, rejectionReason) {
     rejectionReason,
   };
 
-  if (timeout) update['message.spec.timeout'] = timeout * 2;
+  if (timeout) update['message.spec.timeout'] = Math.min(timeout * 2, MAX_TIMEOUT);
   if (memory) update['message.spec.resources.memory'] = Math.floor(MAX_MEMORY, memory * 2);
 
   const doc = await this.findOneAndUpdate(
@@ -112,15 +105,16 @@ schema.statics.handleSuccess = async function ({ ack }) {
   return doc !== null;
 };
 
-schema.statics.ack = async function (job) {
+schema.statics.ack = async function (job, incrementAttempts = true) {
   const { ack = 'invalid', spec = {} } = job;
   const { timeout } = spec;
+  const update = {
+    $set: { nextReceivableTime: now() + timeout + 10 },
+  };
+  if (incrementAttempts) update.$inc = { attempts: 1 };
   const doc = await this.findOneAndUpdate(
     { ack },
-    {
-      $set: { nextReceivableTime: now() + timeout + 10 },
-      $inc: { attempts: 1 },
-    }
+    update,
   );
   return doc !== null;
 };
@@ -141,7 +135,6 @@ schema.statics.queueLength = async function (limits = {}, constraints = {}, queu
 
 const model = mongoose.model('Queue', schema, 'queue');
 module.exports = model;
-module.exports.taskTypes = taskTypes;
 module.exports.ackWindow = ackWindow;
 module.exports.overideNow = (fn) => { now = fn; }; // used for testing
 

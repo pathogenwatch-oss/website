@@ -1,9 +1,74 @@
 const LOGGER = require('utils/logging').createLogger('container');
 
-const { PassThrough } = require("stream");
+const { PassThrough, Writable } = require("stream");
 const Docker = require('dockerode');
 
 const docker = new Docker();
+class Demux extends Writable {
+  constructor(container) {
+    super();
+    this.container = container;
+    this.buffer = Buffer.from('');
+    this.nextDataType = null;
+    this.nextDataLength = null;
+  }
+
+  bufferSlice(length) {
+    const out = this.buffer.slice(0, length);
+    this.buffer = Buffer.from(this.buffer.slice(length, this.buffer.length));
+    return out;
+  }
+
+  _write(data, _, done) {
+    this.buffer = Buffer.concat([this.buffer, data]);
+    while (this.buffer.length > 8) {
+      if (!this.nextDataType) {
+        const header = this.bufferSlice(8);
+        this.nextDataType = header.readUInt8(0);
+        this.nextDataLength = header.readUInt32BE(4);
+      }
+      if (this.buffer.length < this.nextDataLength) return done();
+      const content = this.bufferSlice(this.nextDataLength);
+      if (this.nextDataType === 1) {
+        this.container.stdout.write(content);
+      } else {
+        this.container.stderr.write(content);
+      }
+      this.nextDataType = null;
+    }
+    return done();
+  }
+
+  _final(cb) {
+    this.container.stdout.end();
+    this.container.stderr.end();
+    cb();
+  }
+}
+
+function addStdio(container) {
+  container.stdout = new PassThrough();
+  container.stderr = new PassThrough();
+  container.stdin = new PassThrough();
+
+  const handler = new Demux(container);
+
+  container.attach({ stream: true, hijack: true, stdout: true, stderr: true, stdin: true }).then((stream) => {
+    stream.on('error', (...args) => {
+      container.stdout.emit('error', ...args);
+      container.stderr.emit('error', ...args);
+    });
+
+    container.stdin.on('error', (...args) => {
+      container.stdout.emit('error', ...args);
+      container.stderr.emit('error', ...args);
+    });
+
+    stream.pipe(handler);
+    container.stdin.pipe(stream);
+  });
+
+}
 
 module.exports = async function (image, environment, timeout, resources, dockerOpts = {}) {
   const { Env = [], HostConfig = {}, ...otherOpts } = dockerOpts;
@@ -32,13 +97,7 @@ module.exports = async function (image, environment, timeout, resources, dockerO
   for (const key of Object.keys(environment)) opts.Env.push(`${key}=${environment[key]}`);
 
   const container = await docker.createContainer(opts);
-  container.stdout = new PassThrough();
-  container.stderr = new PassThrough();
-  container.stdin = new PassThrough();
-
-  const stream = await container.attach({ stream: true, hijack: true, stdout: true, stderr: true, stdin: true });
-  container.modem.demuxStream(stream, container.stdout, container.stderr);
-  container.stdin.pipe(stream);
+  addStdio(container);
 
   if (timeout) {
     const t = setTimeout(() => {
@@ -50,5 +109,3 @@ module.exports = async function (image, environment, timeout, resources, dockerO
   // container.wait().then(() => container.stop());
   return container;
 };
-
-module.exports.pull = (...args) => docker.pull(...args);

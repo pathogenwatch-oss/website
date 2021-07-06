@@ -3,7 +3,7 @@ import { ASSEMBLY_FILE_EXTENSIONS } from '~/app/constants';
 export function getUploadAccepts() {
   const extensions = [
     ...ASSEMBLY_FILE_EXTENSIONS,
-    '.fastq.gz',
+    '.gz',
     '.csv',
   ];
   return extensions.join(',');

@@ -24,17 +24,6 @@ module.exports = async ({ timeout$, stream, filename, user, id, clientId }) => {
   if (fileNumber === 0) throw new ServiceRequestError('Not authorised');
 
   await request('genome', 'store-reads', { genomeId: id, timeout$, stream, fileNumber });
-  const readsKeys = await request('genome', 'list-available-reads', { genomeId: id });
-  if (readsKeys.length < files.length) return { ok: 1, message: "waiting for more reads" };
-  if (readsKeys.length > files.length) throw new ServiceRequestError('Got too many reads');
 
-  await request('tasks', 'submit-assembly', {
-    clientId,
-    genomeId: id,
-    readsKeys,
-    uploadedAt: doc.uploadedAt,
-    userId: user._id,
-  });
-
-  return { ok: 1, message: "enqueued assembly" };
+  return { ok: 1 };
 };

@@ -137,7 +137,7 @@ async function uploadResults(results, spec, metadata) {
 }
 
 async function handleContainerExit(container, spec, metadata) {
-  const { task, version } = spec;
+  const { task, version, resources } = spec;
   const { userId, scheme, taskId } = metadata;
 
   await container.start();
@@ -150,7 +150,7 @@ async function handleContainerExit(container, spec, metadata) {
 
   const [ durationS, durationNs ] = process.hrtime(startTime);
   const duration = Math.round(durationS * 1000 + durationNs / 1e6);
-  TaskLog.create({ task, version, userId, scheme, duration, statusCode });
+  TaskLog.create({ task, version, userId, scheme, duration, statusCode, resources });
 
   if (statusCode !== 0) {
     await request('clustering', 'send-progress', { taskId, payload: { task, status: 'ERROR' } });

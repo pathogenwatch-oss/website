@@ -416,7 +416,7 @@ async function handleContainerOutput(container, task, versions, metadata, genome
   };
 }
 
-async function handleContainerExit(container, task, versions, metadata) {
+async function handleContainerExit(container, task, versions, metadata, resources) {
   const { organismId, collectionId, clientId, name } = metadata;
 
   await container.start();
@@ -428,7 +428,7 @@ async function handleContainerExit(container, task, versions, metadata) {
 
   const [ durationS, durationNs ] = process.hrtime(startTime);
   const duration = Math.round(durationS * 1000 + durationNs / 1e6);
-  TaskLog.create({ collectionId, task, version: versions.tree, organismId, duration, exitCode });
+  TaskLog.create({ collectionId, task, version: versions.tree, organismId, duration, exitCode, resources });
 
   if (exitCode !== 0) {
     request('collection', 'send-progress', { clientId, payload: { task, name, status: 'ERROR' } });
@@ -484,7 +484,7 @@ async function runTask(spec, metadata, timeout) {
   const whenContainerOutput = handleContainerOutput(container, task, versions, metadata, genomes, cache);
   attachInputStream(container, versions, genomes, organismId, fileIds, stream);
 
-  const whenContainerExit = handleContainerExit(container, task, versions, metadata);
+  const whenContainerExit = handleContainerExit(container, task, versions, metadata, resources);
 
   const [output] = await Promise.all([
     whenContainerOutput,

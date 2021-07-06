@@ -16,6 +16,7 @@ export default React.createClass({
   propTypes: {
     onFiles: React.PropTypes.func.isRequired,
     noAddButton: React.PropTypes.bool,
+    readsEligible: React.PropTypes.bool,
   },
 
   getInitialState() {

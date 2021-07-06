@@ -31,5 +31,5 @@ module.exports = async ({ timeout$, stream, user, id, clientId }) => {
     uploadedAt: doc.uploadedAt,
     userId: user._id,
   });
-  return { ok: 1 };
+  return { ok: 1, fileId };
 };

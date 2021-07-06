@@ -21,10 +21,6 @@ const random = () => Math.random().toString(36).slice(2, 10);
 const slugify = (task) => task.replace(/[^a-zA-Z0-9]+/g, '_').replace(/[_]+/g, '_').replace(/_$/g, '');
 
 async function runTask({ fileId, task, version, resources, organismId, speciesId, genusId, timeout }) {
-  if (process.env.KEEP_TASK_CONTAINERS === 'true') {
-    LOGGER.warn(`Creating a container which will not be removed on completion`);
-  }
-
   const container = await docker(
     getImageName(task, version),
     {
@@ -75,7 +71,7 @@ async function runTask({ fileId, task, version, resources, organismId, speciesId
 
   const [ durationS, durationNs ] = process.hrtime(startTime);
   const duration = Math.round(durationS * 1000 + durationNs / 1e6);
-  TaskLog.create({ fileId, task, version, organismId, speciesId, genusId, duration, statusCode });
+  TaskLog.create({ fileId, task, version, organismId, speciesId, genusId, duration, statusCode, resources });
 
   if (statusCode !== 0) {
     container.stderr.setEncoding('utf8');

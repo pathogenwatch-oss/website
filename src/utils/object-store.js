@@ -5,6 +5,8 @@ const http = require('http');
 const https = require('https');
 const { PassThrough } = require('stream');
 const zlib = require('zlib');
+const { ObjectId } = require('mongoose').Types;
+
 const { promisify } = require('util');
 const LOGGER = require('utils/logging').createLogger('object-store');
 
@@ -55,6 +57,12 @@ async function createBucket() {
 const MAX_CONCURRENCY = 10;
 const MAX_ATTEMPTS = 10;
 
+function dateFromGenomeId(id) {
+  const oid = typeof id === 'string' ? new ObjectId(id) : id;
+  const timestamp = oid.getTimestamp();
+  return timestamp.toISOString().slice(0, 10).replace(/-/g, '');
+}
+
 class ObjectStore {
   constructor() {
     this.throttle = new Throttle();
@@ -101,22 +109,22 @@ class ObjectStore {
   }
 
   readsKey(genomeId, fileNumber) {
-    return `${config.prefix || ''}reads/${genomeId.slice(0, 2)}/${genomeId}_${fileNumber}.fastq.gz`;
+    return `${config.prefix || ''}tmp/reads/${dateFromGenomeId(genomeId)}/${genomeId.slice(0, 2)}/${genomeId}_${fileNumber}.fastq.gz`;
   }
 
   async putReads(genomeId, fileNumber, data) {
     const key = this.readsKey(genomeId, fileNumber);
-    await this.put(key, data);
+    await this.put(key, data, { compress: false });
     return key;
   }
 
   getReads(genomeId, fileNumber) {
     const key = this.readsKey(genomeId, fileNumber);
-    return this.get(key);
+    return this.get(key, { decompress: false });
   }
 
   async listReads(genomeId) {
-    const prefix = `${config.prefix || ''}reads/${genomeId.slice(0, 2)}/${genomeId}_`;
+    const prefix = `${config.prefix || ''}tmp/reads/${dateFromGenomeId(genomeId)}/${genomeId.slice(0, 2)}/${genomeId}_`;
     const readFiles = [];
     for await (const { Key, type } of this.list(prefix)) {
       if (type !== 'file') continue;
@@ -170,6 +178,14 @@ class ObjectStore {
       }
     }
     return undefined;
+  }
+
+  async head(key) {
+    try {
+      return this.request('get', { key, timeout: 200 });
+    } catch (err) {
+      return undefined;
+    }
   }
 
   async put(key, data, { compress = true, ...params } = {}) {
@@ -252,6 +268,8 @@ class ObjectStore {
           } else {
             r = await req.promise();
           }
+        } else if (method === 'head') {
+          r = await s3.headObject(s3Params).promise();
         } else if (method === 'put') {
           r = await new Promise((resolve, reject) => {
             const { data: Body } = params;

@@ -12,8 +12,8 @@ import {
 import { getFileIds } from './recovery/selectors';
 
 export const getProgress = ({ upload }) => upload.progress;
-export const getProgressView = state => getProgress(state)._.view;
-export const getUploadedAt = state => getProgress(state)._.uploadedAt;
+export const getProgressView = (state) => getProgress(state)._.view;
+export const getUploadedAt = (state) => getProgress(state)._.uploadedAt;
 
 export const getGenome = createSelector(
   (state, id) => getUploadedGenomes(state)[id],
@@ -34,7 +34,7 @@ export const getUploadsInProgress = createSelector(
   getUploadedFiles,
   getUploadStatuses,
   (processing, genomes, files, statuses) =>
-    Array.from(processing).map(id => ({
+    Array.from(processing).map((id) => ({
       ...genomes[id],
       files: Object.values(files[id]),
       status: statuses[id],

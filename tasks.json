@@ -1,12 +1,12 @@
 {
   "assembly": {
     "task": "assembly",
-    "version": "0",
-    "timeout": 1800000
+    "version": "v0",
+    "timeout": "30m"
   },
   "clustering": {
     "task": "clustering",
-    "timeout": 1800,
+    "timeout": "30m",
     "version": "v2.5.1"
   },
   "collection": {
@@ -19,7 +19,7 @@
           }
         ],
         "task": "tree",
-        "timeout": 900,
+        "timeout": "15m",
         "version": "v1",
         "workers": 16
       },
@@ -31,7 +31,7 @@
           }
         ],
         "task": "subtree",
-        "timeout": 900,
+        "timeout": "15m",
         "version": "v1",
         "workers": 16
       }
@@ -45,7 +45,7 @@
           }
         ],
         "task": "tree",
-        "timeout": 900,
+        "timeout": "15m",
         "version": "v1",
         "workers": 16
       }
@@ -59,7 +59,7 @@
           }
         ],
         "task": "tree",
-        "timeout": 900,
+        "timeout": "15m",
         "version": "v1",
         "workers": 16
       },
@@ -71,7 +71,7 @@
           }
         ],
         "task": "subtree",
-        "timeout": 900,
+        "timeout": "15m",
         "version": "v1",
         "workers": 16
       }
@@ -85,7 +85,7 @@
           }
         ],
         "task": "tree",
-        "timeout": 900,
+        "timeout": "15m",
         "version": "v1",
         "workers": 16
       }
@@ -102,7 +102,7 @@
           }
         ],
         "task": "tree",
-        "timeout": 900,
+        "timeout": "15m",
         "version": "v1.0.5",
         "workers": 16
       },
@@ -117,7 +117,7 @@
           }
         ],
         "task": "subtree",
-        "timeout": 900,
+        "timeout": "15m",
         "version": "v1.0.5",
         "workers": 16
       }
@@ -131,7 +131,7 @@
           }
         ],
         "task": "tree",
-        "timeout": 900,
+        "timeout": "15m",
         "version": "v1.0.2",
         "workers": 16
       }
@@ -145,7 +145,7 @@
           }
         ],
         "task": "tree",
-        "timeout": 900,
+        "timeout": "15m",
         "version": "v1",
         "workers": 16
       }
@@ -162,7 +162,7 @@
           }
         ],
         "task": "tree",
-        "timeout": 900,
+        "timeout": "15m",
         "version": "v1.0.11",
         "workers": 16
       },
@@ -177,7 +177,7 @@
           }
         ],
         "task": "subtree",
-        "timeout": 900,
+        "timeout": "15m",
         "version": "v1.0.11",
         "workers": 16
       }
@@ -191,7 +191,7 @@
           }
         ],
         "task": "tree",
-        "timeout": 900,
+        "timeout": "15m",
         "version": "v1",
         "workers": 16
       },
@@ -203,7 +203,7 @@
           }
         ],
         "task": "subtree",
-        "timeout": 900,
+        "timeout": "15m",
         "version": "v1",
         "workers": 16
       }
@@ -217,7 +217,7 @@
           }
         ],
         "task": "tree",
-        "timeout": 900,
+        "timeout": "15m",
         "version": "alignment-3"
       }
     ]
@@ -507,7 +507,7 @@
     "160674": [
       {
         "task": "kleborate",
-        "timeout": 900,
+        "timeout": "15m",
         "version": "v2.2.1"
       }
     ],
@@ -1191,7 +1191,7 @@
     "570": [
       {
         "task": "kleborate",
-        "timeout": 900,
+        "timeout": "15m",
         "version": "v2.2.1"
       },
       {

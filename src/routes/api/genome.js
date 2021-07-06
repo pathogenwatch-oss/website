@@ -203,7 +203,7 @@ router.put(
         user,
         clientId,
       })
-      .then((response) => res.json(response))
+      .then(() => res.json({ ok: 1 }))
       .catch(next);
   }
 );
@@ -216,7 +216,7 @@ router.put(
     const { id } = req.params;
     const busboy = new Busboy({ headers: req.headers });
 
-    LOGGER.info('Received request to upload genome assembly');
+    LOGGER.info('Received request to upload genome reads');
     const { clientId } = req.query;
 
     const whenStream = new Promise((resolve, reject) => {
@@ -258,9 +258,10 @@ router.post('/genome/:id/uploaded', (req, res, next) => {
   LOGGER.info('Received request to confirm genome uploaded');
   const { id } = req.params;
   const { user } = req;
+  const { clientId } = req.query;
 
   services
-    .request('genome', 'uploaded', { id, user })
+    .request('genome', 'uploaded', { id, user, clientId })
     .then((response) => res.json(response))
     .catch(next);
 });

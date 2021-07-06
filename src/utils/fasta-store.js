@@ -4,7 +4,7 @@ const temp = require('temp').track();
 const ZipStream = require('zip-stream');
 const objectStore = require('utils/object-store');
 
-const { PassThrough, Readable } = require('stream');
+const { PassThrough, Transform } = require('stream');
 
 const { maxGenomeFileSize = 20, maxReadsFileSize = 100 } = require('configuration');
 const { promisify } = require('util');
@@ -40,29 +40,48 @@ async function createTempFile(suffix) {
   });
 }
 
+class Hasher extends Transform {
+  constructor(maxLength) {
+    super();
+    this.maxLength = maxLength;
+    this.hash = crypto.createHash('sha1');
+    this.length = 0;
+    this.results = new Promise((resolve, reject) => {
+      this.resolve = resolve;
+      this.reject = reject;
+    });
+  }
+
+  _transform(chunk, _, done) {
+    this.length += chunk.length;
+    if (this.length > this.maxLength) {
+      const error = new MaxLengthError(this.length, this.maxLength);
+      this.reject(error);
+      done(error);
+    }
+    this.hash.update(chunk);
+    this.push(chunk);
+    return done();
+  }
+
+  _final(cb) {
+    this.resolve(this.hash.digest('hex'));
+    cb();
+  }
+}
+
 async function store(stream, maxMb = maxGenomeFileSize) {
   const maxGenomeFileSizeBytes = maxMb * 1048576;
   const tempPath = await createTempFile('.fa');
 
   try {
     /* eslint-disable no-async-promise-executor */
-    const fileId = await new Promise(async (resolve, reject) => {
-      let length = 0;
-      const hash = crypto.createHash('sha1');
-
-      async function* passthrough() {
-        for await (const chunk of stream) {
-          length += chunk.length;
-          if (length > maxGenomeFileSizeBytes) throw new MaxLengthError(length, maxGenomeFileSizeBytes);
-          hash.update(chunk);
-          yield chunk;
-        }
-        resolve(hash.digest('hex'));
-      }
-
-      const outstream = Readable.from(passthrough());
-      outstream.on('error', reject);
-      outstream.pipe(fs.createWriteStream(tempPath));
+    const fileId = await new Promise((resolve, reject) => {
+      const hasher = new Hasher(maxGenomeFileSizeBytes);
+      hasher.results.then(resolve).catch(reject);
+      stream.on('error', reject);
+      hasher.pipe(fs.createWriteStream(tempPath));
+      stream.pipe(hasher);
     });
 
     const fastaKey = await objectStore.putFasta(fileId, fs.createReadStream(tempPath));
@@ -72,27 +91,46 @@ async function store(stream, maxMb = maxGenomeFileSize) {
   }
 }
 
+class LengthCheck extends Transform {
+  constructor(maxLength) {
+    super();
+    this.maxLength = maxLength;
+    this.length = 0;
+    this.results = new Promise((resolve, reject) => {
+      this.resolve = resolve;
+      this.reject = reject;
+    });
+  }
+
+  _transform(chunk, _, done) {
+    this.length += chunk.length;
+    if (this.length > this.maxLength) {
+      const error = new MaxLengthError(this.length, this.maxLength);
+      this.reject(error);
+      done(error);
+    }
+    this.push(chunk);
+    return done();
+  }
+
+  _final(cb) {
+    this.resolve();
+    cb();
+  }
+}
+
 async function storeReads({ genomeId, stream, fileNumber, maxMb = maxReadsFileSize }) {
   const maxGenomeFileSizeBytes = maxMb * 1048576;
   const tempPath = await createTempFile('.fastq.gz');
 
   try {
     /* eslint-disable no-async-promise-executor */
-    await new Promise(async (resolve, reject) => {
-      let length = 0;
-
-      async function* passthrough() {
-        for await (const chunk of stream) {
-          length += chunk.length;
-          if (length > maxGenomeFileSizeBytes) throw new MaxLengthError(length, maxGenomeFileSizeBytes);
-          yield chunk;
-        }
-        resolve();
-      }
-
-      const outstream = Readable.from(passthrough());
-      outstream.on('error', reject);
-      outstream.pipe(fs.createWriteStream(tempPath));
+    await new Promise((resolve, reject) => {
+      const handler = new LengthCheck(maxGenomeFileSizeBytes);
+      handler.results.then(resolve).catch(reject);
+      stream.on('error', reject);
+      handler.pipe(fs.createWriteStream(tempPath));
+      stream.pipe(handler);
     });
 
     const fastaKey = await objectStore.putReads(genomeId, fileNumber, fs.createReadStream(tempPath));

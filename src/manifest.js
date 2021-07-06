@@ -1,11 +1,58 @@
 const assert = require('assert').strict;
-const { taskTypes } = require('models/queue');
 
 const config = require('configuration');
 const tasks = require('../tasks.json');
 
 const GB = 1024 ** 3;
-const defaultTimeout = config.tasks.timeout || 60;
+const MB = 1024 ** 2;
+const MINUTE = 60;
+const HOUR = 60 * MINUTE;
+const defaultTimeout = config.tasks.timeout || 1 * MINUTE;
+
+const taskTypes = {
+  assembly: 'assembly',
+  genome: 'genome',
+  task: 'task',
+  collection: 'collection',
+  clustering: 'clustering',
+};
+module.exports.taskTypes = taskTypes;
+
+function formatMemory(value) {
+  if (Number.isFinite(value)) return Math.floor(value);
+  else if (typeof value !== 'string') throw new Error(`Don't understand memory value ${value}`);
+  const [v, unit] = value.toLowerCase().match(/^([0-9.]+)\s*([mg])?$/).slice(1, 3);
+  switch (unit) {
+    case undefined:
+      return Math.floor(Number(v));
+    case 'm':
+      return Math.floor(Number(v) * MB);
+    case 'g':
+      return Math.floor(Number(v) * GB);
+    default:
+      throw new Error(`Don't understand units of memory value ${value}`);
+  }
+}
+module.exports.formatMemory = formatMemory;
+
+function formatTime(value) {
+  if (Number.isFinite(value)) return Math.floor(value);
+  else if (typeof value !== 'string') throw new Error(`Don't understand time value ${value}`);
+  const [v, unit] = value.toLowerCase().match(/^([0-9.]+)\s*([smh])?$/).slice(1, 3);
+  switch (unit) {
+    case undefined:
+      return Math.floor(Number(v));
+    case 's':
+      return Math.floor(Number(v));
+    case 'm':
+      return Math.floor(Number(v) * MINUTE);
+    case 'h':
+      return Math.floor(Number(v) * HOUR);
+    default:
+      throw new Error(`Don't understand units of time value ${value}`);
+  }
+}
+module.exports.formatTime = formatTime;
 
 function addTaskDefaults(task) {
   const { resources = {} } = task;
@@ -34,6 +81,7 @@ function addTaskDefaults(task) {
     default:
       resources.memory = resources.memory || 1 * GB;
   }
+  resources.memory = formatMemory(resources.memory);
 
   switch (task.task) {
     case 'assembly':
@@ -54,7 +102,7 @@ function addTaskDefaults(task) {
   }
 
   task.resources = resources;
-  task.timeout = task.timeout || defaultTimeout;
+  task.timeout = formatTime(task.timeout || defaultTimeout);
   return task;
 }
 

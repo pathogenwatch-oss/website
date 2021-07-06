@@ -10,7 +10,7 @@ import { getPendingFiles } from './selectors';
 
 import { recoverUploadSession } from './actions';
 
-import { getGenomeAccepts } from '../../file-utils';
+import { getUploadAccepts } from '../../file-utils';
 
 const readsEligible = true;
 
@@ -22,7 +22,7 @@ const Recovery = ({
   <FileDragAndDrop
     onFiles={onFiles}
     readsEligible={readsEligible}
-    accept={getGenomeAccepts()}
+    accept={getUploadAccepts()}
   >
     <section className="pw-upload-page pw-upload-recovery">
       <h1>Recover this session.</h1>

@@ -14,6 +14,8 @@ import { fetchUploads } from '../previous/actions';
 
 import { getUploadAccepts } from '../file-utils';
 
+const readsEligible = true;
+
 const Instructions = ({ onFiles, fetchPreviousUploads, location }) => {
   React.useEffect(() => {
     fetchPreviousUploads();
@@ -22,7 +24,7 @@ const Instructions = ({ onFiles, fetchPreviousUploads, location }) => {
   return (
     <FileDragAndDrop
       onFiles={onFiles}
-      readsEligible={true}
+      readsEligible={readsEligible}
       accept={getUploadAccepts()}
       isMultiFasta={uploadType === "multi-fasta"}
     >

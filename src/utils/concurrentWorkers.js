@@ -17,7 +17,7 @@ class Pool {
 
     this.zombieLand = [];
     this.killed = 0;
-    this.zombieFarmer = setInterval(() => this.farmZombies(), 2000);
+    this.zombieFarmer = null;
   }
 
   get size() {
@@ -31,6 +31,7 @@ class Pool {
 
   wait() {
     if (this.isEmpty) return this.isEmpty;
+    if (this.size.queue + this.size.inProgress === 0) return Promise.resolve();
     this.isEmpty = new Promise((res) => {
       this.onEmpty = res;
     });
@@ -54,11 +55,17 @@ class Pool {
     const jobCount = this.inProgress.length + this.queue.length;
     if (jobCount === 0 && this.onEmpty !== null) this.onEmpty();
 
+    if (this.size.total === 0 && this.zombieFarmer !== null) {
+      clearInterval(this.zombieFarmer);
+      this.zombieFarmer = null;
+    }
+
     if (this.inProgress.length >= this.maxWorkers) return undefined;
     if (this.queue.length === 0) return undefined;
 
     const job = this.queue.shift();
     this.inProgress.push(job);
+    if (this.zombieFarmer === null) this.zombieFarmer = setInterval(() => this.farmZombies(), 2000);
     try {
       job.started = new Date();
       const r = await this.fn(...job.params);
