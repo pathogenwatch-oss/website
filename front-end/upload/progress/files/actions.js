@@ -7,9 +7,8 @@ import { getUploadedAt, getGenome } from '../selectors';
 import { getSettingValue } from '../../selectors';
 
 import * as api from './api';
-import { uploadReadsProgress } from '../assembly/api';
 import { compress, validateAssembly } from './utils';
-import { InvalidGenomeError } from './utils/validation';
+import { upload } from '../assembly/api';
 
 import { fileTypes } from '../../constants';
 
@@ -25,7 +24,6 @@ uploadLimiter.on("failed", async (error, jobInfo) => {
   if (jobInfo.retryCount <= 1) { // Retry twice (3 total attempts).
     return 25; // Pause 25ms
   }
-  return undefined;
 });
 
 export function genomeUploadProgress(id, progress) {
@@ -61,7 +59,7 @@ export function uploadGenome(genome, data) {
       type: UPLOAD_GENOME,
       payload: {
         id,
-        promise: uploadLimiter.schedule(() => api.uploadAssembly(genome, data, progressFn)).then((uploadResult) => {
+        promise: uploadLimiter.schedule(() => api.upload(genome, data, progressFn)).then((uploadResult) => {
           if (metadata) {
             return api
               .update(uploadResult.id, metadata)
@@ -85,33 +83,10 @@ function processAssembly(dispatch, getState, genome) {
     .then((data) => dispatch(uploadGenome(genome, data)));
 }
 
-export function uploadReads(genome) {
-  return (dispatch) => {
-    const { id } = genome;
-    const progressFn = (fileName, progress) => dispatch(uploadReadsProgress(
-      'UPLOAD',
-      id,
-      fileName,
-      progress,
-    ));
-
-    return dispatch({
-      type: UPLOAD_GENOME,
-      payload: {
-        id,
-        promise: uploadLimiter.schedule(() => api.uploadReads(genome, progressFn)).then((uploadResult) => {
-          return api.uploadComplete(id).then(() => uploadResult);
-        }),
-      },
-    });
-  };
-}
-
 function processReads(dispatch, getState, genome) {
-  const { files = [] } = genome;
-  if (files.length !== 2) throw new InvalidGenomeError(`Expected a pair of read files, got ${files.length}`);
-  return Promise.resolve()
-    .then(() => dispatch(uploadReads(genome)));
+  const state = getState();
+  const uploadedAt = getUploadedAt(state);
+  return upload(genome, { uploadedAt }, dispatch);
 }
 
 export const PROCESS_GENOME = createAsyncConstants('PROCESS_GENOME');

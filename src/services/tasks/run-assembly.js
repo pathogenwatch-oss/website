@@ -7,7 +7,6 @@ const TaskLog = require('models/taskLog');
 const Genome = require('models/genome');
 const store = require('utils/object-store');
 
-const notify = require('services/genome/notify');
 const docker = require('services/docker');
 const { DEFAULT_TIMEOUT } = require('services/bus');
 const { getImageName } = require('manifest.js');
@@ -36,7 +35,7 @@ function inputStream(genomeId, readsKeys) {
 
 async function runTask({ spec, metadata }) {
   const { task, version, resources, timeout } = spec;
-  const { userId: user, genomeId: id, clientId, readsKeys } = metadata;
+  const { userId, genomeId: id, clientId, readsKeys } = metadata;
   const name = `${slugify(task)}_${random()}`;
   const container = await docker(
     getImageName(task, version),
@@ -52,7 +51,7 @@ async function runTask({ spec, metadata }) {
     timeout$: (timeout + 60) * 1000,
     stream: container.stdout,
     id,
-    user,
+    userId,
     clientId,
   });
   whenOutput.catch((err) => LOGGER.error(err));
@@ -91,26 +90,15 @@ async function runTask({ spec, metadata }) {
 }
 
 module.exports = async function ({ spec, metadata, timeout$: timeout = DEFAULT_TIMEOUT }) {
-  const { task, version } = spec;
   const {
     genomeId,
-    uploadedAt,
-    clientId,
-    userId,
   } = metadata;
 
   const value = await Genome.findOne({ _id: genomeId }, { fileId: 1 }).lean();
 
   if (value && value.fileId) {
     // The genome already has an assembly
-    const { fileId } = value;
-    return notify({
-      genomeId,
-      clientId,
-      userId,
-      uploadedAt,
-      tasks: [ { fileId, task, version } ],
-    });
+    return value.fileId;
   }
 
   const fileId = await runTask({ spec, metadata });

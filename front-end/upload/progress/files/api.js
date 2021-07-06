@@ -14,29 +14,6 @@ export function uploadAssembly({ id }, data, progressFn) {
   });
 }
 
-export async function uploadReads(genome, progressFn) {
-  // FIXME do some retries
-  const { id, files = [] } = genome;
-
-  for (const file of files) {
-    const { name: fileName, handle } = file;
-    const fileProgress = (p) => { progressFn(fileName, p); };
-
-    const formData = new FormData();
-    formData.append('fileName', fileName);
-    formData.append('content', handle);
-
-    await fetchRaw({
-      method: 'PUT',
-      path: `/api/genome/${id}/reads?${$.param({ clientId })}`,
-      contentType: false,
-      data: formData,
-      processData: false,
-      progressFn: fileProgress,
-    });
-  }
-}
-
 export function uploadComplete(id) {
   return fetchJson('POST', `/api/genome/${id}/uploaded?${$.param({ clientId })}`);
 }

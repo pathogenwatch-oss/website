@@ -200,7 +200,7 @@ router.put(
         timeout$: 1000 * 60 * 5,
         stream: getStream(req),
         id,
-        user,
+        userId: user._id,
         clientId,
       })
       .then(() => res.json({ ok: 1 }))

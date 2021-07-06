@@ -50,10 +50,9 @@ module.exports = async function ({ user, query }) {
       pending: doc.pending,
       type: upload.type,
       uploadedAt: doc.uploadedAt,
+      files: upload.files,
+      uploadComplete: upload.complete,
     };
-    if (!upload.complete) {
-      genome.files = upload.files;
-    }
     return genome;
   });
 };
