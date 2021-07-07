@@ -28,7 +28,7 @@ RUN npm run build # runs webpack build
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
 
-FROM node:12.22.3-alpine
+FROM node:12.22.2-alpine
 
 WORKDIR /pathogenwatch/
 
