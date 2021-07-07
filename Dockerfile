@@ -1,4 +1,4 @@
-FROM node:12.22.3-alpine AS middle-end
+FROM node:12.22.2-alpine AS middle-end
 
 ARG REPO_USER
 ARG REPO_TOKEN
