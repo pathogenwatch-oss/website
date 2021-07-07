@@ -2,7 +2,7 @@ import React from 'react';
 import { Map, TileLayer } from 'react-leaflet';
 import classnames from 'classnames';
 import { Link } from 'react-router-dom';
-import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
+import ReactCSSTransitionGroup from 'react-transition-group/CSSTransitionGroup';
 
 import MarkerLayer from '../cgps-commons/LeafletMarkerLayer.react';
 import MarkdownHeading from '../components/MarkdownHeading.react';

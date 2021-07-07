@@ -59,7 +59,7 @@ export function uploadGenome(genome, data) {
       type: UPLOAD_GENOME,
       payload: {
         id,
-        promise: uploadLimiter.schedule(() => api.upload(genome, data, progressFn)).then((uploadResult) => {
+        promise: uploadLimiter.schedule(() => api.uploadAssembly(genome, data, progressFn)).then((uploadResult) => {
           if (metadata) {
             return api
               .update(uploadResult.id, metadata)
