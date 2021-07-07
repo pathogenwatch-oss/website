@@ -1,4 +1,4 @@
-FROM node:12.13.1-alpine AS middle-end
+FROM node:12.22.3-alpine AS middle-end
 
 ARG REPO_USER
 ARG REPO_TOKEN
@@ -17,7 +17,7 @@ WORKDIR /pathogenwatch/
 
 COPY . /pathogenwatch
 
-RUN npm install --only=production
+RUN npm install -g npm && npm install --only=production
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
 
@@ -28,7 +28,7 @@ RUN npm run build # runs webpack build
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
 
-FROM node:12.13.1-alpine
+FROM node:12.22.3-alpine
 
 WORKDIR /pathogenwatch/
 
