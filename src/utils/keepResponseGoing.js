@@ -10,7 +10,7 @@
 // (e.g. a header row) and if the total response is small
 // enough to be held in memory.
 
-const TIMEOUT = 5 * 60 * 1000;
+const TIMEOUT = 10 * 60 * 1000;
 const createError = require('http-errors');
 
 const timeoutError = createError(503, 'Response timeout', {
