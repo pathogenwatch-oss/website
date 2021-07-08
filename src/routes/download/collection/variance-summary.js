@@ -7,7 +7,6 @@ const store = require('utils/object-store');
 
 const { request } = require('services');
 const { ServiceRequestError } = require('utils/errors');
-const keepResponseGoing = require('utils/keepResponseGoing');
 
 const { calculateStats } = require('utils/stats');
 
@@ -225,7 +224,7 @@ async function generateTreeData(tree, treeGenomeIds, collectionGenomeIds) {
   return result;
 }
 
-function writeMatrixHeader(response) {
+function writeMatrixHeader(stream) {
   const header = [
     '',
     'Number of user assemblies',
@@ -244,10 +243,11 @@ function writeMatrixHeader(response) {
     'Pathogenwatch Gene Representative Variant Sites (user-only)',
     'Pathogenwatch Gene Representative Variant Sites (including public data)',
   ];
-  response.push(header.join(','));
+  stream.write(header.join(','));
+  stream.write('\n');
 }
 
-function writeMatrixLine(result, response) {
+function writeMatrixLine(result, stream) {
   const line = [
     result.label.replace(/,/g, ''),
     result.totalCollection,
@@ -266,16 +266,17 @@ function writeMatrixLine(result, response) {
     result.sites.userRepresentative,
     result.sites.publicRepresentative,
   ];
-  response.push(line.join(','));
+  stream.write(line.join(','));
+  stream.write('\n');
 }
 
-function writeMatrixFooter(response) {
-  response.push('');
-  response.push('Notes:1. Pathogenwatch Gene Representative Sites includes sites that vary when compared to the Pathogenwatch family reference alleles');
-  response.push('');
+function writeMatrixFooter(stream) {
+  stream.write('\n');
+  stream.write('Notes:1. Pathogenwatch Gene Representative Sites includes sites that vary when compared to the Pathogenwatch family reference alleles');
+  stream.write('\n');
 }
 
-async function generateData({ genomes, tree, subtrees = [] }, response) {
+async function generateData({ genomes, tree, subtrees = [] }, stream) {
   subtrees = subtrees === null ? [] : subtrees;
   const collectionGenomeIds = new Set(genomes.map((id) => id.toString()));
   if (tree) {
@@ -286,25 +287,23 @@ async function generateData({ genomes, tree, subtrees = [] }, response) {
       versions: tree.versions,
     };
     const collectionData = await generateTreeData(collectionTree, Array.from(collectionGenomeIds), collectionGenomeIds);
-    writeMatrixLine(collectionData, response);
+    writeMatrixLine(collectionData, stream);
   }
 
   for (const subtree of subtrees) {
     if (subtree.status === 'READY' && (subtree.size || 0) >= 3) {
       const genomeIds = Collection.getSubtreeIds(subtree);
       const data = await generateTreeData(subtree, genomeIds, collectionGenomeIds);
-      writeMatrixLine(data, response);
+      writeMatrixLine(data, stream);
     }
   }
 }
 
-async function generateMatrix(collection, res) {
-  const sendResponse = keepResponseGoing(res);
-  const response = [];
-  writeMatrixHeader(response);
-  await generateData(collection, response);
-  writeMatrixFooter(response);
-  return sendResponse(response.join('\n'));
+async function generateMatrix(collection, stream) {
+  writeMatrixHeader(stream);
+  await generateData(collection, stream);
+  writeMatrixFooter(stream);
+  stream.end();
 }
 
 module.exports = (req, res, next) => {
