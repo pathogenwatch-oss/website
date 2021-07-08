@@ -49,17 +49,21 @@ async function runJob(job, releaseResources) {
     }
 
     if (taskType === taskTypes.assembly) {
+      const { genomeId, clientId, userId, uploadedAt } = metadata;
       try {
+        await request('genome', 'send-assembly-progress', { clientId, userId, uploadedAt });
         await request('tasks', 'run-assembly', { spec, timeout$: timeout * 1000, metadata });
         await Queue.handleSuccess(job);
+        await request('genome', 'send-assembly-progress', { clientId, userId, uploadedAt });
       } catch (err) {
         LOGGER.error(err);
         await Queue.handleFailure(job, err.message);
         await request('genome', 'assembler-error', {
-          id: metadata.genomeId,
-          user: metadata.userId,
+          id: genomeId,
+          user: userId,
           error: 'problem assembling genome',
         });
+        await request('genome', 'send-assembly-progress', { clientId, userId, uploadedAt });
       }
     }
 

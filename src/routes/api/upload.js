@@ -44,6 +44,16 @@ router.get('/upload/:uploadedAt', (req, res, next) => {
     .catch(next);
 });
 
+router.get('/upload/:uploadedAt/progress', (req, res, next) => {
+  // returns { runningSince = [], failed = 0, complete = 0 }
+  LOGGER.info('Received request to get assembly progress');
+  const { user } = req;
+  const { uploadedAt } = req.params;
+  services.request('genome', 'fetch-assembly-progress', { userId: user._id, uploadedAt })
+    .then((response) => res.json(response))
+    .catch(next);
+});
+
 router.get('/upload', (req, res, next) => {
   LOGGER.info('Received request to get upload sessions');
   const { user } = req;

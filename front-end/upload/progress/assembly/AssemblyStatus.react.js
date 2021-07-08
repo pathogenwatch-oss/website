@@ -2,8 +2,6 @@ import React from 'react';
 import { connect } from 'react-redux';
 import 'eventsource/lib/eventsource-polyfill';
 
-import { useAuthToken } from '~/auth/hooks';
-
 import { isAssemblyInProgress, shouldListenForUpdates } from './selectors';
 
 import { assemblyProgressTick, assemblyPipelineStatus, assemblyPipelineError } from './actions';
@@ -18,10 +16,35 @@ const Status = ({
   handleStatusUpdate,
   listening,
   progressTick,
-  token,
   uploadedAt,
 }) => {
-  //  FIXME
+  React.useEffect(() => {
+    if (listening) {
+      fetchProgress(uploadedAt)
+        .then((payload) => {
+          handleStatusUpdate({
+            type: 'STATUS',
+            payload,
+          });
+        })
+        .catch(console.error);
+      const channelId = `${config.clientId}-assembly`;
+      subscribe(
+        channelId, uploadedAt, handleStatusUpdate
+      );
+      return () => unsubscribe(channelId);
+    }
+  }, [ listening ]);
+
+  React.useEffect(() => {
+    if (assemblyInProgress) {
+      const interval = setInterval(
+        progressTick,
+        2000
+      );
+      return () => clearInterval(interval);
+    }
+  }, [ assemblyInProgress ]);
   return null;
 };
 
@@ -29,7 +52,6 @@ function mapStateToProps(state) {
   return {
     listening: shouldListenForUpdates(state),
     assemblyInProgress: isAssemblyInProgress(state),
-    token: state.auth.token,
   };
 }
 

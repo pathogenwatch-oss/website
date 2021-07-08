@@ -11,6 +11,12 @@ const defaultRetries = config.tasks.retries || 3;
 
 let now = () => Math.floor(new Date() / 1000);
 
+const state = {
+  PENDING: 'PENDING',
+  RUNNING: 'RUNNING',
+  FAILED: 'FAILED',
+};
+
 const schema = new Schema({
   ack: Schema.Types.ObjectId,
 
@@ -19,6 +25,8 @@ const schema = new Schema({
     spec: {
       task: { type: String, required: true },
       taskType: { type: String, default: 'task' },
+      state: { type: String, default: state.PENDING },
+      startTime: { type: Number },
       version: { type: String, required: true },
       timeout: { type: Number, required: true },
       resources: {
@@ -71,6 +79,7 @@ schema.statics.handleFailure = async function (job, rejectionReason) {
   const update = {
     nextReceivableTime: now() + 10,
     rejectionReason,
+    state: state.PENDING,
   };
 
   if (timeout) update['message.spec.timeout'] = Math.min(timeout * 2, MAX_TIMEOUT);
@@ -90,7 +99,7 @@ schema.statics.handleFailure = async function (job, rejectionReason) {
     { ack },
     {
       $unset: { ack: 1 },
-      $set: { rejectionReason, rejectedTime: now() },
+      $set: { rejectionReason, rejectedTime: now(), state: state.FAILED },
       $inc: { attempts: 1 },
     }
   );
@@ -105,13 +114,17 @@ schema.statics.handleSuccess = async function ({ ack }) {
   return doc !== null;
 };
 
-schema.statics.ack = async function (job, incrementAttempts = true) {
+schema.statics.ack = async function (job, started = true) {
   const { ack = 'invalid', spec = {} } = job;
   const { timeout } = spec;
   const update = {
     $set: { nextReceivableTime: now() + timeout + 10 },
   };
-  if (incrementAttempts) update.$inc = { attempts: 1 };
+  if (started) {
+    update.$inc = { attempts: 1 };
+    update.state = state.RUNNING;
+    update.startTime = Number(new Date());
+  }
   const doc = await this.findOneAndUpdate(
     { ack },
     update,
@@ -135,6 +148,7 @@ schema.statics.queueLength = async function (limits = {}, constraints = {}, queu
 
 const model = mongoose.model('Queue', schema, 'queue');
 module.exports = model;
+module.exports.state = state;
 module.exports.ackWindow = ackWindow;
 module.exports.overideNow = (fn) => { now = fn; }; // used for testing
 

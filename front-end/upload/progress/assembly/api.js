@@ -69,3 +69,17 @@ export function fetchSession(uploadedAt) {
     })
   );
 }
+
+export function fetchProgress(uploadedAt) {
+  return new Promise((resolve, reject) =>
+    fetchJson('GET', `/upload/${uploadedAt}/progress`).then((response) => {
+      if (response.status === 200) {
+        resolve(response.json());
+      } else if (response.status === 404) {
+        reject({ type: 'NOT_FOUND' });
+      } else {
+        reject({ message: response.statusText });
+      }
+    })
+  );
+}
