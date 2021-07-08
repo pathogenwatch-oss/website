@@ -34,14 +34,17 @@ module.exports = function (req, res, next) {
   const originalWrite = res.write.bind(res);
   const originalEnd = res.end.bind(res);
 
+  const sendBit = () => {
+    if (buffer.length === 0) return;
+    originalWrite(buffer.slice(0, 1));
+    buffer = buffer.slice(1);
+  };
+
   res.write = (content) => {
     buffer += content;
+    sendBit();
     if (interval === null) {
-      interval = setInterval(() => {
-        if (buffer.length === 0) return;
-        originalWrite(buffer.slice(0, 1));
-        buffer = buffer.slice(1);
-      }, 10 * 1000);
+      interval = setInterval(sendBit, 10 * 1000);
     }
   };
 
