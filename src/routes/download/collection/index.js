@@ -5,6 +5,7 @@ const router = express.Router();
 const { request } = require('services');
 
 const LOGGER = require('utils/logging').createLogger('Downloads');
+const keepResponseGoing = require('utils/keepResponseGoing');
 
 router.use('/:token', async (req, res, next) => {
   const { token } = req.params;
@@ -42,7 +43,7 @@ router.post('/:token/kleborate', require('./kleborate'));
 router.post('/:token/pangolin', require('./pangolin'));
 router.post('/:token/speciator', require('./speciator'));
 router.post('/:token/:type-matrix', require('./matrix'));
-router.get('/:token/variance-summary', require('./variance-summary'));
+router.get('/:token/variance-summary', keepResponseGoing, require('./variance-summary'));
 router.post('/:token/vista', require('./vista'));
 
 module.exports = router;
