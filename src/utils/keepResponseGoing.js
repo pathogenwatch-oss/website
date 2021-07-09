@@ -40,7 +40,7 @@ module.exports = function (req, res, next) {
     buffer = buffer.slice(1);
   };
 
-  res.write = (content) => {
+  res.write = (content = '') => {
     buffer += content;
     sendBit();
     if (interval === null) {
@@ -48,7 +48,7 @@ module.exports = function (req, res, next) {
     }
   };
 
-  res.end = (content) => {
+  res.end = (content = '') => {
     if (interval) {
       clearInterval(interval);
       interval = null;
