@@ -27,7 +27,7 @@ const Status = ({
             payload,
           });
         })
-        .catch(console.error);
+        .catch((err) => console.error('error fetching progress', err));
       const channelId = `${config.clientId}-assembly`;
       subscribe(
         channelId, uploadedAt, handleStatusUpdate

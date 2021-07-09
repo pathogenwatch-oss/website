@@ -38,9 +38,12 @@ module.exports = async function ({ user, query }) {
     upload: 1,
     uploadedAt: 1,
   };
-  const genomes = await Genome.find({ ...query, _user: user._id }, projection).lean();
-  return genomes.map((doc) => {
-    const { analysis = {}, upload = { complete: true, type: Genome.uploadTypes.ASSEMBLY } } = doc;
+
+  const genomes = [];
+  const progress = [];
+  const docs = await Genome.find({ ...query, _user: user._id }, projection).lean();
+  for (const doc of docs) {
+    const { analysis = {}, upload = { complete: true, type: Genome.uploadTypes.ASSEMBLY, files: [] } } = doc;
     const genome = {
       analysis,
       assembler: doc.assembler,
@@ -50,9 +53,17 @@ module.exports = async function ({ user, query }) {
       pending: doc.pending,
       type: upload.type,
       uploadedAt: doc.uploadedAt,
-      files: upload.files,
-      uploadComplete: upload.complete,
     };
-    return genome;
-  });
+    if (!upload.complete) genome.files = upload.files;
+    genomes.push(genome);
+
+    if (upload.type === Genome.uploadTypes.READS) {
+      progress.push({
+        genomeId: doc._id,
+        files: upload.files.map((fileName) => ({ fileId: fileName, complete: upload.complete })),
+      });
+    }
+  }
+
+  return { genomes, progress };
 };

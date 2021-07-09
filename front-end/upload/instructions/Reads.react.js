@@ -3,7 +3,7 @@ import React from 'react';
 import { FormattedName } from '~/organisms';
 import Fade from '~/components/fade/Fade.react';
 
-export default ({ remaining }) => (
+export default () => (
   <React.Fragment>
     <div className="pw-upload-instructions-column">
       <h2>Genomic Data</h2>

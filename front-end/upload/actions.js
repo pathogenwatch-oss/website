@@ -10,7 +10,7 @@ export function addGenomes(genomes, uploadedAt) {
     payload: {
       genomes,
       uploadedAt,
-      promise: api.initialise(genomes, uploadedAt).then(result => {
+      promise: api.initialise(genomes, uploadedAt).then((result) => {
         for (const genome of genomes) {
           if (genome.id in result) {
             genome.id = result[genome.id];
@@ -34,15 +34,6 @@ export function uploadErrorMessage(message) {
 export const UPLOAD_FETCH_ASSEMBLER_USAGE = createAsyncConstants(
   'UPLOAD_FETCH_ASSEMBLER_USAGE'
 );
-
-export function fetchAssemblerUsage(token) {
-  return {
-    type: UPLOAD_FETCH_ASSEMBLER_USAGE,
-    payload: {
-      promise: api.fetchUsage(token),
-    },
-  };
-}
 
 export const UPLOAD_SETTING_CHANGED = 'UPLOAD_SETTING_CHANGED';
 

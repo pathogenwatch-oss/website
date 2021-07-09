@@ -5,7 +5,10 @@ const { ServiceRequestError } = require('utils/errors');
 module.exports = async ({ uploadedAt, userId }) => {
   if (!userId) throw new ServiceRequestError('Not authenticated');
 
-  const genomes = await Genome.find({ uploadedAt, _user: userId }, { _id: 1, fileId: 1, assembler: 1 }).lean();
+  const genomes = await Genome.find(
+    { uploadedAt, _user: userId, 'upload.type': 'reads' },
+    { _id: 1, fileId: 1, assembler: 1 }
+  ).lean();
   if (!genomes) throw new ServiceRequestError('Not authenticated');
 
   const status = {

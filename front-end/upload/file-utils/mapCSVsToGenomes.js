@@ -33,7 +33,7 @@ function isMultiFastaFile(file) {
   return file.isMultiFasta;
 }
 
-export default async function (files, assemblerUsage) {
+export default async function (files) {
   const csvFiles = [];
   const assemblies = [];
   const reads = [];
@@ -71,7 +71,7 @@ export default async function (files, assemblerUsage) {
 
   let readsPairs = {};
   try {
-    readsPairs = pairReadsFiles(reads, READS_FILENAME_REGEX, assemblerUsage);
+    readsPairs = pairReadsFiles(reads, READS_FILENAME_REGEX);
   } catch (e) {
     return Promise.reject(e);
   }

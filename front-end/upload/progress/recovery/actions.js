@@ -1,5 +1,4 @@
 import { getFilenameToGenomeId } from './selectors';
-import { getAssemblerUsage } from '~/upload/selectors';
 
 import { processFiles } from '../files/actions';
 import { UPLOAD_ADD_GENOMES } from '../../actions';
@@ -9,10 +8,9 @@ import { mapCSVsToGenomes } from '~/upload/file-utils';
 export function recoverUploadSession(files, session = []) {
   return (dispatch, getState) => {
     const state = getState();
-    const usage = getAssemblerUsage(state);
     const filenameToGenomeId = getFilenameToGenomeId(state);
     const filesToRecover = new Set(Object.keys(filenameToGenomeId));
-    const relevantFiles = files.filter(file => filesToRecover.has(file.name));
+    const relevantFiles = files.filter((file) => filesToRecover.has(file.name));
     if (relevantFiles.length === 0) {
       dispatch({
         type: 'UPLOAD_ERROR_MESSAGE',
@@ -20,8 +18,8 @@ export function recoverUploadSession(files, session = []) {
       });
       return;
     }
-    mapCSVsToGenomes(relevantFiles, usage)
-      .then(genomes => {
+    mapCSVsToGenomes(relevantFiles)
+      .then((genomes) => {
         for (const genome of genomes) {
           let genomeId;
           if (genome.files) {
@@ -32,7 +30,7 @@ export function recoverUploadSession(files, session = []) {
           }
           if (genomeId) {
             genome.id = genomeId;
-            const sessionRecord = session.find(_ => _.genomeId === genomeId);
+            const sessionRecord = session.find((_) => _.genomeId === genomeId);
             if (sessionRecord) {
               genome.recovery = sessionRecord.files;
             }
@@ -56,7 +54,7 @@ export function recoverUploadSession(files, session = []) {
           dispatch(processFiles());
         }
       })
-      .catch(e => {
+      .catch((e) => {
         dispatch({
           type: 'UPLOAD_ERROR_MESSAGE',
           payload: e.message,

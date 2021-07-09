@@ -56,30 +56,9 @@ export async function upload(genome, { uploadedAt }, dispatch) {
 }
 
 export function fetchSession(uploadedAt) {
-  return new Promise((resolve, reject) =>
-    fetchJson('GET', `/upload/${uploadedAt}`).then((response) => {
-      if (response.status === 200) {
-        const { progress } = response.json();
-        resolve({ progress });
-      } else if (response.status === 404) {
-        reject({ type: 'NOT_FOUND' });
-      } else {
-        reject({ message: response.statusText });
-      }
-    })
-  );
+  return fetchJson('GET', `/api/upload/${uploadedAt}`);
 }
 
 export function fetchProgress(uploadedAt) {
-  return new Promise((resolve, reject) =>
-    fetchJson('GET', `/upload/${uploadedAt}/progress`).then((response) => {
-      if (response.status === 200) {
-        resolve(response.json());
-      } else if (response.status === 404) {
-        reject({ type: 'NOT_FOUND' });
-      } else {
-        reject({ message: response.statusText });
-      }
-    })
-  );
+  return fetchJson('GET', `/api/upload/${uploadedAt}/progress`);
 }

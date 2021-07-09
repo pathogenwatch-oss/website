@@ -25,13 +25,6 @@ router.get('/upload/:uploadedAt/position', (req, res, next) => {
     .catch(next);
 });
 
-function formatUploadProgress(genomes) {
-  return genomes.map(({ id: genomeId, files, uploadComplete }) => ({
-    genomeId,
-    files: files.map((fileName) => ({ fileId: fileName, complete: uploadComplete })),
-  }));
-}
-
 router.get('/upload/:uploadedAt', (req, res, next) => {
   LOGGER.info('Received request to get upload session');
   const { user } = req;
@@ -40,7 +33,7 @@ router.get('/upload/:uploadedAt', (req, res, next) => {
     services.request('genome', 'fetch-upload', { user, query: { uploadedAt } }),
     services.request('tasks', 'queue-position', { uploadedAt }),
   ])
-    .then(([ genomes, { position } ]) => res.json({ genomes, position, progress: formatUploadProgress(genomes) }))
+    .then(([ { genomes, progress }, { position } ]) => res.json({ genomes, position, progress }))
     .catch(next);
 });
 

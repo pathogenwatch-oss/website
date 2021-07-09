@@ -6,6 +6,7 @@
   "mapboxKey": "",
   "maxCollectionSize": 1500,
   "maxGenomeFileSize": 20,
+  "maxReadsFileSize": 500,
   "maxDownloadSize": 2500,
   "mongodb": {
     "host": "localhost",

@@ -23,8 +23,8 @@ function getFrontEndSettings(req) {
   };
 
   organismConfigs
-    .filter(organismConfig => 'maxCollectionSize' in organismConfig)
-    .forEach(({ id, maxCollectionSize }) => {limits.maxCollectionSize[id] = maxCollectionSize;});
+    .filter((organismConfig) => 'maxCollectionSize' in organismConfig)
+    .forEach(({ id, maxCollectionSize }) => { limits.maxCollectionSize[id] = maxCollectionSize; });
 
   if (req.user) {
     const hash = crypto.createHash('sha1');
@@ -33,7 +33,7 @@ function getFrontEndSettings(req) {
     if (req.user.limits) {
       for (const [ key, value ] of Object.entries(req.user.limits)) {
         // model will provide missing properties as undefined, should not overwrite.
-        if (!!value) {
+        if (value) {
           limits[key] = value;
         }
       }
@@ -41,12 +41,12 @@ function getFrontEndSettings(req) {
   }
 
   const frontEndConfig = {
-    assemblerAddress: config.assemblerAddress,
     clientId,
     mapboxKey: config.mapboxKey,
     maxCollectionSize: limits.maxCollectionSize,
     maxDownloadSize: limits.maxDownloadSize,
     maxGenomeFileSize: config.maxGenomeFileSize,
+    maxReadsFileSize: config.maxReadsFileSize,
     pagination: config.pagination,
     pusher: {
       key: config.pusher.key,

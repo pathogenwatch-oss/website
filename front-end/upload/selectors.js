@@ -2,8 +2,6 @@ import { createSelector } from 'reselect';
 
 const getUpload = (state) => state.upload;
 
-export const getAssemblerUsage = (state) => ({ remaining: 1001 });
-
 export const getSettingValue = (state, setting) =>
   getUpload(state).settings[setting];
 
