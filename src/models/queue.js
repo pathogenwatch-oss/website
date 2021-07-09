@@ -25,8 +25,6 @@ const schema = new Schema({
     spec: {
       task: { type: String, required: true },
       taskType: { type: String, default: 'task' },
-      state: { type: String, default: state.PENDING },
-      startTime: { type: Number },
       version: { type: String, required: true },
       timeout: { type: Number, required: true },
       resources: {
@@ -39,8 +37,10 @@ const schema = new Schema({
   // These are queue implementation parameters
   nextReceivableTime: { type: Number, default: null },
   queue: { type: String, index: true },
-  rejectionReason: { type: String, default: null },
+  state: { type: String, default: state.PENDING },
+  startTime: { type: Number },
   rejectedTime: { type: Number, default: null },
+  rejectionReason: { type: String, default: null },
   attempts: { type: Number, default: 0, required: true },
   maxAttempts: { type: Number, default: 1, required: true },
 }, { strict: false });
@@ -125,6 +125,20 @@ schema.statics.ack = async function (job, started = true) {
     update.state = state.RUNNING;
     update.startTime = Number(new Date());
   }
+  const doc = await this.findOneAndUpdate(
+    { ack },
+    update,
+  );
+  return doc !== null;
+};
+
+schema.statics.requeue = async function (job) {
+  const { ack = 'invalid' } = job;
+  const update = {
+    $set: { nextReceivableTime: now() + ackWindow },
+    state: state.PENDING,
+    startTime: null,
+  };
   const doc = await this.findOneAndUpdate(
     { ack },
     update,

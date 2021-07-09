@@ -38,7 +38,13 @@ async function runJob(job, releaseResources) {
     const { spec, metadata } = job;
     const { taskType, timeout, task, version } = spec;
 
-    await pullTaskImage(spec);
+    try {
+      await pullTaskImage(spec);
+    } catch (err) {
+      LOGGER.error(err);
+      await Queue.requeue(job);
+      return;
+    }
 
     const ackOk = await Queue.ack(job);
     if (!ackOk) {
