@@ -38,7 +38,7 @@ function generateMatrix({ genomes, cache }, stream) {
   for (const genomeA of genomes) {
     const line = [ genomeA.name.replace(/,/g, '_') ];
     for (const genomeB of genomes) {
-      if (genomeA === genomeB) {
+      if (genomeA.fileId === genomeB.fileId) {
         line.push(0);
       } else if (genomeA.fileId in cache && genomeB.fileId in cache[genomeA.fileId]) {
         line.push(cache[genomeA.fileId][genomeB.fileId]);
