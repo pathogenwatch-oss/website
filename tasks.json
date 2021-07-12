@@ -3,7 +3,7 @@
     "task": "assembly",
     "version": "v2",
     "timeout": "60m",
-    "retries": 0
+    "retries": 1
   },
   "clustering": {
     "task": "clustering",
