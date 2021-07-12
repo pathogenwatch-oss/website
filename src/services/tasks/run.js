@@ -73,7 +73,11 @@ async function runTask({ fileId, task, version, resources, organismId, speciesId
   const duration = Math.round(durationS * 1000 + durationNs / 1e6);
   TaskLog.create({ fileId, task, version, organismId, speciesId, genusId, duration, statusCode, resources });
 
-  if (statusCode !== 0) {
+  if (container.timeout) {
+    throw new Error('timeout');
+  } else if (statusCode === 137) {
+    throw new Error('killed');
+  } else if (statusCode !== 0) {
     container.stderr.setEncoding('utf8');
     throw new Error(container.stderr.read());
   } else if (buffer.length === 0) {
@@ -83,8 +87,8 @@ async function runTask({ fileId, task, version, resources, organismId, speciesId
   }
 }
 
-module.exports = async function ({ spec, metadata, timeout$: timeout = DEFAULT_TIMEOUT, precache = false }) {
-  const { task, version, resources } = spec;
+module.exports = async function ({ spec, metadata, precache = false }) {
+  const { task, version, resources, timeout } = spec;
   const {
     organismId,
     speciesId,

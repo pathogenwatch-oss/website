@@ -12,7 +12,6 @@ const store = require('utils/object-store');
 const Genome = require('models/genome');
 const TaskLog = require('models/taskLog');
 const docker = require('services/docker');
-const { DEFAULT_TIMEOUT } = require('services/bus');
 
 const { getImageName } = require('manifest.js');
 const { request } = require('services');
@@ -161,10 +160,12 @@ async function handleContainerExit(container, spec, metadata) {
   return statusCode;
 }
 
+const random = () => Math.random().toString(36).slice(2, 10);
+
 function createContainer(spec, timeout, resources = {}) {
   const { task, version } = spec;
   LOGGER.debug(`Starting container of ${task}:${version}`);
-  return docker(getImageName(task, version), {}, timeout, resources);
+  return docker(getImageName(task, version), {}, timeout, resources, { name: `clustering_${random()}` });
 }
 
 async function runTask(spec, metadata, timeout, resources) {
@@ -176,13 +177,15 @@ async function runTask(spec, metadata, timeout, resources) {
   const statusCode = await handleContainerExit(container, spec, metadata);
 
   const results = await whenResults;
+  if (container.timeout) throw new Error('timeout');
+  else if (statusCode === 137) throw new Error('killed');
   await uploadResults(results, spec, metadata);
   return statusCode;
 }
 
-module.exports = async function handleMessage({ spec, metadata, timeout$: timeout = DEFAULT_TIMEOUT, resources }) {
+module.exports = async function handleMessage({ spec, metadata, resources }) {
   const { taskId } = metadata;
-  const { task } = spec;
+  const { task, timeout } = spec;
   try {
     const statusCode = await runTask(spec, metadata, timeout, resources);
     return { statusCode };

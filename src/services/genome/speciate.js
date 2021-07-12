@@ -65,7 +65,7 @@ module.exports = async function findTask(message, retries = 0) {
   }
 
   const metadata = { genomeId, fileId, uploadedAt, clientId };
-  await request('tasks', 'run', { spec: speciatorTask, timeout$: timeout * 1000, metadata, precache });
+  await request('tasks', 'run', { spec: speciatorTask, timeout$: timeout * 1000 * 1.05, metadata, precache });
 
   if (retries === maxRetries) return null;
   return findTask(message, retries + 1);

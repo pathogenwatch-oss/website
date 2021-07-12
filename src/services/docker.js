@@ -97,13 +97,15 @@ module.exports = async function (image, environment, timeout, resources, dockerO
   for (const key of Object.keys(environment)) opts.Env.push(`${key}=${environment[key]}`);
 
   const container = await docker.createContainer(opts);
+  container.timeout = false;
   addStdio(container);
 
   if (timeout) {
     const t = setTimeout(() => {
-      LOGGER.warn(`Container '${image}' (${container.id.slice(0, 8)}) timed out after ${timeout} milliseconds`);
+      LOGGER.warn(`Container '${image}' (${container.id.slice(0, 8)}) timed out after ${timeout} seconds`);
       container.stop();
-    }, timeout);
+      container.timeout = true;
+    }, timeout * 1000);
     container.wait().then(() => clearTimeout(t));
   }
   // container.wait().then(() => container.stop());

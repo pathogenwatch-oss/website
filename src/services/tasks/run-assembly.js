@@ -81,7 +81,11 @@ async function runTask({ spec, metadata }) {
   const { fileId } = await whenOutput;
   TaskLog.create({ fileId, task, version, duration, statusCode, resources });
 
-  if (statusCode !== 0) {
+  if (container.timeout) {
+    throw new Error('timeout');
+  } else if (statusCode === 137) {
+    throw new Error('killed');
+  } else if (statusCode !== 0) {
     container.stderr.setEncoding('utf8');
     throw new Error(container.stderr.read());
   } else {
@@ -89,7 +93,7 @@ async function runTask({ spec, metadata }) {
   }
 }
 
-module.exports = async function ({ spec, metadata, timeout$: timeout = DEFAULT_TIMEOUT }) {
+module.exports = async function ({ spec, metadata }) {
   const {
     genomeId,
   } = metadata;

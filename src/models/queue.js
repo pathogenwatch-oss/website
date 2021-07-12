@@ -82,8 +82,8 @@ schema.statics.handleFailure = async function (job, rejectionReason) {
     state: state.PENDING,
   };
 
-  if (timeout) update['message.spec.timeout'] = Math.min(timeout * 2, MAX_TIMEOUT);
-  if (memory) update['message.spec.resources.memory'] = Math.floor(MAX_MEMORY, memory * 2);
+  if (timeout && rejectionReason === 'timeout') update['message.spec.timeout'] = Math.min(timeout * 2, MAX_TIMEOUT);
+  if (memory && rejectionReason === 'killed') update['message.spec.resources.memory'] = Math.min(memory * 2, MAX_MEMORY);
 
   const doc = await this.findOneAndUpdate(
     { ack, $expr: { $gt: [ "$maxAttempts", "$attempts" ] } },

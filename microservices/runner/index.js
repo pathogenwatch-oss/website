@@ -58,7 +58,7 @@ async function runJob(job, releaseResources) {
       const { genomeId, clientId, userId, uploadedAt } = metadata;
       try {
         await request('genome', 'send-assembly-progress', { clientId, userId, uploadedAt });
-        await request('tasks', 'run-assembly', { spec, timeout$: timeout * 1000, metadata });
+        await request('tasks', 'run-assembly', { spec, timeout$: timeout * 1000 * 1.1, metadata });
         await Queue.handleSuccess(job);
         await request('genome', 'send-assembly-progress', { clientId, userId, uploadedAt });
       } catch (err) {
@@ -75,7 +75,7 @@ async function runJob(job, releaseResources) {
 
     else if (taskType === taskTypes.genome) {
       try {
-        await request('genome', 'speciate', { timeout$: timeout * 1000, metadata, precache });
+        await request('genome', 'speciate', { timeout$: timeout * 1000 * 1.1, metadata, precache });
         await Queue.handleSuccess(job);
       } catch (err) {
         LOGGER.error(err);
@@ -86,7 +86,7 @@ async function runJob(job, releaseResources) {
 
     else if (taskType === taskTypes.task) {
       try {
-        await request('tasks', 'run', { spec, timeout$: timeout * 1000, metadata, precache });
+        await request('tasks', 'run', { spec, timeout$: timeout * 1000 * 1.1, metadata, precache });
         await Queue.handleSuccess(job);
       } catch (err) {
         LOGGER.error(err);
@@ -98,7 +98,7 @@ async function runJob(job, releaseResources) {
     else if (taskType === taskTypes.collection) {
       try {
         const { clientId, name } = metadata;
-        await request('tasks', 'run-collection', { spec, metadata, timeout$: timeout * 1000 });
+        await request('tasks', 'run-collection', { spec, metadata, timeout$: timeout * 1000 * 1.1 });
         LOGGER.info('Got result', metadata.collectionId, task, version);
         await request('collection', 'send-progress', { clientId, payload: { task, name, status: 'READY' } });
         await Queue.handleSuccess(job);
@@ -111,7 +111,7 @@ async function runJob(job, releaseResources) {
 
     else if (taskType === taskTypes.clustering) {
       try {
-        const result = await request('tasks', 'run-clustering', { spec, metadata, timeout$: timeout * 1000 });
+        const result = await request('tasks', 'run-clustering', { spec, metadata, timeout$: timeout * 1000 * 1.1 });
         const { taskId } = metadata;
         LOGGER.info('Got result', spec.task, spec.version, metadata, result);
         await request('clustering', 'send-progress', { taskId, payload: { status: 'READY' } });

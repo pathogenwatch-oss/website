@@ -437,6 +437,8 @@ async function handleContainerExit(container, task, versions, metadata, resource
   }
 }
 
+const random = () => Math.random().toString(36).slice(2, 10);
+
 function createContainer(spec, metadata, timeout, resources) {
   const { task, version, workers } = spec;
   const { organismId, collectionId } = metadata;
@@ -454,6 +456,7 @@ function createContainer(spec, metadata, timeout, resources) {
     },
     timeout,
     resources,
+    { name: `tree_${random()}` }
   );
 }
 
@@ -486,10 +489,13 @@ async function runTask(spec, metadata, timeout) {
 
   const whenContainerExit = handleContainerExit(container, task, versions, metadata, resources);
 
-  const [output] = await Promise.all([
+  const [output, statusCode] = await Promise.all([
     whenContainerOutput,
     whenContainerExit,
   ]);
+
+  if (container.timeout) throw new Error('timeout');
+  else if (statusCode === 137) throw new Error('killed');
 
   return output;
 }
