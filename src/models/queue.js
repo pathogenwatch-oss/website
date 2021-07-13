@@ -51,10 +51,15 @@ schema.index({ queue: 1, rejectedTime: 1, 'message.spec.resources.memory': 1, 'm
 const ackWindow = 30;
 
 schema.statics.dequeue = async function (limits = {}, constraints = {}, queue = 'normal') {
-  const resourceQuery = {};
-  for (const key of Object.keys(limits)) resourceQuery[`message.spec.resources.${key}`] = { $lte: limits[key] };
+  const resourceQuery = [];
+  for (const key of Object.keys(limits)) {
+    resourceQuery.push({ $or: [
+      { [`message.spec.resources.${key}`]: { $exists: false } },
+      { [`message.spec.resources.${key}`]: { $lte: limits[key] } },
+    ] });
+  }
   const fullQuery = {
-    ...resourceQuery,
+    $and: resourceQuery,
     ...constraints,
     queue,
     rejectedTime: null,
@@ -148,7 +153,9 @@ schema.statics.requeue = async function (job) {
 
 schema.statics.queueLength = async function (limits = {}, constraints = {}, queue = 'normal') {
   const resourceQuery = {};
-  for (const key of Object.keys(limits)) resourceQuery[`message.spec.resources.${key}`] = { $lte: limits[key] };
+  for (const key of Object.keys(limits)) {
+    resourceQuery[`message.spec.resources.${key}`] = { $or: [{ $exists: false }, { $lte: limits[key] }] };
+  }
   const fullQuery = {
     ...resourceQuery,
     ...constraints,

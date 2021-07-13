@@ -9,6 +9,12 @@ class ResourceManager {
     this.nextId = 0;
   }
 
+  get free() {
+    const freeResources = { ...this.available };
+    for (const key of Object.keys(freeResources)) freeResources[key] = Math.max(freeResources[key] - (this.allocated[key] || 0), 0);
+    return freeResources;
+  }
+
   request(resources = {}) {
     for (const key in resources) {
       if ((this.available[key] || 0) < resources[key]) {

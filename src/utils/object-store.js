@@ -109,7 +109,7 @@ class ObjectStore {
   }
 
   readsKey(genomeId, fileNumber) {
-    return `${config.prefix || ''}tmp/reads/${dateFromGenomeId(genomeId)}/${genomeId.slice(0, 2)}/${genomeId}_${fileNumber}.fastq.gz`;
+    return `${config.prefix || ''}tmp/reads/${dateFromGenomeId(genomeId)}/${genomeId}_${fileNumber}.fastq.gz`;
   }
 
   async putReads(genomeId, fileNumber, data) {
@@ -124,7 +124,7 @@ class ObjectStore {
   }
 
   async listReads(genomeId) {
-    const prefix = `${config.prefix || ''}tmp/reads/${dateFromGenomeId(genomeId)}/${genomeId.slice(0, 2)}/${genomeId}_`;
+    const prefix = `${config.prefix || ''}tmp/reads/${dateFromGenomeId(genomeId)}/${genomeId}_`;
     const readFiles = [];
     for await (const { Key, type } of this.list(prefix)) {
       if (type !== 'file') continue;

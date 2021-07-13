@@ -26,12 +26,13 @@ const {
   once = 'false', // If true, it only runs one task.  Useful for debugging.
 } = argv.opts;
 const availableMemory = formatMemory(argv.opts.availableMemory || DEFAULT_AVAILABLE_MEMORY);
+const availableSlow = Math.max(Math.floor(availableCPUs / 2), 1);
 
 process.on('uncaughtException', (err) => console.error('uncaught', err));
 
 const ResourceManager = require('services/resourceManager');
 
-const resourceManager = new ResourceManager({ cpu: availableCPUs, memory: availableMemory });
+const resourceManager = new ResourceManager({ cpu: availableCPUs, memory: availableMemory, slow: availableSlow });
 
 async function runJob(job, releaseResources) {
   try {
@@ -140,14 +141,20 @@ async function subscribeToQueue(queueName, taskType) {
     // We could make a small change so that we exclude jobs for users
     // who recently had a task run.  That would be a small step towards
     // the queue being fairer.
+
+    const limits = { ...resourceManager.available, slow: resourceManager.free.slow };
+    // We're not even pulling slow jobs if there are too many running
+    // Normally we'd pull a job and wait, but slow jobs from one use clog up the
+    // service for other users.
+
     const job = await Queue.dequeue(
-      resourceManager.available, // Only give us a job which fits on this worker
+      limits, // Only give us a job which fits on this worker
       constraints, // Some additional constrains if we only want some tasks
       queueName // The queue to pull jobs from.
     );
 
     if (job === null) {
-      LOGGER.info(`No jobs found in ${queueName} queue which fit on machine with cpu=${availableCPUs} memory=${availableMemory}`);
+      LOGGER.info(`No jobs found in ${queueName} queue which fit on machine`, { available: resourceManager.available, free: resourceManager.free });
       await sleep(2000);
       continue;
     }

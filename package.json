@@ -170,7 +170,7 @@
     "start": "NODE_PATH=./src NODE_ENV=production node start.js --seneca.log.quiet",
     "build": "NODE_ENV=production webpack",
     "release": "npm run build && git add . && git commit -m Build && npm version major && git push && git push --tags",
-    "runner": "NODE_PATH=./src node --trace-uncaught --unhandled-rejections=strict microservices/bootstrap.js runner",
+    "runner": "NODE_PATH=./src node --unhandled-rejections=strict microservices/bootstrap.js runner",
     "test": "NODE_PATH=./src mocha",
     "upload": "eval $npm_package_startcmd bin/upload.js",
     "download": "eval $npm_package_startcmd bin/download.js",

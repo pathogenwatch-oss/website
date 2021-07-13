@@ -61,6 +61,7 @@ function addTaskDefaults(task) {
   switch (task.task) {
     case 'assembly':
       resources.memory = resources.memory || 3 * GB;
+      resources.slow = resources.slow || 1;
       break;
     case 'speciator':
       resources.memory = resources.memory || 1 * GB;
@@ -77,6 +78,7 @@ function addTaskDefaults(task) {
       break;
     case 'clustering':
       resources.memory = resources.memory || 15 * GB;
+      resources.slow = resources.slow || 1;
       break;
     default:
       resources.memory = resources.memory || 1 * GB;
