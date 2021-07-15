@@ -11,8 +11,11 @@ import report from '../genome-report/reducer';
 import { CREATE_COLLECTION } from './create-collection-form';
 import * as actions from './actions';
 
+import { statuses } from './constants';
+
 function entities(state = {}, { type, payload }) {
   switch (type) {
+    case actions.FETCH_GENOME_SELECTION.SUCCESS:
     case actions.FETCH_GENOME_LIST.SUCCESS: {
       const { prefilter } = payload.filter;
       return payload.result.reduce(
@@ -97,8 +100,6 @@ function indices(state = {}, { type, payload }) {
       return state;
   }
 }
-
-import { statuses } from './constants';
 
 function waiting(state = false, { type }) {
   switch (type) {

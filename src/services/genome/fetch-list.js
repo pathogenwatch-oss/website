@@ -40,7 +40,19 @@ function inferScheme(analysis) {
 
 module.exports = async function (props) {
   const { user, query = {} } = props;
-  const { skip = 0, limit = MAX_PAGE_SIZE, sort } = query;
+  // Since the getSort function that if no sort is provided then a default is used, it's not possible to assume that an
+  // empty sort field means that it shouldn't be sorted - at least not without a lot of testing. So I've bolted on a
+  // field that indicates no sorting should be done.
+  const { skip = 0, limit = MAX_PAGE_SIZE, sort, noSort = false } = query;
+  const bounds = {
+    skip: Number(skip),
+  };
+  if (!noSort) {
+    bounds.sort = Genome.getSort(sort);
+  }
+  if (limit !== 0) {
+    bounds.limit = Number(limit);
+  }
   const schemes = new Set(getCollectionSchemes(user));
   return Genome.find(
     await Genome.getFilterQuery(props),
@@ -63,12 +75,7 @@ module.exports = async function (props) {
       uploadedAt: 1,
       year: 1,
     },
-    {
-      skip: Number(skip),
-      limit: Number(limit),
-      // limit: Math.min(Number(limit), MAX_PAGE_SIZE),
-      sort: Genome.getSort(sort),
-    }
+    bounds
   )
     .lean()
     .then((genomes) =>
