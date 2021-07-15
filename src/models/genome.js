@@ -103,7 +103,7 @@ schema.index({
   'public': 1,
   'analysis.speciator.organismId': 1,
   'analysis.speciator.organismName': 1,
-  '_user': 1 
+  '_user': 1
 });
 
 schema.statics.uploadTypes = uploadTypes;

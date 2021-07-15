@@ -5,7 +5,6 @@ const contentLength = require('express-content-length-validator');
 
 const services = require('services');
 const { asyncWrapper } = require('utils/routes');
-const { ServiceRequestError } = require('utils/errors');
 
 const router = express.Router();
 const LOGGER = require('utils/logging').createLogger('Genome');
@@ -149,7 +148,7 @@ router.get('/genome', (req, res, next) => {
 
   const { user, query } = req;
   services
-    .request('genome', 'fetch-list', { user, query })
+    .request('genome', 'fetch-list', { timeout$: 30000, user, query })
     .then((response) => res.json(response))
     .catch(next);
 });

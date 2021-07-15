@@ -1,5 +1,5 @@
 import { createAsyncConstants } from '../../actions';
-import { fetchGenomeList } from '../actions';
+import { fetchGenomeList, fetchGenomeSelection } from '../actions';
 
 import { getGenomeList, getGenomes, getListIndices } from '../selectors';
 import { getVisible } from '../summary/selectors';
@@ -92,29 +92,37 @@ export function toggleSelection(genomes, index) {
   };
 }
 
+function localUpdate(state, start, stop) {
+
+  const genomes = getGenomes(state);
+  const indices = getListIndices(state);
+
+  const selection = [];
+  for (let i = start; i <= stop; i++) {
+    const id = indices[i];
+    if (id in genomes) {
+      selection.push(genomes[id]);
+    }
+  }
+  return selection;
+}
+
+
 export function selectRange(fromIndex, toIndex) {
   return (dispatch, getState) => {
-    const state = getState();
-    const genomes = getGenomes(state);
-    const indices = getListIndices(state);
 
+    const state = getState();
     const start = Math.min(fromIndex, toIndex);
     const stop = Math.max(fromIndex, toIndex);
     const size = stop - start + 1;
 
-    const selection = [];
-    for (let i = start; i <= stop; i++) {
-      const id = indices[i];
-      if (id in genomes) {
-        selection.push(genomes[id]);
-      }
-    }
+    const selection = localUpdate(state, start, stop);
 
     if (selection.length === size) {
       dispatch(appendToSelection(selection));
       return Promise.resolve();
     }
-    return dispatch(fetchGenomeList(start, stop)).then(fetchedGenomes =>
+    return dispatch(fetchGenomeList(start, stop)).then((fetchedGenomes) =>
       dispatch(appendToSelection(fetchedGenomes))
     );
   };
@@ -143,6 +151,18 @@ export function selectAll() {
       }
     }
 
-    return dispatch(selectRange(start, total - 1));
+    const stop = total - 1;
+    const size = stop - start + 1;
+    const newSelection = localUpdate(state, start, stop);
+
+    if (newSelection.length === size) {
+      dispatch(appendToSelection(newSelection));
+      return Promise.resolve();
+    }
+    return dispatch(fetchGenomeSelection(start, 0)).then((fetchedGenomes) =>
+      dispatch(appendToSelection(fetchedGenomes))
+    );
+
+
   };
 }

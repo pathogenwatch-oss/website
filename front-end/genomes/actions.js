@@ -2,7 +2,7 @@ import { createAsyncConstants } from '../actions';
 
 import { getFilter } from './filter/selectors';
 
-import { fetchSummary, fetchList, fetchMap, fetchStats } from './api';
+import { fetchList, fetchMap, fetchStats, fetchSummary } from './api';
 
 export const FETCH_GENOME_SUMMARY = createAsyncConstants('FETCH_GENOME_SUMMARY');
 
@@ -18,7 +18,7 @@ export function fetchGenomeSummary(filter) {
 
 export const FETCH_GENOME_LIST = createAsyncConstants('FETCH_GENOME_LIST');
 
-const isDefined = value => (typeof value !== 'undefined' && value !== null);
+const isDefined = (value) => (typeof value !== 'undefined' && value !== null);
 
 export function fetchGenomeList(startIndex, stopIndex) {
   let skip = undefined;
@@ -34,6 +34,23 @@ export function fetchGenomeList(startIndex, stopIndex) {
     const filter = getFilter(getState());
     return dispatch({
       type: FETCH_GENOME_LIST,
+      payload: {
+        filter,
+        options,
+        promise: fetchList({ ...filter, ...options }),
+      },
+    });
+  };
+}
+
+export const FETCH_GENOME_SELECTION = createAsyncConstants('FETCH_GENOME_SELECTION');
+
+export function fetchGenomeSelection(skip, limit) {
+  const options = { skip, limit, noSort: true };
+  return (dispatch, getState) => {
+    const filter = getFilter(getState());
+    return dispatch({
+      type: FETCH_GENOME_SELECTION,
       payload: {
         filter,
         options,
