@@ -1,7 +1,7 @@
 const Genome = require('models/genome');
 const { getCollectionSchemes } = require('manifest');
 
-const MAX_PAGE_SIZE = 100;
+const MAX_PAGE_SIZE = "100";
 
 const preferredTypingSchemes = [
   { analysis: 'pangolin', field: 'lineage' },
@@ -46,12 +46,10 @@ module.exports = async function (props) {
   const { skip = 0, limit = MAX_PAGE_SIZE, sort, noSort = false } = query;
   const bounds = {
     skip: Number(skip),
+    limit: Number(limit), // limit=0 is the same as no limit.
   };
   if (!noSort) {
     bounds.sort = Genome.getSort(sort);
-  }
-  if (limit !== 0) {
-    bounds.limit = Number(limit);
   }
   const schemes = new Set(getCollectionSchemes(user));
   return Genome.find(

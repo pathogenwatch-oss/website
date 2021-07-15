@@ -99,11 +99,20 @@ schema.index({ 'analysis.pangolin.lineage': 1 });
 schema.index({ 'analysis.sarscov2-variants.variants.state': 1 });
 schema.index({ 'analysis.sarscov2-variants.variants.name': 1 });
 schema.index({
-  'binned': 1,
-  'public': 1,
+  binned: 1,
+  public: 1,
   'analysis.speciator.organismId': 1,
   'analysis.speciator.organismName': 1,
-  '_user': 1
+  _user: 1,
+});
+schema.index({
+  binned: 1,
+  public: 1,
+  "analysis.speciator.organismId": 1,
+  "analysis.speciator.organismName": 1,
+  name: 1,
+  _user: 1,
+  createdAt: -1,
 });
 
 schema.statics.uploadTypes = uploadTypes;
