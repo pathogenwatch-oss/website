@@ -1,7 +1,7 @@
 const Genome = require('models/genome');
 const transform = require('stream-transform');
 const sanitize = require('sanitize-filename');
-const store = require('utils/object-store');
+const TreeScores = require('models/treeScores');
 
 const { request } = require('services');
 const { ServiceRequestError } = require('utils/errors');
@@ -100,7 +100,7 @@ module.exports = (req, res, next) => {
         throw new ServiceRequestError('Tree not found');
       }
 
-      const cache = await store.getScoreCache(genomes, tree.versions, type);
+      const cache = await TreeScores.getScores(genomes, tree.versions, type);
       return { genomes, cache };
     })
     .then((data) => generateMatrix(data, stream))

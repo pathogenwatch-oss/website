@@ -9,6 +9,7 @@ const readline = require('readline');
 
 const Collection = require('models/collection');
 const Genome = require('models/genome');
+const TreeScores = require('models/treeScores');
 const TaskLog = require('models/taskLog');
 const docker = require('services/docker');
 const store = require('utils/object-store');
@@ -81,224 +82,17 @@ async function* createGenomesStream(genomes, uncachedFileIds, versions, organism
   }
 }
 
-const EMPTY_SCORE = 4294967295;
-const EMPTY_LOCATION = 65535;
-
-async function readScoreCache(versions, organismId, fileIds) {
+async function readTreeScores(versions, fileIds) {
   const sortedFileIds = [ ...fileIds ];
   sortedFileIds.sort();
 
-  const analysisKeys = sortedFileIds.map((fileId) => store.analysisKey('core-tree-score', `${versions.core}_${versions.tree}`, fileId, undefined));
+  const projection = sortedFileIds.reduce((proj, fileId) => { proj[`scores.${fileId}`] = 1; return proj; }, { fileId: 1 });
+  const cacheDocs = await TreeScores.find(
+    { fileId: { $in: sortedFileIds }, 'versions.core': versions.core, 'versions.tree': versions.tree },
+    projection
+  ).cursor();
 
-  const fileIdLookup = {};
-  sortedFileIds.forEach((fileId, i) => { fileIdLookup[fileId] = i; });
-
-  const nScores = (sortedFileIds.length * (sortedFileIds.length - 1)) / 2;
-  const cache = {
-    scores: new Uint32Array(nScores),
-    differences: new Uint32Array(nScores),
-    locations: new Uint16Array(nScores), // Make a note of which cache document this score was found in
-    fileIds: sortedFileIds,
-    counts: new Uint16Array(sortedFileIds.length), // The number of scores which are stored in each document
-    savePreference: new Uint8Array(sortedFileIds.length), // A number 0-3 recording which documents we'd rather grow
-    update: (doc, saveLocation = false) => {
-      const aIdx = fileIdLookup[doc.fileId];
-      if (aIdx === undefined) return;
-      for (const fileId in doc.scores) { // eslint-disable-line guard-for-in
-        const bIdx = fileIdLookup[fileId];
-        if (bIdx === undefined) continue;
-        const idx = aIdx < bIdx ? (bIdx * (bIdx - 1) / 2) + aIdx : (aIdx * (aIdx - 1) / 2) + bIdx;
-        cache.scores[idx] = doc.scores[fileId];
-        cache.differences[idx] = doc.differences[fileId];
-        if (saveLocation) cache.locations[idx] = aIdx; // We save the location if this comes from the cache
-      }
-    },
-  };
-  cache.scores.fill(EMPTY_SCORE);
-  cache.differences.fill(EMPTY_SCORE);
-  cache.locations.fill(EMPTY_LOCATION);
-
-  let idxA = -1;
-  // Download cache documents and load them
-  for await (const value of store.iterGet(analysisKeys)) {
-    idxA += 1;
-    if (value === undefined) continue;
-    const doc = JSON.parse(value);
-    cache.counts[idxA] = Object.keys(doc.scores).length;
-    cache.update(doc, true);
-  }
-
-  // Walk through the cache and emit documents needed for tree building
-  async function* cacheDocs() {
-    // eslint-disable-next-line guard-for-in
-    for (const aIdx in sortedFileIds) {
-      const cacheDoc = { fileId: sortedFileIds[aIdx], scores: {}, differences: {}, versions };
-      for (let bIdx = 0; bIdx < aIdx; bIdx++) {
-        const idx = (aIdx * (aIdx - 1) / 2) + bIdx;
-        const fileId = sortedFileIds[bIdx];
-        const score = cache.scores[idx];
-        const difference = cache.differences[idx];
-        if (score !== EMPTY_SCORE) cacheDoc.scores[fileId] = score;
-        if (difference !== EMPTY_SCORE) cacheDoc.differences[fileId] = difference;
-      }
-      yield cacheDoc;
-    }
-  }
-
-  return { cache, stream: cacheDocs() };
-}
-
-function planCacheLocations(cache) {
-  // We need to write scores back into the cache.  Its better if:
-  // * documents don't get too big / are balanced
-  // * we avoid updating documents unless we really need to
-
-  // We set a preference score for each document to arbitrate which document a score goes into:
-  //  Up to half the docs have preference 3 if they're new; or 1 if they're not
-  //  The other half have 2 if they're new; or 0 if they're not
-  //  Docs are ordered by the number of scores they already contain
-
-  const sortedIndex = new Uint16Array(cache.fileIds.length);
-  for (let i = 0; i < cache.fileIds.length; i++) sortedIndex[i] = i;
-  sortedIndex.sort((a, b) => (cache.counts[a] < cache.counts[b] ? -1 : 1));
-  for (let i = 0; i < cache.fileIds.length; i++) {
-    const idx = sortedIndex[i];
-    if (i < cache.fileIds.length / 2) {
-      if (cache.counts[idx] === 0) cache.savePreference[idx] = 3;
-      else cache.savePreference[idx] = 1;
-    }
-    else if (cache.counts[idx] === 0) cache.savePreference[idx] = 2;
-    else cache.savePreference[idx] = 0;
-  }
-
-  // We also keep track of which documents were updated and need to be saved
-  cache.wasUpdated = new Uint8Array(cache.fileIds.length);
-  for (let offset = 1; offset < cache.fileIds.length; offset++) {
-    for (let aIdx = 0; aIdx < cache.fileIds.length; aIdx++) {
-      const bIdx = (aIdx + offset) % cache.fileIds.length;
-      const idx = aIdx < bIdx ? (bIdx * (bIdx - 1) / 2) + aIdx : (aIdx * (aIdx - 1) / 2) + bIdx;
-      const currentLocation = cache.locations[idx];
-
-      // The score is not already in the cache
-      if (currentLocation === EMPTY_LOCATION) {
-        let newLocation = aIdx;
-        // Add the score to the prefered doc unless that makes things very imbalanced
-        if (
-          (cache.savePreference[aIdx] > cache.savePreference[bIdx]) &&
-          (cache.counts[aIdx] < (cache.counts[bIdx] + 20))
-        ) {
-          newLocation = aIdx;
-        }
-        // Or to the other doc if that is prefered
-        else if (
-          (cache.savePreference[bIdx] > cache.savePreference[aIdx]) &&
-          (cache.counts[bIdx] < (cache.counts[aIdx] + 20))
-        ) {
-          newLocation = bIdx;
-        }
-        // Otherwise we add the score to the smaller doc
-        else if (cache.counts[aIdx] > cache.counts[bIdx]) {
-          newLocation = bIdx;
-        }
-        cache.locations[idx] = newLocation;
-        cache.counts[newLocation] += 1;
-        cache.wasUpdated[newLocation] = true;
-
-      }
-
-      // The score was in the cache already, but perhaps we can rebalance things
-      else if (currentLocation === aIdx && (cache.counts[aIdx] > (cache.counts[bIdx] + 20))) {
-        cache.locations[idx] = bIdx;
-        cache.counts[aIdx] -= 1;
-        cache.counts[bIdx] += 1;
-        cache.wasUpdated[aIdx] = true;
-        cache.wasUpdated[bIdx] = true;
-      }
-
-      // Or the other way
-      else if (currentLocation === bIdx && (cache.counts[bIdx] > (cache.counts[aIdx] + 20))) {
-        cache.locations[idx] = aIdx;
-        cache.counts[aIdx] += 1;
-        cache.counts[bIdx] -= 1;
-        cache.wasUpdated[aIdx] = true;
-        cache.wasUpdated[bIdx] = true;
-      }
-    }
-  }
-
-  let idx = -1;
-  // Looping over the scores again helps rebalance the cache
-  for (let aIdx = 0; aIdx < cache.fileIds.length; aIdx++) {
-    for (let bIdx = 0; bIdx < aIdx; bIdx++) {
-      idx += 1;
-      const currentLocation = cache.locations[idx];
-      if (currentLocation === aIdx && (cache.counts[aIdx] > (cache.counts[bIdx] + 20))) {
-        cache.locations[idx] = bIdx;
-        cache.counts[aIdx] -= 1;
-        cache.counts[bIdx] += 1;
-        cache.wasUpdated[aIdx] = true;
-        cache.wasUpdated[bIdx] = true;
-      } else if (currentLocation === bIdx && (cache.counts[bIdx] > (cache.counts[aIdx] + 20))) {
-        cache.locations[idx] = aIdx;
-        cache.counts[aIdx] += 1;
-        cache.counts[bIdx] -= 1;
-        cache.wasUpdated[aIdx] = true;
-        cache.wasUpdated[bIdx] = true;
-      }
-    }
-  }
-}
-
-async function updateScoreCache(versions, cache) {
-  planCacheLocations(cache);
-
-  let updated = 0;
-  for (let aIdx = 0; aIdx < cache.fileIds.length; aIdx += 1) {
-    if (!cache.wasUpdated[aIdx]) continue;
-    const fileId = cache.fileIds[aIdx];
-
-    // Fetch the existing cache for this fileId
-    const value = await store.getAnalysis('core-tree-score', `${versions.core}_${versions.tree}`, fileId, undefined);
-    const update = value === undefined ? { fileId, versions, scores: {}, differences: {} } : JSON.parse(value);
-
-    // Loop over the fileIds we've compared with it and descide if the cache will go into this document
-    // or into the document for the other fileId.
-    for (let bIdx = 0; bIdx < cache.fileIds.length; bIdx++) {
-      if (aIdx === bIdx) continue;
-
-      const fileIdB = cache.fileIds[bIdx];
-      // The scores are held in a flat array to reduce memory, find the index into that array for these fileIds
-      const idx = aIdx < bIdx ? (bIdx * (bIdx - 1) / 2) + aIdx : (aIdx * (aIdx - 1) / 2) + bIdx;
-      const score = cache.scores[idx];
-      const difference = cache.differences[idx];
-
-      if (cache.locations[idx] === aIdx) {
-        if (score !== EMPTY_SCORE && update.scores[fileIdB] !== score) {
-          update.scores[fileIdB] = score;
-          cache.wasUpdated[aIdx] = true;
-        }
-        if (difference !== EMPTY_SCORE && update.differences[fileIdB] !== difference) {
-          update.differences[fileIdB] = difference;
-          cache.wasUpdated[aIdx] = true;
-        }
-      } else {
-        if (update.scores[fileIdB] !== undefined) {
-          delete update.scores[fileIdB];
-          cache.wasUpdated[aIdx] = true;
-        }
-        if (update.differences[fileIdB] !== undefined) {
-          delete update.differences[fileIdB];
-          cache.wasUpdated[aIdx] = true;
-        }
-      }
-    }
-
-    if (cache.wasUpdated[aIdx]) {
-      await store.putAnalysis('core-tree-score', `${versions.core}_${versions.tree}`, fileId, undefined, update);
-      updated += 1;
-    }
-  }
-  LOGGER.info(`Updated ${updated} of ${cache.fileIds.length} documents (${Math.round(100 * updated / cache.fileIds.length)}%)`);
+  return { stream: cacheDocs };
 }
 
 async function attachInputStream(container, versions, genomes, organismId, fileIds, stream) {
@@ -337,7 +131,7 @@ async function attachInputStream(container, versions, genomes, organismId, fileI
   Readable.from(gen()).pipe(container.stdin);
 }
 
-async function handleContainerOutput(container, task, versions, metadata, genomes, cache) {
+async function handleContainerOutput(container, task, versions, metadata, genomes) {
   const { clientId, name } = metadata;
   request('collection', 'send-progress', { clientId, payload: { task, name, status: 'IN PROGRESS' } });
 
@@ -362,7 +156,7 @@ async function handleContainerOutput(container, task, versions, metadata, genome
       try {
         const doc = JSON.parse(line);
         if (doc.fileId && doc.scores) {
-          if (cache) cache.update(doc);
+          await TreeScores.addScores(versions, doc);
           const progress = doc.progress * 0.99;
           if ((progress - lastProgress) >= 1) {
             request('collection', 'send-progress', { clientId, payload: { task, name, progress } });
@@ -398,13 +192,6 @@ async function handleContainerOutput(container, task, versions, metadata, genome
         populationSize += 1;
       }
     }
-  }
-
-  try {
-    if (cache) await updateScoreCache(versions, cache);
-  } catch (e) {
-    request('collection', 'send-progress', { clientId, payload: { task, name, status: 'ERROR' } });
-    throw e;
   }
 
   return {
@@ -481,10 +268,10 @@ async function runTask(spec, metadata, timeout) {
   fileIds.sort();
 
   const { organismId } = metadata;
-  const { cache, stream } = await readScoreCache(versions, organismId, fileIds);
+  const { stream } = await readTreeScores(versions, fileIds);
   const container = await createContainer(spec, metadata, timeout, resources);
 
-  const whenContainerOutput = handleContainerOutput(container, task, versions, metadata, genomes, cache);
+  const whenContainerOutput = handleContainerOutput(container, task, versions, metadata, genomes);
   attachInputStream(container, versions, genomes, organismId, fileIds, stream);
 
   const whenContainerExit = handleContainerExit(container, task, versions, metadata, resources);

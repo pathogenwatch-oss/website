@@ -133,31 +133,6 @@ class ObjectStore {
     return readFiles;
   }
 
-  async getScoreCache(genomes, versions, type) {
-    const cacheByFileId = {};
-    const fieldName = (type === 'score') ? 'scores' : 'differences';
-    for (const { fileId } of genomes) {
-      cacheByFileId[fileId] = {};
-    }
-
-    const orderedGenomes = [ ...genomes ];
-    orderedGenomes.sort((a, b) => (a.fileId < b.fileId ? -1 : 1));
-
-    const analysisKeys = orderedGenomes.map(({ fileId }) => this.analysisKey('core-tree-score', `${versions.core}_${versions.tree}`, fileId, undefined));
-    for await (const value of this.iterGet(analysisKeys)) {
-      if (value === undefined) continue;
-      const doc = JSON.parse(value);
-      if (doc.versions.core !== versions.core) continue;
-      if (doc.versions.tree !== versions.tree) continue;
-
-      for (const genome of orderedGenomes) {
-        const { fileId } = genome;
-        if (doc[fieldName][fileId] !== undefined) cacheByFileId[doc.fileId][fileId] = doc[fieldName][fileId];
-      }
-    }
-    return cacheByFileId;
-  }
-
   async get(key, { decompress = true, ...params } = {}) {
     if (params.outStream && decompress) {
       const oldOutStream = params.outStream;

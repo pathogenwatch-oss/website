@@ -4,32 +4,33 @@ const { Readable } = require('stream');
 const Genome = require('models/genome');
 const Collection = require('models/collection');
 const store = require('utils/object-store');
+const TreeScores = require('models/treeScores');
 
 const { request } = require('services');
 const { ServiceRequestError } = require('utils/errors');
 
 const { calculateStats } = require('utils/stats');
 
-function generateTreeStats(genomeSummaries, cache) {
-  const scores = [];
+function generateTreeStats(genomeSummaries, scores) {
+  const listOfScores = [];
 
   for (let a = 0; a < genomeSummaries.length; a++) {
     const genomeA = genomeSummaries[a];
     for (let b = 0; b < a; b++) {
       const genomeB = genomeSummaries[b];
       if (genomeA.fileId === genomeB.fileId) {
-        scores.push(0);
-      } else if (genomeA.fileId in cache && genomeB.fileId in cache[genomeA.fileId]) {
-        scores.push(cache[genomeA.fileId][genomeB.fileId]);
-      } else if (genomeB.fileId in cache && genomeA.fileId in cache[genomeB.fileId]) {
-        scores.push(cache[genomeB.fileId][genomeA.fileId]);
+        listOfScores.push(0);
+      } else if (genomeA.fileId in scores && genomeB.fileId in scores[genomeA.fileId]) {
+        listOfScores.push(scores[genomeA.fileId][genomeB.fileId]);
+      } else if (genomeB.fileId in scores && genomeA.fileId in scores[genomeB.fileId]) {
+        listOfScores.push(scores[genomeB.fileId][genomeA.fileId]);
       } else {
         throw new ServiceRequestError(`Missing score for ${genomeA.fileId} ${genomeB.fileId}`);
       }
     }
   }
 
-  return calculateStats(scores.sort((a, b) => a - b));
+  return calculateStats(listOfScores.sort((a, b) => a - b));
 }
 
 function getFamilyStatsStore(hasPublicData = false) {
@@ -186,7 +187,13 @@ function createGenomeStream(genomeSummaries, versions) {
   }) => store.analysisKey('core', versions.core, fileId, organismId));
 
   async function* gen() {
+    let idx = 0;
     for await (const value of store.iterGet(analysisKeys)) {
+      if (value === undefined) {
+        throw new ServiceRequestError(`Missing core profile for ${genomes[idx].fileId}`);
+      }
+      idx += 1;
+
       const { fileId, results } = JSON.parse(value);
       for (const genomeId of genomeIds[fileId] || []) {
         yield {
@@ -209,7 +216,8 @@ function createGenomeStream(genomeSummaries, versions) {
 async function generateTreeData(tree, treeGenomeIds, collectionGenomeIds) {
   const genomeSummaries = await getGenomeSummaries(treeGenomeIds);
 
-  const stats = generateTreeStats(genomeSummaries, await store.getScoreCache(genomeSummaries, tree.versions, 'score'));
+  const scores = await TreeScores.getScores(genomeSummaries, tree.versions, 'score');
+  const stats = generateTreeStats(genomeSummaries, scores);
 
   const genomes = createGenomeStream(genomeSummaries, tree.versions);
   const sites = await generateTreeSites(genomes, collectionGenomeIds, tree.populationSize !== 0);
