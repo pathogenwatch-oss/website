@@ -89,6 +89,13 @@ async function main() {
     collectionFileIds.push(bson.deserialize(doc).fileId);
   }
 
+  const populationGenomes = Genome.collection.find({ $or: [{ population: true }, { reference: true }], public: true, 'analysis.speciator.organismId': '1280' }, { raw: true });
+  while (await populationGenomes.hasNext()) {
+    const doc = await populationGenomes.next();
+    await addGenome(doc);
+    collectionFileIds.push(bson.deserialize(doc).fileId);
+  }
+
   const scoresProjection = collectionFileIds.reduce((proj, fileId) => {
     proj[`scores.${fileId}`] = 1;
     proj[`differences.${fileId}`] = 1;
