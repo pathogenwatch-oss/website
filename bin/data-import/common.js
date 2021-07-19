@@ -24,11 +24,11 @@ function hashDocument(data) {
 
   const s = JSON.stringify(data, sortObjects, 0);
   return createHash('sha1').update(s).digest().slice(0, 8);
-};
+}
 module.exports.hashDocument = hashDocument;
 
 module.exports.hashGenome = function (genome) {
-  const { analysis={}, ...data } = genome;
+  const { analysis = {}, ...data } = genome;
   data.analysis = {};
   for (const task of Object.keys(analysis)) {
     const { organismId, __v } = analysis[task];
@@ -37,12 +37,12 @@ module.exports.hashGenome = function (genome) {
   }
 
   return hashDocument(data);
-}
+};
 
 module.exports.serializeBSON = function (doc) {
   return bson.serialize(doc).toString('base64');
-}
+};
 
 module.exports.deserializeBSON = function (docBytes) {
   return bson.deserialize(Buffer.from(docBytes, 'base64'));
-}
+};

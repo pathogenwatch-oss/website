@@ -188,18 +188,16 @@ async function sendOrganism(organism) {
   }
 }
 
-async function sendScoreCache(score) {
-  const { versions, fileId } = score;
-  const task = 'core-tree-score';
-  const version = `${versions.core}_${versions.tree}`;
+async function sendTreeScore(treeScore) {
   try {
-    const r = await uploadLimit(() => postJson(`analysis/${task}/${version}/${fileId}/`, score));
-    if (r.status === 200) stats.inc('additions.score');
-    else stats.inc('errors.score');
+    const treeScoreId = treeScore._id.toString();
+    const r = await uploadLimit(() => postJson(`treeScore/${treeScoreId}`, { treeScore: serializeBSON(treeScore) }));
+    if (r.status === 200) stats.inc('additions.treeScore');
+    else stats.inc('errors.treeScore');
     return r.status === 200;
   } catch (err) {
     if (DEBUG) console.log(err);
-    stats.inc('errors.score');
+    stats.inc('errors.treeScore');
     return false;
   }
 }
@@ -440,35 +438,60 @@ async function sendCollections() {
   console.log({ collectionCount: i, collectionExpected, stats: stats.format() });
 }
 
-async function sendScoreCaches() {
-  const scoreExpected = await ScoreCache.count({});
-  const cursor = ScoreCache
-    .find({})
-    .lean()
-    .cursor();
+async function sendTreeScores() {
+  const treeScoreExpected = await ScoreCache.count({});
+  let i = 0;
 
-  async function* gen() {
-    for (let score = await cursor.next(); score !== null; score = await cursor.next()) {
-      yield score;
+  async function* generateTasks() {
+    const cursor = ScoreCache
+      .find({})
+      .lean()
+      .cursor();
+
+    let treeScoresDocs = {};
+    let offer = {};
+    let offerSize = 0;
+
+    for (let treeScore = await cursor.next(); treeScore !== null; treeScore = await cursor.next()) {
+      const treeScoreId = treeScore._id.toString();
+      treeScoresDocs[treeScoreId] = treeScore;
+      offer[treeScoreId] = hashDocument(treeScore).toString('base64');
+      offerSize += 1;
+
+      if (offerSize >= 100) {
+        yield { i, treeScoresDocs, offer };
+        treeScoresDocs = {};
+        offer = {};
+        offerSize = 0;
+      }
     }
   }
 
-  const scores = gen();
-
-  let i = 0;
-  async function worker() {
-    for await (const score of scores) {
-      await sendScoreCache(score);
-      i += 1;
-      if (i % 100 === 0) console.log({ scoreCount: i, scoreExpected, stats: stats.format() });
+  const tasks = generateTasks();
+  async function worker(workerId) {
+    await sleep(workerId * 500);
+    for await (const { offer, treeScoresDocs } of tasks) {
+      const resp = await statusLimit(() => postJson('treeScore/status', { treeScores: offer }));
+      if (resp.status === 200) {
+        const neededTreeScoreIDs = (await resp.json()).treeScores;
+        stats.inc('cache.treeScore', (Object.keys(offer).length - neededTreeScoreIDs.length));
+        for (const needed of neededTreeScoreIDs) {
+          await sendTreeScore(treeScoresDocs[needed]);
+          i += 1;
+        }
+      }
+      else stats.inc('errors.treeScore', Object.keys(offer).length);
+      console.log({ workerId, treeScoreCount: i, treeScoreExpected, stats: stats.format() });
     }
   }
 
   const workers = [];
-  for (let w = 0; w < 10; w++) workers.push(worker());
+  for (let w = 0; w < 5; w++) {
+    workers.push(worker(w));
+  }
   await Promise.all(workers);
 
-  console.log({ scoreCount: i, scoreExpected, stats: stats.format() });
+  console.log({ treeScoreCount: i, treeScoreExpected, stats: stats.format() });
 }
 
 async function sendOrganisms() {
@@ -505,9 +528,9 @@ async function main() {
       sendOrganisms(),
       sendUsers(),
       sendCollections(),
+      sendTreeScores(),
     ];
     await Promise.all(tasks);
-    await sendScoreCaches();
   }
 
   // await sendAnalysisBatches(last, { public: true });

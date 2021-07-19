@@ -11,6 +11,7 @@ const Genome = require('models/genome');
 const Collection = require('models/collection');
 const Organism = require('models/organism');
 const User = require('models/user');
+const TreeScores = require('models/treeScores');
 const objectStore = require('utils/object-store');
 const { objectStore: config } = require('configuration');
 
@@ -185,6 +186,28 @@ app.post('/collection/:collectionId', asyncWrapper(async (req, res, next) => {
   return res.send({ collectionId: collection._id });
 }));
 
+app.post('/treeScore/status', asyncWrapper(async (req, res, next) => {
+  const offer = req.body.treeScores;
+  const treeScoreIds = Object.keys(offer);
+  const missing = new Set(treeScoreIds);
+  if (treeScoreIds.length > 1000) return res.status(400).send(`Expected fewer than 1000 treeScore, got ${treeScoreIds.length}`);
+  const treeScores = TreeScores.find({ _id: { $in: treeScoreIds } }).lean().cursor();
+  for await (const treeScore of treeScores) {
+    const treeScoreId = treeScore._id.toString();
+    const digest = hashDocument(treeScore).toString('base64');
+    if (offer[treeScoreId] === digest) missing.delete(treeScoreId);
+    missing.delete(treeScoreId);
+  }
+  return res.status(200).send({ count: missing.size, treeScores: [ ...missing ] });
+}));
+
+app.post('/treeScore/:treeScoreId', asyncWrapper(async (req, res, next) => {
+  const data = req.body;
+  const treeScore = deserializeBSON(data.treeScore);
+  await TreeScores.collection.replaceOne({ _id: treeScore._id }, treeScore, { upsert: true });
+  return res.send({ treeScoreId: treeScore._id });
+}));
+
 app.post('/organism/:organismId', asyncWrapper(async (req, res, next) => {
   const data = req.body;
   const organism = deserializeBSON(data.organism);
@@ -250,6 +273,7 @@ async function populateCache() {
     if (type === 'file' && Size > 0) storeCache.add(Key);
     i += 1;
     if (i % 100000 === 0) console.log(`cacheSize=${storeCache.size} latest=${Key}`);
+    if (i % 1000000 === 0) await saveCache();
   }
 
   await saveCache();
