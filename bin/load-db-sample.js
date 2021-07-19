@@ -7,23 +7,36 @@ const fs = require('fs');
 const argv = require('named-argv');
 const es = require('event-stream');
 const { Writable } = require('stream');
+const BSON = require('bson');
+
+const bson = new BSON();
 
 const mongoConnection = require('utils/mongoConnection');
 
 const Genome = require('models/genome');
 const Collection = require('models/collection');
 const Organism = require('models/organism');
+const TreeScores = require('models/treeScores');
 const store = require('utils/object-store');
 
 const { ObjectId } = require('mongoose').Types;
 
+const stats = {};
+function inc(key) {
+  stats[key] = (stats[key] || 0) + 1;
+}
+
 async function process(line) {
   const data = JSON.parse(line);
-  const { doc, type } = data;
+  const { doc: bsonDoc, type } = data;
+
   let model;
   switch (type) {
     case 'genome':
       model = Genome;
+      break;
+    case 'treeScores':
+      model = TreeScores;
       break;
     case 'collection':
       model = Collection;
@@ -38,15 +51,24 @@ async function process(line) {
       return undefined;
   }
 
+  const doc = bson.deserialize(Buffer.from(bsonDoc, 'base64'));
+
   const { _id, ...rest } = doc;
-  if (!_id) return undefined; // not sure why this happened but it's not good
+  if (type === 'analysis' && doc.fileId);
+  else if (!_id) {
+    inc(`undefined.${type}`);
+    return undefined;
+  } // not sure why this happened but it's not good
 
   // I tried doing a traditional "upsert" but had a problem with some documents
   // and a date field.  This seems to be quick and actually work.
   try {
-    if (model === 'Analysis') return await store.putAnalysis(doc.task, doc.version, doc.fileId, doc.organismId, doc);
-    return await model.collection.findOneAndReplace({ _id: ObjectId(_id) }, rest, { upsert: true }); // eslint-disable-line new-cap
+    if (model === 'Analysis') await store.putAnalysis(doc.task, doc.version, doc.fileId, doc.organismId, doc);
+    else await model.collection.findOneAndReplace({ _id: ObjectId(_id) }, rest, { upsert: true }); // eslint-disable-line new-cap
+    inc(type);
+    return undefined;
   } catch (err) {
+    inc(`error.${type}`);
     err.doc = { _id, type };
     throw err;
   }
@@ -61,14 +83,20 @@ async function main() {
 
   await mongoConnection.connect();
 
+  let lineNumber = 0;
+
   /* eslint-disable-next-line new-cap */
   const output = Writable({
     write(line, _, cb) {
       if (!line || line.length < 2) return cb();
       return process(line)
-        .then(() => cb())
+        .then(() => {
+          lineNumber += 1;
+          if (lineNumber % 100 === 0) console.log(lineNumber, stats);
+          cb();
+        })
         .catch((err) => {
-          console.error(err);
+          console.error(line.slice(0, 20), err);
           this.errorCount = (this.errorCount || 0) + 1;
           this.lastError = err;
           cb();

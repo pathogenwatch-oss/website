@@ -14,6 +14,7 @@ const bson = new BSON();
 const Genome = require('models/genome');
 const Collection = require('models/collection');
 const Organism = require('models/organism');
+const TreeScores = require('models/treeScores');
 const store = require('utils/object-store');
 
 function append(path, type, ...docs) {
@@ -57,9 +58,9 @@ async function main() {
     await addAnalysis(doc, organismId);
   }
 
-  const taxids = await Genome.distinct('analysis.speciator.speciesId', { public: true });
+  const taxids = (await Genome.distinct('analysis.speciator.speciesId', { public: true })).slice(0, 20);
   for (const taxid of taxids) {
-    const taxidGenomes = Genome.collection.find({ 'analysis.speciator.speciesId': taxid, public: true }, { limit: 4, raw: true });
+    const taxidGenomes = Genome.collection.find({ 'analysis.speciator.speciesId': taxid, public: true }, { limit: 5, raw: true });
     while (await taxidGenomes.hasNext()) {
       const doc = await taxidGenomes.next();
       await addGenome(doc);
@@ -81,9 +82,25 @@ async function main() {
   const collection = bson.deserialize(rawCollection);
 
   const collectionGenomes = Genome.collection.find({ _id: { $in: collection.genomes }, public: true }, { raw: true });
+  const collectionFileIds = [];
   while (await collectionGenomes.hasNext()) {
     const doc = await collectionGenomes.next();
     await addGenome(doc);
+    collectionFileIds.push(bson.deserialize(doc).fileId);
+  }
+
+  const scoresProjection = collectionFileIds.reduce((proj, fileId) => {
+    proj[`scores.${fileId}`] = 1;
+    proj[`differences.${fileId}`] = 1;
+    return proj;
+  }, { _id: 1, fileId: 1, versions: 1, __v: 1 });
+  const scores = TreeScores.collection.find(
+    { fileId: { $in: collectionFileIds } },
+    { raw: true, projection: scoresProjection }
+  );
+  while (await scores.hasNext()) {
+    const rawDoc = await scores.next();
+    await append(output, 'treeScores', rawDoc);
   }
 
   const gonoGenomes = Genome.collection.find({ 'analysis.speciator.speciesId': "485", public: true }, {}, { limit: 1000, raw: true });
@@ -98,7 +115,7 @@ async function main() {
     append(output, 'organism', doc);
   }
 
-  append(output, '__ids', genomeIds);
+  append(output, '__ids', bson.serialize(genomeIds));
 
   console.log("Done");
 
