@@ -8,7 +8,8 @@
   "clustering": {
     "task": "clustering",
     "timeout": "30m",
-    "version": "v2.5.1"
+    "version": "v2.5.1",
+    "retries": 1
   },
   "collection": {
     "1280": [
