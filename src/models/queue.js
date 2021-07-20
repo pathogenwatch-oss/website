@@ -63,6 +63,7 @@ schema.statics.dequeue = async function (limits = {}, constraints = {}, queue = 
     ...constraints,
     queue,
     rejectedTime: null,
+    $expr: { $lt: ['$attempts', '$maxAttempts'] },
     $or: [{ nextReceivableTime: null }, { nextReceivableTime: { $lte: now() } }],
   };
 
