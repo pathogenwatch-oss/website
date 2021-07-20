@@ -62,6 +62,7 @@ schema.index({ name: 1 });
 schema.index({ name: 'text' });
 schema.index({ public: 1, reference: 1 });
 schema.index({ _user: 1, binned: 1 });
+schema.index({ uploadedAt: 1, binned: 1 });
 schema.index({ 'analysis.mlst.st': 1 });
 schema.index({ 'analysis.mlst2.st': 1 });
 schema.index({
