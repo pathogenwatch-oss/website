@@ -69,12 +69,13 @@ function attachInputStream(container, spec, metadata, cgmlstKeys) {
       yield bson.serialize(clustering);
     }
 
-    let idx = 0;
+    let idx = -1;
     for await (const value of store.iterGet(Object.values(cgmlstKeys))) {
+      idx += 1;
       try {
+        if (value === undefined) continue;
         const { _id, results } = JSON.parse(value);
         yield bson.serialize({ _id, results });
-        idx += 1;
       } catch (err) {
         LOGGER.error(`Cluster error: ${cgmlstKeys[idx]}`);
         throw err;

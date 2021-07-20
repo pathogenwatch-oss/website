@@ -2,7 +2,7 @@ const { Readable } = require('stream');
 const sanitize = require('sanitize-filename');
 const Genome = require('models/genome');
 const store = require('utils/object-store');
-const asyncWrapper = require('utils/routes');
+const { asyncWrapper } = require('utils/routes');
 
 const { request } = require('services');
 
