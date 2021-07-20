@@ -173,6 +173,7 @@ module.exports = model;
 module.exports.state = state;
 module.exports.ackWindow = ackWindow;
 module.exports.overideNow = (fn) => { now = fn; }; // used for testing
+module.exports.now = now;
 
 module.exports.enqueue = async function (spec, metadata, queue = 'normal') {
   const maxAttempts = spec.retries || defaultRetries;
