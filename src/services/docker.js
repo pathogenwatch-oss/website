@@ -103,7 +103,7 @@ module.exports = async function (image, environment, timeout, resources, dockerO
   if (timeout) {
     const t = setTimeout(() => {
       LOGGER.warn(`Container '${image}' (${container.id.slice(0, 8)}) timed out after ${timeout} seconds`);
-      container.stop();
+      container.kill();
       container.timeout = true;
     }, timeout * 1000);
     container.wait().then(() => clearTimeout(t));

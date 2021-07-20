@@ -326,7 +326,8 @@ class ObjectStore {
   }
 
   async* iter(fn, keys, { maxConcurrent = 10, ...params } = {}) {
-    const shift = Array.isArray(keys) ? async () => keys.shift() : async () => (await keys.next()).value;
+    const keyCopy = Array.isArray(keys) ? [...keys] : keys;
+    const shift = Array.isArray(keyCopy) ? async () => keyCopy.shift() : async () => (await keyCopy.next()).value;
     const inProgress = [];
     let nextTodo = await shift();
     for (let i = 0; nextTodo !== undefined && i < maxConcurrent; i++) {

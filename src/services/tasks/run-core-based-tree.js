@@ -128,7 +128,12 @@ async function attachInputStream(container, versions, genomes, organismId, fileI
     }
   }
 
-  Readable.from(gen()).pipe(container.stdin);
+  const cores = Readable.from(gen());
+  cores.on('error', (err) => {
+    LOGGER.error(err);
+    container.kill();
+  });
+  cores.pipe(container.stdin);
 }
 
 async function handleContainerOutput(container, task, versions, metadata, genomes) {

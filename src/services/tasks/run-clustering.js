@@ -69,13 +69,25 @@ function attachInputStream(container, spec, metadata, cgmlstKeys) {
       yield bson.serialize(clustering);
     }
 
+    let idx = 0;
     for await (const value of store.iterGet(Object.values(cgmlstKeys))) {
-      const { _id, results } = JSON.parse(value);
-      yield bson.serialize({ _id, results });
+      try {
+        const { _id, results } = JSON.parse(value);
+        yield bson.serialize({ _id, results });
+        idx += 1;
+      } catch (err) {
+        LOGGER.error(`Cluster error: ${cgmlstKeys[idx]}`);
+        throw err;
+      }
     }
   }
 
-  Readable.from(gen()).pipe(container.stdin);
+  const inputStream = Readable.from(gen());
+  inputStream.on('error', (err) => {
+    LOGGER.error(err);
+    container.kill();
+  });
+  inputStream.pipe(container.stdin);
 }
 
 async function handleContainerOutput(container, spec, metadata) {

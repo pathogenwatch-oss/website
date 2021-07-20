@@ -10,6 +10,8 @@ const store = require('utils/object-store');
 const Collection = require("models/collection");
 const Genome = require("models/genome");
 
+const LOGGER = require('utils/logging').createLogger('runner');
+
 const runCoreBasedTree = require("./run-core-based-tree");
 
 const { createContainer, handleContainerOutput, handleContainerExit } = runCoreBasedTree;
@@ -81,7 +83,12 @@ async function runTask(spec, metadata, timeout) {
   const container = await createContainer(spec, metadata, timeout);
   const whenContainerOutput = handleContainerOutput(container, task, versions, metadata, genomes);
   const whenContainerExit = handleContainerExit(container, task, versions, metadata);
-  createInputStream(genomes, versions, organismId).pipe(container.stdin);
+  const genomesStream = createInputStream(genomes, versions, organismId);
+  genomesStream.on('error', (err) => {
+    LOGGER.error(err);
+    container.kill();
+  });
+  genomesStream.pipe(container.stdin);
 
   const [output] = await Promise.all([
     whenContainerOutput,
