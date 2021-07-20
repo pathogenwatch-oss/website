@@ -213,13 +213,14 @@ function createGenomeStream(genomeSummaries, versions) {
   return Readable.from(gen());
 }
 
-async function generateTreeData(tree, treeGenomeIds, collectionGenomeIds) {
+async function generateTreeData(tree, treeGenomeIds, collectionGenomeIds, onError) {
   const genomeSummaries = await getGenomeSummaries(treeGenomeIds);
 
   const scores = await TreeScores.getScores(genomeSummaries, tree.versions, 'score');
   const stats = generateTreeStats(genomeSummaries, scores);
 
   const genomes = createGenomeStream(genomeSummaries, tree.versions);
+  genomes.on('error', onError);
   const sites = await generateTreeSites(genomes, collectionGenomeIds, tree.populationSize !== 0);
 
   const result = {
@@ -284,7 +285,7 @@ function writeMatrixFooter(stream) {
   stream.write('\n');
 }
 
-async function generateData({ genomes, tree, subtrees = [] }, stream) {
+async function generateData({ genomes, tree, subtrees = [] }, stream, onError) {
   subtrees = subtrees === null ? [] : subtrees;
   const collectionGenomeIds = new Set(genomes.map((id) => id.toString()));
   if (tree) {
@@ -294,22 +295,22 @@ async function generateData({ genomes, tree, subtrees = [] }, stream) {
       populationSize: 0,
       versions: tree.versions,
     };
-    const collectionData = await generateTreeData(collectionTree, Array.from(collectionGenomeIds), collectionGenomeIds);
+    const collectionData = await generateTreeData(collectionTree, Array.from(collectionGenomeIds), collectionGenomeIds, onError);
     writeMatrixLine(collectionData, stream);
   }
 
   for (const subtree of subtrees) {
     if (subtree.status === 'READY' && (subtree.size || 0) >= 3) {
       const genomeIds = Collection.getSubtreeIds(subtree);
-      const data = await generateTreeData(subtree, genomeIds, collectionGenomeIds);
+      const data = await generateTreeData(subtree, genomeIds, collectionGenomeIds, onError);
       writeMatrixLine(data, stream);
     }
   }
 }
 
-async function generateMatrix(collection, stream) {
+async function generateMatrix(collection, stream, onError) {
   writeMatrixHeader(stream);
-  await generateData(collection, stream);
+  await generateData(collection, stream, onError);
   writeMatrixFooter(stream);
   stream.end();
 }
@@ -326,6 +327,6 @@ module.exports = (req, res, next) => {
   });
 
   request('collection', 'authorise', { user, token, projection: { genomes: 1, 'tree.versions': 1, subtrees: 1 } })
-    .then((results) => generateMatrix(results, res))
+    .then((results) => generateMatrix(results, res, next))
     .catch(next);
 };

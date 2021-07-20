@@ -5,6 +5,7 @@ const { Writable, Readable } = require('stream');
 
 const Genome = require('models/genome');
 const store = require('utils/object-store');
+const { asyncWrapper } = require('utils/routes');
 const { request } = require('services');
 
 const header = '##gff-version 3.2.1';
@@ -259,7 +260,7 @@ async function generateData(collection, genomeIds, filename, res, next) {
   }
 }
 
-module.exports = async (req, res, next) => {
+module.exports = asyncWrapper(async (req, res, next) => {
   const { user } = req;
   const { token } = req.params;
   const { ids } = req.method === 'GET' ? req.query : req.body;
@@ -273,4 +274,4 @@ module.exports = async (req, res, next) => {
   } catch (e) {
     next(e);
   }
-};
+});

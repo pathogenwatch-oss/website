@@ -2,10 +2,11 @@ const { Readable } = require('stream');
 const sanitize = require('sanitize-filename');
 const Genome = require('models/genome');
 const store = require('utils/object-store');
+const asyncWrapper = require('utils/routes');
 
 const { request } = require('services');
 
-function writeLines(columns, genomes, res) {
+function writeLines(columns, genomes, res, next) {
   const totalGenomes = {};
   const totalSequences = {};
 
@@ -65,7 +66,9 @@ function writeLines(columns, genomes, res) {
     yield format(line);
   }
 
-  Readable.from(gen()).pipe(res);
+  const lines = Readable.from(gen());
+  lines.on('error', (err) => next(err));
+  lines.pipe(res);
 }
 
 function getGenomes(cores, genomeLookup) {
@@ -117,7 +120,7 @@ async function* getCores(fileIds, version, organismId) {
   }
 }
 
-module.exports = async (req, res, next) => {
+module.exports = asyncWrapper(async (req, res, next) => {
   const { user } = req;
   const { token } = req.params;
   const { ids, subtree } = req.body;
@@ -157,8 +160,8 @@ module.exports = async (req, res, next) => {
     const columns = await getColumns(getCores(fileIds, coreVersion, collection.organismId));
     const genomes = getGenomes(getCores(fileIds, coreVersion, collection.organismId), genomeLookup);
 
-    writeLines(columns, genomes, res);
+    writeLines(columns, genomes, res, next);
   } catch (err) {
     next(err);
   }
-};
+});

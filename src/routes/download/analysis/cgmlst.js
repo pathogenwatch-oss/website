@@ -2,10 +2,12 @@ const sanitize = require('sanitize-filename');
 const csv = require('csv');
 const Genome = require('models/genome');
 const store = require('utils/object-store');
+const { asyncWrapper } = require('utils/routes');
+const LOGGER = require('utils/logging').createLogger('Downloads');
 
 const { Readable } = require('stream');
 
-module.exports = async (req, res) => {
+module.exports = asyncWrapper(async (req, res, next) => {
   const { user } = req;
   const { filename: rawFilename = '' } = req.query;
   const filename = sanitize(rawFilename) || 'cgmlst.csv';
@@ -67,7 +69,12 @@ module.exports = async (req, res) => {
     }
   }
 
-  return Readable.from(generate())
+  const profiles = Readable.from(generate());
+  profiles.on('error', (err) => {
+    LOGGER.error(err);
+    next(err);
+  });
+  return profiles
     .pipe(csv.stringify({ header: true, quotedString: true }))
     .pipe(res);
-};
+});

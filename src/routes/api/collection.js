@@ -4,6 +4,7 @@ const router = express.Router();
 
 const services = require('services');
 
+const { asyncWrapper } = require('utils/routes');
 const LOGGER = require('utils/logging').createLogger('Collection requests');
 
 router.put('/collection', (req, res, next) => {
@@ -18,7 +19,7 @@ router.put('/collection', (req, res, next) => {
     .catch(next);
 });
 
-router.post('/collection/verify', async (req, res, next) => {
+router.post('/collection/verify', asyncWrapper(async (req, res, next) => {
   LOGGER.info('Received request to verify collection input');
   const { user } = req;
   const { genomeIds, organismId } = req.body;
@@ -30,7 +31,7 @@ router.post('/collection/verify', async (req, res, next) => {
   } catch (e) {
     next(e);
   }
-});
+}));
 
 router.get('/collection/summary', (req, res, next) => {
   LOGGER.info('Received request to get collection summary');

@@ -6,8 +6,9 @@ const { request } = require('services');
 
 const LOGGER = require('utils/logging').createLogger('Downloads');
 const keepResponseGoing = require('utils/keepResponseGoing');
+const { asyncWrapper } = require('utils/routes');
 
-router.use('/:token', async (req, res, next) => {
+router.use('/:token', asyncWrapper(async (req, res, next) => {
   const { token } = req.params;
   const genomeIds = req.method === 'GET' ? req.query.ids : req.body.ids;
 
@@ -30,7 +31,7 @@ router.use('/:token', async (req, res, next) => {
   } catch (e) {
     next(e);
   }
-});
+}));
 
 router.get('/:token/fastas', require('./fastas'));
 router.post('/:token/fastas', require('./fastas'));

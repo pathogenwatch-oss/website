@@ -87,7 +87,7 @@ router.get('/genome/:id/clusters', (req, res, next) => {
     .catch(next);
 });
 
-router.post('/genome/:id/clusters', async (req, res, next) => {
+router.post('/genome/:id/clusters', asyncWrapper(async (req, res, next) => {
   const { user, params, body } = req;
   const { id } = params;
   const { clientId } = body;
@@ -110,9 +110,9 @@ router.post('/genome/:id/clusters', async (req, res, next) => {
       next(e);
     }
   }
-});
+}));
 
-router.post('/genome/:id/clusters/edges', async (req, res, next) => {
+router.post('/genome/:id/clusters/edges', asyncWrapper(async (req, res, next) => {
   const { user, body } = req;
   const { threshold, sts, version, scheme } = body;
   const { id } = req.params;
@@ -132,7 +132,7 @@ router.post('/genome/:id/clusters/edges', async (req, res, next) => {
   } catch (e) {
     next(e);
   }
-});
+}));
 
 router.post('/genome/selection', (req, res, next) => {
   LOGGER.info('Received request to get selection');
