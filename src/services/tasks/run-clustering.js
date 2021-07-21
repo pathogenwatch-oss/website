@@ -39,7 +39,7 @@ async function removeMissingKeys(analysisKeys) {
     }
   }
 
-  LOGGER.warn(`Missing cgmlst: ${[...missing].join(', ')}`);
+  LOGGER.error(`Missing cgmlst: ${[...missing].join(', ')}`);
 
   for (const st of Object.keys(analysisKeys)) {
     if (missing.has(analysisKeys[st])) delete analysisKeys[st];
