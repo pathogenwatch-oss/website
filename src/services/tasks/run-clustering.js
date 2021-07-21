@@ -225,9 +225,9 @@ async function runTask(spec, metadata, timeout, resources) {
   return statusCode;
 }
 
-module.exports = async function handleMessage({ spec, metadata, resources }) {
+module.exports = async function handleMessage({ spec, metadata }) {
   const { taskId } = metadata;
-  const { task, timeout } = spec;
+  const { task, timeout, resources = {} } = spec;
   try {
     const statusCode = await runTask(spec, metadata, timeout, resources);
     return { statusCode };
