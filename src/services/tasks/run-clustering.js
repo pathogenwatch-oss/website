@@ -16,9 +16,35 @@ const docker = require('services/docker');
 const { getImageName } = require('manifest.js');
 const { request } = require('services');
 
+const { ServiceRequestError } = require('utils/errors');
 const LOGGER = require('utils/logging').createLogger('runner');
 
 const DEFAULT_THRESHOLD = 50;
+
+function getPrefix(key) {
+  const parts = key.split('/');
+  return `${parts.slice(0, parts.length - 1).join('/')}/`;
+}
+
+async function removeMissingKeys(analysisKeys) {
+  const prefixes = new Set();
+  const missing = new Set(Object.values(analysisKeys));
+  for (const key of Object.values(analysisKeys)) {
+    prefixes.add(getPrefix(key));
+  }
+
+  for (const prefix of prefixes) {
+    for await (const { Key: key } of store.list(prefix)) {
+      missing.delete(key);
+    }
+  }
+
+  LOGGER.warn(`Missing cgmlst: ${[...missing].join(', ')}`);
+
+  for (const st of Object.keys(analysisKeys)) {
+    if (missing.has(analysisKeys[st])) delete analysisKeys[st];
+  }
+}
 
 async function getCgmlstKeys({ userId, scheme }) {
   const query = {
@@ -47,6 +73,8 @@ async function getCgmlstKeys({ userId, scheme }) {
     analysisKeys[st] = store.analysisKey('cgmlst', version, fileId, organismId);
   }
 
+  await removeMissingKeys(analysisKeys);
+
   if (Object.keys(analysisKeys).length < 2) {
     throw new Error('Not enough genomes to cluster');
   }
@@ -70,14 +98,15 @@ function attachInputStream(container, spec, metadata, cgmlstKeys) {
     }
 
     let idx = -1;
-    for await (const value of store.iterGet(Object.values(cgmlstKeys))) {
+    const keys = Object.values(cgmlstKeys);
+    for await (const value of store.iterGet(keys)) {
       idx += 1;
       try {
-        if (value === undefined) continue;
+        if (value === undefined) throw new ServiceRequestError('Cannot cluster because a cgmlst profile is missing');
         const { _id, results } = JSON.parse(value);
         yield bson.serialize({ _id, results });
       } catch (err) {
-        LOGGER.error(`Cluster error: ${cgmlstKeys[idx]}`);
+        LOGGER.error(`Cluster error: ${keys[idx]}`);
         throw err;
       }
     }
