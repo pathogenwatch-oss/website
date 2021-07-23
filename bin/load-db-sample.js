@@ -3,6 +3,8 @@
 // Loads DB records into a test environment
 // Records should be dumped with dump-db-sample.js
 
+// Run with NODE_PATH='./src' node bin/load-db-sample.js --input=sample.json
+
 const fs = require('fs');
 const argv = require('named-argv');
 const es = require('event-stream');

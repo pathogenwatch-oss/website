@@ -4,6 +4,8 @@
 // Also dumps a collection
 // Records should be dumped with dump-db-sample.js
 
+// Run with NODE_PATH='./src' node bin/dump-db-sample.js --output=sample.json
+
 const fs = require('fs');
 const argv = require('named-argv');
 const BSON = require('bson');
