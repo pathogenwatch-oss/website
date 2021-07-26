@@ -83,14 +83,14 @@ async function* createGenomesStream(genomes, uncachedFileIds, versions, organism
 }
 
 async function readTreeScores(versions, fileIds) {
-  const sortedFileIds = [ ...fileIds ];
-  sortedFileIds.sort();
-
-  const projection = sortedFileIds.reduce((proj, fileId) => { proj[`scores.${fileId}`] = 1; return proj; }, { fileId: 1 });
+  const projection = fileIds.reduce((proj, fileId) => { proj[`scores.${fileId}`] = 1; return proj; }, { fileId: 1 });
   const cacheDocs = await TreeScores.find(
-    { fileId: { $in: sortedFileIds }, 'versions.core': versions.core, 'versions.tree': versions.tree },
+    { fileId: { $in: fileIds }, 'versions.core': versions.core, 'versions.tree': versions.tree },
     projection
-  ).cursor();
+  )
+    .sort({ fileId: 1 })
+    .lean()
+    .cursor();
 
   return { stream: cacheDocs };
 }
