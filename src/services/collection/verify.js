@@ -29,7 +29,7 @@ module.exports = async function ({ genomeIds, organismId, user }) {
 
   const config = organismConfigs.find(({ id }) => id === organismId);
   const systemMaxSize = 'maxCollectionSize' in config ? config.maxCollectionSize : maxCollectionSize;
-  const maxSize = user.limits && user.limits.maxCollectionSize && user.limits.maxCollectionSize[organismId] || systemMaxSize;
+  const maxSize = user.limits && user.limits.maxCollectionSize && user.limits.maxCollectionSize[organismId] || user.limits && user.limits.maxCollectionSize && user.limits.maxCollectionSize.default || systemMaxSize;
   if (maxSize !== null && size > maxSize) {
     throw new ServiceRequestErrorJSON(`Too many assemblies provided - the maximum collection size for this organism is ${maxSize}. Please reduce the size of your selection and try again.`, {
       status: 'ERROR',
