@@ -25,16 +25,15 @@ async function rm(p) {
 }
 
 let tmpUploadDir;
-async function setupTmpDir() {
-  if (tmpUploadDir === undefined) tmpUploadDir = await mkdir({ prefix: 'pw-tmp' });
+function getTmpDir() {
+  if (tmpUploadDir === undefined) tmpUploadDir = mkdir({ prefix: 'pw-tmp' });
   return tmpUploadDir;
 }
 
 async function createTempFile(suffix) {
-  await setupTmpDir();
   const d = new Date();
   return temp.path({
-    dir: tmpUploadDir,
+    dir: await getTmpDir(),
     prefix: `${d.getFullYear()}${d.getUTCMonth()}${d.getUTCDay()}.`,
     suffix,
   });
@@ -78,9 +77,10 @@ async function store(stream, maxMb = maxGenomeFileSize) {
     /* eslint-disable no-async-promise-executor */
     const fileId = await new Promise((resolve, reject) => {
       const hasher = new Hasher(maxGenomeFileSizeBytes);
-      hasher.results.then(resolve).catch(reject);
       stream.on('error', reject);
-      hasher.pipe(fs.createWriteStream(tempPath));
+      const tempFile = fs.createWriteStream(tempPath);
+      tempFile.on('close', () => resolve(hasher.results));
+      hasher.pipe(tempFile);
       stream.pipe(hasher);
     });
 
