@@ -39,7 +39,7 @@ async function getGenomes(task, metadata) {
   }));
 }
 
-async function createInputStream(genomes, versions, organismId) {
+function createInputStream(genomes, versions, organismId) {
   const fileIds = genomes.map((_) => _.fileId);
   fileIds.sort();
 

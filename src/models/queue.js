@@ -128,8 +128,8 @@ schema.statics.ack = async function (job, started = true) {
   };
   if (started) {
     update.$inc = { attempts: 1 };
-    update.state = state.RUNNING;
-    update.startTime = Number(new Date());
+    update.$set.state = state.RUNNING;
+    update.$set.startTime = Number(new Date());
   }
   const doc = await this.findOneAndUpdate(
     { ack },
@@ -141,9 +141,11 @@ schema.statics.ack = async function (job, started = true) {
 schema.statics.requeue = async function (job) {
   const { ack = 'invalid' } = job;
   const update = {
-    $set: { nextReceivableTime: now() + ackWindow },
-    state: state.PENDING,
-    startTime: null,
+    $set: {
+      nextReceivableTime: now() + ackWindow,
+      state: state.PENDING,
+      startTime: null,
+    },
   };
   const doc = await this.findOneAndUpdate(
     { ack },
