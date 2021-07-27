@@ -231,8 +231,8 @@ async function handleContainerExit(container, task, versions, metadata, resource
 
 const random = () => Math.random().toString(36).slice(2, 10);
 
-function createContainer(spec, metadata, timeout, resources) {
-  const { task, version, workers } = spec;
+function createContainer(spec, metadata) {
+  const { task, version, workers, resources, timeout } = spec;
   const { organismId, collectionId } = metadata;
 
   return docker(
@@ -252,7 +252,7 @@ function createContainer(spec, metadata, timeout, resources) {
   );
 }
 
-async function runTask(spec, metadata, timeout) {
+async function runTask(spec, metadata) {
   const { task, version, requires: taskRequires = [], resources = {} } = spec;
   const coreVersion = taskRequires.find((_) => _.task === 'core').version;
   const versions = { tree: version, core: coreVersion };
@@ -274,7 +274,7 @@ async function runTask(spec, metadata, timeout) {
 
   const { organismId } = metadata;
   const { stream } = await readTreeScores(versions, fileIds);
-  const container = await createContainer(spec, metadata, timeout, resources);
+  const container = await createContainer(spec, metadata);
 
   const whenContainerOutput = handleContainerOutput(container, task, versions, metadata, genomes);
   attachInputStream(container, versions, genomes, organismId, fileIds, stream);

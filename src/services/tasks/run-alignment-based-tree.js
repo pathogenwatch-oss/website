@@ -60,7 +60,7 @@ async function createInputStream(genomes, versions, organismId) {
   return Readable.from(gen());
 }
 
-async function runTask(spec, metadata, timeout) {
+async function runTask(spec, metadata) {
   const { organismId } = metadata;
   const genomes = await getGenomes(spec.task, metadata);
 
@@ -80,7 +80,7 @@ async function runTask(spec, metadata, timeout) {
   const alignmentVersion = taskRequires.find((x) => x.task === "alignment").version;
   const versions = { tree: version, alignment: alignmentVersion };
 
-  const container = await createContainer(spec, metadata, timeout);
+  const container = await createContainer(spec, metadata);
   const whenContainerOutput = handleContainerOutput(container, task, versions, metadata, genomes);
   const whenContainerExit = handleContainerExit(container, task, versions, metadata);
   const genomesStream = createInputStream(genomes, versions, organismId);
