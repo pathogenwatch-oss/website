@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import DownloadButton from './DownloadButton.react';
 
 import { getCollection } from '../selectors';
-import { getGenomes, hasAMR, hasKleborateAMR, hasMetadata, hasVista, hasSarscov2Variants } from '../genomes/selectors';
+import { getGenomes, hasAMR, hasKleborateAMR, hasMetadata, hasSarscov2Variants, hasVista } from '../genomes/selectors';
 import { getTables, hasTyping } from '../table/selectors';
 import { getActiveGenomeIds } from '../selectors/active';
 
@@ -21,7 +21,6 @@ import {
   generateTypingFile,
   generateVistaFile,
 } from './client-side';
-import Organisms from '~/organisms/config';
 
 const DownloadsMenu = (props) => {
   const { collection, genomes, genomeIds, tables } = props;
@@ -100,18 +99,18 @@ const DownloadsMenu = (props) => {
       <DownloadButton
         filename={formatCollectionFilename(collection, 'vista.csv')}
         genomeIds={genomeIds}
-        generateFile={() => generateVistaFile( {genomes, genomeIds, tables})}
+        generateFile={() => generateVistaFile({ genomes, genomeIds, tables })}
       >
       Virulence
     </DownloadButton>}
-      { props.hasSarscov2VariantsTable &&
+      {props.hasSarscov2VariantsTable &&
       <DownloadButton
         filename={formatCollectionFilename(collection, 'sarscov2Variants.csv')}
         genomeIds={genomeIds}
-        generateFile={() => generateSarscov2Variants( {genomes, genomeIds, tables})}
+        generateFile={() => generateSarscov2Variants({ genomes, genomeIds, tables })}
       >
       Notable Mutations
-    </DownloadButton> }
+    </DownloadButton>}
     </React.Fragment>
   );
 };
