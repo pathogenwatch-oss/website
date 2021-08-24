@@ -94,7 +94,7 @@ function attachInputStream(container, spec, metadata, cgmlstKeys) {
 
     const clustering = await request('clustering', 'cluster-details', { scheme, version, userId });
     if (clustering !== undefined && clustering !== null) {
-      const { edges, ...otherFields } = JSON.parse(clustering);
+      const { edges, ...otherFields } = clustering;
       yield bson.serialize(otherFields);
       for (const threshold of Object.keys(edges)) {
         yield bson.serialize({ edges: { [threshold]: edges[threshold] } });
