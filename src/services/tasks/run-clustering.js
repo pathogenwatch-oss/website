@@ -39,7 +39,7 @@ async function removeMissingKeys(analysisKeys) {
     }
   }
 
-  LOGGER.error(`Missing cgmlst: ${[...missing].join(', ')}`);
+  LOGGER.error(`Missing cgmlst: ${[ ...missing ].join(', ')}`);
 
   for (const st of Object.keys(analysisKeys)) {
     if (missing.has(analysisKeys[st])) delete analysisKeys[st];
@@ -94,7 +94,11 @@ function attachInputStream(container, spec, metadata, cgmlstKeys) {
 
     const clustering = await request('clustering', 'cluster-details', { scheme, version, userId });
     if (clustering !== undefined && clustering !== null) {
-      yield bson.serialize(clustering);
+      const { edges, ...otherFields } = JSON.parse(clustering);
+      yield bson.serialize(otherFields);
+      for (const threshold of Object.keys(edges)) {
+        yield bson.serialize({ edges: { [threshold]: edges[threshold] } });
+      }
     }
 
     let idx = -1;
@@ -146,7 +150,10 @@ async function handleContainerOutput(container, spec, metadata) {
         if (doc.progress) {
           const progress = doc.progress * 0.99;
           if ((progress - lastProgress) >= 0.1) {
-            await request('clustering', 'send-progress', { taskId, payload: { task, status: 'IN PROGRESS', message: doc.message, progress } });
+            await request('clustering', 'send-progress', {
+              taskId,
+              payload: { task, status: 'IN PROGRESS', message: doc.message, progress }
+            });
             lastProgress = progress;
           }
         } else if ((doc.STs !== undefined) || (doc.edges !== undefined)) {
