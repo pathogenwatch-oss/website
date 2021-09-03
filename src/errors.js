@@ -1,8 +1,8 @@
-const errors = require('./utils/errors');
+const errors = require('utils/errors');
 
 const LOGGER = require('utils/logging').createLogger('Error handler');
 
-process.on('uncaughtException', error => {
+process.on('uncaughtException', (error) => {
   console.error(error);
   process.exit(1);
 });
@@ -26,6 +26,6 @@ module.exports = function handleErrors(app) {
       return res.sendStatus(404);
     }
 
-    res.sendStatus(500);
+    return res.sendStatus(500);
   });
 };

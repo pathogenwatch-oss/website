@@ -1,6 +1,7 @@
 const sanitize = require('sanitize-filename');
 const csv = require('csv');
 const { ObjectId } = require('mongoose').Types;
+const { asyncWrapper } = require('utils/routes');
 
 const Genome = require('models/genome');
 
@@ -36,7 +37,7 @@ const transformer = function (doc) {
   return result;
 };
 
-module.exports = async (req, res) => {
+module.exports = asyncWrapper(async (req, res, next) => {
   const { user } = req;
   const { filename: rawFilename = '' } = req.query;
   const filename = sanitize(rawFilename) || 'metadata.csv';
@@ -47,10 +48,10 @@ module.exports = async (req, res) => {
   res.setHeader('Content-Disposition', `attachment; filename=${filename}`);
   res.setHeader('Content-Type', 'text/csv');
 
-  const query = Object.assign(
-    { _id: { $in: ids.split(',').map(id => new ObjectId(id)) } },
-    Genome.getPrefilterCondition({ user })
-  );
+  const query = {
+    _id: { $in: ids.split(',').map((id) => new ObjectId(id)) },
+    ...Genome.getPrefilterCondition({ user }),
+  };
   const projection = {
     country: 1,
     day: 1,
@@ -83,4 +84,4 @@ module.exports = async (req, res) => {
     .pipe(csv.transform(transformer))
     .pipe(csv.stringify({ header: true, quotedString: true, columns }))
     .pipe(res);
-};
+});

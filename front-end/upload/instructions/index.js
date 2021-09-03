@@ -12,19 +12,20 @@ import Summary from '../Summary.react';
 import { addFiles } from './actions';
 import { fetchUploads } from '../previous/actions';
 
-import { isReadsEligible, getUploadAccepts } from '../file-utils';
+import { getUploadAccepts } from '../file-utils';
+
+const readsEligible = true;
 
 const Instructions = ({ onFiles, fetchPreviousUploads, location }) => {
   React.useEffect(() => {
     fetchPreviousUploads();
   }, []);
   const uploadType = location.pathname.split("/").find((_, index, array) => index === array.length - 1);
-  const readsEligible = isReadsEligible();
   return (
     <FileDragAndDrop
       onFiles={onFiles}
       readsEligible={readsEligible}
-      accept={getUploadAccepts(readsEligible)}
+      accept={getUploadAccepts()}
       isMultiFasta={uploadType === "multi-fasta"}
     >
       <DocumentTitle>Upload</DocumentTitle>
@@ -41,7 +42,7 @@ const Instructions = ({ onFiles, fetchPreviousUploads, location }) => {
 
 function mapDispatchToProps(dispatch) {
   return {
-    onFiles: files => dispatch(addFiles(files)),
+    onFiles: (files) => dispatch(addFiles(files)),
     fetchPreviousUploads: () => dispatch(fetchUploads()),
   };
 }

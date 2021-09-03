@@ -16,8 +16,8 @@ module.exports = function ({ ids, user, status }) {
     { binned: status, binnedDate: status ? new Date() : null },
     { multi: true }
   )
-  .then(response => {
-    if (response.ok !== 1) throw new ServiceRequestError('Failed to complete bin action');
-    return { binned: response.nModified };
-  });
+    .then((response) => {
+      if (response.ok !== 1) throw new ServiceRequestError('Failed to complete bin action');
+      return { binned: response.nModified };
+    });
 };

@@ -1,4 +1,3 @@
-
 const { request } = require('services/bus');
 const { getCollectionTask } = require('manifest');
 
@@ -56,14 +55,14 @@ function getSubtrees(organismId, genomes, genomeIds) {
       }
       return null;
     })
-  ).then(subtrees => subtrees.filter(_ => _ !== null));
+  ).then((subtrees) => subtrees.filter((_) => _ !== null));
 }
 
 async function createCollection(genomes, { organismId, title, description, pmid, user }) {
   const size = genomes.length;
   const tree = genomes.length >= 3 ? { name: 'collection' } : null;
 
-  const genomeIds = genomes.map(_ => _._id);
+  const genomeIds = genomes.map((_) => _._id);
   const organism = await Organism.getLatest(organismId);
   const subtrees = await getSubtrees(organismId, genomes, genomeIds);
 
@@ -84,7 +83,7 @@ async function createCollection(genomes, { organismId, title, description, pmid,
   });
 
   await Genomecollection.bulkWrite(
-    genomeIds.map(_genome => ({
+    genomeIds.map((_genome) => ({
       updateOne: {
         filter: { _genome },
         update: { $addToSet: { collections: collection._id } },
@@ -111,7 +110,7 @@ module.exports = function (message) {
   return Promise.resolve(message)
     .then(validate)
     .then(getGenomes)
-    .then(genomes => createCollection(genomes, message))
+    .then((genomes) => createCollection(genomes, message))
     .then(submitCollection)
     .then(({ token }) => ({ token }));
 };

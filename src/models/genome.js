@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
-const { Schema } = mongoose;
 const escapeRegex = require('escape-string-regexp');
+
+const { Schema } = mongoose;
 
 const Collection = require('./collection');
 
@@ -58,8 +59,10 @@ const schema = new Schema({
 });
 
 schema.index({ name: 1 });
+schema.index({ name: 'text' });
 schema.index({ public: 1, reference: 1 });
 schema.index({ _user: 1, binned: 1 });
+schema.index({ uploadedAt: 1, binned: 1 });
 schema.index({ 'analysis.mlst.st': 1 });
 schema.index({ 'analysis.mlst2.st': 1 });
 schema.index({
@@ -68,7 +71,13 @@ schema.index({
 });
 schema.index({ 'analysis.cgmlst.st': 1 });
 schema.index({ 'analysis.paarsnp.antibiotics.state': 1 });
+schema.index({ 'analysis.paarsnp.antibiotics.fullName': 1 });
+schema.index({
+  'analysis.paarsnp.antibiotics.fullName': 1,
+  'analysis.paarsnp.antibiotics.state': 1,
+});
 schema.index({ 'analysis.speciator.organismId': 1 });
+schema.index({ 'analysis.speciator.organismName': 1 });
 schema.index({ 'analysis.speciator.speciesId': 1 });
 schema.index({ 'analysis.speciator.genusId': 1 });
 schema.index({ 'analysis.serotype.subspecies': 1 });
@@ -90,12 +99,28 @@ schema.index({ 'analysis.kleborate.typing.O_locus': 1 });
 schema.index({ 'analysis.pangolin.lineage': 1 });
 schema.index({ 'analysis.sarscov2-variants.variants.state': 1 });
 schema.index({ 'analysis.sarscov2-variants.variants.name': 1 });
+schema.index({
+  binned: 1,
+  public: 1,
+  'analysis.speciator.organismId': 1,
+  'analysis.speciator.organismName': 1,
+  _user: 1,
+});
+schema.index({
+  binned: 1,
+  public: 1,
+  "analysis.speciator.organismId": 1,
+  "analysis.speciator.organismName": 1,
+  name: 1,
+  _user: 1,
+  createdAt: -1,
+});
 
 schema.statics.uploadTypes = uploadTypes;
 
-schema.statics.taxonomy = genome => {
+schema.statics.taxonomy = (genome) => {
   const speciator = (genome.analysis || {}).speciator || {};
-  const includes = taxid =>
+  const includes = (taxid) =>
     taxid && [ speciator.organismId, speciator.speciesId, speciator.genusId ].includes(taxid);
   return {
     includes,
@@ -222,7 +247,6 @@ schema.statics.getPrefilterCondition = function ({ user, query = {} }) {
 
   throw new Error(`Invalid genome prefilter: '${prefilter}'`);
 };
-
 
 schema.statics.getFilterQuery = async function (props) {
   const { user, query = {} } = props;
@@ -450,7 +474,7 @@ schema.statics.getForCollection = function (query, user = {}) {
     _user: 1,
   })
     .lean()
-    .then(genomes => genomes.map(doc => toObject(doc, user)));
+    .then((genomes) => genomes.map((doc) => toObject(doc, user)));
 };
 
 schema.statics.lookupCgMlstScheme = async function (genomeId, user) {
@@ -461,6 +485,7 @@ schema.statics.lookupCgMlstScheme = async function (genomeId, user) {
   };
   const projection = { 'analysis.cgmlst.scheme': 1 };
   const genome = await this.findOne(query, projection);
+  if (user && genome === undefined) return this.lookupCgMlstScheme(genomeId, undefined);
   return genome ? genome.analysis.cgmlst.scheme : undefined;
 };
 

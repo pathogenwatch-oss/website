@@ -1,127 +1,111 @@
-const es = require('event-stream');
 const sanitize = require('sanitize-filename');
+const { Readable } = require('stream');
 
-const Analysis = require('models/analysis');
 const Genome = require('models/genome');
 const Collection = require('models/collection');
-const ScoreCache = require('models/scoreCache');
+const store = require('utils/object-store');
+const TreeScores = require('models/treeScores');
 
 const { request } = require('services');
 const { ServiceRequestError } = require('utils/errors');
 
 const { calculateStats } = require('utils/stats');
 
-function getCache(genomes, versions) {
-  return ScoreCache.find(
-    { fileId: { $in: genomes.map(_ => _.fileId) }, 'versions.core': versions.core, 'versions.tree': versions.tree },
-    genomes.reduce(
-      (projection, { fileId }) => {
-        projection[`scores.${fileId}`] = 1;
-        return projection;
-      },
-      { fileId: 1 }
-    ),
-    { sort: { fileId: 1 } }
-  )
-    .then(cache => {
-      const cacheByFileId = {};
-      for (const doc of cache) {
-        cacheByFileId[doc.fileId] = doc.scores;
-      }
-      return cacheByFileId;
-    });
-}
+function generateTreeStats(genomeSummaries, scores) {
+  const listOfScores = [];
 
-
-function generateTreeStats(genomes, cache) {
-  const scores = [];
-
-  for (let a = 0; a < genomes.length; a++) {
-    const genomeA = genomes[a];
-    for (let b = 0; b <= a; b++) {
-      const genomeB = genomes[b];
-      if (a === b) {
-        continue;
-      } else if (genomeA.fileId === genomeB.fileId) {
-        scores.push(0);
-      } else if (genomeA.fileId in cache && genomeB.fileId in cache[genomeA.fileId]) {
-        scores.push(cache[genomeA.fileId][genomeB.fileId]);
+  for (let a = 0; a < genomeSummaries.length; a++) {
+    const genomeA = genomeSummaries[a];
+    for (let b = 0; b < a; b++) {
+      const genomeB = genomeSummaries[b];
+      if (genomeA.fileId === genomeB.fileId) {
+        listOfScores.push(0);
+      } else if (genomeA.fileId in scores && genomeB.fileId in scores[genomeA.fileId]) {
+        listOfScores.push(scores[genomeA.fileId][genomeB.fileId]);
+      } else if (genomeB.fileId in scores && genomeA.fileId in scores[genomeB.fileId]) {
+        listOfScores.push(scores[genomeB.fileId][genomeA.fileId]);
       } else {
         throw new ServiceRequestError(`Missing score for ${genomeA.fileId} ${genomeB.fileId}`);
       }
     }
   }
 
-  const stats = calculateStats(scores.sort((a, b) => a - b));
-
-  return stats;
+  return calculateStats(listOfScores.sort((a, b) => a - b));
 }
 
-async function generateTreeSites(genomes, collectionGenomeIds) {
+function getFamilyStatsStore(hasPublicData = false) {
+  return hasPublicData ?
+    {
+      userFiltered: {},
+      userUnfiltered: {},
+      userRepresentative: new Set(),
+    } :
+    {
+      userFiltered: {},
+      publicFiltered: {},
+      userUnfiltered: {},
+      publicUnfiltered: {},
+      userRepresentative: new Set(),
+      publicRepresentative: new Set(),
+    };
+}
+
+async function generateTreeSites(genomes, collectionGenomeIds, hasPublicData) {
   const sitesByFamilyId = {};
   let genomesLength = 0;
 
-  await new Promise((resolve, reject) => {
-    genomes.on('error', err => reject(err));
-    genomes.on('end', () => resolve());
-    genomes.on('data', genomeA => {
-      genomesLength += 1;
-      const isCollectionGenome = collectionGenomeIds.has(genomeA._id.toString());
-      for (const profile of genomeA.analysis.core.profile) {
-        if (!sitesByFamilyId[profile.id]) {
-          sitesByFamilyId[profile.id] = {
-            userFiltered: {},
-            publicFiltered: {},
-            userUnfiltered: {},
-            publicUnfiltered: {},
-            userRepresentative: new Set(),
-            publicRepresentative: new Set(),
-          };
-        }
+  for await (const genomeA of genomes) {
+    genomesLength += 1;
+    const isCollectionGenome = collectionGenomeIds.has(genomeA._id.toString());
+    for (const profile of genomeA.analysis.core.profile) {
+      if (!sitesByFamilyId[profile.id]) {
+        sitesByFamilyId[profile.id] = getFamilyStatsStore();
+      }
 
-        const sites = sitesByFamilyId[profile.id];
-        const filteredPositions = new Set();
-        const unfilteredPositions = new Set();
-        const unfilteredMutations = new Set();
-        for (const allele of profile.alleles) {
-          for (const position of Object.keys(allele.mutations)) {
-            if (profile.filter === false && allele.filter === false) {
-              filteredPositions.add(position);
-            }
+      const sites = sitesByFamilyId[profile.id];
+      const filteredPositions = new Set();
+      const unfilteredPositions = new Set();
+      const unfilteredMutations = new Set();
+      for (const allele of profile.alleles) {
+        for (const position of Object.keys(allele.mutations)) {
+          if (profile.filter === false && allele.filter === false) {
+            filteredPositions.add(position);
+          }
 
-            unfilteredPositions.add(position);
-            unfilteredMutations.add(position + allele.mutations[position]);
+          unfilteredPositions.add(position);
+          unfilteredMutations.add(position + allele.mutations[position]);
 
-            sites.userFiltered[position] = 0;
+          sites.userFiltered[position] = 0;
+          sites.userUnfiltered[position] = 0;
+          if (hasPublicData) {
             sites.publicFiltered[position] = 0;
-            sites.userUnfiltered[position] = 0;
             sites.publicUnfiltered[position] = 0;
           }
         }
-
-        for (const position of filteredPositions) {
-          if (isCollectionGenome) {
-            sites.userFiltered[position]++;
-          }
-          sites.publicFiltered[position]++;
-        }
-
-        for (const position of unfilteredPositions) {
-          if (isCollectionGenome) {
-            sites.userUnfiltered[position]++;
-          }
-          sites.publicUnfiltered[position]++;
-        }
-
-        for (const mutation of unfilteredMutations) {
-          if (isCollectionGenome) {
-            sites.userRepresentative.add(mutation);
-          }
-          sites.publicRepresentative.add(mutation);
-        }
       }
-    });
-  });
+
+      for (const position of filteredPositions) {
+        if (isCollectionGenome) {
+          sites.userFiltered[position] += 1;
+        }
+        if (hasPublicData) sites.publicFiltered[position] += 1;
+      }
+
+      for (const position of unfilteredPositions) {
+        if (isCollectionGenome) {
+          sites.userUnfiltered[position] += 1;
+        }
+        if (hasPublicData) sites.publicUnfiltered[position] += 1;
+      }
+
+      for (const mutation of unfilteredMutations) {
+        if (isCollectionGenome) {
+          sites.userRepresentative.add(mutation);
+        }
+        if (hasPublicData) sites.publicRepresentative.add(mutation);
+      }
+    }
+  }
 
   const result = {
     userFiltered: 0,
@@ -137,29 +121,34 @@ async function generateTreeSites(genomes, collectionGenomeIds) {
 
     for (const count of Object.values(sites.userFiltered)) {
       if (count > 0 && count < genomesLength) {
-        result.userFiltered++;
-      }
-    }
-    for (const count of Object.values(sites.publicFiltered)) {
-      if (count > 0 && count < genomesLength) {
-        result.publicFiltered++;
+        result.userFiltered += 1;
       }
     }
     for (const count of Object.values(sites.userUnfiltered)) {
       if (count > 0 && count < genomesLength) {
-        result.userUnfiltered++;
+        result.userUnfiltered += 1;
       }
     }
-    for (const count of Object.values(sites.publicUnfiltered)) {
-      if (count > 0 && count < genomesLength) {
-        result.publicUnfiltered++;
-      }
-    }
-
     result.userRepresentative += sites.userRepresentative.size;
-    result.publicRepresentative += sites.publicRepresentative.size;
-  }
 
+    if (hasPublicData) {
+      for (const count of Object.values(sites.publicFiltered)) {
+        if (count > 0 && count < genomesLength) {
+          result.publicFiltered += 1;
+        }
+      }
+      for (const count of Object.values(sites.publicUnfiltered)) {
+        if (count > 0 && count < genomesLength) {
+          result.publicUnfiltered += 1;
+        }
+      }
+      result.publicRepresentative += sites.publicRepresentative.size;
+    } else {
+      result.publicFiltered = result.userFiltered;
+      result.publicUnfiltered = result.userUnfiltered;
+      result.publicRepresentative = result.userRepresentative;
+    }
+  }
   return result;
 }
 
@@ -169,64 +158,70 @@ async function getGenomeSummaries(genomeIds) {
   };
   const projection = {
     fileId: 1,
+    'analysis.speciator.organismId': 1,
   };
   const options = {
     sort: { fileId: 1 },
   };
   const results = await Genome.find(query, projection, options).lean();
-  return results.map(({ _id, fileId }) => ({
-    _id,
-    fileId,
+  return results.map((doc) => ({
+    _id: doc._id,
+    fileId: doc.fileId,
+    organismId: doc.analysis.speciator.organismId,
   }));
 }
 
 function createGenomeStream(genomeSummaries, versions) {
-  const fileIds = genomeSummaries.map(({ fileId }) => fileId);
-  const genomeIds = genomeSummaries.reduce((acc, { fileId, _id }) => {
-    acc[fileId] = acc[fileId] || [];
-    acc[fileId].push(_id);
-    return acc;
-  }, {});
+  const genomes = [ ...genomeSummaries ];
+  genomes.sort((a, b) => (a.fileId < b.fileId ? -1 : 1));
 
-  const query = {
-    fileId: { $in: fileIds },
-    task: 'core',
-    version: versions.core,
-  };
-  const projection = {
-    fileId: 1,
-    'results.profile.id': 1,
-    'results.profile.filter': 1,
-    'results.profile.alleles.filter': 1,
-    'results.profile.alleles.mutations': 1,
-  };
-  const options = {
-    sort: { fileId: 1 },
-  };
-  const cores = Analysis.find(query, projection, options).lean().cursor();
-  const coreFormatter = es.through(function ({ fileId, results }) {
+  const genomeIds = {};
+  for (const { fileId, _id } of genomeSummaries) {
     genomeIds[fileId] = genomeIds[fileId] || [];
-    for (const genomeId of genomeIds[fileId]) {
-      const genome = {
-        _id: genomeId,
-        fileId,
-        analysis: { core: results },
-      };
-      this.emit('data', genome);
+    genomeIds[fileId].push(_id);
+  }
+
+  const analysisKeys = genomes.map(({
+    fileId,
+    organismId,
+  }) => store.analysisKey('core', versions.core, fileId, organismId));
+
+  async function* gen() {
+    let idx = 0;
+    for await (const value of store.iterGet(analysisKeys)) {
+      if (value === undefined) {
+        throw new ServiceRequestError(`Missing core profile for ${genomes[idx].fileId}`);
+      }
+      idx += 1;
+
+      const { fileId, results } = JSON.parse(value);
+      for (const genomeId of genomeIds[fileId] || []) {
+        yield {
+          _id: genomeId,
+          fileId,
+          analysis: {
+            core: {
+              profile: results.profile,
+            },
+          },
+        };
+      }
+      genomeIds[fileId] = [];
     }
-    genomeIds[fileId] = [];
-  });
-  return cores.pipe(coreFormatter);
+  }
+
+  return Readable.from(gen());
 }
 
-async function generateTreeData(tree, treeGenomeIds, collectionGenomeIds) {
+async function generateTreeData(tree, treeGenomeIds, collectionGenomeIds, onError) {
   const genomeSummaries = await getGenomeSummaries(treeGenomeIds);
 
-  const cache = await getCache(genomeSummaries, tree.versions);
-  const stats = generateTreeStats(genomeSummaries, cache);
+  const scores = await TreeScores.getScores(genomeSummaries, tree.versions, 'score');
+  const stats = generateTreeStats(genomeSummaries, scores);
 
   const genomes = createGenomeStream(genomeSummaries, tree.versions);
-  const sites = await generateTreeSites(genomes, collectionGenomeIds);
+  genomes.on('error', onError);
+  const sites = await generateTreeSites(genomes, collectionGenomeIds, tree.populationSize !== 0);
 
   const result = {
     label: tree.name,
@@ -290,9 +285,9 @@ function writeMatrixFooter(stream) {
   stream.write('\n');
 }
 
-async function generateData({ genomes, tree, subtrees = [] }, stream) {
+async function generateData({ genomes, tree, subtrees = [] }, stream, onError) {
   subtrees = subtrees === null ? [] : subtrees;
-  const collectionGenomeIds = new Set(genomes.map(id => id.toString()));
+  const collectionGenomeIds = new Set(genomes.map((id) => id.toString()));
   if (tree) {
     const collectionTree = {
       name: 'collection',
@@ -300,22 +295,22 @@ async function generateData({ genomes, tree, subtrees = [] }, stream) {
       populationSize: 0,
       versions: tree.versions,
     };
-    const collectionData = await generateTreeData(collectionTree, Array.from(collectionGenomeIds), collectionGenomeIds);
+    const collectionData = await generateTreeData(collectionTree, Array.from(collectionGenomeIds), collectionGenomeIds, onError);
     writeMatrixLine(collectionData, stream);
   }
 
   for (const subtree of subtrees) {
     if (subtree.status === 'READY' && (subtree.size || 0) >= 3) {
       const genomeIds = Collection.getSubtreeIds(subtree);
-      const data = await generateTreeData(subtree, genomeIds, collectionGenomeIds);
+      const data = await generateTreeData(subtree, genomeIds, collectionGenomeIds, onError);
       writeMatrixLine(data, stream);
     }
   }
 }
 
-async function generateMatrix(collection, stream) {
+async function generateMatrix(collection, stream, onError) {
   writeMatrixHeader(stream);
-  await generateData(collection, stream);
+  await generateData(collection, stream, onError);
   writeMatrixFooter(stream);
   stream.end();
 }
@@ -332,6 +327,6 @@ module.exports = (req, res, next) => {
   });
 
   request('collection', 'authorise', { user, token, projection: { genomes: 1, 'tree.versions': 1, subtrees: 1 } })
-    .then(results => generateMatrix(results, res))
+    .then((results) => generateMatrix(results, res, next))
     .catch(next);
 };

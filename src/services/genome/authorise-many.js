@@ -11,7 +11,7 @@ module.exports = ({ user, ids }) => {
   }
 
   return Genome.count({ _id: { $in: ids }, $or })
-    .then(count => {
+    .then((count) => {
       if (count !== ids.length) throw new NotFoundError('Not found or access denied');
       return true;
     });

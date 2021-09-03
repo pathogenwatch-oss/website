@@ -13,19 +13,19 @@ import Summary from '../Summary.react';
 import { addFiles } from './actions';
 import { fetchUploads } from '../previous/actions';
 
-import { isReadsEligible, getUploadAccepts } from '../file-utils';
+import { getUploadAccepts } from '../file-utils';
 
 const Instructions = ({ onFiles, fetchPreviousUploads }) => {
   React.useEffect(() => {
     fetchPreviousUploads();
   }, []);
 
-  const readsEligible = isReadsEligible();
+  const readsEligible = true;
   return (
     <div
       onFiles={onFiles}
       readsEligible={readsEligible}
-      accept={getUploadAccepts(readsEligible)}
+      accept={getUploadAccepts()}
     >
       <DocumentTitle>Upload</DocumentTitle>
       <Summary />
@@ -91,7 +91,7 @@ const Instructions = ({ onFiles, fetchPreviousUploads }) => {
 
 function mapDispatchToProps(dispatch) {
   return {
-    onFiles: files => dispatch(addFiles(files)),
+    onFiles: (files) => dispatch(addFiles(files)),
     fetchPreviousUploads: () => dispatch(fetchUploads()),
   };
 }

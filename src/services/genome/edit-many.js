@@ -50,7 +50,7 @@ module.exports = async function ({ user, data }) {
         },
       };
     })
-  ).then(result => ({
+  ).then((result) => ({
     matched: result.matchedCount,
     modified: result.modifiedCount,
     computedData,

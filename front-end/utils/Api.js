@@ -1,5 +1,3 @@
-/* global $ */
-
 import CONFIG from '../app/config';
 
 export function getServerPath(path) {
@@ -13,8 +11,8 @@ function ajax(config) {
         ? config
         : { ...config, xhrFields: { withCredentials: true } }
     )
-      .done(data => resolve(data))
-      .fail(error => reject(error));
+      .done((data) => resolve(data))
+      .fail((error) => reject(error));
   });
 }
 
@@ -29,7 +27,7 @@ export function fetchJson(method, path, data, headers) {
   });
 }
 
-export function fetchRaw(method, path, contentType, data, progressFn) {
+export function fetchRaw({ method, path, contentType, data, progressFn, ...opts }) {
   return ajax({
     type: method,
     url: getServerPath(path),
@@ -37,6 +35,7 @@ export function fetchRaw(method, path, contentType, data, progressFn) {
     data,
     processData: false,
     dataType: 'json',
+    ...opts,
     xhr: progressFn
       ? function () {
         const xhr = new window.XMLHttpRequest();
@@ -45,7 +44,7 @@ export function fetchRaw(method, path, contentType, data, progressFn) {
 
         xhr.upload.addEventListener(
           'progress',
-          evt => {
+          (evt) => {
             if (evt.lengthComputable) {
               const percentComplete = (evt.loaded / evt.total) * 100;
               const percentRounded = Math.floor(percentComplete / 10) * 10;

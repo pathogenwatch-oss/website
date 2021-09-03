@@ -7,7 +7,6 @@ import { getActiveGenomeIds } from '../selectors/active';
 
 import { formatCollectionFilename } from './utils';
 
-import Organisms from '~/organisms';
 import { getGenomeDatatypes } from '~/collection-viewer/genomes/selectors';
 
 const DownloadForm = ({ link, filename, title, genomeIds, children }) => (
@@ -22,7 +21,7 @@ const DownloadForm = ({ link, filename, title, genomeIds, children }) => (
     >
       {children}
     </button>
-    { genomeIds && <input type="hidden" name="ids" value={genomeIds} /> }
+    {genomeIds && <input type="hidden" name="ids" value={genomeIds} />}
   </form>
 );
 
@@ -35,30 +34,30 @@ const DownloadsMenu = ({ collection, genomeIds, prefix, datatypes: { hasKleborat
     >
       Species prediction
     </DownloadForm>
-    { hasKleborateAMR &&
+    {hasKleborateAMR &&
     <DownloadForm
       link={`${prefix}/kleborate`}
       filename={formatCollectionFilename(collection, 'kleborate.csv')}
       genomeIds={genomeIds}
     >
       Kleborate
-    </DownloadForm> }
-    { hasVista &&
+    </DownloadForm>}
+    {hasVista &&
     <DownloadForm
       link={`${prefix}/vista`}
       filename={formatCollectionFilename(collection, 'vista.csv')}
       genomeIds={genomeIds}
     >
       Vista
-    </DownloadForm> }
-    { hasPangolin &&
+    </DownloadForm>}
+    {hasPangolin &&
     <DownloadForm
       link={`${prefix}/pangolin`}
       filename={formatCollectionFilename(collection, 'pangolin.csv')}
       genomeIds={genomeIds}
     >
       Pangolin
-    </DownloadForm> }
+    </DownloadForm>}
   </React.Fragment>
 );
 

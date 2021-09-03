@@ -1,10 +1,11 @@
 const Genome = require('models/genome');
 
 module.exports = async function (props) {
-  const query = Object.assign(
-    { latitude: { $exists: true, $ne: null }, longitude: { $exists: true, $ne: null } },
-    await Genome.getFilterQuery(props)
-  );
+  const query = {
+    latitude: { $exists: true, $ne: null },
+    longitude: { $exists: true, $ne: null },
+    ...await Genome.getFilterQuery(props),
+  };
   return (
     Genome
       .aggregate([

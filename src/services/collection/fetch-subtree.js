@@ -13,7 +13,7 @@ module.exports = ({ user, token, name }) => {
   const query = { 'subtrees.name': name };
   const projection = { 'subtrees.$': 1, genomes: 1 };
   return request('collection', 'authorise', { user, token, query, projection })
-    .then(collection => {
+    .then((collection) => {
       if (!collection || collection.subtrees.length === 0) throw new NotFoundError('Not found');
       const { genomes, subtrees } = collection;
       const { newick, status } = subtrees[0];
@@ -22,6 +22,6 @@ module.exports = ({ user, token, name }) => {
       return Genome.getForCollection(
         { _id: { $in: leafIds, $nin: genomes }, population: true, 'analysis.core.fp.reference': name }
       )
-        .then(docs => ({ status, newick, genomes: docs }));
+        .then((docs) => ({ status, newick, genomes: docs }));
     });
 };

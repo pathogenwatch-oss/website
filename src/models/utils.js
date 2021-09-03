@@ -12,7 +12,7 @@ exports.setToObjectOptions = (schema, optionalTransform) =>
     retainKeyOrder: true,
   });
 
-exports.addPreSaveHook = schema =>
+exports.addPreSaveHook = (schema) =>
   schema.pre('save', function (next) {
     const date = new Date();
     if (!this.createdAt) {
@@ -23,22 +23,14 @@ exports.addPreSaveHook = schema =>
     next();
   });
 
-const rangeAggregation = field => [
+const rangeAggregation = (field) => [
   { $group: { _id: field, max: { $max: `$${field}` }, min: { $min: `$${field}` } } },
   { $project: { _id: 0 } },
 ];
 
-const sumAggregation = field => [
+const sumAggregation = (field) => [
   { $group: { _id: `$${field}`, count: { $sum: 1 } } },
 ];
-
-function getRangeQuery(query, queryKeys) {
-  const nextQuery = { ...query };
-  for (const key of queryKeys) {
-    nextQuery[key] = undefined;
-  }
-  return nextQuery;
-}
 
 async function aggregateSummaryFields(model, summaryFields, props) {
   const pipelines = [];
@@ -77,8 +69,8 @@ async function aggregateSummaryFields(model, summaryFields, props) {
   return Promise.all([
     model.count(model.getPrefilterCondition(props)),
     model.count(query),
-    pipelines.map(_ => _.field),
-    ...pipelines.map(_ => model.aggregate(_.pipeline)),
+    pipelines.map((_) => _.field),
+    ...pipelines.map((_) => model.aggregate(_.pipeline)),
   ]);
 }
 

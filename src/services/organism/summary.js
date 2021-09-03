@@ -33,13 +33,13 @@ module.exports = async function (props) {
 
   return {
     supportedOrganisms: Object.keys(supportedGenomeSummary.organismId)
-      .map(organismId => ({
+      .map((organismId) => ({
         organismId,
         totalCollections: (collectionSummary.organismId[organismId] || { count: 0 }).count,
         totalGenomes: (supportedGenomeSummary.organismId[organismId] || { count: 0 }).count,
       })),
     allSpecies: Object.keys(genomeSummary.speciesId)
-      .map(speciesId => ({
+      .map((speciesId) => ({
         speciesId,
         speciesName: genomeSummary.speciesId[speciesId].label,
         totalGenomes: genomeSummary.speciesId[speciesId].count,

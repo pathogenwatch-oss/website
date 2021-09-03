@@ -13,7 +13,7 @@ module.exports = ({ user, token = '', query: userQuery, projection = {} }) => {
 
   const query = userQuery ? { $and: [ authQuery, userQuery ] } : authQuery;
   return Collection.findOne(query, projection)
-    .then(collection => {
+    .then((collection) => {
       if (!collection) {
         throw new NotFoundError('No collection found for this user');
       }

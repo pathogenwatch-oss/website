@@ -21,7 +21,7 @@ router.get('/upload/:uploadedAt/position', (req, res, next) => {
   const { uploadedAt } = req.params;
   services
     .request('tasks', 'queue-position', { uploadedAt })
-    .then(result => res.json(result))
+    .then((result) => res.json(result))
     .catch(next);
 });
 
@@ -33,7 +33,17 @@ router.get('/upload/:uploadedAt', (req, res, next) => {
     services.request('genome', 'fetch-upload', { user, query: { uploadedAt } }),
     services.request('tasks', 'queue-position', { uploadedAt }),
   ])
-    .then(([ genomes, { position } ]) => res.json({ genomes, position }))
+    .then(([ { genomes, progress }, { position } ]) => res.json({ genomes, position, progress }))
+    .catch(next);
+});
+
+router.get('/upload/:uploadedAt/progress', (req, res, next) => {
+  // returns { runningSince = [], failed = 0, complete = 0 }
+  LOGGER.info('Received request to get assembly progress');
+  const { user } = req;
+  const { uploadedAt } = req.params;
+  services.request('genome', 'fetch-assembly-progress', { userId: user._id, uploadedAt })
+    .then((response) => res.json(response))
     .catch(next);
 });
 
@@ -42,7 +52,7 @@ router.get('/upload', (req, res, next) => {
   const { user } = req;
   services
     .request('genome', 'fetch-upload-list', { user })
-    .then(response => res.json(response))
+    .then((response) => res.json(response))
     .catch(next);
 });
 

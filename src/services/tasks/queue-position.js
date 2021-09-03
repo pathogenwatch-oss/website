@@ -9,13 +9,13 @@ module.exports = function ({ uploadedAt, until = uploadedAt, type = defaultTypeC
       rejectionReason: { $exists: false },
       type,
     },
-      (err, position) => {
-        if (err) {
-          reject(err);
-        } else {
-          resolve({ position });
-        }
+    (err, position) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve({ position });
       }
+    }
     );
   });
 };

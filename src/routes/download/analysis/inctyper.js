@@ -12,28 +12,30 @@ const transformer = (doc, callback) => {
       'Genome Name': doc.name,
     };
 
+    /* eslint-disable no-return-assign */
     Object.keys(match)
-      .forEach(prop =>
+      .forEach((prop) =>
         record[prop.replace('__v', 'Version').replace(/_/g, ' ')] = match[prop]
       );
-    records.push(record)
+    records.push(record);
   }
   callback(null, ...records);
 };
 
 module.exports = (req, res) => {
-  const {user} = req;
-  const {filename: rawFilename = ''} = req.query;
+  const { user } = req;
+  const { filename: rawFilename = '' } = req.query;
   const filename = sanitize(rawFilename) || 'inctyper.csv';
-  const {ids} = req.body;
+  const { ids } = req.body;
 
   res.setHeader('Content-Disposition', `attachment; filename=${filename}`);
   res.setHeader('Content-Type', 'text/csv');
 
-  const query = Object.assign(
-    {_id: {$in: ids.split(',')}, 'analysis.inctyper': {$exists: true}},
-    Genome.getPrefilterCondition({user})
-  );
+  const query = {
+    _id: { $in: ids.split(',') },
+    'analysis.inctyper': { $exists: true },
+    ...Genome.getPrefilterCondition({ user }),
+  };
   const projection = {
     name: 1,
     'analysis.inctyper': 1,
@@ -42,7 +44,6 @@ module.exports = (req, res) => {
   return Genome.find(query, projection)
     .cursor()
     .pipe(csv.transform(transformer))
-    .pipe(csv.stringify({header: true, quotedString: true}))
+    .pipe(csv.stringify({ header: true, quotedString: true }))
     .pipe(res);
 };
-

@@ -1,5 +1,5 @@
-import { SHOW_GENOME_REPORT, CLOSE_GENOME_REPORT } from './actions';
-import { FETCH_GENOME_LIST } from '../genomes/actions';
+import { CLOSE_GENOME_REPORT, SHOW_GENOME_REPORT } from './actions';
+import { FETCH_GENOME_LIST, FETCH_GENOME_SELECTION } from '../genomes/actions';
 import { LOCATION_CHANGE } from '../location';
 
 const initialState = {
@@ -31,6 +31,7 @@ export default function (state = initialState, { type, payload }) {
       };
     case CLOSE_GENOME_REPORT:
     case FETCH_GENOME_LIST.ATTEMPT:
+    case FETCH_GENOME_SELECTION.ATTEMPT:
     case LOCATION_CHANGE:
       return {
         ...initialState,

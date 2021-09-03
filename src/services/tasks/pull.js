@@ -1,65 +1,82 @@
 const LOGGER = require('utils/logging').createLogger('runner');
+const readline = require('readline');
+const { Readable, Writable, finished } = require('stream');
 
-const { getImages, getImageName, getSpeciatorTask, getClusteringTask } = require('manifest.js');
+const { getImageName } = require('manifest.js');
 const { tasks } = require('configuration.js');
+
 const { username = 'anon', password = '' } = tasks.registry || {};
 
-const dockerPull = require('docker-pull');
-const mapLimit = require('promise-map-limit');
+const Docker = require('dockerode');
 
-const { queues } = require('../taskQueue');
+const docker = new Docker();
+const pLimit = require('p-limit');
 
-function getImageNames(queue) {
-  const speciator = getSpeciatorTask();
-  const speciatorImage = getImageName(speciator.task, speciator.version);
-  const clustering = getClusteringTask();
-  const clusteringImage = getImageName(clustering.task, clustering.version);
+const pullLimiter = pLimit(5);
 
-  if (queue === queues.genome) {
-    return [ speciatorImage ];
+class PullProgress extends Writable {
+  constructor({ shortName, ...options }) {
+    super(options);
+    this.shortName = shortName;
+    this.lastPerc = {};
   }
 
-  if (queue === queues.collection) return getImages('collection');
+  _write(line, _, done) {
+    const { status, progressDetail = {}, id } = JSON.parse(line);
+    const { current = 0, total } = progressDetail;
+    if (total === undefined) return done();
+    const key = `${id}:${status}`;
 
-  if (queue === queues.task) return getImages('genome');
-
-  if (queue === queues.clustering) {
-    return [ clusteringImage ];
+    const perc = Math.floor(100 * current / total);
+    const threshold = (this.lastPerc[key] || -1) + 5;
+    if (perc > threshold) {
+      const summary = `docker-pull:${this.shortName}:${key}:${perc}%`;
+      LOGGER.info(summary);
+      this.lastPerc[key] = perc;
+    }
+    return done();
   }
-
-  return [
-    speciatorImage,
-    clusteringImage,
-    ...getImages('genome'),
-    ...getImages('collection'),
-  ];
 }
 
-const options = { host: null, version: 'v2', username, password };
 function pullImage(name) {
+  const parts = name.split('/');
+  const shortName = parts[parts.length - 1];
   return new Promise((resolve, reject) => {
     LOGGER.info(`Pulling image ${name}`);
-    const p = dockerPull(name, options, err => (err ? reject(err) : resolve()));
-    p.on('progress', () => {
-      if (p._layers !== p.layers) {
-        LOGGER.info(`${name} pulled %d new layers and %d/%d bytes`, p.layers, p.transferred, p.length);
-      }
-      p._layers = p.layers;
+    docker.pull(name, { authconfig: { username, password } }, (err, stream) => {
+      if (err) return reject(err);
+      const lines = readline.createInterface({
+        input: stream,
+        crlfDelay: Infinity,
+      });
+      const logger = new PullProgress({
+        objectMode: true,
+        shortName,
+      });
+
+      finished(logger, (err) => {
+        if (err) return reject(err);
+        return resolve();
+      });
+
+      Readable.from(lines).pipe(logger);
     });
   });
 }
 
-const LIMIT = 5;
+const cached = {};
+const populatedCache = docker.listImages().then((images) => {
+  for (const image of images) {
+    const tags = image.RepoTags || [];
+    for (const tag of tags) cached[tag] = Promise.resolve();
+  }
+});
 
-function pullImages(imageNames) {
-  return mapLimit(imageNames, LIMIT, pullImage);
-}
-
-module.exports = function ({ queue }) {
-  return (
-    Promise.resolve(queue)
-      .then(getImageNames)
-      .then(pullImages)
-      .then(() => LOGGER.info('All images have been pulled'))
-  );
+module.exports = async function ({ task, version }) {
+  await populatedCache;
+  const name = getImageName(task, version);
+  if (cached[name]) return cached[name];
+  cached[name] = pullLimiter(() => pullImage(name));
+  cached[name].then(() => LOGGER.info(`Pulled task=${task} version=${version}`));
+  return cached[name];
 };

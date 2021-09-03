@@ -1,7 +1,9 @@
-const Genome = require('../../models/genome');
-const { queues, Queue } = require('../taskQueue');
+const Genome = require('models/genome');
+const Queue = require('models/queue');
 
-const { getClusteringTask } = require('../../manifest');
+const { state, now } = Queue;
+
+const { taskTypes, getClusteringTask } = require('manifest');
 
 function getJobStatus(doc) {
   if (!doc) return 'NOT_QUEUED';
@@ -13,7 +15,7 @@ module.exports = async function ({ taskId, user, genomeId, projection = {} }) {
   let scheme;
   let spec;
   const queueQuery = {
-    type: queues.clustering,
+    'message.spec.taskType': taskTypes.clustering,
   };
   if (taskId) {
     queueQuery['message.metadata.taskId'] = taskId;
@@ -29,6 +31,9 @@ module.exports = async function ({ taskId, user, genomeId, projection = {} }) {
   } else {
     queueQuery['message.metadata.public'] = true;
   }
+
+  queueQuery.state = { $in: [state.PENDING, state.RUNNING] };
+  queueQuery.$or = [{ nextReceivableTime: { $gt: now() + 10 } }, { nextReceivableTime: null }];
 
   const doc = await Queue.findOne(queueQuery, projection).lean();
   const status = getJobStatus(doc);

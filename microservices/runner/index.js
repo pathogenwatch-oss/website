@@ -1,83 +1,201 @@
 const LOGGER = require('utils/logging').createLogger('runner');
 
 const argv = require('named-argv');
+const os = require('os');
 
+const { formatMemory } = require('manifest');
 const { request } = require('services');
-const pullTaskImages = require('services/tasks/pull');
-const taskQueue = require('services/taskQueue');
+const pullTaskImage = require('services/tasks/pull');
 
-const { queues } = taskQueue;
-const { queue, type = queue, pull = 1, precache = false } = argv.opts;
+const MB = 1024 ** 2;
+const DEFAULT_AVAILABLE_MEMORY = os.totalmem() - 500 * MB;
+const DEFAULT_AVAILABLE_CPUS = os.cpus().length;
 
-if (type && !(type in queues)) {
-  LOGGER.error(`Queue type ${type} not recognised, exiting...`);
-  process.exit(1);
+function sleep(t) {
+  return new Promise((resolve) => setTimeout(() => resolve(), t));
 }
 
-process.on('uncaughtException', err => console.error('uncaught', err));
+const Queue = require('models/queue');
+const { taskTypes } = require('manifest');
 
-taskQueue.setMaxWorkers(argv.opts.workers || 1);
+const {
+  queue = 'normal',
+  type,
+  precache = false,
+  availableCPUs = DEFAULT_AVAILABLE_CPUS,
+  once = 'false', // If true, it only runs one task.  Useful for debugging.
+} = argv.opts;
+const availableMemory = formatMemory(argv.opts.availableMemory || DEFAULT_AVAILABLE_MEMORY);
+const availableSlow = Math.max(Math.floor(availableCPUs / 2), 1);
 
-function subscribeToQueue(queueName, queueType = queueName) {
-  if (queueType === queues.genome) {
-    taskQueue.dequeue(
-      queueName,
-      ({ metadata, timeout }) => request('genome', 'speciate', { timeout$: timeout * 1000, metadata, precache }),
-      message => request('genome', 'add-error', message)
-    );
-  }
+process.on('uncaughtException', (err) => console.error('uncaught', err));
 
-  if (queueType === queues.task) {
-    taskQueue.dequeue(
-      queueName,
-      ({ task, version, timeout, metadata }) =>
-        request('tasks', 'run', { task, version, timeout$: timeout * 1000, metadata, precache }),
-      message => request('genome', 'add-error', message)
-    );
-  }
+const ResourceManager = require('services/resourceManager');
 
-  if (queueType === queues.collection) {
-    taskQueue.dequeue(
-      queueName,
-      ({ spec, metadata, timeout }) =>
-        request('tasks', 'run-collection', { spec, metadata, timeout$: timeout * 1000 })
-          .then(result => {
-            LOGGER.info('Got result', metadata.collectionId, spec.task, spec.version);
-            return request('collection', 'add-analysis', { spec, metadata, result });
-          }),
-      message => request('collection', 'add-error', message)
-    );
-  }
+const resourceManager = new ResourceManager({ cpu: availableCPUs, memory: availableMemory, slow: availableSlow });
 
-  if (queueType === queues.clustering) {
-    taskQueue.dequeue(
-      queueName,
-      async ({ spec, metadata, timeout }) => {
-        const { relatedBy } = await request('tasks', 'run-clustering', { spec, metadata, timeout$: timeout * 1000 });
-        const { taskId } = metadata;
-        const { version } = spec;
-        LOGGER.info('Got result', spec.task, spec.version, metadata);
-        await request('clustering', 'delete-prior', { relatedBy, metadata, version });
-        return await request('clustering', 'send-progress', { taskId, payload: { status: 'READY' } });
-      },
-      message => request('clustering', 'error', message)
-    );
-  }
-}
+async function runJob(job, releaseResources) {
+  try {
+    const { spec, metadata } = job;
+    const { taskType, timeout, task, version } = spec;
 
-function pullImages() {
-  if (pull === '0') return Promise.resolve();
-  return pullTaskImages({ queue: type })
-    .catch(err => {
+    try {
+      await pullTaskImage(spec);
+    } catch (err) {
       LOGGER.error(err);
-      process.exit(1);
-    });
+      await Queue.requeue(job);
+      return;
+    }
+
+    const ackOk = await Queue.ack(job);
+    if (!ackOk) {
+      // It might have taken a long time to pull the image and another runner
+      // may have been given our task to run.  If that's the case we want
+      // to return and fetch another job
+      return;
+    }
+
+    if (taskType === taskTypes.assembly) {
+      const { genomeId, clientId, userId, uploadedAt } = metadata;
+      try {
+        await request('genome', 'send-assembly-progress', { clientId, userId, uploadedAt });
+        await request('tasks', 'run-assembly', { spec, timeout$: timeout * 1000 * 1.1, metadata });
+        await Queue.handleSuccess(job);
+        await request('genome', 'send-assembly-progress', { clientId, userId, uploadedAt });
+      } catch (err) {
+        LOGGER.error(err);
+        await Queue.handleFailure(job, err.message);
+        await request('genome', 'assembler-error', {
+          id: genomeId,
+          user: userId,
+          error: 'problem assembling genome',
+        });
+        await request('genome', 'send-assembly-progress', { clientId, userId, uploadedAt });
+      }
+    }
+
+    else if (taskType === taskTypes.genome) {
+      try {
+        await request('genome', 'speciate', { timeout$: timeout * 1000 * 1.1, metadata, precache });
+        await Queue.handleSuccess(job);
+      } catch (err) {
+        LOGGER.error(err);
+        await Queue.handleFailure(job, err.message);
+        await request('genome', 'add-error', { spec, metadata });
+      }
+    }
+
+    else if (taskType === taskTypes.task) {
+      try {
+        await request('tasks', 'run', { spec, timeout$: timeout * 1000 * 1.1, metadata, precache });
+        await Queue.handleSuccess(job);
+      } catch (err) {
+        LOGGER.error(err);
+        await Queue.handleFailure(job, err.message);
+        await request('genome', 'add-error', { spec, metadata });
+      }
+    }
+
+    else if (taskType === taskTypes.collection) {
+      try {
+        const { clientId, name } = metadata;
+        await request('tasks', 'run-collection', { spec, metadata, timeout$: timeout * 1000 * 1.1 });
+        LOGGER.info('Got result', metadata.collectionId, task, version);
+        await request('collection', 'send-progress', { clientId, payload: { task, name, status: 'READY' } });
+        await Queue.handleSuccess(job);
+      } catch (err) {
+        LOGGER.error(err);
+        await Queue.handleFailure(job, err.message);
+        await request('collection', 'add-error', { spec, metadata });
+      }
+    }
+
+    else if (taskType === taskTypes.clustering) {
+      try {
+        const result = await request('tasks', 'run-clustering', { spec, metadata, timeout$: timeout * 1000 * 1.1 });
+        const { taskId } = metadata;
+        LOGGER.info('Got result', spec.task, spec.version, metadata, result);
+        await request('clustering', 'send-progress', { taskId, payload: { status: 'READY' } });
+        await Queue.handleSuccess(job);
+      } catch (err) {
+        LOGGER.error(err);
+        await Queue.handleFailure(job, err.message);
+      }
+    }
+
+    else {
+      const errMessage = `Don't know how to handle job of type ${taskType} (task=${task} version=${version})`;
+      LOGGER.error(errMessage);
+      await Queue.handleFailure(job, errMessage);
+    }
+  } finally {
+    // Whatever happens, we must release the resources.
+    releaseResources();
+  }
+}
+
+async function subscribeToQueue(queueName, taskType) {
+  const constraints = {};
+  if (taskType) constraints['message.taskType'] = taskType;
+  while (true) {
+    // We could make a small change so that we exclude jobs for users
+    // who recently had a task run.  That would be a small step towards
+    // the queue being fairer.
+
+    const limits = { ...resourceManager.available, slow: resourceManager.free.slow };
+    // We're not even pulling slow jobs if there are too many running
+    // Normally we'd pull a job and wait, but slow jobs from one use clog up the
+    // service for other users.
+
+    const job = await Queue.dequeue(
+      limits, // Only give us a job which fits on this worker
+      constraints, // Some additional constrains if we only want some tasks
+      queueName // The queue to pull jobs from.
+    );
+
+    if (job === null) {
+      LOGGER.info(`No jobs found in ${queueName} queue which fit on machine`, { available: resourceManager.available, free: resourceManager.free });
+      await sleep(2000);
+      continue;
+    }
+
+    // This is intentionally not awaited, we're pulling the container
+    // while we wait for the resources to run it.
+    pullTaskImage(job.spec).catch((err) => LOGGER.error(`Problem pulling task=${job.spec.task} version=${job.spec.version}: ${err}`));
+
+    LOGGER.debug({ job });
+
+    // We don't want to keep waiting for resources if another worker will have
+    // picked up this task.
+    const whenResources = resourceManager.request(job.spec.resources);
+    const isTimeout = await Promise.race([request, sleep(job.ackWindown * 1000).then(() => 'timeout')]) === 'timeout';
+    if (isTimeout) {
+      whenResources.then((release) => release());
+      continue;
+    }
+
+    const releaseResources = await whenResources;
+
+    // When we got the job, we were only granted exclusivity for a short window
+    // That might be 30s or so.  We 'ack' the job to say that we're actually
+    // ready to start running it.  This gives us more time to complete the task.
+    const ackOk = await Queue.ack(job, false);
+    if (!ackOk) {
+      // It might have taken a long time to free up resources and another runner
+      // may have been given our task to run.  If that's the case we release
+      // the resources and ask for another job.
+      releaseResources();
+      continue;
+    }
+
+    const r = runJob(job, releaseResources); // Don't await this, we want to start another job if we can
+    if (once === 'true') {
+      LOGGER.warn("Exiting because called with --once='true' flag");
+      return r;
+    }
+  }
 }
 
 module.exports = function () {
-  pullImages()
-    .then(() => {
-      if (queue) subscribeToQueue(queue, type);
-      else Object.keys(queues).map(queueName => subscribeToQueue(queueName));
-    });
+  return subscribeToQueue(queue, type);
 };

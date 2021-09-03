@@ -1,12 +1,12 @@
 const Genome = require('models/genome');
-const ScoreCache = require('models/scoreCache');
 const transform = require('stream-transform');
 const sanitize = require('sanitize-filename');
+const TreeScores = require('models/treeScores');
 
 const { request } = require('services');
 const { ServiceRequestError } = require('utils/errors');
 
-function getCollectionGenomes({ genomes }, genomeIds) {
+async function getCollectionGenomes({ genomes }, genomeIds) {
   const query = {
     _id: { $in: genomeIds },
     $or: [
@@ -14,32 +14,16 @@ function getCollectionGenomes({ genomes }, genomeIds) {
       { public: true },
     ],
   };
-  return Genome
-    .find(query, { fileId: 1, name: 1 }, { sort: { name: 1 } })
+  const projection = {
+    fileId: 1,
+    name: 1,
+    'analysis.speciator.organismId': 1,
+  };
+  const result = await Genome
+    .find(query, projection, { sort: { name: 1 } })
     .lean();
-}
-
-function getCache(tree, genomes, type) {
-  const fieldName = (type === 'score') ? 'scores' : 'differences';
-  const { versions } = tree;
-  return ScoreCache.find(
-    { fileId: { $in: genomes.map(_ => _.fileId) }, 'versions.core': versions.core, 'versions.tree': versions.tree },
-    genomes.reduce(
-      (projection, { fileId }) => {
-        projection[`${fieldName}.${fileId}`] = 1;
-        return projection;
-      },
-      { fileId: 1 }
-    ),
-    { sort: { fileId: 1 } }
-  )
-  .then(cache => {
-    const cacheByFileId = {};
-    for (const doc of cache) {
-      cacheByFileId[doc.fileId] = doc[fieldName];
-    }
-    return cacheByFileId;
-  });
+  return result
+    .map((d) => ({ fileId: d.fileId, name: d.name, organismId: d.analysis.speciator.organismId }));
 }
 
 function writeMatrixHeader(genomes, stream) {
@@ -54,7 +38,7 @@ function generateMatrix({ genomes, cache }, stream) {
   for (const genomeA of genomes) {
     const line = [ genomeA.name.replace(/,/g, '_') ];
     for (const genomeB of genomes) {
-      if (genomeA === genomeB) {
+      if (genomeA.fileId === genomeB.fileId) {
         line.push(0);
       } else if (genomeA.fileId in cache && genomeB.fileId in cache[genomeA.fileId]) {
         line.push(cache[genomeA.fileId][genomeB.fileId]);
@@ -99,7 +83,7 @@ module.exports = (req, res, next) => {
     'Content-type': 'text/csv',
   });
 
-  const stream = transform(data => data.join(',') + '\n');
+  const stream = transform((data) => `${data.join(',')}\n`);
   stream.pipe(res);
 
   request('collection', 'authorise', { user, token, projection: { genomes: 1, 'tree.versions': 1, 'subtrees.versions': 1, 'subtrees.name': 1 } })
@@ -109,16 +93,16 @@ module.exports = (req, res, next) => {
       writeMatrixHeader(genomes, stream);
 
       const tree = subtree ?
-        collection.subtrees.find(_ => _.name === subtree) :
+        collection.subtrees.find((_) => _.name === subtree) :
         collection.tree;
 
       if (!tree) {
         throw new ServiceRequestError('Tree not found');
       }
 
-      const cache = await getCache(tree, genomes, type);
+      const cache = await TreeScores.getScores(genomes, tree.versions, type);
       return { genomes, cache };
     })
-    .then(data => generateMatrix(data, stream))
+    .then((data) => generateMatrix(data, stream))
     .catch(next);
 };

@@ -11,7 +11,7 @@ module.exports = async ({ user, id }) => {
 
   if (genome && genome.analysis && genome.analysis.cgmlst) {
     const { scheme } = genome.analysis.cgmlst;
-    return await request('clustering', 'fetch', { user, scheme, genomeId: id });
+    return request('clustering', 'fetch', { user, scheme, id });
   }
   return null;
 };

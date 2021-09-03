@@ -7,15 +7,7 @@ import Assemblies from './Assemblies.react';
 import Reads from './Reads.react';
 import Badge from '../../components/badge';
 
-import { useAssemblerUsage } from '../hooks';
-
-import { getAssemblerUsage } from '../selectors';
-import { useAuthToken } from '~/auth/hooks';
-
-const Tabs = ({ usage, token, uploadType }) => {
-  useAuthToken(true);
-  useAssemblerUsage(token);
-
+const Tabs = ({ uploadType }) => {
   return (
     <React.Fragment>
       <div
@@ -81,7 +73,7 @@ const Tabs = ({ usage, token, uploadType }) => {
         {
           (uploadType === "reads") && (
             <div className="mdl-tabs__panel">
-              <Reads remaining={!!usage && !!usage.remaining ? usage.remaining : 0} />
+              <Reads />
             </div>
           )
         }
@@ -90,11 +82,4 @@ const Tabs = ({ usage, token, uploadType }) => {
   );
 };
 
-function mapStateToProps(state) {
-  return {
-    usage: getAssemblerUsage(state),
-    token: state.auth.token,
-  };
-}
-
-export default connect(mapStateToProps)(Tabs);
+export default Tabs;

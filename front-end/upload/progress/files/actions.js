@@ -1,4 +1,4 @@
-import Bottleneck from 'bottleneck'
+import Bottleneck from 'bottleneck';
 
 import { createAsyncConstants } from '~/actions';
 
@@ -16,7 +16,7 @@ export const GENOME_UPLOAD_PROGRESS = 'GENOME_UPLOAD_PROGRESS';
 
 const uploadLimiter = new Bottleneck({
   maxConcurrent: 7,
-  minTime: 125
+  minTime: 125,
 });
 
 // Listen to the "failed" event
@@ -51,19 +51,19 @@ export function compressGenome(id, text) {
 export const UPLOAD_GENOME = createAsyncConstants('UPLOAD_GENOME');
 
 export function uploadGenome(genome, data) {
-  return dispatch => {
+  return (dispatch) => {
     const { id, metadata } = genome;
-    const progressFn = percent => dispatch(genomeUploadProgress(id, percent));
+    const progressFn = (percent) => dispatch(genomeUploadProgress(id, percent));
 
     return dispatch({
       type: UPLOAD_GENOME,
       payload: {
         id,
-        promise: uploadLimiter.schedule(() => api.upload(genome, data, progressFn)).then(uploadResult => {
+        promise: uploadLimiter.schedule(() => api.uploadAssembly(genome, data, progressFn)).then((uploadResult) => {
           if (metadata) {
             return api
               .update(uploadResult.id, metadata)
-              .then(updateResult => ({ ...uploadResult, ...updateResult }));
+              .then((updateResult) => ({ ...uploadResult, ...updateResult }));
           }
           return uploadResult;
         }),
@@ -74,20 +74,19 @@ export function uploadGenome(genome, data) {
 
 function processAssembly(dispatch, getState, genome) {
   return validateAssembly(genome)
-    .then(data => {
+    .then((data) => {
       if (getSettingValue(getState(), 'compression')) {
         return dispatch(compressGenome(genome.id, data));
       }
       return data;
     })
-    .then(data => dispatch(uploadGenome(genome, data)));
+    .then((data) => dispatch(uploadGenome(genome, data)));
 }
 
 function processReads(dispatch, getState, genome) {
   const state = getState();
   const uploadedAt = getUploadedAt(state);
-  const token = state.auth.token;
-  return upload(genome, { token, uploadedAt }, dispatch);
+  return upload(genome, { uploadedAt }, dispatch);
 }
 
 export const PROCESS_GENOME = createAsyncConstants('PROCESS_GENOME');

@@ -1,5 +1,5 @@
 const { request } = require('services');
-const { enqueue, queues } = require('../taskQueue');
+const { enqueue } = require('models/queue');
 const rand = require('rand-token');
 
 module.exports = async function ({ user, genomeId, clientId }) {
@@ -18,6 +18,6 @@ module.exports = async function ({ user, genomeId, clientId }) {
     metadata.public = true;
   }
 
-  await enqueue(queues.clustering, { spec, metadata });
+  await enqueue(spec, metadata);
   return { ok: 1, taskId };
 };

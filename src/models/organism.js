@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+
 const { Schema } = mongoose;
 
 const { getCollectionSchemes } = require('manifest');
@@ -20,18 +21,18 @@ setToObjectOptions(schema);
 
 schema.statics.getLatest = function (taxId, projection = {}) {
   return (
-    this.
-      find({ taxId }, projection).
-      sort({ deployed: -1 }).
-      limit(1).
-      then(([ doc ]) => doc)
+    this
+      .find({ taxId }, projection)
+      .sort({ deployed: -1 })
+      .limit(1)
+      .then(([ doc ]) => doc)
   );
 };
 
 schema.statics.deployedOrganismIds = function (user) {
   const schemes = new Set(getCollectionSchemes(user));
   return this.distinct('taxId')
-    .then(taxIds => taxIds.filter(taxId => schemes.has(taxId)));
+    .then((taxIds) => taxIds.filter((taxId) => schemes.has(taxId)));
 };
 
 module.exports = mongoose.model('Organism', schema);

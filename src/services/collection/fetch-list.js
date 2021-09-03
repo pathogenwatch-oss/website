@@ -25,6 +25,6 @@ module.exports = function (props) {
         limit: Number(limit),
         sort: Collection.getSort(sort),
       })
-      .then(collections => collections.map(_ => _.toObject({ user })))
+      .then((collections) => collections.map((_) => _.toObject({ user })))
   );
 };

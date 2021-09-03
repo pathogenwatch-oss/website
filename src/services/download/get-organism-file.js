@@ -4,9 +4,8 @@ const sanitize = require('sanitize-filename');
 
 const config = require('configuration.js');
 const downloads = require('utils/organismDownloads');
-const organisms = require('../../../universal/organisms');
-
 const { ServiceRequestError } = require('utils/errors');
+const organisms = require('../../../universal/organisms');
 
 const organismIds = organisms.reduce((memo, { nickname, id }) => {
   memo[nickname] = id;

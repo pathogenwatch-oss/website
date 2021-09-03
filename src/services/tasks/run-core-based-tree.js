@@ -1,23 +1,23 @@
 /* eslint no-param-reassign: ["error", { "props": false }] */
-/* eslint no-params: 0 */
 /* eslint max-params: 0 */
 
-const es = require('event-stream');
 const BSON = require('bson');
 
-const Analysis = require('models/analysis');
-const Collection = require('../../models/collection');
-const Genome = require('../../models/genome');
-const ScoreCache = require('../../models/scoreCache');
-const TaskLog = require('../../models/taskLog');
-const docker = require('../docker');
-const { DEFAULT_TIMEOUT } = require('../bus');
-
-const { getImageName } = require('../../manifest.js');
-const { request } = require('../../services');
-
-const LOGGER = require('../../utils/logging').createLogger('runner');
 const bson = new BSON();
+const { Readable, Writable } = require('stream');
+const readline = require('readline');
+
+const Collection = require('models/collection');
+const Genome = require('models/genome');
+const TreeScores = require('models/treeScores');
+const TaskLog = require('models/taskLog');
+const docker = require('services/docker');
+const store = require('utils/object-store');
+
+const { getImageName } = require('manifest.js');
+const { request } = require("services");
+
+const LOGGER = require('utils/logging').createLogger('runner');
 
 async function getGenomes(task, metadata) {
   const { collectionId, name: refName, organismId } = metadata;
@@ -40,7 +40,7 @@ async function getGenomes(task, metadata) {
     .find(query, { fileId: 1, name: 1 }, { sort: { fileId: 1 } })
     .lean();
 
-  const ids = new Set(genomes.map(_ => _.toString()));
+  const ids = new Set(genomes.map((_) => _.toString()));
 
   return docs.map(({ _id, fileId, name }) => ({
     _id,
@@ -50,141 +50,118 @@ async function getGenomes(task, metadata) {
   }));
 }
 
-function getGenomesInCache(genomes, versions) {
-  return ScoreCache.find(
-    { fileId: { $in: genomes.map(_ => _.fileId) }, 'versions.core': versions.core, 'versions.tree': versions.tree },
-    genomes.reduce(
-      (projection, { fileId }) => {
-        projection[`scores.${fileId}`] = 1;
-        return projection;
-      },
-      { fileId: 1 }
-    ),
-    { sort: { fileId: 1 } }
-  )
-    .then(docs => {
-      const cacheByFileId = {};
-      for (const doc of docs) {
-        cacheByFileId[doc.fileId] = doc.scores;
-      }
-
-      const missingFileIds = new Set();
-      for (let i = genomes.length - 1; i > 0; i--) {
-        if (genomes[i].fileId in cacheByFileId) {
-          for (let j = 0; j < i; j++) {
-            if (!(genomes[j].fileId in cacheByFileId[genomes[i].fileId])) {
-              missingFileIds.add(genomes[i].fileId);
-              missingFileIds.add(genomes[j].fileId);
-            }
-          }
-        } else {
-          missingFileIds.add(genomes[i].fileId);
-          for (let j = 0; j < i; j++) {
-            missingFileIds.add(genomes[j].fileId);
-          }
-        }
-      }
-
-      return Array.from(missingFileIds);
-    });
-}
-
-function createGenomesStream(genomes, uncachedFileIds, versions, organismId) {
-  const genomeLookup = genomes.reduce((acc, genome) => {
+async function* createGenomesStream(genomes, uncachedFileIds, versions, organismId) {
+  const genomeLookup = {};
+  for (const genome of genomes) {
     const { fileId } = genome;
-    if (uncachedFileIds.indexOf(fileId) === -1) return acc;
-    acc[fileId] = acc[fileId] || [];
-    acc[fileId].push(genome);
-    return acc;
-  }, {});
+    if (!uncachedFileIds.has(fileId)) continue;
+    genomeLookup[fileId] = genomeLookup[fileId] || [];
+    genomeLookup[fileId].push(genome);
+  }
 
-  const cores = Analysis.find({
-    fileId: { $in: uncachedFileIds },
-    task: 'core',
-    version: versions.core,
-    organismId,
-  }, {
-    fileId: 1,
-    'results.profile.filter': 1,
-    'results.profile.alleles.filter': 1,
-    'results.profile.id': 1,
-    'results.profile.alleles.id': 1,
-    'results.profile.alleles.rstart': 1,
-    'results.profile.alleles.rstop': 1,
-    'results.profile.alleles.mutations': 1,
-  }).sort({ fileId: 1 }).lean().cursor();
+  const fileIds = Array.from(uncachedFileIds);
+  fileIds.sort();
 
-  const reformatCores = es.through(function (core) {
-    const { fileId, results } = core;
+  const analysisKeys = fileIds.map((fileId) => store.analysisKey('core', versions.core, fileId, organismId));
+  for await (const value of store.iterGet(analysisKeys)) {
+    if (value === undefined) continue;
+    const { fileId, results } = JSON.parse(value);
     genomeLookup[fileId] = genomeLookup[fileId] || [];
     for (const genomeDetails of genomeLookup[fileId]) {
       const genome = {
         ...genomeDetails,
-        analysis: { core: results },
+        analysis: {
+          core: {
+            profile: results.profile,
+          },
+        },
       };
-      this.emit('data', genome);
+      yield genome;
     }
     genomeLookup[fileId] = [];
+  }
+}
+
+async function readTreeScores(versions, fileIds) {
+  const projection = fileIds.reduce((proj, fileId) => { proj[`scores.${fileId}`] = 1; return proj; }, { fileId: 1 });
+  const cacheDocs = await TreeScores.find(
+    { fileId: { $in: fileIds }, 'versions.core': versions.core, 'versions.tree': versions.tree },
+    projection
+  )
+    .sort({ fileId: 1 })
+    .lean()
+    .cursor();
+
+  return { stream: cacheDocs };
+}
+
+async function attachInputStream(container, versions, genomes, organismId, fileIds, stream) {
+  const seen = new Set();
+
+  async function* gen() {
+    yield bson.serialize({ genomes });
+
+    let uncachedFileIds = new Set();
+    for await (const doc of stream) {
+      yield bson.serialize(doc);
+
+      seen.add(doc.fileId);
+      for (const fileId of fileIds) {
+        if (fileId >= doc.fileId) break;
+        if (doc.scores[fileId] === undefined) {
+          uncachedFileIds.add(doc.fileId);
+          uncachedFileIds.add(fileId);
+        }
+      }
+    }
+
+    for (const fileId of fileIds) {
+      if (!seen.has(fileId)) {
+        uncachedFileIds = new Set(fileIds);
+        break;
+      }
+    }
+    LOGGER.info(`Tree needs ${uncachedFileIds.size} of ${new Set(fileIds).size} genomes`);
+
+    for await (const doc of createGenomesStream(genomes, uncachedFileIds, versions, organismId)) {
+      yield bson.serialize(doc);
+    }
+  }
+
+  const cores = Readable.from(gen());
+  cores.on('error', (err) => {
+    LOGGER.error(err);
+    container.kill();
   });
-
-  const toRaw = es.map((doc, cb) => cb(null, bson.serialize(doc)));
-  return cores.pipe(reformatCores).pipe(toRaw);
+  cores.pipe(container.stdin);
 }
 
-function attachInputStream(container, versions, genomes, uncachedFileIds, organismId) {
-  const docsStream = createGenomesStream(genomes, uncachedFileIds, versions, organismId);
-  docsStream.pause();
-  // docsStream.on('end', () => console.log('docs ended'));
-
-  const scoresStream = ScoreCache.collection.find(
-    { fileId: { $in: genomes.map(_ => _.fileId) }, 'versions.core': versions.core, 'versions.tree': versions.tree },
-    genomes.reduce((projection, { fileId }) => {
-      projection[`scores.${fileId}`] = 1;
-      return projection;
-    }, { fileId: 1 }),
-    { raw: true, sort: { fileId: 1 } }
-  );
-  scoresStream.pause();
-  scoresStream.on('end', () => docsStream.resume());
-
-  const genomesStream = es.through();
-
-  const stream = es.merge(
-    genomesStream,
-    scoresStream,
-    docsStream
-  );
-
-  stream
-    .pipe(container.stdin);
-
-  genomesStream.end(bson.serialize({ genomes }), () => scoresStream.resume());
-}
-
-function handleContainerOutput(container, task, versions, metadata, genomes, resolve, reject) {
+async function handleContainerOutput(container, task, versions, metadata, genomes) {
   const { clientId, name } = metadata;
   request('collection', 'send-progress', { clientId, payload: { task, name, status: 'IN PROGRESS' } });
+
+  const lines = readline.createInterface({
+    input: container.stdout,
+    crlfDelay: Infinity,
+  });
+
+  let onNewick;
+  let onError;
+  const whenNewick = new Promise((resolve, reject) => {
+    onNewick = resolve;
+    onError = reject;
+  });
+
   let lastProgress = 0;
-  container.stdout
-    .pipe(es.split())
-    .on('data', (data) => {
-      // console.log(data); return;
-      if (!data) return;
+
+  const handler = new Writable({
+    objectMode: true,
+    async write(line, _, done) {
+      if (!line) return done();
       try {
-        const doc = JSON.parse(data);
+        const doc = JSON.parse(line);
         if (doc.fileId && doc.scores) {
-          const update = {};
-          for (const key of Object.keys(doc.scores)) {
-            update[`scores.${key}`] = doc.scores[key];
-          }
-          for (const key of Object.keys(doc.differences)) {
-            update[`differences.${key}`] = doc.differences[key];
-          }
-          ScoreCache.update({
-            fileId: doc.fileId,
-            'versions.core': versions.core,
-            'versions.tree': versions.tree,
-          }, update, { upsert: true }).exec();
+          await TreeScores.addScores(versions, doc);
           const progress = doc.progress * 0.99;
           if ((progress - lastProgress) >= 1) {
             request('collection', 'send-progress', { clientId, payload: { task, name, progress } });
@@ -199,65 +176,68 @@ function handleContainerOutput(container, task, versions, metadata, genomes, res
           }
         }
         else {
-          let populationSize = 0;
-          if (task === 'subtree') {
-            for (const { population } of genomes) {
-              if (population) {
-                populationSize++;
-              }
-            }
-          }
-          const { newick } = doc;
-          resolve({
-            newick,
-            populationSize,
-            name: metadata.name,
-            size: genomes.length,
-            versions,
-          });
+          onNewick(doc.newick);
         }
+        return done();
       } catch (e) {
         request('collection', 'send-progress', { clientId, payload: { task, name, status: 'ERROR' } });
-        reject(e);
+        onError(e);
+        return done(e);
       }
-    });
-}
-
-function handleContainerExit(container, task, versions, metadata, reject) {
-  const { organismId, collectionId, clientId, name } = metadata;
-  let startTime = process.hrtime();
-
-  container.on('spawn', (containerId) => {
-    startTime = process.hrtime();
-    LOGGER.info('spawn', containerId, 'running task', task, 'for collection', collectionId);
+    },
   });
 
-  container.on('exit', (exitCode) => {
-    LOGGER.info('exit', exitCode);
+  Readable.from(lines).pipe(handler);
+  const newick = await whenNewick;
 
-    const [ durationS, durationNs ] = process.hrtime(startTime);
-    const duration = Math.round(durationS * 1000 + durationNs / 1e6);
-    TaskLog.create({ collectionId, task, version: versions.tree, organismId, duration, exitCode });
-
-    if (exitCode !== 0) {
-      request('collection', 'send-progress', { clientId, payload: { task, name, status: 'ERROR' } });
-      container.stderr.setEncoding('utf8');
-      reject(new Error(container.stderr.read()));
+  let populationSize = 0;
+  if (task === 'subtree') {
+    for (const { population } of genomes) {
+      if (population) {
+        populationSize += 1;
+      }
     }
-  });
+  }
 
-  container.on('error', (e) => {
-    request('collection', 'send-progress', { clientId, payload: { task, name, status: 'ERROR' } });
-    reject(e);
-  });
+  return {
+    newick,
+    populationSize,
+    name: metadata.name,
+    size: genomes.length,
+    versions,
+  };
 }
 
-function createContainer(spec, metadata, timeout) {
-  const { task, version, workers } = spec;
+async function handleContainerExit(container, task, versions, metadata, resources) {
+  const { organismId, collectionId, clientId, name } = metadata;
+
+  await container.start();
+  const startTime = process.hrtime();
+  LOGGER.info('spawn', container.id, 'running task', task, 'for collection', collectionId);
+
+  const { StatusCode: exitCode } = await container.wait();
+  LOGGER.info('exit', exitCode);
+
+  const [ durationS, durationNs ] = process.hrtime(startTime);
+  const duration = Math.round(durationS * 1000 + durationNs / 1e6);
+  TaskLog.create({ collectionId, task, version: versions.tree, organismId, duration, exitCode, resources });
+
+  if (exitCode !== 0) {
+    request('collection', 'send-progress', { clientId, payload: { task, name, status: 'ERROR' } });
+    container.stderr.setEncoding('utf8');
+    throw new Error(container.stderr.read());
+  }
+}
+
+const random = () => Math.random().toString(36).slice(2, 10);
+
+function createContainer(spec, metadata) {
+  const { task, version, workers, resources, timeout } = spec;
   const { organismId, collectionId } = metadata;
 
-  const container = docker(getImageName(task, version), {
-    env: {
+  return docker(
+    getImageName(task, version),
+    {
       PW_ORGANISM_TAXID: organismId,
       PW_COLLECTION_ID: collectionId,
       PW_WORKERS: workers,
@@ -266,14 +246,15 @@ function createContainer(spec, metadata, timeout) {
       WGSA_COLLECTION_ID: collectionId,
       WGSA_WORKERS: workers,
     },
-  }, timeout);
-
-  return container;
+    timeout,
+    resources,
+    { name: `tree_${random()}` }
+  );
 }
 
-async function runTask(spec, metadata, timeout) {
-  const { task, version, requires: taskRequires = [] } = spec;
-  const coreVersion = taskRequires.find(_ => _.task === 'core').version;
+async function runTask(spec, metadata) {
+  const { task, version, requires: taskRequires = [], resources = {} } = spec;
+  const coreVersion = taskRequires.find((_) => _.task === 'core').version;
   const versions = { tree: version, core: coreVersion };
 
   const genomes = await getGenomes(task, metadata);
@@ -283,22 +264,32 @@ async function runTask(spec, metadata, timeout) {
     return {
       newick: `(${genomes[0]._id}:0.5,${genomes[1]._id}:0.5);`,
       size: 2,
-      populationSize: genomes.filter(_ => _.population).length,
+      populationSize: genomes.filter((_) => _.population).length,
       name: metadata.name,
     };
   }
 
-  const uncachedFileIds = await getGenomesInCache(genomes, versions);
+  const fileIds = genomes.map((_) => _.fileId);
+  fileIds.sort();
 
-  return new Promise((resolve, reject) => {
-    const container = createContainer(spec, metadata, timeout);
+  const { organismId } = metadata;
+  const { stream } = await readTreeScores(versions, fileIds);
+  const container = await createContainer(spec, metadata);
 
-    handleContainerOutput(container, task, versions, metadata, genomes, resolve, reject);
+  const whenContainerOutput = handleContainerOutput(container, task, versions, metadata, genomes);
+  attachInputStream(container, versions, genomes, organismId, fileIds, stream);
 
-    handleContainerExit(container, task, versions, metadata, reject);
+  const whenContainerExit = handleContainerExit(container, task, versions, metadata, resources);
 
-    attachInputStream(container, versions, genomes, uncachedFileIds, metadata.organismId);
-  });
+  const [output, statusCode] = await Promise.all([
+    whenContainerOutput,
+    whenContainerExit,
+  ]);
+
+  if (container.timeout) throw new Error('timeout');
+  else if (statusCode === 137) throw new Error('killed');
+
+  return output;
 }
 
 module.exports = runTask;

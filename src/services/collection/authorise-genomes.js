@@ -1,7 +1,6 @@
 const Genome = require('models/genome');
-const { ServiceRequestError } = require('../../utils/errors');
-
 const { request } = require('services');
+const { ServiceRequestError } = require('../../utils/errors');
 
 module.exports = async ({ user, token, genomeIds }) => {
   const collection = await request('collection', 'authorise', {

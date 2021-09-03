@@ -10,9 +10,9 @@ import { getPendingFiles } from './selectors';
 
 import { recoverUploadSession } from './actions';
 
-import { isReadsEligible, getGenomeAccepts } from '../../file-utils';
+import { getUploadAccepts } from '../../file-utils';
 
-const readsEligible = isReadsEligible();
+const readsEligible = true;
 
 const Recovery = ({
   onFiles,
@@ -22,7 +22,7 @@ const Recovery = ({
   <FileDragAndDrop
     onFiles={onFiles}
     readsEligible={readsEligible}
-    accept={getGenomeAccepts(readsEligible)}
+    accept={getUploadAccepts()}
   >
     <section className="pw-upload-page pw-upload-recovery">
       <h1>Recover this session.</h1>
@@ -35,7 +35,7 @@ const Recovery = ({
       )}
       <p>Please drag and drop these files to continue:</p>
       <ul className="pw-upload-recovery-files">
-        {remainingFiles.map(files => (
+        {remainingFiles.map((files) => (
           <li key={files[0]}>
             <span className="wgsa-file-icon">
               <i className="material-icons">
@@ -43,7 +43,7 @@ const Recovery = ({
               </i>
             </span>
             <ul>
-              {files.map(file => (
+              {files.map((file) => (
                 <li key={file}>{file}</li>
               ))}
             </ul>
@@ -63,7 +63,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch, { session }) {
   return {
-    onFiles: files => dispatch(recoverUploadSession(files, session)),
+    onFiles: (files) => dispatch(recoverUploadSession(files, session)),
   };
 }
 

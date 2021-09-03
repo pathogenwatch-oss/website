@@ -1,46 +1,26 @@
-const Clustering = require('../../models/clustering');
-const Genome = require('../../models/genome');
-const { NotFoundError } = require('../../utils/errors');
-const { Writable } = require('stream');
+const Genome = require('models/genome');
+const { NotFoundError } = require('utils/errors');
+const { request } = require('services');
+const { getClusteringTask } = require('manifest');
 
-async function getEdges({ userId, scheme, version, sts, threshold }) {
-  const query = {
-    scheme,
-    version,
-    $or: [ { user: userId }, { public: true } ],
-    threshold: { $gte: threshold },
-    'STs.1': { $exists: 1 },
-  };
+async function getEdges({ userId, scheme, sts, threshold }) {
+  const { version } = getClusteringTask(scheme);
+  if (version === undefined) throw new NotFoundError(`No clustering for scheme '${scheme}'`);
+  const clusteringDoc = await request('clustering', 'cluster-details', { scheme, version, userId });
+  if (clusteringDoc === undefined) throw new NotFoundError(`No cluster edges at threshold ${threshold}`);
 
-  const projection = { STs: 1, public: 1, relatedBy: 1 };
-
-  const [ clusteringDoc ] = await Clustering
-    .find(
-      query,
-      projection,
-    )
-    .sort({ public: 1 })
-    .limit(1)
-    .lean();
-
-  if (!clusteringDoc) {
-    throw new NotFoundError(`No cluster edges at threshold ${threshold}`);
+  if (clusteringDoc.threshold <= threshold) throw new NotFoundError(`No cluster edges at threshold ${threshold}`);
+  for (let t = 0; t <= threshold; t++) {
+    if (clusteringDoc.edges[t] === undefined) throw new Error(`Edges are missing for threshold of ${t}`);
   }
+
   const clusterToQueryMap = {};
-  let checkCount = 0;
-  let checkSum = 0;
-  for (let clusterIdx = 0; clusterIdx < clusteringDoc.STs.length; clusterIdx++) {
-    const st = clusteringDoc.STs[clusterIdx];
-    const queryIdx = sts.indexOf(st);
-    if (queryIdx === -1) continue;
-    clusterToQueryMap[clusterIdx] = queryIdx;
-    checkCount++;
-    checkSum += queryIdx;
-  }
-
   const nSts = sts.length;
-  if (checkCount !== nSts || checkSum !== (nSts * (nSts - 1) / 2)) {
-    throw new NotFoundError('No cluster edges some of the query sts');
+  for (let queryIdx = 0; queryIdx < nSts; queryIdx++) {
+    const st = sts[queryIdx];
+    const clusterIdx = clusteringDoc.STs.indexOf(st);
+    if (clusterIdx === -1) throw new NotFoundError(`${st} not in clustering`);
+    clusterToQueryMap[clusterIdx] = queryIdx;
   }
 
   const offsets = Array(nSts);
@@ -56,63 +36,19 @@ async function getEdges({ userId, scheme, version, sts, threshold }) {
   }
 
   const edges = new Array(nSts * (nSts - 1) / 2).fill(false);
-  const seen = new Set();
-
-  let onGotEdges;
-  let onFailedEdges;
-  const whenGotEdges = new Promise((resolve, reject) => {
-    onGotEdges = resolve;
-    onFailedEdges = reject;
-  });
-  const consumer = new Writable({
-    objectMode: true,
-    write(doc, _, callback) {
-      if (!doc) return callback();
-      for (const dist of Object.keys(doc.edges)) {
-        if (dist > threshold) continue;
-        if (seen.has(dist)) {
-          return callback(new Error(`Already seen distances of ${dist}`));
-        }
-        for (const [ clustA, clustB ] of doc.edges[dist]) {
-          const queryA = clusterToQueryMap[clustA];
-          if (queryA === undefined) continue;
-          const queryB = clusterToQueryMap[clustB];
-          if (queryB === undefined) continue;
-          edges[edgeIndex(queryA, queryB)] = true;
-        }
-        seen.add(dist);
-      }
-      return callback();
-    },
-    final(callback) {
-      onGotEdges();
-      return callback();
-    },
-  });
-
-  const thresholdsQuery = [];
-  const thresholdProjection = {};
-  for (let t = 0; t <= threshold; t++) {
-    thresholdsQuery.push({ [`edges.${t}`]: { $exists: true } });
-    thresholdProjection[`edges.${t}`] = 1;
-  }
-  Clustering
-    .find({ relatedBy: clusteringDoc.relatedBy, $or: thresholdsQuery }, thresholdProjection)
-    .lean()
-    .cursor()
-    .pipe(consumer)
-    .on('error', err => onFailedEdges(err));
-
-  await whenGotEdges;
-  for (let t = 0; t <= threshold; t++) {
-    if (!seen.has(t.toString())) {
-      throw new Error(`Edges are missing for threshold of ${t}`);
+  for (const dist of Object.keys(clusteringDoc.edges)) {
+    if (dist > threshold) continue;
+    for (const [ clustA, clustB ] of clusteringDoc.edges[dist]) {
+      const queryA = clusterToQueryMap[clustA];
+      if (queryA === undefined) continue;
+      const queryB = clusterToQueryMap[clustB];
+      if (queryB === undefined) continue;
+      edges[edgeIndex(queryA, queryB)] = true;
     }
   }
 
   return edges;
 }
-
 
 module.exports = async function ({ user, genomeId, scheme, version, sts, threshold }) {
   // We need to check that the user is allowed to get the edges for these STs

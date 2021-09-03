@@ -1,5 +1,5 @@
 import * as actions from './actions';
-import { FETCH_GENOME_LIST, FETCH_GENOME_SUMMARY } from '../actions';
+import { FETCH_GENOME_LIST, FETCH_GENOME_SELECTION, FETCH_GENOME_SUMMARY } from '../actions';
 import { CREATE_COLLECTION } from '../create-collection-form/actions';
 
 import { statuses } from '../../app/constants';
@@ -53,6 +53,8 @@ export default function (state = initialState, { type, payload }) {
         ...state,
         dropdown: payload === state.dropdown ? null : payload,
       };
+    case FETCH_GENOME_SELECTION.SUCCESS:
+    case FETCH_GENOME_SELECTION.ERROR:
     case FETCH_GENOME_LIST.SUCCESS:
     case FETCH_GENOME_LIST.ERROR:
     case CREATE_COLLECTION.SUCCESS:

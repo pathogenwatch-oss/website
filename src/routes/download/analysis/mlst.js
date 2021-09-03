@@ -2,7 +2,7 @@ const sanitize = require('sanitize-filename');
 const csv = require('csv');
 const Genome = require('models/genome');
 
-const transformer = key => (doc) => {
+const transformer = (key) => (doc) => {
   const result = {
     'Genome ID': doc._id.toString(),
     'Genome Name': doc.name,
@@ -17,7 +17,7 @@ const transformer = key => (doc) => {
   return result;
 };
 
-module.exports = key => (req, res) => {
+module.exports = (key) => (req, res) => {
   const { user } = req;
   const { filename: rawFilename = '' } = req.query;
   const filename = sanitize(rawFilename) || `${key}.csv`;
@@ -26,10 +26,11 @@ module.exports = key => (req, res) => {
   res.setHeader('Content-Disposition', `attachment; filename=${filename}`);
   res.setHeader('Content-Type', 'text/csv');
 
-  const query = Object.assign(
-    { _id: { $in: ids.split(',') }, [`analysis.${key}`]: { $exists: true } },
-    Genome.getPrefilterCondition({ user })
-  );
+  const query = {
+    _id: { $in: ids.split(',') },
+    [`analysis.${key}`]: { $exists: true },
+    ...Genome.getPrefilterCondition({ user }),
+  };
   const projection = {
     name: 1,
     [`analysis.${key}.__v`]: 1,

@@ -2,7 +2,7 @@ import './styles.css';
 
 import React from 'react';
 import { connect } from 'react-redux';
-import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
+import ReactCSSTransitionGroup from 'react-transition-group/CSSTransitionGroup';
 
 import { hideToast } from './index';
 

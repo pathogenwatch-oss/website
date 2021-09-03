@@ -2,8 +2,6 @@ import React from 'react';
 import { connect } from 'react-redux';
 import 'eventsource/lib/eventsource-polyfill';
 
-import { useAuthToken } from '~/auth/hooks';
-
 import { isAssemblyInProgress, shouldListenForUpdates } from './selectors';
 
 import { assemblyProgressTick, assemblyPipelineStatus, assemblyPipelineError } from './actions';
@@ -18,27 +16,25 @@ const Status = ({
   handleStatusUpdate,
   listening,
   progressTick,
-  token,
   uploadedAt,
 }) => {
-  useAuthToken();
   React.useEffect(() => {
-    if (listening && token) {
-      fetchProgress(uploadedAt, token)
-        .then(payload => {
+    if (listening) {
+      fetchProgress(uploadedAt)
+        .then((payload) => {
           handleStatusUpdate({
             type: 'STATUS',
             payload,
           });
         })
-        .catch(console.error);
+        .catch((err) => console.error('error fetching progress', err));
       const channelId = `${config.clientId}-assembly`;
       subscribe(
         channelId, uploadedAt, handleStatusUpdate
       );
       return () => unsubscribe(channelId);
     }
-  }, [ listening, token ]);
+  }, [ listening ]);
 
   React.useEffect(() => {
     if (assemblyInProgress) {
@@ -56,7 +52,6 @@ function mapStateToProps(state) {
   return {
     listening: shouldListenForUpdates(state),
     assemblyInProgress: isAssemblyInProgress(state),
-    token: state.auth.token,
   };
 }
 

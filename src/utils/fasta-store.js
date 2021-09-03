@@ -1,76 +1,148 @@
-const path = require('path');
 const fs = require('fs');
-const uuid = require('uuid/v4');
-const zlib = require('zlib');
 const crypto = require('crypto');
+const temp = require('temp').track();
 const ZipStream = require('zip-stream');
+const objectStore = require('utils/object-store');
 
-const { Transform, PassThrough } = require('stream');
+const { PassThrough, Transform } = require('stream');
 
-const {fastaStoragePath, maxGenomeFileSize = 20} = require('configuration');
-const maxGenomeFileSizeBytes = maxGenomeFileSize * 1048576;
+const { maxGenomeFileSize = 20, maxReadsFileSize = 500 } = require('configuration');
+const { promisify } = require('util');
 
-async function setup() {
-  await mkdirp(path.join(fastaStoragePath, 'tmp'));
-  await mkdirp(path.join(fastaStoragePath, 'archives'));
+class MaxLengthError extends Error {
+  constructor(length, maxLength) {
+    super(`Stream length of ${length} is greater than ${maxLength}`);
+  }
 }
 
-function lookupPath(fileId, compressed = true) {
-  const base = path.join(fastaStoragePath, fileId.slice(0, 2), fileId.slice(2));
-  return compressed ? `${base}.gz` : base;
+const mkdir = promisify(temp.mkdir);
+async function rm(p) {
+  try {
+    return await fs.promises.unlink(p);
+  } catch (err) {
+    return undefined;
+  }
 }
 
-async function store(stream) {
-  await setup();
-  const tempPath = path.join(fastaStoragePath, 'tmp', uuid());
-  const tempFile = fs.createWriteStream(tempPath);
+let tmpUploadDir;
+function getTmpDir() {
+  if (tmpUploadDir === undefined) tmpUploadDir = mkdir({ prefix: 'pw-tmp' });
+  return tmpUploadDir;
+}
 
-  let length = 0;
-  const hash = crypto.createHash('sha1');
-  const hashAndCountBytes = new Transform({
-    transform(chunk, _, callback) {
-      length += chunk.length;
-      if (length > maxGenomeFileSizeBytes) return callback(new MaxLengthError(length, maxGenomeFileSizeBytes))
-      hash.update(chunk);
-      return callback(null, chunk);
-    },
+async function createTempFile(suffix) {
+  const d = new Date();
+  return temp.path({
+    dir: await getTmpDir(),
+    prefix: `${d.getFullYear()}${d.getUTCMonth()}${d.getUTCDay()}.`,
+    suffix,
   });
+}
 
-  const fileId = await new Promise((resolve, reject) => {
-    stream
-      .pipe(hashAndCountBytes)
-      .on('error', error => {
-        fs.unlink(tempPath);
-        reject(error);
-      })
-      .pipe(zlib.createGzip())
-      .pipe(tempFile)
-      .on('close', () => resolve(hash.digest('hex')));
-  });
+class Hasher extends Transform {
+  constructor(maxLength) {
+    super();
+    this.maxLength = maxLength;
+    this.hash = crypto.createHash('sha1');
+    this.length = 0;
+    this.results = new Promise((resolve, reject) => {
+      this.resolve = resolve;
+      this.reject = reject;
+    });
+  }
 
-  const filePath = lookupPath(fileId);
-  await mkdirp(path.dirname(filePath));
-  await fs.promises.rename(tempPath, filePath);
-  return { fileId, filePath };
+  _transform(chunk, _, done) {
+    this.length += chunk.length;
+    if (this.length > this.maxLength) {
+      const error = new MaxLengthError(this.length, this.maxLength);
+      this.reject(error);
+      done(error);
+    }
+    this.hash.update(chunk);
+    this.push(chunk);
+    return done();
+  }
+
+  _final(cb) {
+    this.resolve(this.hash.digest('hex'));
+    cb();
+  }
+}
+
+async function store(stream, maxMb = maxGenomeFileSize) {
+  const maxGenomeFileSizeBytes = maxMb * 1048576;
+  const tempPath = await createTempFile('.fa');
+
+  try {
+    /* eslint-disable no-async-promise-executor */
+    const fileId = await new Promise((resolve, reject) => {
+      const hasher = new Hasher(maxGenomeFileSizeBytes);
+      stream.on('error', reject);
+      const tempFile = fs.createWriteStream(tempPath);
+      tempFile.on('close', () => resolve(hasher.results));
+      hasher.pipe(tempFile);
+      stream.pipe(hasher);
+    });
+
+    const fastaKey = await objectStore.putFasta(fileId, fs.createReadStream(tempPath));
+    return { fileId, fastaKey };
+  } finally {
+    await rm(tempPath);
+  }
+}
+
+class LengthCheck extends Transform {
+  constructor(maxLength) {
+    super();
+    this.maxLength = maxLength;
+    this.length = 0;
+    this.results = new Promise((resolve, reject) => {
+      this.resolve = resolve;
+      this.reject = reject;
+    });
+  }
+
+  _transform(chunk, _, done) {
+    this.length += chunk.length;
+    if (this.length > this.maxLength) {
+      const error = new MaxLengthError(this.length, this.maxLength);
+      this.reject(error);
+      done(error);
+    }
+    this.push(chunk);
+    return done();
+  }
+
+  _final(cb) {
+    this.resolve();
+    cb();
+  }
+}
+
+async function storeReads({ genomeId, stream, fileNumber, maxMb = maxReadsFileSize }) {
+  const maxGenomeFileSizeBytes = maxMb * 1048576;
+  const tempPath = await createTempFile('.fastq.gz');
+
+  try {
+    /* eslint-disable no-async-promise-executor */
+    await new Promise((resolve, reject) => {
+      const handler = new LengthCheck(maxGenomeFileSizeBytes);
+      handler.results.then(resolve).catch(reject);
+      stream.on('error', reject);
+      handler.pipe(fs.createWriteStream(tempPath));
+      stream.pipe(handler);
+    });
+
+    const fastaKey = await objectStore.putReads(genomeId, fileNumber, fs.createReadStream(tempPath));
+    return { fastaKey };
+  } finally {
+    await rm(tempPath);
+  }
 }
 
 function fetch(fileId) {
   const outStream = new PassThrough();
-  (async () => {
-    const filePathCompressed = lookupPath(fileId, true);
-    const compressed = await exists(filePathCompressed);
-    if (compressed) {
-      return fs
-        .createReadStream(filePathCompressed)
-        .pipe(zlib.createGunzip())
-        .pipe(outStream);
-    }
-    return fs
-      .createReadStream(lookupPath(fileId, false))
-      .pipe(outStream);
-  })().catch(err => {
-    outStream.destroy(err);
-  });
+  objectStore.getFasta(fileId, { outStream });
   return outStream;
 }
 
@@ -79,7 +151,7 @@ function archive(files) {
 
   function add(stream, name) {
     return new Promise((resolve, reject) => {
-      archiveCreator.entry(stream, {name}, (err, _) => {
+      archiveCreator.entry(stream, { name }, (err, _) => {
         if (err) return reject(err);
         return resolve();
       });
@@ -92,32 +164,15 @@ function archive(files) {
       await add(stream, name);
     }
     archiveCreator.finish();
-  })().catch(err => {
+  })().catch((err) => {
     archiveCreator.destroy(err);
   });
   return archiveCreator;
 }
 
-class MaxLengthError extends Error {
-  constructor(length, maxLength) {
-    super(`Stream length of ${length} is greater than ${maxLength}`);
-  }
-}
-
-function mkdirp(filepath) {
-  return fs.promises.mkdir(filepath, {recursive: true});
-}
-
-function exists(filepath) {
-  return new Promise((resolve) => {
-    fs.access(filepath, fs.constants.R_OK, (err) => {
-      resolve(!err);
-    });
-  });
-}
-
 module.exports = {
   store,
+  storeReads,
   fetch,
   archive,
 };

@@ -1,8 +1,10 @@
+const Busboy = require('busboy');
 const express = require('express');
 const zlib = require('zlib');
 const contentLength = require('express-content-length-validator');
 
 const services = require('services');
+const { asyncWrapper } = require('utils/routes');
 
 const router = express.Router();
 const LOGGER = require('utils/logging').createLogger('Genome');
@@ -27,7 +29,7 @@ router.get('/genome/stats', (req, res, next) => {
   const { user, query } = req;
   services
     .request('genome', 'fetch-stats', { user, query })
-    .then(response => res.json(response))
+    .then((response) => res.json(response))
     .catch(next);
 });
 
@@ -37,7 +39,7 @@ router.get('/genome/map', (req, res, next) => {
   const { user, query } = req;
   services
     .request('genome', 'fetch-map', { user, query })
-    .then(response => res.json(response))
+    .then((response) => res.json(response))
     .catch(next);
 });
 
@@ -47,7 +49,7 @@ router.post('/genome/at-locations', (req, res, next) => {
   const { coordinates } = req.body;
   services
     .request('genome', 'at-locations', { user, coordinates, query })
-    .then(response => res.json(response))
+    .then((response) => res.json(response))
     .catch(next);
 });
 
@@ -58,7 +60,7 @@ router.get('/genome/:id', (req, res, next) => {
   LOGGER.info(`Received request to get single genome ${id}`);
   services
     .request('genome', 'fetch-one', { user, id, collectionId })
-    .then(response => res.json(response))
+    .then((response) => res.json(response))
     .catch(next);
 });
 
@@ -70,8 +72,8 @@ router.get('/genome/:id/clusters/position', (req, res, next) => {
   LOGGER.info(`Received request to get cluster queue position for genome ${id}`);
   services
     .request('clustering', 'fetch-position', { user, genomeId: id, taskId })
-    .then(response => res.json(response))
-    .catch(e => next(e));
+    .then((response) => res.json(response))
+    .catch((e) => next(e));
 });
 
 router.get('/genome/:id/clusters', (req, res, next) => {
@@ -81,11 +83,11 @@ router.get('/genome/:id/clusters', (req, res, next) => {
   LOGGER.info(`Received request to get clusters for genome ${id}`);
   services
     .request('genome', 'fetch-clusters', { user, id })
-    .then(response => res.json(response))
+    .then((response) => res.json(response))
     .catch(next);
 });
 
-router.post('/genome/:id/clusters', async (req, res, next) => {
+router.post('/genome/:id/clusters', asyncWrapper(async (req, res, next) => {
   const { user, params, body } = req;
   const { id } = params;
   const { clientId } = body;
@@ -108,9 +110,9 @@ router.post('/genome/:id/clusters', async (req, res, next) => {
       next(e);
     }
   }
-});
+}));
 
-router.post('/genome/:id/clusters/edges', async (req, res, next) => {
+router.post('/genome/:id/clusters/edges', asyncWrapper(async (req, res, next) => {
   const { user, body } = req;
   const { threshold, sts, version, scheme } = body;
   const { id } = req.params;
@@ -130,14 +132,14 @@ router.post('/genome/:id/clusters/edges', async (req, res, next) => {
   } catch (e) {
     next(e);
   }
-});
+}));
 
 router.post('/genome/selection', (req, res, next) => {
   LOGGER.info('Received request to get selection');
   const { user, query } = req;
   services
     .request('genome', 'selection', { user, query })
-    .then(response => res.json(response))
+    .then((response) => res.json(response))
     .catch(next);
 });
 
@@ -146,8 +148,8 @@ router.get('/genome', (req, res, next) => {
 
   const { user, query } = req;
   services
-    .request('genome', 'fetch-list', { user, query })
-    .then(response => res.json(response))
+    .request('genome', 'fetch-list', { timeout$: 30000, user, query })
+    .then((response) => res.json(response))
     .catch(next);
 });
 
@@ -172,7 +174,7 @@ router.put('/genome', (req, res, next) => {
 
   services
     .request('genome', 'initialise', { user, data: body, uploadedAt })
-    .then(response => res.json(response))
+    .then((response) => res.json(response))
     .catch(next);
 });
 
@@ -190,24 +192,6 @@ router.put(
     const { user } = req;
     const { id } = req.params;
 
-    if (req.is('application/json')) {
-      LOGGER.info('Received status notification of genome assembly');
-      const { type, payload } = req.body;
-      if (type === 'ERROR') {
-        services
-          .request('genome', 'assembler-error', {
-            id,
-            user,
-            error: payload.error,
-          })
-          .then(() => res.sendStatus(200))
-          .catch(next);
-      } else {
-        res.sendStatus(200);
-      }
-      return;
-    }
-
     LOGGER.info('Received request to upload genome assembly');
     const { clientId } = req.query;
     services
@@ -215,13 +199,47 @@ router.put(
         timeout$: 1000 * 60 * 5,
         stream: getStream(req),
         id,
-        user,
+        userId: user._id,
         clientId,
       })
-      .then(response => res.json(response))
+      .then(() => res.json({ ok: 1 }))
       .catch(next);
   }
 );
+
+router.put(
+  '/genome/:id/reads',
+  contentLength.validateMax({ max: (config.maxReadsFileSize || 100) * 1048576 }),
+  asyncWrapper(async (req, res, next) => {
+    const { user } = req;
+    const { id } = req.params;
+    const busboy = new Busboy({ headers: req.headers });
+
+    LOGGER.info('Received request to upload genome reads');
+    const { clientId } = req.query;
+
+    const whenStream = new Promise((resolve, reject) => {
+      busboy.on('file', (fieldname, file, filename, encoding, mimetype) => {
+        resolve({ file, filename });
+      });
+    });
+
+    req.pipe(busboy);
+    const { file, filename } = await whenStream;
+
+    const response = await services
+      .request('genome', 'upload-reads', {
+        timeout$: 1000 * 60 * 30,
+        stream: file,
+        filename,
+        id,
+        user,
+        clientId,
+      });
+
+    return res.json(response);
+  }
+  ));
 
 router.post('/genome/bin', (req, res, next) => {
   const { user, body } = req;
@@ -231,7 +249,7 @@ router.post('/genome/bin', (req, res, next) => {
 
   services
     .request('genome', 'bin', { ids, user, status })
-    .then(response => res.json(response))
+    .then((response) => res.json(response))
     .catch(next);
 });
 
@@ -239,10 +257,11 @@ router.post('/genome/:id/uploaded', (req, res, next) => {
   LOGGER.info('Received request to confirm genome uploaded');
   const { id } = req.params;
   const { user } = req;
+  const { clientId } = req.query;
 
   services
-    .request('genome', 'uploaded', { id, user })
-    .then(response => res.json(response))
+    .request('genome', 'uploaded', { id, user, clientId })
+    .then((response) => res.json(response))
     .catch(next);
 });
 
@@ -253,7 +272,7 @@ router.post('/genome/:id', (req, res, next) => {
   const { body, user } = req;
   services
     .request('genome', 'edit', { id, user, metadata: body })
-    .then(response => res.json(response))
+    .then((response) => res.json(response))
     .catch(next);
 });
 
@@ -264,7 +283,7 @@ router.post('/genome', (req, res, next) => {
 
   services
     .request('genome', 'edit-many', { user, data: body })
-    .then(response => res.json(response))
+    .then((response) => res.json(response))
     .catch(next);
 });
 

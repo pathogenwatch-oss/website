@@ -4,8 +4,9 @@
   "fastaStoragePath": "./fastas",
   "googleMapsKey": "",
   "mapboxKey": "",
-  "maxCollectionSize": 1000,
+  "maxCollectionSize": 2000,
   "maxGenomeFileSize": 20,
+  "maxReadsFileSize": 500,
   "maxDownloadSize": 2500,
   "mongodb": {
     "host": "localhost",

@@ -84,8 +84,7 @@ const Verifier = React.createClass({
     if (this.state.status === statuses.ERROR) {
       return (
         <div>
-          <p>Core analysis could not be completed for this selection.</p>
-          <p>Please resubmit your genomes and try again.</p>
+          <p>{this.state.message}</p>
         </div>
       );
     }

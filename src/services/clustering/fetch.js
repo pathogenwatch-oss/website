@@ -1,23 +1,7 @@
-const Clustering = require('../../models/clustering');
-const Genome = require('../../models/genome');
-const { NotFoundError } = require('../../utils/errors');
-
-async function getClusteringData({ scheme, user }) {
-  const query = { scheme, 'STs.1': { $exists: true } };
-  if (user) {
-    query.user = user._id;
-  } else {
-    query.public = true;
-  }
-  const projection = {
-    pi: 1,
-    lambda: 1,
-    STs: 1,
-    version: 1,
-    threshold: 1,
-  };
-  return await Clustering.findOne(query, projection);
-}
+const Genome = require('models/genome');
+const { NotFoundError } = require('utils/errors');
+const { request } = require('services');
+const { getClusteringTask } = require('manifest');
 
 async function mapStsToGenomeNames({ genomeId, sts, user }) {
   const namesQuery = {
@@ -46,7 +30,7 @@ async function mapStsToGenomeNames({ genomeId, sts, user }) {
     if (!foundSts.has(st)) throw new NotFoundError(`User nolonger has a genome with st ${st}`);
   }
 
-  const genome = genomes.find(_ => _._id.toString() === genomeId);
+  const genome = genomes.find((_) => _._id.toString() === genomeId);
   const genomeSt = genome ? genome.analysis.cgmlst.st : null;
   const genomeIdx = sts.indexOf(genomeSt);
 
@@ -62,14 +46,16 @@ async function mapStsToGenomeNames({ genomeId, sts, user }) {
   };
 }
 
-module.exports = async function ({ user, genomeId }) {
-  const scheme = await Genome.lookupCgMlstScheme(genomeId, user);
-  const clusters = await getClusteringData({ scheme, user });
+module.exports = async function ({ user = {}, scheme, id: genomeId }) {
+  const { version } = getClusteringTask(scheme);
+  if (version === undefined) throw new NotFoundError('No matching clustering result');
+
+  const clusters = await request('clustering', 'cluster-details', { scheme, version, userId: user._id });
   if (!clusters) {
     throw new NotFoundError('No matching clustering result');
   }
 
-  const { pi, lambda, STs: sts = [], threshold, version } = clusters;
+  const { pi, lambda, STs: sts = [], threshold } = clusters;
   if (sts.length === 0) {
     throw new NotFoundError('No matching clustering result');
   }

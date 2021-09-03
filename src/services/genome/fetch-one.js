@@ -56,8 +56,8 @@ const projection = {
   'upload.type': 1,
 };
 
-module.exports = async ({ user, id, collectionId }) => {
+module.exports = ({ user, id, collectionId }) => {
   if (!id) throw new ServiceRequestError('Missing Id');
 
-  return await request('genome', 'authorise', { user, id, collectionId, projection });
+  return request('genome', 'authorise', { user, id, collectionId, projection });
 };

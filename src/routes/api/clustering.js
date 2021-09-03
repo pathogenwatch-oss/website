@@ -1,12 +1,13 @@
 const express = require('express');
+
 const router = express.Router();
 
 const services = require('services');
-const { NotFoundError } = require('../../utils/errors');
-
+const { NotFoundError } = require('utils/errors');
+const { asyncWrapper } = require('utils/routes');
 const LOGGER = require('utils/logging').createLogger('Summary');
 
-router.get('/clustering/:genomeId', async (req, res, next) => {
+router.get('/clustering/:genomeId', asyncWrapper(async (req, res, next) => {
   const { user } = req;
   const { threshold = null } = req.query;
   const { genomeId } = req.params;
@@ -21,6 +22,6 @@ router.get('/clustering/:genomeId', async (req, res, next) => {
   } catch (e) {
     next(e);
   }
-});
+}));
 
 module.exports = router;

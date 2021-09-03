@@ -11,10 +11,10 @@ module.exports = {
   },
   save({ type, id, name, email, photo }, done) {
     User.findOne({ providerType: type, providerId: id })
-      .then(user => {
+      .then((user) => {
         // log the user in if the user is found
         if (user) {
-          return user.update({ name, email, photo }, err => done(err, user));
+          return user.update({ name, email, photo }, (err) => done(err, user));
         }
 
         // create a new user if there is no user found with the same profile ID

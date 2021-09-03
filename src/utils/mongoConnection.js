@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+
 mongoose.Promise = global.Promise;
 
 const mongoConfig = require('configuration').mongodb || {};
@@ -11,10 +12,13 @@ const hostname = mongoConfig.host || DEFAULT_HOSTNAME;
 const port = mongoConfig.port || DEFAULT_PORT;
 const database = mongoConfig.database || DEFAULT_DATABASE;
 const replicaset = mongoConfig.replicaset;
+const mongoUser = mongoConfig.user;
+const mongoPassword = mongoConfig.password;
 
-const dbUrl = `mongodb://${hostname}:${port}/${database}${replicaset ? `?replicaSet=${replicaset}` : ''}`;
+const userAuth = !!mongoUser && !!mongoPassword ? `${mongoUser}:${mongoPassword}@` : '';
+const dbUrl = `mongodb://${userAuth}${hostname}:${port}/${database}${replicaset ? `?replicaSet=${replicaset}` : ''}`;
 
-const handleError = error => {
+const handleError = (error) => {
   LOGGER.error(error);
   process.exit(1);
 };
@@ -25,20 +29,22 @@ function connect(callback) {
   mongoose.connection.on('error', handleError);
   mongoose.connection.on('disconnected', () => {
     if (disconnectExpected) return;
-    handleError('disconnected event')
+    handleError('disconnected event');
   });
   if (callback) {
     mongoose.connection.once('open', callback);
   }
 
   LOGGER.info(`Connecting to mongodb: ${dbUrl}`);
-  return mongoose.connect(dbUrl);
+  return mongoose.connect(dbUrl, { useMongoClient: true });
 }
 
 mongoose.set('debug', (collection, ...args) => {
-  if (collection === 'clustering' && args[0] === 'update') {
+  if (process.env.MONGO_QUIET) LOGGER.debug([ collection, args[0] ]);
+  else if (collection === 'clustering' && args[0] === 'update') {
     LOGGER.debug([ collection, ...args.slice(0, 2), 'TOO_LONG', ...args.slice(3) ]);
-  } else LOGGER.debug([ collection, ...args ]);
+  } else if (args[0] === 'ensureIndex');
+  else LOGGER.debug([ collection, ...args ]);
 });
 
 module.exports.connect = connect;

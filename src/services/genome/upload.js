@@ -4,16 +4,16 @@ const Genome = require('models/genome');
 
 const { ServiceRequestError } = require('utils/errors');
 
-module.exports = async ({ timeout$, stream, user, id, clientId }) => {
+module.exports = async ({ timeout$, stream, userId, id, clientId }) => {
   if (!stream) {
     throw new ServiceRequestError('No stream provided');
   }
 
-  if (!user) {
+  if (!userId) {
     throw new ServiceRequestError('Not authorised');
   }
 
-  const count = await Genome.count({ _user: user, _id: id });
+  const count = await Genome.count({ _user: userId, _id: id });
   if (count !== 1) {
     throw new ServiceRequestError('Not authorised');
   }
@@ -29,7 +29,7 @@ module.exports = async ({ timeout$, stream, user, id, clientId }) => {
     fileId,
     genomeId: id,
     uploadedAt: doc.uploadedAt,
-    userId: user._id,
+    userId,
   });
-  return { ok: 1 };
+  return { ok: 1, fileId };
 };

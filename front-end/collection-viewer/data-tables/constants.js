@@ -28,7 +28,7 @@ export const systemDataColumns = {
           target="_blank" rel="noopener"
           title="View publication"
           style={{ color: '#369' }}
-          onClick={e => e.stopPropagation()}
+          onClick={(e) => e.stopPropagation()}
         >
           {pmid}
         </a>
@@ -162,28 +162,30 @@ export const systemDataColumns = {
   __porA: {
     columnKey: '__porA',
     displayName: 'porA',
-    valueGetter({ analysis}) {
-      if (! analysis['ngono-markers']) return null;
+    valueGetter({ analysis }) {
+      if (!analysis['ngono-markers']) return null;
       return analysis['ngono-markers'].status.toUpperCase() === 'PRESENT' ? 'Complete' : '';
-    }
+    },
   },
   __inc_types: {
     columnKey: '__inc_types',
     displayName: 'Inc Types',
     valueGetter({ analysis }) {
-      if (!analysis.inctyper) return null;
+      if (!analysis.inctyper || !analysis.inctyper['Inc Matches']) return null;
       if (Object.keys(analysis.inctyper).length === 0 && analysis.inctyper.constructor === Object) return null;
 
-      return Object.values(analysis.inctyper['Inc Matches']
+      const matches = analysis.inctyper['Inc Matches']
         .reduce((contigs, match) => {
           if (!contigs.hasOwnProperty(match.Contig)) {
             contigs[match.Contig] = [];
           }
           contigs[match.Contig].push(match);
           return contigs;
-        }, {}))
-        .map(contigMatches => contigMatches.map(
-          match => (analysis.inctyper.Library === 'gram_negative' ?
+        }, {});
+
+      return Object.values(matches)
+        .map((contigMatches) => contigMatches.map(
+          (match) => (analysis.inctyper.Library === 'gram_negative' ?
             match['Inc Match'].replace(/_\d+$/, '') :
             match.Group))
           .sort()

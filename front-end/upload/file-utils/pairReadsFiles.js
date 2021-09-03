@@ -1,6 +1,8 @@
-export default function pairReadsFiles(files, filenameRegex, assemblerUsage) {
+import config from '~/app/config';
+
+export default function pairReadsFiles(files, filenameRegex) {
   const pairs = {};
-  const { maxSizeMB = 500 } = assemblerUsage || {};
+  const { maxSizeMB = 500 } = config.maxReadsFileSize;
   const maxSize = maxSizeMB * 1048576;
   for (const file of files) {
     if (file.size > maxSize) {
@@ -18,11 +20,6 @@ export default function pairReadsFiles(files, filenameRegex, assemblerUsage) {
         `No pair found for files starting ${id}, please check and try again.`
       );
     }
-  }
-  if (assemblerUsage && Object.keys(pairs).length > assemblerUsage.remaining) {
-    throw new Error(
-      `You do not have enough remaining credits to complete this upload. You have ${assemblerUsage.remaining} left.`
-    );
   }
   return pairs;
 }

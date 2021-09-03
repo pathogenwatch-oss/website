@@ -1,4 +1,4 @@
-const Genome = require('../../models/genome');
+const Genome = require('models/genome');
 const { ObjectId } = require('mongoose').Types;
 
 module.exports = function ({ user, ids }) {
@@ -22,14 +22,15 @@ module.exports = function ({ user, ids }) {
     'spn_pbp_amr',
     'vista',
   ];
-  const $in = ids.map(id => new ObjectId(id));
+  const $in = ids.map((id) => new ObjectId(id));
   return Promise.all([
     Genome.aggregate([
       {
-        $match: Object.assign(
-          { _id: { $in }, 'analysis.speciator.speciesId': { $exists: true } },
-          Genome.getPrefilterCondition({ user })
-        ),
+        $match: {
+          _id: { $in },
+          'analysis.speciator.speciesId': { $exists: true },
+          ...Genome.getPrefilterCondition({ user }),
+        },
       },
       {
         $group: {
@@ -51,10 +52,11 @@ module.exports = function ({ user, ids }) {
     ]),
     Genome.aggregate([
       {
-        $match: Object.assign(
-          { _id: { $in }, 'analysis.speciator.speciesId': { $exists: true } },
-          Genome.getPrefilterCondition({ user })
-        ),
+        $match: {
+          _id: { $in },
+          'analysis.speciator.speciesId': { $exists: true },
+          ...Genome.getPrefilterCondition({ user }),
+        },
       },
       {
         $facet: taskNames.reduce((memo, task) => {
@@ -75,7 +77,7 @@ module.exports = function ({ user, ids }) {
   ]).then(([ organisms, [ organismsByTask ] ]) => {
     const summary = {};
     for (const organism of organisms) {
-      summary[organism.speciesId] = Object.assign({ tasks: [] }, organism);
+      summary[organism.speciesId] = { tasks: [], ...organism };
     }
     for (const task of Object.keys(organismsByTask)) {
       for (const { _id, genomeIds, sources } of organismsByTask[task]) {
@@ -85,7 +87,7 @@ module.exports = function ({ user, ids }) {
       }
     }
     return Object.keys(summary)
-      .map(key => summary[key])
-      .filter(_ => _.tasks && _.tasks.length > 0);
+      .map((key) => summary[key])
+      .filter((_) => _.tasks && _.tasks.length > 0);
   });
 };

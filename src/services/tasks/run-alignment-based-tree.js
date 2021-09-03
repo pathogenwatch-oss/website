@@ -1,18 +1,20 @@
 /* eslint no-param-reassign: ["error", { "props": false }] */
-/* eslint no-params: 0 */
 /* eslint max-params: 0 */
 
-const es = require("event-stream");
 const BSON = require("bson");
 
-const Analysis = require("models/analysis");
-const Collection = require("../../models/collection");
-const Genome = require("../../models/genome");
+const bson = new BSON();
+const { Readable } = require('stream');
+
+const store = require('utils/object-store');
+const Collection = require("models/collection");
+const Genome = require("models/genome");
+
+const LOGGER = require('utils/logging').createLogger('runner');
 
 const runCoreBasedTree = require("./run-core-based-tree");
-const { createContainer, handleContainerOutput, handleContainerExit } = runCoreBasedTree;
 
-const bson = new BSON();
+const { createContainer, handleContainerOutput, handleContainerExit } = runCoreBasedTree;
 
 async function getGenomes(task, metadata) {
   const { genomes } = await Collection.findOne(
@@ -27,7 +29,7 @@ async function getGenomes(task, metadata) {
     .find(query, { fileId: 1, name: 1 }, { sort: { fileId: 1 } })
     .lean();
 
-  const ids = new Set(genomes.map(_ => _.toString()));
+  const ids = new Set(genomes.map((_) => _.toString()));
 
   return docs.map(({ _id, fileId, name }) => ({
     _id,
@@ -37,46 +39,29 @@ async function getGenomes(task, metadata) {
   }));
 }
 
-function createAlignmentDocumentsStream(genomes, versions, organismId) {
-  const cores = Analysis.find({
-    fileId: { $in: genomes.map((x) => x.fileId) },
-    task: "alignment",
-    version: versions.alignment,
-    organismId,
-  }, {
-    fileId: 1,
-    results: 1,
-  }).sort({ fileId: 1 }).lean().cursor();
+function createInputStream(genomes, versions, organismId) {
+  const fileIds = genomes.map((_) => _.fileId);
+  fileIds.sort();
 
-  const reformatCores = es.through(function (core) {
-    const { fileId, results } = core;
-    const genome = {
-      fileId,
-      analysis: { alignment: results },
-    };
-    this.emit("data", genome);
-  });
+  const analysisKeys = fileIds.map((fileId) => store.analysisKey('alignment', versions.alignment, fileId, organismId));
+  async function* gen() {
+    yield bson.serialize({ genomes });
+    for await (const value of store.iterGet(analysisKeys)) {
+      const core = JSON.parse(value);
+      const { fileId, results } = core;
+      const genome = {
+        fileId,
+        analysis: { alignment: results },
+      };
+      yield bson.serialize(genome);
+    }
+  }
 
-  const toRaw = es.map((doc, cb) => cb(null, bson.serialize(doc)));
-  return cores.pipe(reformatCores).pipe(toRaw);
+  return Readable.from(gen());
 }
 
-function attachInputStream(container, versions, genomes, organismId) {
-  const docsStream = createAlignmentDocumentsStream(genomes, versions, organismId);
-
-  // const treeInput = require("fs").createWriteStream("tree-input.bson");
-  // treeInput.write(
-  //   bson.serialize({ genomes }),
-  //   docsStream.pipe(treeInput),
-  // );
-
-  container.stdin.write(
-    bson.serialize({ genomes }),
-    docsStream.pipe(container.stdin),
-  );
-}
-
-async function runTask(spec, metadata, timeout) {
+async function runTask(spec, metadata) {
+  const { organismId } = metadata;
   const genomes = await getGenomes(spec.task, metadata);
 
   if (genomes.length <= 1) {
@@ -86,7 +71,7 @@ async function runTask(spec, metadata, timeout) {
     return {
       newick: `(${genomes[0]._id}:0.5,${genomes[1]._id}:0.5);`,
       size: 2,
-      populationSize: genomes.filter(_ => _.population).length,
+      populationSize: genomes.filter((_) => _.population).length,
       name: metadata.name,
     };
   }
@@ -95,15 +80,21 @@ async function runTask(spec, metadata, timeout) {
   const alignmentVersion = taskRequires.find((x) => x.task === "alignment").version;
   const versions = { tree: version, alignment: alignmentVersion };
 
-  return new Promise((resolve, reject) => {
-    const container = createContainer(spec, metadata, timeout);
-
-    handleContainerOutput(container, task, versions, metadata, genomes, resolve, reject);
-
-    handleContainerExit(container, task, versions, metadata, reject);
-
-    attachInputStream(container, versions, genomes, metadata.organismId);
+  const container = await createContainer(spec, metadata);
+  const whenContainerOutput = handleContainerOutput(container, task, versions, metadata, genomes);
+  const whenContainerExit = handleContainerExit(container, task, versions, metadata);
+  const genomesStream = createInputStream(genomes, versions, organismId);
+  genomesStream.on('error', (err) => {
+    LOGGER.error(err);
+    container.kill();
   });
+  genomesStream.pipe(container.stdin);
+
+  const [output] = await Promise.all([
+    whenContainerOutput,
+    whenContainerExit,
+  ]);
+  return output;
 }
 
 module.exports = runTask;

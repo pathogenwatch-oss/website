@@ -11,14 +11,14 @@ import { DEFAULT, analysisLabels } from '~/app/constants';
 
 export const getAnalysis = ({ upload }) => upload.progress.analysis;
 
-export const getSelectedOrganism = state => getAnalysis(state).selectedOrganism;
-export const getQueuePosition = state => getAnalysis(state).position;
-export const getLastMessageReceived = state =>
+export const getSelectedOrganism = (state) => getAnalysis(state).selectedOrganism;
+export const getQueuePosition = (state) => getAnalysis(state).position;
+export const getLastMessageReceived = (state) =>
   getAnalysis(state).lastMessageReceived;
 
 export const getAnalysisList = createSelector(
   getAnalysis,
-  analysis => Object.keys(analysis.entities).map(id => analysis.entities[id])
+  (analysis) => Object.keys(analysis.entities).map((id) => analysis.entities[id])
 );
 
 function getAnalysisBreakdown(analysis) {
@@ -48,7 +48,7 @@ function getAnalysisBreakdown(analysis) {
   }
 
   if (breakdown.mlst) {
-    breakdown.mlst.sequenceTypes = Object.keys(sts).map(st => ({
+    breakdown.mlst.sequenceTypes = Object.keys(sts).map((st) => ({
       label: `ST ${st}`,
       total: sts[st],
     }));
@@ -62,12 +62,11 @@ function getAnalysisBreakdown(analysis) {
   }
 
   if (breakdown.pangolin) {
-    breakdown.pangolin.lineages = Object.keys(lineages).map(lineage => ({
+    breakdown.pangolin.lineages = Object.keys(lineages).map((lineage) => ({
       label: lineage,
       total: lineages[lineage],
     }));
   }
-
 
   return breakdown;
 }
@@ -128,10 +127,10 @@ export const getAnalysisSummary = createSelector(
 
 export const getSpeciesBreakdown = createSelector(
   getAnalysisSummary,
-  summary =>
-    summary.map(section => {
+  (summary) =>
+    summary.map((section) => {
       if (section.analyses) {
-        const analysesList = Object.keys(section.analyses).map(key => ({
+        const analysesList = Object.keys(section.analyses).map((key) => ({
           key,
           label: analysisLabels[key] || key,
           ...section.analyses[key],
@@ -139,7 +138,7 @@ export const getSpeciesBreakdown = createSelector(
 
         return {
           ...section,
-          analyses: sortBy(analysesList, _ => `${_.label.toUpperCase()}-${_.key}`), // key sorts duplicated MLST labels
+          analyses: sortBy(analysesList, (_) => `${_.label.toUpperCase()}-${_.key}`), // key sorts duplicated MLST labels
         };
       }
       return section;
@@ -148,7 +147,7 @@ export const getSpeciesBreakdown = createSelector(
 
 export const shouldShowSpeciesBreakdown = createSelector(
   getSpeciesBreakdown,
-  breakdown => !!breakdown.length && breakdown[0].key !== 'pending'
+  (breakdown) => !!breakdown.length && breakdown[0].key !== 'pending'
 );
 
 function getSpeciesCode(organismName) {
@@ -162,7 +161,7 @@ function getSpeciesCode(organismName) {
 
 const getAnalysisChartData = createSelector(
   getAnalysisSummary,
-  data => {
+  (data) => {
     const organisms = {
       label: 'Organism',
       data: [],

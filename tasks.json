@@ -1,8 +1,15 @@
 {
+  "assembly": {
+    "task": "assembly",
+    "version": "v2",
+    "timeout": "60m",
+    "retries": 1
+  },
   "clustering": {
     "task": "clustering",
-    "timeout": 1800,
-    "version": "v2.5.1"
+    "timeout": "30m",
+    "version": "v2.5.1",
+    "retries": 1
   },
   "collection": {
     "1280": [
@@ -14,7 +21,7 @@
           }
         ],
         "task": "tree",
-        "timeout": 900,
+        "timeout": "15m",
         "version": "v1",
         "workers": 16
       },
@@ -26,7 +33,7 @@
           }
         ],
         "task": "subtree",
-        "timeout": 900,
+        "timeout": "15m",
         "version": "v1",
         "workers": 16
       }
@@ -40,7 +47,7 @@
           }
         ],
         "task": "tree",
-        "timeout": 900,
+        "timeout": "15m",
         "version": "v1",
         "workers": 16
       }
@@ -54,7 +61,7 @@
           }
         ],
         "task": "tree",
-        "timeout": 900,
+        "timeout": "15m",
         "version": "v1",
         "workers": 16
       },
@@ -66,7 +73,7 @@
           }
         ],
         "task": "subtree",
-        "timeout": 900,
+        "timeout": "15m",
         "version": "v1",
         "workers": 16
       }
@@ -80,7 +87,7 @@
           }
         ],
         "task": "tree",
-        "timeout": 900,
+        "timeout": "15m",
         "version": "v1",
         "workers": 16
       }
@@ -97,7 +104,7 @@
           }
         ],
         "task": "tree",
-        "timeout": 900,
+        "timeout": "15m",
         "version": "v1.0.5",
         "workers": 16
       },
@@ -112,7 +119,7 @@
           }
         ],
         "task": "subtree",
-        "timeout": 900,
+        "timeout": "15m",
         "version": "v1.0.5",
         "workers": 16
       }
@@ -126,7 +133,7 @@
           }
         ],
         "task": "tree",
-        "timeout": 900,
+        "timeout": "15m",
         "version": "v1.0.2",
         "workers": 16
       }
@@ -140,7 +147,7 @@
           }
         ],
         "task": "tree",
-        "timeout": 900,
+        "timeout": "15m",
         "version": "v1",
         "workers": 16
       }
@@ -157,7 +164,7 @@
           }
         ],
         "task": "tree",
-        "timeout": 900,
+        "timeout": "15m",
         "version": "v1.0.11",
         "workers": 16
       },
@@ -172,7 +179,7 @@
           }
         ],
         "task": "subtree",
-        "timeout": 900,
+        "timeout": "15m",
         "version": "v1.0.11",
         "workers": 16
       }
@@ -186,7 +193,7 @@
           }
         ],
         "task": "tree",
-        "timeout": 900,
+        "timeout": "15m",
         "version": "v1",
         "workers": 16
       },
@@ -198,7 +205,7 @@
           }
         ],
         "task": "subtree",
-        "timeout": 900,
+        "timeout": "15m",
         "version": "v1",
         "workers": 16
       }
@@ -212,7 +219,7 @@
           }
         ],
         "task": "tree",
-        "timeout": 900,
+        "timeout": "15m",
         "version": "alignment-3"
       }
     ]
@@ -267,7 +274,7 @@
       },
       {
         "task": "cgmlst",
-        "version": "202011162032-v2.6.3"
+        "version": "202011162032-v2.7.0"
       },
       {
         "task": "paarsnp",
@@ -353,7 +360,7 @@
       },
       {
         "task": "cgmlst",
-        "version": "202011162032-v2.6.3"
+        "version": "202011162032-v2.7.0"
       }
     ],
     "1314": [
@@ -397,7 +404,7 @@
       },
       {
         "task": "cgmlst",
-        "version": "202011162032-v2.6.3"
+        "version": "202011162032-v2.7.0"
       }
     ],
     "1352": [
@@ -407,7 +414,7 @@
       },
       {
         "task": "cgmlst",
-        "version": "202011162032-v2.6.3"
+        "version": "202011162032-v2.7.0"
       },
       {
         "flags": {
@@ -445,7 +452,7 @@
     "1463165": [
       {
         "task": "cgmlst",
-        "version": "202011162032-v2.6.3"
+        "version": "202011162032-v2.7.0"
       },
       {
         "flags": {
@@ -478,7 +485,7 @@
       },
       {
         "task": "cgmlst",
-        "version": "202011162032-v2.6.3"
+        "version": "202011162032-v2.7.0"
       }
     ],
     "1504": [
@@ -502,7 +509,7 @@
     "160674": [
       {
         "task": "kleborate",
-        "timeout": 900,
+        "timeout": "15m",
         "version": "v2.2.1"
       }
     ],
@@ -515,7 +522,7 @@
     "1637": [
       {
         "task": "cgmlst",
-        "version": "202011162032-v2.6.3"
+        "version": "202011162032-v2.7.0"
       }
     ],
     "1639": [
@@ -557,13 +564,13 @@
     "1765": [
       {
         "task": "cgmlst",
-        "version": "202011162032-v2.6.3"
+        "version": "202011162032-v2.7.0"
       }
     ],
     "1773": [
       {
         "task": "cgmlst",
-        "version": "202011162032-v2.6.3"
+        "version": "202011162032-v2.7.0"
       },
       {
         "flags": {
@@ -600,7 +607,7 @@
     "195": [
       {
         "task": "cgmlst",
-        "version": "202011162032-v2.6.3"
+        "version": "202011162032-v2.7.0"
       }
     ],
     "196": [
@@ -622,7 +629,7 @@
       },
       {
         "task": "cgmlst",
-        "version": "202011162032-v2.6.3"
+        "version": "202011162032-v2.7.0"
       }
     ],
     "198": [
@@ -762,7 +769,7 @@
     "244366": [
       {
         "task": "cgmlst",
-        "version": "202011162032-v2.6.3"
+        "version": "202011162032-v2.7.0"
       },
       {
         "flags": {
@@ -783,7 +790,7 @@
       },
       {
         "task": "cgmlst",
-        "version": "202011162032-v2.6.3"
+        "version": "202011162032-v2.7.0"
       }
     ],
     "2587529": [
@@ -886,7 +893,8 @@
       },
       {
         "task": "cgmlst",
-        "version": "202011162032-v2.6.3"
+        "version": "202011162032-v2.7.0",
+        "resources": { "memory": 5368709120 }
       },
       {
         "flags": {
@@ -941,7 +949,7 @@
     "33894": [
       {
         "task": "cgmlst",
-        "version": "202011162032-v2.6.3"
+        "version": "202011162032-v2.7.0"
       }
     ],
     "33970": [
@@ -1003,7 +1011,7 @@
       },
       {
         "task": "cgmlst",
-        "version": "202011162032-v2.6.3"
+        "version": "202011162032-v2.7.0"
       },
       {
         "flags": {
@@ -1028,7 +1036,7 @@
     "485": [
       {
         "task": "cgmlst",
-        "version": "202011162032-v2.6.3"
+        "version": "202011162032-v2.7.0"
       },
       {
         "task": "paarsnp",
@@ -1054,7 +1062,7 @@
     "487": [
       {
         "task": "cgmlst",
-        "version": "202011162032-v2.6.3"
+        "version": "202011162032-v2.7.0"
       }
     ],
     "4909": [
@@ -1154,7 +1162,7 @@
     "561": [
       {
         "task": "cgmlst",
-        "version": "202011162032-v2.6.3"
+        "version": "202011162032-v2.7.0"
       },
       {
         "flags": {
@@ -1185,7 +1193,7 @@
     "570": [
       {
         "task": "kleborate",
-        "timeout": 900,
+        "timeout": "15m",
         "version": "v2.2.1"
       },
       {
@@ -1215,7 +1223,7 @@
       },
       {
         "task": "cgmlst",
-        "version": "202011162032-v2.6.3"
+        "version": "202011162032-v2.7.0"
       },
       {
         "task": "core",
@@ -1246,7 +1254,7 @@
     "620": [
       {
         "task": "cgmlst",
-        "version": "202011162032-v2.6.3"
+        "version": "202011162032-v2.7.0"
       }
     ],
     "629": [
@@ -1317,7 +1325,7 @@
           "V_CHOLERAE_EXPERIMENT_USER": true
         },
         "task": "cgmlst",
-        "version": "202011162032-v2.6.3"
+        "version": "202011162032-v2.7.0"
       }
     ],
     "670": [
@@ -1406,7 +1414,7 @@
     "78331": [
       {
         "task": "cgmlst",
-        "version": "202011162032-v2.6.3"
+        "version": "202011162032-v2.7.0"
       }
     ],
     "784": [

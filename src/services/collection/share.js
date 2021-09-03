@@ -9,7 +9,7 @@ module.exports = function ({ token, user, status }) {
 
   return Collection
     .find({ token, _user: user._id }, { link: 1 })
-    .then(collection => {
+    .then((collection) => {
       if (!collection) return new NotFoundError('Incorrect id and user combination.');
       if (status === false) {
         return (
@@ -17,10 +17,10 @@ module.exports = function ({ token, user, status }) {
             { token, _user: user._id },
             { $unset: { link: 1 } }
           )
-          .then(response => {
-            if (response.ok !== 1) throw new ServiceRequestError('Failed to complete share action');
-            return {};
-          })
+            .then((response) => {
+              if (response.ok !== 1) throw new ServiceRequestError('Failed to complete share action');
+              return {};
+            })
         );
       }
 
@@ -35,10 +35,10 @@ module.exports = function ({ token, user, status }) {
           { token, _user: user._id },
           { link }
         )
-        .then(response => {
-          if (response.ok !== 1) throw new ServiceRequestError('Failed to complete share action');
-          return { link };
-        })
+          .then((response) => {
+            if (response.ok !== 1) throw new ServiceRequestError('Failed to complete share action');
+            return { link };
+          })
       );
     });
 };

@@ -20,7 +20,7 @@ module.exports = async ({ user, id, collectionId, projection = {} }) => {
   }
 
   return Genome.findOne({ _id: id, $or }, projection)
-    .then(record => {
+    .then((record) => {
       if (!record) throw new NotFoundError('Not found or access denied');
       return record.toObject({ user });
     });
