@@ -2,6 +2,7 @@ const LOGGER = require('utils/logging').createLogger('runner');
 
 const argv = require('named-argv');
 const os = require('os');
+const fs = require('fs');
 
 const { formatMemory } = require('manifest');
 const { request } = require('services');
@@ -72,9 +73,7 @@ async function runJob(job, releaseResources) {
         });
         await request('genome', 'send-assembly-progress', { clientId, userId, uploadedAt });
       }
-    }
-
-    else if (taskType === taskTypes.genome) {
+    } else if (taskType === taskTypes.genome) {
       try {
         await request('genome', 'speciate', { timeout$: timeout * 1000 * 1.1, metadata, precache });
         await Queue.handleSuccess(job);
@@ -83,9 +82,7 @@ async function runJob(job, releaseResources) {
         await Queue.handleFailure(job, err.message);
         await request('genome', 'add-error', { spec, metadata });
       }
-    }
-
-    else if (taskType === taskTypes.task) {
+    } else if (taskType === taskTypes.task) {
       try {
         await request('tasks', 'run', { spec, timeout$: timeout * 1000 * 1.1, metadata, precache });
         await Queue.handleSuccess(job);
@@ -94,9 +91,7 @@ async function runJob(job, releaseResources) {
         await Queue.handleFailure(job, err.message);
         await request('genome', 'add-error', { spec, metadata });
       }
-    }
-
-    else if (taskType === taskTypes.collection) {
+    } else if (taskType === taskTypes.collection) {
       try {
         const { clientId, name } = metadata;
         await request('tasks', 'run-collection', { spec, metadata, timeout$: timeout * 1000 * 1.1 });
@@ -108,9 +103,7 @@ async function runJob(job, releaseResources) {
         await Queue.handleFailure(job, err.message);
         await request('collection', 'add-error', { spec, metadata });
       }
-    }
-
-    else if (taskType === taskTypes.clustering) {
+    } else if (taskType === taskTypes.clustering) {
       try {
         const result = await request('tasks', 'run-clustering', { spec, metadata, timeout$: timeout * 1000 * 1.1 });
         const { taskId } = metadata;
@@ -121,9 +114,7 @@ async function runJob(job, releaseResources) {
         LOGGER.error(err);
         await Queue.handleFailure(job, err.message);
       }
-    }
-
-    else {
+    } else {
       const errMessage = `Don't know how to handle job of type ${taskType} (task=${task} version=${version})`;
       LOGGER.error(errMessage);
       await Queue.handleFailure(job, errMessage);
@@ -137,10 +128,15 @@ async function runJob(job, releaseResources) {
 async function subscribeToQueue(queueName, taskType) {
   const constraints = {};
   if (taskType) constraints['message.taskType'] = taskType;
+  const heartbeatFile = '/tmp/pw-worker-heartbeat';
+  fs.writeFileSync(heartbeatFile, new Date().toISOString());
+
   while (true) {
     // We could make a small change so that we exclude jobs for users
     // who recently had a task run.  That would be a small step towards
     // the queue being fairer.
+    const time = new Date();
+    fs.utimesSync(heartbeatFile, time, time);
 
     const limits = { ...resourceManager.available, slow: resourceManager.free.slow };
     // We're not even pulling slow jobs if there are too many running
@@ -154,7 +150,10 @@ async function subscribeToQueue(queueName, taskType) {
     );
 
     if (job === null) {
-      LOGGER.info(`No jobs found in ${queueName} queue which fit on machine`, { available: resourceManager.available, free: resourceManager.free });
+      LOGGER.info(`No jobs found in ${queueName} queue which fit on machine`, {
+        available: resourceManager.available,
+        free: resourceManager.free,
+      });
       await sleep(2000);
       continue;
     }
@@ -168,7 +167,7 @@ async function subscribeToQueue(queueName, taskType) {
     // We don't want to keep waiting for resources if another worker will have
     // picked up this task.
     const whenResources = resourceManager.request(job.spec.resources);
-    const isTimeout = await Promise.race([request, sleep(job.ackWindown * 1000).then(() => 'timeout')]) === 'timeout';
+    const isTimeout = await Promise.race([ request, sleep(job.ackWindown * 1000).then(() => 'timeout') ]) === 'timeout';
     if (isTimeout) {
       whenResources.then((release) => release());
       continue;
