@@ -1,6 +1,6 @@
 {
   "name": "pathogenwatch-middle-end",
-  "version": "10.0.1",
+  "version": "10.0.2-0",
   "description": "Server-side code for Pathogenwatch",
   "main": "app.js",
   "engines": {

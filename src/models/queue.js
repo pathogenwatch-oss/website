@@ -22,6 +22,8 @@ const schema = new Schema({
 
   message: { // Has PW specific parameters
     metadata: Object,
+    precache: { type: Boolean, default: false },
+    priority: { type: Number, default: 0 },
     spec: {
       task: { type: String, required: true },
       taskType: { type: String, default: 'task' },
@@ -46,31 +48,41 @@ const schema = new Schema({
 }, { strict: false });
 
 schema.index({ ack: 1 }, { sparse: true });
-schema.index({ queue: 1, rejectedTime: 1, 'message.spec.resources.memory': 1, 'message.resources.cpu': 1, _id: 1, nextReceivableTime: 1 });
+schema.index({
+  queue: 1,
+  rejectedTime: 1,
+  'message.spec.resources.memory': 1,
+  'message.resources.cpu': 1,
+  'message.priority': -1,
+  _id: 1,
+  nextReceivableTime: 1,
+});
 
 const ackWindow = 30;
 
 schema.statics.dequeue = async function (limits = {}, constraints = {}, queue = 'normal') {
   const resourceQuery = [];
   for (const key of Object.keys(limits)) {
-    resourceQuery.push({ $or: [
-      { [`message.spec.resources.${key}`]: { $exists: false } },
-      { [`message.spec.resources.${key}`]: { $lte: limits[key] } },
-    ] });
+    resourceQuery.push({
+      $or: [
+        { [`message.spec.resources.${key}`]: { $exists: false } },
+        { [`message.spec.resources.${key}`]: { $lte: limits[key] } },
+      ],
+    });
   }
   const fullQuery = {
     $and: resourceQuery,
     ...constraints,
     queue,
     rejectedTime: null,
-    $expr: { $lt: ['$attempts', '$maxAttempts'] },
-    $or: [{ nextReceivableTime: null }, { nextReceivableTime: { $lte: now() } }],
+    $expr: { $lt: [ '$attempts', '$maxAttempts' ] },
+    $or: [ { nextReceivableTime: null }, { nextReceivableTime: { $lte: now() } } ],
   };
 
   const doc = await this.findOneAndUpdate(
     fullQuery,
     { $set: { ack: new mongoose.Types.ObjectId(), nextReceivableTime: now() + ackWindow } },
-    { new: true, sort: { _id: 1 } },
+    { new: true, sort: { 'message.priority': -1, _id: 1 } },
   ).lean();
 
   if (doc) return { ack: doc.ack, ackWindow, ...doc.message };
@@ -157,14 +169,14 @@ schema.statics.requeue = async function (job) {
 schema.statics.queueLength = async function (limits = {}, constraints = {}, queue = 'normal') {
   const resourceQuery = {};
   for (const key of Object.keys(limits)) {
-    resourceQuery[`message.spec.resources.${key}`] = { $or: [{ $exists: false }, { $lte: limits[key] }] };
+    resourceQuery[`message.spec.resources.${key}`] = { $or: [ { $exists: false }, { $lte: limits[key] } ] };
   }
   const fullQuery = {
     ...resourceQuery,
     ...constraints,
     queue,
     rejectedTime: null,
-    $or: [{ nextReceivableTime: null }, { nextReceivableTime: { $lte: now() } }],
+    $or: [ { nextReceivableTime: null }, { nextReceivableTime: { $lte: now() } } ],
   };
 
   return this.count(fullQuery);
@@ -174,16 +186,20 @@ const model = mongoose.model('Queue', schema, 'queue');
 module.exports = model;
 module.exports.state = state;
 module.exports.ackWindow = ackWindow;
-module.exports.overideNow = (fn) => { now = fn; }; // used for testing
+module.exports.overideNow = (fn) => {
+  now = fn;
+}; // used for testing
 module.exports.now = now;
 
-module.exports.enqueue = async function (spec, metadata, queue = 'normal') {
+module.exports.enqueue = async function ({ spec, metadata, queue = 'normal', precache = false, priority = 0 }) {
   const maxAttempts = spec.retries || defaultRetries;
 
   // eslint-disable-next-line new-cap
   const item = new model({
     message: {
       metadata,
+      precache,
+      priority,
       spec,
     },
     queue,

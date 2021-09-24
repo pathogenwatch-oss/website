@@ -11,5 +11,5 @@ module.exports = function ({ genomeId, fileId, uploadedAt, clientId, userId, que
     clientId,
     userId,
   };
-  return enqueue(speciatorTask, metadata, queue);
+  return enqueue({ spec: speciatorTask, metadata, queue });
 };

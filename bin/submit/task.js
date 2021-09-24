@@ -10,7 +10,11 @@ const { enqueue } = require('models/queue');
 
 const limit = 1;
 
-const { task, queue = 'reprocessing' } = argv.opts;
+const { task, priority: _priority = -10, precache: _precache = 'true' } = argv.opts;
+
+const priority = Number(_priority);
+const precache = _precache !== 'false';
+
 if (!task) {
   throw new Error('--task not provided');
 }
@@ -47,7 +51,7 @@ function submitTasks(genomes) {
         superkingdomId,
         uploadedAt: new Date(uploadedAt),
       };
-      return enqueue(requestedTask, metadata, queue);
+      await enqueue({ spec: requestedTask, metadata, precache, priority });
     }
   });
 }
