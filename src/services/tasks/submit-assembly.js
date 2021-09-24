@@ -11,5 +11,5 @@ module.exports = function ({ genomeId, readsKeys, uploadedAt, clientId, userId, 
     clientId,
     userId,
   };
-  return enqueue(assemblyTask, metadata, queue);
+  return enqueue({ spec: assemblyTask, metadata, queue });
 };

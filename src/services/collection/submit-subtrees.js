@@ -16,7 +16,7 @@ module.exports = function ({ organismId, collectionId, clientId }) {
   return getSubtrees(collectionId)
     .then((subtrees) => Promise.all(
       subtrees.map(({ name }) =>
-        enqueue(spec, { organismId, collectionId, name, clientId })
+        enqueue({ spec, metadata: { organismId, collectionId, name, clientId } })
       )
     ));
 };

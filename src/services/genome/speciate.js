@@ -7,7 +7,7 @@ const { getSpeciatorTask, getTasksByOrganism } = require('manifest');
 const notify = require('services/genome/notify');
 const { summariseAnalysis } = require('utils/analysis');
 
-async function submitTasks({ genomeId, fileId, uploadedAt, clientId, userId }, doc) {
+async function submitTasks({ genomeId, fileId, uploadedAt, clientId, userId }, doc, precache, priority) {
   const speciatorResult = summariseAnalysis(doc);
   const { organismId, speciesId, genusId, superkingdomId } = speciatorResult;
   const user = await User.findById(userId, { flags: 1 });
@@ -43,6 +43,8 @@ async function submitTasks({ genomeId, fileId, uploadedAt, clientId, userId }, d
     uploadedAt,
     clientId,
     userId,
+    precache,
+    priority,
   });
 }
 
@@ -59,9 +61,9 @@ module.exports = async function findTask(message, retries = 0) {
 
   const value = await store.getAnalysis(task, version, fileId, undefined);
   const doc = value === undefined ? undefined : JSON.parse(value);
-  const { precache = false } = message;
-  if (doc && !precache) {
-    return submitTasks(message.metadata, doc);
+  const { precache = false, priority = 0 } = message;
+  if (doc) {
+    return submitTasks(message.metadata, doc, precache, priority);
   }
 
   const metadata = { genomeId, fileId, uploadedAt, clientId };

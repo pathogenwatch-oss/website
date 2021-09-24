@@ -22,7 +22,6 @@ const { taskTypes } = require('manifest');
 const {
   queue = 'normal',
   type,
-  precache = false,
   availableCPUs = DEFAULT_AVAILABLE_CPUS,
   once = 'false', // If true, it only runs one task.  Useful for debugging.
 } = argv.opts;
@@ -37,7 +36,7 @@ const resourceManager = new ResourceManager({ cpu: availableCPUs, memory: availa
 
 async function runJob(job, releaseResources) {
   try {
-    const { spec, metadata } = job;
+    const { spec, metadata, priority = 0, precache = false } = job;
     const { taskType, timeout, task, version } = spec;
 
     try {
@@ -75,7 +74,7 @@ async function runJob(job, releaseResources) {
       }
     } else if (taskType === taskTypes.genome) {
       try {
-        await request('genome', 'speciate', { timeout$: timeout * 1000 * 1.1, metadata, precache });
+        await request('genome', 'speciate', { timeout$: timeout * 1000 * 1.1, metadata, precache, priority });
         await Queue.handleSuccess(job);
       } catch (err) {
         LOGGER.error(err);
@@ -92,6 +91,7 @@ async function runJob(job, releaseResources) {
         await request('genome', 'add-error', { spec, metadata });
       }
     } else if (taskType === taskTypes.collection) {
+      // TODO: Need to add priority + precache to collection tree tasks as subtree tasks are spawned by the task.
       try {
         const { clientId, name } = metadata;
         await request('tasks', 'run-collection', { spec, metadata, timeout$: timeout * 1000 * 1.1 });
@@ -127,7 +127,7 @@ async function runJob(job, releaseResources) {
 
 async function subscribeToQueue(queueName, taskType) {
   const constraints = {};
-  if (taskType) constraints['message.taskType'] = taskType;
+  if (taskType) constraints['message.spec.taskType'] = taskType;
   const heartbeatFile = '/tmp/pw-worker-heartbeat';
   fs.writeFileSync(heartbeatFile, new Date().toISOString());
 
