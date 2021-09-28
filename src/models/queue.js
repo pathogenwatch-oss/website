@@ -57,6 +57,10 @@ schema.index({
   _id: 1,
   nextReceivableTime: 1,
 });
+schema.index({
+  'message.priority': -1,
+  _id: 1,
+});
 
 const ackWindow = 30;
 
