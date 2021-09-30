@@ -17,6 +17,7 @@ const schema = new Schema({
   },
   name: String,
   organisation: { type: Schema.Types.ObjectId, ref: 'Organisation' },
+  priorityModifier: Number,
   photo: String,
   providerId: String,
   providerType: String,

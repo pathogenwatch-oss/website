@@ -17,7 +17,7 @@ async function runTask(spec, metadata) {
   throw new Error("Unknown tree task.");
 }
 
-module.exports = async function handleMessage({ spec, metadata }) {
+module.exports = async function handleMessage({ spec, metadata, priority = 0, precache = false}) {
   const result = await runTask(spec, metadata);
-  await request('collection', 'add-analysis', { spec, metadata, result });
+  await request('collection', 'add-analysis', { spec, metadata, result, priority, precache });
 };
