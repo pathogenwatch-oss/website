@@ -5,6 +5,7 @@ const Collection = require('models/collection');
 const Genome = require('models/genome');
 const Organism = require('models/organism');
 const Genomecollection = require('models/genomecollection');
+const { getTaskPriority } = require('../utils');
 
 async function validate({ genomeIds, organismId, user }) {
   await request('collection', 'verify', { genomeIds, organismId, user });
@@ -64,6 +65,7 @@ async function createCollection(genomes, { organismId, title, description, pmid,
 
   const genomeIds = genomes.map((_) => _._id);
   const organism = await Organism.getLatest(organismId);
+
   const subtrees = await getSubtrees(organismId, genomes, genomeIds);
 
   const collection = await Collection.create({
@@ -98,11 +100,13 @@ async function createCollection(genomes, { organismId, title, description, pmid,
 function submitCollection(collection) {
   const { _id, token, organismId } = collection;
   const submitType = collection.tree ? 'submit-tree' : 'submit-subtrees';
-  return request('collection', submitType, {
-    organismId,
-    collectionId: _id,
-    clientId: token,
-  })
+  return getTaskPriority('collection', collection._user).then(
+    (priority) => request('collection', submitType, {
+      organismId,
+      collectionId: _id,
+      clientId: token,
+      priority,
+    }))
     .then(() => collection);
 }
 

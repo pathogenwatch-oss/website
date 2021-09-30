@@ -91,10 +91,9 @@ async function runJob(job, releaseResources) {
         await request('genome', 'add-error', { spec, metadata });
       }
     } else if (taskType === taskTypes.collection) {
-      // TODO: Need to add priority + precache to collection tree tasks as subtree tasks are spawned by the task.
       try {
         const { clientId, name } = metadata;
-        await request('tasks', 'run-collection', { spec, metadata, timeout$: timeout * 1000 * 1.1 });
+        await request('tasks', 'run-collection', { spec, metadata, priority, precache, timeout$: timeout * 1000 * 1.1 });
         LOGGER.info('Got result', metadata.collectionId, task, version);
         await request('collection', 'send-progress', { clientId, payload: { task, name, status: 'READY' } });
         await Queue.handleSuccess(job);

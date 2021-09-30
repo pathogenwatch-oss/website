@@ -1,6 +1,7 @@
 const { request } = require('services');
 const { enqueue } = require('models/queue');
 const rand = require('rand-token');
+const { getTaskPriority } = require('../utils');
 
 module.exports = async function ({ user, genomeId, clientId }) {
   const { doc, status, scheme, spec } =
@@ -18,6 +19,7 @@ module.exports = async function ({ user, genomeId, clientId }) {
     metadata.public = true;
   }
 
-  await enqueue({ spec, metadata });
+  const priority = await getTaskPriority('clustering', user._id);
+  await enqueue({ spec, metadata, priority });
   return { ok: 1, taskId };
 };
