@@ -80,3 +80,5 @@ module.exports = async function ({ task, version }) {
   cached[name].then(() => LOGGER.info(`Pulled task=${task} version=${version}`));
   return cached[name];
 };
+
+module.exports.pullImage = pullImage;

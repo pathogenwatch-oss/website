@@ -215,7 +215,7 @@ async function handleContainerExit(container, task, versions, metadata, resource
   const startTime = process.hrtime();
   LOGGER.info('spawn', container.id, 'running task', task, 'for collection', collectionId);
 
-  const { StatusCode: exitCode } = await container.wait();
+  const { StatusCode: exitCode } = await container.wait({ condition: 'next-exit' });
   LOGGER.info('exit', exitCode);
 
   const [ durationS, durationNs ] = process.hrtime(startTime);

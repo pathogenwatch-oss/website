@@ -72,7 +72,7 @@ async function runTask({ spec, metadata }) {
     throw err;
   }
 
-  const { StatusCode: statusCode } = await container.wait();
+  const { StatusCode: statusCode } = await container.wait({ condition: 'next-exit' });
   LOGGER.info('exit', statusCode);
 
   const [ durationS, durationNs ] = process.hrtime(startTime);

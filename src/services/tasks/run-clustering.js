@@ -152,7 +152,7 @@ async function handleContainerOutput(container, spec, metadata) {
           if ((progress - lastProgress) >= 0.1) {
             await request('clustering', 'send-progress', {
               taskId,
-              payload: { task, status: 'IN PROGRESS', message: doc.message, progress }
+              payload: { task, status: 'IN PROGRESS', message: doc.message, progress },
             });
             lastProgress = progress;
           }
@@ -173,7 +173,7 @@ async function handleContainerOutput(container, spec, metadata) {
   });
 
   Readable.from(lines).pipe(handler);
-  await container.wait();
+  await container.wait({ condition: 'next-exit' });
   return results;
 }
 
@@ -192,7 +192,7 @@ async function handleContainerExit(container, spec, metadata) {
   const startTime = process.hrtime();
   LOGGER.info('spawn', container.id, 'running task', task);
 
-  const { StatusCode: statusCode } = await container.wait();
+  const { StatusCode: statusCode } = await container.wait({ condition: 'next-exit' });
 
   LOGGER.info('exit', statusCode);
 
