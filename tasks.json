@@ -274,6 +274,7 @@
       },
       {
         "task": "cgmlst",
+        "timeout": 480,
         "version": "202011162032-v2.7.0"
       },
       {
@@ -360,6 +361,7 @@
       },
       {
         "task": "cgmlst",
+        "timeout": 480,
         "version": "202011162032-v2.7.0"
       }
     ],
@@ -404,6 +406,7 @@
       },
       {
         "task": "cgmlst",
+        "timeout": 480,
         "version": "202011162032-v2.7.0"
       }
     ],
@@ -414,6 +417,7 @@
       },
       {
         "task": "cgmlst",
+        "timeout": 480,
         "version": "202011162032-v2.7.0"
       },
       {
@@ -452,6 +456,7 @@
     "1463165": [
       {
         "task": "cgmlst",
+        "timeout": 480,
         "version": "202011162032-v2.7.0"
       },
       {
@@ -485,6 +490,7 @@
       },
       {
         "task": "cgmlst",
+        "timeout": 480,
         "version": "202011162032-v2.7.0"
       }
     ],
@@ -522,6 +528,7 @@
     "1637": [
       {
         "task": "cgmlst",
+        "timeout": 480,
         "version": "202011162032-v2.7.0"
       }
     ],
@@ -564,12 +571,14 @@
     "1765": [
       {
         "task": "cgmlst",
+        "timeout": 480,
         "version": "202011162032-v2.7.0"
       }
     ],
     "1773": [
       {
         "task": "cgmlst",
+        "timeout": 480,
         "version": "202011162032-v2.7.0"
       },
       {
@@ -607,6 +616,7 @@
     "195": [
       {
         "task": "cgmlst",
+        "timeout": 480,
         "version": "202011162032-v2.7.0"
       }
     ],
@@ -629,6 +639,7 @@
       },
       {
         "task": "cgmlst",
+        "timeout": 480,
         "version": "202011162032-v2.7.0"
       }
     ],
@@ -769,6 +780,7 @@
     "244366": [
       {
         "task": "cgmlst",
+        "timeout": 480,
         "version": "202011162032-v2.7.0"
       },
       {
@@ -790,6 +802,7 @@
       },
       {
         "task": "cgmlst",
+        "timeout": 480,
         "version": "202011162032-v2.7.0"
       }
     ],
@@ -893,8 +906,11 @@
       },
       {
         "task": "cgmlst",
+        "timeout": 480,
         "version": "202011162032-v2.7.0",
-        "resources": { "memory": 5368709120 }
+        "resources": {
+          "memory": 5368709120
+        }
       },
       {
         "flags": {
@@ -949,6 +965,7 @@
     "33894": [
       {
         "task": "cgmlst",
+        "timeout": 480,
         "version": "202011162032-v2.7.0"
       }
     ],
@@ -1011,6 +1028,7 @@
       },
       {
         "task": "cgmlst",
+        "timeout": 480,
         "version": "202011162032-v2.7.0"
       },
       {
@@ -1036,6 +1054,7 @@
     "485": [
       {
         "task": "cgmlst",
+        "timeout": 480,
         "version": "202011162032-v2.7.0"
       },
       {
@@ -1062,6 +1081,7 @@
     "487": [
       {
         "task": "cgmlst",
+        "timeout": 480,
         "version": "202011162032-v2.7.0"
       }
     ],
@@ -1162,6 +1182,7 @@
     "561": [
       {
         "task": "cgmlst",
+        "timeout": 480,
         "version": "202011162032-v2.7.0"
       },
       {
@@ -1223,6 +1244,7 @@
       },
       {
         "task": "cgmlst",
+        "timeout": 480,
         "version": "202011162032-v2.7.0"
       },
       {
@@ -1254,6 +1276,7 @@
     "620": [
       {
         "task": "cgmlst",
+        "timeout": 480,
         "version": "202011162032-v2.7.0"
       }
     ],
@@ -1325,6 +1348,7 @@
           "V_CHOLERAE_EXPERIMENT_USER": true
         },
         "task": "cgmlst",
+        "timeout": 480,
         "version": "202011162032-v2.7.0"
       }
     ],
@@ -1414,6 +1438,7 @@
     "78331": [
       {
         "task": "cgmlst",
+        "timeout": 480,
         "version": "202011162032-v2.7.0"
       }
     ],
