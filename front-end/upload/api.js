@@ -1,5 +1,4 @@
-import { fetchJson } from '../utils/Api';
-import config from '~/app/config';
+import { fetchJson } from '~/utils/Api';
 
 export function initialise(genomes, uploadedAt) {
   return fetchJson(

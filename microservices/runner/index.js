@@ -36,7 +36,7 @@ const resourceManager = new ResourceManager({ cpu: availableCPUs, memory: availa
 
 async function runJob(job, releaseResources) {
   try {
-    const { spec, metadata, priority = 0, precache = false } = job;
+    const { spec, metadata, priority = 0, precache = false, retry = false } = job;
     const { taskType, timeout, task, version } = spec;
 
     try {
@@ -79,7 +79,9 @@ async function runJob(job, releaseResources) {
       } catch (err) {
         LOGGER.error(err);
         await Queue.handleFailure(job, err.message);
-        await request('genome', 'add-error', { spec, metadata });
+        if (!retry) {
+          await request('genome', 'add-error', { spec, metadata });
+        }
       }
     } else if (taskType === taskTypes.task) {
       try {
@@ -88,12 +90,20 @@ async function runJob(job, releaseResources) {
       } catch (err) {
         LOGGER.error(err);
         await Queue.handleFailure(job, err.message);
-        await request('genome', 'add-error', { spec, metadata });
+        if (!retry) {
+          await request('genome', 'add-error', { spec, metadata });
+        }
       }
     } else if (taskType === taskTypes.collection) {
       try {
         const { clientId, name } = metadata;
-        await request('tasks', 'run-collection', { spec, metadata, priority, precache, timeout$: timeout * 1000 * 1.1 });
+        await request('tasks', 'run-collection', {
+          spec,
+          metadata,
+          priority,
+          precache,
+          timeout$: timeout * 1000 * 1.1,
+        });
         LOGGER.info('Got result', metadata.collectionId, task, version);
         await request('collection', 'send-progress', { clientId, payload: { task, name, status: 'READY' } });
         await Queue.handleSuccess(job);
@@ -166,7 +176,7 @@ async function subscribeToQueue(queueName, taskType) {
     // We don't want to keep waiting for resources if another worker will have
     // picked up this task.
     const whenResources = resourceManager.request(job.spec.resources);
-    const isTimeout = await Promise.race([ request, sleep(job.ackWindown * 1000).then(() => 'timeout') ]) === 'timeout';
+    const isTimeout = await Promise.race([ request, sleep(job.ackWindow * 1000).then(() => 'timeout') ]) === 'timeout';
     if (isTimeout) {
       whenResources.then((release) => release());
       continue;

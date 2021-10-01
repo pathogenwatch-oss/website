@@ -3,8 +3,8 @@ const { request } = require('services');
 const { summariseAnalysis } = require('../../utils/analysis');
 
 function getNotification(analysis) {
-  const { task, version, results, error } = analysis;
-  if (error) return { task, version, result: error, error };
+  const { task, version, results, error = false } = analysis;
+  if (error) return { task, version, error };
   switch (task) {
     case 'speciator':
       return { task, version, result: summariseAnalysis(analysis), error };
