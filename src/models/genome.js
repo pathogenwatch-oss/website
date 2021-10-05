@@ -116,6 +116,22 @@ schema.index({
   createdAt: -1,
 });
 
+// Indexes for the stats page
+// Re-enable when stats page re-enabled
+// schema.index({
+//   binned: 1,
+//   public: 1,
+//   createdAt: -1,
+// }, { partialFilterExpression: { 'analysis.metrics': { $exists: true } } });
+//
+// NB This index wasn't enough to get the stats page fast enough when the user was logged in.
+// schema.index({
+//   _user: 1,
+//   binned: 1,
+//   public: 1,
+//   createdAt: -1,
+// }, { partialFilterExpression: { 'analysis.metrics': { $exists: true } } });
+
 schema.statics.uploadTypes = uploadTypes;
 
 schema.statics.taxonomy = (genome) => {
