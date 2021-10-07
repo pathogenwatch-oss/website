@@ -274,6 +274,7 @@
       },
       {
         "task": "cgmlst",
+        "cpu": 2,
         "timeout": 480,
         "version": "202011162032-v2.7.0"
       },
@@ -361,6 +362,7 @@
       },
       {
         "task": "cgmlst",
+        "cpu": 2,
         "timeout": 480,
         "version": "202011162032-v2.7.0"
       }
@@ -406,6 +408,7 @@
       },
       {
         "task": "cgmlst",
+        "cpu": 2,
         "timeout": 480,
         "version": "202011162032-v2.7.0"
       }
@@ -417,6 +420,7 @@
       },
       {
         "task": "cgmlst",
+        "cpu": 2,
         "timeout": 480,
         "version": "202011162032-v2.7.0"
       },
@@ -456,6 +460,7 @@
     "1463165": [
       {
         "task": "cgmlst",
+        "cpu": 2,
         "timeout": 480,
         "version": "202011162032-v2.7.0"
       },
@@ -490,6 +495,7 @@
       },
       {
         "task": "cgmlst",
+        "cpu": 2,
         "timeout": 480,
         "version": "202011162032-v2.7.0"
       }
@@ -528,6 +534,7 @@
     "1637": [
       {
         "task": "cgmlst",
+        "cpu": 2,
         "timeout": 480,
         "version": "202011162032-v2.7.0"
       }
@@ -571,6 +578,7 @@
     "1765": [
       {
         "task": "cgmlst",
+        "cpu": 2,
         "timeout": 480,
         "version": "202011162032-v2.7.0"
       }
@@ -578,6 +586,7 @@
     "1773": [
       {
         "task": "cgmlst",
+        "cpu": 2,
         "timeout": 480,
         "version": "202011162032-v2.7.0"
       },
@@ -616,6 +625,7 @@
     "195": [
       {
         "task": "cgmlst",
+        "cpu": 2,
         "timeout": 480,
         "version": "202011162032-v2.7.0"
       }
@@ -639,6 +649,7 @@
       },
       {
         "task": "cgmlst",
+        "cpu": 2,
         "timeout": 480,
         "version": "202011162032-v2.7.0"
       }
@@ -780,6 +791,7 @@
     "244366": [
       {
         "task": "cgmlst",
+        "cpu": 2,
         "timeout": 480,
         "version": "202011162032-v2.7.0"
       },
@@ -802,6 +814,7 @@
       },
       {
         "task": "cgmlst",
+        "cpu": 2,
         "timeout": 480,
         "version": "202011162032-v2.7.0"
       }
@@ -906,7 +919,8 @@
       },
       {
         "task": "cgmlst",
-        "timeout": 480,
+        "cpu": 2,
+        "timeout": 900,
         "version": "202011162032-v2.7.0",
         "resources": {
           "memory": 5368709120
@@ -965,6 +979,7 @@
     "33894": [
       {
         "task": "cgmlst",
+        "cpu": 2,
         "timeout": 480,
         "version": "202011162032-v2.7.0"
       }
@@ -1028,6 +1043,7 @@
       },
       {
         "task": "cgmlst",
+        "cpu": 2,
         "timeout": 480,
         "version": "202011162032-v2.7.0"
       },
@@ -1054,6 +1070,7 @@
     "485": [
       {
         "task": "cgmlst",
+        "cpu": 2,
         "timeout": 480,
         "version": "202011162032-v2.7.0"
       },
@@ -1081,6 +1098,7 @@
     "487": [
       {
         "task": "cgmlst",
+        "cpu": 2,
         "timeout": 480,
         "version": "202011162032-v2.7.0"
       }
@@ -1182,7 +1200,11 @@
     "561": [
       {
         "task": "cgmlst",
-        "timeout": 480,
+        "cpu": 2,
+        "timeout": 900,
+        "resources": {
+          "memory": 4294967296
+        },
         "version": "202011162032-v2.7.0"
       },
       {
@@ -1244,6 +1266,7 @@
       },
       {
         "task": "cgmlst",
+        "cpu": 2,
         "timeout": 480,
         "version": "202011162032-v2.7.0"
       },
@@ -1276,7 +1299,11 @@
     "620": [
       {
         "task": "cgmlst",
-        "timeout": 480,
+        "cpu": 2,
+        "timeout": 600,
+        "resources": {
+          "memory": 4294967296
+        },
         "version": "202011162032-v2.7.0"
       }
     ],
@@ -1348,6 +1375,7 @@
           "V_CHOLERAE_EXPERIMENT_USER": true
         },
         "task": "cgmlst",
+        "cpu": 2,
         "timeout": 480,
         "version": "202011162032-v2.7.0"
       }
@@ -1438,6 +1466,7 @@
     "78331": [
       {
         "task": "cgmlst",
+        "cpu": 2,
         "timeout": 480,
         "version": "202011162032-v2.7.0"
       }
