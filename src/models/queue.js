@@ -7,6 +7,7 @@ const { formatMemory, formatTime } = require('manifest');
 
 const MAX_MEMORY = formatMemory(process.env.MAX_MEMORY || '30g');
 const MAX_TIMEOUT = formatTime('1h');
+const MAX_CPU = 15;
 const defaultRetries = config.tasks.retries || 3;
 
 let now = () => Math.floor(new Date() / 1000);
@@ -89,14 +90,20 @@ schema.statics.dequeue = async function (limits = {}, constraints = {}, queue = 
     { new: true, sort: { 'message.priority': -1, _id: 1 } },
   ).lean();
 
-  if (doc) return { ack: doc.ack, ackWindow, ...doc.message, retry: doc && doc.maxAttempts - doc.attempts > 1, _id: doc._id };
+  if (doc) return {
+    ack: doc.ack,
+    ackWindow,
+    ...doc.message,
+    retry: doc && doc.maxAttempts - doc.attempts > 1,
+    _id: doc._id,
+  };
   return null;
 };
 
 schema.statics.handleFailure = async function (job, rejectionReason) {
   const { ack, spec = {} } = job;
   const { resources = {}, timeout } = spec;
-  const { memory } = resources;
+  const { cpu = 1, memory } = resources;
 
   const update = {
     nextReceivableTime: now() + 10,
@@ -104,8 +111,16 @@ schema.statics.handleFailure = async function (job, rejectionReason) {
     state: state.PENDING,
   };
 
-  if (timeout && rejectionReason === 'timeout') update['message.spec.timeout'] = Math.min(timeout * 2, MAX_TIMEOUT);
-  if (memory && rejectionReason === 'killed') update['message.spec.resources.memory'] = Math.min(memory * 2, MAX_MEMORY);
+  if (timeout && rejectionReason === 'timeout') {
+    update['message.spec.resources.cpu'] = Math.min(Math.ceil(cpu * 1.4), MAX_CPU);
+    update['message.spec.timeout'] = Math.min(timeout * 2, MAX_TIMEOUT);
+  } else if (memory && rejectionReason === 'killed') update['message.spec.resources.memory'] = Math.min(memory * 2, MAX_MEMORY);
+  else {
+    // The general case. If a particular type or combination of tasks is causing failures through load,
+    // scaling up requirements provides a bit more robustness to tasks all getting processed.
+    update['message.spec.resources.cpu'] = Math.min(Math.ceil(cpu * 1.4), MAX_CPU);
+    if (memory) update['message.spec.resources.memory'] = Math.min(memory * 1.4, MAX_MEMORY);
+  }
 
   const doc = await this.findOneAndUpdate(
     { ack, $expr: { $gt: [ "$maxAttempts", "$attempts" ] } },
