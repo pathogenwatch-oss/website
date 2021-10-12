@@ -22,7 +22,7 @@ describe("Queue", async () => {
             task: 'test',
             version: 0,
             taskType: 'testTask',
-            timeout: 10,
+            timeout: 12,
             resources: { cpu: 1, memory: (100 - i) * 1024 ** 2 },
             retries: 3,
           },
@@ -63,7 +63,7 @@ describe("Queue", async () => {
       const job = await Queue.dequeue({ cpu: 1 }, {}, testQueue);
       await Queue.ack(job);
       assert.equal(await Queue.queueLength({}, {}, testQueue), 4);
-      timeNow += job.spec.timeout + 1;
+      timeNow += job.spec.timeout + 11;
       assert.equal(await Queue.queueLength({}, {}, testQueue), 5);
 
       // Another worker gets the same job
@@ -85,31 +85,59 @@ describe("Queue", async () => {
       // Take a job but fail
       const job = await Queue.dequeue({ cpu: 1 }, {}, testQueue);
       assert.ok(await Queue.ack(job));
-      assert.equal(job.message.spec.timeout, 10);
       assert.ok(await Queue.handleFailure(job, 'testReason'));
 
-      // Get the same job again
-      timeNow += 11;
+      // Get the same job again and fail with a timeout
+      timeNow += 13;
       let anotherWorkerJob = await Queue.dequeue({ cpu: 1 }, {}, testQueue);
       assert.ok(await Queue.ack(anotherWorkerJob));
       assert.equal(job._id.toString(), anotherWorkerJob._id.toString());
-      assert.equal(anotherWorkerJob.message.spec.timeout, 20);
       assert.ok(await Queue.handleFailure(anotherWorkerJob, 'testReason'));
 
       // Get the same job again
-      timeNow += 11;
+      timeNow += 13;
       anotherWorkerJob = await Queue.dequeue({ cpu: 1 }, {}, testQueue);
       assert.ok(await Queue.ack(anotherWorkerJob));
       assert.equal(job._id.toString(), anotherWorkerJob._id.toString());
-      assert.equal(anotherWorkerJob.message.spec.timeout, 40);
       assert.ok(!await Queue.handleFailure(anotherWorkerJob, 'testReason'));
 
       // Get a different job
-      timeNow += 11;
+      timeNow += 13;
       anotherWorkerJob = await Queue.dequeue({ cpu: 1 }, {}, testQueue);
       assert.ok(await Queue.ack(anotherWorkerJob));
       assert.notEqual(job._id.toString(), anotherWorkerJob._id.toString());
-      assert.ok(await Queue.handleSuccess(anotherWorkerJob, 'testReason'));
+      assert.ok(await Queue.handleSuccess(anotherWorkerJob));
+
+      done();
+    } catch (err) {
+      done(err);
+    }
+  });
+
+  it(" correctly updates the timeout", async (done) => {
+    try {
+
+      assert.equal(await Queue.queueLength({}, {}, testQueue), 5);
+
+      // Take a job but fail
+      const job = await Queue.dequeue({ cpu: 1 }, {}, testQueue);
+      assert.ok(await Queue.ack(job));
+      assert.equal(job.spec.timeout, 12);
+      assert.ok(await Queue.handleFailure(job, 'timeout'));
+
+      timeNow += 12;
+      let anotherWorkerJob = await Queue.dequeue({ cpu: 1 }, {}, testQueue);
+      assert.ok(await Queue.ack(anotherWorkerJob));
+      assert.equal(job._id.toString(), anotherWorkerJob._id.toString());
+      assert.equal(anotherWorkerJob.spec.timeout, 24);
+      assert.ok(await Queue.handleFailure(anotherWorkerJob, 'timeout'));
+
+      timeNow += 25;
+      anotherWorkerJob = await Queue.dequeue({ cpu: 1 }, {}, testQueue);
+      assert.ok(await Queue.ack(anotherWorkerJob));
+      assert.equal(job._id.toString(), anotherWorkerJob._id.toString());
+      assert.equal(anotherWorkerJob.spec.timeout, 48);
+      assert.equal(false, await Queue.handleFailure(anotherWorkerJob, 'timeout'));
 
       done();
     } catch (err) {
