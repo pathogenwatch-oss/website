@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 const mongoConnection = require('utils/mongoConnection');
 const Queue = require('models/queue');
 const assert = require('assert').strict;
