@@ -8,15 +8,17 @@ mongoConnection.connect()
     const collections = Collection.find({}, { genomes: 1 }).cursor();
     return collections.eachAsync(async ({ _id, genomes }) => {
       console.log({ collection: _id, genomes: genomes.length });
-      await Genomecollection.bulkWrite(
-        genomes.map(_genome => ({
-          updateOne: {
-            filter: { _genome },
-            update: { $addToSet: { collections: _id } },
-            upsert: true,
-          },
-        })),
-      );
+      if (genomes.length !== 0) {
+        await Genomecollection.bulkWrite(
+          genomes.map((_genome) => ({
+            updateOne: {
+              filter: { _genome },
+              update: { $addToSet: { collections: _id } },
+              upsert: true,
+            },
+          })),
+        );
+      }
     });
   })
   .then(() => process.exit(0));
