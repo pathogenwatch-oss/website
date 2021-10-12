@@ -89,7 +89,7 @@ schema.statics.dequeue = async function (limits = {}, constraints = {}, queue = 
     { new: true, sort: { 'message.priority': -1, _id: 1 } },
   ).lean();
 
-  if (doc) return { ack: doc.ack, ackWindow, ...doc.message, retry: doc && doc.maxAttempts - doc.attempts > 1 };
+  if (doc) return { ack: doc.ack, ackWindow, ...doc.message, retry: doc && doc.maxAttempts - doc.attempts > 1, _id: doc._id };
   return null;
 };
 
