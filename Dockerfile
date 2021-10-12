@@ -7,7 +7,7 @@ RUN apk add --update --no-cache \
       g++ \
       make \
       git \
-      python
+      python3
 
 RUN git config --global url.https://$REPO_USER:$REPO_TOKEN@gitlab.com/.insteadOf git://gitlab.com/ && \
     git config --global url.https://$REPO_USER:$REPO_TOKEN@gitlab.com/cgps.insteadOf git@gitlab.com:cgps && \
@@ -19,14 +19,14 @@ COPY . /pathogenwatch
 
 RUN npm install -g npm && npm install --only=production
 
-# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
 FROM middle-end AS front-end
 
 RUN npm install # installs dev dependencies
 RUN npm run build # runs webpack build
 
-# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
 FROM node:12.22.2-alpine
 
