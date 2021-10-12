@@ -110,7 +110,9 @@ async function runJob(job, releaseResources) {
       } catch (err) {
         LOGGER.error(err);
         await Queue.handleFailure(job, err.message);
-        await request('collection', 'add-error', { spec, metadata });
+        if (!retry) {
+          await request('collection', 'add-error', { spec, metadata });
+        }
       }
     } else if (taskType === taskTypes.clustering) {
       try {
