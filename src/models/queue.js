@@ -90,13 +90,15 @@ schema.statics.dequeue = async function (limits = {}, constraints = {}, queue = 
     { new: true, sort: { 'message.priority': -1, _id: 1 } },
   ).lean();
 
-  if (doc) return {
-    ack: doc.ack,
-    ackWindow,
-    ...doc.message,
-    retry: doc && doc.maxAttempts - doc.attempts > 1,
-    _id: doc._id,
-  };
+  if (doc) {
+    return {
+      ack: doc.ack,
+      ackWindow,
+      ...doc.message,
+      retry: doc && doc.maxAttempts - doc.attempts > 1,
+      _id: doc._id,
+    };
+  }
   return null;
 };
 
@@ -119,7 +121,7 @@ schema.statics.handleFailure = async function (job, rejectionReason) {
     // The general case. If a particular type or combination of tasks is causing failures through load,
     // scaling up requirements provides a bit more robustness to tasks all getting processed.
     update['message.spec.resources.cpu'] = Math.min(Math.ceil(cpu * 1.4), MAX_CPU);
-    if (memory) update['message.spec.resources.memory'] = Math.min(memory * 1.4, MAX_MEMORY);
+    if (memory) update['message.spec.resources.memory'] = Math.min(Math.round(memory * 1.4), MAX_MEMORY);
   }
 
   const doc = await this.findOneAndUpdate(
