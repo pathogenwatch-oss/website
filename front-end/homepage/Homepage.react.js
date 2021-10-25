@@ -310,7 +310,7 @@ export default ({ deployedOrganisms }) => (
               </td>
               <td />
               <td>
-                <small>PopPUNK</small>
+                <small>PopPUNK 2</small>
                 <br />
                 <small>SeroBA</small>
                 <br />

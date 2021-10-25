@@ -6,8 +6,8 @@ const transformer = function (doc) {
   return {
     'Genome ID': doc._id.toString(),
     'Genome Name': doc.name,
-    Version: doc.analysis.poppunk.__v,
-    Strain: doc.analysis.poppunk.strain,
+    Version: doc.analysis.poppunk2.__v,
+    Strain: doc.analysis.poppunk2.strain,
   };
 };
 
@@ -22,12 +22,12 @@ module.exports = (req, res) => {
 
   const query = {
     _id: { $in: ids.split(',') },
-    'analysis.poppunk': { $exists: true },
+    'analysis.poppunk2': { $exists: true },
     ...Genome.getPrefilterCondition({ user }),
   };
   const projection = {
     name: 1,
-    'analysis.poppunk': 1,
+    'analysis.poppunk2': 1,
   };
 
   return Genome.find(query, projection)

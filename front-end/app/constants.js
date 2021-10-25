@@ -68,7 +68,7 @@ export const analysisLabels = {
   ngstar: 'NG-STAR',
   paarsnp: 'AMR',
   pangolin: 'Pangolin',
-  poppunk: 'Strain',
+  poppunk2: 'Strain',
   "sarscov2-variants": 'Notable mutations',
   serotype: 'Serotype',
   speciator: 'Species prediction',

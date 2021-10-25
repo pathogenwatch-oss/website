@@ -5,7 +5,7 @@ import ExternalLink from '../ExternalLink.react';
 const mailto = 'mailto:gps@pneumogen.net?subject=Novel strain assignment&body=(Please attach your assembly to this email)';
 
 export default ({ genome }) => {
-  const { poppunk, speciator } = genome.analysis;
+  const { poppunk2, speciator } = genome.analysis;
   return (
     <React.Fragment>
       <header className="pw-genome-report-section-header">
@@ -20,8 +20,8 @@ export default ({ genome }) => {
         <div className="pw-genome-report-metadata">
           <dt>GPSC</dt>
           <dd>
-            {poppunk.strain}
-            {poppunk.strain === 'novel' && genome.owner === 'me' &&
+            {poppunk2.strain}
+            {poppunk2.strain === 'novel' && genome.owner === 'me' &&
               <a href={mailto} target="_blank" rel="noopener" className="pw-genome-report-secondary-link">
                 Submit for assignment
               </a>
@@ -32,9 +32,9 @@ export default ({ genome }) => {
       <ExternalLink
         to={`/genomes/all?genusId=${speciator.genusId}&speciesId=${
           speciator.speciesId
-        }&strain=${poppunk.strain}`}
+        }&strain=${poppunk2.strain}`}
       >
-        View all GPSC {poppunk.strain}
+        View all GPSC {poppunk2.strain}
       </ExternalLink>
     </React.Fragment>
   );

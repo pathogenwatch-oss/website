@@ -86,7 +86,7 @@ schema.index({
 });
 schema.index({ 'analysis.speciator.organismId': 1, 'analysis.speciator.organismName': 1 });
 schema.index({ 'upload.type': 1, 'upload.completed': 1 });
-schema.index({ 'analysis.poppunk.strain': 1 });
+schema.index({ 'analysis.poppunk2.strain': 1 });
 schema.index({ 'analysis.ngstar.st': 1 });
 schema.index({ 'analysis.ngmast.ngmast': 1 });
 schema.index({ 'analysis.genotyphi.genotype': 1 });
@@ -386,7 +386,7 @@ schema.statics.getFilterQuery = async function (props) {
   }
 
   if (strain) {
-    findQuery['analysis.poppunk.strain'] = strain;
+    findQuery['analysis.poppunk2.strain'] = strain;
   }
 
   if (ngmast) {

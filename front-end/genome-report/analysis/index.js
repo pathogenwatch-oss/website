@@ -24,7 +24,7 @@ function hasSpeciesTypingResult(analysis) {
     analysis.ngmast ||
     analysis.serotype ||
     analysis.pangolin ||
-    analysis.poppunk ||
+    analysis.poppunk2 ||
     analysis.kleborate ||
     analysis.ngstar ||
     analysis.vista

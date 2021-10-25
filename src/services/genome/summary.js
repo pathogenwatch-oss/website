@@ -167,12 +167,12 @@ const summaryFields = [
   },
   {
     field: 'strain',
-    task: 'poppunk',
+    task: 'poppunk2',
     aggregation: () => [
-      { $match: { 'analysis.poppunk': { $exists: true } } },
+      { $match: { 'analysis.poppunk2': { $exists: true } } },
       {
         $group: {
-          _id: '$analysis.poppunk.strain',
+          _id: '$analysis.poppunk2.strain',
           count: { $sum: 1 },
         },
       },
