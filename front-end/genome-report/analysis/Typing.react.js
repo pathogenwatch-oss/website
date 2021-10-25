@@ -12,14 +12,14 @@ import SpnPbpType from './SpnPbpType.react';
 import VistaGenotype from './VistaGenotype.react';
 
 function getSecondaryTyping(genome) {
-  const { genotyphi, ngmast, serotype, poppunk, kleborate, "ngono-markers": ngonoMarkers, pangolin, spn_pbp_amr, vista } = genome.analysis;
+  const { genotyphi, ngmast, serotype, poppunk2, kleborate, "ngono-markers": ngonoMarkers, pangolin, spn_pbp_amr, vista } = genome.analysis;
   return (
     <React.Fragment>
       {!!pangolin &&
         <div>
           <Pangolin genome={genome} />
         </div>}
-      {!!poppunk &&
+      {!!poppunk2 &&
         <div className="pw-genome-report-column one half">
           <Strain genome={genome} />
         </div>}

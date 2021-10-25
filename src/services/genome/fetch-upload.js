@@ -21,7 +21,7 @@ module.exports = async function ({ user, query }) {
     'analysis.paarsnp.__v': 1,
     'analysis.pangolin.__v': 1,
     'analysis.pangolin.lineage': 1,
-    'analysis.poppunk.__v': 1,
+    'analysis.poppunk2.__v': 1,
     'analysis.sarscov2-variants.__v': 1,
     'analysis.serotype.__v': 1,
     'analysis.speciator.__v': 1,

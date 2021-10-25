@@ -15,7 +15,7 @@ module.exports = function ({ user, ids }) {
     'ngstar',
     'paarsnp',
     'pangolin',
-    'poppunk',
+    'poppunk2',
     'sarscov2-variants',
     'serotype',
     'speciator',
