@@ -1,4 +1,5 @@
-import { createAsyncConstants } from '../actions';
+import Bottleneck from 'bottleneck';
+import { createAsyncConstants } from '~/actions';
 
 import { getFilter } from './filter/selectors';
 
@@ -6,12 +7,24 @@ import { fetchList, fetchMap, fetchStats, fetchSummary } from './api';
 
 export const FETCH_GENOME_SUMMARY = createAsyncConstants('FETCH_GENOME_SUMMARY');
 
+const listLimiter = new Bottleneck({
+  highWater: 1,
+  maxConcurrent: 1,
+  minTime: 100,
+});
+
+const summaryLimiter = new Bottleneck({
+  highWater: 1,
+  maxConcurrent: 1,
+  minTime: 100,
+});
+
 export function fetchGenomeSummary(filter) {
   return {
     type: FETCH_GENOME_SUMMARY,
     payload: {
       filter,
-      promise: fetchSummary(filter),
+      promise: summaryLimiter.schedule(() => fetchSummary(filter)),
     },
   };
 }
@@ -37,7 +50,7 @@ export function fetchGenomeList(startIndex, stopIndex) {
       payload: {
         filter,
         options,
-        promise: fetchList({ ...filter, ...options }),
+        promise: listLimiter.schedule(() => fetchList({ ...filter, ...options })),
       },
     });
   };
