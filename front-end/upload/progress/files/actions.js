@@ -16,7 +16,7 @@ export const GENOME_UPLOAD_PROGRESS = 'GENOME_UPLOAD_PROGRESS';
 
 const uploadLimiter = new Bottleneck({
   maxConcurrent: 7,
-  minTime: 125,
+  minTime: 150,
 });
 
 // Listen to the "failed" event
