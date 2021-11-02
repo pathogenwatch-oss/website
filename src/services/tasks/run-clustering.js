@@ -106,7 +106,9 @@ function attachInputStream(container, spec, metadata, cgmlstKeys) {
     for await (const value of store.iterGet(keys)) {
       idx += 1;
       try {
-        if (value === undefined) throw new ServiceRequestError('Cannot cluster because a cgmlst profile is missing');
+        if (value === undefined) { // noinspection ExceptionCaughtLocallyJS
+          throw new ServiceRequestError('Cannot cluster because a cgmlst profile is missing');
+        }
         const { _id, results } = JSON.parse(value);
         yield bson.serialize({ _id, results });
       } catch (err) {
