@@ -48,7 +48,7 @@ async function cleanGenome(genome, userId, update) {
         speciesId,
         genusId,
         superkingdomId,
-        uploadedAt: new Date(uploadedAt),
+        uploadedAt,
       };
       enqueue({ task, metadata, queue });
     }

@@ -97,37 +97,70 @@ schema.index({ 'analysis.pangolin.lineage': 1 });
 schema.index({ 'analysis.sarscov2-variants.variants.state': 1 });
 schema.index({ 'analysis.sarscov2-variants.variants.name': 1 });
 schema.index({
-  binned: 1,
-  public: 1,
-  'analysis.speciator.organismId': 1,
-  'analysis.speciator.organismName': 1,
   _user: 1,
+  binned: 1,
+  'analysis.speciator.speciesName': 1,
+  'analysis.serotype.subspecies': 1,
+  'analysis.serotype.value': 1,
 });
 schema.index({
-  binned: 1,
   public: 1,
-  "analysis.speciator.organismId": 1,
-  "analysis.speciator.organismName": 1,
-  name: 1,
+  binned: 1,
+  'analysis.speciator.speciesName': 1,
+  'analysis.serotype.subspecies': 1,
+  'analysis.serotype.value': 1,
+}, { partialFilterExpression: { public: true, binned: false } });
+schema.index({
   _user: 1,
-  createdAt: -1,
+  binned: 1,
+  'analysis.speciator.organismId': 1,
+  'analysis.speciator.speciesName': 1,
+  'analysis.serotype.subspecies': 1,
+  'analysis.serotype.value': 1,
+});
+schema.index({
+  public: 1,
+  binned: 1,
+  'analysis.speciator.organismId': 1,
+  'analysis.speciator.speciesName': 1,
+  'analysis.serotype.subspecies': 1,
+  'analysis.serotype.value': 1,
+}, { partialFilterExpression: { public: true, binned: false } });
+// Need these as well
+schema.index({ public: 1, binned: 1, createdAt: -1 }, { partialFilterExpression: { public: true, binned: false } });
+schema.index({ _user: 1, binned: 1, createdAt: -1 });
+// mlst as well
+schema.index({
+  public: 1,
+  binned: 1,
+  'analysis.speciator.organismId': 1,
+  'analysis.mlst.st': 1,
+  'analysis.mlst2.st': 1,
+}, { partialFilterExpression: { public: true, binned: false } });
+schema.index({
+  _user: 1,
+  binned: 1,
+  'analysis.speciator.organismId': 1,
+  'analysis.mlst.st': 1,
+  'analysis.mlst2.st': 1,
 });
 
-// Indexes for the stats page
-// Re-enable when stats page re-enabled
-// schema.index({
-//   binned: 1,
-//   public: 1,
-//   createdAt: -1,
-// }, { partialFilterExpression: { 'analysis.metrics': { $exists: true } } });
-//
-// NB This index wasn't enough to get the stats page fast enough when the user was logged in.
-// schema.index({
-//   _user: 1,
-//   binned: 1,
-//   public: 1,
-//   createdAt: -1,
-// }, { partialFilterExpression: { 'analysis.metrics': { $exists: true } } });
+schema.index({
+  public: 1,
+  binned: 1,
+  'analysis.mlst.st': 1,
+  'analysis.mlst2.st': 1,
+  'analysis.genotyphi.genotype': 1,
+  'analysis.pangolin.lineage': 1,
+}, { partialFilterExpression: { public: true, binned: false } });
+schema.index({
+  _user: 1,
+  binned: 1,
+  'analysis.mlst.st': 1,
+  'analysis.mlst2.st': 1,
+  'analysis.genotyphi.genotype': 1,
+  'analysis.pangolin.lineage': 1,
+});
 
 schema.statics.uploadTypes = uploadTypes;
 
@@ -239,29 +272,29 @@ schema.statics.updateMetadata = async function (_id, { user }, metadata) {
   return { country: update.country };
 };
 
-schema.statics.getPrefilterCondition = function ({ user, query = {} }) {
+schema.statics.getPrefilterCondition = function ({ user, query = {} }, currentFilters = {}) {
   const { prefilter = 'all' } = query;
 
   if (prefilter === 'all') {
-    const hasAccess = { $or: [ { public: true } ] };
+    const hasAccess = { $or: [ { public: true, binned: false, ...currentFilters } ] };
     if (user) {
-      hasAccess.$or.push({ _user: user._id });
+      hasAccess.$or.push({ _user: user._id, binned: false, ...currentFilters });
     }
-    return Object.assign(hasAccess, { binned: false });
+    return Object.assign(hasAccess);
   }
 
   if (prefilter === 'user') {
-    return { binned: false, _user: user._id };
+    return { binned: false, _user: user._id, ...currentFilters };
   }
 
   if (prefilter === 'bin') {
-    return { binned: true, _user: user._id, binnedDate: { $gt: getBinExpiryDate() } };
+    return { binned: true, _user: user._id, binnedDate: { $gt: getBinExpiryDate() }, ...currentFilters };
   }
 
   throw new Error(`Invalid genome prefilter: '${prefilter}'`);
 };
 
-schema.statics.getFilterQuery = async function (props) {
+schema.statics.getFilterQuery = async function (props, findQuery = {}) {
   const { user, query = {} } = props;
   const {
     collection,
@@ -292,8 +325,6 @@ schema.statics.getFilterQuery = async function (props) {
     reference = type === 'reference' ? 'true' : undefined,
     uploadedAt,
   } = query;
-
-  const findQuery = this.getPrefilterCondition(props);
 
   if (collection) {
     findQuery._id = { $in: await Collection.getGenomeIds(collection, props) };
@@ -407,7 +438,7 @@ schema.statics.getFilterQuery = async function (props) {
     };
   }
 
-  return findQuery;
+  return this.getPrefilterCondition(props, findQuery);
 };
 
 schema.statics.getSummary = function (fields, props) {

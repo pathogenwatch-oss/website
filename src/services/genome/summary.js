@@ -309,10 +309,12 @@ const summaryFields = [
           as: 'collection',
         } },
         { $unwind: '$collection' }, // flatten document and filter out collections that are not visible
-        { $project: { // present in summary format
-          _id: { key: '$collection.token', label: '$collection.title' },
-          count: 1,
-        } },
+        {
+          $project: { // present in summary format
+            _id: { key: '$collection.token', label: '$collection.title' },
+            count: 1,
+          },
+        },
       ];
     },
   },
