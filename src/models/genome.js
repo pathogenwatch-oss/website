@@ -23,7 +23,7 @@ const uploadTypes = {
 };
 
 const schema = new Schema({
-  _user: { type: Schema.Types.ObjectId, ref: 'User', index: true },
+  _user: { type: Schema.Types.ObjectId, ref: 'User' },
   analysis: Object,
   assembler: {
     error: { type: String, maxLength: 256 },
@@ -46,7 +46,7 @@ const schema = new Schema({
   pending: { type: Array, default: null },
   pmid: { type: String, maxLength: 16 },
   population: { type: Boolean, default: false, index: true },
-  public: { type: Boolean, default: false, index: true },
+  public: { type: Boolean, default: false },
   upload: {
     type: { type: String, enum: Object.values(uploadTypes) },
     files: { type: [ String ] },
