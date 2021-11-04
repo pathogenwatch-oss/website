@@ -59,9 +59,14 @@ async function aggregateSummaryFields(model, summaryFields, props) {
         pipeline: [ { $match: rangeQuery }, ...pipeline ],
       });
     } else {
+      if ('$match' in pipeline[0]) {
+        pipeline[0].$match = await model.getFilterQuery(props, pipeline[0].$match);
+      } else {
+        pipeline.unshift({ $match: await model.getFilterQuery(props) });
+      }
       pipelines.push({
         field,
-        pipeline: [ { $match: query }, ...pipeline ],
+        pipeline,
       });
     }
   }

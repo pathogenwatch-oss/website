@@ -1,11 +1,8 @@
 const Genome = require('models/genome');
 
 module.exports = async function (props) {
-  const query = {
-    ...await Genome.getFilterQuery(props),
-    'analysis.metrics': { $exists: true },
-  };
-  // const sort = Genome.getSort(props.sort);
+  const query = await Genome.getFilterQuery(props, { 'analysis.metrics': { $exists: true } });
+  const sort = Genome.getSort(props.sort);
   return (
     Genome
       .find(query, {
@@ -15,10 +12,9 @@ module.exports = async function (props) {
         'analysis.metrics.contigs': 1,
         'analysis.metrics.nonATCG': 1,
         'analysis.metrics.gcContent': 1,
+      }, {
+        sort,
       })
-      // , {
-      //   sort,
-      // }
       .lean()
       .then(
         (docs) => docs.map(({ _id, name, analysis }) => ({
