@@ -276,7 +276,10 @@ schema.statics.getPrefilterCondition = function ({ user, query = {} }, currentFi
   const { prefilter = 'all' } = query;
 
   if (prefilter === 'all') {
-    const hasAccess = { $or: [ { public: true, binned: false, ...currentFilters } ] };
+    const hasAccess = { $or: [] };
+    if (!('public' in currentFilters) || currentFilters.public === true) {
+      hasAccess.$or.push({ public: true, binned: false, ...currentFilters });
+    }
     if (user) {
       hasAccess.$or.push({ _user: user._id, binned: false, ...currentFilters });
     }
