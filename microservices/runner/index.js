@@ -149,6 +149,13 @@ async function subscribeToQueue(queueName, taskType) {
     const time = new Date();
     fs.utimesSync(heartbeatFile, time, time);
 
+    // Check if pause file exists
+    if (fs.existsSync('/tmp/pw/pause')) {
+      LOGGER.info("Pause file found, not accepting tasks.");
+      await sleep(5000);
+      continue;
+    }
+
     const limits = { ...resourceManager.available, slow: resourceManager.free.slow };
     // We're not even pulling slow jobs if there are too many running
     // Normally we'd pull a job and wait, but slow jobs from one use clog up the
