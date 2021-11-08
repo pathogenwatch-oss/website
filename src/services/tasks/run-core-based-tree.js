@@ -83,7 +83,10 @@ async function* createGenomesStream(genomes, uncachedFileIds, versions, organism
 }
 
 async function readTreeScores(versions, fileIds) {
-  const projection = fileIds.reduce((proj, fileId) => { proj[`scores.${fileId}`] = 1; return proj; }, { fileId: 1 });
+  const projection = fileIds.reduce((proj, fileId) => {
+    proj[`scores.${fileId}`] = 1;
+    return proj;
+  }, { fileId: 1 });
   const cacheDocs = await TreeScores.find(
     { fileId: { $in: fileIds }, 'versions.core': versions.core, 'versions.tree': versions.tree },
     projection
@@ -167,15 +170,13 @@ async function handleContainerOutput(container, task, versions, metadata, genome
             request('collection', 'send-progress', { clientId, payload: { task, name, progress } });
             lastProgress = progress;
           }
-        }
-        else if (doc.progress) {
+        } else if (doc.progress) {
           const progress = doc.progress * 0.99;
           if ((progress - lastProgress) >= 1) {
             request('collection', 'send-progress', { clientId, payload: { task, name, progress } });
             lastProgress = progress;
           }
-        }
-        else {
+        } else {
           onNewick(doc.newick);
         }
         return done();
@@ -224,6 +225,8 @@ async function handleContainerExit(container, task, versions, metadata, resource
 
   if (exitCode !== 0) {
     request('collection', 'send-progress', { clientId, payload: { task, name, status: 'ERROR' } });
+    if (container.timeout) throw new Error('timeout');
+    if (exitCode === 137) throw new Error('killed');
     container.stderr.setEncoding('utf8');
     throw new Error(container.stderr.read());
   }
@@ -281,11 +284,12 @@ async function runTask(spec, metadata) {
 
   const whenContainerExit = handleContainerExit(container, task, versions, metadata, resources);
 
-  const [output, statusCode] = await Promise.all([
+  const [ output, statusCode ] = await Promise.all([
     whenContainerOutput,
     whenContainerExit,
   ]);
 
+  // I don't think these actually do anything.
   if (container.timeout) throw new Error('timeout');
   else if (statusCode === 137) throw new Error('killed');
 
