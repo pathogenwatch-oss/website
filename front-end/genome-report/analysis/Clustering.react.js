@@ -8,21 +8,11 @@ import Network from '~/clustering/Network.react';
 import ThresholdChart from '~/clustering/ThresholdChart.react';
 import ClusterButton from '~/clustering/ClusterButton.react';
 
-import {
-  getSelectedGenomeId,
-  getStatus,
-  getThreshold,
-} from '~/clustering/selectors';
+import { getGenomeIdsInCluster, getSelectedGenomeId, getStatus, getThreshold } from '~/clustering/selectors';
 
 import * as actions from '~/clustering/actions';
 
-const ClusteringSection = ({
-  result,
-  selectedGenomeId,
-  setThreshold,
-  status,
-  threshold,
-}) => (
+const ClusteringSection = ({ result, selectedGenomeId, linkedGenomeIds = [], setThreshold, status, threshold }) => (
   <div className={classnames({ 'pw-genome-report-noprint': status !== 'COMPLETED_LAYOUT' })}>
     <header className="pw-genome-report-section-header">
       <h2>Core genome clustering</h2>
@@ -40,13 +30,19 @@ const ClusteringSection = ({
         </p>
         <ThresholdChart setThreshold={setThreshold} />
         <div className="pw-cluster-buttons">
-          <ClusterButton genomeId={selectedGenomeId}>Recluster</ClusterButton>
+          <ClusterButton genomeId={selectedGenomeId}>Re-cluster</ClusterButton>
           <Link
             to={`/clustering/${selectedGenomeId}?threshold=${threshold}`}
             className="mdl-button mdl-button--raised mdl-button--colored pw-cluster-buttons-view"
           >
             View cluster
           </Link>
+          <a
+            href={`/genomes/all?${linkedGenomeIds.map((hexCode) => `id=${hexCode}`).join('&')}`}
+            rel="noopener"
+            className="mdl-button mdl-button--raised mdl-button--colored pw-cluster-buttons-view">
+            List genomes
+          </a>
         </div>
       </div>
     </Clustering>
@@ -56,6 +52,7 @@ const ClusteringSection = ({
 function mapStateToProps(state) {
   return {
     selectedGenomeId: getSelectedGenomeId(state),
+    linkedGenomeIds: getGenomeIdsInCluster(state),
     threshold: getThreshold(state),
     status: getStatus(state),
   };
@@ -63,7 +60,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    setThreshold: threshold => dispatch(actions.setThreshold(threshold)),
+    setThreshold: (threshold) => dispatch(actions.setThreshold(threshold)),
   };
 }
 

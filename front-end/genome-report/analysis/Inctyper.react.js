@@ -122,4 +122,3 @@ export default ({ analysis }) => {
     </React.Fragment>
   );
 };
-
