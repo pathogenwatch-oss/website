@@ -304,6 +304,7 @@ schema.statics.getFilterQuery = async function (props, findQuery = {}) {
     country,
     genotype,
     genusId,
+    id,
     klocus,
     maxDate,
     minDate,
@@ -328,6 +329,10 @@ schema.statics.getFilterQuery = async function (props, findQuery = {}) {
     reference = type === 'reference' ? 'true' : undefined,
     uploadedAt,
   } = query;
+
+  if (id) {
+    findQuery._id = { $in: [].concat(id).map((hexCode) => mongoose.Types.ObjectId(hexCode)) };
+  }
 
   if (collection) {
     findQuery._id = { $in: await Collection.getGenomeIds(collection, props) };
