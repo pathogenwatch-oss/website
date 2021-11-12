@@ -344,7 +344,7 @@ export const getGenomeIdsInCluster = createSelector(
   getGenomeIdsAtThreshold,
   (thresholds = [], threshold, ids = []) => {
     if (threshold in thresholds) {
-      return ids[thresholds.indexOf(threshold)];
+      return ids[thresholds.indexOf(threshold)].reduce((flattened, hexCodes) => flattened.concat(hexCodes), []);
     }
     return undefined;
   }
