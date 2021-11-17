@@ -116,7 +116,7 @@ schema.statics.handleFailure = async function (job, rejectionReason) {
   if (timeout && rejectionReason === 'timeout') {
     update['message.spec.resources.cpu'] = Math.min(Math.ceil(cpu * 1.4), MAX_CPU);
     update['message.spec.timeout'] = Math.min(timeout * 2, MAX_TIMEOUT);
-  } else if (memory && rejectionReason === 'killed') update['message.spec.resources.memory'] = Math.min(memory * 2, MAX_MEMORY);
+  } else if (memory && (rejectionReason === 'killed' || rejectionReason.endsWith('killed.'))) update['message.spec.resources.memory'] = Math.min(memory * 2, MAX_MEMORY);
   else {
     // The general case. If a particular type or combination of tasks is causing failures through load,
     // scaling up requirements provides a bit more robustness to tasks all getting processed.

@@ -1,0 +1,428 @@
+[
+  {
+    "name": "fetch-list-default-sort",
+    "query": {
+      "$or": [
+        {
+          "public": true,
+          "binned": false
+        },
+        {
+          "_user": "60faf1a6450343046ba6359b",
+          "binned": false
+        }
+      ]
+    },
+    "bounds": {
+      "skip": 0,
+      "limit": 100,
+      "sort": {
+        "createdAt": -1
+      }
+    },
+    "view": {
+      "_user": 1,
+      "analysis.mlst.st": 1,
+      "analysis.mlst2.st": 1,
+      "analysis.pangolin.lineage": 1,
+      "analysis.genotyphi.genotype": 1,
+      "analysis.serotype.subspecies": 1,
+      "analysis.serotype.value": 1,
+      "analysis.speciator.organismId": 1,
+      "analysis.speciator.speciesName": 1,
+      "country": 1,
+      "day": 1,
+      "month": 1,
+      "name": 1,
+      "public": 1,
+      "reference": 1,
+      "uploadedAt": 1,
+      "year": 1
+    }
+  },
+  {
+    "name": "fetch-list-organism-sort",
+    "query": {
+      "$or": [
+        {
+          "public": true,
+          "binned": false
+        },
+        {
+          "_user": "60faf1a6450343046ba6359b",
+          "binned": false
+        }
+      ]
+    },
+    "bounds": {
+      "skip": 0,
+      "limit": 100,
+      "sort": {
+        "analysis.speciator.speciesName": 1,
+        "analysis.serotype.subspecies": 1,
+        "analysis.serotype.value": 1
+      }
+    },
+    "view": {
+      "_user": 1,
+      "analysis.mlst.st": 1,
+      "analysis.mlst2.st": 1,
+      "analysis.pangolin.lineage": 1,
+      "analysis.genotyphi.genotype": 1,
+      "analysis.serotype.subspecies": 1,
+      "analysis.serotype.value": 1,
+      "analysis.speciator.organismId": 1,
+      "analysis.speciator.speciesName": 1,
+      "country": 1,
+      "day": 1,
+      "month": 1,
+      "name": 1,
+      "public": 1,
+      "reference": 1,
+      "uploadedAt": 1,
+      "year": 1
+    }
+  },
+  {
+    "name": "fetch-list-date-sort",
+    "query": {
+      "$or": [
+        {
+          "public": true,
+          "binned": false
+        },
+        {
+          "_user": "60faf1a6450343046ba6359b",
+          "binned": false
+        }
+      ]
+    },
+    "bounds": {
+      "skip": 0,
+      "limit": 100,
+      "sort": {
+        "date": 1
+      }
+    },
+    "view": {
+      "_user": 1,
+      "analysis.mlst.st": 1,
+      "analysis.mlst2.st": 1,
+      "analysis.pangolin.lineage": 1,
+      "analysis.genotyphi.genotype": 1,
+      "analysis.serotype.subspecies": 1,
+      "analysis.serotype.value": 1,
+      "analysis.speciator.organismId": 1,
+      "analysis.speciator.speciesName": 1,
+      "country": 1,
+      "day": 1,
+      "month": 1,
+      "name": 1,
+      "public": 1,
+      "reference": 1,
+      "uploadedAt": 1,
+      "year": 1
+    }
+  },
+  {
+    "name": "fetch-list-mlst-sort",
+    "query": {
+      "$or": [
+        {
+          "public": true,
+          "binned": false
+        },
+        {
+          "_user": "60faf1a6450343046ba6359b",
+          "binned": false
+        }
+      ]
+    },
+    "bounds": {
+      "skip": 0,
+      "limit": 100,
+      "sort": {
+        "analysis.mlst.st": 1,
+        "analysis.mlst2.st": 1
+      }
+    },
+    "view": {
+      "_user": 1,
+      "analysis.mlst.st": 1,
+      "analysis.mlst2.st": 1,
+      "analysis.pangolin.lineage": 1,
+      "analysis.genotyphi.genotype": 1,
+      "analysis.serotype.subspecies": 1,
+      "analysis.serotype.value": 1,
+      "analysis.speciator.organismId": 1,
+      "analysis.speciator.speciesName": 1,
+      "country": 1,
+      "day": 1,
+      "month": 1,
+      "name": 1,
+      "public": 1,
+      "reference": 1,
+      "uploadedAt": 1,
+      "year": 1
+    }
+  },
+  {
+    "name": "fetch-list-pneumo-filter-default-sort",
+    "query": {
+      "$or": [
+        {
+          "public": true,
+          "binned": false,
+          "analysis.speciator.organismId": "1313"
+        },
+        {
+          "_user": "60faf1a6450343046ba6359b",
+          "binned": false,
+          "analysis.speciator.organismId": "1313"
+        }
+      ]
+    },
+    "bounds": {
+      "skip": 0,
+      "limit": 100,
+      "sort": {
+        "createdAt": -1
+      }
+    },
+    "view": {
+      "_user": 1,
+      "analysis.mlst.st": 1,
+      "analysis.mlst2.st": 1,
+      "analysis.pangolin.lineage": 1,
+      "analysis.genotyphi.genotype": 1,
+      "analysis.serotype.subspecies": 1,
+      "analysis.serotype.value": 1,
+      "analysis.speciator.organismId": 1,
+      "analysis.speciator.speciesName": 1,
+      "country": 1,
+      "day": 1,
+      "month": 1,
+      "name": 1,
+      "public": 1,
+      "reference": 1,
+      "uploadedAt": 1,
+      "year": 1
+    }
+  },
+  {
+    "name": "fetch-list-pneumo-filter-organism-sort",
+    "query": {
+      "$or": [
+        {
+          "public": true,
+          "binned": false,
+          "analysis.speciator.organismId": "1313"
+        },
+        {
+          "_user": "60faf1a6450343046ba6359b",
+          "binned": false,
+          "analysis.speciator.organismId": "1313"
+        }
+      ]
+    },
+    "bounds": {
+      "skip": 0,
+      "limit": 100,
+      "sort": {
+        "analysis.speciator.speciesName": 1,
+        "analysis.serotype.subspecies": 1,
+        "analysis.serotype.value": 1
+      }
+    },
+    "view": {
+      "_user": 1,
+      "analysis.mlst.st": 1,
+      "analysis.mlst2.st": 1,
+      "analysis.pangolin.lineage": 1,
+      "analysis.genotyphi.genotype": 1,
+      "analysis.serotype.subspecies": 1,
+      "analysis.serotype.value": 1,
+      "analysis.speciator.organismId": 1,
+      "analysis.speciator.speciesName": 1,
+      "country": 1,
+      "day": 1,
+      "month": 1,
+      "name": 1,
+      "public": 1,
+      "reference": 1,
+      "uploadedAt": 1,
+      "year": 1
+    }
+  },
+  {
+    "name": "fetch-list-pneumo-filter-date-sort",
+    "query": {
+      "$or": [
+        {
+          "public": true,
+          "binned": false,
+          "analysis.speciator.organismId": "1313"
+        },
+        {
+          "_user": "60faf1a6450343046ba6359b",
+          "binned": false,
+          "analysis.speciator.organismId": "1313"
+        }
+      ]
+    },
+    "bounds": {
+      "skip": 0,
+      "limit": 100,
+      "sort": {
+        "date": 1
+      }
+    },
+    "view": {
+      "_user": 1,
+      "analysis.mlst.st": 1,
+      "analysis.mlst2.st": 1,
+      "analysis.pangolin.lineage": 1,
+      "analysis.genotyphi.genotype": 1,
+      "analysis.serotype.subspecies": 1,
+      "analysis.serotype.value": 1,
+      "analysis.speciator.organismId": 1,
+      "analysis.speciator.speciesName": 1,
+      "country": 1,
+      "day": 1,
+      "month": 1,
+      "name": 1,
+      "public": 1,
+      "reference": 1,
+      "uploadedAt": 1,
+      "year": 1
+    }
+  },
+  {
+    "name": "fetch-list-pneumo-filter-mlst-sort",
+    "query": {
+      "$or": [
+        {
+          "public": true,
+          "binned": false,
+          "analysis.speciator.organismId": "1313"
+        },
+        {
+          "_user": "60faf1a6450343046ba6359b",
+          "binned": false,
+          "analysis.speciator.organismId": "1313"
+        }
+      ]
+    },
+    "bounds": {
+      "skip": 0,
+      "limit": 100,
+      "sort": {
+        "analysis.mlst.st": 1,
+        "analysis.mlst2.st": 1
+      }
+    },
+    "view": {
+      "_user": 1,
+      "analysis.mlst.st": 1,
+      "analysis.mlst2.st": 1,
+      "analysis.pangolin.lineage": 1,
+      "analysis.genotyphi.genotype": 1,
+      "analysis.serotype.subspecies": 1,
+      "analysis.serotype.value": 1,
+      "analysis.speciator.organismId": 1,
+      "analysis.speciator.speciesName": 1,
+      "country": 1,
+      "day": 1,
+      "month": 1,
+      "name": 1,
+      "public": 1,
+      "reference": 1,
+      "uploadedAt": 1,
+      "year": 1
+    }
+  },
+  {
+    "name": "fetch-list-skip-50000-default-sort",
+    "query": {
+      "$or": [
+        {
+          "public": true,
+          "binned": false
+        },
+        {
+          "_user": "60faf1a6450343046ba6359b",
+          "binned": false
+        }
+      ]
+    },
+    "bounds": {
+      "skip": 50000,
+      "limit": 100,
+      "sort": {
+        "createdAt": -1
+      }
+    },
+    "view": {
+      "_user": 1,
+      "analysis.mlst.st": 1,
+      "analysis.mlst2.st": 1,
+      "analysis.pangolin.lineage": 1,
+      "analysis.genotyphi.genotype": 1,
+      "analysis.serotype.subspecies": 1,
+      "analysis.serotype.value": 1,
+      "analysis.speciator.organismId": 1,
+      "analysis.speciator.speciesName": 1,
+      "country": 1,
+      "day": 1,
+      "month": 1,
+      "name": 1,
+      "public": 1,
+      "reference": 1,
+      "uploadedAt": 1,
+      "year": 1
+    }
+  },
+  {
+    "name": "fetch-list-skip-50000-organism-sort",
+    "query": {
+      "$or": [
+        {
+          "public": true,
+          "binned": false
+        },
+        {
+          "_user": "60faf1a6450343046ba6359b",
+          "binned": false
+        }
+      ]
+    },
+    "bounds": {
+      "skip": 50000,
+      "limit": 100,
+      "sort": {
+        "analysis.speciator.speciesName": 1,
+        "analysis.serotype.subspecies": 1,
+        "analysis.serotype.value": 1
+      }
+    },
+    "view": {
+      "_user": 1,
+      "analysis.mlst.st": 1,
+      "analysis.mlst2.st": 1,
+      "analysis.pangolin.lineage": 1,
+      "analysis.genotyphi.genotype": 1,
+      "analysis.serotype.subspecies": 1,
+      "analysis.serotype.value": 1,
+      "analysis.speciator.organismId": 1,
+      "analysis.speciator.speciesName": 1,
+      "country": 1,
+      "day": 1,
+      "month": 1,
+      "name": 1,
+      "public": 1,
+      "reference": 1,
+      "uploadedAt": 1,
+      "year": 1
+    }
+  }
+]

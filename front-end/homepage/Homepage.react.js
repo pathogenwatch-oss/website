@@ -416,16 +416,16 @@ export default ({ deployedOrganisms }) => (
     </section>
     <footer className="mr-footer">
       <p>
-        <span>Funded by </span>
+        <span>Initially funded by </span>
         <img
           src="images/wellcome-logo-white.png"
           className="mr-footer-logo-square"
+          alt=""
         />
       </p>
       <p>
         <span>Developed at </span>
-        <img src="images/bdi.png" className="mr-footer-logo-square" />
-        <img src="images/sanger.svg" className="mr-footer-logo" />
+        <img src="images/bdi.png" className="mr-footer-logo-bdi" alt="Oxford Big Data Institute Logo" />
       </p>
       <p>
         <a
@@ -436,6 +436,7 @@ export default ({ deployedOrganisms }) => (
           <img
             src="images/cgps-long-white.svg"
             className="mr-footer-logo-cgps"
+            alt="Centre for Genomic Pathogen Surveillance logo"
           />
         </a>
       </p>

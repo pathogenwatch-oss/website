@@ -1,6 +1,6 @@
 {
   "name": "pathogenwatch-middle-end",
-  "version": "10.0.18-0",
+  "version": "10.0.23",
   "description": "Server-side code for Pathogenwatch",
   "main": "app.js",
   "engines": {
@@ -48,6 +48,7 @@
     "remove-markdown": "^0.2.2",
     "sanitize-filename": "^1.5.3",
     "seneca": "^3.5.0",
+    "simple-statistics": "^7.7.0",
     "slug": "^0.9.1",
     "stream-transform": "^0.1.2",
     "temp": "^0.9.4",

@@ -8,15 +8,13 @@ import { fetchList, fetchMap, fetchStats, fetchSummary } from './api';
 export const FETCH_GENOME_SUMMARY = createAsyncConstants('FETCH_GENOME_SUMMARY');
 
 const listLimiter = new Bottleneck({
-  highWater: 1,
   maxConcurrent: 1,
-  minTime: 100,
+  minTime: 50,
 });
 
 const summaryLimiter = new Bottleneck({
-  highWater: 1,
   maxConcurrent: 1,
-  minTime: 100,
+  minTime: 50,
 });
 
 export function fetchGenomeSummary(filter) {

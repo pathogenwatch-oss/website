@@ -23,7 +23,7 @@ function normalize(arr) {
   const min = Math.min(...arr);
   const diff = max - min;
   if (diff === 0) return arr.map(() => 0.5);
-  return arr.map(el => 0.5 + (el - min) / diff);
+  return arr.map((el) => 0.5 + (el - min) / diff);
 }
 
 const lookupIndexOfSelectedInCluster = (indexOfSelectedInAll, clusters, allSts, clusterSts) => {
@@ -68,7 +68,7 @@ function calcDistanceFromSelected(edgeMatrix, indexOfSelectedInCluster) {
     frontier = nextFrontier;
   }
 
-  return nodes.map(_ => _.degrees);
+  return nodes.map((_) => _.degrees);
 }
 
 function calcMinEdgeDistance(degrees) {
@@ -83,30 +83,30 @@ function calcMinEdgeDistance(degrees) {
   return edgeDegrees;
 }
 
-const getClusterState = state => state.clustering || {};
-const getIndex = state => getClusterState(state).index || {};
-export const getSelectedGenomeId = state => getClusterState(state).selectedGenomeId;
-export const getStatus = state => getClusterState(state).status;
-export const getThreshold = state => getClusterState(state).threshold;
-export const getTriedBuilding = state => getClusterState(state).triedBuilding;
-export const getEdgeMatrix = state => getClusterState(state).edgeMatrix;
-export const getProgress = state => getClusterState(state).progress;
-const getAllSts = state => getClusterState(state).allSchemeSts;
-export const getIndexOfSelectedInAll = state => getClusterState(state).indexOfSelectedInAll;
-export const getSkipMessage = state => getClusterState(state).skipMessage;
-export const getNodeCoordinates = state => getClusterState(state).nodeCoordinates || [];
-export const getTaskId = state => getClusterState(state).taskId;
-export const getScheme = state => getClusterState(state).scheme;
-export const getVersion = state => getClusterState(state).version;
-export const getNodeData = state => getClusterState(state).nodes;
+const getClusterState = (state) => state.clustering || {};
+const getIndex = (state) => getClusterState(state).index || {};
+export const getSelectedGenomeId = (state) => getClusterState(state).selectedGenomeId;
+export const getStatus = (state) => getClusterState(state).status;
+export const getThreshold = (state) => getClusterState(state).threshold;
+export const getTriedBuilding = (state) => getClusterState(state).triedBuilding;
+export const getEdgeMatrix = (state) => getClusterState(state).edgeMatrix;
+export const getProgress = (state) => getClusterState(state).progress;
+const getAllSts = (state) => getClusterState(state).allSchemeSts;
+export const getIndexOfSelectedInAll = (state) => getClusterState(state).indexOfSelectedInAll;
+export const getSkipMessage = (state) => getClusterState(state).skipMessage;
+export const getNodeCoordinates = (state) => getClusterState(state).nodeCoordinates || [];
+export const getTaskId = (state) => getClusterState(state).taskId;
+export const getScheme = (state) => getClusterState(state).scheme;
+export const getVersion = (state) => getClusterState(state).version;
+export const getNodeData = (state) => getClusterState(state).nodes;
 
 export const getEdgesCount = createSelector(
   getEdgeMatrix,
-  edgeMatrix => (edgeMatrix || []).filter(_ => _ === 1).length
+  (edgeMatrix) => (edgeMatrix || []).filter((_) => _ === 1).length
 );
 export const getEdgesExist = createSelector(
   getEdgesCount,
-  nEdges => nEdges > 0
+  (nEdges) => nEdges > 0
 );
 const getClusters = createSelector(
   getThreshold,
@@ -129,11 +129,11 @@ export const getClusterSts = createSelector(
 export const getClusterNodes = createSelector(
   getClusterSts,
   getNodeData,
-  (sts = [], nodes) => sts.map(st => nodes[st])
+  (sts = [], nodes) => sts.map((st) => nodes[st])
 );
 export const getNumberOfNodesInCluster = createSelector(
   getClusterSts,
-  sts => (sts || []).length
+  (sts) => (sts || []).length
 );
 export const getIndexOfSelectedInCluster = createSelector(
   getIndexOfSelectedInAll,
@@ -182,7 +182,7 @@ export const getClusterNodeColors = createSelector(
   getClusterNodes,
   getGenomeStyles,
   (degrees, clusterView, nodes, styles) => {
-    const defaultColours = !degrees ? [ NODE_COLORS[0] ] : degrees.map(d => NODE_COLORS[d] || NODE_COLORS[-1]);
+    const defaultColours = !degrees ? [ NODE_COLORS[0] ] : degrees.map((d) => NODE_COLORS[d] || NODE_COLORS[-1]);
     if (!clusterView) {
       return defaultColours;
     }
@@ -193,11 +193,11 @@ export const getClusterNodeColors = createSelector(
     }
     // This is slightly over-engineered to support creating pie chart nodes.
     return nodes
-      .map(node => node.ids) // genome IDs in each nodew
-      .map(ids => {
+      .map((node) => node.ids) // genome IDs in each nodew
+      .map((ids) => {
         const colours = ids.flat()
-          .filter(genomeId => genomeId in styles && styles[genomeId].colour !== nonResistantColour)
-          .map(genomeId => styles[genomeId].colour)
+          .filter((genomeId) => genomeId in styles && styles[genomeId].colour !== nonResistantColour)
+          .map((genomeId) => styles[genomeId].colour)
           // .filter(genomeId => genomeId in styles ? styles[genomeId].colour : nonResistantColour)
           .reduce((memo, colour) => {
             if (!memo.hasOwnProperty(colour)) {
@@ -228,7 +228,7 @@ export const getClusterNodeColors = createSelector(
             current.best = entry[0];
           }
           return current;
-        }, {best: nonResistantColour, max: 0});
+        }, { best: nonResistantColour, max: 0 });
         return mostCommon.best;
       });
   }
@@ -237,7 +237,7 @@ export const getClusterNodeColors = createSelector(
 // They're scaled and normalized to make them look nicer.
 export const getClusterNodeSizes = createSelector(
   getClusterNodeIds,
-  names => (!names ? undefined : normalize(names.map(n => n.length ** 0.3)))
+  (names) => (!names ? undefined : normalize(names.map((n) => n.length ** 0.3)))
 );
 export const getMinDegreeForEdge = createSelector(
   getClusterNodeDegrees,
@@ -245,17 +245,25 @@ export const getMinDegreeForEdge = createSelector(
 );
 export const getEdgeColors = createSelector(
   getMinDegreeForEdge,
-  degrees =>
-    (!degrees ? undefined : degrees.map(d => EDGE_COLORS[d] || EDGE_COLORS[-1]))
+  (degrees) =>
+    (!degrees ? undefined : degrees.map((d) => EDGE_COLORS[d] || EDGE_COLORS[-1]))
 );
 
 const chartThresholds = [ ...Array(MAX_THRESHOLD + 1) ].map((__, i) => i);
 export const getChartThresholds = () => chartThresholds;
+
+const getNodeGenomeIds = createSelector(
+  getAllSts,
+  getNodeData,
+  (sts, nodes) => (!nodes ? undefined : sts.map((st) => nodes[st].ids))
+);
+
 const getNodeGenomeCounts = createSelector(
   getAllSts,
   getNodeData,
-  (sts, nodes) => (!nodes ? undefined : sts.map(st => nodes[st].ids.length))
+  (sts, nodes) => (!nodes ? undefined : sts.map((st) => nodes[st].ids.length))
 );
+
 export const getNumberOfGenomesAtThreshold = createSelector(
   getIndexOfSelectedInAll,
   getChartThresholds,
@@ -263,7 +271,7 @@ export const getNumberOfGenomesAtThreshold = createSelector(
   getNodeGenomeCounts,
   (indexOfSelectedInAll, thresholds, { pi, lambda }, genomeCounts) => {
     if (!pi) return undefined;
-    return thresholds.map(t => {
+    return thresholds.map((t) => {
       const thresholdCluster = cluster(t, pi, lambda);
       const clusterId = thresholdCluster[indexOfSelectedInAll];
       let size = 0;
@@ -276,18 +284,42 @@ export const getNumberOfGenomesAtThreshold = createSelector(
     });
   }
 );
+
+export const getGenomeIdsAtThreshold = createSelector(
+  getIndexOfSelectedInAll,
+  getChartThresholds,
+  getIndex,
+  getNodeGenomeIds,
+  (indexOfSelectedInAll, thresholds, { pi, lambda }, genomeIds) => {
+    if (!pi) return undefined;
+    return thresholds.map((t) => {
+      const thresholdCluster = cluster(t, pi, lambda);
+      const clusterId = thresholdCluster[indexOfSelectedInAll];
+      const ids = [];
+      for (let i = 0; i < genomeIds.length; i++) {
+        if (thresholdCluster[i] === clusterId) {
+          ids.push(genomeIds[i]);
+        }
+      }
+      return ids;
+    });
+  }
+);
+
 export const getNumberOfNodesAtThreshold = createSelector(
   getIndexOfSelectedInAll,
   getChartThresholds,
   getIndex,
   (indexOfSelectedInAll, thresholds, { pi, lambda }) => {
     if (!pi) return undefined;
-    return thresholds.map(t => {
+    return thresholds.map((t) => {
       const thresholdCluster = cluster(t, pi, lambda);
       const clusterId = thresholdCluster[indexOfSelectedInAll];
       let size = 0;
       for (const id of thresholdCluster) {
-        if (id === clusterId) size++;
+        if (id === clusterId) {
+          size++;
+        }
       }
       return size;
     });
@@ -301,6 +333,18 @@ export const getNumberOfGenomesInCluster = createSelector(
   (thresholds = [], threshold, sizes = []) => {
     if (threshold in thresholds) {
       return sizes[thresholds.indexOf(threshold)];
+    }
+    return undefined;
+  }
+);
+
+export const getGenomeIdsInCluster = createSelector(
+  getChartThresholds,
+  getThreshold,
+  getGenomeIdsAtThreshold,
+  (thresholds = [], threshold, ids = []) => {
+    if (threshold in thresholds) {
+      return ids[thresholds.indexOf(threshold)].reduce((flattened, hexCodes) => flattened.concat(hexCodes), []);
     }
     return undefined;
   }
