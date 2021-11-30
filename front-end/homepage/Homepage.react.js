@@ -162,6 +162,11 @@ export default ({ deployedOrganisms }) => (
               Staphylococcus aureus
             </Link>
           </li>
+          <li>
+            <Link to="/genomes?genusId=662&speciesId=666">
+              Vibrio cholerae
+            </Link>
+          </li>
         </ul>
         <table className="wgsa-organism-table">
           <caption>Further Analyses</caption>
@@ -275,6 +280,22 @@ export default ({ deployedOrganisms }) => (
                 <small>Genotyphi</small>
               </td>
             </tr>
+            {deployedOrganisms.has('2697049') && (
+              <tr>
+                <td>
+                  <FormattedName organismId="2697049" />
+                </td>
+                <td>
+                  <i className="material-icons">check</i>
+                </td>
+                <td>
+                  <i className="material-icons">check</i>
+                </td>
+                <td>
+                  <small>Pangolin</small>
+                </td>
+              </tr>
+            )}
             <tr>
               <td>
                 <FormattedName organismId="1280" />
@@ -317,6 +338,22 @@ export default ({ deployedOrganisms }) => (
                 <small>PBP Typing</small>
               </td>
             </tr>
+            {deployedOrganisms.has('666') && (
+              <tr>
+                <td>
+                  <FormattedName organismId="666" />
+                </td>
+                <td>
+                  <i className="material-icons">check</i>
+                </td>
+                <td>
+                  <i className="material-icons">check</i>
+                </td>
+                <td>
+                  <small>Vista Genotypes</small>
+                </td>
+              </tr>
+            )}
             {deployedOrganisms.has('64320') && (
               <tr>
                 <td>

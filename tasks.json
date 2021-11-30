@@ -154,9 +154,6 @@
     ],
     "666": [
       {
-        "flags": {
-          "V_CHOLERAE_EXPERIMENT_USER": true
-        },
         "requires": [
           {
             "task": "core",
@@ -169,9 +166,6 @@
         "workers": 16
       },
       {
-        "flags": {
-          "V_CHOLERAE_EXPERIMENT_USER": true
-        },
         "requires": [
           {
             "task": "core",
@@ -1377,24 +1371,14 @@
     ],
     "666": [
       {
-        "flags": {
-          "V_CHOLERAE_EXPERIMENT_USER": true
-        },
         "task": "core",
         "version": "v1.0.11"
       },
       {
-        "flags": {
-          "GHRU_USER": true,
-          "V_CHOLERAE_EXPERIMENT_USER": true
-        },
         "task": "paarsnp",
         "version": "v3.0.1"
       },
       {
-        "flags": {
-          "V_CHOLERAE_EXPERIMENT_USER": true
-        },
         "task": "vista",
         "version": "v0.0.6"
       },
@@ -1403,9 +1387,6 @@
         "version": "202109151248-v2.8.0"
       },
       {
-        "flags": {
-          "V_CHOLERAE_EXPERIMENT_USER": true
-        },
         "task": "cgmlst",
         "resources": {
           "cpu": 2
