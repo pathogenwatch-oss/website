@@ -263,7 +263,7 @@ module.exports.enqueue = async function ({ spec, metadata, queue = 'normal', pre
   // Override priority is for use by update scripts such as submit/task.js
   const priority = !!overridePriority
     ? overridePriority :
-    await this.determinePriority({ spec, metadata });
+    await model.determinePriority({ spec, metadata });
 
   // eslint-disable-next-line new-cap
   const item = new model({

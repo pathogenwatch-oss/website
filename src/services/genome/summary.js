@@ -68,15 +68,18 @@ const summaryFields = [
             _id: { key: '$analysis.speciator.organismId', label: '$analysis.speciator.organismName' },
             collections: { $addToSet: '$memberOf.collections' },
           },
-        }, {
-          $lookup: { // fetch related data
+        },
+        {
+          $lookup: { // identify collections that match the required access
             from: 'collections',
-            localField: 'collections',
-            foreignField: '_id',
+            let: { genomecollections: '$collections' },
+            // localField: 'collections',
+            // foreignField: '_id',
             pipeline: [
               {
                 $match: {
-                  $or: collectionAccess,
+                  $expr: { $in: [ '$_id', '$$genomecollections' ] },
+                  $or: [ { access: 'private', binned: false } ],
                 },
               },
               { $project: { _id: 1 } },
