@@ -79,7 +79,7 @@ const summaryFields = [
               {
                 $match: {
                   $expr: { $in: [ '$_id', '$$genomecollections' ] },
-                  $or: [ { access: 'private', binned: false } ],
+                  $or: collectionAccess,
                 },
               },
               { $project: { _id: 1 } },
