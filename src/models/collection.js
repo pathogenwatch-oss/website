@@ -43,6 +43,7 @@ const schema = new Schema({
   lastUpdatedAt: Date,
   locations: Array,
   organismId: { type: String, index: true },
+  organismName: { type: String },
   pmid: String,
   published: { type: Boolean, default: false },
   publicationYear: { type: Number, index: true },

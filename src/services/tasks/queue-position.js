@@ -1,23 +1,30 @@
-const db = require('mongoose').connection;
+const Queue = require('../../models/queue');
 
-const defaultTypeClause = { $in: [ 'genome', 'task' ] };
+const limit = 500;
 
 // This method really only provides an estimate of queue position
-module.exports = function ({ uploadedAt, until = uploadedAt, type = defaultTypeClause }) {
-  return new Promise((resolve, reject) => {
-    db.collection('queue').count({
-      'message.metadata.uploadedAt': { $lt: new Date(until) },
-      rejectionReason: { $eq: null },
-      'message.spec.taskType': type,
-      'message.priority': { $gt: -1 },
-    },
-    (err, position) => {
-      if (err) {
-        reject(err);
-      } else {
-        resolve({ position });
+module.exports = async function ({ userId, type }) {
+  const cursor = Queue
+    .find({ state: 'PENDING' })
+    .sort({ 'message.priority': -1, _id: 1 })
+    .limit(limit)
+    .select({ 'message.metadata.userId': 1, 'message.spec.taskType': 1 })
+    .lean()
+    .cursor();
+
+  let position = 0;
+
+  for await (const doc of cursor) {
+    if (!!doc.message.metadata.userId && doc.message.metadata.userId.equals(userId)) {
+      if (!!type && doc.message.spec.taskType !== type) {
+        continue;
       }
+      break;
     }
-    );
-  });
+    position += 1;
+  }
+  if (position === limit) {
+    position = `${limit}+`;
+  }
+  return Promise.resolve({ position });
 };

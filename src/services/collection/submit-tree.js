@@ -2,7 +2,7 @@ const { enqueue } = require('models/queue');
 
 const { getCollectionTask } = require('../../manifest');
 
-module.exports = function ({ organismId, collectionId, clientId, priority = 0 }) {
+module.exports = function ({ organismId, collectionId, clientId }) {
   const spec = getCollectionTask(organismId, 'tree');
   return enqueue(
     {
@@ -13,6 +13,5 @@ module.exports = function ({ organismId, collectionId, clientId, priority = 0 })
         clientId,
         name: 'collection',
       },
-      priority,
     });
 };

@@ -28,8 +28,10 @@ export const getSelectedInternalNode = createSelector(
 );
 
 export const areTreesComplete = createSelector(
+  hasTrees,
   getTrees,
-  trees => {
+  (doesHaveTrees, trees) => {
+    if (!doesHaveTrees) { return true; }
     for (const key of Object.keys(trees)) {
       if (trees[key].status !== 'READY') {
         return false;

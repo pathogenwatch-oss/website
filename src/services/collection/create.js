@@ -5,7 +5,6 @@ const Collection = require('models/collection');
 const Genome = require('models/genome');
 const Organism = require('models/organism');
 const Genomecollection = require('models/genomecollection');
-const { getTaskPriority } = require('../utils');
 
 async function validate({ genomeIds, organismId, user }) {
   await request('collection', 'verify', { genomeIds, organismId, user });
@@ -59,13 +58,12 @@ function getSubtrees(organismId, genomes, genomeIds) {
   ).then((subtrees) => subtrees.filter((_) => _ !== null));
 }
 
-async function createCollection(genomes, { organismId, title, description, pmid, user }) {
-  const size = genomes.length;
-  const tree = genomes.length >= 3 ? { name: 'collection' } : null;
-
-  const genomeIds = genomes.map((_) => _._id);
+async function createCollection(genomes, { organismId, organismName, title, description, pmid, user }) {
   const organism = await Organism.getLatest(organismId);
 
+  const size = genomes.length;
+  const tree = !!organism && size >= 3 ? { name: 'collection' } : null;
+  const genomeIds = genomes.map((_) => _._id);
   const subtrees = await getSubtrees(organismId, genomes, genomeIds);
 
   const collection = await Collection.create({
@@ -76,6 +74,7 @@ async function createCollection(genomes, { organismId, title, description, pmid,
     genomes: genomeIds,
     locations: getLocations(genomes),
     organismId,
+    organismName,
     pmid,
     size,
     subtrees,
@@ -100,13 +99,11 @@ async function createCollection(genomes, { organismId, title, description, pmid,
 function submitCollection(collection) {
   const { _id, token, organismId } = collection;
   const submitType = collection.tree ? 'submit-tree' : 'submit-subtrees';
-  return getTaskPriority('collection', collection._user).then(
-    (priority) => request('collection', submitType, {
-      organismId,
-      collectionId: _id,
-      clientId: token,
-      priority,
-    }))
+  return request('collection', submitType, {
+    organismId,
+    collectionId: _id,
+    clientId: token,
+  })
     .then(() => collection);
 }
 

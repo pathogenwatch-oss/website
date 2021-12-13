@@ -50,7 +50,7 @@ async function cleanGenome(genome, userId, update) {
         superkingdomId,
         uploadedAt,
       };
-      enqueue({ task, metadata, queue });
+      await enqueue({ task, metadata, overridePriority: -10000 });
     }
   }
 }

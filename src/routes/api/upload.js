@@ -18,9 +18,9 @@ router.use('/upload', (req, res, next) => {
 
 router.get('/upload/:uploadedAt/position', (req, res, next) => {
   LOGGER.info('Received request to get upload position');
-  const { uploadedAt } = req.params;
+  const { user } = req;
   services
-    .request('tasks', 'queue-position', { uploadedAt })
+    .request('tasks', 'queue-position', { userId: user._id })
     .then((result) => res.json(result))
     .catch(next);
 });
@@ -31,7 +31,7 @@ router.get('/upload/:uploadedAt', (req, res, next) => {
   const { uploadedAt } = req.params;
   Promise.all([
     services.request('genome', 'fetch-upload', { user, query: { uploadedAt } }),
-    services.request('tasks', 'queue-position', { uploadedAt }),
+    services.request('tasks', 'queue-position', { userId: user._id }),
   ])
     .then(([ { genomes, progress }, { position } ]) => res.json({ genomes, position, progress }))
     .catch(next);

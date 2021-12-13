@@ -5,6 +5,7 @@ import dateSince from 'date-fns/distance_in_words';
 
 import Card, { CardMetadata } from '../card';
 import { FormattedName } from '../organisms';
+import { getFormatted } from '~/organisms/OrganismName.react';
 import PubMedLink from '../components/PubMedLink.react';
 import RemoveButton from './RemoveButton.react';
 import MarkdownHeading from '../components/MarkdownHeading.react';
@@ -61,7 +62,7 @@ export default ({ item, footerLink }) => {
         <h2 className="wgsa-card-title">{'(Untitled Collection)'}</h2>
       }
       <p className="wgsa-card-subtitle">
-        <FormattedName organismId={item.organismId} />
+        <FormattedName organismId={item.organismId} title={getFormatted({ speciesName: item.organismName })} />
       </p>
       {item.description ?
         <Markdown className="wgsa-card-description" source={item.description} /> :

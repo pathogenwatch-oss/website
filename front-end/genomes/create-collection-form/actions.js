@@ -1,20 +1,21 @@
-import { getSelectedSupportedGenomesList } from '../selection/selectors';
+import { getSelectedGenomeList } from '../selection/selectors';
 import { getCollectionSummary, getCollectionMetadata } from './selectors';
 
-import { createAsyncConstants } from '../../actions';
-import { showToast } from '../../toast';
+import { createAsyncConstants } from '~/actions';
+import { showToast } from '~/toast';
 
 import { createCollectionRequest } from './api';
 
 export const CREATE_COLLECTION = createAsyncConstants('CREATE_COLLECTION');
 
-function requestCreateCollection(organismId, files, metadata) {
+function requestCreateCollection(organismId, organismName, files, metadata) {
   return {
     type: CREATE_COLLECTION,
     payload: {
       organismId,
+      organismName,
       metadata,
-      promise: createCollectionRequest(files, organismId, metadata),
+      promise: createCollectionRequest(files, organismId, organismName, metadata),
     },
   };
 }
@@ -22,11 +23,11 @@ function requestCreateCollection(organismId, files, metadata) {
 export function createCollection() {
   return (dispatch, getState) => {
     const state = getState();
-    const { organismId } = getCollectionSummary(state);
-    const genomes = getSelectedSupportedGenomesList(state);
+    const { organismId, organismName } = getCollectionSummary(state);
+    const genomes = getSelectedGenomeList(state);
     const metadata = getCollectionMetadata(state);
 
-    return dispatch(requestCreateCollection(organismId, genomes, metadata))
+    return dispatch(requestCreateCollection(organismId, organismName, genomes, metadata))
       .catch(() => dispatch(
         showToast({
           message: 'Your collection could not be created at this time, please try again later.',

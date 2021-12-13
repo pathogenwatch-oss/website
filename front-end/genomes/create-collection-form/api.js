@@ -1,8 +1,9 @@
 import { fetchJson } from '../../utils/Api';
 
-export function createCollectionRequest(genomes, organismId, metadata) {
+export function createCollectionRequest(genomes, organismId, organismName, metadata) {
   return fetchJson('PUT', '/api/collection', {
     organismId,
+    organismName,
     ...metadata,
     genomeIds: genomes.map(_ => _.id),
   });

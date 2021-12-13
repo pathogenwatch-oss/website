@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 const mongoConnection = require('utils/mongoConnection');
 const argv = require('named-argv');
 const mapLimit = require('promise-map-limit');
@@ -10,9 +11,9 @@ const { enqueue } = require('models/queue');
 
 const limit = 1;
 
-const { task, priority: _priority = -10, precache: _precache = 'true' } = argv.opts;
+const { task, priority: _priority = -10000, precache: _precache = 'true' } = argv.opts;
 
-const priority = Number(_priority);
+const overridePriority = Number(_priority);
 const precache = _precache !== 'false';
 
 if (!task) {
@@ -22,6 +23,7 @@ const uploadedAt = new Date();
 
 function parseQuery() {
   const { query = '{}' } = argv.opts;
+  console.log(`Query=${query}`);
   return JSON.parse(query);
 }
 
@@ -51,7 +53,7 @@ function submitTasks(genomes) {
         superkingdomId,
         uploadedAt: new Date(uploadedAt),
       };
-      await enqueue({ spec: requestedTask, metadata, precache, priority });
+      await enqueue({ spec: requestedTask, metadata, precache, overridePriority });
     }
   });
 }

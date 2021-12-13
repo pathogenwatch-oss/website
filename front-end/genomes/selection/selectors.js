@@ -37,18 +37,6 @@ export const getSelectedGenomeList = createSelector(
 
 export const getSelectionSize = state => getSelectedGenomeList(state).length;
 
-export const getSelectedSupportedGenomesList = createSelector(
-  getSelectedGenomeList,
-  getDeployedOrganismIds,
-  (genomes, deployedIds) =>
-    genomes.filter(genome => deployedIds.has(genome.organismId))
-);
-
-export const isSelectionLimitReached = createSelector(
-  getSelectedGenomeIds,
-  ids => isOverSelectionLimit(ids.length)
-);
-
 export const getSelectionStatus = createSelector(
   getSelectedGenomeIds,
   getGenomeList,

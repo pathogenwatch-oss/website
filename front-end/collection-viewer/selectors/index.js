@@ -1,7 +1,7 @@
 import { createSelector } from 'reselect';
 import removeMarkdown from 'remove-markdown';
 
-import { POPULATION, COLLECTION } from '~/app/stateKeys/tree';
+import { COLLECTION, POPULATION } from '~/app/stateKeys/tree';
 import Organisms from '~/organisms';
 
 export const getViewer = ({ viewer }) => viewer;
@@ -24,12 +24,13 @@ export const getCollectionMetadata = createSelector(
     pmid: collection.pmid,
     owner: collection.owner,
     access: collection.access,
+    organismName: collection.organismName,
   })
 );
 
 export const getSingleTree = createSelector(
   getCollection,
-  (collection) => {
+  collection => {
     if (!Organisms.uiOptions.hasPopulation) return COLLECTION;
     if (collection.size < 3) return POPULATION;
     return null;

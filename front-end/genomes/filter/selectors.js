@@ -8,7 +8,7 @@ import { getDeployedOrganismIds } from '~/summary/selectors';
 import { stateKey } from './index';
 import { getCountryName } from '~/utils/country';
 import { taxIdMap } from '~/organisms';
-import { getSeroName } from '~/organisms/OrganismName.react';
+import { getFormatted, getSeroName } from '~/organisms/OrganismName.react';
 import { formatDateTime } from '~/utils/Date';
 import { isNovel } from '~/mlst';
 
@@ -41,6 +41,48 @@ const getFilterFn = (filterKey, property) => createSelector(
 );
 
 const getFilterSummaries = ({ genomes }) => genomes.summary;
+
+function summariseOrganismFilter(filterData, filterValue) {
+  return value => {
+    const organism = taxIdMap.has(value) ? taxIdMap.get(value) : {
+      formattedName: getFormatted({ speciesName: filterData[value].label }),
+      name: filterData[value].label,
+    };
+    const active = filterValue === value;
+    return {
+      value,
+      active,
+      label: organism.formattedName,
+      title: organism.name,
+      activeTitle: `Organism: ${organism.name}`,
+      count: filterData[value].count,
+    };
+  };
+}
+
+const getOrganismCgmlstSummary = createSelector(
+  getFilterSummaries,
+  state => getFilter(state).organismCgmlst,
+  getFilterFn('organismCgmlst'),
+  ({ organismCgmlst = {} }, filterValue, filterFn) => sortBy(
+    Object.keys(organismCgmlst)
+      .map(summariseOrganismFilter(organismCgmlst, filterValue))
+      .filter(filterFn),
+    'title'
+  )
+);
+
+const getOrganismCollectionSummary = createSelector(
+  getFilterSummaries,
+  state => getFilter(state).organismCollection,
+  getFilterFn('organismCollection'),
+  ({ organismCollection = {} }, filterValue, filterFn) => sortBy(
+    Object.keys(organismCollection)
+      .map(summariseOrganismFilter(organismCollection, filterValue))
+      .filter(filterFn),
+    'title'
+  )
+);
 
 const getOrganismSummary = createSelector(
   getFilterSummaries,
@@ -473,6 +515,8 @@ export const getFilterSummary = createSelector(
   getFilterSummaries,
   getAccessSummary,
   getCollectionSummary,
+  getOrganismCgmlstSummary,
+  getOrganismCollectionSummary,
   getCountrySummary,
   getDateSummary,
   getGenotypeSummary,
@@ -497,6 +541,8 @@ export const getFilterSummary = createSelector(
     const [ // order is important!
       access,
       collection,
+      organismCgmlst,
+      organismCollection,
       country,
       date,
       genotype,
@@ -527,6 +573,8 @@ export const getFilterSummary = createSelector(
 
       access,
       collection,
+      organismCgmlst,
+      organismCollection,
       country,
       date,
       genotype,

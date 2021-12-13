@@ -1,4 +1,4 @@
-import { createAsyncConstants } from '../actions';
+import { createAsyncConstants } from '~/actions';
 
 import { getCollection } from './api';
 import { fetchQueuePosition } from '~/queue/api';

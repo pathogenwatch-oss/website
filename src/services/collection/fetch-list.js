@@ -15,6 +15,7 @@ module.exports = function (props) {
         createdAt: 1,
         description: 1,
         organismId: 1,
+        organismName: 1,
         pmid: 1,
         size: 1,
         status: 1,

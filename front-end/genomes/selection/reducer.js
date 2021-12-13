@@ -1,8 +1,9 @@
 import * as actions from './actions';
 import { FETCH_GENOME_LIST, FETCH_GENOME_SELECTION, FETCH_GENOME_SUMMARY } from '../actions';
-import { CREATE_COLLECTION } from '../create-collection-form/actions';
+import { CREATE_COLLECTION } from '~/genomes/create-collection-form';
+import { getFormatted } from '~/organisms/OrganismName.react';
 
-import { statuses } from '../../app/constants';
+import { statuses } from '~/app/constants';
 
 const initialState = {
   dropdown: null,
@@ -14,12 +15,24 @@ const initialState = {
   lastSelectedIndex: null,
 };
 
-const addToSelection = (memo, { id, name, organismId, binned }) => {
-  memo[id] = { id, name, organismId, binned };
+const addToSelection = (memo, { id, name, organismId, analysis, binned }) => {
+  const organismName = 'speciator' in analysis ?
+    analysis.speciator.organismName :
+    '';
+  // eslint-disable-next-line no-param-reassign
+  memo[id] = {
+    id,
+    name,
+    organismId,
+    organismName,
+    organismLabel: getFormatted({ speciesName: organismName }),
+    binned,
+  };
   return memo;
 };
 
 const removeFromSelection = (memo, { id }) => {
+  // eslint-disable-next-line no-param-reassign
   delete memo[id];
   return memo;
 };

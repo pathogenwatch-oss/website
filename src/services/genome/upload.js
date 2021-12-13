@@ -3,7 +3,6 @@ const { request } = require('services/bus');
 const Genome = require('models/genome');
 
 const { ServiceRequestError } = require('utils/errors');
-const { getTaskPriority } = require('../utils');
 
 module.exports = async ({ timeout$, stream, userId, id, clientId }) => {
   if (!stream) {
@@ -26,14 +25,12 @@ module.exports = async ({ timeout$, stream, userId, id, clientId }) => {
     { fields: { uploadedAt: 1 } }
   );
 
-  const priority = await getTaskPriority('genome', userId);
   await request('tasks', 'submit-genome', {
     clientId,
     fileId,
     genomeId: id,
     uploadedAt: doc.uploadedAt,
     userId,
-    priority,
   });
   return { ok: 1, fileId };
 };

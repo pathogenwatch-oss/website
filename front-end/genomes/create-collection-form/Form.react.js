@@ -8,8 +8,8 @@ import * as selectors from './selectors';
 import { createCollection, changeCollectionMetadata } from './actions';
 import { clearSelection } from '../selection/actions';
 
-import { taxIdMap } from '../../organisms';
-import { history } from '../../app/router';
+import { taxIdMap } from '~/organisms';
+import { history } from '~/app/router';
 
 const CreateCollectionForm = React.createClass({
 
@@ -32,7 +32,7 @@ const CreateCollectionForm = React.createClass({
 
   render() {
     const { metadata: { title, description, pmid }, canCreateCollection } = this.props;
-    const { organismId, numGenomes } = this.props.collectionSummary;
+    const { organismId, organismLabel, numGenomes } = this.props.collectionSummary;
 
     if (!organismId) return null; // Prevent form erroring when organism not supplied
     return (
@@ -42,7 +42,7 @@ const CreateCollectionForm = React.createClass({
             <span>{numGenomes} Genome{numGenomes === 1 ? '' : 's'}</span>
           </CardMetadata>
           <CardMetadata title="Organism" icon="bug_report">
-            {taxIdMap.get(organismId).formattedName}
+            {organismId in taxIdMap && 'formattedName' in taxIdMap.get(organismId) ? taxIdMap.get(organismId).formattedName : organismLabel }
           </CardMetadata>
         </span>
         <div ref={this.addToFormElements} className="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">

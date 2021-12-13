@@ -2,7 +2,7 @@ const { enqueue } = require('models/queue');
 
 const { getAssemblyTask } = require('../../manifest');
 
-module.exports = function ({ genomeId, readsKeys, uploadedAt, clientId, userId, queue, priority = 0 }) {
+module.exports = function ({ genomeId, readsKeys, uploadedAt, clientId, userId, queue }) {
   const assemblyTask = getAssemblyTask();
   const metadata = {
     genomeId,
@@ -11,5 +11,5 @@ module.exports = function ({ genomeId, readsKeys, uploadedAt, clientId, userId, 
     clientId,
     userId,
   };
-  return enqueue({ spec: assemblyTask, metadata, queue, priority });
+  return enqueue({ spec: assemblyTask, metadata, queue });
 };

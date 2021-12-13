@@ -23,7 +23,7 @@ function getTitle({ speciesName, subspecies, serotype }) {
   return speciesName;
 }
 
-function getFormatted({ speciesName, subspecies, serotype, abbreviated }) {
+export function getFormatted({ speciesName, subspecies, serotype, abbreviated }) {
   const seroName = getSeroName(speciesName);
   if (speciesName === 'Salmonella enterica' && serotype) {
     return <React.Fragment><em>Salmonella</em> {serotype}</React.Fragment>;

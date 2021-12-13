@@ -24,6 +24,81 @@ const summaryFields = [
     ],
   },
   {
+    field: 'organismCgmlst',
+    aggregation: () => [
+      { $match: { 'analysis.cgmlst': { $exists: true } } },
+      {
+        $group: {
+          _id: {
+            label: '$analysis.speciator.organismName',
+            key: '$analysis.speciator.organismId',
+          },
+          count: { $sum: 1 },
+        },
+      },
+    ],
+  },
+  {
+    field: 'organismCollection',
+    aggregation: ({ user }) => {
+      const collectionAccess = [ { access: 'public', binned: false } ];
+      if (user) {
+        collectionAccess.push({ _user: user._id, binned: false });
+      }
+      return [
+        {
+          $project: {
+            _id: 1,
+            'analysis.speciator.organismId': 1,
+            'analysis.speciator.organismName': 1,
+          },
+        },
+        {
+          $lookup: { // attach membership info
+            from: 'genomecollections',
+            localField: '_id',
+            foreignField: '_genome',
+            as: 'memberOf',
+          },
+        },
+        { $unwind: '$memberOf' },
+        { $unwind: '$memberOf.collections' },
+        {
+          $group: {
+            _id: { key: '$analysis.speciator.organismId', label: '$analysis.speciator.organismName' },
+            collections: { $addToSet: '$memberOf.collections' },
+          },
+        }, {
+          $lookup: { // fetch related data
+            from: 'collections',
+            localField: 'collections',
+            foreignField: '_id',
+            pipeline: [
+              {
+                $match: {
+                  $or: collectionAccess,
+                },
+              },
+              { $project: { _id: 1 } },
+            ],
+            as: 'collection',
+          },
+        },
+        {
+          $project: {
+            _id: 1,
+            count: { $size: '$collection' },
+          },
+        },
+        {
+          $match: {
+            count: { $gte: 1 },
+          },
+        },
+      ];
+    },
+  },
+  {
     field: 'speciesId',
     aggregation: ({ query }) => {
       if (Object.keys(query).length <= 1) return null;
@@ -95,7 +170,12 @@ const summaryFields = [
       if (!user) return null;
       return [
         { $match: { _user: user._id } },
-        { $group: { _id: { $dateToString: { date: '$uploadedAt', format: '%Y-%m-%dT%H:%M:%S.%LZ' } }, count: { $sum: 1 } } },
+        {
+          $group: {
+            _id: { $dateToString: { date: '$uploadedAt', format: '%Y-%m-%dT%H:%M:%S.%LZ' } },
+            count: { $sum: 1 },
+          },
+        },
       ];
     },
   },
@@ -119,20 +199,24 @@ const summaryFields = [
   {
     field: 'resistance',
     aggregation: ({ query }) => [
-      { $project: {
-        antibiotics: {
-          $filter: {
-            input: '$analysis.paarsnp.resistanceProfile',
-            as: 'ab',
-            cond: query.resistance ?
-              { $and: [
+      {
+        $project: {
+          antibiotics: {
+            $filter: {
+              input: '$analysis.paarsnp.resistanceProfile',
+              as: 'ab',
+              cond: query.resistance ?
+                {
+                  $and: [
+                    { $eq: [ '$$ab.state', 'RESISTANT' ] },
+                    { $eq: [ '$$ab.agent.name', query.resistance ] },
+                  ],
+                } :
                 { $eq: [ '$$ab.state', 'RESISTANT' ] },
-                { $eq: [ '$$ab.agent.name', query.resistance ] },
-              ] } :
-              { $eq: [ '$$ab.state', 'RESISTANT' ] },
+            },
           },
         },
-      } },
+      },
       { $unwind: '$antibiotics' },
       { $group: { _id: '$antibiotics.agent.name', count: { $sum: 1 } } },
     ],
@@ -260,54 +344,69 @@ const summaryFields = [
     field: 'sarscov2-variants',
     task: 'sarscov2-variants',
     aggregation: ({ query }) => [
-      { $project: {
-        "sarscov2-variants": {
-          $filter: {
-            input: '$analysis.sarscov2-variants.variants',
-            as: 'va',
-            cond: query["sarscov2-variants"] ?
-              { $and: [
+      {
+        $project: {
+          "sarscov2-variants": {
+            $filter: {
+              input: '$analysis.sarscov2-variants.variants',
+              as: 'va',
+              cond: query["sarscov2-variants"] ?
+                {
+                  $and: [
+                    { $eq: [ '$$va.state', 'var' ] },
+                    { $eq: [ '$$va.name', query["sarscov2-variants"] ] },
+                  ],
+                } :
                 { $eq: [ '$$va.state', 'var' ] },
-                { $eq: [ '$$va.name', query["sarscov2-variants"] ] },
-              ] } :
-              { $eq: [ '$$va.state', 'var' ] },
+            },
           },
         },
-      } },
+      },
       { $unwind: '$sarscov2-variants' },
       { $group: { _id: '$sarscov2-variants.name', count: { $sum: 1 } } },
     ],
   },
   {
     field: 'collection',
-    aggregation: ({ query, user, deployedOrganisms }) => {
-      if (!deployedOrganisms.includes(query.organismId)) return null;
+    aggregation: ({ query, user }) => {
+      // if (!deployedOrganisms.includes(query.organismId)) return null;
       const collectionAccess = [ { access: 'public' } ];
       if (user) {
         collectionAccess.push({ _user: user._id });
       }
+      const organismId = 'organismId' in query ? query.organismId : (query.organismCollection ? query.organismCollection : query.organismCgmlst);
       return [
         { $project: { _id: 1 } }, // don't need genome details
-        { $lookup: { // attach membership info
-          from: 'genomecollections',
-          localField: '_id',
-          foreignField: '_genome',
-          as: 'memberOf',
-        } },
+        {
+          $lookup: { // attach membership info
+            from: 'genomecollections',
+            localField: '_id',
+            foreignField: '_genome',
+            as: 'memberOf',
+          },
+        },
         { $unwind: '$memberOf' }, // flatten document and filter out genomes not in a collection
         { $replaceRoot: { newRoot: '$memberOf' } }, // work directly with genomecollection docs
         { $unwind: '$collections' }, // create record for every membership
         { $group: { _id: '$collections', count: { $sum: 1 } } }, // summarise membership
-        { $lookup: { // fetch related data
-          from: 'collections',
-          let: { id: '$_id' },
-          pipeline: [
-            { $match: { $or: collectionAccess, binned: false, organismId: query.organismId } }, // filter by visibility
-            { $match: { $expr: { $eq: [ '$_id', '$$id' ] } } },
-            { $project: { title: 1, token: 1 } },
-          ],
-          as: 'collection',
-        } },
+        {
+          $lookup: { // fetch related data
+            from: 'collections',
+            let: { id: '$_id' },
+            pipeline: [
+              {
+                $match: {
+                  $or: collectionAccess,
+                  binned: false,
+                  organismId,
+                },
+              }, // filter by visibility
+              { $match: { $expr: { $eq: [ '$_id', '$$id' ] } } },
+              { $project: { title: 1, token: 1 } },
+            ],
+            as: 'collection',
+          },
+        },
         { $unwind: '$collection' }, // flatten document and filter out collections that are not visible
         {
           $project: { // present in summary format
@@ -323,6 +422,7 @@ const summaryFields = [
 module.exports = async function (props) {
   const deployedOrganisms = await Organism.deployedOrganismIds(props.user);
   if (props.query.subspecies && props.query.subspecies === 'SARS-CoV-2') {
+    // eslint-disable-next-line no-param-reassign
     props.query.organismId = '2697049';
   }
   const tasks = getTasksByOrganism(props.query, props.user).map((_) => _.task);

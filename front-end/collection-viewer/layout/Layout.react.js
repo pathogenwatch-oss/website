@@ -22,6 +22,7 @@ import { getCollection, getHistory } from '../selectors';
 import { getVisibleSouthView } from './selectors';
 
 import { travel } from '@cgps/libmicroreact/history/actions';
+import { hasTrees } from '~/collection-viewer/tree/selectors/entities';
 
 const ConnectedHistory = connect(
   (state, { stateKey }) => getHistory(state)[stateKey] || { entries: [] },
@@ -41,7 +42,7 @@ const SouthSection = connect(
   </div>
 ));
 
-const NorthSection = ({ isClusterView, treeStateKey, horizontalSize, createdAt }) => {
+const NorthSection = ({ isClusterView, treeStateKey, hasTrees, horizontalSize, createdAt }) => {
   const [ verticalSize, setVerticalSize ] = React.useState(null);
   if (isClusterView) {
     return (
@@ -63,7 +64,7 @@ const NorthSection = ({ isClusterView, treeStateKey, horizontalSize, createdAt }
     );
   }
 
-  if (treeStateKey) {
+  if (treeStateKey && hasTrees) {
     return (
       <SplitPane
         split="vertical"
@@ -83,14 +84,14 @@ const NorthSection = ({ isClusterView, treeStateKey, horizontalSize, createdAt }
   return (
     <Map>
       <Summary />
-      <TreeProgress date={createdAt} />
+      {hasTrees && <TreeProgress date={createdAt} />}
     </Map>
   );
 };
 
 const defaultHorizontalSize = '62.5%';
 
-const Layout = ({ isClusterView, treeStateKey, createdAt }) => {
+const Layout = ({ isClusterView, treeStateKey, createdAt, hasTrees }) => {
   const [ horizontalSize, setHorizontalSize ] = React.useState(null);
 
   const navStyle = React.useMemo(() => ({
@@ -119,6 +120,7 @@ const Layout = ({ isClusterView, treeStateKey, createdAt }) => {
         <NorthSection
           createdAt={createdAt}
           isClusterView={isClusterView}
+          hasTrees={hasTrees}
           treeStateKey={treeStateKey}
           horizontalSize={horizontalSize}
         />
@@ -133,6 +135,7 @@ function mapStateToProps(state) {
   return {
     createdAt: collection.createdAt,
     isClusterView: collection.isClusterView,
+    hasTrees: hasTrees(state),
     treeStateKey: getTreeStateKey(state),
   };
 }
