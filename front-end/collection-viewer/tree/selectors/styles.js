@@ -1,6 +1,6 @@
 import { createSelector } from 'reselect';
 
-import { getTrees, getSubtreeNames } from './entities';
+import { getTrees, getSubtreeNames, hasTrees } from './entities';
 import { getTitles, getTreeStateKey } from './index';
 import { getGenomeStyles } from '../../selectors/styles';
 import { getFilteredGenomeIds } from '../../filter/selectors';
@@ -51,11 +51,15 @@ const getPopulationLabel = ({ status, size, populationSize, progress }, name) =>
 };
 
 const getPopulationNodeStyles = createSelector(
+  hasTrees,
   getTrees,
   getSubtreeNames,
-  state => getTrees(state)[POPULATION].leafIds,
+  state => !getTrees(state)[POPULATION] ? [] : getTrees(state)[POPULATION].leafIds,
   getTitles,
-  (trees, subtreeNames, treeIds, titles) => {
+  (hasTrees, trees, subtreeNames, treeIds, titles) => {
+    if (!hasTrees) {
+      return {};
+    }
     const styles = {};
     for (const id of treeIds) {
       const name = titles[id];
@@ -79,7 +83,7 @@ const getPopulationNodeStyles = createSelector(
 
 export const getNodeStyles = state => {
   const name = getTreeStateKey(state);
-  return name === POPULATION ?
+  return name && name === POPULATION ?
     getPopulationNodeStyles(state) :
     getStandardNodeStyles(state);
 };

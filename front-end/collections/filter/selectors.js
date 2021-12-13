@@ -1,9 +1,10 @@
 import { createSelector } from 'reselect';
 import sortBy from 'lodash.sortby';
 
-import { selectors as filter } from '../../filter';
+import { selectors as filter } from '~/filter';
 
-import { taxIdMap } from '../../organisms';
+import { taxIdMap } from '~/organisms';
+import { getOrganismNames } from '../selectors';
 
 import { stateKey } from './index';
 
@@ -21,12 +22,13 @@ export const getSearchText = createSelector(
 export const getFilterSummary = createSelector(
   ({ collections }) => collections.summary,
   getFilter,
-  ({ loading, visible, organismId, access = {}, publicationYear, createdAt }, filterState) => ({
+  getOrganismNames,
+  ({ loading, visible, organismId, access = {}, publicationYear, createdAt }, filterState, names) => ({
     loading,
     visible,
     organism: sortBy(
       Object.keys(organismId).map(value => {
-        const organism = taxIdMap.get(value);
+        const organism = taxIdMap.has(value) ? taxIdMap.get(value) : (value in names ? names[value] : '');
         return {
           value,
           label: organism.formattedName,

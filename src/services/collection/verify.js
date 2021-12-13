@@ -17,24 +17,23 @@ module.exports = async function ({ genomeIds, organismId, user }) {
   }
 
   const schemes = manifest.getCollectionSchemes(user);
-  if (!schemes.includes(organismId)) {
-    throw new ServiceRequestError('Unsupported organism');
-  }
-
-  const task = manifest.getCollectionTask(organismId, 'tree');
-  if (!task) throw new ServiceRequestError('Unsupported organism');
-
-  const size = genomeIds.length;
-  // Should be unnecessary as is set the middleware function.
-
   const config = organismConfigs.find(({ id }) => id === organismId);
-  const systemMaxSize = 'maxCollectionSize' in config ? config.maxCollectionSize : maxCollectionSize;
+  const systemMaxSize = !!config && 'maxCollectionSize' in config ? config.maxCollectionSize : maxCollectionSize;
   const maxSize = user.limits && user.limits.maxCollectionSize && user.limits.maxCollectionSize[organismId] || user.limits && user.limits.maxCollectionSize && user.limits.maxCollectionSize.default || systemMaxSize;
+  const size = genomeIds.length;
+
   if (maxSize !== null && size > maxSize) {
     throw new ServiceRequestErrorJSON(`Too many assemblies provided - the maximum collection size for this organism is ${maxSize}. Please reduce the size of your selection and try again.`, {
       status: 'ERROR',
     });
   }
+  if (!schemes.includes(organismId)) {
+    return { ok: 1 }; // Not building a tree.
+  }
+
+  const task = manifest.getCollectionTask(organismId, 'tree');
+  if (!task) throw new ServiceRequestError('Internal error.');
+
 
   const completeGenomesQuery = {};
   const erroredGenomesQuery = {};
@@ -47,13 +46,11 @@ module.exports = async function ({ genomeIds, organismId, user }) {
     Genome.count({
       _id: { $in: genomeIds },
       'analysis.speciator.organismId': organismId,
-      // 'analysis.core': { $exists: true },
       ...completeGenomesQuery,
     }),
     Genome.count({
       _id: { $in: genomeIds },
       'analysis.speciator.organismId': organismId,
-      // 'analysis.core': false,
       ...erroredGenomesQuery,
     }),
   ]);

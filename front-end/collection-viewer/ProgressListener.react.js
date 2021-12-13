@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { subscribe, unsubscribe } from '../utils/Notification';
+import { subscribe, unsubscribe } from '~/utils/Notification';
 
 import { getCollection } from './selectors';
 import { areTreesComplete } from './tree/selectors/entities';
@@ -37,7 +37,6 @@ const StatusSwitcher = React.createClass({
   render() {
     return null;
   },
-
 });
 
 function mapStateToProps(state) {
@@ -50,7 +49,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    updateProgress: results => dispatch(handleTreeProgress(results)),
+    updateProgress: (results) => dispatch(handleTreeProgress(results)),
   };
 }
 

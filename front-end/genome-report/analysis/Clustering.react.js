@@ -38,9 +38,10 @@ const ClusteringSection = ({ result, selectedGenomeId, linkedGenomeIds = [], set
             View cluster
           </Link>
           <a
-            href={`/genomes/all?${linkedGenomeIds.map((hexCode) => `id=${hexCode}`).join('&')}`}
+            href={`/genomes/all?${linkedGenomeIds.reduce((flattened, hexCodes) => flattened.concat(hexCodes), []).map((hexCode) => `id=${hexCode}`).join('&')}`}
             rel="noopener"
-            className="mdl-button mdl-button--raised mdl-button--colored pw-cluster-buttons-view">
+            className="mdl-button mdl-button--raised mdl-button--colored pw-cluster-buttons-view"
+          >
             List genomes
           </a>
         </div>

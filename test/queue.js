@@ -1,39 +1,62 @@
 /* eslint-disable no-undef */
 const mongoConnection = require('utils/mongoConnection');
+const mongoose = require('mongoose');
 const Queue = require('models/queue');
 const assert = require('assert').strict;
 
 let timeNow = 0;
-Queue.overideNow(() => timeNow);
-const testQueue = 'testQueue';
+Queue.overrideNow(() => timeNow);
+const userId = mongoose.Types.ObjectId('602ba05d24a87083dab20204');
+const altUserId = mongoose.Types.ObjectId('602ba05d24a87083dab20203');
 
+const testQueue = 'testQueue';
 describe("Queue", async () => {
   before(async () => {
     await mongoConnection.connect();
   });
-
   beforeEach(async () => {
     timeNow = 0;
     await Queue.deleteMany({ queue: testQueue });
     for (let i = 0; i < 5; i++) {
-      await Queue.enqueue(
-        {
-          spec: {
-            task: 'test',
-            version: 0,
-            taskType: 'testTask',
-            timeout: 12,
-            resources: { cpu: 2, memory: (100 - i) * 1024 ** 2 },
-            retries: 3,
-          },
-          metadata: { testNumber: i },
-          queue: testQueue,
-          priority: 0,
-          precache: false,
-        }
-      );
+      await Queue.enqueue({
+        spec: {
+          task: 'test',
+          version: 0,
+          taskType: 'testTask',
+          timeout: 12,
+          resources: { cpu: 2, memory: (100 - i) * 1024 ** 2 },
+          retries: 3,
+        }, metadata: { testNumber: i, userId }, queue: testQueue, precache: false,
+      });
     }
   });
+
+  it("should correctly scale the priorities", async (done) => {
+    const jobs = await Queue.find({
+      'message.metadata.userId': userId, state: 'PENDING',
+    }).sort({ _id: 1 });
+    assert.equal(jobs[4].message.priority + 4, jobs[0].message.priority);
+    for (let i = 0; i < 5; i++) {
+      await Queue.enqueue({
+        spec: {
+          task: 'test',
+          version: 0,
+          taskType: 'testTask',
+          timeout: 12,
+          resources: { cpu: 2, memory: (100 - i) * 1024 ** 2 },
+          retries: 3,
+        }, metadata: { testNumber: i, userId: altUserId }, queue: testQueue, precache: false,
+      });
+    }
+    const altJobs = await Queue.find({
+      'message.metadata.userId': altUserId, state: 'PENDING',
+    }).sort({ _id: 1 });
+    assert.equal(altJobs[4].message.priority + 4, altJobs[0].message.priority);
+    await Queue.deleteMany({ 'message.metadata.userId': altUserId });
+
+    done();
+  });
+
 
   it("should requeue if not-acked", async (done) => {
     assert.equal(await Queue.queueLength({}, {}, testQueue), 5);

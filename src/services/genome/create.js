@@ -2,7 +2,6 @@ const { request } = require('services/bus');
 
 const Genome = require('models/genome');
 const { ServiceRequestError } = require('utils/errors');
-const { getTaskPriority } = require('../utils');
 
 async function createGenomeDocument({ name, uploadedAt }, { fileId, reference, user }) {
   const doc = await Genome.create({
@@ -24,7 +23,6 @@ module.exports = async ({ timeout$, stream, metadata, reference, user, clientId 
 
   const { fileId } = await request('genome', 'store', { timeout$, stream });
   const genomeId = await createGenomeDocument(metadata, { fileId, reference, user });
-  const priority = await getTaskPriority('genome', user._id);
 
   await request('tasks', 'submit-genome', {
     genomeId,
@@ -32,7 +30,6 @@ module.exports = async ({ timeout$, stream, metadata, reference, user, clientId 
     uploadedAt: metadata.uploadedAt,
     clientId,
     userId: user._id,
-    priority,
   });
   return { id: genomeId };
 };

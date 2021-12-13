@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 
 import MarkdownInline from '../components/MarkdownInline.react';
 import { FormattedName } from '../organisms';
+import { getFormatted } from '~/organisms/OrganismName.react';
 
 const icons = {
   genome: 'cloud_upload',
@@ -12,12 +13,16 @@ const icons = {
 
 const content = {
   genome: ({ count, date }) =>
-    <Link to={`/genomes/user?uploadedAt=${date}`}>
+    (<Link to={`/genomes/user?uploadedAt=${date}`}>
       Uploaded <strong>{count}</strong> genome{count === 1 ? '' : 's'}
-    </Link>,
-  collection: ({ size, organismId, title, token }) => (
+    </Link>),
+  collection: ({ size, organismId, organismName, title, token }) => (
     <Link to={`/collection/${token}`}>
-      Created collection <MarkdownInline tag="strong">{title}</MarkdownInline> (<FormattedName organismId={organismId} />, <strong>{size}</strong> genomes)
+      Created collection <MarkdownInline tag="strong">{title}</MarkdownInline> (
+      <FormattedName
+        organismId={organismId}
+        title={getFormatted({ speciesName: organismName })}
+      />, <strong>{size}</strong> genomes)
     </Link>
   ),
 };

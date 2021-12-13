@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 const mongoose = require('mongoose');
 const escapeRegex = require('escape-string-regexp');
 
@@ -302,6 +303,8 @@ schema.statics.getFilterQuery = async function (props, findQuery = {}) {
   const { user, query = {} } = props;
   const {
     collection,
+    organismCgmlst,
+    organismCollection,
     country,
     genotype,
     genusId,
@@ -337,6 +340,14 @@ schema.statics.getFilterQuery = async function (props, findQuery = {}) {
 
   if (collection) {
     findQuery._id = { $in: await Collection.getGenomeIds(collection, props) };
+  }
+
+  if (organismCollection) {
+    findQuery['analysis.speciator.organismId'] = organismCollection;
+  }
+
+  if (organismCgmlst) {
+    findQuery['analysis.speciator.organismId'] = organismCgmlst;
   }
 
   if (searchText) {

@@ -40,6 +40,7 @@ export default function (state = initialState, { type, payload }) {
         description: result.description,
         size: result.size,
         organismId: result.organismId,
+        organismName: result.organismName,
         owner: result.owner,
         pmid: result.pmid,
         progress: result.progress,

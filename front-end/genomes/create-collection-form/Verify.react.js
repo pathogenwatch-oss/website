@@ -68,7 +68,7 @@ const Verifier = React.createClass({
         }),
       new Promise(resolve => setTimeout(resolve, wait)),
     ])
-    .then(([ nextState ]) => this.setState(nextState));
+      .then(([ nextState ]) => this.setState(nextState));
   },
 
   renderStatus() {
@@ -96,7 +96,7 @@ const Verifier = React.createClass({
     }
 
     return (
-      <p className="wgsa-blink">Verifying core analysis...</p>
+      <p className="wgsa-blink">Verifying request...</p>
     );
   },
 

@@ -32,7 +32,7 @@ export default ({ organism, metadata, isOpen, onButtonClick }) => (
     </MarkdownHeading>
     <p className="wgsa-card-metadata-inliner">
       <CardMetadata title="Organism" icon="bug_report">
-        {organism}
+        {typeof organism !== 'undefined' ? organism : metadata.organismName}
       </CardMetadata>
       <CardMetadata tooltip={metadata.dateCreated.toLocaleDateString()} icon="access_time">
         {dateSince(metadata.dateCreated, new Date())} ago

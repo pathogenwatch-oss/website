@@ -10,6 +10,7 @@ const projection = {
   description: 1,
   genomes: 1,
   organismId: 1,
+  organismName: 1,
   pmid: 1,
   size: 1,
   tree: 1,

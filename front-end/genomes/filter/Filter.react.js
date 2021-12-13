@@ -65,7 +65,27 @@ const Filter = ({
       disabledText="No supported organisms in current filter."
       filterKey="organismId"
       heading="SNP tree supported"
-      hidden={!filterSummary.visible}
+      hidden={filterState.organismCollection || filterState.organismCgmlst || !filterSummary.visible}
+      icon="bug_report"
+      updateFilter={clearDependants(filterState, genusDependants)}
+    />
+    <FilterableSection
+      autoSelect={false}
+      disabled={!filterSummary.organismCgmlst.length}
+      disabledText="No organisms with a cgMLST scheme in current filter."
+      filterKey="organismCgmlst"
+      heading="cgMLST supported"
+      hidden={filterState.organismId || filterState.organismCollection || !filterSummary.visible}
+      icon="bug_report"
+      updateFilter={clearDependants(filterState, genusDependants)}
+    />
+    <FilterableSection
+      autoSelect={false}
+      disabled={!filterSummary.organismCollection.length}
+      disabledText="No linked collections in current filter."
+      filterKey="organismCollection"
+      heading="Linked collections"
+      hidden={filterState.organismId || filterState.organismCgmlst || !filterSummary.visible}
       icon="bug_report"
       updateFilter={clearDependants(filterState, genusDependants)}
     />

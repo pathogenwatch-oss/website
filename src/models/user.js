@@ -17,11 +17,16 @@ const schema = new Schema({
   },
   name: String,
   organisation: { type: Schema.Types.ObjectId, ref: 'Organisation' },
-  priorityModifier: Number,
+  priority: Number,
   photo: String,
   providerId: String,
   providerType: String,
 });
+
+schema.index(
+  { _id: 1, priority: 1 },
+  { partialFilterExpression: { priority: { $exists: true } } }
+);
 
 addPreSaveHook(schema);
 

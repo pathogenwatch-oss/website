@@ -63,6 +63,7 @@ module.exports = async function (props) {
       'analysis.serotype.subspecies': 1,
       'analysis.serotype.value': 1,
       'analysis.speciator.organismId': 1,
+      'analysis.speciator.organismName': 1,
       'analysis.speciator.speciesName': 1,
       country: 1,
       day: 1,
@@ -87,6 +88,7 @@ module.exports = async function (props) {
         formattedGenome.type2 = scheme.type2 ? analysis[scheme.type2.analysis][scheme.type2.field] : null;
         formattedGenome.typeSource2 = scheme.type2 ? scheme.type2.analysis : null;
         formattedGenome.organismId = speciator.organismId;
+        formattedGenome.organismName = speciator.organismName;
         formattedGenome.speciesName = speciator.speciesName;
         formattedGenome.subspecies = speciator.organismId === '2697049' ? 'SARS-CoV-2' : serotype.subspecies;
         formattedGenome.serotype = serotype.value;

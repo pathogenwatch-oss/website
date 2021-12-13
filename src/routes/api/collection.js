@@ -10,8 +10,8 @@ const LOGGER = require('utils/logging').createLogger('Collection requests');
 router.put('/collection', (req, res, next) => {
   LOGGER.info('Received request to create collection');
   const { user } = req;
-  const { genomeIds, title, description, pmid, organismId } = req.body;
-  const message = { user, genomeIds, title, description, pmid, organismId };
+  const { genomeIds, title, description, pmid, organismId, organismName } = req.body;
+  const message = { user, genomeIds, title, description, pmid, organismId, organismName };
 
   return services
     .request('collection', 'create', message)
@@ -47,8 +47,8 @@ router.get('/collection/summary', (req, res, next) => {
 
 router.get('/collection/position/:uploadedAt', (req, res, next) => {
   LOGGER.info('Received request to get tree position');
-  const { uploadedAt } = req.params;
-  services.request('tasks', 'queue-position', { uploadedAt, type: 'collection' })
+  const { user } = req;
+  services.request('tasks', 'queue-position', { userId: user._id, type: 'collection' })
     .then((result) => res.json(result))
     .catch(next);
 });

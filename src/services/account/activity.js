@@ -23,6 +23,7 @@ function findRecentCollections(user) {
           type: 'collection',
           size: _.size,
           organismId: _.organismId,
+          organismName: _.organismName,
           token: _.token,
           title: _.title,
         }))
