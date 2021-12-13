@@ -16,7 +16,7 @@ const initialState = {
 };
 
 const addToSelection = (memo, { id, name, organismId, analysis, binned }) => {
-  const organismName = 'speciator' in analysis ?
+  const organismName = !! analysis && 'speciator' in analysis ?
     analysis.speciator.organismName :
     '';
   // eslint-disable-next-line no-param-reassign
