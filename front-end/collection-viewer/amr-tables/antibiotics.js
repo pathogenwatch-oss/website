@@ -17,7 +17,7 @@ function createColumn( { agent } ) {
     cellClasses: 'wgsa-table-cell--resistance',
     cellPadding: 16,
     flexGrow: 0,
-    label: agent.key,
+    label: agent.name,
     addState() {
       this.width = this.getWidth();
       return this;

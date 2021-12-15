@@ -14,7 +14,7 @@ export const name = tableKeys.snps;
 
 function hasVariant(genome, key, gene, variant) {
   const profile = genome.analysis.paarsnp.resistanceProfile
-    .find(profile => profile.agent.key === key);
+    .find(prof => prof.agent.key === key);
   const foundGene = profile.determinants.variants.find(determinant => determinant.gene === gene && determinant.variant === variant);
   return !!foundGene;
 }
@@ -94,7 +94,7 @@ export function buildColumns(results) {
       groups.push({
         group: true,
         columnKey: `snp_${key}`,
-        label: key,
+        label: name,
         headerClasses: 'wgsa-table-header--expanded',
         headerTitle: `${modifierKey} + click to select multiple`,
         onHeaderClick,

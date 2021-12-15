@@ -1,6 +1,5 @@
 import { measureHeadingText } from '~/collection-viewer/table/columnWidth';
 import { tableKeys } from '../constants';
-import Organisms from '../../organisms';
 import * as amr from '~/collection-viewer/amr-utils';
 import { formatEffect, getEffectColour } from '~/collection-viewer/amr-utils';
 import React from '~/react-shim';
@@ -12,7 +11,7 @@ export const name = tableKeys.genes;
 
 function hasGene(genome, key, gene) {
   const profile = genome.analysis.paarsnp.resistanceProfile
-    .find(profile => profile.agent.key === key);
+    .find(prof => prof.agent.key === key);
   const found = profile.determinants.acquired.find(determinant => determinant.gene === gene)
   return !!found;
 }
@@ -23,13 +22,14 @@ function extractFoundDeterminants(results) {
     return memo;
   }, {});
 
-  results.forEach(({ resistanceProfile }) => resistanceProfile.forEach(({ agent, determinants }) => {
-    if ('acquired' in determinants && determinants.acquired.length !== 0) {
-      determinants.acquired.forEach(({ gene, resistanceEffect }) => {
-        extracted[agent.key][gene] = resistanceEffect
-      });
-    }
-  }));
+  results.forEach(({ resistanceProfile }) =>
+    resistanceProfile.forEach(({ agent, determinants }) => {
+      if ('acquired' in determinants && determinants.acquired.length !== 0) {
+        determinants.acquired.forEach(({ gene, resistanceEffect }) => {
+          extracted[agent.key][gene] = resistanceEffect;
+        });
+      }
+    }));
   return extracted;
 }
 
@@ -55,21 +55,24 @@ function createColumn(key, gene, effect, bufferSize) {
         <i
           className="material-icons wgsa-resistance-icon"
           style={{ color: effectColour }}
-          title={ formattedEffect }
+          title={formattedEffect}
         >
           lens
         </i>
       ) : null;
     },
     headerClasses: 'wgsa-table-header--expanded',
-    valueGetter: genome => (hasGene(genome, key, gene) ? effectColour : amr.nonResistantColour),
+    valueGetter: genome => (
+      hasGene(genome, key, gene) ?
+        effectColour :
+        amr.nonResistantColour
+    ),
     onHeaderClick,
   };
 }
 
 // export function buildColumns({ paar = {}, antibiotics }, profiles) {
 export function buildColumns(results) {
-
   // First extract all the acquired genes in the dataset
   const acquired = extractFoundDeterminants(results)
 
@@ -86,16 +89,15 @@ export function buildColumns(results) {
         fixedWidth,
         headerClasses: 'wgsa-table-header--expanded',
         headerTitle: `${modifierKey} + click to select multiple`,
-        label: key,
+        label: name,
         onHeaderClick,
         columns: Object.keys(acquired[key])
           .sort()
           .map(gene => createColumn(
             key, gene, acquired[key][gene], bufferSize
-          ))
+          )),
       });
 
       return groups;
     }, []);
-
 }
