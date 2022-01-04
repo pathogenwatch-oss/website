@@ -7,7 +7,7 @@ const GB = 1024 ** 3;
 const MB = 1024 ** 2;
 const MINUTE = 60;
 const HOUR = 60 * MINUTE;
-const defaultTimeout = config.tasks.timeout || 1 * MINUTE;
+const defaultTimeout = config.tasks.timeout || MINUTE;
 
 const taskTypes = {
   assembly: 'assembly',
@@ -21,7 +21,7 @@ module.exports.taskTypes = taskTypes;
 function formatMemory(value) {
   if (Number.isFinite(value)) return Math.floor(value);
   else if (typeof value !== 'string') throw new Error(`Don't understand memory value ${value}`);
-  const [v, unit] = value.toLowerCase().match(/^([0-9.]+)\s*([mg])?$/).slice(1, 3);
+  const [ v, unit ] = value.toLowerCase().match(/^([0-9.]+)\s*([mg])?$/).slice(1, 3);
   switch (unit) {
     case undefined:
       return Math.floor(Number(v));
@@ -38,7 +38,7 @@ module.exports.formatMemory = formatMemory;
 function formatTime(value) {
   if (Number.isFinite(value)) return Math.floor(value);
   else if (typeof value !== 'string') throw new Error(`Don't understand time value ${value}`);
-  const [v, unit] = value.toLowerCase().match(/^([0-9.]+)\s*([smh])?$/).slice(1, 3);
+  const [ v, unit ] = value.toLowerCase().match(/^([0-9.]+)\s*([smh])?$/).slice(1, 3);
   switch (unit) {
     case undefined:
       return Math.floor(Number(v));
@@ -61,10 +61,11 @@ function addTaskDefaults(task) {
   switch (task.task) {
     case 'assembly':
       resources.memory = resources.memory || 3 * GB;
+      resources.cpu = resources.cpu || 2;
       resources.slow = resources.slow || 1;
       break;
     case 'speciator':
-      resources.memory = resources.memory || 1 * GB;
+      resources.memory = resources.memory || GB;
       break;
     case 'cgmlst':
       resources.memory = resources.memory || 3 * GB;
@@ -81,7 +82,7 @@ function addTaskDefaults(task) {
       resources.slow = resources.slow || 1;
       break;
     default:
-      resources.memory = resources.memory || 1 * GB;
+      resources.memory = resources.memory || GB;
   }
   resources.memory = formatMemory(resources.memory);
 

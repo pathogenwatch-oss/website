@@ -27,7 +27,7 @@ class ResourceManager {
     };
     this.nextId += 1;
 
-    const releaseFn = (() => this.release(job.id));
+    const releaseFn = () => this.release(job.id);
     const output = new Promise((resolve) => {
       job.onReady = () => resolve(releaseFn);
     });
