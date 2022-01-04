@@ -63,7 +63,7 @@ async function runTask({ spec, metadata }) {
   try {
     const stream = inputStream(id, readsKeys);
     stream.on('error', (err) => {
-      LOGGER.info('Error in input stream, destroying container.');
+      LOGGER.info(`Error in input stream, destroying container: ${err}`);
       container.kill();
     });
     stream.pipe(container.stdin);

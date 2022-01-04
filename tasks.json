@@ -3,6 +3,11 @@
     "task": "assembly",
     "version": "v2",
     "timeout": "60m",
+    "resources": {
+      "cpu": 2,
+      "memory": 3221225472,
+      "slow": 1
+    },
     "retries": 2
   },
   "clustering": {
