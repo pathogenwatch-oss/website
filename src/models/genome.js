@@ -131,6 +131,8 @@ schema.index({
 // Need these as well
 schema.index({ public: 1, binned: 1, createdAt: -1 }, { partialFilterExpression: { public: true, binned: false } });
 schema.index({ _user: 1, binned: 1, createdAt: -1 });
+schema.index({ public: 1, _user: 1, binned: 1, createdAt: -1 }, { partialFilterExpression: { public: false, binned: false } });
+
 // mlst as well
 schema.index({
   public: 1,
