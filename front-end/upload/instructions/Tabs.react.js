@@ -1,11 +1,9 @@
 import React from 'react';
 import classnames from "classnames";
-import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 
 import Assemblies from './Assemblies.react';
 import Reads from './Reads.react';
-import Badge from '../../components/badge';
 
 const Tabs = ({ uploadType }) => {
   return (
@@ -45,28 +43,35 @@ const Tabs = ({ uploadType }) => {
               )
             }
           >
-            <Badge text="Beta" color="turquoise">
-              Reads (FASTQ)
-            </Badge>
+            Reads (FASTQ)
           </Link>
         </div>
 
         {
           (uploadType === "fasta") && (
             <div className="mdl-tabs__panel">
-              <Assemblies csvText={(<React.Fragment>Files should contain a <strong>filename</strong> column to match each
-                row to its respective genomic data. Please use the name of the file{' '}
-                <strong>including extension</strong>.</React.Fragment>)}/>
+              <Assemblies
+                csvText={(<React.Fragment>
+                  Files should contain a <strong>filename</strong> column to
+                  match each row to its respective genomic data. Please use the
+                  name of the file{' '}
+                  <strong>including extension</strong>.</React.Fragment>)}
+              />
             </div>
           )
         }
         {
           (uploadType === "multi-fasta") && (
             <div className="mdl-tabs__panel">
-              <Assemblies csvText={(<React.Fragment>Files should contain a <strong>filename</strong> column to match each
-                row to its respective genomic data. Please use the name given in the{' '}
-                <strong>header line of the individual FASTA records</strong> -{' '}
-                not the actual filename.</React.Fragment>)}/>
+              <Assemblies
+                csvText={(<React.Fragment>
+                  Files should contain a <strong>filename</strong> column to
+                  match each row to its respective genomic data. Please use the
+                  name given in the{' '}
+                  <strong>header line of the individual FASTA records</strong>
+                  -{' '}
+                  not the actual filename.</React.Fragment>)}
+              />
             </div>
           )
         }
