@@ -863,7 +863,7 @@
       },
       {
         "task": "pangolin",
-        "version": "v11.3.0"
+        "version": "v12.0.0"
       }
     ],
     "2751": [
@@ -1324,7 +1324,7 @@
       },
       {
         "task": "serotype",
-        "version": "sistr-v1.0.2"
+        "version": "sistr-v1.1.1"
       }
     ],
     "620": [
