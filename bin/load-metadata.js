@@ -34,7 +34,7 @@ function fetchGenomes(query) {
   }).lean();
 }
 
-function mapMetadata(metadataUpdate, genomes, nameColumn) {
+function mapMetadata(metadataUpdate, genomes, nameColumn, clean = false) {
   const metadataMap = metadataUpdate.reduce((memo, row) => {
     if (!row[nameColumn] && !row.userDefined[nameColumn]) {
       throw new Error(`Missing ${nameColumn} in ${JSON.stringify(row)}`);
@@ -60,7 +60,7 @@ function mapMetadata(metadataUpdate, genomes, nameColumn) {
       genome.id = genome._id.toString();
       delete genome._id;
       const metadata = metadataMap[genome.name];
-      metadata.userDefined = { ...genome.userDefined, ...metadata.userDefined };
+      metadata.userDefined = clean ? metadata.userDefined : { ...genome.userDefined, ...metadata.userDefined };
       const foo = { ...genome, ...metadata };
       console.log(`${JSON.stringify(Object.keys(foo))}`);
       merged[genome.name] = foo;
@@ -69,8 +69,13 @@ function mapMetadata(metadataUpdate, genomes, nameColumn) {
   return Object.values(mergedMetadata);
 }
 
+function checkCleanOption() {
+  return 'clean' in argv.opts && argv.opts.clean;
+}
+
 async function main() {
   checkOpts();
+  const clean = checkCleanOption();
   const metadataUpdate = await readCsv(argv.opts.csvFile);
   await mongoConnection.connect();
   const query = parseQuery(argv.opts.query);
@@ -78,7 +83,7 @@ async function main() {
   console.log(`Query: ${JSON.stringify(query)}`);
   const genomes = await fetchGenomes(query);
   const nameColumn = argv.opts.nameColumn ? argv.opts.nameColumn.toLowerCase() : 'name';
-  const data = mapMetadata(metadataUpdate, genomes, nameColumn);
+  const data = mapMetadata(metadataUpdate, genomes, nameColumn, clean);
   const user = { _id: argv.opts.userId };
   await editMany({ user, data });
 }
