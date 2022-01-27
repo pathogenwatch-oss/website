@@ -22,6 +22,7 @@
     "cookie-parser": "^1.4.3",
     "country-iso-3-to-2": "^1.0.1",
     "csv": "^1.1.1",
+    "csv-parse": "^5.0.4",
     "docker-pull": "github:cgps-dev/docker-pull",
     "dockerode": "^3.3.0",
     "ejs": "^2.5.1",
