@@ -12,7 +12,7 @@ const MAX_TIMEOUT = formatTime('1h');
 const MAX_CPU = 15;
 const defaultRetries = config.tasks.retries || 3;
 
-const fairUseTaskTypes = { genome: 1, task: 1, assembly: 10, testTask: 1 };
+const fairUseTaskTypes = { genome: 1, task: 1, assembly: 50, testTask: 1 };
 
 let now = () => Math.floor(new Date() / 1000);
 
