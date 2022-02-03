@@ -9,17 +9,15 @@ const csv = require('csv');
 const { transformer } = require('../src/routes/download/utils/kleborate');
 
 function fetchGenomes(query, projection) {
-
   return Genome.find(query, projection).lean();
 }
 
 async function main() {
-
   const query = {
     public: true,
     binned: false,
     'analysis.kleborate': { $exists: true },
-    'analysis.speciator.organismId': '573',
+    'analysis.speciator.genusId': { $in: [ '570', '160674' ] },
     'analysis.kleborate.__v': 'v2.2.1',
   };
   const projection = { name: 1, 'analysis.kleborate': 1 };
@@ -33,6 +31,7 @@ async function main() {
   writable._write = (object, encoding, done) => {
     fs.appendFileSync('test.csv', object);
     // process.stdout.write(object);
+    // process.exit(0);
     done();
   };
 
