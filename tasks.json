@@ -1564,7 +1564,7 @@
     "all": [
       {
         "task": "metrics",
-        "version": "v2"
+        "version": "v3"
       }
     ]
   }
