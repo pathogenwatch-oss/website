@@ -17,6 +17,7 @@ router.post('/core', require('./core-summary'));
 router.post('/cgmlst', require('./cgmlst'));
 router.post('/genotyphi', require('./genotyphi'));
 router.post('/inctyper', require('./inctyper'));
+router.post('/kaptive', require('./kaptive'));
 router.post('/kleborate', require('./kleborate'));
 router.post('/metrics', require('./metrics'));
 router.post('/mlst', require('./mlst')('mlst'));

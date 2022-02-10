@@ -527,7 +527,21 @@
     ],
     "160674": [
       {
+        "flags": {
+          "KLEBORATE_TEST": true
+        },
         "task": "kleborate",
+        "resources": {
+          "memory": 653741824
+        },
+        "timeout": "15m",
+        "version": "v2.3.0"
+      },
+      {
+        "task": "kleborate",
+        "resources": {
+          "memory": 653741824
+        },
         "timeout": "15m",
         "version": "v2.2.1"
       }
@@ -1078,6 +1092,16 @@
         },
         "task": "paarsnp",
         "version": "v3.0.1"
+      },
+      {
+        "flags": {
+          "KAPTIVE_TEST": true
+        },
+        "task": "kaptive",
+        "resources": {
+          "memory": 653741824
+        },
+        "version": "1"
       }
     ],
     "480": [
@@ -1264,9 +1288,23 @@
     ],
     "570": [
       {
+        "flags": {
+          "KLEBORATE_TEST": true
+        },
         "task": "kleborate",
         "timeout": "15m",
-        "version": "v2.2.1"
+        "version": "v2.3.0",
+        "resources": {
+          "memory": 653741824
+        }
+      },
+      {
+        "task": "kleborate",
+        "timeout": "15m",
+        "version": "v2.2.1",
+        "resources": {
+          "memory": 653741824
+        }
       },
       {
         "flags": {

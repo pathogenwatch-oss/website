@@ -93,6 +93,10 @@ schema.index({ 'analysis.ngstar.st': 1 });
 schema.index({ 'analysis.ngmast.ngmast': 1 });
 schema.index({ 'analysis.genotyphi.genotype': 1 });
 schema.index({ 'analysis.core.fp.reference': 1 });
+schema.index({ 'analysis.kaptive.kLocus.Best locus match': 1 },
+  { partialFilterExpression: { 'analysis.kaptive': { $exists: true } } });
+schema.index({ 'analysis.kaptive.oLocus.Best locus match': 1 },
+  { partialFilterExpression: { 'analysis.kaptive': { $exists: true } } });
 schema.index({ 'analysis.kleborate.typing.K_locus': 1 });
 schema.index({ 'analysis.kleborate.typing.O_locus': 1 });
 schema.index({ 'analysis.pangolin.lineage': 1 });
@@ -131,7 +135,12 @@ schema.index({
 // Need these as well
 schema.index({ public: 1, binned: 1, createdAt: -1 }, { partialFilterExpression: { public: true, binned: false } });
 schema.index({ _user: 1, binned: 1, createdAt: -1 });
-schema.index({ public: 1, _user: 1, binned: 1, createdAt: -1 }, { partialFilterExpression: { public: false, binned: false } });
+schema.index({ public: 1, _user: 1, binned: 1, createdAt: -1 }, {
+  partialFilterExpression: {
+    public: false,
+    binned: false
+  }
+});
 
 // mlst as well
 schema.index({
@@ -312,11 +321,13 @@ schema.statics.getFilterQuery = async function (props, findQuery = {}) {
     genusId,
     id,
     klocus,
+    klocusKaptive,
     maxDate,
     minDate,
     ngmast,
     ngstar,
     olocus,
+    olocusKaptive,
     organismId,
     pangolin,
     resistance,
@@ -428,6 +439,14 @@ schema.statics.getFilterQuery = async function (props, findQuery = {}) {
     findQuery['analysis.kleborate.typing.O_locus'] = olocus;
   }
 
+  if (klocusKaptive) {
+    findQuery['analysis.kaptive.kLocus.Best match locus'] = klocusKaptive;
+  }
+
+  if (olocusKaptive) {
+    findQuery['analysis.kaptive.oLocus.Best match locus'] = olocusKaptive;
+  }
+
   if (pangolin) {
     findQuery['analysis.pangolin.lineage'] = pangolin;
   }
@@ -502,6 +521,7 @@ schema.statics.getForCollection = function (query, user = {}) {
     'analysis.core.summary': 1,
     'analysis.genotyphi': 1,
     'analysis.inctyper': 1,
+    'analysis.kaptive': 1,
     'analysis.kleborate': 1,
     'analysis.metrics': 1,
     'analysis.mlst.alleles': 1,

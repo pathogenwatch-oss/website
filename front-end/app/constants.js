@@ -59,6 +59,7 @@ export const analysisLabels = {
   core: 'Core Summary',
   genotyphi: 'Genotyphi',
   inctyper: 'Inctyper',
+  kaptive: 'Kaptive',
   kleborate: 'Kleborate',
   metrics: 'Stats',
   mlst: 'MLST',

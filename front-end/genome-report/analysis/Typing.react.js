@@ -5,14 +5,26 @@ import Genotyphi from './Genotyphi.react';
 import NgMast from './NgMast.react';
 import Serotype from './Serotype.react';
 import Strain from './Strain.react';
+import Kaptive from './Kaptive.react';
 import Kleborate from './Kleborate.react';
-import NgonoVariants from './NgonoVariants.react'
+import NgonoVariants from './NgonoVariants.react';
 import Pangolin from './Pangolin.react';
 import SpnPbpType from './SpnPbpType.react';
 import VistaGenotype from './VistaGenotype.react';
 
 function getSecondaryTyping(genome) {
-  const { genotyphi, ngmast, serotype, poppunk2, kleborate, "ngono-markers": ngonoMarkers, pangolin, spn_pbp_amr, vista } = genome.analysis;
+  const {
+    genotyphi,
+    ngmast,
+    serotype,
+    poppunk2,
+    kaptive,
+    kleborate,
+    "ngono-markers": ngonoMarkers,
+    pangolin,
+    spn_pbp_amr,
+    vista
+  } = genome.analysis;
   return (
     <React.Fragment>
       {!!pangolin &&
@@ -39,6 +51,10 @@ function getSecondaryTyping(genome) {
         <div>
           <NgonoVariants result={ngonoMarkers} />
         </div>}
+      {!!kaptive &&
+        <div>
+          <Kaptive genome={genome} />
+        </div>}
       {!!kleborate &&
         <div>
           <Kleborate genome={genome} />
@@ -63,7 +79,9 @@ export default ({ genome }) => {
         <div id="mlst">
           {mlst && <MLST result={mlst} speciator={speciator} />}
           {mlst2 && <MLST heading="Alternative MLST" result={mlst2} speciator={speciator} filterKey="mlst2" />}
-          {ngstar && <MLST heading="NG-STAR – Sequence typing for antimicrobial resistance" result={ngstar} speciator={speciator} filterKey="ngstar" label="type" />}
+          {ngstar &&
+            <MLST heading="NG-STAR – Sequence typing for antimicrobial resistance" result={ngstar} speciator={speciator}
+                  filterKey="ngstar" label="type" />}
         </div>}
       {getSecondaryTyping(genome)}
     </React.Fragment>

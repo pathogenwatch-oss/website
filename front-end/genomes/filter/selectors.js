@@ -423,6 +423,38 @@ const getOlocusSummary = createSelector(
   )
 );
 
+const getKlocusKaptiveSummary = createSelector(
+  getFilterSummaries,
+  state => getFilter(state).klocusKaptive,
+  getFilterFn('klocusKaptive'),
+  ({ klocusKaptive = {} }, filterValue, filterFn) => sortBy(
+    Object.keys(klocusKaptive)
+      .filter(filterFn)
+      .map(value => ({
+        value,
+        active: filterValue === value,
+        count: klocusKaptive[value].count,
+      })),
+    'value'
+  )
+);
+
+const getOlocusKaptiveSummary = createSelector(
+  getFilterSummaries,
+  state => getFilter(state).olocusKaptive,
+  getFilterFn('olocusKaptive'),
+  ({ olocusKaptive = {} }, filterValue, filterFn) => sortBy(
+    Object.keys(olocusKaptive)
+      .filter(filterFn)
+      .map(value => ({
+        value,
+        active: filterValue === value,
+        count: olocusKaptive[value].count,
+      })),
+    'value'
+  )
+);
+
 const getPangolinSummary = createSelector(
   getFilterSummaries,
   state => getFilter(state).pangolin,
@@ -522,11 +554,13 @@ export const getFilterSummary = createSelector(
   getGenotypeSummary,
   getGenusIdSummary,
   getKlocusSummary,
+  getKlocusKaptiveSummary,
   getMlst2Summary,
   getMlstSummary,
   getNgmastSummary,
   getNgstarSummary,
   getOlocusSummary,
+  getOlocusKaptiveSummary,
   getOrganismSummary,
   getPangolinSummary,
   getReferenceSummary,
@@ -548,11 +582,13 @@ export const getFilterSummary = createSelector(
       genotype,
       genusId,
       klocus,
+      klocusKaptive,
       mlst2,
       mlst,
       ngmast,
       ngstar,
       olocus,
+      olocusKaptive,
       organismId,
       pangolin,
       reference,
@@ -580,11 +616,13 @@ export const getFilterSummary = createSelector(
       genotype,
       genusId,
       klocus,
+      klocusKaptive,
       mlst,
       mlst2,
       ngmast,
       ngstar,
       olocus,
+      olocusKaptive,
       organismId,
       pangolin,
       reference,

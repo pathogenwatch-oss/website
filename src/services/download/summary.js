@@ -7,6 +7,7 @@ module.exports = function ({ user, ids }) {
     'cgmlst',
     'genotyphi',
     'inctyper',
+    'kaptive',
     'kleborate',
     'metrics',
     'mlst',

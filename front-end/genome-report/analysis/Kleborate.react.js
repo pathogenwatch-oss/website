@@ -4,15 +4,15 @@ import ExternalLink from '../ExternalLink.react';
 
 export default ({ genome }) => {
   const { kleborate, speciator } = genome.analysis;
-  const species = !kleborate.species.replace('Klebsiella (Raoultella)', 'Raoultella').startsWith(speciator.speciesName);
+  const species = !speciator.speciesName.replace('Raoultella', 'Klebsiella').startsWith(kleborate.species);
 
   return (
     <React.Fragment>
       <header className="pw-genome-report-section-header">
-        <h2>Kleborate</h2>
+        <h2>Capsule (K) and O serotype predictions</h2>
         <p>
-          <a href="https://github.com/katholt/Kleborate" target="_blank" rel="noopener">
-            https://github.com/katholt/Kleborate - version {kleborate['Kleborate version']}
+          <a href="https://github.com/katholt/Kaptive/wiki/Interpreting-the-results" target="_blank" rel="noopener">
+          Sourced from Kaptive
           </a>
         </p>
       </header>
@@ -24,6 +24,10 @@ export default ({ genome }) => {
             View all {kleborate.typing.K_locus}
           </ExternalLink>
         </div>
+        {'K_type' in kleborate.typing && (<div className="pw-genome-report-metadata">
+          <dt>Predicted capsule type</dt>
+          <dd>{kleborate.typing.K_type}</dd>
+        </div>)}
         <div className="pw-genome-report-metadata">
           <dt>Confidence</dt>
           <dd>{kleborate.typing.K_locus_confidence}</dd>
@@ -41,6 +45,11 @@ export default ({ genome }) => {
             View all {kleborate.typing.O_locus}
           </ExternalLink>
         </div>
+        {'O_type' in kleborate.typing &&
+          (<div className="pw-genome-report-metadata">
+            <dt>Predicted O type</dt>
+            <dd>{kleborate.typing.O_type}</dd>
+          </div>)}
         <div className="pw-genome-report-metadata">
           <dt>Confidence</dt>
           <dd>{kleborate.typing.O_locus_confidence}</dd>
