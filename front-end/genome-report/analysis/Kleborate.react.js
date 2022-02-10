@@ -6,6 +6,7 @@ export default ({ genome }) => {
   const { kleborate, speciator } = genome.analysis;
   const species = !speciator.speciesName.replace('Raoultella', 'Klebsiella').startsWith(kleborate.species);
 
+  // TODO: Remove the version check.
   return (
     <React.Fragment>
       <header className="pw-genome-report-section-header">
@@ -45,7 +46,7 @@ export default ({ genome }) => {
             View all {kleborate.typing.O_locus}
           </ExternalLink>
         </div>
-        {'O_type' in kleborate.typing &&
+        {'O_type' in kleborate.typing && kleborate.__v === 'v2.3.0' &&
           (<div className="pw-genome-report-metadata">
             <dt>Predicted O type</dt>
             <dd>{kleborate.typing.O_type}</dd>
