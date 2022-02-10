@@ -103,10 +103,18 @@ const inctyperGroup = {
   columns: [ '__inc_types' ],
 };
 
+const kaptiveGroup = {
+  group: true,
+  columnKey: 'kaptive',
+  columns: [ '__K_locus_kaptive', '__K_type_kaptive', '__O_locus_kaptive', '__O_type_kaptive' ],
+};
+
 const kleborateGroup = {
   group: true,
   columnKey: 'kleborate',
+  // TODO: add the type columns back in once kleborate v2.2.0 update goes live.
   columns: [ '__K_locus', '__O_locus', '__Virulence_Score', '__Aerobactin', '__Colibactin', '__Salmochelin', '__Yersiniabactin', '__RmpADC', '__rmpA2' ],
+  // columns: [ '__K_locus', '__K_type', '__O_locus', '__O_type', '__Virulence_Score', '__Aerobactin', '__Colibactin', '__Salmochelin', '__Yersiniabactin', '__RmpADC', '__rmpA2' ],
 };
 
 const vistaGroup = {
@@ -124,16 +132,17 @@ function fillColumnDefs({ columns, ...group }) {
   };
 }
 
-function getTypingColumnGroups({ isClusterView }, uiOptions, hasAltMLST, {
+function getTypingColumnGroups(uiOptions, hasAltMLST, {
   genotyphi,
   inctyper,
+  kaptive,
   kleborate,
   mlst,
   ngmast,
   "ngono-markers": ngonoMarkers,
   ngstar,
   pangolin,
-  vista
+  vista,
 }) {
   return [
     !uiOptions.hasPopulation ? null : referenceGroup,
@@ -144,6 +153,7 @@ function getTypingColumnGroups({ isClusterView }, uiOptions, hasAltMLST, {
     ngonoMarkers ? ngonoMarkersGroup : null,
     genotyphi ? genotyphiGroup : null,
     inctyper ? inctyperGroup : null,
+    kaptive ? kaptiveGroup : null,
     kleborate ? kleborateGroup : null,
     vista ? vistaGroup : null,
     pangolin ? pangolinGroup : null,
@@ -155,15 +165,16 @@ function getTypingColumnGroups({ isClusterView }, uiOptions, hasAltMLST, {
 export function hasTyping({ hasPopulation }, {
   genotyphi,
   inctyper,
+  kaptive,
   kleborate,
   mlst,
   "ngono-markers": ngonoMarkers,
   ngmast,
   ngstar,
   pangolin,
-  vista
+  vista,
 }) {
-  return !(!hasPopulation && !mlst && !genotyphi && !inctyper && !kleborate && !ngmast && !!ngonoMarkers && !ngstar && !pangolin && !vista);
+  return !(!hasPopulation && !mlst && !genotyphi && !inctyper && !kaptive && !kleborate && !ngmast && !!ngonoMarkers && !ngstar && !pangolin && !vista);
 }
 
 function updateTypingSettings({ genomes }) {
@@ -184,6 +195,7 @@ function updateTypingSettings({ genomes }) {
 
 function checkAnalysesPresent({ exclude = [] }, { genomes }, analyses) {
   return analyses.filter(analysis => !exclude.includes(analysis)).reduce((memo, analysis) => {
+    // eslint-disable-next-line no-param-reassign
     memo[analysis] = !!genomes[0].analysis[analysis];
     return memo;
   }, {});
@@ -192,8 +204,7 @@ function checkAnalysesPresent({ exclude = [] }, { genomes }, analyses) {
 export default function (state = initialState, { type, payload }) {
   switch (type) {
     case FETCH_COLLECTION.SUCCESS: {
-
-      const foundAnalyses = checkAnalysesPresent(Organisms.uiOptions, payload.result, [ 'genotyphi', 'inctyper', 'kleborate', 'mlst', 'ngmast', 'ngono-markers', 'ngstar', 'pangolin', 'vista' ]);
+      const foundAnalyses = checkAnalysesPresent(Organisms.uiOptions, payload.result, [ 'genotyphi', 'inctyper', 'kaptive', 'kleborate', 'mlst', 'ngmast', 'ngono-markers', 'ngstar', 'pangolin', 'vista' ]);
       const active = hasTyping(Organisms.uiOptions, foundAnalyses);
 
       if (!active) {
@@ -209,7 +220,7 @@ export default function (state = initialState, { type, payload }) {
         active,
         columns: [
           leadingSystemGroup,
-          ...getTypingColumnGroups(payload.result, Organisms.uiOptions, hasAltMLST, foundAnalyses),
+          ...getTypingColumnGroups(Organisms.uiOptions, hasAltMLST, foundAnalyses),
           trailingSystemGroup,
         ],
       };

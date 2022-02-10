@@ -11,8 +11,7 @@ import Speciator from './Speciator.react';
 import Typing from './Typing.react';
 import Virulence from './Virulence.react';
 import CovidVariants from './Sarscov2Variants.react';
-import {taxIdMap} from '~/organisms';
-import Organisms from '~/organisms';
+import { taxIdMap } from '~/organisms';
 
 // import renderGenericResults from './Generic.react';
 
@@ -25,6 +24,7 @@ function hasSpeciesTypingResult(analysis) {
     analysis.serotype ||
     analysis.pangolin ||
     analysis.poppunk2 ||
+    analysis.kaptive ||
     analysis.kleborate ||
     analysis.ngstar ||
     analysis.vista
@@ -40,6 +40,7 @@ export default genome => {
     cgmlst,
     core,
     inctyper,
+    kaptive,
     kleborate,
     metrics,
     paarsnp,

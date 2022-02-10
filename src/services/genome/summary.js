@@ -331,6 +331,32 @@ const summaryFields = [
     ],
   },
   {
+    field: 'klocusKaptive',
+    task: 'kaptive',
+    aggregation: () => [
+      { $match: { 'analysis.kaptive': { $exists: true } } },
+      {
+        $group: {
+          _id: '$analysis.kaptive.kLocus.Best match locus',
+          count: { $sum: 1 },
+        },
+      },
+    ],
+  },
+  {
+    field: 'olocusKaptive',
+    task: 'kaptive',
+    aggregation: () => [
+      { $match: { 'analysis.kaptive': { $exists: true } } },
+      {
+        $group: {
+          _id: '$analysis.kaptive.oLocus.Best match locus',
+          count: { $sum: 1 },
+        },
+      },
+    ],
+  },
+  {
     field: 'pangolin',
     task: 'pangolin',
     aggregation: () => [

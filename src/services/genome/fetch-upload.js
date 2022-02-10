@@ -8,6 +8,7 @@ module.exports = async function ({ user, query }) {
     'analysis.core.__v': 1,
     'analysis.genotyphi.__v': 1,
     'analysis.inctyper.__v': 1,
+    'analysis.kaptive.__v': 1,
     'analysis.kleborate.__v': 1,
     'analysis.metrics.__v': 1,
     'analysis.mlst.__v': 1,

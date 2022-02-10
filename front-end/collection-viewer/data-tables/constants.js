@@ -204,13 +204,58 @@ export const systemDataColumns = {
       return `${analysis.kleborate.virulence_score}`;
     },
   },
+  __K_locus_kaptive: {
+    columnKey: '__K_locus_kaptive',
+    displayName: 'K Locus',
+    label: 'K Locus',
+    valueGetter({ analysis }) {
+      if (!analysis.kaptive || !('kLocus' in analysis.kaptive)) return null;
+      return analysis.kaptive.kLocus['Best match locus'];
+    },
+  },
+  __K_type_kaptive: {
+    columnKey: '__K_type_kaptive',
+    displayName: 'Capsule type',
+    label: 'Predicted capsule (K locus) type',
+    valueGetter({ analysis }) {
+      if (!analysis.kaptive || !('kLocus' in analysis.kaptive)) return null;
+      return analysis.kaptive.kLocus['Best match type'];
+    },
+  },
+  __O_locus_kaptive: {
+    columnKey: '__O_locus_kaptive',
+    displayName: 'OC Locus',
+    label: 'OC Locus',
+    valueGetter({ analysis }) {
+      if (!analysis.kaptive || !('oLocus' in analysis.kaptive)) return null;
+      return analysis.kaptive.oLocus['Best match locus'];
+    },
+  },
+  __O_type_kaptive: {
+    columnKey: '__O_type_kaptive',
+    displayName: 'OC Locus Type',
+    label: 'Predicted OC locus type',
+    valueGetter({ analysis }) {
+      if (!analysis.kaptive || !('oLocus' in analysis.kaptive)) return null;
+      return analysis.kaptive.oLocus['Best match type'];
+    },
+  },
   __K_locus: {
     columnKey: '__K_locus',
-    displayName: 'K LOCUS (wzi)',
-    label: 'K LOCUS (wzi)',
+    displayName: 'K Locus (wzi)',
+    label: 'K Locus (wzi)',
     valueGetter({ analysis }) {
       if (!analysis.kleborate) return null;
       return `${analysis.kleborate.typing.K_locus} (${analysis.kleborate.typing.wzi})`;
+    },
+  },
+  __K_type: {
+    columnKey: '__K_type',
+    displayName: 'Capsule type',
+    label: 'Predicted capsule (K locus) type',
+    valueGetter({ analysis }) {
+      if (!analysis.kleborate) return null;
+      return analysis.kleborate.typing.K_type;
     },
   },
   __O_locus: {
@@ -218,6 +263,15 @@ export const systemDataColumns = {
     valueGetter({ analysis }) {
       if (!analysis.kleborate) return null;
       return analysis.kleborate.typing.O_locus;
+    },
+  },
+  __O_type: {
+    columnKey: '__O_type',
+    displayName: 'O type',
+    label: 'Predicted O locus type',
+    valueGetter({ analysis }) {
+      if (!analysis.kleborate) return null;
+      return analysis.kleborate.typing.O_type;
     },
   },
   __Aerobactin: {

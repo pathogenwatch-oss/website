@@ -31,6 +31,8 @@ const speciesDependants = [
   'mlst2',
   'ngmast',
   'ngstar',
+  'klocusKaptive',
+  'olocusKaptive',
   'genotype',
   'reference',
 ];
@@ -197,6 +199,16 @@ const Filter = ({
     />
     <FilterableSection
       filterKey="olocus"
+      heading="O Locus"
+      icon="label"
+    />
+    <FilterableSection
+      filterKey="klocusKaptive"
+      heading="K Locus"
+      icon="label"
+    />
+    <FilterableSection
+      filterKey="olocusKaptive"
       heading="O Locus"
       icon="label"
     />

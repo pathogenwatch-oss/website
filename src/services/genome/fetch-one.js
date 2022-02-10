@@ -25,6 +25,7 @@ const projection = {
   'analysis.core.summary': 1,
   'analysis.genotyphi': 1,
   'analysis.inctyper': 1,
+  'analysis.kaptive': 1,
   'analysis.kleborate': 1,
   'analysis.metrics': 1,
   'analysis.mlst.__v': 1,
