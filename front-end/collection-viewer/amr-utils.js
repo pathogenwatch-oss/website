@@ -1,4 +1,5 @@
 import { CGPS, DEFAULT } from '../app/constants';
+import { mergeColumnInto, multiClassFields } from '~/task-utils/kleborate';
 
 const stateColours = {
   RESISTANT: DEFAULT.DANGER_COLOUR,
@@ -44,7 +45,7 @@ export function findState({ resistanceProfile }, antibioticKey) {
 }
 
 export function hasResistanceState(state) {
-  return state.toUpperCase() !== 'NOT_FOUND'
+  return state.toUpperCase() !== 'NOT_FOUND';
 }
 
 export function isResistant({ resistanceProfile }, antibioticKey) {
@@ -63,7 +64,22 @@ export function hasElement(genome, type, element) {
 }
 
 export function kleborateIsResistant({ amr }, antibiotic) {
-  return !!amr.profile && antibiotic in amr.profile && !!amr.profile[antibiotic].resistant;
+  // If there is a match in e.g. Bla_ESBL_inhR then Bla_ESBL is also true.
+  if (!!amr.profile &&
+    antibiotic in multiClassFields &&
+    multiClassFields[antibiotic] in amr.profile &&
+    amr.profile[multiClassFields[antibiotic]].resistant) {
+    return true;
+  }
+  return !!amr.profile &&
+    antibiotic in amr.profile &&
+    !!amr.profile[antibiotic].resistant;
+}
+
+export function kleborateMatches({ key }, { amr }) {
+  return !!amr.profile && key in multiClassFields ?
+    mergeColumnInto(multiClassFields[key], key, amr.profile) :
+    amr.profile[key].matches;
 }
 
 export function kleborateCleanElement(element) {

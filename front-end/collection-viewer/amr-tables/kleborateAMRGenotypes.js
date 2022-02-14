@@ -7,6 +7,7 @@ import * as amr from '^/collection-viewer/amr-utils';
 import { kleborateCleanElement } from '^/collection-viewer/amr-utils';
 import { onHeaderClick } from '^/collection-viewer/amr-tables/thunks';
 import React from '^/react-shim';
+import { ignoreFields, multiClassFields } from '~/task-utils/kleborate';
 
 export const name = tableKeys.kleborateAMRGenotypes;
 
@@ -58,21 +59,28 @@ function buildColumns(genomes) {
     if (!genome.analysis.kleborate.amr) {
       continue;
     }
-    for (const phenotype of Object.values(genome.analysis.kleborate.amr.profile)) {
-      if (phenotype.match === '-' || phenotype.key === 'SHVM') {
+    const profile = genome.analysis.kleborate.amr.profile;
+    for (const phenotype of Object.values(profile)) {
+      if (phenotype.key in multiClassFields) {
+        if (phenotype.match === '-' && profile[multiClassFields[phenotype.key]] === '-') {
+          continue;
+        }
+      } else if (phenotype.match === '-') {
         continue;
       }
       if (!elementsInResults[phenotype.name]) {
         elementsInResults[phenotype.name] = new Set();
       }
-      const elements = phenotype.matches.split(';').map(element => kleborateCleanElement(element));
+      const elements = phenotype.key in multiClassFields ?
+        `${phenotype.matches};${profile[multiClassFields[phenotype.key]].matches}`.split(';').filter(element => element !== '-').map(element => kleborateCleanElement(element)) :
+        phenotype.matches.split(';').map(element => kleborateCleanElement(element));
       elements.forEach(element => {
         elementsInResults[phenotype.name].add(element);
       });
     }
   }
 
-  return Object.keys(elementsInResults).sort().reduce((groups, antibiotic) => {
+  return Object.keys(elementsInResults).sort().filter(code => !ignoreFields.has(code)).reduce((groups, antibiotic) => {
     const { fixedWidth, bufferSize } = calculateHeaderWidth(antibiotic, elementsInResults[antibiotic].size);
     groups.push({
       group: true,

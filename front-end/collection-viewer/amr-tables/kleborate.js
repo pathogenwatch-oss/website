@@ -5,13 +5,12 @@ import { SET_COLOUR_COLUMNS } from '../table/actions';
 import { onHeaderClick } from './thunks';
 
 import * as amr from '../amr-utils';
+import { kleborateIsResistant, kleborateMatches } from '../amr-utils';
 import { measureHeadingText } from '../table/columnWidth';
-import { systemGroup, spacerGroup } from './utils';
-import Organism from '../../organisms';
+import { spacerGroup, systemGroup } from './utils';
 
-import { statuses } from '../constants';
-import { tableKeys } from '../constants';
-import { kleborateIsResistant } from '../amr-utils';
+import { statuses, tableKeys } from '../constants';
+import { displayAMRField, formatAMRName, sortKleborateProfile } from '~/task-utils/kleborate';
 
 export const name = tableKeys.kleborateAMR;
 
@@ -22,12 +21,13 @@ const isMac =
     navigator.platform.toUpperCase().indexOf('MAC') >= 0);
 const modifierKey = isMac ? 'Cmd' : 'Ctrl';
 
-function buildColumns(genomes) {
+function buildColumns(genomeRecords) {
   const columns = [];
 
   // Need to gather into phenotypes
-
-  for (const record of Object.values(genomes[0].analysis.kleborate.amr.profile)) {
+  const headerRecords = Object.values(genomeRecords[0].analysis.kleborate.amr.profile).sort(sortKleborateProfile());
+  for (const record of headerRecords) {
+    if (!displayAMRField(record)) continue;
     columns.push({
       columnKey: `kleborate_${record.key}`,
       addState({ genomes }) {
@@ -36,19 +36,19 @@ function buildColumns(genomes) {
         return this;
       },
       headerClasses: 'wgsa-table-header--expanded',
-      headerTitle: `${record.name} - ${modifierKey} + click to select multiple`,
+      headerTitle: `${formatAMRName(record)} - ${modifierKey} + click to select multiple`,
       cellClasses: 'wgsa-table-cell--resistance',
       cellPadding: 16,
-      label: record.name,
+      label: formatAMRName(record),
       getWidth() {
-        return measureHeadingText(record.name);
+        return measureHeadingText(formatAMRName(record));
       },
       getCellContents(props, { analysis: { kleborate } }) {
         return kleborateIsResistant(kleborate, record.key) ? (
           <i
             className="material-icons wgsa-resistance-icon"
             style={{ color: effectColour }}
-            title={kleborate.amr.profile[record.key].matches}
+            title={kleborateMatches(record, kleborate)}
           >
             lens
           </i>
@@ -58,7 +58,6 @@ function buildColumns(genomes) {
       onHeaderClick,
     });
   }
-
   return columns;
 }
 

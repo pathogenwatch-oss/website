@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import React from 'react';
 
 import ExternalLink from '../ExternalLink.react';
@@ -27,7 +28,7 @@ export default ({ genome }) => {
         </div>
         {'K_type' in kleborate.typing && (<div className="pw-genome-report-metadata">
           <dt>Predicted capsule type</dt>
-          <dd>{kleborate.typing.K_type}</dd>
+          <dd>{(kleborate.typing.K_type.startsWith('unknown') ? 'unknown' : kleborate.typing.K_type)}</dd>
         </div>)}
         <div className="pw-genome-report-metadata">
           <dt>Confidence</dt>
@@ -46,7 +47,7 @@ export default ({ genome }) => {
             View all {kleborate.typing.O_locus}
           </ExternalLink>
         </div>
-        {'O_type' in kleborate.typing && kleborate.__v === 'v2.3.0' &&
+        {'O_type' in kleborate.typing && kleborate['Kleborate version'] !== 'v2.0.4' &&
           (<div className="pw-genome-report-metadata">
             <dt>Predicted O type</dt>
             <dd>{kleborate.typing.O_type}</dd>
