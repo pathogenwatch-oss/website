@@ -15,7 +15,7 @@ const effectColour = amr.getStateColour('RESISTANT');
 
 export function hasElement(genome, element) {
   for (const phenotype of Object.values(genome.analysis.kleborate.amr.profile)) {
-    if (phenotype.matches.replace(/-\d+%/g, '_truncated').includes(element)) {
+    if (kleborateCleanElement(phenotype.matches).includes(element)) {
       return true;
     }
   }
@@ -53,6 +53,8 @@ function createColumn(key, element, name, bufferSize) {
 }
 
 function buildColumns(genomes) {
+  // Distinct set of resistance determinants and which "classes"
+  // they are linked to (a determinant can be in more than one class)
   const elementsInResults = {};
 
   for (const genome of genomes) {

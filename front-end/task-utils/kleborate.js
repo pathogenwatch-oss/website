@@ -1,6 +1,8 @@
+/* eslint-disable no-param-reassign */
+import { cloneDeep } from 'lodash';
+
 export const ignoreFields = new Set([ 'GPA', 'MAC', 'OMPK', 'RIF', 'SHVM' ]);
 export const multiClassFields = { BLA: 'BLI', EBL: 'EBI', CBP: 'OMPK' };
-
 
 export function sortKleborateProfile() {
   return (a, b) => ((a.name > b.name) ? 1 : -1);
@@ -33,18 +35,19 @@ export function formatAMRMatch({ matches }) {
 // columns.
 // e.g. Bla_ESBL_acquired’ and ‘Bla_ESBL_inhR_acquired
 export function mergeColumnInto(to, from, profile) {
-  // eslint-disable-next-line no-param-reassign
-  if (profile[to].matches === '-') {
-    return profile[from].matches;
-  } else if (profile[from].matches === '-') {
-    return profile[to].matches;
+  if (profile[to].matches === '-' && profile[from].matches !== '-') {
+    profile[to].matches = profile[from].matches;
+    profile[to].resistant = true;
+  } else if (profile[to].matches !== '-' && profile[from].matches !== '-') {
+    profile[to].matches = `${profile[to].matches};${profile[from].matches}`;
+    profile[to].resistant = true;
   }
-  return `${profile[to].matches};${profile[from].matches}`;
 }
 
 export function mergeInhibitorColumns(profile) {
+  const updatedProfile = cloneDeep(profile);
   for (const to of Object.keys(multiClassFields)) {
-    mergeColumnInto(to, multiClassFields[to], profile);
+    mergeColumnInto(to, multiClassFields[to], updatedProfile);
   }
-  return profile;
+  return updatedProfile;
 }
