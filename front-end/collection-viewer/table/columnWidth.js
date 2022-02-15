@@ -2,7 +2,7 @@ import { getColumnLabel } from './utils';
 
 export const canvas = document.createElement('canvas').getContext('2d');
 
-const weights = {
+export const weights = {
   bold: 'bold',
   normal: 'normal',
 };

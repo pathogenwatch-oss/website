@@ -1,8 +1,8 @@
 import { FETCH_COLLECTION } from '^/collection-viewer/actions';
 import { statuses, tableKeys } from '^/collection-viewer/constants';
-import { calculateHeaderWidth, spacerGroup, systemGroup } from '^/collection-viewer/amr-tables/utils';
+import { calculateHeaderWidthAlternative, spacerGroup, systemGroup } from '~/collection-viewer/amr-tables/utils';
 import { SET_COLOUR_COLUMNS } from '^/collection-viewer/table/actions';
-import { measureHeadingText } from '^/collection-viewer/table/columnWidth';
+import { measureHeadingText } from '~/collection-viewer/table/columnWidth';
 import * as amr from '^/collection-viewer/amr-utils';
 import { kleborateCleanElement } from '^/collection-viewer/amr-utils';
 import { onHeaderClick } from '^/collection-viewer/amr-tables/thunks';
@@ -22,7 +22,7 @@ export function hasElement(genome, element) {
   return false;
 }
 
-function createColumn(key, element, name, bufferSize) {
+function createColumn(key, element, bufferSize) {
   return {
     addState({ genomes }) {
       if (!genomes.length) return this;
@@ -34,7 +34,7 @@ function createColumn(key, element, name, bufferSize) {
     label: element,
     cellClasses: 'wgsa-table-cell--resistance',
     getWidth() {
-      return measureHeadingText(name) + bufferSize;
+      return measureHeadingText(element) + bufferSize;
     },
     getCellContents(props, genome) {
       return hasElement(genome, element) ? (
@@ -75,7 +75,7 @@ function buildColumns(genomes) {
       }
       const elements = phenotype.key in multiClassFields ?
         `${phenotype.matches};${profile[multiClassFields[phenotype.key]].matches}`.split(';').filter(element => element !== '-').map(element => kleborateCleanElement(element)) :
-        phenotype.matches.split(';').map(element => kleborateCleanElement(element));
+        phenotype.matches.split(';').filter(element => element !== '-').map(element => kleborateCleanElement(element));
       elements.forEach(element => {
         elementsInResults[phenotype.key].elements.add(element);
       });
@@ -83,7 +83,10 @@ function buildColumns(genomes) {
   }
 
   return Object.values(elementsInResults).sort(sortKleborateProfile()).filter(record => !ignoreFields.has(record.key)).reduce((groups, antibioticRecord) => {
-    const { fixedWidth, bufferSize } = calculateHeaderWidth(antibioticRecord.name, antibioticRecord.elements.size);
+    const {
+      fixedWidth,
+      bufferSize,
+    } = calculateHeaderWidthAlternative(antibioticRecord.name, Array.from(antibioticRecord.elements));
     groups.push({
       group: true,
       columnKey: `kleborateAMRGenotypes_${antibioticRecord.key}`,
@@ -98,7 +101,7 @@ function buildColumns(genomes) {
         .filter(element => element !== '-')
         .sort()
         .map((element) => createColumn(
-          `kleborateAMRGenotypes_${antibioticRecord}_${element}`, element, antibioticRecord.name, bufferSize
+          `kleborateAMRGenotypes_${antibioticRecord}_${element}`, element, bufferSize
         )),
     });
     return groups;

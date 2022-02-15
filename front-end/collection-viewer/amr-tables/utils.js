@@ -1,15 +1,9 @@
-import React from 'react';
 
-import { FETCH_COLLECTION } from '../../collection-viewer/actions';
+import { FETCH_COLLECTION } from '~/collection-viewer/actions';
 import { SET_COLOUR_COLUMNS } from '../table/actions';
-import { onHeaderClick } from './thunks';
-
-import * as amr from '../amr-utils';
-import { measureHeadingText } from '../table/columnWidth';
+import { measureHeadingText, measureText, weights } from '../table/columnWidth';
 import * as constants from '../table/constants';
-import { statuses } from '../../collection-viewer/constants';
-
-import Organisms from '../../organisms';
+import { statuses } from '~/collection-viewer/constants';
 
 const isMac =
   (navigator && navigator.platform &&
@@ -88,6 +82,14 @@ export function createReducer({ name, buildColumns }) {
         return state;
     }
   };
+}
+
+export function calculateHeaderWidthAlternative(label, children) {
+  const minWidth = measureHeadingText(label) + 16;
+  const childWidth = children.map(child => measureHeadingText(child) + 16).reduce((sum, length) => sum += length, 0);
+  return minWidth < childWidth ?
+    { fixedWidth: childWidth, bufferSize: 0 } :
+    { fixedWidth: minWidth, bufferSize: (minWidth - childWidth) / children.length };
 }
 
 export function calculateHeaderWidth(label, numChildren) {

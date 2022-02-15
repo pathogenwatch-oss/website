@@ -117,7 +117,6 @@ export function getColour(antibiotic, genome) {
   if (!paarsnp) {
     return defaultColourGetter(genome);
   }
-
   const state = findState(paarsnp, antibiotic);
   return hasResistanceState(state) ? getStateColour(state) : nonResistantColour;
 }
