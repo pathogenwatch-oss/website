@@ -1,5 +1,5 @@
 import { CGPS, DEFAULT } from '../app/constants';
-import { mergeColumnInto, multiClassFields } from '~/task-utils/kleborate';
+import { mergeMatches, multiClassFields } from '~/task-utils/kleborate';
 
 const stateColours = {
   RESISTANT: DEFAULT.DANGER_COLOUR,
@@ -78,7 +78,8 @@ export function kleborateIsResistant({ amr }, antibiotic) {
 
 export function kleborateMatches({ key }, { amr }) {
   return !!amr.profile && key in multiClassFields ?
-    mergeColumnInto(multiClassFields[key], key, amr.profile) :
+    mergeMatches(key, multiClassFields[key], amr.profile) :
+    // mergeColumnInto(key, multiClassFields[key], amr.profile) :
     amr.profile[key].matches;
 }
 

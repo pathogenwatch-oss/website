@@ -44,6 +44,15 @@ export function mergeColumnInto(to, from, profile) {
   }
 }
 
+export function mergeMatches(a, b, profile) {
+  if (profile[a].matches === '-') {
+    return profile[b].matches;
+  } else if (profile[b].matches === '-') {
+    return profile[a].matches;
+  }
+  return `${profile[a].matches};${profile[b].matches}`;
+}
+
 export function mergeInhibitorColumns(profile) {
   const updatedProfile = cloneDeep(profile);
   for (const to of Object.keys(multiClassFields)) {
