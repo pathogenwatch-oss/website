@@ -35,7 +35,6 @@ function extractFoundDeterminants(results) {
 
 function createColumn(key, gene, effect, bufferSize) {
   const effectColour = getEffectColour(effect);
-  const formattedEffect = formatEffect(effect);
   return {
     addState({ genomes }) {
       if (!genomes.length) return this;
@@ -55,7 +54,7 @@ function createColumn(key, gene, effect, bufferSize) {
         <i
           className="material-icons wgsa-resistance-icon"
           style={{ color: effectColour }}
-          title={formattedEffect}
+          title={`${gene} found`}
         >
           lens
         </i>

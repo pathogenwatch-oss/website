@@ -35,7 +35,7 @@ function createColumn( { agent } ) {
           <i
             className={`material-icons wgsa-resistance-icon wgsa-amr--${state.toLowerCase()}`}
             style={{ color: amr.getStateColour(state) }}
-            title={ formatEffect(state) }
+            title={ `${formatEffect(state)} to ${agent.name}` }
           >
             lens
           </i>

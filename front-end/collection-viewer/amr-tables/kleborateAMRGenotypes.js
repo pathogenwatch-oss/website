@@ -31,6 +31,7 @@ function createColumn(key, element, bufferSize) {
     },
     columnKey: key,
     displayName: element,
+    headerTitle: element,
     label: element,
     cellClasses: 'wgsa-table-cell--resistance',
     getWidth() {

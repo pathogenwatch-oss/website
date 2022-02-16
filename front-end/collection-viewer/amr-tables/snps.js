@@ -21,7 +21,6 @@ function hasVariant(genome, key, gene, variant) {
 
 function createColumn(amKey, gene, variant, effect) {
   const effectColour = getEffectColour(effect);
-  const formattedEffect = formatEffect(effect);
 
   return {
     addState({ genomes }) {
@@ -48,7 +47,7 @@ function createColumn(amKey, gene, variant, effect) {
         <i
           className="material-icons wgsa-resistance-icon"
           style={{ color: effectColour }}
-          title={ formattedEffect }
+          title={ `${gene}_${variant} found` }
         >
           lens
         </i>
