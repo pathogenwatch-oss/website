@@ -89,8 +89,7 @@ export function kleborateCleanElement(element) {
     .replace('*', '')
     .replace('?', '')
     .replace(/\.v\d/, '')
-    .replace(/-\d+%/g, '_truncated')
-    .replace(/^(\d+\w+)$/, 'SHV-1_$1');
+    .replace(/-\d+%/g, '_truncated');
 }
 
 export function kleborateHasElement({ amr: { profile } }, antibiotic, element) {

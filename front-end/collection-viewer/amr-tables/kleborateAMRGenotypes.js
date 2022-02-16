@@ -4,7 +4,7 @@ import { calculateHeaderWidthAlternative, spacerGroup, systemGroup } from '~/col
 import { SET_COLOUR_COLUMNS } from '^/collection-viewer/table/actions';
 import { measureHeadingText } from '~/collection-viewer/table/columnWidth';
 import * as amr from '^/collection-viewer/amr-utils';
-import { kleborateCleanElement } from '^/collection-viewer/amr-utils';
+import { kleborateCleanElement } from '~/collection-viewer/amr-utils';
 import { onHeaderClick } from '^/collection-viewer/amr-tables/thunks';
 import React from '^/react-shim';
 import { formatAMRName, ignoreFields, multiClassFields, sortKleborateProfile } from '~/task-utils/kleborate';
@@ -41,6 +41,7 @@ function createColumn(key, element, bufferSize) {
         <i
           className="material-icons wgsa-resistance-icon"
           style={{ color: effectColour }}
+          title={ `${element} found`}
         >
           lens
         </i>

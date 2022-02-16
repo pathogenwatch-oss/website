@@ -67,24 +67,24 @@ const TableMenu = connect(
       {(amr || kleborate) && <hr />}
       {amr &&
       <>
-          <button onClick={() => showTable(tableKeys.antibiotics)}>Antibiotics</button>
-          <button onClick={() => showTable(tableKeys.genes)}>Genes</button>
-          <button onClick={() => showTable(tableKeys.snps)}>Variants</button>
-        </>
+        <button onClick={() => showTable(tableKeys.antibiotics)}>Antibiotics</button>
+        <button onClick={() => showTable(tableKeys.genes)}>Genes</button>
+        <button onClick={() => showTable(tableKeys.snps)}>Variants</button>
+      </>
       }
       {kleborate && <>
-          <button onClick={() => showTable(tableKeys.kleborateAMR)}>Antibiotics</button>
-          <button onClick={() => showTable(tableKeys.kleborateAMRGenotypes)}>AMR Genotypes</button>
-        </>
+        <button onClick={() => showTable(tableKeys.kleborateAMR)}>{tableDisplayNames[tableKeys.kleborateAMR]}</button>
+        <button onClick={() => showTable(tableKeys.kleborateAMRGenotypes)}>{tableDisplayNames[tableKeys.kleborateAMRGenotypes]}</button>
+      </>
       }
       {sarscov2Variants && <button onClick={() => showTable(tableKeys.sarscov2Variants)}>Notable Mutations</button>}
       {vista && <hr />}
       {vista && <button onClick={() => showTable(tableKeys.vista)}>Virulence</button>}
       {timeline &&
       <>
-          <hr />
-          <button onClick={_showTimeline}>Timeline</button>
-        </>
+        <hr />
+        <button onClick={_showTimeline}>Timeline</button>
+      </>
       }
     </DropdownMenu>
   )
