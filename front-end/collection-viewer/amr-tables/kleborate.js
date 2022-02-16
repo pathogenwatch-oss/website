@@ -10,7 +10,7 @@ import { measureHeadingText } from '../table/columnWidth';
 import { spacerGroup, systemGroup } from './utils';
 
 import { statuses, tableKeys } from '../constants';
-import { displayAMRField, formatAMRName, sortKleborateProfile } from '~/task-utils/kleborate';
+import { displayAMRField, formatAMRMatch, formatAMRName, sortKleborateProfile } from '~/task-utils/kleborate';
 
 export const name = tableKeys.kleborateAMR;
 
@@ -48,49 +48,49 @@ function buildColumns(genomeRecords) {
           <i
             className="material-icons wgsa-resistance-icon"
             style={{ color: effectColour }}
-            title={kleborateMatches(record, kleborate)}
-          >
-            lens
-          </i>
-        ) : null;
-      },
+            title={formatAMRMatch({ matches: kleborateMatches(record, kleborate) })}
+              >
+              lens
+              </i>
+              ) : null;
+            },
       valueGetter: genome => (kleborateIsResistant(genome.analysis.kleborate, record.key) ? effectColour : amr.nonResistantColour),
-      onHeaderClick,
-    });
+        onHeaderClick,
+      });
   }
-  return columns;
-}
+    return columns;
+  }
 
-const initialState = {
-  activeColumns: new Set(),
-  columns: [],
-};
-
-export function createReducer() {
-  return function (state = initialState, { type, payload }) {
-    switch (type) {
-      case FETCH_COLLECTION.SUCCESS: {
-        const { genomes, status } = payload.result;
-        if (status !== statuses.READY || !genomes[0].analysis.kleborate) return state;
-        return {
-          ...state,
-          columns: [
-            ...systemGroup.columns,
-            ...buildColumns(genomes),
-            ...spacerGroup.columns,
-          ],
-        };
-      }
-      case SET_COLOUR_COLUMNS:
-        return {
-          ...state,
-          activeColumns:
-            payload.table === name ?
-              payload.columns :
-              state.activeColumns,
-        };
-      default:
-        return state;
-    }
+  const initialState = {
+    activeColumns: new Set(),
+    columns: [],
   };
-}
+
+  export function createReducer() {
+    return function (state = initialState, { type, payload }) {
+      switch (type) {
+        case FETCH_COLLECTION.SUCCESS: {
+          const { genomes, status } = payload.result;
+          if (status !== statuses.READY || !genomes[0].analysis.kleborate) return state;
+          return {
+            ...state,
+            columns: [
+              ...systemGroup.columns,
+              ...buildColumns(genomes),
+              ...spacerGroup.columns,
+            ],
+          };
+        }
+        case SET_COLOUR_COLUMNS:
+          return {
+            ...state,
+            activeColumns:
+              payload.table === name ?
+                payload.columns :
+                state.activeColumns,
+          };
+        default:
+          return state;
+      }
+    };
+  }

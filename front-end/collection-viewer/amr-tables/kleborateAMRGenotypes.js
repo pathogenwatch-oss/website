@@ -7,7 +7,13 @@ import * as amr from '^/collection-viewer/amr-utils';
 import { kleborateCleanElement } from '~/collection-viewer/amr-utils';
 import { onHeaderClick } from '^/collection-viewer/amr-tables/thunks';
 import React from '^/react-shim';
-import { formatAMRName, ignoreFields, multiClassFields, sortKleborateProfile } from '~/task-utils/kleborate';
+import {
+  formatAMRMatch,
+  formatAMRName,
+  ignoreFields,
+  multiClassFields,
+  sortKleborateProfile
+} from '~/task-utils/kleborate';
 
 export const name = tableKeys.kleborateAMRGenotypes;
 
@@ -42,7 +48,7 @@ function createColumn(key, element, bufferSize) {
         <i
           className="material-icons wgsa-resistance-icon"
           style={{ color: effectColour }}
-          title={ `${element} found`}
+          title={`${formatAMRMatch({ matches: element })} found`}
         >
           lens
         </i>

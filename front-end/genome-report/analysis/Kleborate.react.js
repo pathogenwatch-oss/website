@@ -21,7 +21,7 @@ export default ({ genome }) => {
       <dl className="grid">
         <div className="pw-genome-report-metadata">
           <dt>K locus</dt>
-          <dd>{kleborate.typing.K_locus}</dd>
+          <dd>{kleborate.typing.K_locus.replace('unknown (', 'Unknown (best match ')}</dd>
           <ExternalLink to={`/genomes/all?genusId=${speciator.genusId}&klocus=${kleborate.typing.K_locus}`}>
             View all {kleborate.typing.K_locus}
           </ExternalLink>
