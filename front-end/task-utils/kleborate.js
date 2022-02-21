@@ -14,7 +14,7 @@ export function displayAMRField({ key }) {
 
 export function formatAMRName({ name }) {
   return name
-    .replace('Third generation', '3rd gen.')
+    .replace('third generation', '3rd gen.')
     .replace('with', '+')
     .replace('beta', 'β');
 }
