@@ -527,23 +527,12 @@
     ],
     "160674": [
       {
-        "flags": {
-          "KLEBORATE_TEST": true
-        },
         "task": "kleborate",
         "resources": {
           "memory": 653741824
         },
         "timeout": "15m",
         "version": "v2.3.1"
-      },
-      {
-        "task": "kleborate",
-        "resources": {
-          "memory": 653741824
-        },
-        "timeout": "15m",
-        "version": "v2.2.1"
       }
     ],
     "1624": [
@@ -1288,20 +1277,9 @@
     ],
     "570": [
       {
-        "flags": {
-          "KLEBORATE_TEST": true
-        },
         "task": "kleborate",
         "timeout": "15m",
         "version": "v2.3.1",
-        "resources": {
-          "memory": 653741824
-        }
-      },
-      {
-        "task": "kleborate",
-        "timeout": "15m",
-        "version": "v2.2.1",
         "resources": {
           "memory": 653741824
         }
