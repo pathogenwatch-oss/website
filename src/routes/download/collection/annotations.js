@@ -52,7 +52,7 @@ function getGenomes(genomeLookup, coreVersionMap) {
   }
 
   async function* cores() {
-    for (const value of store.iterGet(analysisKeys)) {
+    for (const value of await store.iterGet(analysisKeys)) {
       if (value === undefined) continue;
       const { fileId, version, results } = JSON.parse(value);
       const genomes = genomeLookup[fileId] || [];
