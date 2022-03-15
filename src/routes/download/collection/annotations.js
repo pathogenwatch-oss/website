@@ -52,19 +52,22 @@ function getGenomes(genomeLookup, coreVersionMap) {
   }
 
   async function* cores() {
-    for (const value of await store.iterGet(analysisKeys)) {
+    console.log(JSON.stringify(analysisKeys));
+    for await (const value of store.iterGet(analysisKeys)) {
       if (value === undefined) continue;
       const { fileId, version, results } = JSON.parse(value);
       const genomes = genomeLookup[fileId] || [];
       for (const genome of genomes) {
         if (!genome.analysis || !genome.analysis.core) continue;
-        if (genome.analysis.core.__v === version) { yield {
-          ...genome,
-          analysis: {
-            ...genome.analysis,
-            core: results,
-          },
-        }; }
+        if (genome.analysis.core.__v === version) {
+          yield {
+            ...genome,
+            analysis: {
+              ...genome.analysis,
+              core: results,
+            },
+          };
+        }
       }
     }
   }
