@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 const assert = require('assert').strict;
 
 const config = require('configuration');
@@ -68,7 +69,7 @@ function addTaskDefaults(task) {
       resources.memory = resources.memory || GB;
       break;
     case 'cgmlst':
-      resources.memory = resources.memory || 3 * GB;
+      resources.memory = resources.memory || 1.5 * GB;
       break;
     case 'core':
       resources.memory = resources.memory || 2 * GB;
