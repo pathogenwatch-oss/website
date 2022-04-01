@@ -18,6 +18,7 @@ async function extractEarliestUploads() {
       public: 1,
       createdAt: 1,
       'analysis.speciator.organismName': 1,
+      'analysis.speciator.genusName': 1,
     }, { sort: { createdAt: 1 } }).lean();
   const memo = {};
   let publicCounter = 0;
@@ -35,6 +36,7 @@ async function extractEarliestUploads() {
         access,
         timestamp: genome.createdAt.getTime(),
         organismName: genome.analysis.speciator.organismName,
+        genusName: genome.analysis.speciator.genusName,
       };
     }
     if ('latitude' in genome && !('latitude' in memo[genomeId])) {
@@ -64,6 +66,7 @@ async function main() {
       // { id: 'month', title: 'Month' },
       // { id: 'day', title: 'Day' },
       { id: 'organismName', title: 'Organism' },
+      { id: 'genusName', title: 'Genus' },
       { id: 'access', title: 'Public/Private' },
     ],
   });
