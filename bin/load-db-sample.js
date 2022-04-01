@@ -122,7 +122,6 @@ async function main() {
     console.log(`Problem with ${doc.type} doc ${doc._id}`);
     throw output.lastError;
   }
-
 }
 
 main().catch((err) => {
