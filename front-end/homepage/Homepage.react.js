@@ -286,7 +286,6 @@ export default ({ deployedOrganisms }) => (
                   <FormattedName organismId="2697049" />
                 </td>
                 <td>
-                  <i className="material-icons">check</i>
                 </td>
                 <td>
                   <i className="material-icons">check</i>
