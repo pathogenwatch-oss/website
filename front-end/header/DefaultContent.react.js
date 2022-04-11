@@ -29,6 +29,15 @@ export default ({ offline = isOffline() }) => {
       </NavLink>
       <a
         className="mdl-button mdl-button--icon"
+        href="https://cgps.gitbook.io/pathogenwatch/announcements"
+        rel="noopener"
+        target="_blank"
+        title="See announcements."
+      >
+        <i className="material-icons">notifications</i>
+      </a>
+      <a
+        className="mdl-button mdl-button--icon"
         href="https://twitter.com/pathogenwatch"
         rel="noopener"
         target="_blank"
