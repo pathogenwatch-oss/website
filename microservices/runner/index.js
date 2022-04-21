@@ -26,7 +26,7 @@ const {
   once = 'false', // If true, it only runs one task.  Useful for debugging.
 } = argv.opts;
 const availableMemory = formatMemory(argv.opts.availableMemory || DEFAULT_AVAILABLE_MEMORY);
-const availableSlow = Math.max(Math.floor(availableCPUs / 2), 1);
+const availableSlow = Math.max(Math.floor(availableCPUs / 4), 1);
 
 process.on('uncaughtException', (err) => console.error('uncaught', err));
 
