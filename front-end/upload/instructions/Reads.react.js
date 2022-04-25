@@ -59,7 +59,7 @@ export default () => (
         with the extension <strong>.csv</strong> when selecting files for upload. Metadata can also be added and updated
         after upload -{' '}
         <a
-          href="https://cgps.gitbook.io/pathogenwatch/how-to-use-pathogenwatch/editing-metadata"
+          href="https://cgps.gitbook.io/pathogenwatch/how-to-use-pathogenwatch/uploading-assemblies#metadata"
         >see here for instructions</a></p>
       <p>
         Files should contain a <strong>filename</strong> column to match each
