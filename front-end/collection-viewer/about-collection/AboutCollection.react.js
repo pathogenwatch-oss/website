@@ -7,9 +7,11 @@ import IconButton from '@cgps/libmicroreact/icon-button';
 import { CardMetadata } from '~/card';
 import Access from '../access';
 import MarkdownHeading from '~/components/MarkdownHeading.react';
-import PubMedLink from '~/components/PubMedLink.react';
+import LiteratureLink from '~/components/LiteratureLink.react';
 import SaveForOffline from '../offline';
+import * as PropTypes from 'prop-types';
 
+LiteratureLink.propTypes = { children: PropTypes.node };
 export default ({ organism, metadata, isOpen, onButtonClick }) => (
   <Menu
     align="right"
@@ -28,7 +30,7 @@ export default ({ organism, metadata, isOpen, onButtonClick }) => (
       className="wgsa-about-collection-dropdown__title"
       level="3"
     >
-      { metadata.title || 'About Collection' }
+      {metadata.title || 'About Collection'}
     </MarkdownHeading>
     <p className="wgsa-card-metadata-inliner">
       <CardMetadata title="Organism" icon="bug_report">
@@ -38,18 +40,19 @@ export default ({ organism, metadata, isOpen, onButtonClick }) => (
         {dateSince(metadata.dateCreated, new Date())} ago
       </CardMetadata>
     </p>
-    { metadata.description ?
+    {metadata.description ?
       <Markdown source={metadata.description} /> :
-      <p>(no description)</p> }
-    { metadata.pmid &&
-        <p className="pw-append-icon">
-          <PubMedLink pmid={metadata.pmid}>
-            View Publication
-          </PubMedLink>
-          <i className="material-icons">launch</i>
-        </p> }
-    { metadata.owner === 'me' && <hr /> }
-    { metadata.owner === 'me' && <Access access={metadata.access} /> }
+      <p>(no description)</p>}
+    {metadata.literatureLink && metadata.literatureLink.value &&
+      <p className="pw-append-icon">
+        <LiteratureLink
+          linkTarget={metadata.literatureLink.value}
+          linkType={metadata.literatureLink.type}
+        />
+        <i className="material-icons">launch</i>
+      </p>}
+    {metadata.owner === 'me' && <hr />}
+    {metadata.owner === 'me' && <Access access={metadata.access} />}
     <hr />
     <SaveForOffline />
   </Menu>

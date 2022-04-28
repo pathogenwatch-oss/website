@@ -13,7 +13,7 @@ const standardColumns = [
   'day',
   'month',
   'year',
-  'pmid',
+  'literaturelink',
 ];
 
 const transformer = function (doc) {
@@ -25,7 +25,7 @@ const transformer = function (doc) {
     day: doc.day,
     month: doc.month,
     year: doc.year,
-    pmid: doc.pmid,
+    literaturelink: doc.literatureLink.value,
   };
 
   if (doc.userDefined) {
@@ -59,7 +59,7 @@ module.exports = asyncWrapper(async (req, res, next) => {
     longitude: 1,
     month: 1,
     name: 1,
-    pmid: 1,
+    literatureLink: 1,
     uploadedAt: 1,
     userDefined: 1,
     year: 1,

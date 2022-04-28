@@ -6,6 +6,7 @@ import Profile from '~/mlst/Profile.react';
 import { createCode, isNovel } from '~/mlst/utils';
 import { getFormattedDateString } from '../table/utils';
 import { sources } from './utils';
+import LiteratureLink from '~/components/LiteratureLink.react';
 
 export const systemDataColumns = {
   __date: {
@@ -14,24 +15,22 @@ export const systemDataColumns = {
       return getFormattedDateString(genome);
     },
   },
-  __pmid: {
-    columnKey: '__pmid',
-    valueGetter({ pmid }) {
-      return pmid;
+  __literatureLink: {
+    columnKey: '__literatureLink',
+    valueGetter({ literatureLink }) {
+      return literatureLink.value;
     },
     getCellContents({ valueGetter }, data) {
-      const pmid = valueGetter(data);
-      if (!pmid) return null;
+      const { literatureLink } = data;
+      if (!literatureLink) return null;
+      const url = literatureLink.type === 'pubmed' ? 'http://www.ncbi.nlm.nih.gov/pubmed' : 'https://doi.org';
       return (
-        <a
-          href={`http://www.ncbi.nlm.nih.gov/pubmed/${pmid}`}
-          target="_blank" rel="noopener"
-          title="View publication"
+        <LiteratureLink
+          linkTarget={literatureLink.value}
+          linkType={literatureLink.type}
           style={{ color: '#369' }}
           onClick={(e) => e.stopPropagation()}
-        >
-          {pmid}
-        </a>
+        />
       );
     },
   },

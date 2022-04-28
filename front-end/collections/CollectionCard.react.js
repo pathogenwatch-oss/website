@@ -6,7 +6,7 @@ import dateSince from 'date-fns/distance_in_words';
 import Card, { CardMetadata } from '../card';
 import { FormattedName } from '../organisms';
 import { getFormatted } from '~/organisms/OrganismName.react';
-import PubMedLink from '../components/PubMedLink.react';
+import LiteratureLink from '../components/LiteratureLink.react';
 import RemoveButton from './RemoveButton.react';
 import MarkdownHeading from '../components/MarkdownHeading.react';
 
@@ -23,11 +23,12 @@ const statusText = {
 };
 
 function getFooterLink(collection) {
-  if (collection.owner === 'other') {
+  if (collection.owner === 'other' && !!collection.literatureLink) {
     return (
-      <PubMedLink
+      <LiteratureLink
         className="mdl-button wgsa-button--text"
-        pmid={collection.pmid}
+        linkTarget={collection.literatureLink.value}
+        linkType={collection.literatureLink.type}
       />
     );
   }
@@ -47,7 +48,7 @@ export default ({ item, footerLink }) => {
           {dateSince(createdAt, now)} ago
         </CardMetadata>
         {status !== 'READY' &&
-        <CardMetadata title="Status" icon={statusIcons[status]}>
+          <CardMetadata title="Status" icon={statusIcons[status]}>
             {statusText[status]}
           </CardMetadata>
         }

@@ -45,7 +45,10 @@ const schema = new Schema({
   month: Number,
   name: { type: String, required: true, maxLength: 256, trim: true },
   pending: { type: Array, default: null },
-  pmid: { type: String, maxLength: 16 },
+  literatureLink: {
+    value: { type: String, maxLength: 256, trim: true },
+    type: { type: String, maxLength: 8, trim: true },
+  },
   population: { type: Boolean, default: false, index: true },
   public: { type: Boolean, default: false },
   upload: {
@@ -257,7 +260,7 @@ schema.statics.getMetadataUpdate = function (metadata) {
     day = null,
     latitude = null,
     longitude = null,
-    pmid,
+    literatureLink,
     userDefined,
   } = metadata;
   const country = getCountryCode(latitude, longitude);
@@ -270,7 +273,7 @@ schema.statics.getMetadataUpdate = function (metadata) {
     latitude,
     longitude,
     country,
-    pmid,
+    literatureLink,
     userDefined,
   };
 };
@@ -552,7 +555,7 @@ schema.statics.getForCollection = function (query, user = {}) {
     longitude: 1,
     month: 1,
     name: 1,
-    pmid: 1,
+    literatureLink: 1,
     public: 1,
     reference: 1,
     userDefined: 1,

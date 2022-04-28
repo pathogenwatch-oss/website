@@ -30,7 +30,7 @@ function fetchGenomes(query) {
     day: 1,
     latitude: 1,
     longitude: 1,
-    pmid: 1,
+    literatureLink: 1,
   }).lean();
 }
 

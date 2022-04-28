@@ -21,7 +21,7 @@ export const getCollectionMetadata = createSelector(
     title: collection.title,
     description: collection.description,
     dateCreated: new Date(collection.createdAt),
-    pmid: collection.pmid,
+    literatureLink: collection.literatureLink,
     owner: collection.owner,
     access: collection.access,
     organismName: collection.organismName,

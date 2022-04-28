@@ -1,7 +1,7 @@
 import React from 'react';
 
 import OrganismName from '../organisms/OrganismName.react';
-import PubMedLink from '../components/PubMedLink.react';
+import LiteratureLink from '../components/LiteratureLink.react';
 
 import { getFormattedDateString } from '../utils/Date';
 import { getCountryName } from '../utils/country';
@@ -26,7 +26,7 @@ const SpeciesSubtitle = ({ analysis }) => {
 };
 
 export default ({ genome }) => {
-  const { analysis = {}, country, pmid } = genome;
+  const { analysis = {}, country, literatureLink } = genome;
   const date = getFormattedDateString(genome);
   return (
     <div className="wgsa-genome-report-summary">
@@ -39,7 +39,7 @@ export default ({ genome }) => {
       <p className="h6 pw-genome-report-summary-subtitle">
         <SpeciesSubtitle analysis={analysis} />
       </p>
-      {(date || country || pmid) && (
+      {(date || country || literatureLink) && (
         <dl>
           {country && (
             <div className="pw-genome-report-metadata inline">
@@ -53,11 +53,14 @@ export default ({ genome }) => {
               <dd>{date}</dd>
             </div>
           )}
-          {pmid && (
+          {literatureLink && (
             <div className="pw-genome-report-metadata inline">
-              <dt>PMID</dt>
+              <dt>Link</dt>
               <dd>
-                <PubMedLink pmid={pmid}>{pmid}</PubMedLink>
+                <LiteratureLink
+                  linkType={literatureLink.type}
+                  linkTarget={literatureLink.value}
+                />
               </dd>
             </div>
           )}

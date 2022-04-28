@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /* eslint no-param-reassign: ["error", { "props": false }] */
 
 import Papa from 'papaparse';
@@ -52,11 +53,7 @@ export function isValid({ date }) {
     return false;
   }
 
-  if (year && (year < 1900 || year > thisYear)) {
-    return false;
-  }
-
-  return true;
+  return !(year && (year < 1900 || year > thisYear));
 }
 
 export function parseMetadata(row, fallbackName = row.filename) {
@@ -64,7 +61,8 @@ export function parseMetadata(row, fallbackName = row.filename) {
 
   const genomeName = displayname || name || id || fallbackName;
 
-  const { year, month, day, latitude, longitude, pmid, ...rest } = columns;
+  // eslint-disable-next-line max-len
+  const { year, month, day, latitude, longitude, literaturelink, pmid, doi, ...rest } = columns;
 
   const userDefined = {};
   for (const [ key, value ] of Object.entries(rest)) {
@@ -79,7 +77,19 @@ export function parseMetadata(row, fallbackName = row.filename) {
   if (day) values.day = parseInt(day, 10);
   if (latitude) values.latitude = parseFloat(latitude);
   if (longitude) values.longitude = parseFloat(longitude);
-  if (pmid) values.pmid = pmid;
+  if (literaturelink) {
+    values.literatureLink = { value: literaturelink };
+    if (literaturelink.includes('/')) {
+      values.literatureLink.type = 'doi';
+    } else {
+      values.literatureLink.type = 'pubmed';
+    }
+    if (doi) values.userDefined.doi = doi;
+    if (pmid) values.userDefined.pmid = pmid;
+  } else if (pmid) {
+    values.literatureLink = { value: pmid, type: 'pubmed' };
+    if (doi) values.userDefined.doi = doi;
+  } else if (doi) values.literatureLink = { value: doi, type: 'doi' };
 
   validateMetadata(values);
 

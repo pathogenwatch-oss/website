@@ -44,7 +44,10 @@ const schema = new Schema({
   locations: Array,
   organismId: { type: String, index: true },
   organismName: { type: String },
-  pmid: String,
+  literatureLink: {
+    value: { type: String, maxLength: 256, trim: true },
+    type: { type: String, maxLength: 8, trim: true },
+  },
   published: { type: Boolean, default: false },
   publicationYear: { type: Number, index: true },
   reference: Boolean,
@@ -83,7 +86,7 @@ schema.methods.ready = function () {
 };
 
 const commonResults = new Set([ 'core', 'metrics' ]);
-const nonReferenceResults = new Set([ ]);
+const nonReferenceResults = new Set([]);
 const standardAnalyses = new Set([ 'mlst', 'paarsnp' ]);
 const standardOrganisms = new Set([ '1280', '90370', '485', '1313' ]);
 const organismSpecificResults = {

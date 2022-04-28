@@ -16,8 +16,8 @@ export function getColumnNames(genomes) {
     if (genome.year) {
       leading.add('__date');
     }
-    if (genome.pmid) {
-      trailing.add('__pmid');
+    if (genome.literatureLink) {
+      trailing.add('__literatureLink');
     }
   });
   return { leading, userDefined, trailing };
