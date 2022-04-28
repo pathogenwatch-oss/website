@@ -4,7 +4,7 @@ const { getCollectionTask } = require('manifest');
 const Collection = require('models/collection');
 const Genome = require('models/genome');
 const Organism = require('models/organism');
-const Genomecollection = require('models/genomecollection');
+const GenomeCollection = require('models/genomecollection');
 
 async function validate({ genomeIds, organismId, user }) {
   await request('collection', 'verify', { genomeIds, organismId, user });
@@ -58,14 +58,16 @@ function getSubtrees(organismId, genomes, genomeIds) {
   ).then((subtrees) => subtrees.filter((_) => _ !== null));
 }
 
-async function createCollection(genomes, { organismId, organismName, title, description, pmid, user }) {
+async function createCollection(genomes, { organismId, organismName, title, description, literatureLink, user }) {
   const organism = await Organism.getLatest(organismId);
 
   const size = genomes.length;
   const tree = !!organism && size >= 3 ? { name: 'collection' } : null;
   const genomeIds = genomes.map((_) => _._id);
   const subtrees = await getSubtrees(organismId, genomes, genomeIds);
-
+  const parsedliteratureLink = literatureLink.includes('/') ?
+    { type: 'doi', value: literatureLink } :
+    { type: 'pubmed', value: literatureLink };
   const collection = await Collection.create({
     _organism: organism,
     _user: user,
@@ -75,7 +77,7 @@ async function createCollection(genomes, { organismId, organismName, title, desc
     locations: getLocations(genomes),
     organismId,
     organismName,
-    pmid,
+    literatureLink: parsedliteratureLink,
     size,
     subtrees,
     title,
@@ -83,7 +85,7 @@ async function createCollection(genomes, { organismId, organismName, title, desc
     tree,
   });
 
-  await Genomecollection.bulkWrite(
+  await GenomeCollection.bulkWrite(
     genomeIds.map((_genome) => ({
       updateOne: {
         filter: { _genome },

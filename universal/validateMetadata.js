@@ -1,3 +1,5 @@
+const literatureLinkMaxLength = 256;
+
 module.exports = function validateMetadata(row) {
   const {
     name = '',
@@ -6,7 +8,7 @@ module.exports = function validateMetadata(row) {
     day = null,
     latitude = null,
     longitude = null,
-    pmid = '',
+    literatureLink = '',
     userDefined = {},
   } = row;
 
@@ -16,10 +18,23 @@ module.exports = function validateMetadata(row) {
     error = 'name is wrong type';
   } else if (name && name.length > 256) {
     error = 'name is too long';
-  } else if (pmid && typeof pmid !== 'string') {
-    error = 'pmid is wrong type';
-  } else if (pmid && pmid.length > 16) {
-    error = 'pmid is too long';
+  } else if (literatureLink && typeof literatureLink.value !== 'string') {
+    error = 'literatureLink is not a text string';
+  } else if (
+    literatureLink &&
+    literatureLink.value.length > literatureLinkMaxLength) {
+    error = 'literatureLink is too long';
+  } else if (
+    literatureLink &&
+    literatureLink.type === 'pubmed' &&
+    !literatureLink.value.match(/^\d+$/)
+  ) {
+    error = 'literatureLink is specified as pubmed but contains non-numeric characters';
+  } else if (
+    literatureLink &&
+    literatureLink.type === 'doi' &&
+    !literatureLink.value.includes('/')) {
+    error = 'literatureLink is specified as a DOI identifier but doesn\'t look like one';
   } else if (
     latitude !== null &&
     (isNaN(latitude) || typeof latitude === 'object')

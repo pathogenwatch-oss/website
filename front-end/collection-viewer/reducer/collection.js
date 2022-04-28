@@ -42,7 +42,7 @@ export default function (state = initialState, { type, payload }) {
         organismId: result.organismId,
         organismName: result.organismName,
         owner: result.owner,
-        pmid: result.pmid,
+        literatureLink: result.literatureLink,
         progress: result.progress,
         status: statuses.READY,
         title: result.title,

@@ -67,8 +67,8 @@ export const getGenomeDatatypes = createSelector(
 
     for (const genome of genomes) {
       if (!hasMetadata) {
-        const { year, pmid, userDefined } = genome;
-        if (year || pmid || (userDefined && Object.keys(userDefined).length)) {
+        const { year, literatureLink, userDefined } = genome;
+        if (year || literatureLink || (userDefined && Object.keys(userDefined).length)) {
           hasMetadata = true;
         }
       }

@@ -10,8 +10,8 @@ const LOGGER = require('utils/logging').createLogger('Collection requests');
 router.put('/collection', (req, res, next) => {
   LOGGER.info('Received request to create collection');
   const { user } = req;
-  const { genomeIds, title, description, pmid, organismId, organismName } = req.body;
-  const message = { user, genomeIds, title, description, pmid, organismId, organismName };
+  const { genomeIds, title, description, literatureLink, organismId, organismName } = req.body;
+  const message = { user, genomeIds, title, description, literatureLink, organismId, organismName };
 
   return services
     .request('collection', 'create', message)

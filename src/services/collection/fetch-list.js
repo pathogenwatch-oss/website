@@ -16,7 +16,7 @@ module.exports = function (props) {
         description: 1,
         organismId: 1,
         organismName: 1,
-        pmid: 1,
+        literatureLink: 1,
         size: 1,
         status: 1,
         title: 1,

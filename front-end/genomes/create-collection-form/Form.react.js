@@ -31,7 +31,7 @@ const CreateCollectionForm = React.createClass({
   firstInput: null,
 
   render() {
-    const { metadata: { title, description, pmid }, canCreateCollection } = this.props;
+    const { metadata: { title, description, literatureLink }, canCreateCollection } = this.props;
     const { organismId, organismLabel, numGenomes } = this.props.collectionSummary;
 
     if (!organismId) return null; // Prevent form erroring when organism not supplied
@@ -75,13 +75,13 @@ const CreateCollectionForm = React.createClass({
           <input
             className="mdl-textfield__input"
             type="text"
-            id="collection-pmid"
-            value={pmid}
+            id="collection-literatureLink"
+            value={literatureLink}
             onChange={this.props.onFormChange}
             disabled={!canCreateCollection}
-            pattern="[0-9]*"
+            pattern="[0-9/.A-Za-z_]*"
           />
-          <label className="mdl-textfield__label" htmlFor="collection-pmid">PMID</label>
+          <label className="mdl-textfield__label" htmlFor="collection-literatureLink">PMID/DOI</label>
         </div>
         <footer>
           <button

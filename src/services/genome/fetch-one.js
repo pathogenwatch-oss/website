@@ -12,7 +12,7 @@ const projection = {
   fileId: 1,
   month: 1,
   name: 1,
-  pmid: 1,
+  literatureLink: 1,
   population: 1,
   public: 1,
   reference: 1,
