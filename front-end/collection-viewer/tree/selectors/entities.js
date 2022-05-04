@@ -3,9 +3,14 @@ import { createSelector } from 'reselect';
 import { getTreeState, getTitles } from './index';
 
 import { topLevelTrees } from '../constants';
+import { POPULATION } from '~/app/stateKeys/tree';
 
 export const getTrees = state => getTreeState(state).entities;
-export const hasTrees = state => Object.keys(getTrees(state)).length > 0;
+export const hasTrees = state => {
+  const trees = getTrees(state);
+  return Object.keys(trees).length > 1 ||
+    (Object.keys(trees).length === 1 && !(POPULATION in trees));
+};
 
 export const getVisibleTree = createSelector(
   getTreeState,

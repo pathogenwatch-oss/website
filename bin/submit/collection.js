@@ -1,3 +1,4 @@
+/* eslint-disable max-len,no-console */
 const mongoConnection = require('utils/mongoConnection');
 const argv = require('named-argv');
 
@@ -14,20 +15,11 @@ async function run() {
   );
 
   for (const collection of collections) {
-    if (!subtrees && collection.tree) {
-      await request('collection', 'submit-tree', {
-        organismId: collection.organismId,
-        collectionId: collection._id,
-        clientId: collection.token,
-      });
-    }
-    if (subtrees && Array.isArray(collection.subtrees)) {
-      await request('collection', 'submit-subtrees', {
-        organismId: collection.organismId,
-        collectionId: collection._id,
-        clientId: collection.token,
-      });
-    }
+    await request('collection', 'submit-trees', {
+      organismId: collection.organismId,
+      collectionId: collection._id,
+      clientId: collection.token,
+    });
     console.log('Done', collections.indexOf(collection) + 1, 'of', collections.length);
   }
 }

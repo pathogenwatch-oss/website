@@ -29,8 +29,8 @@ function getLocations(genomes) {
   return Object.values(locations);
 }
 
-function getSubtrees(organismId, genomes, genomeIds) {
-  const spec = getCollectionTask(organismId, 'subtree');
+function getSubtrees(organismId, genomes, genomeIds, user) {
+  const spec = getCollectionTask(organismId, 'subtree', user);
   if (!spec) return null;
 
   const fps = new Set();
@@ -58,14 +58,20 @@ function getSubtrees(organismId, genomes, genomeIds) {
   ).then((subtrees) => subtrees.filter((_) => _ !== null));
 }
 
+
+function getTree(organismId, size, user) {
+  if (!organismId) return null;
+  if (!(getCollectionTask(organismId, 'tree', user))) return null;
+  return size >= 3 ? { name: 'collection' } : null;
+}
+
 async function createCollection(genomes, { organismId, organismName, title, description, literatureLink, user }) {
   const organism = await Organism.getLatest(organismId);
-
   const size = genomes.length;
-  const tree = !!organism && size >= 3 ? { name: 'collection' } : null;
+  const tree = getTree(organismId, size, user);
   const genomeIds = genomes.map((_) => _._id);
-  const subtrees = await getSubtrees(organismId, genomes, genomeIds);
-  const parsedliteratureLink = literatureLink.includes('/') ?
+  const subtrees = await getSubtrees(organismId, genomes, genomeIds, user);
+  const parsedLiteratureLink = literatureLink.includes('/') ?
     { type: 'doi', value: literatureLink } :
     { type: 'pubmed', value: literatureLink };
   const collection = await Collection.create({
@@ -77,7 +83,7 @@ async function createCollection(genomes, { organismId, organismName, title, desc
     locations: getLocations(genomes),
     organismId,
     organismName,
-    literatureLink: parsedliteratureLink,
+    literatureLink: parsedLiteratureLink,
     size,
     subtrees,
     title,
@@ -99,12 +105,13 @@ async function createCollection(genomes, { organismId, organismName, title, desc
 }
 
 function submitCollection(collection) {
-  const { _id, token, organismId } = collection;
-  const submitType = collection.tree ? 'submit-tree' : 'submit-subtrees';
-  return request('collection', submitType, {
+  const { _id, token, organismId, _user, tree, subtree } = collection;
+  if (!tree && !subtree) return Promise.resolve(collection);
+  return request('collection', 'submit-trees', {
     organismId,
     collectionId: _id,
     clientId: token,
+    userId: _user,
   })
     .then(() => collection);
 }

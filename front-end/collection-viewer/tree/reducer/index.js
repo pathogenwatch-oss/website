@@ -38,7 +38,7 @@ function entities(state = {}, action) {
         };
       }
 
-      if (organism.tree) {
+      if (organism.tree && subtrees.length > 0) {
         nextState[POPULATION] = {
           name: POPULATION,
           status: 'READY',

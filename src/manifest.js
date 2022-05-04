@@ -193,13 +193,14 @@ module.exports.getTasksByOrganism = function (
   return Object.values(uniqueTasks).map(addTaskDefaults);
 };
 
-module.exports.getCollectionTask = function (organismId, task) {
+module.exports.getCollectionTask = function (organismId, task, user = defaultUser) {
   const collectionTasks = tasks.collection;
 
   if (organismId in collectionTasks) {
     const list = collectionTasks[organismId];
     const taskDetails = list.find((_) => _.task === task);
     if (taskDetails === undefined) return null;
+    if (!user.canRun(taskDetails)) return null;
     return addTaskDefaults(taskDetails);
   }
 
