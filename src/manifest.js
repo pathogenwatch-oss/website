@@ -80,7 +80,7 @@ function addTaskDefaults(task) {
       break;
     case 'clustering':
       resources.memory = resources.memory || 15 * GB;
-      resources.slow = resources.slow || 1;
+      resources.cpu = resources.cpu || 2;
       break;
     default:
       resources.memory = resources.memory || GB;
