@@ -6,7 +6,7 @@ import { getDownloadPath } from './selectors';
 import { getCollection } from '../selectors';
 import { getActiveGenomeIds } from '../selectors/active';
 import { getTreeStateKey } from '../tree/selectors';
-import { hasCore } from '~/collection-viewer/genomes/selectors';
+import { hasCores } from '~/collection-viewer/genomes/selectors';
 
 import { formatCollectionFilename } from './utils';
 import { topLevelTrees } from '../tree/constants';
@@ -70,21 +70,21 @@ const DownloadsMenu = ({ collection, genomeIds, path, filename, tree, core }) =>
           tree={tree}
         >
         Core allele distribution
-      </DownloadForm>
-      <DownloadForm
-        link={`${path}/score-matrix`}
-        filename={formatCollectionFilename(collection, 'score-matrix.csv')}
-        genomeIds={genomeIds}
-        tree={tree}
-      >
-        Score matrix
-      </DownloadForm>
-      <DownloadForm
-        link={`${path}/difference-matrix`}
-        filename={formatCollectionFilename(collection, 'difference-matrix.csv')}
-        genomeIds={genomeIds}
-        tree={tree}
-      >
+        </DownloadForm>
+        <DownloadForm
+          link={`${path}/score-matrix`}
+          filename={formatCollectionFilename(collection, 'score-matrix.csv')}
+          genomeIds={genomeIds}
+          tree={tree}
+        >
+          Score matrix
+        </DownloadForm>
+        <DownloadForm
+          link={`${path}/difference-matrix`}
+          filename={formatCollectionFilename(collection, 'difference-matrix.csv')}
+          genomeIds={genomeIds}
+          tree={tree}
+        >
       Difference matrix
       </DownloadForm>
       <DownloadButton
@@ -110,7 +110,7 @@ DownloadsMenu.propTypes = {
 function mapStateToProps(state) {
   return {
     collection: getCollection(state),
-    core: hasCore(state),
+    core: hasCores(state),
     filename: getFilenamePrefix(state),
     genomeIds: getActiveGenomeIds(state),
     path: getDownloadPath(state),

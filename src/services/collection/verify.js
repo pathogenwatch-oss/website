@@ -31,8 +31,8 @@ module.exports = async function ({ genomeIds, organismId, user }) {
     return { ok: 1 }; // Not building a tree.
   }
 
-  const task = manifest.getCollectionTask(organismId, 'tree');
-  if (!task) throw new ServiceRequestError('Internal error.');
+  const task = manifest.getCollectionTask(organismId, 'tree', user);
+  if (!task) throw new ServiceRequestError('No tree task for user.');
 
 
   const completeGenomesQuery = {};

@@ -132,15 +132,15 @@ export const hasAMR = createSelector(
   datatypes => datatypes.hasAMR
 );
 
-export const hasCore = createSelector(
+export const hasCores = createSelector(
   getGenomeDatatypes,
   datatypes => datatypes.hasCore
-)
+);
 
 export const hasPangolin = createSelector(
   getGenomeDatatypes,
   datatypes => datatypes.hasPangolin
-)
+);
 
 export const hasKleborateAMR = createSelector(
   getGenomeDatatypes,
