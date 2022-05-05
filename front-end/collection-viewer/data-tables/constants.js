@@ -18,7 +18,7 @@ export const systemDataColumns = {
   __literatureLink: {
     columnKey: '__literatureLink',
     valueGetter({ literatureLink }) {
-      return literatureLink.value;
+      return !!literatureLink ? literatureLink.value : null;
     },
     getCellContents({ valueGetter }, data) {
       const { literatureLink } = data;
