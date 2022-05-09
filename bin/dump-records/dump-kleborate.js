@@ -6,7 +6,7 @@ const Stream = require('stream');
 
 const Genome = require('models/genome');
 const csv = require('csv');
-const { transformer } = require('../src/routes/download/utils/kleborate');
+const { transformer } = require('../../src/routes/download/utils/kleborate');
 const { ObjectId } = require('mongoose/lib/types');
 
 function fetchGenomes(query, projection) {
@@ -28,24 +28,7 @@ async function main() {
   const projection = { name: 1, 'analysis.kleborate': 1 };
   await mongoConnection.connect();
 
-  // return Genome.find(query, projection)
-  //   .cursor()
-  //   .pipe(csv.transform(transformer))
-  //   .pipe(csv.stringify({ header: true, quotedString: true }))
-  //   .pipe(res);
-
-
-  // const genomes = await fetchGenomes(query, projection);
-
-  // const readable = new Stream.Readable({ objectMode: true });
-  const writable = new Stream.Writable({ objectMode: true });
-
-  writable._write = (object, encoding, done) => {
-    fs.appendFileSync('/tmp/kleborate.csv', object);
-    // process.stdout.write(object);
-    // process.exit(0);
-    done();
-  };
+  const writable = fs.createWriteStream('/tmp/kleborate.csv');
 
   await Genome.find(query, projection)
     .cursor()
@@ -53,14 +36,10 @@ async function main() {
     .pipe(csv.stringify({ header: true, quotedString: true }))
     .pipe(writable);
 
-  // for (const genome of genomes) {
-  //   const record = transformer(genome);
-  //   readable.push(record);
-  // }
-  //
-  // end the stream
-  // readable.push(null);
-  console.log("Done");
+  writable.on('finish', () => {
+    console.log("Done");
+    process.exit(0);
+  });
 }
 
 main().catch((err) => {
