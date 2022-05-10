@@ -79,7 +79,7 @@ const CreateCollectionForm = React.createClass({
             value={literatureLink}
             onChange={this.props.onFormChange}
             disabled={!canCreateCollection}
-            pattern="[0-9/.A-Za-z_]*"
+            pattern="(^$)|(\d\S+)"
           />
           <label className="mdl-textfield__label" htmlFor="collection-literatureLink">PMID/DOI</label>
         </div>
