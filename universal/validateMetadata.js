@@ -33,7 +33,7 @@ module.exports = function validateMetadata(row) {
   } else if (
     literatureLink &&
     literatureLink.type === 'doi' &&
-    !literatureLink.value.includes('/')) {
+    !literatureLink.value.match(/\d+\S+\/\S+/)) {
     error = 'literatureLink is specified as a DOI identifier but doesn\'t look like one';
   } else if (
     latitude !== null &&
