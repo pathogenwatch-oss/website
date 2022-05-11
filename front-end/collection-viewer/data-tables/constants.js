@@ -17,6 +17,8 @@ export const systemDataColumns = {
   },
   __literatureLink: {
     columnKey: '__literatureLink',
+    label: 'LITERATURE LINK',
+    displayName: 'LITERATURE LINK',
     valueGetter({ literatureLink }) {
       return !!literatureLink ? literatureLink.value : null;
     },
