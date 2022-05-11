@@ -45,7 +45,6 @@
   <script>PW_CONFIG = <%- JSON.stringify(frontEndConfig) %>;</script>
 <% for (let file of files.scripts) { %>
   <script src="<%= file %>"></script><% } %>
-<% if (typeof gaTrackingId !== 'undefined') { %>
-  <script defer data-domain="pathogenwatch.net" src="https://analytics.cgps.dev/js/plausible.js"></script><% } %>
+  <script defer data-domain="pathogen.watch" src="https://analytics.cgps.dev/js/plausible.js"></script>
 </body>
 </html>
