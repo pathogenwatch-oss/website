@@ -61,6 +61,23 @@
         "workers": 16
       }
     ],
+    "1463165": [
+      {
+        "flags": {
+          "KQP_EXPERIMENT_USER": true
+        },
+        "requires": [
+          {
+            "task": "core",
+            "version": "v2.0.0-6-1463165"
+          }
+        ],
+        "task": "tree",
+        "timeout": "15m",
+        "version": "v1.0.12",
+        "workers": 16
+      }
+    ],
     "1646": [
       {
         "requires": [
@@ -84,6 +101,23 @@
         "task": "subtree",
         "timeout": "15m",
         "version": "v1",
+        "workers": 16
+      }
+    ],
+    "244366": [
+      {
+        "flags": {
+          "KV_EXPERIMENT_USER": true
+        },
+        "requires": [
+          {
+            "task": "core",
+            "version": "v2.0.0-6-244366"
+          }
+        ],
+        "task": "tree",
+        "timeout": "15m",
+        "version": "v1.0.12",
         "workers": 16
       }
     ],
@@ -462,6 +496,13 @@
       },
       {
         "flags": {
+          "KQP_EXPERIMENT_USER": true
+        },
+        "task": "core",
+        "version": "v2.0.0-6-1463165"
+      },
+      {
+        "flags": {
           "ESBL_CPE_EXPERIMENT_USER": true
         },
         "task": "paarsnp",
@@ -785,6 +826,13 @@
       {
         "task": "cgmlst",
         "version": "202203171231-v3.0.0"
+      },
+      {
+        "flags": {
+          "KQP_EXPERIMENT_USER": true
+        },
+        "task": "core",
+        "version": "v2.0.0-6-244366"
       },
       {
         "flags": {
