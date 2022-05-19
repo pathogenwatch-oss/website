@@ -15,7 +15,7 @@ function writeLines(columns, genomes, res, next) {
   }
 
   async function* gen() {
-    yield format(['Family ID,', ...columns]);
+    yield format([ 'Genome ID', ...columns ]);
     for await (const genome of genomes) {
       const line = [];
       line.push(genome.name);
@@ -84,6 +84,7 @@ function getGenomes(cores, genomeLookup) {
       genomeLookup[fileId] = [];
     }
   }
+
   return Readable.from(gen());
 }
 
@@ -139,7 +140,11 @@ module.exports = asyncWrapper(async (req, res, next) => {
     'Content-type': 'text/csv',
   });
 
-  const collection = await request('collection', 'authorise', { user, token, projection: { genomes: 1, organismId: 1, 'tree.versions': 1, 'subtrees.versions': 1, 'subtrees.name': 1 } });
+  const collection = await request('collection', 'authorise', {
+    user,
+    token,
+    projection: { genomes: 1, organismId: 1, 'tree.versions': 1, 'subtrees.versions': 1, 'subtrees.name': 1 }
+  });
   try {
     const tree = subtree ?
       collection.subtrees.find((_) => _.name === subtree) :

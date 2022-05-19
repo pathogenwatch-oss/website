@@ -66,7 +66,7 @@ function buildColumns(genomes) {
   const elementsInResults = {};
 
   for (const genome of genomes) {
-    if (!genome.analysis.kleborate.amr) {
+    if (!genome.analysis.kleborate || !genome.analysis.kleborate.amr) {
       continue;
     }
     const profile = genome.analysis.kleborate.amr.profile;
