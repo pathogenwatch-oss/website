@@ -106,7 +106,7 @@ const inctyperGroup = {
 const kaptiveGroup = {
   group: true,
   columnKey: 'kaptive',
-  columns: [ '__K_locus_kaptive', '__K_type_kaptive', '__O_locus_kaptive', '__O_type_kaptive' ],
+  columns: [ '__K_locus_kaptive', '__K_type_kaptive', '__O_locus_kaptive' ],
 };
 
 const kleborateGroup = {

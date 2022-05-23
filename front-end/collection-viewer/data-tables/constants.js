@@ -208,7 +208,7 @@ export const systemDataColumns = {
   __K_locus_kaptive: {
     columnKey: '__K_locus_kaptive',
     displayName: 'K Locus',
-    label: 'K Locus',
+    label: 'K LOCUS',
     valueGetter({ analysis }) {
       if (!analysis.kaptive || !('kLocus' in analysis.kaptive)) return null;
       return analysis.kaptive.kLocus['Best match locus'];
@@ -216,8 +216,8 @@ export const systemDataColumns = {
   },
   __K_type_kaptive: {
     columnKey: '__K_type_kaptive',
-    displayName: 'Capsule type',
-    label: 'Predicted capsule (K locus) type',
+    label: 'CAPSULE TYPE',
+    displayName: 'Predicted capsule (K locus) type',
     valueGetter({ analysis }) {
       if (!analysis.kaptive || !('kLocus' in analysis.kaptive)) return null;
       return analysis.kaptive.kLocus['Best match type'];
@@ -226,7 +226,7 @@ export const systemDataColumns = {
   __O_locus_kaptive: {
     columnKey: '__O_locus_kaptive',
     displayName: 'OC Locus',
-    label: 'OC Locus',
+    label: 'OC LOCUS',
     valueGetter({ analysis }) {
       if (!analysis.kaptive || !('oLocus' in analysis.kaptive)) return null;
       return analysis.kaptive.oLocus['Best match locus'];

@@ -31,7 +31,7 @@
         ],
         "task": "tree",
         "timeout": "15m",
-        "version": "v1",
+        "version": "v1.0.12-1280",
         "workers": 16
       },
       {
@@ -43,7 +43,7 @@
         ],
         "task": "subtree",
         "timeout": "15m",
-        "version": "v1",
+        "version": "v1.0.12-1280",
         "workers": 16
       }
     ],
@@ -69,12 +69,12 @@
         "requires": [
           {
             "task": "core",
-            "version": "v2.0.0-10-1463165"
+            "version": "v2.0.0-12-1463165"
           }
         ],
         "task": "tree",
         "timeout": "15m",
-        "version": "v1.0.12",
+        "version": "v1.0.12-1463165",
         "workers": 16
       }
     ],
@@ -112,12 +112,12 @@
         "requires": [
           {
             "task": "core",
-            "version": "v2.0.0-8-244366"
+            "version": "v2.0.0-12-244366"
           }
         ],
         "task": "tree",
         "timeout": "15m",
-        "version": "v1.0.12",
+        "version": "v1.0.12-244366",
         "workers": 16
       }
     ],
@@ -499,7 +499,7 @@
           "KQP_EXPERIMENT_USER": true
         },
         "task": "core",
-        "version": "v2.0.0-10-1463165"
+        "version": "v2.0.0-12-1463165"
       },
       {
         "flags": {
@@ -832,7 +832,7 @@
           "KQP_EXPERIMENT_USER": true
         },
         "task": "core",
-        "version": "v2.0.0-8-244366"
+        "version": "v2.0.0-12-244366"
       },
       {
         "flags": {
@@ -1092,7 +1092,7 @@
         "resources": {
           "memory": 653741824
         },
-        "version": "1"
+        "version": "2"
       }
     ],
     "480": [

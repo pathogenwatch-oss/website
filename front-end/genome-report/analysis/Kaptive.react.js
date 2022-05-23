@@ -45,10 +45,6 @@ export default ({ genome }) => {
           </ExternalLink>
         </div>
         <div className="pw-genome-report-metadata">
-          <dt>Predicted OC type</dt>
-          <dd>{kaptive.oLocus['Best match type']}</dd>
-        </div>
-        <div className="pw-genome-report-metadata">
           <dt>Confidence</dt>
           <dd>{kaptive.oLocus['Match confidence']}</dd>
         </div>
