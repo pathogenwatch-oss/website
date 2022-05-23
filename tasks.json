@@ -1090,7 +1090,8 @@
         },
         "task": "kaptive",
         "resources": {
-          "memory": 653741824
+          "memory": 653741824,
+          "cpu": 2
         },
         "version": "2"
       }
