@@ -1085,9 +1085,6 @@
         "version": "v3.0.1"
       },
       {
-        "flags": {
-          "KAPTIVE_TEST": true
-        },
         "task": "kaptive",
         "resources": {
           "memory": 653741824,
