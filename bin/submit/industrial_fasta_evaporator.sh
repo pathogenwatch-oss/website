@@ -6,8 +6,6 @@ ending=.fasta
 config_dir=/data/spaces-config
 spaces_base_url="s3://pathogenwatch-cgps/pw-test/fasta"
 
-echo "Preparing FASTAs from '${in_dir}' in '${out_dir}'"
-
 for file in "${in_dir}"/*.gz; do
   checksum=$(zcat "${file}" | sha1sum | cut -f 1 -d ' ')
   name=$(basename "${file}" ${ending}.gz)
