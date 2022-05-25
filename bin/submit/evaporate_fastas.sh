@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+# NB This script does not handle restarts. Only use for smaller datasets.
+
 # Run against a directory of FASTAs using:
 # find . -name "*.fasta.gz" -print0 | xargs -0 -P 2 -I xx /data/evaporate_fastas.sh xx > /data/p_aeruginosa_records.csv
 
@@ -7,7 +9,7 @@
 
 #spaces_base_url="https://pathogenwatch-cgps.ams3.digitaloceanspaces.com/pw-test/fasta"
 # URL for testing
-spaces_base_url="s3://pathogenwatch-cgps/pw-live.fa/fasta"
+spaces_base_url="s3://pathogenwatch-cgps/pw-live/fasta"
 
 file=$(basename "${1}")
 ending="${2:-.fasta}"
