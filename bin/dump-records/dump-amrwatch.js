@@ -15,19 +15,33 @@ const projection = {
   year: 1,
   'analysis.mlst.st': 1,
   'analysis.mlst.alleles': 1,
+  'analysis.mlst.url': 1,
+  'analysis.mlst2.st': 1,
+  'analysis.mlst2.alleles': 1,
+  'analysis.mlst2.url': 1,
   'analysis.kleborate.amr': 1,
   'analysis.kleborate.csv': 1,
 };
 const _user = new ObjectId("623b3dac8f2efe62c2e69fa8");
 
 const queries = {
+  aba: {
+    query: {
+      _user,
+      binned: false,
+      'analysis.speciator.organismId': '470',
+    },
+  },
   kpn: {
     query: {
-      $or: [ { binned: false, public: true, 'analysis.speciator.organismId': '573' }, {
-        _user,
-        binned: false,
-        'analysis.speciator.organismId': '573'
-      }, ],
+      $or: [
+        { binned: false, public: true, 'analysis.speciator.organismId': '573' },
+        {
+          _user,
+          binned: false,
+          'analysis.speciator.organismId': '573',
+        },
+      ],
     },
   },
 };
@@ -36,7 +50,7 @@ function writeOutput(species, foundTasks, rows) {
   const header = [ "Name", "Latitude", "Longitude", "Country", "Year", "Month", "Day" ];
   const tasks = Object.keys(foundTasks);
   for (const task of tasks) {
-    header.concat(foundTasks[task]);
+    header.push(foundTasks[task]);
   }
   const stream = fs.createWriteStream(`${species}.csv`);
   stream.write(`${header.join(",")}\n`);
@@ -69,13 +83,20 @@ async function main() {
   const genomes = await Genome.find(queries[species].query, projection).lean();
   const foundTasks = {};
   const rows = [];
-  for (const { name, longitude, latitude, country, day, month, year, analysis: { mlst, kleborate } = {} } of genomes) {
+  for (const { name, longitude, latitude, country, day, month, year, analysis: { mlst, mlst2, kleborate } = {} } of genomes) {
     const metadata = { name, longitude, latitude, country, day, month, year };
     if (!!mlst) {
-      metadata.mlst = { ST: mlst.st };
+      metadata.mlst = { ST: mlst.st, url: mlst.url };
       metadata.mlst.Profile = mlst.alleles.map(({ hits }) => hits.join('|')).join('.');
       if (!('mlst' in foundTasks)) {
         foundTasks.mlst = Object.keys(metadata.mlst);
+      }
+    }
+    if (!!mlst2) {
+      metadata.mlst2 = { ST2: mlst2.st, url2: mlst2.url };
+      metadata.mlst2.Profile2 = mlst2.alleles.map(({ hits }) => hits.join('|')).join('.');
+      if (!('mlst2' in foundTasks)) {
+        foundTasks.mlst2 = Object.keys(metadata.mlst2);
       }
     }
     if (!!kleborate) {

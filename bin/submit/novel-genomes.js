@@ -75,6 +75,7 @@ async function main() {
   if (!(await existenceValidated(genomes))) {
     throw new Error('Not all the genomes were found in spaces');
   }
+  LOGGER.info(`Genomes passed validation.`);
   for (const genome of genomes) {
     const genomeId = await createRecord(genome, userId);
     await submit(genomeId, genome.fileId, userId);
