@@ -44,6 +44,13 @@ const queries = {
       ],
     },
   },
+  pae: {
+    query: {
+      _user,
+      binned: false,
+      'analysis.speciator.organismId': '287',
+    },
+  },
 };
 
 function writeOutput(species, foundTasks, rows) {
