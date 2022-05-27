@@ -90,18 +90,27 @@ async function main() {
   const genomes = await Genome.find(queries[species].query, projection).lean();
   const foundTasks = {};
   const rows = [];
-  for (const { name, longitude, latitude, country, day, month, year, analysis: { mlst, mlst2, kleborate } = {} } of genomes) {
+  for (const {
+    name,
+    longitude,
+    latitude,
+    country,
+    day,
+    month,
+    year,
+    analysis: { mlst, mlst2, kleborate } = {}
+  } of genomes) {
     const metadata = { name, longitude, latitude, country, day, month, year };
     if (!!mlst) {
       metadata.mlst = { ST: mlst.st, url: mlst.url };
-      metadata.mlst.Profile = mlst.alleles.map(({ hits }) => hits.join('|')).join('.');
+      metadata.mlst['MLST Profile'] = mlst.alleles.map(({ hits }) => hits.join('|')).join('.');
       if (!('mlst' in foundTasks)) {
         foundTasks.mlst = Object.keys(metadata.mlst);
       }
     }
     if (!!mlst2) {
-      metadata.mlst2 = { ST2: mlst2.st, url2: mlst2.url };
-      metadata.mlst2.Profile2 = mlst2.alleles.map(({ hits }) => hits.join('|')).join('.');
+      metadata.mlst2 = { "ST 2": mlst2.st, url2: mlst2.url };
+      metadata.mlst2['MLST Profile 2'] = mlst2.alleles.map(({ hits }) => hits.join('|')).join('.');
       if (!('mlst2' in foundTasks)) {
         foundTasks.mlst2 = Object.keys(metadata.mlst2);
       }
