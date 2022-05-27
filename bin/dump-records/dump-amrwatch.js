@@ -51,6 +51,13 @@ const queries = {
       'analysis.speciator.organismId': '287',
     },
   },
+  spn: {
+    query: {
+      _user,
+      binned: false,
+      'analysis.speciator.organismId': '1313',
+    },
+  },
 };
 
 function writeOutput(species, foundTasks, rows) {
