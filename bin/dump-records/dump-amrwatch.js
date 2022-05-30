@@ -51,6 +51,13 @@ const queries = {
       'analysis.speciator.organismId': '287',
     },
   },
+  spn: {
+    query: {
+      _user,
+      binned: false,
+      'analysis.speciator.organismId': '1313',
+    },
+  },
 };
 
 function writeOutput(species, foundTasks, rows) {
@@ -98,7 +105,7 @@ async function main() {
     day,
     month,
     year,
-    analysis: { mlst, mlst2, kleborate } = {}
+    analysis: { mlst, mlst2, kleborate } = {},
   } of genomes) {
     const metadata = { name, longitude, latitude, country, day, month, year };
     if (!!mlst) {
