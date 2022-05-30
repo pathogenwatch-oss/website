@@ -105,7 +105,7 @@ async function main() {
     day,
     month,
     year,
-    analysis: { mlst, mlst2, kleborate } = {}
+    analysis: { mlst, mlst2, kleborate } = {},
   } of genomes) {
     const metadata = { name, longitude, latitude, country, day, month, year };
     if (!!mlst) {
