@@ -21,6 +21,7 @@ const projection = {
   'analysis.mlst2.url': 1,
   'analysis.kleborate.amr': 1,
   'analysis.kleborate.csv': 1,
+  'analysis.serotype.value': 1,
 };
 const _user = new ObjectId("623b3dac8f2efe62c2e69fa8");
 
@@ -30,6 +31,20 @@ const queries = {
       _user,
       binned: false,
       'analysis.speciator.organismId': '470',
+    },
+  },
+  cco: {
+    query: {
+      _user,
+      binned: false,
+      'analysis.speciator.organismId': '195',
+    },
+  },
+  cje: {
+    query: {
+      _user,
+      binned: false,
+      'analysis.speciator.organismId': '197',
     },
   },
   kpn: {
@@ -44,11 +59,39 @@ const queries = {
       ],
     },
   },
+  ngo: {
+    query: {
+      _user,
+      binned: false,
+      'analysis.speciator.organismId': '485',
+    },
+  },
   pae: {
     query: {
       _user,
       binned: false,
       'analysis.speciator.organismId': '287',
+    },
+  },
+  sau: {
+    query: {
+      _user,
+      binned: false,
+      'analysis.speciator.organismId': '1280',
+    },
+  },
+  sal: {
+    query: {
+      _user,
+      binned: false,
+      'analysis.speciator.organismId': '28901',
+    },
+  },
+  sty: {
+    query: {
+      _user,
+      binned: false,
+      'analysis.speciator.organismId': '90370',
     },
   },
   spn: {
@@ -105,7 +148,7 @@ async function main() {
     day,
     month,
     year,
-    analysis: { mlst, mlst2, kleborate } = {},
+    analysis: { mlst, mlst2, kleborate, serotype } = {},
   } of genomes) {
     const metadata = { name, longitude, latitude, country, day, month, year };
     if (!!mlst) {
@@ -129,6 +172,12 @@ async function main() {
       });
       if (!('kleborate' in foundTasks)) {
         foundTasks.kleborate = Object.keys(metadata.kleborate);
+      }
+    }
+    if (!!serotype) {
+      metadata.serotype = { Serotype: serotype.value };
+      if (!('serotype' in foundTasks)) {
+        foundTasks.serotype = Object.keys(metadata.serotype);
       }
     }
     rows.push(metadata);
