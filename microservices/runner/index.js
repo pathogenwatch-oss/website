@@ -7,6 +7,7 @@ const fs = require('fs');
 const { formatMemory } = require('manifest');
 const { request } = require('services');
 const pullTaskImage = require('services/tasks/pull');
+const store = require('utils/object-store');
 
 const MB = 1024 ** 2;
 const DEFAULT_AVAILABLE_MEMORY = os.totalmem() - 500 * MB;
@@ -56,12 +57,14 @@ async function runJob(job, releaseResources) {
     }
 
     if (taskType === taskTypes.assembly) {
-      const { genomeId, clientId, userId, uploadedAt } = metadata;
+      const { genomeId, clientId, userId, uploadedAt, readsKeys } = metadata;
       try {
         await request('genome', 'send-assembly-progress', { clientId, userId, uploadedAt });
         await request('tasks', 'run-assembly', { spec, timeout$: timeout * 1000 * 1.1, metadata });
         await Queue.handleSuccess(job);
         await request('genome', 'send-assembly-progress', { clientId, userId, uploadedAt });
+        readsKeys.forEach(readKey => store.delete(readKey));
+        // Delete the read files?
       } catch (err) {
         LOGGER.error(err);
         await Queue.handleFailure(job, err.message);
