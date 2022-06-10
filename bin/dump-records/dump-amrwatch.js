@@ -47,6 +47,13 @@ const queries = {
       'analysis.speciator.organismId': '197',
     },
   },
+  eco: {
+    query: {
+      _user,
+      binned: false,
+      'analysis.speciator.organismId': '562',
+    },
+  },
   kpn: {
     query: {
       $or: [
