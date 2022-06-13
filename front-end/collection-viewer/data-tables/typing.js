@@ -117,6 +117,12 @@ const kleborateGroup = {
   // columns: [ '__K_locus', '__K_type', '__O_locus', '__O_type', '__Virulence_Score', '__Aerobactin', '__Colibactin', '__Salmochelin', '__Yersiniabactin', '__RmpADC', '__rmpA2' ],
 };
 
+const serotypeGroup = {
+  group: true,
+  columnKey: 'serotype',
+  columns: [ '__serotype' ],
+};
+
 const vistaGroup = {
   group: true,
   columnKey: 'vista',
@@ -142,9 +148,11 @@ function getTypingColumnGroups(uiOptions, hasAltMLST, {
   "ngono-markers": ngonoMarkers,
   ngstar,
   pangolin,
+  serotype,
   vista,
 }) {
   return [
+    serotype ? serotypeGroup : null,
     !uiOptions.hasPopulation ? null : referenceGroup,
     mlst ? mlstGroup : null,
     hasAltMLST ? mlst2Group : null,
@@ -172,9 +180,10 @@ export function hasTyping({ hasPopulation }, {
   ngmast,
   ngstar,
   pangolin,
+  serotype,
   vista,
 }) {
-  return !(!hasPopulation && !mlst && !genotyphi && !inctyper && !kaptive && !kleborate && !ngmast && !!ngonoMarkers && !ngstar && !pangolin && !vista);
+  return !(!hasPopulation && !mlst && !genotyphi && !inctyper && !kaptive && !kleborate && !ngmast && !!ngonoMarkers && !ngstar && !pangolin && !serotype && !vista);
 }
 
 function updateTypingSettings({ genomes }) {
@@ -204,7 +213,7 @@ function checkAnalysesPresent({ exclude = [] }, { genomes }, analyses) {
 export default function (state = initialState, { type, payload }) {
   switch (type) {
     case FETCH_COLLECTION.SUCCESS: {
-      const foundAnalyses = checkAnalysesPresent(Organisms.uiOptions, payload.result, [ 'genotyphi', 'inctyper', 'kaptive', 'kleborate', 'mlst', 'ngmast', 'ngono-markers', 'ngstar', 'pangolin', 'vista' ]);
+      const foundAnalyses = checkAnalysesPresent(Organisms.uiOptions, payload.result, [ 'genotyphi', 'inctyper', 'kaptive', 'kleborate', 'mlst', 'ngmast', 'ngono-markers', 'ngstar', 'pangolin', 'serotype', 'vista' ]);
       const active = hasTyping(Organisms.uiOptions, foundAnalyses);
 
       if (!active) {

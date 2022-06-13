@@ -386,6 +386,14 @@ export const systemDataColumns = {
     },
     numeric: true,
   },
+  __serotype: {
+    columnKey: '__serotype',
+    label: 'SEROTYPE',
+    valueGetter({ analysis }) {
+      if (!('serotype' in analysis)) return null;
+      return analysis.serotype.value;
+    },
+  },
   __vista_biotype: {
     columnKey: '__vista_biotype',
     label: 'BIOTYPE',
