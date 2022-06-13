@@ -9,6 +9,7 @@ module.exports.transformer = function (doc) {
     'Species ID': doc.analysis.speciator.speciesId,
     'Genus Name': doc.analysis.speciator.genusName,
     'Genus ID': doc.analysis.speciator.genusId,
+    'Reference Library': doc.analysis.speciator.source,
     'Reference ID': doc.analysis.speciator.referenceId,
     'Matching Hashes': doc.analysis.speciator.matchingHashes,
     'p-Value': doc.analysis.speciator.pValue,
