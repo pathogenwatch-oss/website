@@ -281,7 +281,6 @@ export const systemDataColumns = {
     label: 'AEROBACTIN (AbST)',
     valueGetter({ analysis }) {
       if (!analysis.kleborate) return null;
-      if (analysis.kleborate.Aerobactin === '-') return null;
       return `${analysis.kleborate.virulence.Aerobactin} (${analysis.kleborate.virulence.AbST})`;
     },
   },
@@ -291,7 +290,6 @@ export const systemDataColumns = {
     label: 'COLIBACTIN (CbST)',
     valueGetter({ analysis }) {
       if (!analysis.kleborate) return null;
-      if (analysis.kleborate.Colibactin === '-') return null;
       return `${analysis.kleborate.virulence.Colibactin} (${analysis.kleborate.virulence.CbST})`;
     },
   },
@@ -301,7 +299,6 @@ export const systemDataColumns = {
     label: 'SALMOCHELIN (SmST)',
     valueGetter({ analysis }) {
       if (!analysis.kleborate) return null;
-      if (analysis.kleborate.Salmochelin === '-') return null;
       return `${analysis.kleborate.virulence.Salmochelin} (${analysis.kleborate.virulence.SmST})`;
     },
   },
@@ -311,7 +308,6 @@ export const systemDataColumns = {
     label: 'YERSINIABACTIN (YbST)',
     valueGetter({ analysis }) {
       if (!analysis.kleborate) return null;
-      if (analysis.kleborate.Yersiniabactin === '-') return null;
       return `${analysis.kleborate.virulence.Yersiniabactin} (${analysis.kleborate.virulence.YbST})`;
     },
   },
@@ -321,7 +317,6 @@ export const systemDataColumns = {
     label: 'RmpADC',
     valueGetter({ analysis }) {
       if (!analysis.kleborate) return null;
-      if (analysis.kleborate.virulence.RmpADC === '-') return null;
       return analysis.kleborate.virulence.RmpADC;
     },
   },
@@ -331,7 +326,6 @@ export const systemDataColumns = {
     label: 'rmpA2',
     valueGetter({ analysis }) {
       if (!analysis.kleborate) return null;
-      if (analysis.kleborate.virulence.rmpA2 === '-') return null;
       return analysis.kleborate.virulence.rmpA2;
     },
   },
