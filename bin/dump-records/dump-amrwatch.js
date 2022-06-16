@@ -1,4 +1,4 @@
-/* eslint-disable no-console,camelcase */
+/* eslint-disable no-console,camelcase,max-len */
 const mongoConnection = require('utils/mongoConnection');
 const { ObjectId } = require('mongoose/lib/types');
 const Genome = require('models/genome');
@@ -28,34 +28,26 @@ const projection = {
 
 const _user = new ObjectId("623b3dac8f2efe62c2e69fa8");
 
+function getSpeciesQuery(taxId) {
+  return {
+    _user,
+    binned: false,
+    'analysis.speciator.organismId': taxId,
+  };
+}
+
 const queries = {
   aba: {
-    query: {
-      _user,
-      binned: false,
-      'analysis.speciator.organismId': '470',
-    },
+    query: getSpeciesQuery('470'),
   },
   cco: {
-    query: {
-      _user,
-      binned: false,
-      'analysis.speciator.organismId': '195',
-    },
+    query: getSpeciesQuery('195'),
   },
   cje: {
-    query: {
-      _user,
-      binned: false,
-      'analysis.speciator.organismId': '197',
-    },
+    query: getSpeciesQuery('197'),
   },
   eco: {
-    query: {
-      _user,
-      binned: false,
-      'analysis.speciator.organismId': '562',
-    },
+    query: getSpeciesQuery('562'),
   },
   kpn: {
     query: {
@@ -70,55 +62,28 @@ const queries = {
     },
   },
   ngo: {
-    query: {
-      _user,
-      binned: false,
-      'analysis.speciator.organismId': '485',
-    },
+    query: getSpeciesQuery('485'),
   },
   pae: {
-    query: {
-      _user,
-      binned: false,
-      'analysis.speciator.organismId': '287',
-    },
+    query: getSpeciesQuery('287'),
   },
   sau: {
-    query: {
-      _user,
-      binned: false,
-      'analysis.speciator.organismId': '1280',
-    },
+    query: getSpeciesQuery('1280'),
   },
   sal: {
-    query: {
-      _user,
-      binned: false,
-      'analysis.speciator.organismId': '28901',
-    },
+    query: getSpeciesQuery('28901'),
   },
   shi: {
-    query: {
-      _user,
-      binned: false,
-      'analysis.speciator.genusId': '620',
-    },
+    query: getSpeciesQuery('620'),
   },
   sty: {
-    query: {
-      _user,
-      binned: false,
-      'analysis.speciator.organismId': '90370',
-    },
+    query: getSpeciesQuery('90370'),
   },
   spn: {
-    query: {
-      _user,
-      binned: false,
-      'analysis.speciator.organismId': '1313',
-    },
+    query: getSpeciesQuery('1313'),
   },
 };
+
 function writeOutput(species, foundTasks, rows) {
   const header = [ "Name", "Latitude", "Longitude", "Country", "Year", "Month", "Day" ];
   const tasks = Object.keys(foundTasks);
@@ -132,7 +97,9 @@ function writeOutput(species, foundTasks, rows) {
     const values = [ row.name, row.latitude, row.longitude, row.country, row.year, row.month, row.day ];
     for (const task of tasks) {
       for (const column of foundTasks[task]) {
-        (!!row[task] && !!row[task][column]) ? values.push(row[task][column]) : '';
+        if (!!row[task] && !!row[task][column]) {
+          values.push(row[task][column]);
+        }
       }
     }
     stream.write(`${values.join(separator)}\n`);
