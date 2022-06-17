@@ -10,7 +10,7 @@ const { query = { 'tree.versions': { $exists: false } }, subtrees = false } = ar
 async function run() {
   const collections = await Collection.find(
     JSON.parse(query),
-    { token: 1, organismId: 1, tree: 1, subtrees: 1 },
+    { token: 1, organismId: 1, tree: 1, subtrees: 1, _user: 1 },
     { lean: true }
   );
 
@@ -19,6 +19,7 @@ async function run() {
       organismId: collection.organismId,
       collectionId: collection._id,
       clientId: collection.token,
+      userId: collection._user.toString(),
     });
     console.log('Done', collections.indexOf(collection) + 1, 'of', collections.length);
   }
