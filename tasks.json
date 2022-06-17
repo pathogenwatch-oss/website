@@ -63,13 +63,10 @@
     ],
     "1463165": [
       {
-        "flags": {
-          "KQP_EXPERIMENT_USER": true
-        },
         "requires": [
           {
             "task": "core",
-            "version": "v2.0.0-13-1463165"
+            "version": "v2.0.0-1463165"
           }
         ],
         "task": "tree",
@@ -106,13 +103,10 @@
     ],
     "244366": [
       {
-        "flags": {
-          "KV_EXPERIMENT_USER": true
-        },
         "requires": [
           {
             "task": "core",
-            "version": "v2.0.0-13-244366"
+            "version": "v2.0.0-244366"
           }
         ],
         "task": "tree",
@@ -495,11 +489,8 @@
         "version": "202203171231-v3.0.0"
       },
       {
-        "flags": {
-          "KQP_EXPERIMENT_USER": true
-        },
         "task": "core",
-        "version": "v2.0.0-13-1463165"
+        "version": "v2.0.0-1463165"
       },
       {
         "flags": {
@@ -828,11 +819,8 @@
         "version": "202203171231-v3.0.0"
       },
       {
-        "flags": {
-          "KQP_EXPERIMENT_USER": true
-        },
         "task": "core",
-        "version": "v2.0.0-13-244366"
+        "version": "v2.0.0-244366"
       },
       {
         "flags": {
