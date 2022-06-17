@@ -66,7 +66,7 @@
         "requires": [
           {
             "task": "core",
-            "version": "v2.0.0-1463165"
+            "version": "v2.0.1-1463165"
           }
         ],
         "task": "tree",
@@ -106,7 +106,7 @@
         "requires": [
           {
             "task": "core",
-            "version": "v2.0.0-244366"
+            "version": "v2.0.1-244366"
           }
         ],
         "task": "tree",
@@ -490,7 +490,7 @@
       },
       {
         "task": "core",
-        "version": "v2.0.0-1463165"
+        "version": "v2.0.1-1463165"
       },
       {
         "flags": {
@@ -820,7 +820,7 @@
       },
       {
         "task": "core",
-        "version": "v2.0.0-244366"
+        "version": "v2.0.1-244366"
       },
       {
         "flags": {
