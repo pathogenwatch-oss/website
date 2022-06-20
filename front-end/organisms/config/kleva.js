@@ -15,7 +15,7 @@ export default {
   desc: (
     <p>
       <strong>{formattedName}</strong>{' '}
-      https://en.wikipedia.org/wiki/Klebsiella_pneumoniae
+      https://en.wikipedia.org/wiki/Klebsiella_variicola
     </p>
   ),
   taxonomy: [

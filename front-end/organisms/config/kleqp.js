@@ -15,7 +15,7 @@ export default {
   desc: (
     <p>
       <strong>{formattedName}</strong>{' '}
-      https://en.wikipedia.org/wiki/Klebsiella_pneumoniae
+      is a member of the Klebsiella pneumoniae complex species group, and can also cause infections in humans..
     </p>
   ),
   taxonomy: [
