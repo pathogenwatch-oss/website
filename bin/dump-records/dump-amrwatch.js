@@ -50,17 +50,20 @@ const queries = {
     query: getSpeciesQuery('562'),
   },
   kpn: {
-    query: {
-      $or: [
-        { binned: false, public: true, 'analysis.speciator.organismId': '573' },
-        {
-          _user,
-          binned: false,
-          'analysis.speciator.organismId': '573',
-        },
-      ],
-    },
+    query: getSpeciesQuery('573'),
   },
+  // kpn: {
+  //   query: {
+  //     $or: [
+  //       { binned: false, public: true, 'analysis.speciator.organismId': '573' },
+  //       {
+  //         _user,
+  //         binned: false,
+  //         'analysis.speciator.organismId': '573',
+  //       },
+  //     ],
+  //   },
+  // },
   ngo: {
     query: getSpeciesQuery('485'),
   },
@@ -73,6 +76,9 @@ const queries = {
   sal: {
     query: getSpeciesQuery('28901'),
   },
+  sfl: {
+    query: getSpeciesQuery('623'),
+  },
   shi: {
     query: getSpeciesQuery('620'),
   },
@@ -81,6 +87,9 @@ const queries = {
   },
   spn: {
     query: getSpeciesQuery('1313'),
+  },
+  ssn: {
+    query: getSpeciesQuery('624'),
   },
 };
 
