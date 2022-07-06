@@ -12,6 +12,7 @@ async function extractEarliestUploads() {
     { $or: [ { 'analysis.metrics.length': { $gt: 500000 } }, { 'analysis.speciator.organismId': '2697049' } ] },
     {
       _id: 0,
+      _user: 1,
       fileId: 1,
       latitude: 1,
       longitude: 1,
@@ -29,6 +30,7 @@ async function extractEarliestUploads() {
     if (!(genomeId in memo)) {
       memo[genomeId] = {
         genomeId,
+        user: genome._user,
         date: `${genome.createdAt.getFullYear()}/${genome.createdAt.getMonth() + 1}/${genome.createdAt.getDate()}`,
         year: genome.createdAt.getFullYear(),
         month: genome.createdAt.getMonth() + 1,
