@@ -4,9 +4,10 @@ const { ObjectId } = require('mongoose/lib/types');
 const Genome = require('models/genome');
 const argv = require('named-argv');
 const fs = require('fs');
+const { query } = require('express');
 
 const separator = ",";
-const projection = {
+const defaultProjection = {
   name: 1,
   latitude: 1,
   longitude: 1,
@@ -28,12 +29,14 @@ const projection = {
 
 const _user = new ObjectId("623b3dac8f2efe62c2e69fa8");
 
-function getSpeciesQuery(taxId) {
-  return {
+function getSpeciesQuery(taxId, field = 'analysis.speciator.organismId') {
+  const baseQuery = {
     _user,
     binned: false,
-    'analysis.speciator.organismId': taxId,
+
   };
+  baseQuery[field] = taxId;
+  return baseQuery;
 }
 
 const queries = {
@@ -46,24 +49,19 @@ const queries = {
   cje: {
     query: getSpeciesQuery('197'),
   },
+  ent: {
+    query: getSpeciesQuery('547', 'analysis.speciator.genusId'),
+    projection: { 'analysis.speciator.organismName': 1 },
+  },
   eco: {
     query: getSpeciesQuery('562'),
+  },
+  hae: {
+    query: getSpeciesQuery('727'),
   },
   kpn: {
     query: getSpeciesQuery('573'),
   },
-  // kpn: {
-  //   query: {
-  //     $or: [
-  //       { binned: false, public: true, 'analysis.speciator.organismId': '573' },
-  //       {
-  //         _user,
-  //         binned: false,
-  //         'analysis.speciator.organismId': '573',
-  //       },
-  //     ],
-  //   },
-  // },
   ngo: {
     query: getSpeciesQuery('485'),
   },
@@ -123,12 +121,13 @@ async function main() {
   const { species } = argv.opts;
 
   if (!species || !(species in queries)) {
+    console.log("--species={id}\n");
     console.log(Object.keys(queries));
     process.exit(1);
   }
 
   await mongoConnection.connect();
-
+  const projection = !!queries[species].projection ? { ...defaultProjection, ...queries[species].projection } : defaultProjection;
   const genomes = await Genome.find(queries[species].query, projection).lean();
   const foundTasks = {};
   const rows = [];
@@ -141,7 +140,7 @@ async function main() {
     month,
     year,
     // eslint-disable-next-line camelcase
-    analysis: { mlst, mlst2, kleborate, serotype, spn_pbp_amr } = {},
+    analysis: { mlst, mlst2, kleborate, serotype, speciator, spn_pbp_amr } = {},
   } of genomes) {
     const metadata = { name, longitude, latitude, country, day, month, year };
     if (!!mlst) {
@@ -171,6 +170,12 @@ async function main() {
       metadata.serotype = { Serotype: serotype.value };
       if (!('serotype' in foundTasks)) {
         foundTasks.serotype = Object.keys(metadata.serotype);
+      }
+    }
+    if (!!speciator) {
+      metadata.speciator = speciator;
+      if (!('speciator' in foundTasks)) {
+        foundTasks.speciator = Object.keys(metadata.speciator);
       }
     }
     if (!!spn_pbp_amr) {
