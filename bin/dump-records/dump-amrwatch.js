@@ -4,7 +4,6 @@ const { ObjectId } = require('mongoose/lib/types');
 const Genome = require('models/genome');
 const argv = require('named-argv');
 const fs = require('fs');
-const { query } = require('express');
 
 const separator = ",";
 const defaultProjection = {
