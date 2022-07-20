@@ -29,6 +29,19 @@ function prepareMetadata(metadataUpdate) {
     }
     cleanedRow.id = cleanedRow.userDefined.id;
     delete cleanedRow.userDefined.id;
+    if ('literatureLink' in row) {
+      cleanedRow.literatureLink = { value: row.literatureLink };
+      if (row.literatureLink.value.includes('/')) {
+        cleanedRow.literatureLink.type = 'doi';
+      } else {
+        cleanedRow.literatureLink.type = 'pubmed';
+      }
+      if (row.doi) cleanedRow.userDefined.doi = row.doi;
+      if (row.pmid) cleanedRow.userDefined.pmid = row.pmid;
+    } else if (row.pmid) {
+      cleanedRow.literatureLink = { value: row.pmid, type: 'pubmed' };
+      if (row.doi) cleanedRow.userDefined.doi = row.doi;
+    } else if (row.doi) cleanedRow.literatureLink = { value: row.doi, type: 'doi' };
     return cleanedRow;
   });
 }
