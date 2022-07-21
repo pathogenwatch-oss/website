@@ -109,7 +109,7 @@ function buildColumns(genomes) {
         .filter(element => element !== '-')
         .sort()
         .map((element) => createColumn(
-          `kleborateAMRGenotypes_${antibioticRecord}_${element}`, element, bufferSize
+          `kleborateAMRGenotypes_${antibioticRecord.name}_${element}`, element, bufferSize
         )),
     });
     return groups;
