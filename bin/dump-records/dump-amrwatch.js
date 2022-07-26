@@ -80,7 +80,7 @@ const queries = {
     query: getSpeciesQuery('623'),
   },
   shi: {
-    query: getSpeciesQuery('620'),
+    query: getSpeciesQuery('620', 'analysis.speciator.genusId'),
   },
   sty: {
     query: getSpeciesQuery('90370'),
