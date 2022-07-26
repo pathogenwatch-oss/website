@@ -61,6 +61,9 @@ const queries = {
   hpy: {
     query: getSpeciesQuery('210'),
   },
+  kle: {
+    query: getSpeciesQuery('570', 'analysis.speciator.genusId'),
+  },
   kpn: {
     query: getSpeciesQuery('573'),
   },
