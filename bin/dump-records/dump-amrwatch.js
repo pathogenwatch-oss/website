@@ -58,6 +58,9 @@ const queries = {
   hae: {
     query: getSpeciesQuery('727'),
   },
+  hpy: {
+    query: getSpeciesQuery('210'),
+  },
   kpn: {
     query: getSpeciesQuery('573'),
   },

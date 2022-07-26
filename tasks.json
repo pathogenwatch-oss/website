@@ -956,12 +956,21 @@
       {
         "task": "mlst",
         "version": "202203171422-v3.0.0"
+      },
+      {
+        "task": "cgmlst",
+        "version": "202207221247-v3.0.6"
       }
+
     ],
     "287": [
       {
         "task": "mlst",
         "version": "202203171422-v3.0.0"
+      },
+      {
+        "task": "cgmlst",
+        "version": "202207221247-v3.0.6"
       },
       {
         "flags": {
@@ -1109,7 +1118,7 @@
       {
         "task": "cgmlst",
         "timeout": 480,
-        "version": "202203171231-v3.0.0"
+        "version": "202207221247-v3.0.6"
       },
       {
         "flags": {
