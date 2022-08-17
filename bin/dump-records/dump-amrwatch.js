@@ -55,6 +55,9 @@ const queries = {
   eco: {
     query: getSpeciesQuery('562'),
   },
+  efa: {
+    query: getSpeciesQuery('1352'),
+  },
   hae: {
     query: getSpeciesQuery('727'),
   },
@@ -150,14 +153,14 @@ async function main() {
     const metadata = { name, longitude, latitude, country, day, month, year };
     if (!!mlst) {
       metadata.mlst = { ST: mlst.st, url: mlst.url };
-      metadata.mlst['MLST Profile'] = mlst.alleles.map(({ hits }) => hits.join('|')).join('.');
+      metadata.mlst.MLST_Profile = mlst.alleles.map(({ hits }) => hits.join('|')).join('.');
       if (!('mlst' in foundTasks)) {
         foundTasks.mlst = Object.keys(metadata.mlst);
       }
     }
     if (!!mlst2) {
-      metadata.mlst2 = { "ST 2": mlst2.st, url2: mlst2.url };
-      metadata.mlst2['MLST Profile 2'] = mlst2.alleles.map(({ hits }) => hits.join('|')).join('.');
+      metadata.mlst2 = { ST2: mlst2.st, url2: mlst2.url };
+      metadata.mlst2.MLST_Profile2 = mlst2.alleles.map(({ hits }) => hits.join('|')).join('.');
       if (!('mlst2' in foundTasks)) {
         foundTasks.mlst2 = Object.keys(metadata.mlst2);
       }
