@@ -17,22 +17,20 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
-    # As from https://stackoverflow.com/questions/63308904/push-to-gitlab-with-access-token-using-github-actions
+    
     steps:
       - uses: actions/checkout@v3
+        with:
+          ref: ''
 
-      # Runs a set of commands using the runners shell
+      # As from https://stackoverflow.com/questions/63308904/push-to-gitlab-with-access-token-using-github-actions
       - name: Push to GitLab
         env:
           token: ${{ secrets.GITLAB_ACCESS_TOKEN }}
         run: |
           echo Starting push to GitLab
           echo test, and deploy your project.
-          # Fix!
-          git config user.name "..."
-          # Fix!
-          git config user.email "..."
-          # Fix!          
-          git remote set-url origin "https://oauth2:${token}@gitlab.com/"
-          # Fix!
-          git push origin master
+          git config user.name "cgps.admin"
+          git config user.email "cgps.dev@gmail.com"
+          git remote set-url origin "https://oauth2:${token}@gitlab.com/cgps/pathogenwatch/website.git"
+          git push origin --follow-tags
