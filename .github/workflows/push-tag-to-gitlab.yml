@@ -1,0 +1,38 @@
+# This is a basic workflow to help you get started with Actions
+
+name: CI
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow when tags are pushed
+  push:
+    tags:
+      - '*'
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    # As from https://stackoverflow.com/questions/63308904/push-to-gitlab-with-access-token-using-github-actions
+    steps:
+      - uses: actions/checkout@v3
+
+      # Runs a set of commands using the runners shell
+      - name: Push to GitLab
+        env:
+          token: ${{ secrets.GITLAB_ACCESS_TOKEN }}
+        run: |
+          echo Starting push to GitLab
+          echo test, and deploy your project.
+          # Fix!
+          git config user.name "..."
+          # Fix!
+          git config user.email "..."
+          # Fix!          
+          git remote set-url origin "https://oauth2:${token}@gitlab.com/"
+          # Fix!
+          git push origin master
