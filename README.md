@@ -1,7 +1,7 @@
 # Pathogenwatch
 
 ## Development
-
+*NB Use Github instead of the GitLab instructions below*
 1. Start MongoDB and Minio (cd ../deployment/dev; ./deploy.sh local)
 2. Create a `config.json` (use ../deployment/dev/config.json and change urls to use localhost)
 3. `export REPO_USER=YOUR_GITLAB_USER REPO_TOKEN=YOUR_TOKEN`
@@ -20,7 +20,6 @@ Use `node bin/submit/task.js`, example arguments:
 
 * `--task='mlst'` task name as specified in tasks.json, required.
 * `--query='{ "public": true }'` filters genomes to run, must be strict JSON format.
-* `--queue='reprocessing'` queue name, defaults to 'reprocessing'
 
 Genomes that are not eligible for the task will not be queued. If tasks are added to a "reprocessing" queue for running outside the user queues, they need a dedicated runner:
 
