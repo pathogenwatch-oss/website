@@ -4,7 +4,7 @@ import config from '../../app/config';
 const storageKey = 'selected-genomes';
 
 export function getSelectionLimit() {
-  const { pagination = { max: 2500 } } = config;
+  const { pagination = { max: 5000 } } = config;
   return pagination.max;
 }
 
