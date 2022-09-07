@@ -7,7 +7,7 @@
   "maxCollectionSize": 2000,
   "maxGenomeFileSize": 20,
   "maxReadsFileSize": 500,
-  "maxDownloadSize": 2500,
+  "maxDownloadSize": 5000,
   "mongodb": {
     "host": "localhost",
     "port": 27017,
