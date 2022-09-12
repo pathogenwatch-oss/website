@@ -20,8 +20,11 @@ const defaultProjection = {
   'analysis.mlst2.st': 1,
   'analysis.mlst2.alleles': 1,
   'analysis.mlst2.url': 1,
+  'analysis.genotyphi.genotype': 1,
+  'analysis.genotyphi.foundLoci': 1,
   'analysis.kleborate.amr': 1,
   'analysis.kleborate.csv': 1,
+  'analysis.poppunk2.strain': 1,
   'analysis.serotype.value': 1,
   'analysis.spn_pbp_amr': 1,
 };
@@ -148,7 +151,7 @@ async function main() {
     month,
     year,
     // eslint-disable-next-line camelcase
-    analysis: { mlst, mlst2, kleborate, serotype, speciator, spn_pbp_amr } = {},
+    analysis: { mlst, mlst2, genotyphi, kleborate, poppunk2, serotype, speciator, spn_pbp_amr } = {},
   } of genomes) {
     const metadata = { name, longitude, latitude, country, day, month, year };
     if (!!mlst) {
@@ -165,6 +168,12 @@ async function main() {
         foundTasks.mlst2 = Object.keys(metadata.mlst2);
       }
     }
+    if (!!genotyphi) {
+      metadata.genotyphi = { Genotype: genotyphi.genotype, SNPs_called: genotyphi.foundLoci };
+      if (!('genotyphi' in foundTasks)) {
+        foundTasks.genotyphi = Object.keys(metadata.genotyphi);
+      }
+    }
     if (!!kleborate) {
       metadata.kleborate = {};
       kleborate.csv.forEach((item) => {
@@ -172,6 +181,12 @@ async function main() {
       });
       if (!('kleborate' in foundTasks)) {
         foundTasks.kleborate = Object.keys(metadata.kleborate);
+      }
+    }
+    if (!!poppunk2) {
+      metadata.poppunk2 = { GSPC: poppunk2.strain };
+      if (!('poppunk2' in foundTasks)) {
+        foundTasks.poppunk2 = Object.keys(metadata.poppunk2);
       }
     }
     if (!!serotype) {
