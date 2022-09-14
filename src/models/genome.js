@@ -127,6 +127,7 @@ schema.index({
   'analysis.serotype.subspecies': 1,
   'analysis.serotype.value': 1,
 });
+
 schema.index({
   public: 1,
   binned: 1,
@@ -135,14 +136,27 @@ schema.index({
   'analysis.serotype.subspecies': 1,
   'analysis.serotype.value': 1,
 }, { partialFilterExpression: { public: true, binned: false } });
+
+schema.index({
+  public: 1,
+  binned: 1,
+  'analysis.cgmlst.scheme': 1,
+}, { partialFilterExpression: { public: true, binned: false } });
+
+schema.index({
+  _user: 1,
+  binned: 1,
+  'analysis.cgmlst.scheme': 1,
+});
+
 // Need these as well
 schema.index({ public: 1, binned: 1, createdAt: -1 }, { partialFilterExpression: { public: true, binned: false } });
 schema.index({ _user: 1, binned: 1, createdAt: -1 });
 schema.index({ public: 1, _user: 1, binned: 1, createdAt: -1 }, {
   partialFilterExpression: {
     public: false,
-    binned: false
-  }
+    binned: false,
+  },
 });
 
 // mlst as well
