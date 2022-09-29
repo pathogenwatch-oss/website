@@ -56,6 +56,7 @@ export const statuses = {
 export const analysisLabels = {
   alignment: 'Reference alignment',
   cgmlst: 'cgMLST',
+  "klebsiella-lincodes": 'LINcode',
   core: 'Core Summary',
   genotyphi: 'Genotyphi',
   inctyper: 'Inctyper',

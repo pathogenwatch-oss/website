@@ -1,19 +1,17 @@
-const { Writable } = require("stream");
+const { Writable, Readable } = require("stream");
 
-const fastaStorage = require('utils/fasta-store');
+const store = require('utils/object-store');
 
 const TaskLog = require('models/taskLog');
 const Genome = require('models/genome');
-const Queue = require('models/queue');
-const store = require('utils/object-store');
 
 const notify = require('services/genome/notify');
 const docker = require('services/docker');
-const { getImageName, taskTypes } = require('manifest.js');
+const { getImageName } = require('manifest.js');
 const { addTaskDefaults } = require('manifest');
+const Queue = require('models/queue');
 
 const LOGGER = require('utils/logging').createLogger('runner');
-
 // Based on https://stackoverflow.com/a/12502559
 // by https://stackoverflow.com/users/569544/jar-jar-beans
 // This is not a secure random number
@@ -21,19 +19,35 @@ const random = () => Math.random().toString(36).slice(2, 10);
 
 const slugify = (task) => task.replace(/[^a-zA-Z0-9]+/g, '_').replace(/[_]+/g, '_').replace(/_$/g, '');
 
-async function runTask({ fileId, task, version, resources, organismId, speciesId, genusId, timeout }) {
+function createInputStream(inputAnalysis) {
+  async function* gen() {
+    const doc = JSON.parse(inputAnalysis.toString());
+    const string = JSON.stringify(doc.results);
+    yield string;
+  }
+
+  return Readable.from(gen());
+}
+
+async function runTask(
+  {
+    fileId,
+    task,
+    version,
+    inputTask,
+    inputTaskVersion,
+    resources,
+    organismId,
+    speciesId,
+    genusId,
+    timeout,
+  }) {
   const container = await docker(
     getImageName(task, version),
     {
       PW_ORGANISM_TAXID: organismId,
       PW_SPECIES_TAXID: speciesId,
       PW_GENUS_TAXID: genusId,
-      PW_FILE_ID: fileId,
-      // TODO: remove old API
-      WGSA_ORGANISM_TAXID: organismId,
-      WGSA_SPECIES_TAXID: speciesId,
-      WGSA_GENUS_TAXID: genusId,
-      WGSA_FILE_ID: fileId,
     },
     timeout,
     resources,
@@ -55,10 +69,12 @@ async function runTask({ fileId, task, version, resources, organismId, speciesId
   await container.start();
   LOGGER.info('spawn', container.id, 'for task', task, 'file', fileId, 'organismId', organismId);
 
+  // Fetch the analysis result for the container input
+  const inputAnalysis = await store.getAnalysis(inputTask, inputTaskVersion, fileId, organismId);
   try {
-    const stream = fastaStorage.fetch(fileId);
+    const stream = createInputStream(inputAnalysis);
     stream.on('error', (err) => {
-      LOGGER.info(`Error in input stream, destroying container: ${err.message}`);
+      LOGGER.info(`Error in input stream, destroying container. ${err.message}`);
       container.kill();
     });
     stream.pipe(container.stdin);
@@ -89,7 +105,7 @@ async function runTask({ fileId, task, version, resources, organismId, speciesId
 }
 
 module.exports = async function ({ spec, metadata, precache = false, priority }) {
-  const { task, version, resources, timeout, andThen } = spec;
+  const { task, version, resources, timeout, inputTask, inputTaskVersion, andThen = [] } = spec;
   const {
     organismId,
     speciesId,
@@ -111,6 +127,8 @@ module.exports = async function ({ spec, metadata, precache = false, priority })
       fileId,
       task,
       version,
+      inputTask,
+      inputTaskVersion,
       organismId,
       speciesId,
       genusId,
@@ -122,21 +140,18 @@ module.exports = async function ({ spec, metadata, precache = false, priority })
     await store.putAnalysis(task, version, fileId, organismId, doc);
   }
 
-  if (!!andThen) {
-    for (const nextTask of andThen) {
-      const newSpec = addTaskDefaults({
-        inputTask: task,
-        inputTaskVersion: version,
-        ...nextTask,
-      });
-      newSpec.taskType = taskTypes.followOn;
-      await Queue.enqueue({
-        spec: newSpec,
-        metadata,
-        precache,
-        overridePriority: priority,
-      });
-    }
+  for (const nextTask of andThen) {
+    const newSpec = addTaskDefaults({
+      inputTask: task,
+      inputTaskVersion: version,
+      ...nextTask,
+    });
+    await Queue.enqueue({
+      spec: newSpec,
+      metadata,
+      precache,
+      overridePriority: priority,
+    });
   }
 
   if (!precache) {

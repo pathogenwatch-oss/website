@@ -5,6 +5,7 @@ const {
   organismHasPopulation,
   getCollectionSchemes,
   getTasksByOrganism,
+  getTaskListByOrganism,
 } = require('manifest');
 
 const summaryFields = [
@@ -454,7 +455,7 @@ module.exports = async function (props) {
     // eslint-disable-next-line no-param-reassign
     props.query.organismId = '2697049';
   }
-  const tasks = getTasksByOrganism(props.query, props.user).map((_) => _.task);
+  const tasks = getTaskListByOrganism(props.query, props.user).map((_) => _.task);
   const summary = await Genome.getSummary(
     summaryFields.filter((_) => (_.task ? tasks.includes(_.task) : true)),
     { ...props, deployedOrganisms }
@@ -489,7 +490,7 @@ module.exports = async function (props) {
 
   if (Object.keys(taxQuery).length > 0) {
     const query = { ...props.query, ...taxQuery };
-    const nextTasks = getTasksByOrganism(query, props.user);
+    const nextTasks = getTaskListByOrganism(query, props.user);
     const missingTasks = [];
 
     for (const { task } of nextTasks) {

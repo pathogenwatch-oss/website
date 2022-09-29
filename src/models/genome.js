@@ -127,7 +127,6 @@ schema.index({
   'analysis.serotype.subspecies': 1,
   'analysis.serotype.value': 1,
 });
-
 schema.index({
   public: 1,
   binned: 1,
@@ -136,19 +135,16 @@ schema.index({
   'analysis.serotype.subspecies': 1,
   'analysis.serotype.value': 1,
 }, { partialFilterExpression: { public: true, binned: false } });
-
 schema.index({
   public: 1,
   binned: 1,
   'analysis.cgmlst.scheme': 1,
 }, { partialFilterExpression: { public: true, binned: false } });
-
 schema.index({
   _user: 1,
   binned: 1,
   'analysis.cgmlst.scheme': 1,
 });
-
 // Need these as well
 schema.index({ public: 1, binned: 1, createdAt: -1 }, { partialFilterExpression: { public: true, binned: false } });
 schema.index({ _user: 1, binned: 1, createdAt: -1 });
@@ -158,7 +154,6 @@ schema.index({ public: 1, _user: 1, binned: 1, createdAt: -1 }, {
     binned: false,
   },
 });
-
 // mlst as well
 schema.index({
   public: 1,
@@ -174,7 +169,6 @@ schema.index({
   'analysis.mlst.st': 1,
   'analysis.mlst2.st': 1,
 });
-
 schema.index({
   public: 1,
   binned: 1,
@@ -534,6 +528,7 @@ schema.statics.getSort = function (sort = 'createdAt-') {
 
 schema.statics.getForCollection = function (query, user = {}) {
   return this.find(query, {
+    'analysis.klebsiella-lincodes': 1,
     'analysis.core.fp.reference': 1,
     'analysis.core.summary': 1,
     'analysis.genotyphi': 1,

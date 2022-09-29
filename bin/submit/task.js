@@ -37,7 +37,7 @@ function submitTasks(genomes) {
     const { speciator = {} } = analysis;
     const user = await User.findById(_user, { flags: 1 });
     if (!user) return;
-    const tasks = manifest.getTasksByOrganism(speciator, user);
+    const tasks = Object.values(manifest.getTasksByOrganism(speciator, user));
 
     const requestedTask = tasks.find(_ => _.task === task);
     console.log(task, requestedTask);

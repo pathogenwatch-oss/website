@@ -1,8 +1,9 @@
+/* eslint-disable no-console */
 const mongoConnection = require('utils/mongoConnection');
 const argv = require('named-argv');
 const mapLimit = require('promise-map-limit');
 const User = require('models/user');
-const { getTasksByOrganism } = require('manifest');
+const { getTasksByOrganism, getTaskListByOrganism } = require('manifest');
 const Genome = require('models/genome');
 const Analysis = require('models/analysis')
 
@@ -34,7 +35,7 @@ async function cleanGenomeCache(genome, newAnalysis, oldAnalysis) {
   if (!newAnalysis) {
     return;
   }
-  // If not in records, speciesId has changed or it's a non-species level organism full update anyway
+  // If not in records, speciesId has changed, or it's a non-species level organism full update anyway
   if (!oldAnalysis || (oldAnalysis && (newAnalysis.speciesId !== oldAnalysis.speciesId || (speciator.organismId !== speciator.speciesId && newAnalysis.taxId !== speciator.organismId)))) {
     count = count + 1;
     console.log(`${count} ${genome.fileId}`);
@@ -54,26 +55,27 @@ async function cleanGenomeCache(genome, newAnalysis, oldAnalysis) {
 
     // Get set of old tasks for that organism.
     const tasks = !user ?
-      getTasksByOrganism({
+      getTaskListByOrganism({
         organismId: oldOrganismId,
         speciesId: oldSpeciesId,
         genusId: oldGenusId,
-        superkingdomId: oldSuperkingdomId
+        superkingdomId: oldSuperkingdomId,
       }, { canRun: task => !hasFlags(task) }) :
-      getTasksByOrganism({
+      getTaskListByOrganism({
         organismId: oldOrganismId,
         speciesId: oldSpeciesId,
         genusId: oldGenusId,
-        superkingdomId: oldSuperkingdomId
+        superkingdomId: oldSuperkingdomId,
       }, user);
 
     if (doIt) {
       // Delete the task results from the cache for that fileId
       for (const taskEntry of tasks) {
-        await Analysis.deleteOne({ 'fileId': genome.fileId, 'task': taskEntry.task, 'version': taskEntry.version });
+        await Analysis.deleteOne({ fileId: genome.fileId, task: taskEntry.task, version: taskEntry.version });
       }
     } else {
-      console.log("!!!!! DUMMY RUN !!!!!")
+      // eslint-disable-next-line no-console
+      console.log("!!!!! DUMMY RUN !!!!!");
     }
   }
 }

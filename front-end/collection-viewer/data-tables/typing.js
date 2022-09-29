@@ -49,6 +49,15 @@ const referenceGroup = {
   },
 };
 
+const cgmlstClassificationGroup = {
+  columnKey: 'cgst',
+  group: true,
+  columns: [ '__cgmlst', '__cgmlst_lincode', '__cgmlst_clonalgroup', '__cgmlst_sublineage' ],
+  get label() {
+    return 'CGMLST CLASSIFICATION';
+  },
+};
+
 const mlstGroup = {
   group: true,
   columnKey: 'mlst',
@@ -112,8 +121,6 @@ const kaptiveGroup = {
 const kleborateGroup = {
   group: true,
   columnKey: 'kleborate',
-  // TODO: add the type columns back in once kleborate v2.2.0 update goes live.
-  // columns: [ '__K_locus', '__O_locus', '__Virulence_Score', '__Aerobactin', '__Colibactin', '__Salmochelin', '__Yersiniabactin', '__RmpADC', '__rmpA2' ],
   columns: [ '__K_locus', '__K_type', '__O_locus', '__O_type', '__Virulence_Score', '__Aerobactin', '__Colibactin', '__Salmochelin', '__Yersiniabactin', '__RmpADC', '__rmpA2' ],
 };
 
@@ -143,6 +150,7 @@ function getTypingColumnGroups(uiOptions, hasAltMLST, {
   inctyper,
   kaptive,
   kleborate,
+  'klebsiella-lincodes': klebsiellaLincodes,
   mlst,
   ngmast,
   "ngono-markers": ngonoMarkers,
@@ -155,6 +163,7 @@ function getTypingColumnGroups(uiOptions, hasAltMLST, {
     serotype ? serotypeGroup : null,
     !uiOptions.hasPopulation ? null : referenceGroup,
     mlst ? mlstGroup : null,
+    klebsiellaLincodes ? cgmlstClassificationGroup : null,
     hasAltMLST ? mlst2Group : null,
     ngstar ? ngStarGroup : null,
     ngmast ? ngMastGroup : null,
@@ -171,6 +180,7 @@ function getTypingColumnGroups(uiOptions, hasAltMLST, {
 }
 
 export function hasTyping({ hasPopulation }, {
+  'cgmlst-classifier': cgmlstClassifier,
   genotyphi,
   inctyper,
   kaptive,
@@ -183,7 +193,7 @@ export function hasTyping({ hasPopulation }, {
   serotype,
   vista,
 }) {
-  return !(!hasPopulation && !mlst && !genotyphi && !inctyper && !kaptive && !kleborate && !ngmast && !!ngonoMarkers && !ngstar && !pangolin && !serotype && !vista);
+  return !(!hasPopulation && !mlst && !genotyphi && !inctyper && !kaptive && !kleborate && !cgmlstClassifier && !ngmast && !!ngonoMarkers && !ngstar && !pangolin && !serotype && !vista);
 }
 
 function updateTypingSettings({ genomes }) {
@@ -213,7 +223,7 @@ function checkAnalysesPresent({ exclude = [] }, { genomes }, analyses) {
 export default function (state = initialState, { type, payload }) {
   switch (type) {
     case FETCH_COLLECTION.SUCCESS: {
-      const foundAnalyses = checkAnalysesPresent(Organisms.uiOptions, payload.result, [ 'genotyphi', 'inctyper', 'kaptive', 'kleborate', 'mlst', 'ngmast', 'ngono-markers', 'ngstar', 'pangolin', 'serotype', 'vista' ]);
+      const foundAnalyses = checkAnalysesPresent(Organisms.uiOptions, payload.result, [ 'klebsiella-lincodes', 'genotyphi', 'inctyper', 'kaptive', 'kleborate', 'mlst', 'ngmast', 'ngono-markers', 'ngstar', 'pangolin', 'serotype', 'vista' ]);
       const active = hasTyping(Organisms.uiOptions, foundAnalyses);
 
       if (!active) {

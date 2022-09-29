@@ -128,6 +128,17 @@ async function runJob(job, releaseResources) {
         LOGGER.error(err);
         await Queue.handleFailure(job, err.message);
       }
+    } else if (taskType === taskTypes.followOn) {
+      try {
+        await request('tasks', 'run-follow-on', { spec, timeout$: timeout * 1000 * 1.1, metadata, precache });
+        await Queue.handleSuccess(job);
+      } catch (err) {
+        LOGGER.error(err);
+        await Queue.handleFailure(job, err.message);
+        if (!retry) {
+          await request('genome', 'add-error', { spec, metadata });
+        }
+      }
     } else {
       const errMessage = `Don't know how to handle job of type ${taskType} (task=${task} version=${version})`;
       LOGGER.error(errMessage);
@@ -145,6 +156,7 @@ async function subscribeToQueue(queueName, taskType) {
   const heartbeatFile = '/tmp/pw-worker-heartbeat';
   fs.writeFileSync(heartbeatFile, new Date().toISOString());
 
+  // eslint-disable-next-line no-constant-condition
   while (true) {
     // We could make a small change so that we exclude jobs for users
     // who recently had a task run.  That would be a small step towards

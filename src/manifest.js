@@ -16,6 +16,7 @@ const taskTypes = {
   task: 'task',
   collection: 'collection',
   clustering: 'clustering',
+  followOn: 'followOn',
 };
 module.exports.taskTypes = taskTypes;
 
@@ -34,6 +35,7 @@ function formatMemory(value) {
       throw new Error(`Don't understand units of memory value ${value}`);
   }
 }
+
 module.exports.formatMemory = formatMemory;
 
 function formatTime(value) {
@@ -53,6 +55,7 @@ function formatTime(value) {
       throw new Error(`Don't understand units of time value ${value}`);
   }
 }
+
 module.exports.formatTime = formatTime;
 
 function addTaskDefaults(task) {
@@ -87,28 +90,32 @@ function addTaskDefaults(task) {
   }
   resources.memory = formatMemory(resources.memory);
 
-  switch (task.task) {
-    case 'assembly':
-      task.taskType = taskTypes.assembly;
-      break;
-    case 'speciator':
-      task.taskType = taskTypes.genome;
-      break;
-    case 'tree':
-    case 'subtree':
-      task.taskType = taskTypes.collection;
-      break;
-    case 'clustering':
-      task.taskType = taskTypes.clustering;
-      break;
-    default:
-      task.taskType = taskTypes.task;
+  if (!('taskType' in task)) {
+    switch (task.task) {
+      case 'assembly':
+        task.taskType = taskTypes.assembly;
+        break;
+      case 'speciator':
+        task.taskType = taskTypes.genome;
+        break;
+      case 'tree':
+      case 'subtree':
+        task.taskType = taskTypes.collection;
+        break;
+      case 'clustering':
+        task.taskType = taskTypes.clustering;
+        break;
+      default:
+        task.taskType = taskTypes.task;
+    }
   }
 
   task.resources = resources;
   task.timeout = formatTime(task.timeout || defaultTimeout);
   return task;
 }
+
+module.exports.addTaskDefaults = addTaskDefaults;
 
 function getImageName(task, version) {
   assert.ok(task, "Need task to be defined");
@@ -157,7 +164,18 @@ const defaultUser = {
   canRun: (task) => !hasFlags(task),
 };
 
-module.exports.getTasksByOrganism = function (
+function iterateTasks(taskList, apply) {
+  for (const task of taskList) {
+    apply(task);
+    if ('andThen' in task) {
+      iterateTasks(task.andThen, apply);
+    }
+  }
+  return taskList;
+}
+
+
+function getTasksByOrganism(
   { organismId, speciesId, genusId, superkingdomId },
   user = defaultUser
 ) {
@@ -170,6 +188,8 @@ module.exports.getTasksByOrganism = function (
   // or the first one listed.
   // If there isn't a user specified, we assume they're not part of any experiments.
 
+  // Note that this doesn't currently deal with follow-on tasks. Task selection is solely based on the top level descriptions.
+  // It would probably make sense to at least handle alternative test (flagged) versions
   for (const id of [ 'all', superkingdomId, genusId, speciesId, organismId ]) {
     if (!id) continue;
     // There is probably a better method than looping twice but it's not obvious and this seems clear
@@ -184,14 +204,60 @@ module.exports.getTasksByOrganism = function (
       if (!uniqueTasks[task.task]) {
         uniqueTasks[task.task] = task;
       } else if (hasFlags(task) && !hasFlags(uniqueTasks[task.task])) {
-        // There is a previous version but there is also one with a corresponding feature flag so we'll run that instead
+        // There is a previous version but there is also one with a corresponding feature flag, so we'll run that instead
         uniqueTasks[task.task] = task;
       }
     }
   }
 
-  return Object.values(uniqueTasks).map(addTaskDefaults);
+  // Then we need to add the remaining config to each task.
+  function addFollowOnTaskDefaults(taskList, inputTask, inputTaskVersion) {
+    for (const task of taskList) {
+      task.taskType = taskTypes.followOn;
+      task.inputTask = inputTask;
+      task.inputTaskVersion = inputTaskVersion;
+      addTaskDefaults(task);
+      if ('andThen' in task) {
+        addFollowOnTaskDefaults(task.andThen);
+      }
+    }
+  }
+
+  for (const task of Object.values(uniqueTasks)) {
+    addTaskDefaults(task);
+    if ('andThen' in task) {
+      addFollowOnTaskDefaults(task.andThen, task.task, task.version);
+    }
+  }
+
+  return uniqueTasks;
+}
+
+module.exports.getTaskListByOrganism = function (
+  { organismId, speciesId, genusId, superkingdomId },
+  user = defaultUser
+) {
+  function flattenTasks(nestedTasks) {
+    let flattened = [];
+    for (const task of nestedTasks) {
+      flattened.push(task);
+      if ('andThen' in task) {
+        flattened = flattened.concat(flattenTasks(task.andThen));
+      }
+    }
+    return flattened;
+  }
+
+  return flattenTasks(
+    Object.values(
+      getTasksByOrganism(
+        { organismId, speciesId, genusId, superkingdomId },
+        user
+      )));
 };
+
+
+module.exports.getTasksByOrganism = getTasksByOrganism;
 
 module.exports.getCollectionTask = function (organismId, task, user = defaultUser) {
   const collectionTasks = tasks.collection;

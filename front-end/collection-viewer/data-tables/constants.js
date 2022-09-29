@@ -25,7 +25,6 @@ export const systemDataColumns = {
     getCellContents({ valueGetter }, data) {
       const { literatureLink } = data;
       if (!literatureLink) return null;
-      const url = literatureLink.type === 'pubmed' ? 'http://www.ncbi.nlm.nih.gov/pubmed' : 'https://doi.org';
       return (
         <LiteratureLink
           linkTarget={literatureLink.value}
@@ -41,6 +40,37 @@ export const systemDataColumns = {
     valueGetter({ analysis }) {
       if (!analysis.core || !analysis.core.fp) return null;
       return analysis.core.fp.reference;
+    },
+  },
+  __cgmlst: {
+    columnKey: '__cgmlst',
+    valueGetter({ analysis }) {
+      if (!analysis['klebsiella-lincodes']) return null;
+      return /^\d+$/.test(analysis['klebsiella-lincodes'].cgST) ? analysis['klebsiella-lincodes'].cgST : `*${analysis['klebsiella-lincodes'].cgST.slice(0, 4)}`;
+    },
+  },
+  __cgmlst_lincode: {
+    columnKey: '__cgmlst_lincode',
+    label: 'LINCODE',
+    valueGetter({ analysis }) {
+      if (!analysis['klebsiella-lincodes']) return null;
+      return analysis['klebsiella-lincodes'].LINcode.map(code => code !== '' && code !== '*' ? code : '?').join('_');
+    },
+  },
+  __cgmlst_clonalgroup: {
+    columnKey: '__cgmlst_clonalgroup',
+    label: 'CLONAL GROUP',
+    valueGetter({ analysis }) {
+      if (!analysis['klebsiella-lincodes']) return null;
+      return analysis['klebsiella-lincodes']['Clonal Group'];
+    },
+  },
+  __cgmlst_sublineage: {
+    columnKey: '__cgmlst_sublineage',
+    label: 'SUBLINEAGE',
+    valueGetter({ analysis }) {
+      if (!analysis['klebsiella-lincodes']) return null;
+      return analysis['klebsiella-lincodes'].Sublineage;
     },
   },
   __mlst: {

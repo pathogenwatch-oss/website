@@ -3,6 +3,17 @@ const Genome = require('models/genome');
 
 const LOGGER = require('utils/logging').createLogger('runner');
 
+function getAllTaskNames(tasks) {
+  return tasks.reduce((all, task) => {
+    all.push(task.task);
+    if ('andThen' in task) {
+      // eslint-disable-next-line no-param-reassign
+      all = all.concat(getAllTaskNames(task.andThen));
+    }
+    return all;
+  }, []);
+}
+
 module.exports = function (
   {
     genomeId,
@@ -17,7 +28,8 @@ module.exports = function (
     precache,
   }
 ) {
-  const taskNames = tasks.map((_) => _.task);
+  const taskNames = getAllTaskNames(tasks); // Includes follow-on tasks.
+
   LOGGER.info(`Submitting tasks [${taskNames}] for ${genomeId}`);
 
   const metadata = {

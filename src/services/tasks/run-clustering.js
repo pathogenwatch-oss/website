@@ -16,79 +16,41 @@ const docker = require('services/docker');
 const { getImageName } = require('manifest.js');
 const { request } = require('services');
 
-const { ServiceRequestError } = require('utils/errors');
 const LOGGER = require('utils/logging').createLogger('runner');
 
 const DEFAULT_THRESHOLD = 50;
 
-function getPrefix(key) {
-  const parts = key.split('/');
-  return `${parts.slice(0, parts.length - 1).join('/')}/`;
-}
-
-async function removeMissingKeys(analysisKeys) {
-  const prefixes = new Set();
-  const missing = new Set(Object.values(analysisKeys));
-  for (const key of Object.values(analysisKeys)) {
-    prefixes.add(getPrefix(key));
-  }
-
-  for (const prefix of prefixes) {
-    for await (const { Key: key } of store.list(prefix)) {
-      missing.delete(key);
-    }
-  }
-
-  LOGGER.error(`Missing cgmlst: ${[ ...missing ].join(', ')}`);
-
-  for (const st of Object.keys(analysisKeys)) {
-    if (missing.has(analysisKeys[st])) delete analysisKeys[st];
-  }
-}
-
-async function getCgmlstKeys({ userId, scheme }) {
-  const query = {
+function buildQuery({ userId, scheme }) {
+  return {
     ...Genome.getPrefilterCondition({ user: userId ? { _id: userId } : null }),
     'analysis.cgmlst.scheme': scheme,
   };
-
-  const projection = {
-    fileId: 1,
-    'analysis.cgmlst.st': 1,
-    'analysis.cgmlst.__v': 1,
-    'analysis.speciator.organismId': 1,
-  };
-
-  const docs = await Genome
-    .find(query, projection)
-    .lean()
-    .cursor();
-
-  const analysisKeys = {};
-
-  for await (const doc of docs) {
-    const { st, __v: version } = doc.analysis.cgmlst;
-    const { fileId } = doc;
-    const organismId = doc.analysis.speciator.organismId;
-    analysisKeys[st] = store.analysisKey('cgmlst', version, fileId, organismId);
-  }
-
-  await removeMissingKeys(analysisKeys);
-
-  if (Object.keys(analysisKeys).length < 2) {
-    throw new Error('Not enough genomes to cluster');
-  }
-
-  return analysisKeys;
 }
 
-function attachInputStream(container, spec, metadata, cgmlstKeys) {
+async function extractCgstSet(metadata) {
+  const cgSTs = {};
+  for await (const doc of Genome.find(buildQuery(metadata), {
+    'analysis.cgmlst.st': 1,
+    fileId: 1,
+  }).lean().cursor()) {
+    // Pick a random unique document for each ST to emulate what the code did previously.
+    cgSTs[doc.analysis.cgmlst.st] = doc.fileId;
+  }
+  return cgSTs;
+}
+
+
+function attachInputStream(container, spec, metadata) {
   const { userId = 'public', scheme } = metadata;
   const { version } = spec;
 
-  async function* gen() {
+  async function* generateInput() {
+    // Two queries are required to get the information in the order required by the clustering program while also being
+    // fairly memory efficient. The reduction to a single profile per ST is not essential but for Klebsiella it does
+    // remove a lot of redundancy.
+    const cgSTs = await extractCgstSet(metadata);
     yield bson.serialize({
-      STs: Object.keys(cgmlstKeys),
+      STs: Object.keys(cgSTs),
       maxThreshold: DEFAULT_THRESHOLD,
     });
 
@@ -101,24 +63,35 @@ function attachInputStream(container, spec, metadata, cgmlstKeys) {
       }
     }
 
-    let idx = -1;
-    const keys = Object.values(cgmlstKeys);
-    for await (const value of store.iterGet(keys)) {
-      idx += 1;
-      try {
-        if (value === undefined) { // noinspection ExceptionCaughtLocallyJS
-          throw new ServiceRequestError('Cannot cluster because a cgmlst profile is missing');
-        }
-        const { _id, results } = JSON.parse(value);
-        yield bson.serialize({ _id, results });
-      } catch (err) {
-        LOGGER.error(`Cluster error: ${keys[idx]}`);
-        throw err;
+    const fileIds = new Set(Object.values(cgSTs));
+
+    const query = {
+      ...Genome.getPrefilterCondition({ user: userId ? { _id: userId } : null }),
+      'analysis.cgmlst.scheme': scheme,
+    };
+
+    const projection = {
+      fileId: 1,
+      'analysis.cgmlst.st': 1,
+      'analysis.cgmlst.matches': 1,
+      'analysis.cgmlst.schemeSize': 1,
+    };
+
+    for await (const matchDoc of Genome.find(query, projection).lean().cursor()) {
+      if (fileIds.has(matchDoc.fileId)) {
+        yield bson.serialize({
+          _id: matchDoc.fileId,
+          results: {
+            st: matchDoc.analysis.cgmlst.st,
+            matches: matchDoc.analysis.cgmlst.matches,
+            schemeSize: matchDoc.schemeSize,
+          },
+        });
       }
     }
   }
 
-  const inputStream = Readable.from(gen());
+  const inputStream = Readable.from(generateInput());
   inputStream.on('error', (err) => {
     LOGGER.error(err);
     container.kill();
@@ -186,11 +159,13 @@ async function uploadResults(results, spec, metadata) {
   await store.putAnalysis('cgmlst-clustering', fullVersion, userId ? userId.toString() : 'public', undefined, results);
 }
 
-async function handleContainerExit(container, spec, metadata) {
+async function handleContainerExit(container, spec, metadata, inputStream) {
   const { task, version, resources } = spec;
   const { userId, scheme, taskId } = metadata;
 
   await container.start();
+  inputStream(container, spec, metadata);
+
   const startTime = process.hrtime();
   LOGGER.info('spawn', container.id, 'running task', task);
 
@@ -220,12 +195,11 @@ function createContainer(spec, timeout, resources = {}) {
 }
 
 async function runTask(spec, metadata, timeout, resources) {
-  const cgmlstKeys = await getCgmlstKeys(metadata);
+  // Using a pre-query to get the STs and then streaming the actual records to the container directly.
 
   const container = await createContainer(spec, timeout, resources);
   const whenResults = handleContainerOutput(container, spec, metadata);
-  attachInputStream(container, spec, metadata, cgmlstKeys);
-  const statusCode = await handleContainerExit(container, spec, metadata);
+  const statusCode = await handleContainerExit(container, spec, metadata, attachInputStream);
 
   const results = await whenResults;
   if (container.timeout) throw new Error('timeout');

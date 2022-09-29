@@ -29,8 +29,8 @@ function summariseAnalysis(analysis) {
   }
 
   if (task === 'cgmlst') {
-    const { st, scheme, source } = results;
-    return { __v: version, st, scheme, source };
+    const { st, code, scheme, schemeSize, source, matches } = results;
+    return { __v: version, st, code, scheme, schemeSize, source, matches: matches.map(match => { return { gene: match.gene, id: match.id }; }) };
   }
 
   return { __v: version, ...results };

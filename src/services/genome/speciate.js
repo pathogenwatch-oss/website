@@ -7,24 +7,70 @@ const { getSpeciatorTask, getTasksByOrganism } = require('manifest');
 const notify = require('services/genome/notify');
 const { summariseAnalysis } = require('utils/analysis');
 
+
+async function fetchCachedResults(tasks, fileId, organismId) {
+  const analysisKeys = tasks.map(
+    ({ task, version }) => store.analysisKey(task, version, fileId, organismId)
+  );
+  const cachedResults = {};
+  for await (const value of store.iterGet(analysisKeys)) {
+    if (value === undefined) continue;
+    const cachedResult = JSON.parse(value);
+    cachedResults[cachedResult.task] = cachedResult;
+  }
+  return cachedResults;
+}
+
+async function addFollowOnTasks(cachedResults, tasks, fileId, organismId) {
+  let cachedUpdate = cachedResults;
+  for (const taskCheck of tasks) {
+    if ('andThen' in taskCheck && taskCheck.task in cachedResults) {
+      const cachedFollowOn = await fetchCachedResults(taskCheck.andThen, fileId, organismId);
+      const followOnUpdate = { ...cachedUpdate, ...cachedFollowOn };
+      const childResults = await addFollowOnTasks(followOnUpdate, taskCheck.andThen, fileId, organismId);
+      cachedUpdate = { ...followOnUpdate, ...childResults };
+    }
+  }
+  return cachedUpdate;
+}
+
+async function getCachedResults(tasks, fileId, organismId) {
+  const cachedResults = await fetchCachedResults(Object.values(tasks), fileId, organismId);
+  return await addFollowOnTasks(cachedResults, Object.values(tasks), fileId, organismId);
+}
+
+function extractMissingTasks(tasks, existingTaskNames, inputTask, inputTaskVersion) {
+  return Object.values(tasks).reduce(
+    (missing, task) => {
+      if (!existingTaskNames.has(task.task)) {
+        if (!!inputTask) {
+          missing.push({ inputTask, taskType: '', inputTaskVersion, ...task });
+        } else {
+          missing.push(task);
+        }
+      } else if ('andThen' in task) {
+        // eslint-disable-next-line no-param-reassign
+        missing = missing.concat(extractMissingTasks(task.andThen, existingTaskNames, task.version));
+      }
+      return missing;
+    },
+    []);
+}
+
 async function submitTasks({ genomeId, fileId, uploadedAt, clientId, userId }, doc, precache, priority) {
   const speciatorResult = summariseAnalysis(doc);
   const { organismId, speciesId, genusId, superkingdomId } = speciatorResult;
   const user = await User.findById(userId, { flags: 1 });
   const tasks = getTasksByOrganism(speciatorResult, user);
 
-  const analysisKeys = tasks.map(({ task, version }) => store.analysisKey(task, version, fileId, organismId));
-  const cachedResults = [];
-  for await (const value of store.iterGet(analysisKeys)) {
-    if (value === undefined) continue;
-    cachedResults.push(JSON.parse(value));
-  }
+  const cachedResults = await getCachedResults(tasks, fileId, organismId);
 
-  await Genome.addAnalysisResults(genomeId, doc, ...cachedResults);
+  await Genome.addAnalysisResults(genomeId, doc, ...Object.values(cachedResults));
 
-  const existingTasks = [ doc, ...cachedResults ];
-  const existingTaskNames = new Set(cachedResults.map((_) => _.task));
-  const missingTasks = tasks.filter((_) => !existingTaskNames.has(_.task));
+  const existingTasks = [ doc, ...Object.values(cachedResults) ];
+  const existingTaskNames = new Set(Object.keys(cachedResults));
+
+  const missingTasks = extractMissingTasks(tasks, existingTaskNames);
 
   if (clientId && existingTasks.length > 0) {
     notify({ genomeId, clientId, uploadedAt, tasks: existingTasks });

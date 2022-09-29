@@ -1,6 +1,7 @@
 import React from 'react';
 
 import MLST from './MLST.react';
+import KlebsiellaLINcode from './KlebsiellaLINcode.react';
 import Genotyphi from './Genotyphi.react';
 import NgMast from './NgMast.react';
 import Serotype from './Serotype.react';
@@ -14,6 +15,7 @@ import VistaGenotype from './VistaGenotype.react';
 
 function getSecondaryTyping(genome) {
   const {
+    "klebsiella-lincodes": klebsiellaLincodes,
     genotyphi,
     ngmast,
     serotype,
@@ -22,8 +24,8 @@ function getSecondaryTyping(genome) {
     kleborate,
     "ngono-markers": ngonoMarkers,
     pangolin,
-    spn_pbp_amr,
-    vista
+    spn_pbp_amr: spnPbpAmr,
+    vista,
   } = genome.analysis;
   return (
     <React.Fragment>
@@ -51,6 +53,10 @@ function getSecondaryTyping(genome) {
         <div>
           <NgonoVariants result={ngonoMarkers} />
         </div>}
+      {!!klebsiellaLincodes &&
+        <div>
+          <KlebsiellaLINcode result={klebsiellaLincodes} />
+        </div>}
       {!!kaptive &&
         <div>
           <Kaptive genome={genome} />
@@ -59,7 +65,7 @@ function getSecondaryTyping(genome) {
         <div>
           <Kleborate genome={genome} />
         </div>}
-      {!!spn_pbp_amr &&
+      {!!spnPbpAmr &&
         <div>
           <SpnPbpType genome={genome} />
         </div>}
