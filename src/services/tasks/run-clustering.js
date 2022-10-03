@@ -10,6 +10,7 @@ const bson = new BSON();
 
 const store = require('utils/object-store');
 const Genome = require('models/genome');
+const CgmlstProfile = require('models/cgmlstprofile');
 const TaskLog = require('models/taskLog');
 const docker = require('services/docker');
 
@@ -63,31 +64,10 @@ function attachInputStream(container, spec, metadata) {
       }
     }
 
-    const fileIds = new Set(Object.values(cgSTs));
+    const query = { fileId: { $in: Object.values(cgSTs) } };
 
-    const query = {
-      ...Genome.getPrefilterCondition({ user: userId ? { _id: userId } : null }),
-      'analysis.cgmlst.scheme': scheme,
-    };
-
-    const projection = {
-      fileId: 1,
-      'analysis.cgmlst.st': 1,
-      'analysis.cgmlst.matches': 1,
-      'analysis.cgmlst.schemeSize': 1,
-    };
-
-    for await (const matchDoc of Genome.find(query, projection).lean().cursor()) {
-      if (fileIds.has(matchDoc.fileId)) {
-        yield bson.serialize({
-          _id: matchDoc.fileId,
-          results: {
-            st: matchDoc.analysis.cgmlst.st,
-            matches: matchDoc.analysis.cgmlst.matches,
-            schemeSize: matchDoc.schemeSize,
-          },
-        });
-      }
+    for await (const { fileId, st, matches, schemeSize } of CgmlstProfile.find(query, { _id: 0 }).lean().cursor()) {
+      yield bson.serialize({ fileId, results: { st, matches, schemeSize } });
     }
   }
 
