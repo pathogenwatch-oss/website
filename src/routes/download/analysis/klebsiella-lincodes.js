@@ -3,19 +3,22 @@ const csv = require('csv');
 const Genome = require('models/genome');
 
 const transformer = function (doc) {
+  const result = doc.analysis['klebsiella-lincodes'];
   return {
     'Genome ID': doc._id.toString(),
     'Genome Name': doc.name,
-    Version: doc.analysis['klebsiella-lincodes'].__v,
-    cgST: doc.analysis['klebsiella-lincodes'].cgST,
-    LINcode: doc.analysis['klebsiella-lincodes'].LINcode,
-    'Clonal Group': doc.analysis['klebsiella-lincodes']['Clonal Group'],
-    Sublineage: doc.analysis['klebsiella-lincodes'].Sublineage,
-    'Reference profile mismatches': doc.analysis['klebsiella-lincodes'].mismatches,
-    'Closest profile(s)': doc.analysis['klebsiella-lincodes']
+    Version: result.__v,
+    'cgST': result.cgST,
+    'Closest cgST': result['Closest cgST'],
+    Mismatches: result.mismatches,
+    LINcode: result.LINcode,
+    'Clonal Group': result['Clonal Group'],
+    Sublineage: result.Sublineage,
+    'Reference profile mismatches': result.mismatches,
+    'Closest profile(s)': result
       .matches
       .map(match => `cgST:${match.cgST} LINcode:${match.LINcode}`)
-      .join(', '),
+      .join(';'),
   };
 };
 
