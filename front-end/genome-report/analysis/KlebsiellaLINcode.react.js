@@ -1,4 +1,7 @@
 import React from 'react';
+import Methods from '@cgps/phylocanvas/methods';
+import { Metadata } from '~/genome-report/components';
+import { ST } from '~/mlst';
 
 const definedCgstPatten = /^\d+$/;
 
@@ -21,14 +24,13 @@ export default ({ result }) => {
         </div>
         <div className="pw-genome-report-metadata">
           <dt>LINcode</dt>
-          <dd>{result.LINcode.map(code => code !== "" && code !== "*" ? code : '?').join("_")}</dd>
+          <dd>{result.LINcode.join("_")}</dd>
         </div>
       </dl>
       <dl className="grid">
-        <div className="pw-genome-report-metadata">
-          <dt>cgST</dt>
-          <dd>{definedCgstPatten.test(result.cgST) ? result.cgST : `*${result.cgST.slice(0, 4)}`}</dd>
-        </div>
+        <Metadata label="Core genome sequence type">
+          <ST id={result.cgST} />
+        </Metadata>
         {
           !(definedCgstPatten.test(result.cgST)) ? (
             <div className="pw-genome-report-metadata">
@@ -40,8 +42,8 @@ export default ({ result }) => {
         {
           !(definedCgstPatten.test(result.cgST)) ? (
             <div className="pw-genome-report-metadata">
-              <dt>Mismatches</dt>
-              <dd>{result.mismatches}/{result.schemeSize}</dd>
+              <dt>Identity</dt>
+              <dd>{`${result.identity}% (${result.identical}/${result.comparedLoci})`}</dd>
             </div>
           ) : null
         }

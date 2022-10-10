@@ -10,11 +10,12 @@ const transformer = function (doc) {
     Version: result.__v,
     'cgST': result.cgST,
     'Closest cgST': result['Closest cgST'],
-    Mismatches: result.mismatches,
     LINcode: result.LINcode,
     'Clonal Group': result['Clonal Group'],
     Sublineage: result.Sublineage,
-    'Reference profile mismatches': result.mismatches,
+    Identity: result.identity,
+    Identical: result.identical,
+    'Compared Loci Count': result.comparedLoci,
     'Closest profile(s)': result
       .matches
       .map(match => `cgST:${match.cgST} LINcode:${match.LINcode}`)
