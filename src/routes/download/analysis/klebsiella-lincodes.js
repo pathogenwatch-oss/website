@@ -10,7 +10,7 @@ const transformer = function (doc) {
     Version: result.__v,
     'cgST': result.cgST,
     'Closest cgST': result['Closest cgST'],
-    LINcode: result.LINcode,
+    'LIN code': result.LINcode.join(','),
     Sublineage: result.Sublineage,
     'Clonal Group': result['Clonal Group'],
     Identity: result.identity,
@@ -18,7 +18,7 @@ const transformer = function (doc) {
     'Compared Loci Count': result.comparedLoci,
     'Closest profile(s)': result
       .matches
-      .map(match => `cgST:${match.cgST} LINcode:${match.LINcode}`)
+      .map(match => `cgST:${match.st} LIN code:${match.LINcode}`)
       .join(';'),
   };
 };

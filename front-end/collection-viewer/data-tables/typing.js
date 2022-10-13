@@ -180,11 +180,11 @@ function getTypingColumnGroups(uiOptions, hasAltMLST, {
 }
 
 export function hasTyping({ hasPopulation }, {
-  'cgmlst-classifier': cgmlstClassifier,
   genotyphi,
   inctyper,
   kaptive,
   kleborate,
+  'klebsiella-lincodes': klebsiellaLincodes,
   mlst,
   "ngono-markers": ngonoMarkers,
   ngmast,
@@ -193,7 +193,7 @@ export function hasTyping({ hasPopulation }, {
   serotype,
   vista,
 }) {
-  return !(!hasPopulation && !mlst && !genotyphi && !inctyper && !kaptive && !kleborate && !cgmlstClassifier && !ngmast && !!ngonoMarkers && !ngstar && !pangolin && !serotype && !vista);
+  return !(!hasPopulation && !mlst && !genotyphi && !inctyper && !kaptive && !kleborate && !klebsiellaLincodes && !ngmast && !!ngonoMarkers && !ngstar && !pangolin && !serotype && !vista);
 }
 
 function updateTypingSettings({ genomes }) {
