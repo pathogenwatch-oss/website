@@ -12,18 +12,17 @@ export default ({ result }) => {
       <h2>cgMLST classification – Core genome MLST profile comparison</h2>
     </header>
      <div>
-
       <dl className="grid">
-        <div className="pw-genome-report-metadata">
+         <div className="pw-genome-report-metadata">
+          <dt>Sublineage</dt>
+          <dd>{result.Sublineage !== '' ? result.Sublineage : 'New'}</dd>
+        </div>
+       <div className="pw-genome-report-metadata">
           <dt>Clonal group</dt>
           <dd>{result['Clonal Group'] !== '' ? result['Clonal Group'] : 'New'}</dd>
         </div>
         <div className="pw-genome-report-metadata">
-          <dt>Sublineage</dt>
-          <dd>{result.Sublineage !== '' ? result.Sublineage : 'New'}</dd>
-        </div>
-        <div className="pw-genome-report-metadata">
-          <dt>LINcode</dt>
+          <dt>LIN code</dt>
           <dd>{result.LINcode.join("_")}</dd>
         </div>
       </dl>

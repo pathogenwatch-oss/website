@@ -52,7 +52,7 @@ const referenceGroup = {
 const cgmlstClassificationGroup = {
   columnKey: 'cgst',
   group: true,
-  columns: [ '__cgmlst', '__cgmlst_lincode', '__cgmlst_clonalgroup', '__cgmlst_sublineage' ],
+  columns: [ '__cgmlst', '__cgmlst_lincode', '__cgmlst_sublineage', '__cgmlst_clonalgroup' ],
   get label() {
     return 'CGMLST CLASSIFICATION';
   },

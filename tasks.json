@@ -934,7 +934,7 @@
       },
       {
         "task": "pangolin",
-        "version": "v17.3.0"
+        "version": "v18.0.0"
       }
     ],
     "2751": [
@@ -1377,7 +1377,7 @@
         "andThen": [
           {
             "task": "klebsiella-lincodes",
-            "version": "v1.0.0-10"
+            "version": "v1.0.0-11"
           }
         ]
       },
