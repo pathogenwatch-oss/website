@@ -24,6 +24,7 @@ function getSerotypeHeading(genusId) {
 }
 
 const speciesDependants = [
+  'organismCollection',
   'subspecies',
   'serotype',
   'strain',
@@ -35,6 +36,7 @@ const speciesDependants = [
   'olocusKaptive',
   'genotype',
   'reference',
+  'resistance',
 ];
 const genusDependants = speciesDependants.concat([ 'speciesId', 'klocus', 'olocus', 'collection' ]);
 const collectionDependents = speciesDependants.concat([ 'klocus', 'olocus' ]);

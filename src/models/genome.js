@@ -71,40 +71,35 @@ schema.index({ uploadedAt: 1, binned: 1 });
 schema.index({
   'analysis.mlst.st': 1,
   'analysis.mlst2.st': 1,
-});
-schema.index({ 'analysis.mlst2.st': 1 });
-schema.index({ 'analysis.cgmlst.st': 1 });
+}, { partialFilterExpression: { 'analysis.mlst': { $exists: true } } });
+schema.index({ 'analysis.mlst2.st': 1 }, { partialFilterExpression: { 'analysis.mlst2': { $exists: true } } });
+schema.index({ 'analysis.cgmlst.st': 1 }, { partialFilterExpression: { 'analysis.cgmlst': { $exists: true } } });
 schema.index({
   'analysis.paarsnp.antibiotics.fullName': 1,
   'analysis.paarsnp.antibiotics.state': 1,
-});
-schema.index({ 'analysis.paarsnp.antibiotics.state': 1 });
-schema.index({ 'analysis.speciator.organismName': 1 });
-schema.index({ 'analysis.speciator.speciesId': 1 });
-schema.index({ 'analysis.speciator.genusId': 1 });
-schema.index({ 'analysis.serotype.subspecies': 1 });
-schema.index({ 'analysis.serotype.value': 1 });
-schema.index({
-  'analysis.speciator.speciesName': 1,
-  'analysis.serotype.subspecies': 1,
-  'analysis.serotype.value': 1,
-});
+}, { partialFilterExpression: { 'analysis.paarsnp': { $exists: true } } });
+schema.index({ 'analysis.paarsnp.antibiotics.state': 1 }, { partialFilterExpression: { 'analysis.paarsnp': { $exists: true } } });
+schema.index({ 'analysis.speciator.organismName': 1 }, { partialFilterExpression: { 'analysis.speciator': { $exists: true } } });
+schema.index({ 'analysis.speciator.speciesId': 1 }, { partialFilterExpression: { 'analysis.speciator': { $exists: true } } });
+schema.index({ 'analysis.speciator.genusId': 1 }, { partialFilterExpression: { 'analysis.speciator': { $exists: true } } });
+schema.index({ 'analysis.serotype.subspecies': 1 }, { partialFilterExpression: { 'analysis.serotype': { $exists: true } } });
+schema.index({ 'analysis.serotype.value': 1 }, { partialFilterExpression: { 'analysis.serotype': { $exists: true } } });
+schema.index({ 'analysis.speciator.speciesName': 1, 'analysis.serotype.subspecies': 1, 'analysis.serotype.value': 1 });
 schema.index({ 'analysis.speciator.organismId': 1, 'analysis.speciator.organismName': 1 });
 schema.index({ 'upload.type': 1, 'upload.completed': 1 });
-schema.index({ 'analysis.poppunk2.strain': 1 });
-schema.index({ 'analysis.ngstar.st': 1 });
-schema.index({ 'analysis.ngmast.ngmast': 1 });
-schema.index({ 'analysis.genotyphi.genotype': 1 });
-schema.index({ 'analysis.core.fp.reference': 1 });
-schema.index({ 'analysis.kaptive.kLocus.Best locus match': 1 },
-  { partialFilterExpression: { 'analysis.kaptive': { $exists: true } } });
-schema.index({ 'analysis.kaptive.oLocus.Best locus match': 1 },
-  { partialFilterExpression: { 'analysis.kaptive': { $exists: true } } });
-schema.index({ 'analysis.kleborate.typing.K_locus': 1 });
-schema.index({ 'analysis.kleborate.typing.O_locus': 1 });
-schema.index({ 'analysis.pangolin.lineage': 1 });
-schema.index({ 'analysis.sarscov2-variants.variants.state': 1 });
-schema.index({ 'analysis.sarscov2-variants.variants.name': 1 });
+schema.index({ 'analysis.poppunk2.strain': 1 }, { partialFilterExpression: { 'analysis.poppunk2': { $exists: true } } });
+schema.index({ 'analysis.ngstar.st': 1 }, { partialFilterExpression: { 'analysis.ngstar': { $exists: true } } });
+schema.index({ 'analysis.ngmast.ngmast': 1 }, { partialFilterExpression: { 'analysis.ngmast': { $exists: true } } });
+schema.index({ 'analysis.genotyphi.genotype': 1 }, { partialFilterExpression: { 'analysis.genotyphi': { $exists: true } } });
+schema.index({ 'analysis.core.fp.reference': 1 }, { partialFilterExpression: { 'analysis.core': { $exists: true } } });
+schema.index({ 'analysis.kaptive.kLocus.Best locus match': 1 }, { partialFilterExpression: { 'analysis.kaptive': { $exists: true } } });
+schema.index({ 'analysis.kaptive.oLocus.Best locus match': 1 }, { partialFilterExpression: { 'analysis.kaptive': { $exists: true } } });
+schema.index({ 'analysis.kleborate.typing.K_locus': 1 }, { partialFilterExpression: { 'analysis.kleborate': { $exists: true } } });
+schema.index({ 'analysis.kleborate.typing.O_locus': 1 }, { partialFilterExpression: { 'analysis.kleborate': { $exists: true } } });
+schema.index({ 'analysis.pangolin.lineage': 1 }, { partialFilterExpression: { 'analysis.pangolin': { $exists: true } } });
+schema.index({ 'analysis.sarscov2-variants.variants.state': 1 }, { partialFilterExpression: { 'analysis.sarscov2-variants': { $exists: true } } });
+schema.index({ 'analysis.sarscov2-variants.variants.name': 1 }, { partialFilterExpression: { 'analysis.sarscov2-variants': { $exists: true } } });
+
 schema.index({
   _user: 1,
   binned: 1,
@@ -148,13 +143,16 @@ schema.index({
 // Need these as well
 schema.index({ public: 1, binned: 1, createdAt: -1 }, { partialFilterExpression: { public: true, binned: false } });
 schema.index({ _user: 1, binned: 1, createdAt: -1 });
+schema.index({ public: 1, binned: 1, createdAt: -1 }, { partialFilterExpression: { public: true, binned: false } });
+schema.index({ public: 1, binned: 1, 'analysis.speciator.organismId': 1, createdAt: -1 }, { partialFilterExpression: { public: true, binned: false } });
+schema.index({ _user: 1, binned: 1, 'analysis.speciator.organismId': 1, createdAt: -1 }, { partialFilterExpression: { binned: false } });
 schema.index({ public: 1, _user: 1, binned: 1, createdAt: -1 }, {
   partialFilterExpression: {
     public: false,
     binned: false,
   },
 });
-// mlst as well
+// MLST sort os well.
 schema.index({
   public: 1,
   binned: 1,

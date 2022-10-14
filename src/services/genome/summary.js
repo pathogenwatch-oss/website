@@ -4,11 +4,10 @@ const Organism = require('models/organism');
 const {
   organismHasPopulation,
   getCollectionSchemes,
-  getTasksByOrganism,
   getTaskListByOrganism,
 } = require('manifest');
 
-const summaryFields = [
+const taxonomySummaryFields = [
   {
     field: 'organismId',
     aggregation: ({ deployedOrganisms }) => [
@@ -22,8 +21,57 @@ const summaryFields = [
           count: { $sum: 1 },
         },
       },
+
     ],
   },
+  {
+    field: 'subspecies',
+    // task: 'serotype',
+    aggregation: () => [
+      { $match: { $or: [ { 'analysis.serotype': { $exists: true } }, { 'analysis.speciator.organismId': '2697049' } ] } },
+      {
+        $group: {
+          _id: {
+            $ifNull: [ '$analysis.serotype.subspecies', '$analysis.speciator.organismName' ],
+          },
+          count: { $sum: 1 },
+        },
+      },
+    ],
+  },
+  {
+    field: 'speciesId',
+    aggregation: ({ query }) => {
+      if (Object.keys(query).length <= 1) return null;
+      return [
+        { $match: { 'analysis.speciator.speciesId': { $exists: true } } },
+        {
+          $group: {
+            _id: {
+              label: '$analysis.speciator.speciesName',
+              key: '$analysis.speciator.speciesId',
+            },
+            count: { $sum: 1 },
+          },
+        },
+      ];
+    },
+  },
+  {
+    field: 'genusId',
+    aggregation: () => [
+      { $match: { 'analysis.speciator.genusId': { $exists: true } } },
+      {
+        $group: {
+          _id: { label: '$analysis.speciator.genusName', key: '$analysis.speciator.genusId' },
+          count: { $sum: 1 },
+        },
+      },
+    ],
+  },
+];
+
+const defaultSummaryFields = [
   {
     field: 'organismCgmlst',
     aggregation: () => [
@@ -102,36 +150,6 @@ const summaryFields = [
       ];
     },
   },
-  {
-    field: 'speciesId',
-    aggregation: ({ query }) => {
-      if (Object.keys(query).length <= 1) return null;
-      return [
-        { $match: { 'analysis.speciator.speciesId': { $exists: true } } },
-        {
-          $group: {
-            _id: {
-              label: '$analysis.speciator.speciesName',
-              key: '$analysis.speciator.speciesId',
-            },
-            count: { $sum: 1 },
-          },
-        },
-      ];
-    },
-  },
-  {
-    field: 'genusId',
-    aggregation: () => [
-      { $match: { 'analysis.speciator.genusId': { $exists: true } } },
-      {
-        $group: {
-          _id: { label: '$analysis.speciator.genusName', key: '$analysis.speciator.genusId' },
-          count: { $sum: 1 },
-        },
-      },
-    ],
-  },
   { field: 'country' },
   {
     field: 'access',
@@ -184,24 +202,92 @@ const summaryFields = [
     },
   },
   { field: 'date', range: true, queryKeys: [ 'minDate', 'maxDate' ] },
+];
+
+const genusSummaryFields = [
   {
-    field: 'mlst',
-    task: 'mlst',
+    field: 'collection',
+    aggregation: ({ query, user }) => {
+      // if (!deployedOrganisms.includes(query.organismId)) return null;
+      const collectionAccess = [ { access: 'public' } ];
+      if (user) {
+        collectionAccess.push({ _user: user._id });
+      }
+      const organismId = 'organismId' in query ? query.organismId : (query.organismCollection ? query.organismCollection : query.organismCgmlst);
+      return [
+        { $project: { _id: 1 } }, // don't need genome details
+        {
+          $lookup: { // attach membership info
+            from: 'genomecollections',
+            localField: '_id',
+            foreignField: '_genome',
+            as: 'memberOf',
+          },
+        },
+        { $unwind: '$memberOf' }, // flatten document and filter out genomes not in a collection
+        { $replaceRoot: { newRoot: '$memberOf' } }, // work directly with genomecollection docs
+        { $unwind: '$collections' }, // create record for every membership
+        { $group: { _id: '$collections', count: { $sum: 1 } } }, // summarise membership
+        {
+          $lookup: { // fetch related data
+            from: 'collections',
+            let: { id: '$_id' },
+            pipeline: [
+              {
+                $match: {
+                  $or: collectionAccess,
+                  binned: false,
+                  organismId,
+                },
+              }, // filter by visibility
+              { $match: { $expr: { $eq: [ '$_id', '$$id' ] } } },
+              { $project: { title: 1, token: 1 } },
+            ],
+            as: 'collection',
+          },
+        },
+        { $unwind: '$collection' }, // flatten document and filter out collections that are not visible
+        {
+          $project: { // present in summary format
+            _id: { key: '$collection.token', label: '$collection.title' },
+            count: 1,
+          },
+        },
+      ];
+    },
+  },
+  {
+    field: 'klocus',
+    task: 'kleborate',
     aggregation: () => [
-      { $match: { 'analysis.mlst.st': { $exists: true } } },
-      { $group: { _id: '$analysis.mlst.st', count: { $sum: 1 }, sources: { $addToSet: '$analysis.mlst.source' } } },
+      { $match: { 'analysis.kleborate': { $exists: true } } },
+      {
+        $group: {
+          _id: '$analysis.kleborate.typing.K_locus',
+          count: { $sum: 1 },
+        },
+      },
     ],
   },
   {
-    field: 'mlst2',
-    task: 'mlst2',
+    field: 'olocus',
+    task: 'kleborate',
     aggregation: () => [
-      { $match: { 'analysis.mlst2.st': { $exists: true } } },
-      { $group: { _id: '$analysis.mlst2.st', count: { $sum: 1 }, sources: { $addToSet: '$analysis.mlst2.source' } } },
+      { $match: { 'analysis.kleborate': { $exists: true } } },
+      {
+        $group: {
+          _id: '$analysis.kleborate.typing.O_locus',
+          count: { $sum: 1 },
+        },
+      },
     ],
   },
+];
+
+const speciesSummaryFields = [
   {
     field: 'resistance',
+    task: 'paarsnp',
     aggregation: ({ query }) => [
       {
         $project: {
@@ -226,18 +312,19 @@ const summaryFields = [
     ],
   },
   {
-    field: 'subspecies',
-    // task: 'serotype',
+    field: 'mlst',
+    task: 'mlst',
     aggregation: () => [
-      { $match: { $or: [ { 'analysis.serotype': { $exists: true } }, { 'analysis.speciator.organismId': '2697049' } ] } },
-      {
-        $group: {
-          _id: {
-            $ifNull: [ '$analysis.serotype.subspecies', '$analysis.speciator.organismName' ],
-          },
-          count: { $sum: 1 },
-        },
-      },
+      { $match: { 'analysis.mlst.st': { $exists: true } } },
+      { $group: { _id: '$analysis.mlst.st', count: { $sum: 1 }, sources: { $addToSet: '$analysis.mlst.source' } } },
+    ],
+  },
+  {
+    field: 'mlst2',
+    task: 'mlst2',
+    aggregation: () => [
+      { $match: { 'analysis.mlst2.st': { $exists: true } } },
+      { $group: { _id: '$analysis.mlst2.st', count: { $sum: 1 }, sources: { $addToSet: '$analysis.mlst2.source' } } },
     ],
   },
   {
@@ -300,32 +387,6 @@ const summaryFields = [
       {
         $group: {
           _id: '$analysis.genotyphi.genotype',
-          count: { $sum: 1 },
-        },
-      },
-    ],
-  },
-  {
-    field: 'klocus',
-    task: 'kleborate',
-    aggregation: () => [
-      { $match: { 'analysis.kleborate': { $exists: true } } },
-      {
-        $group: {
-          _id: '$analysis.kleborate.typing.K_locus',
-          count: { $sum: 1 },
-        },
-      },
-    ],
-  },
-  {
-    field: 'olocus',
-    task: 'kleborate',
-    aggregation: () => [
-      { $match: { 'analysis.kleborate': { $exists: true } } },
-      {
-        $group: {
-          _id: '$analysis.kleborate.typing.O_locus',
           count: { $sum: 1 },
         },
       },
@@ -396,58 +457,9 @@ const summaryFields = [
       { $group: { _id: '$sarscov2-variants.name', count: { $sum: 1 } } },
     ],
   },
-  {
-    field: 'collection',
-    aggregation: ({ query, user }) => {
-      // if (!deployedOrganisms.includes(query.organismId)) return null;
-      const collectionAccess = [ { access: 'public' } ];
-      if (user) {
-        collectionAccess.push({ _user: user._id });
-      }
-      const organismId = 'organismId' in query ? query.organismId : (query.organismCollection ? query.organismCollection : query.organismCgmlst);
-      return [
-        { $project: { _id: 1 } }, // don't need genome details
-        {
-          $lookup: { // attach membership info
-            from: 'genomecollections',
-            localField: '_id',
-            foreignField: '_genome',
-            as: 'memberOf',
-          },
-        },
-        { $unwind: '$memberOf' }, // flatten document and filter out genomes not in a collection
-        { $replaceRoot: { newRoot: '$memberOf' } }, // work directly with genomecollection docs
-        { $unwind: '$collections' }, // create record for every membership
-        { $group: { _id: '$collections', count: { $sum: 1 } } }, // summarise membership
-        {
-          $lookup: { // fetch related data
-            from: 'collections',
-            let: { id: '$_id' },
-            pipeline: [
-              {
-                $match: {
-                  $or: collectionAccess,
-                  binned: false,
-                  organismId,
-                },
-              }, // filter by visibility
-              { $match: { $expr: { $eq: [ '$_id', '$$id' ] } } },
-              { $project: { title: 1, token: 1 } },
-            ],
-            as: 'collection',
-          },
-        },
-        { $unwind: '$collection' }, // flatten document and filter out collections that are not visible
-        {
-          $project: { // present in summary format
-            _id: { key: '$collection.token', label: '$collection.title' },
-            count: 1,
-          },
-        },
-      ];
-    },
-  },
 ];
+
+const initialFields = [ ...taxonomySummaryFields, ...defaultSummaryFields ];
 
 module.exports = async function (props) {
   const deployedOrganisms = await Organism.deployedOrganismIds(props.user);
@@ -455,54 +467,65 @@ module.exports = async function (props) {
     // eslint-disable-next-line no-param-reassign
     props.query.organismId = '2697049';
   }
-  const tasks = getTaskListByOrganism(props.query, props.user).map((_) => _.task);
-  const summary = await Genome.getSummary(
-    summaryFields.filter((_) => (_.task ? tasks.includes(_.task) : true)),
-    { ...props, deployedOrganisms }
-  );
+  const summary = await Genome.getSummary(initialFields, { ...props, deployedOrganisms });
 
-  // begin auto-taxonomy
   const genera = Object.keys(summary.genusId || {});
   const species = Object.keys(summary.speciesId || {});
   const organisms = Object.keys(summary.organismId || {});
 
+  // const tasks = getTaskListByOrganism(props.query, props.user).map((_) => _.task);
+  // const summary = await Genome.getSummary(
+  //   taskSummaryFields.filter((_) => (_.task ? tasks.includes(_.task) : true)),
+  //   { ...props, deployedOrganisms }
+  // );
+
+  // begin auto-taxonomy
   const { genusId, speciesId, organismId } = props.query;
 
   const taxQuery = {};
-  if (!genusId && genera.length === 1) {
+  let extraSummaryFields = [];
+  if (!!genusId || genera.length === 1) {
     const { count } = summary.genusId[genera[0]];
     if (count === summary.visible) {
+      extraSummaryFields = [ ...extraSummaryFields, ...genusSummaryFields ];
       taxQuery.genusId = genera[0];
     }
   }
-  if (!speciesId && (genusId || taxQuery.genusId) && species.length === 1) {
+  if (!!speciesId || species.length === 1) {
     const { count } = summary.speciesId[species[0]];
     if (count === summary.visible) {
+      extraSummaryFields = [ ...extraSummaryFields, ...speciesSummaryFields ];
       taxQuery.speciesId = species[0];
     }
   }
-  if (!organismId && (speciesId || taxQuery.speciesId) && organisms.length === 1) {
+  if (!!organismId || organisms.length === 1) {
     const { count } = summary.organismId[organisms[0]];
     if (count === summary.visible) {
       taxQuery.organismId = organisms[0];
+    }
+  } else if ('speciesId' in taxQuery) { // has species ID and no organism ID
+    const query = props;
+    props.query.speciesId = taxQuery.speciesId;
+    const filterQuery = await Genome.getFilterQuery(query);
+    const organismIds = await Genome.distinct('analysis.speciator.organismId', filterQuery);
+    if (organismIds.length === 1) {
+      taxQuery.organismId = organismIds[0];
     }
   }
 
   if (Object.keys(taxQuery).length > 0) {
     const query = { ...props.query, ...taxQuery };
     const nextTasks = getTaskListByOrganism(query, props.user);
-    const missingTasks = [];
+    const extraTasks = [];
 
     for (const { task } of nextTasks) {
-      if (!tasks.includes(task)) {
-        missingTasks.push(task);
-      }
+      extraTasks.push(task);
     }
 
-    if (missingTasks.length) {
+    if (extraTasks.length) {
       const extraSummary = await Genome.getSummary(
-        summaryFields.filter((_) => missingTasks.includes(_.task)),
-        { ...props, query, deployedOrganisms, tasks: missingTasks }
+        extraSummaryFields.filter((_) => (_.task ? extraTasks.includes(_.task) : true)),
+        { ...props, query, deployedOrganisms, tasks: extraTasks }
       );
 
       return {
