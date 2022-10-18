@@ -10,6 +10,11 @@ export default ({ result }) => {
     <React.Fragment>
     <header className="pw-genome-report-section-header">
       <h2>cgMLST classification – Core genome MLST profile comparison</h2>
+      <p>
+        <a href="https://cgps.gitbook.io/pathogenwatch/technical-descriptions/typing-methods/klebsiella-lin-codes" target="_blank" rel="noopener">
+          Sourced from the Pasteur Institute
+        </a>
+      </p>
     </header>
      <div>
       <dl className="grid">
