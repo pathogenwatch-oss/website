@@ -8,7 +8,6 @@ const Genome = require('models/genome');
 const store = require('utils/object-store');
 
 const docker = require('services/docker');
-const { DEFAULT_TIMEOUT } = require('services/bus');
 const { getImageName } = require('manifest.js');
 
 const LOGGER = require('utils/logging').createLogger('runner');
