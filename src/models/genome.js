@@ -65,9 +65,7 @@ const schema = new Schema({
 schema.index({ name: 1 });
 schema.index({ name: 'text' });
 schema.index({ reference: 1 });
-schema.index({ public: 1, reference: 1 });
-schema.index({ _user: 1, binned: 1 });
-schema.index({ uploadedAt: 1, binned: 1 });
+schema.index({ uploadedAt: 1 });
 schema.index({
   'analysis.mlst.st': 1,
   'analysis.mlst2.st': 1,
@@ -85,7 +83,6 @@ schema.index({ 'analysis.speciator.genusId': 1 }, { partialFilterExpression: { '
 schema.index({ 'analysis.serotype.subspecies': 1 }, { partialFilterExpression: { 'analysis.serotype': { $exists: true } } });
 schema.index({ 'analysis.serotype.value': 1 }, { partialFilterExpression: { 'analysis.serotype': { $exists: true } } });
 schema.index({ 'analysis.speciator.speciesName': 1, 'analysis.serotype.subspecies': 1, 'analysis.serotype.value': 1 });
-schema.index({ 'analysis.speciator.organismId': 1, 'analysis.speciator.organismName': 1 });
 schema.index({ 'upload.type': 1, 'upload.completed': 1 });
 schema.index({ 'analysis.poppunk2.strain': 1 }, { partialFilterExpression: { 'analysis.poppunk2': { $exists: true } } });
 schema.index({ 'analysis.ngstar.st': 1 }, { partialFilterExpression: { 'analysis.ngstar': { $exists: true } } });
@@ -101,35 +98,30 @@ schema.index({ 'analysis.sarscov2-variants.variants.state': 1 }, { partialFilter
 schema.index({ 'analysis.sarscov2-variants.variants.name': 1 }, { partialFilterExpression: { 'analysis.sarscov2-variants': { $exists: true } } });
 
 schema.index({
-  _user: 1,
-  binned: 1,
-  'analysis.speciator.speciesName': 1,
-  'analysis.serotype.subspecies': 1,
-  'analysis.serotype.value': 1,
-});
-schema.index({
   public: 1,
   binned: 1,
-  'analysis.speciator.speciesName': 1,
-  'analysis.serotype.subspecies': 1,
-  'analysis.serotype.value': 1,
+  'analysis.speciator.organismId': 1,
+  'analysis.speciator.organismName': 1,
 }, { partialFilterExpression: { public: true, binned: false } });
 schema.index({
   _user: 1,
   binned: 1,
   'analysis.speciator.organismId': 1,
-  'analysis.speciator.speciesName': 1,
-  'analysis.serotype.subspecies': 1,
-  'analysis.serotype.value': 1,
-});
-schema.index({
-  public: 1,
-  binned: 1,
-  'analysis.speciator.organismId': 1,
-  'analysis.speciator.speciesName': 1,
-  'analysis.serotype.subspecies': 1,
-  'analysis.serotype.value': 1,
-}, { partialFilterExpression: { public: true, binned: false } });
+  'analysis.speciator.organismName': 1,
+}, { partialFilterExpression: { binned: false } });
+// Not clear why these don't work, but left out as the query planner doesn't user them for the summary aggregate.
+// schema.index({
+//   public: 1,
+//   binned: 1,
+//   'analysis.speciator.genusId': 1,
+//   'analysis.speciator.genusName': 1,
+// }, { partialFilterExpression: { public: true, binned: false, 'analysis.speciator.genusId': { $exists: true } } });
+// schema.index({
+//   _user: 1,
+//   binned: 1,
+//   'analysis.speciator.genusId': 1,
+//   'analysis.speciator.genusName': 1,
+// }, { partialFilterExpression: { binned: false, 'analysis.speciator.genusId': { $exists: true } } });
 schema.index({
   public: 1,
   binned: 1,
@@ -143,45 +135,23 @@ schema.index({
 // Need these as well
 schema.index({ public: 1, binned: 1, createdAt: -1 }, { partialFilterExpression: { public: true, binned: false } });
 schema.index({ _user: 1, binned: 1, createdAt: -1 });
-schema.index({ public: 1, binned: 1, createdAt: -1 }, { partialFilterExpression: { public: true, binned: false } });
-schema.index({ public: 1, binned: 1, 'analysis.speciator.organismId': 1, createdAt: -1 }, { partialFilterExpression: { public: true, binned: false } });
-schema.index({ _user: 1, binned: 1, 'analysis.speciator.organismId': 1, createdAt: -1 }, { partialFilterExpression: { binned: false } });
+schema.index({
+  public: 1,
+  binned: 1,
+  'analysis.speciator.organismId': 1,
+  createdAt: -1,
+}, { partialFilterExpression: { public: true, binned: false } });
+schema.index({
+  _user: 1,
+  binned: 1,
+  'analysis.speciator.organismId': 1,
+  createdAt: -1,
+}, { partialFilterExpression: { binned: false } });
 schema.index({ public: 1, _user: 1, binned: 1, createdAt: -1 }, {
   partialFilterExpression: {
     public: false,
     binned: false,
   },
-});
-// MLST sort os well.
-schema.index({
-  public: 1,
-  binned: 1,
-  'analysis.speciator.organismId': 1,
-  'analysis.mlst.st': 1,
-  'analysis.mlst2.st': 1,
-}, { partialFilterExpression: { public: true, binned: false } });
-schema.index({
-  _user: 1,
-  binned: 1,
-  'analysis.speciator.organismId': 1,
-  'analysis.mlst.st': 1,
-  'analysis.mlst2.st': 1,
-});
-schema.index({
-  public: 1,
-  binned: 1,
-  'analysis.mlst.st': 1,
-  'analysis.mlst2.st': 1,
-  'analysis.genotyphi.genotype': 1,
-  'analysis.pangolin.lineage': 1,
-}, { partialFilterExpression: { public: true, binned: false } });
-schema.index({
-  _user: 1,
-  binned: 1,
-  'analysis.mlst.st': 1,
-  'analysis.mlst2.st': 1,
-  'analysis.genotyphi.genotype': 1,
-  'analysis.pangolin.lineage': 1,
 });
 
 schema.statics.uploadTypes = uploadTypes;

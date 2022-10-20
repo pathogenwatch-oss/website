@@ -1,28 +1,57 @@
 [
   {
+    "name": "list",
+    "query": {
+      "binned": false,
+      "_user": "623b3dac8f2efe62c2e69fa8"
+    },
+    "view": {
+      "_user": 1,
+      "analysis.mlst.st": 1,
+      "analysis.mlst2.st": 1,
+      "analysis.pangolin.lineage": 1,
+      "analysis.genotyphi.genotype": 1,
+      "analysis.serotype.subspecies": 1,
+      "analysis.serotype.value": 1,
+      "analysis.speciator.organismId": 1,
+      "analysis.speciator.organismName": 1,
+      "analysis.speciator.speciesName": 1,
+      "country": 1,
+      "day": 1,
+      "month": 1,
+      "name": 1,
+      "public": 1,
+      "reference": 1,
+      "uploadedAt": 1,
+      "year": 1
+    },
+    "bounds": {
+      "skip": 0,
+      "limit": 100,
+      "sort": {
+        "createdAt": -1
+      }
+    }
+  },
+  {
     "name": "organismId",
     "pipeline": [
       {
         "$match": {
-          "$or": [
-            {
-              "public": true
-            }
-          ],
-          "binned": false
-        }
-      },
-      {
-        "$match": {
+          "binned": false,
+          "_user": "623b3dac8f2efe62c2e69fa8",
           "analysis.speciator.organismId": {
             "$in": [
               "1280",
               "1336",
+              "1463165",
               "1646",
+              "244366",
               "2697049",
               "485",
               "573",
               "64320",
+              "666",
               "90370"
             ]
           }
@@ -42,20 +71,46 @@
     ]
   },
   {
+    "name": "subspecies",
+    "pipeline": [
+      {
+        "$match": {
+          "binned": false,
+          "_user": "623b3dac8f2efe62c2e69fa8",
+          "$or": [
+            {
+              "analysis.serotype": {
+                "$exists": true
+              }
+            },
+            {
+              "analysis.speciator.organismId": "2697049"
+            }
+          ]
+        }
+      },
+      {
+        "$group": {
+          "_id": {
+            "$ifNull": [
+              "$analysis.serotype.subspecies",
+              "$analysis.speciator.organismName"
+            ]
+          },
+          "count": {
+            "$sum": 1
+          }
+        }
+      }
+    ]
+  },
+  {
     "name": "genusId",
     "pipeline": [
       {
         "$match": {
-          "$or": [
-            {
-              "public": true
-            }
-          ],
-          "binned": false
-        }
-      },
-      {
-        "$match": {
+          "binned": false,
+          "_user": "623b3dac8f2efe62c2e69fa8",
           "analysis.speciator.genusId": {
             "$exists": true
           }
@@ -75,16 +130,37 @@
     ]
   },
   {
+    "name": "organismCgmlst",
+    "pipeline": [
+      {
+        "$match": {
+          "binned": false,
+          "_user": "623b3dac8f2efe62c2e69fa8",
+          "analysis.cgmlst": {
+            "$exists": true
+          }
+        }
+      },
+      {
+        "$group": {
+          "_id": {
+            "label": "$analysis.speciator.organismName",
+            "key": "$analysis.speciator.organismId"
+          },
+          "count": {
+            "$sum": 1
+          }
+        }
+      }
+    ]
+  },
+  {
     "name": "country",
     "pipeline": [
       {
         "$match": {
-          "$or": [
-            {
-              "public": true
-            }
-          ],
-          "binned": false
+          "binned": false,
+          "_user": "623b3dac8f2efe62c2e69fa8"
         }
       },
       {
@@ -102,12 +178,8 @@
     "pipeline": [
       {
         "$match": {
-          "$or": [
-            {
-              "public": true
-            }
-          ],
-          "binned": false
+          "binned": false,
+          "_user": "623b3dac8f2efe62c2e69fa8"
         }
       },
       {
@@ -128,11 +200,14 @@
                       [
                         "485",
                         "573",
+                        "666",
                         "1280",
                         "1336",
                         "1646",
                         "64320",
                         "90370",
+                        "244366",
+                        "1463165",
                         "2697049"
                       ]
                     ]
@@ -162,16 +237,36 @@
     ]
   },
   {
+    "name": "uploadedAt",
+    "pipeline": [
+      {
+        "$match": {
+          "binned": false,
+          "_user": "623b3dac8f2efe62c2e69fa8"
+        }
+      },
+      {
+        "$group": {
+          "_id": {
+            "$dateToString": {
+              "date": "$uploadedAt",
+              "format": "%Y-%m-%dT%H:%M:%S.%LZ"
+            }
+          },
+          "count": {
+            "$sum": 1
+          }
+        }
+      }
+    ]
+  },
+  {
     "name": "date",
     "pipeline": [
       {
         "$match": {
-          "$or": [
-            {
-              "public": true
-            }
-          ],
-          "binned": false
+          "binned": false,
+          "_user": "623b3dac8f2efe62c2e69fa8"
         }
       },
       {
@@ -188,90 +283,6 @@
       {
         "$project": {
           "_id": 0
-        }
-      }
-    ]
-  },
-  {
-    "name": "resistance",
-    "pipeline": [
-      {
-        "$match": {
-          "$or": [
-            {
-              "public": true
-            }
-          ],
-          "binned": false
-        }
-      },
-      {
-        "$project": {
-          "antibiotics": {
-            "$filter": {
-              "input": "$analysis.paarsnp.resistanceProfile",
-              "as": "ab",
-              "cond": {
-                "$eq": [
-                  "$$ab.state",
-                  "RESISTANT"
-                ]
-              }
-            }
-          }
-        }
-      },
-      {
-        "$unwind": "$antibiotics"
-      },
-      {
-        "$group": {
-          "_id": "$antibiotics.agent.name",
-          "count": {
-            "$sum": 1
-          }
-        }
-      }
-    ]
-  },
-  {
-    "name": "subspecies",
-    "pipeline": [
-      {
-        "$match": {
-          "$or": [
-            {
-              "public": true
-            }
-          ],
-          "binned": false
-        }
-      },
-      {
-        "$match": {
-          "$or": [
-            {
-              "analysis.serotype": {
-                "$exists": true
-              }
-            },
-            {
-              "analysis.speciator.organismId": "2697049"
-            }
-          ]
-        }
-      },
-      {
-        "$group": {
-          "_id": {
-            "$ifNull": [
-              "$analysis.serotype.subspecies",
-              "$analysis.speciator.organismName"
-            ]
-          },
-          "count": {
-            "$sum": 1
-          }
         }
       }
     ]

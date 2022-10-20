@@ -6,12 +6,13 @@ const mongoConnection = require('utils/mongoConnection');
 const argv = require('named-argv');
 const fs = require('fs');
 const Genome = require('models/genome');
+const { ObjectId } = require('mongoose/lib/types');
 
 const { queryFile, outfile = 'speeds.csv', repeats = "10" } = argv.opts;
 const repeatsNum = parseInt(repeats, 10);
 
 if (!queryFile) {
-  throw new Error('--query_file not provided.');
+  throw new Error('--queryFile not provided.');
 }
 
 function readInput() {
@@ -29,10 +30,26 @@ async function timeQuery(queryFunction) {
   return endTime - startTime;
 }
 
+function cleanIdReferences(pipeline) {
+  if ('$match' in pipeline[0]) {
+    if ('_user' in pipeline[0].$match) {
+      pipeline[0].$match._user = ObjectId(pipeline[0].$match._user);
+    } else if ('$or' in pipeline[0].$match) {
+      pipeline[0].$match.$or.forEach(query => {
+        if ('_user' in query) {
+          query._user = ObjectId(query._user);
+        }
+      });
+    }
+  }
+
+  return pipeline;
+}
+
 async function executeQueries(queries) {
   const results = [];
   for (const query of queries) {
-    const testFunction = "pipeline" in query ? async () => Genome.aggregate(query.pipeline) : async () => Genome.find(query.query, query.view, query.bounds).lean();
+    const testFunction = "pipeline" in query ? async () => Genome.aggregate(cleanIdReferences(query.pipeline)) : async () => Genome.find(query.query, query.view, query.bounds).lean();
     console.log(`Testing ${query.name}`);
     const times = Array(repeatsNum);
     for (const test of times.keys()) {
@@ -62,7 +79,7 @@ function report(statistics) {
   const writeStream = fs.createWriteStream(outfile);
   writeStream.write("Query,Sample Count,Mean,Standard Deviation,Fastest,Slowest\n");
   statistics.forEach((queryStats) => {
-    writeStream.write(`${queryStats.name},${queryStats.sampleCount},${queryStats.mean},${queryStats.standardDeviation},${queryStats.max},${queryStats.min}\n`);
+    writeStream.write(`${queryStats.name},${queryStats.sampleCount},${queryStats.mean},${queryStats.standardDeviation},${queryStats.min},${queryStats.max}\n`);
   });
   writeStream.close();
 }

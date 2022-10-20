@@ -1,0 +1,257 @@
+[
+  {
+    "name": "list",
+    "query": {
+      "$or": [
+        {
+          "public": true,
+          "binned": false
+        }
+      ]
+    },
+    "view": {
+      "_user": 1,
+      "analysis.mlst.st": 1,
+      "analysis.mlst2.st": 1,
+      "analysis.pangolin.lineage": 1,
+      "analysis.genotyphi.genotype": 1,
+      "analysis.serotype.subspecies": 1,
+      "analysis.serotype.value": 1,
+      "analysis.speciator.organismId": 1,
+      "analysis.speciator.organismName": 1,
+      "analysis.speciator.speciesName": 1,
+      "country": 1,
+      "day": 1,
+      "month": 1,
+      "name": 1,
+      "public": 1,
+      "reference": 1,
+      "uploadedAt": 1,
+      "year": 1
+    },
+    "bounds": {
+      "skip": 0,
+      "limit": 100,
+      "sort": {
+        "createdAt": -1
+      }
+    }
+  },
+  {
+    "name": "organismId",
+    "pipeline": [
+      {
+        "$match": {
+          "public": true,
+          "binned": false,
+          "analysis.speciator.organismId": {
+            "$in": [
+              "1280",
+              "1336",
+              "1463165",
+              "1646",
+              "244366",
+              "2697049",
+              "485",
+              "573",
+              "64320",
+              "666",
+              "90370"
+            ]
+          }
+        }
+      },
+      {
+        "$group": {
+          "_id": {
+            "label": "$analysis.speciator.organismName",
+            "key": "$analysis.speciator.organismId"
+          },
+          "count": {
+            "$sum": 1
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "genusId",
+    "pipeline": [
+      {
+        "$match": {
+          "$or": [
+            {
+              "public": true,
+              "binned": false,
+              "analysis.speciator.genusId": {
+                "$exists": true
+              }
+            }
+          ]
+        }
+      },
+      {
+        "$group": {
+          "_id": {
+            "label": "$analysis.speciator.genusName",
+            "key": "$analysis.speciator.genusId"
+          },
+          "count": {
+            "$sum": 1
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "organismCgmlst",
+    "pipeline": [
+      {
+        "$match": {
+          "$or": [
+            {
+              "public": true,
+              "binned": false,
+              "analysis.cgmlst": {
+                "$exists": true
+              }
+            }
+          ]
+        }
+      },
+      {
+        "$group": {
+          "_id": {
+            "label": "$analysis.speciator.organismName",
+            "key": "$analysis.speciator.organismId"
+          },
+          "count": {
+            "$sum": 1
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "country",
+    "pipeline": [
+      {
+        "$match": {
+          "$or": [
+            {
+              "public": true,
+              "binned": false
+            }
+          ]
+        }
+      },
+      {
+        "$group": {
+          "_id": "$country",
+          "count": {
+            "$sum": 1
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "access",
+    "pipeline": [
+      {
+        "$match": {
+          "$or": [
+            {
+              "public": true,
+              "binned": false
+            }
+          ]
+        }
+      },
+      {
+        "$group": {
+          "_id": {
+            "$cond": [
+              {
+                "$and": [
+                  {
+                    "$eq": [
+                      "$reference",
+                      true
+                    ]
+                  },
+                  {
+                    "$in": [
+                      "$analysis.speciator.organismId",
+                      [
+                        "485",
+                        "573",
+                        "666",
+                        "1280",
+                        "1336",
+                        "1646",
+                        "64320",
+                        "90370",
+                        "244366",
+                        "1463165",
+                        "2697049"
+                      ]
+                    ]
+                  }
+                ]
+              },
+              "reference",
+              {
+                "$cond": [
+                  {
+                    "$eq": [
+                      "$public",
+                      true
+                    ]
+                  },
+                  "public",
+                  "private"
+                ]
+              }
+            ]
+          },
+          "count": {
+            "$sum": 1
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "date",
+    "pipeline": [
+      {
+        "$match": {
+          "$or": [
+            {
+              "public": true,
+              "binned": false
+            }
+          ]
+        }
+      },
+      {
+        "$group": {
+          "_id": "date",
+          "max": {
+            "$max": "$date"
+          },
+          "min": {
+            "$min": "$date"
+          }
+        }
+      },
+      {
+        "$project": {
+          "_id": 0
+        }
+      }
+    ]
+  }
+]
+

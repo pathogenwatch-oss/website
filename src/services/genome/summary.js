@@ -9,22 +9,6 @@ const {
 
 const taxonomySummaryFields = [
   {
-    field: 'organismId',
-    aggregation: ({ deployedOrganisms }) => [
-      { $match: { 'analysis.speciator.organismId': { $in: deployedOrganisms } } },
-      {
-        $group: {
-          _id: {
-            label: '$analysis.speciator.organismName',
-            key: '$analysis.speciator.organismId',
-          },
-          count: { $sum: 1 },
-        },
-      },
-
-    ],
-  },
-  {
     field: 'subspecies',
     // task: 'serotype',
     aggregation: () => [
@@ -57,6 +41,25 @@ const taxonomySummaryFields = [
       ];
     },
   },
+];
+
+const defaultSummaryFields = [
+  {
+    field: 'organismId',
+    aggregation: ({ deployedOrganisms }) => [
+      { $match: { 'analysis.speciator.organismId': { $in: deployedOrganisms } } },
+      {
+        $group: {
+          _id: {
+            label: '$analysis.speciator.organismName',
+            key: '$analysis.speciator.organismId',
+          },
+          count: { $sum: 1 },
+        },
+      },
+
+    ],
+  },
   {
     field: 'genusId',
     aggregation: () => [
@@ -69,9 +72,6 @@ const taxonomySummaryFields = [
       },
     ],
   },
-];
-
-const defaultSummaryFields = [
   {
     field: 'organismCgmlst',
     aggregation: () => [
@@ -86,69 +86,6 @@ const defaultSummaryFields = [
         },
       },
     ],
-  },
-  {
-    field: 'organismCollection',
-    aggregation: ({ user }) => {
-      const collectionAccess = [ { access: 'public', binned: false } ];
-      if (user) {
-        collectionAccess.push({ _user: user._id, binned: false });
-      }
-      return [
-        {
-          $project: {
-            _id: 1,
-            'analysis.speciator.organismId': 1,
-            'analysis.speciator.organismName': 1,
-          },
-        },
-        {
-          $lookup: { // attach membership info
-            from: 'genomecollections',
-            localField: '_id',
-            foreignField: '_genome',
-            as: 'memberOf',
-          },
-        },
-        { $unwind: '$memberOf' },
-        { $unwind: '$memberOf.collections' },
-        {
-          $group: {
-            _id: { key: '$analysis.speciator.organismId', label: '$analysis.speciator.organismName' },
-            collections: { $addToSet: '$memberOf.collections' },
-          },
-        },
-        {
-          $lookup: { // identify collections that match the required access
-            from: 'collections',
-            let: { genomecollections: '$collections' },
-            // localField: 'collections',
-            // foreignField: '_id',
-            pipeline: [
-              {
-                $match: {
-                  $expr: { $in: [ '$_id', '$$genomecollections' ] },
-                  $or: collectionAccess,
-                },
-              },
-              { $project: { _id: 1 } },
-            ],
-            as: 'collection',
-          },
-        },
-        {
-          $project: {
-            _id: 1,
-            count: { $size: '$collection' },
-          },
-        },
-        {
-          $match: {
-            count: { $gte: 1 },
-          },
-        },
-      ];
-    },
   },
   { field: 'country' },
   {
@@ -459,7 +396,69 @@ const speciesSummaryFields = [
   },
 ];
 
-const initialFields = [ ...taxonomySummaryFields, ...defaultSummaryFields ];
+const linkedCollections = {
+  field: 'organismCollection',
+  aggregation: ({ user }) => {
+    const collectionAccess = [ { access: 'public', binned: false } ];
+    if (user) {
+      collectionAccess.push({ _user: user._id, binned: false });
+    }
+    return [
+      {
+        $project: {
+          _id: 1,
+          'analysis.speciator.organismId': 1,
+          'analysis.speciator.organismName': 1,
+        },
+      },
+      {
+        $lookup: { // attach membership info
+          from: 'genomecollections',
+          localField: '_id',
+          foreignField: '_genome',
+          as: 'memberOf',
+        },
+      },
+      { $unwind: '$memberOf' },
+      { $unwind: '$memberOf.collections' },
+      {
+        $group: {
+          _id: { key: '$analysis.speciator.organismId', label: '$analysis.speciator.organismName' },
+          collections: { $addToSet: '$memberOf.collections' },
+        },
+      },
+      {
+        $lookup: { // identify collections that match the required access
+          from: 'collections',
+          let: { genomecollections: '$collections' },
+          // localField: 'collections',
+          // foreignField: '_id',
+          pipeline: [
+            {
+              $match: {
+                $expr: { $in: [ '$_id', '$$genomecollections' ] },
+                $or: collectionAccess,
+              },
+            },
+            { $project: { _id: 1 } },
+          ],
+          as: 'collection',
+        },
+      },
+      {
+        $project: {
+          _id: 1,
+          count: { $size: '$collection' },
+        },
+      },
+      {
+        $match: {
+          count: { $gte: 1 },
+        },
+      },
+    ];
+  },
+};
 
 module.exports = async function (props) {
   const deployedOrganisms = await Organism.deployedOrganismIds(props.user);
@@ -467,6 +466,9 @@ module.exports = async function (props) {
     // eslint-disable-next-line no-param-reassign
     props.query.organismId = '2697049';
   }
+
+  const initialFields = Object.keys(props.query).length === 1 && props.query.prefilter === 'all' ? defaultSummaryFields : [ linkedCollections, ...taxonomySummaryFields, ...defaultSummaryFields ];
+
   const summary = await Genome.getSummary(initialFields, { ...props, deployedOrganisms });
 
   const genera = Object.keys(summary.genusId || {});
@@ -483,7 +485,7 @@ module.exports = async function (props) {
   const { genusId, speciesId, organismId } = props.query;
 
   const taxQuery = {};
-  let extraSummaryFields = [];
+  let extraSummaryFields = 'organismCollection' in summary ? [] : [ linkedCollections ];
   if (!!genusId || genera.length === 1) {
     const { count } = summary.genusId[genera[0]];
     if (count === summary.visible) {
