@@ -132,7 +132,7 @@ schema.index({
   binned: 1,
   'analysis.cgmlst.scheme': 1,
 });
-// Need these as well
+// Need these for the sorts
 schema.index({ public: 1, binned: 1, createdAt: -1 }, { partialFilterExpression: { public: true, binned: false } });
 schema.index({ _user: 1, binned: 1, createdAt: -1 });
 schema.index({
@@ -152,6 +152,13 @@ schema.index({ public: 1, _user: 1, binned: 1, createdAt: -1 }, {
     public: false,
     binned: false,
   },
+});
+schema.index({
+  "_user": 1,
+  "binned": 1,
+  "analysis.speciator.organismId": 1,
+  "analysis.mlst.st": 1,
+  "analysis.mlst2.st": 1,
 });
 
 schema.statics.uploadTypes = uploadTypes;
