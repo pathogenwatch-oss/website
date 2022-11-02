@@ -29,7 +29,7 @@ function prepareMetadata(metadataUpdate) {
     }
     cleanedRow.id = cleanedRow.userDefined.id;
     delete cleanedRow.userDefined.id;
-    if ('literatureLink' in row) {
+    if ('literatureLink' in row && !!row.literatureLink) {
       cleanedRow.literatureLink = { value: row.literatureLink };
       if (row.literatureLink.value.includes('/')) {
         cleanedRow.literatureLink.type = 'doi';
