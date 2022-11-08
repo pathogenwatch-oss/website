@@ -100,6 +100,13 @@ schema.index({ 'analysis.sarscov2-variants.variants.name': 1 }, { partialFilterE
 schema.index({
   public: 1,
   binned: 1,
+  reference: 1,
+  _user: 1,
+});
+
+schema.index({
+  public: 1,
+  binned: 1,
   'analysis.speciator.organismId': 1,
   'analysis.speciator.organismName': 1,
 }, { partialFilterExpression: { public: true, binned: false } });
@@ -109,19 +116,6 @@ schema.index({
   'analysis.speciator.organismId': 1,
   'analysis.speciator.organismName': 1,
 }, { partialFilterExpression: { binned: false } });
-// Not clear why these don't work, but left out as the query planner doesn't user them for the summary aggregate.
-// schema.index({
-//   public: 1,
-//   binned: 1,
-//   'analysis.speciator.genusId': 1,
-//   'analysis.speciator.genusName': 1,
-// }, { partialFilterExpression: { public: true, binned: false, 'analysis.speciator.genusId': { $exists: true } } });
-// schema.index({
-//   _user: 1,
-//   binned: 1,
-//   'analysis.speciator.genusId': 1,
-//   'analysis.speciator.genusName': 1,
-// }, { partialFilterExpression: { binned: false, 'analysis.speciator.genusId': { $exists: true } } });
 schema.index({
   public: 1,
   binned: 1,
