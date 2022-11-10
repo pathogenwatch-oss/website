@@ -62,7 +62,6 @@
       }
     ],
     "1463165": [
-
       {
         "requires": [
           {
@@ -743,6 +742,16 @@
       {
         "task": "mlst",
         "version": "202209111732-v3.2.0"
+      },
+      {
+        "task": "cgmlst",
+        "version": "202209111732-v3.2.0",
+        "andThen": [
+          {
+            "task": "klebsiella-lincodes",
+            "version": "v1.0.0"
+          }
+        ]
       }
     ],
     "2058152": [
@@ -870,7 +879,8 @@
             "version": "v1.0.0"
           }
         ]
-      }, {
+      },
+      {
         "task": "core",
         "version": "v2.0.1-244366"
       },
@@ -893,7 +903,13 @@
       },
       {
         "task": "cgmlst",
-        "version": "202209111732-v3.2.0"
+        "version": "202209111732-v3.2.0",
+        "andThen": [
+          {
+            "task": "klebsiella-lincodes",
+            "version": "v1.0.0"
+          }
+        ]
       }
     ],
     "2587529": [
@@ -919,7 +935,7 @@
       },
       {
         "task": "pangolin",
-        "version": "v18.0.0"
+        "version": "v18.1.0"
       }
     ],
     "2751": [
@@ -973,7 +989,6 @@
         "task": "cgmlst",
         "version": "202209111732-v3.2.0"
       }
-
     ],
     "287": [
       {
