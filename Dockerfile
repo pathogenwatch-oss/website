@@ -17,7 +17,7 @@ WORKDIR /pathogenwatch/
 
 COPY . /pathogenwatch
 
-RUN npm install -g npm@6.12.0 && npm install --only=production
+RUN npm install -g npm@8.19.3 && npm install --only=production
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
