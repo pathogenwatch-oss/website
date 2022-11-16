@@ -73,6 +73,9 @@ const queries = {
   kpn: {
     query: getSpeciesQuery('573'),
   },
+  mtb: {
+    query: getSpeciesQuery('1773'),
+  },
   ngo: {
     query: getSpeciesQuery('485'),
   },

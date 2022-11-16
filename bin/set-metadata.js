@@ -10,7 +10,7 @@ function checkOpts() {
   const { csvFile } = argv.opts;
 
   if (!csvFile) {
-    console.log('Missing argument(s) (--userId, --csvFile)');
+    console.log('Missing argument(s) --csvFile)');
     process.exit(1);
   }
 }
