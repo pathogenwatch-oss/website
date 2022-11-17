@@ -7,7 +7,7 @@ const { formatMemory, formatTime } = require('manifest');
 
 const User = require('models/user');
 
-const MAX_MEMORY = formatMemory(process.env.MAX_MEMORY || '122g');
+const MAX_MEMORY = formatMemory(process.env.MAX_MEMORY || '125g');
 const MAX_TIMEOUT = formatTime('1h');
 const MAX_CPU = 15;
 const defaultRetries = config.tasks.retries || 3;
