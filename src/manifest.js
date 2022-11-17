@@ -256,7 +256,6 @@ module.exports.getTaskListByOrganism = function (
       )));
 };
 
-
 module.exports.getTasksByOrganism = getTasksByOrganism;
 
 module.exports.getCollectionTask = function (organismId, task, user = defaultUser) {
