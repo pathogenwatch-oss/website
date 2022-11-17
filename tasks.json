@@ -16,7 +16,7 @@
     "version": "v2.5.1",
     "resources": {
       "cpu": 2,
-      "memory": 12820000000
+      "memory": 114122547200
     },
     "retries": 2
   },
