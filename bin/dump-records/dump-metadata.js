@@ -6,20 +6,22 @@ const fs = require('fs');
 
 const separator = ",";
 
+const fields = [ 'name', 'fileId', 'latitude', 'longitude', 'literaturelink', 'country' ];
+
 const projection = {
-  name: 1,
-  fileId: 1,
-  latitude: 1,
-  longitude: 1,
-  userDefined: 1,
   _id: 0,
+  userDefined: 1,
+  ...Object.fromEntries(fields.reduce((memo, field) => {
+    memo.set(field, 1);
+    return memo;
+  }, new Map())),
 };
 
 function printTable(header, rows) {
   const stream = fs.createWriteStream(`metadata.csv`);
   stream.write(`${header.join(separator)}\n`);
   for (const row of rows) {
-    stream.write(`${header.map(field => `"${row[field]}"`).join(separator)}\n`);
+    stream.write(`${header.map(field => `"${!!row[field] ? row[field] : ''}"`).join(separator)}\n`);
   }
   stream.on('finish', () => {
     process.exit(0);
@@ -28,32 +30,43 @@ function printTable(header, rows) {
 }
 
 async function main() {
-  const { queryString } = argv.opts;
+  const { queryString, uuids } = argv.opts;
 
+  if (!!uuids) {
+    projection._id = 1;
+    fields.push('_id');
+  }
   if (!queryString) {
-    console.log("--queryString={id}\n");
+    console.log("--queryString={query}\n");
     process.exit(0);
   }
 
   await mongoConnection.connect();
 
-  const query = JSON.parse(queryString);
+  const tempQuery = queryString === 'test' ? '{"public" : true, "analysis.speciator.organismId": "1313"}' : queryString;
+
+  const query = JSON.parse(tempQuery);
 
   const genomes = await Genome
     .find(query, projection)
     .lean();
 
   const rows = [];
-  const header = new Set([ 'name', 'fileId', 'latitude', 'longitude' ]);
-  for (const { name, fileId, latitude, longitude, userDefined = {} } of genomes) {
-    Object.keys(userDefined).map(field => header.add(field));
-    rows.push({
-      name,
-      fileId,
-      latitude,
-      longitude,
-      ...userDefined,
-    });
+  const header = new Set(fields);
+  for (const genome of genomes) {
+    if (!('userDefined' in genome)) {
+      genome.userDefined = {};
+    }
+    Object.keys(genome.userDefined).map(field => header.add(field));
+    genome.literaturelink = 'literaturelink' in genome ? genome.literaturelink.value : '';
+    const row = {
+      ...genome.userDefined,
+      ...Object.fromEntries(fields.reduce((memo, field) => {
+        memo.set(field, genome[field]);
+        return memo;
+      }, new Map())),
+    };
+    rows.push(row);
   }
   printTable(Array.from(header.values()), rows);
 }
