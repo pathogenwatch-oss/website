@@ -102,11 +102,10 @@ const config = require('configuration');
 const defaultTimeout = config.tasks.timeout || 30;
 const maxRetries = config.tasks.retries || 3;
 
-const speciatorTask = getSpeciatorTask();
-
 module.exports = async function findTask(message, retries = 0) {
-  const { genomeId, fileId, uploadedAt, clientId } = message.metadata;
-  const { task, version, timeout = defaultTimeout } = speciatorTask;
+  const { spec, metadata } = message;
+  const { fileId } = metadata;
+  const { task, version, timeout = defaultTimeout } = spec;
 
   const value = await store.getAnalysis(task, version, fileId, undefined);
   const doc = value === undefined ? undefined : JSON.parse(value);
@@ -115,8 +114,7 @@ module.exports = async function findTask(message, retries = 0) {
     return submitTasks(message.metadata, doc, precache, priority);
   }
 
-  const metadata = { genomeId, fileId, uploadedAt, clientId };
-  await request('tasks', 'run', { spec: speciatorTask, timeout$: timeout * 1000 * 1.05, metadata, precache, priority });
+  await request('tasks', 'run', { spec, metadata, precache, priority, timeout$: timeout * 1000 * 1.05 });
 
   if (retries === maxRetries) return null;
   return findTask(message, retries + 1);

@@ -27,7 +27,7 @@ async function cleanGenome(genome, userId, update) {
   const { speciator = {} } = analysis;
   const user = await User.findById(userId, { flags: 1 });
   if (!user) return;
-  const tasks = getTasksByOrganism(speciator, user);
+  const tasks = Object.keys(getTasksByOrganism(speciator, user)) || [];
   const expectedTasks = new Set([ ...tasks.map(_ => _.task), 'speciator' ]);
   const unset = {};
   const existingTasks = Object.keys(genome.analysis || {});
@@ -55,10 +55,8 @@ async function cleanGenome(genome, userId, update) {
   }
 }
 
-const { queue = 'reprocessing' } = argv.opts;
-
 async function updateGenome({ _id, fileId, _user }, clean, update) {
-  await submit({ genomeId: _id, fileId, userId: _user, queue });
+  await submit({ genomeId: _id, fileId, userId: _user, queue: 'normal' });
   const genome = await Genome.findById(_id);
   if (genome && clean) {
     await cleanGenome(genome, _user, update);

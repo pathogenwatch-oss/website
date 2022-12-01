@@ -258,7 +258,7 @@ module.exports.now = now;
 
 
 module.exports.enqueue = async function ({ spec, metadata, queue = 'normal', precache = false, overridePriority }) {
-  const maxAttempts = spec.retries || defaultRetries;
+  const maxAttempts = !!spec && !!spec.retries ? spec.retries : defaultRetries;
 
   // Override priority is for use by update scripts such as submit/task.js
   const priority = !!overridePriority

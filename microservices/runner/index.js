@@ -77,7 +77,7 @@ async function runJob(job, releaseResources) {
       }
     } else if (taskType === taskTypes.genome) {
       try {
-        await request('genome', 'speciate', { timeout$: timeout * 1000 * 1.1, metadata, precache, priority });
+        await request('genome', 'speciate', { timeout$: timeout * 1000 * 1.1, spec, metadata, precache, priority });
         await Queue.handleSuccess(job);
       } catch (err) {
         LOGGER.error(err);
