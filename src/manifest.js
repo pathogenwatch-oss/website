@@ -146,7 +146,7 @@ module.exports.getSpeciatorTask = function () {
   const { speciation = {} } = config.tasks || {};
 
   speciation.task = speciation.task || 'speciator';
-  speciation.version = speciation.version || 'v3.0.1';
+  speciation.version = speciation.version || 'v4.0.0';
 
   return addTaskDefaults(speciation);
 };
