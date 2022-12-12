@@ -20,6 +20,6 @@ export default {
   publicMetadataColumnNames: [],
   collections: [],
   uiOptions: {
-    exclude: [ 'inctyper' ]
+    exclude: [ 'inctyper' ],
   },
 };
