@@ -13,7 +13,7 @@ export default React.createClass({
   render() {
     const { id } = this.props;
     if (isNovel(id)) {
-      const abbreviatedId = id.substr(0, 4);
+      const abbreviatedId = id.substring(0, 4);
       return (
         <span
           ref={el => {

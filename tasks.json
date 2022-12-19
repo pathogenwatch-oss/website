@@ -456,7 +456,7 @@
           "GHRU_USER": true
         },
         "task": "paarsnp",
-        "version": "v3.0.1"
+        "version": "v3.0.4"
       }
     ],
     "138": [
@@ -486,11 +486,11 @@
     "1463165": [
       {
         "task": "cgmlst",
-        "version": "202209111732-v3.2.0",
+        "version": "202214121127-v3.2.1",
         "andThen": [
           {
             "task": "klebsiella-lincodes",
-            "version": "v1.0.0"
+            "version": "v2.0.0"
           }
         ]
       },
@@ -507,7 +507,7 @@
       },
       {
         "task": "mlst",
-        "version": "202209111732-v3.2.0"
+        "version": "202214121127-v3.2.1"
       }
     ],
     "1464": [
@@ -741,15 +741,15 @@
       },
       {
         "task": "mlst",
-        "version": "202209111732-v3.2.0"
+        "version": "202214121127-v3.2.1"
       },
       {
         "task": "cgmlst",
-        "version": "202209111732-v3.2.0",
+        "version": "202214121127-v3.2.1",
         "andThen": [
           {
             "task": "klebsiella-lincodes",
-            "version": "v1.0.0"
+            "version": "v2.0.0"
           }
         ]
       }
@@ -866,17 +866,17 @@
     "2371": [
       {
         "task": "mlst",
-        "version": "202209111732-v3.2.0"
+        "version": "202214121127-v3.2.1"
       }
     ],
     "244366": [
       {
         "task": "cgmlst",
-        "version": "202209111732-v3.2.0",
+        "version": "202214121127-v3.2.1",
         "andThen": [
           {
             "task": "klebsiella-lincodes",
-            "version": "v1.0.0"
+            "version": "v2.0.0"
           }
         ]
       },
@@ -899,15 +899,15 @@
     "2489010": [
       {
         "task": "mlst",
-        "version": "202209111732-v3.2.0"
+        "version": "202214121127-v3.2.1"
       },
       {
         "task": "cgmlst",
-        "version": "202209111732-v3.2.0",
+        "version": "202214121127-v3.2.1",
         "andThen": [
           {
             "task": "klebsiella-lincodes",
-            "version": "v1.0.0"
+            "version": "v2.0.0"
           }
         ]
       }
@@ -1366,15 +1366,15 @@
     "573": [
       {
         "task": "mlst",
-        "version": "202209111732-v3.2.0"
+        "version": "202214121127-v3.2.1"
       },
       {
         "task": "cgmlst",
-        "version": "202209111732-v3.2.0",
+        "version": "202214121127-v3.2.1",
         "andThen": [
           {
             "task": "klebsiella-lincodes",
-            "version": "v1.0.0"
+            "version": "v2.0.0"
           }
         ]
       },

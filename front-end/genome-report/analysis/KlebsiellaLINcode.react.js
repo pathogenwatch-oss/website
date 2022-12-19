@@ -1,7 +1,7 @@
 import React from 'react';
-import Methods from '@cgps/phylocanvas/methods';
 import { Metadata } from '~/genome-report/components';
 import { ST } from '~/mlst';
+import ExternalLink from '~/genome-report/ExternalLink.react';
 
 const definedCgstPatten = /^\d+$/;
 
@@ -11,8 +11,9 @@ export default ({ result }) => {
     <header className="pw-genome-report-section-header">
       <h2>cgMLST classification – Core genome MLST profile comparison</h2>
       <p>
-        <a href="https://cgps.gitbook.io/pathogenwatch/technical-descriptions/typing-methods/klebsiella-lin-codes" target="_blank" rel="noopener">
-          Sourced from the Pasteur Institute
+        <a href="https://cgps.gitbook.io/pathogenwatch/technical-descriptions/typing-methods/klebsiella-lin-codes"
+           target="_blank" rel="noopener">
+          Sourced from the Pasteur Institute.
         </a>
       </p>
     </header>
@@ -52,6 +53,11 @@ export default ({ result }) => {
           ) : null
         }
       </dl>
+      <ExternalLink
+        to={`/genomes/all?lincodeCgst=${result.cgST}`}
+      >
+          View all cgST <ST id={result.cgST} textOnly />
+        </ExternalLink>
     </div>
   </React.Fragment>
   );

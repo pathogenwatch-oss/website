@@ -93,6 +93,7 @@ schema.index({ 'analysis.kaptive.kLocus.Best locus match': 1 }, { partialFilterE
 schema.index({ 'analysis.kaptive.oLocus.Best locus match': 1 }, { partialFilterExpression: { 'analysis.kaptive': { $exists: true } } });
 schema.index({ 'analysis.kleborate.typing.K_locus': 1 }, { partialFilterExpression: { 'analysis.kleborate': { $exists: true } } });
 schema.index({ 'analysis.kleborate.typing.O_locus': 1 }, { partialFilterExpression: { 'analysis.kleborate': { $exists: true } } });
+schema.index({ 'analysis.klebsiella-lincodes.cgST': 1 }, { partialFilterExpression: { 'analysis.klebsiella-lincodes': { $exists: true } } });
 schema.index({ 'analysis.pangolin.lineage': 1 }, { partialFilterExpression: { 'analysis.pangolin': { $exists: true } } });
 schema.index({ 'analysis.sarscov2-variants.variants.state': 1 }, { partialFilterExpression: { 'analysis.sarscov2-variants': { $exists: true } } });
 schema.index({ 'analysis.sarscov2-variants.variants.name': 1 }, { partialFilterExpression: { 'analysis.sarscov2-variants': { $exists: true } } });
@@ -302,6 +303,7 @@ schema.statics.getFilterQuery = async function (props, findQuery = {}) {
     id,
     klocus,
     klocusKaptive,
+    lincodeCgst,
     maxDate,
     minDate,
     ngmast,
@@ -457,6 +459,10 @@ schema.statics.getFilterQuery = async function (props, findQuery = {}) {
     findQuery['analysis.paarsnp.resistanceProfile'] = {
       $elemMatch: { 'agent.name': resistance, state: 'RESISTANT' },
     };
+  }
+
+  if (lincodeCgst) {
+    findQuery['analysis.klebsiella-lincodes.cgST'] = lincodeCgst;
   }
 
   return this.getPrefilterCondition(props, findQuery);
