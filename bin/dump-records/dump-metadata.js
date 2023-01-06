@@ -6,7 +6,7 @@ const fs = require('fs');
 
 const separator = ",";
 
-const fields = [ 'name', 'fileId', 'latitude', 'longitude', 'literaturelink', 'country' ];
+const fields = [ 'name', 'fileId', 'day', 'month', 'year', 'latitude', 'longitude', 'literaturelink', 'country' ];
 
 const projection = {
   _id: 0,
