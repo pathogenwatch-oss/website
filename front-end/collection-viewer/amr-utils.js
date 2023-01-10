@@ -63,7 +63,11 @@ export function hasElement(genome, type, element) {
   return paarsnp[type].indexOf(element) !== -1;
 }
 
-export function kleborateIsResistant({ amr }, antibiotic) {
+export function kleborateIsResistant(kleborate = {}, antibiotic) {
+  if (!kleborate || !kleborate.amr) {
+    return false;
+  }
+  const { amr } = kleborate;
   // If there is a match in e.g. Bla_ESBL_inhR then Bla_ESBL is also true.
   if (!!amr.profile &&
     antibiotic in multiClassFields &&

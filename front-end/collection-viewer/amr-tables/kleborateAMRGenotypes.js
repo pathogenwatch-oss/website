@@ -19,8 +19,11 @@ export const name = tableKeys.kleborateAMRGenotypes;
 
 const effectColour = amr.getStateColour('RESISTANT');
 
-export function hasElement(genome, element) {
-  for (const phenotype of Object.values(genome.analysis.kleborate.amr.profile)) {
+export function hasElement({ analysis = {} }, element) {
+  if (!analysis.kleborate || !analysis.kleborate.amr) {
+    return false;
+  }
+  for (const phenotype of Object.values(analysis.kleborate.amr.profile)) {
     if (kleborateCleanElement(phenotype.matches).includes(element)) {
       return true;
     }
@@ -120,7 +123,6 @@ const initialState = {
   activeColumns: new Set(),
   columns: [],
 };
-
 
 export function createReducer() {
   return function (state = initialState, { type, payload }) {

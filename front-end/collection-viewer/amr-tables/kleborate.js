@@ -52,45 +52,45 @@ function buildColumns(genomeRecords) {
               >
               lens
               </i>
-              ) : null;
-            },
+        ) : null;
+      },
       valueGetter: genome => (kleborateIsResistant(genome.analysis.kleborate, record.key) ? effectColour : amr.nonResistantColour),
-        onHeaderClick,
-      });
+      onHeaderClick,
+    });
   }
-    return columns;
-  }
+  return columns;
+}
 
-  const initialState = {
-    activeColumns: new Set(),
-    columns: [],
-  };
+const initialState = {
+  activeColumns: new Set(),
+  columns: [],
+};
 
-  export function createReducer() {
-    return function (state = initialState, { type, payload }) {
-      switch (type) {
-        case FETCH_COLLECTION.SUCCESS: {
-          const { genomes, status } = payload.result;
-          if (status !== statuses.READY || !genomes[0].analysis.kleborate) return state;
-          return {
-            ...state,
-            columns: [
-              ...systemGroup.columns,
-              ...buildColumns(genomes),
-              ...spacerGroup.columns,
-            ],
-          };
-        }
-        case SET_COLOUR_COLUMNS:
-          return {
-            ...state,
-            activeColumns:
-              payload.table === name ?
-                payload.columns :
-                state.activeColumns,
-          };
-        default:
-          return state;
+export function createReducer() {
+  return function (state = initialState, { type, payload }) {
+    switch (type) {
+      case FETCH_COLLECTION.SUCCESS: {
+        const { genomes, status } = payload.result;
+        if (status !== statuses.READY || !genomes[0].analysis.kleborate) return state;
+        return {
+          ...state,
+          columns: [
+            ...systemGroup.columns,
+            ...buildColumns(genomes),
+            ...spacerGroup.columns,
+          ],
+        };
       }
-    };
-  }
+      case SET_COLOUR_COLUMNS:
+        return {
+          ...state,
+          activeColumns:
+            payload.table === name ?
+              payload.columns :
+              state.activeColumns,
+        };
+      default:
+        return state;
+    }
+  };
+}
