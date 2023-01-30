@@ -33,18 +33,6 @@
         "timeout": "15m",
         "version": "v1.0.12-1280",
         "workers": 16
-      },
-      {
-        "requires": [
-          {
-            "task": "core",
-            "version": "v1"
-          }
-        ],
-        "task": "subtree",
-        "timeout": "15m",
-        "version": "v1.0.12-1280",
-        "workers": 16
       }
     ],
     "1336": [
@@ -224,18 +212,6 @@
           }
         ],
         "task": "tree",
-        "timeout": "15m",
-        "version": "v1.0.12-90370",
-        "workers": 16
-      },
-      {
-        "requires": [
-          {
-            "task": "core",
-            "version": "v1"
-          }
-        ],
-        "task": "subtree",
         "timeout": "15m",
         "version": "v1.0.12-90370",
         "workers": 16

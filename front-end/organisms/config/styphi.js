@@ -54,6 +54,5 @@ export default {
   amrOptions: {
   },
   uiOptions: {
-    hasPopulation: true,
   },
 };
