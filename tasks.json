@@ -540,7 +540,7 @@
           "memory": 653741824
         },
         "timeout": "15m",
-        "version": "v2.3.1"
+        "version": "v2.3.3"
       }
     ],
     "1624": [
@@ -1314,7 +1314,7 @@
       {
         "task": "kleborate",
         "timeout": "15m",
-        "version": "v2.3.1",
+        "version": "v2.3.3",
         "resources": {
           "memory": 653741824
         }
