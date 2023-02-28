@@ -125,12 +125,12 @@
         "requires": [
           {
             "task": "core",
-            "version": "v1.0.6"
+            "version": "v2.0.2-498019"
           }
         ],
         "task": "tree",
         "timeout": "15m",
-        "version": "v1.0.12-498019",
+        "version": "v1.0.13-498019",
         "workers": 16
       },
       {
@@ -1204,7 +1204,7 @@
           "C_AURIS_EXPERIMENT_USER": true
         },
         "task": "core",
-        "version": "v1.0.6"
+        "version": "v2.0.2-498019"
       }
     ],
     "504": [
