@@ -2,8 +2,8 @@ import React from 'react';
 import classnames from 'classnames';
 
 const libraryLink = {
-  PUBLIC: 'https://gitlab.com/cgps/pathogenwatch/amr-libraries/blob',
-  TESTING: 'https://gitlab.com/cgps/pathogenwatch/amr-test-libraries/blob',
+  PUBLIC: 'https://github.com/pathogenwatch/amr-libraries/blob',
+  TESTING: 'https://github.com/pathogenwatch/amr-test-libraries/blob',
 };
 
 const originalPublicSet = new Set([ '1280', '1313', '485', '90370' ]);
