@@ -140,12 +140,12 @@
         "requires": [
           {
             "task": "core",
-            "version": "v1.0.6"
+            "version": "v2.0.2-498019"
           }
         ],
         "task": "subtree",
         "timeout": "15m",
-        "version": "v1.0.5",
+        "version": "v1.0.13-498019",
         "workers": 16
       }
     ],
