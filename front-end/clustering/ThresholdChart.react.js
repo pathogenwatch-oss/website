@@ -33,7 +33,7 @@ class ThresholdChart extends Component {
     return (
       <BarChart
         width={584}
-        height={100}
+        height={140}
         labels={this.props.chartThresholds}
         values={this.props.chartValues}
         onClick={(data) => this.onClick(data)}
