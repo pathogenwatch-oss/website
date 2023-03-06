@@ -14,6 +14,7 @@ async function getEdges({ userId, scheme, sts, threshold }) {
     if (clusteringDoc.edges[t] === undefined) throw new Error(`Edges are missing for threshold of ${t}`);
   }
 
+  // Create a map of the index of the ST in the cluster record to the index of the st in the list of STs
   const clusterToQueryMap = {};
   const nSts = sts.length;
   for (let queryIdx = 0; queryIdx < nSts; queryIdx++) {

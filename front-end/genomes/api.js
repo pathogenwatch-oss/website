@@ -1,4 +1,4 @@
-import { fetchJson } from '../utils/Api';
+import { fetchJson } from '~/utils/Api';
 
 export function fetchList(query) {
   return fetchJson('GET', '/api/genome', query);

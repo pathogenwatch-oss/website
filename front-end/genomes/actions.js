@@ -32,8 +32,8 @@ export const FETCH_GENOME_LIST = createAsyncConstants('FETCH_GENOME_LIST');
 const isDefined = (value) => (typeof value !== 'undefined' && value !== null);
 
 export function fetchGenomeList(startIndex, stopIndex) {
-  let skip = undefined;
-  let limit = undefined;
+  let skip;
+  let limit;
   if (isDefined(startIndex)) {
     skip = startIndex;
     if (isDefined(stopIndex)) {

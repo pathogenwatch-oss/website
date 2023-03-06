@@ -11,17 +11,30 @@ const LOGGER = require('utils/logging').createLogger('Genome');
 
 const config = require('configuration');
 
-router.get('/genome/summary', (req, res, next) => {
+router.get('/genome/summary', asyncWrapper(async (req, res, next) => {
   LOGGER.info('Received request to get genome summary');
 
   const { user, query } = req;
-  Promise.all([
-    services.request('genome', 'summary', { user, query }),
-    services.request('genome', 'fetch-list', { user, query }),
-  ])
-    .then(([ summary, genomes ]) => res.json({ summary, genomes }))
-    .catch(next);
-});
+  if ('threshold' in query) {
+    try {
+      const genomes = await services.request('genome', 'fetch-cluster-members', { user, query });
+      delete query.threshold;
+      query.id = genomes.map(genome => genome.id);
+      const summary = await services.request('genome', 'summary', { user, query });
+      res.json({ summary, genomes });
+    } catch (e) {
+      next(e);
+    }
+  } else {
+    Promise.all([
+      services.request('genome', 'summary', { user, query }),
+      services.request('genome', 'fetch-list', { user, query }),
+    ])
+      .then(([ summary, genomes ]) => res.json({ summary, genomes }))
+      .catch(next);
+
+  }
+}));
 
 router.get('/genome/stats', (req, res, next) => {
   LOGGER.info('Received request to get genome stats data');
