@@ -2,6 +2,8 @@ const { request } = require('services');
 const Genome = require('models/genome');
 const { ServiceRequestError } = require("../../../services/errors");
 
+const MAX_GENOMES = 2000;
+
 function buildClusters(threshold, clusterIndex) {
   const { pi, lambda } = clusterIndex;
   const nItems = pi.length;
@@ -30,8 +32,9 @@ module.exports = async ({ user, scheme, version, id, threshold = 0, filters = {}
   };
 
   const query = {
-    id: [],
     ...filters,
+    id: [],
+    limit: MAX_GENOMES,
   };
 
   // Get the uuids
