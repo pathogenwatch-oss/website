@@ -9,7 +9,7 @@ async function getEdges({ userId, scheme, sts, threshold }) {
   const clusteringDoc = await request('clustering', 'cluster-details', { scheme, version, userId });
   if (clusteringDoc === undefined) throw new NotFoundError(`No cluster edges at threshold ${threshold}`);
 
-  if (clusteringDoc.threshold <= threshold) throw new NotFoundError(`No cluster edges at threshold ${threshold}`);
+  if (clusteringDoc.threshold < threshold) throw new NotFoundError(`No cluster edges at threshold ${threshold}`);
   for (let t = 0; t <= threshold; t++) {
     if (clusteringDoc.edges[t] === undefined) throw new Error(`Edges are missing for threshold of ${t}`);
   }
