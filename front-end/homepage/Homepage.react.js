@@ -94,6 +94,11 @@ export default ({ deployedOrganisms }) => (
             </Link>
           </li>
           <li>
+            <Link to={"/genomes?genusId=36910&speciesId=498019"}>
+              Candida auris
+            </Link>
+          </li>
+          <li>
             <Link to="/genomes?genusId=1350&speciesId=1352">
               Enterococcus faecium
             </Link>
@@ -195,6 +200,19 @@ export default ({ deployedOrganisms }) => (
               </td>
               <td />
               <td />
+            </tr>
+            <tr>
+              <td>
+                <em>Candida auris</em>
+              </td>
+              <td>
+                <i className="material-icons">check</i>
+              </td>
+              <td>
+                {deployedOrganisms.has('498019') && (
+                  <i className="material-icons">check</i>
+                )}
+              </td>
             </tr>
             <tr>
               <td>
