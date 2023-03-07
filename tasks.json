@@ -119,9 +119,6 @@
     ],
     "498019": [
       {
-        "flags": {
-          "C_AURIS_EXPERIMENT_USER": true
-        },
         "requires": [
           {
             "task": "core",
@@ -134,10 +131,7 @@
         "workers": 16
       },
       {
-        "flags": {
-          "C_AURIS_EXPERIMENT_USER": true
-        },
-        "requires": [
+       "requires": [
           {
             "task": "core",
             "version": "v2.0.2-498019"
@@ -1193,16 +1187,10 @@
     ],
     "498019": [
       {
-        "flags": {
-          "C_AURIS_EXPERIMENT_USER": true
-        },
         "task": "paarsnp",
         "version": "v3.0.13"
       },
       {
-        "flags": {
-          "C_AURIS_EXPERIMENT_USER": true
-        },
         "task": "core",
         "version": "v2.0.2-498019"
       }
