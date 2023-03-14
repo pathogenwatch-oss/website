@@ -456,11 +456,11 @@
     "1463165": [
       {
         "task": "cgmlst",
-        "version": "202214121127-v3.2.1",
+        "version": "202303071649-klebsiella_1-v3.2.1",
         "andThen": [
           {
             "task": "klebsiella-lincodes",
-            "version": "v2.0.0"
+            "version": "v3.0.0"
           }
         ]
       },
@@ -715,11 +715,11 @@
       },
       {
         "task": "cgmlst",
-        "version": "202214121127-v3.2.1",
+        "version": "202303071649-klebsiella_1-v3.2.1",
         "andThen": [
           {
             "task": "klebsiella-lincodes",
-            "version": "v2.0.0"
+            "version": "v3.0.0"
           }
         ]
       }
@@ -842,11 +842,11 @@
     "244366": [
       {
         "task": "cgmlst",
-        "version": "202214121127-v3.2.1",
+        "version": "202303071649-klebsiella_1-v3.2.1",
         "andThen": [
           {
             "task": "klebsiella-lincodes",
-            "version": "v2.0.0"
+            "version": "v3.0.0"
           }
         ]
       },
@@ -873,11 +873,11 @@
       },
       {
         "task": "cgmlst",
-        "version": "202214121127-v3.2.1",
+        "version": "202303071649-klebsiella_1-v3.2.1",
         "andThen": [
           {
             "task": "klebsiella-lincodes",
-            "version": "v2.0.0"
+            "version": "v3.0.0"
           }
         ]
       }
@@ -1334,11 +1334,11 @@
       },
       {
         "task": "cgmlst",
-        "version": "202214121127-v3.2.1",
+        "version": "202303071649-klebsiella_1-v3.2.1",
         "andThen": [
           {
             "task": "klebsiella-lincodes",
-            "version": "v2.0.0"
+            "version": "v3.0.0"
           }
         ]
       },
