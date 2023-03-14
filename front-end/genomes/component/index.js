@@ -3,7 +3,7 @@ import { parse } from 'query-string';
 
 import Genomes from './Genomes.react';
 
-import { getTotalGenomes, getGridItems, getStatus } from '../selectors';
+import { getTotalGenomes, getGridItems, getStatus, getErrorMsg } from '../selectors';
 import { isFilterOpen, isActive } from '../filter/selectors';
 import { getTotal } from '../summary/selectors';
 
@@ -17,6 +17,7 @@ function mapStateToProps(state, { match }) {
     items: getGridItems(state),
     total: getTotal(state),
     status: getStatus(state),
+    errorMsg: getErrorMsg(state),
     isFilterOpen: isFilterOpen(state),
     filterActive: isActive(state),
   };

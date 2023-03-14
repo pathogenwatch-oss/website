@@ -22,6 +22,8 @@ export const isWaiting = state => getGenomeState(state).waiting;
 
 export const getStatus = state => getGenomeState(state).status;
 
+export const getErrorMsg = state => getGenomeState(state).errorMsg;
+
 export const getGridItems = getGenomeList;
 
 export const isAsideEnabled = () => true;

@@ -12,6 +12,7 @@ import { CREATE_COLLECTION } from './create-collection-form';
 import * as actions from './actions';
 
 import { statuses } from './constants';
+import { messageToken } from "../../universal/constants";
 
 function entities(state = {}, { type, payload }) {
   switch (type) {
@@ -114,6 +115,7 @@ function waiting(state = false, { type }) {
 }
 
 const initialStatus = null;
+
 function status(state = initialStatus, { type }) {
   switch (type) {
     case actions.FETCH_GENOME_SUMMARY.ATTEMPT:
@@ -133,6 +135,21 @@ function status(state = initialStatus, { type }) {
   }
 }
 
+const initialErrorMsg = "";
+
+function errorMsg(state = initialErrorMsg, { type, payload }) {
+  switch (type) {
+    case actions.FETCH_GENOME_SUMMARY.FAILURE:
+    case actions.FETCH_GENOME_MAP.FAILURE:
+    case actions.FETCH_GENOME_STATS.FAILURE:
+      return payload.error.responseText.includes(messageToken) ?
+        payload.error.responseText.split(messageToken)[1] :
+        null;
+    default:
+      return state;
+  }
+}
+
 export default combineReducers({
   filter,
   entities,
@@ -145,4 +162,5 @@ export default combineReducers({
   waiting,
   map,
   report,
+  errorMsg,
 });

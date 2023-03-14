@@ -81,10 +81,12 @@ export default React.createClass({
   },
 
   renderContent() {
-    const { items, total, status } = this.props;
+    const { items, total, status, errorMsg } = this.props;
 
     if (status === statuses.ERROR) {
-      return <p className="pw-filter-view-message">Something went wrong. 😞</p>;
+      return <p className="pw-filter-view-message">{
+        `😞 Something went wrong${!!errorMsg && errorMsg !== '' ? `: ${errorMsg}` : '.'}`
+      }</p>;
     }
 
     // Initial load
@@ -106,10 +108,10 @@ export default React.createClass({
           'has-filter': this.props.isFilterOpen,
         })}
       >
-        <DocumentTitle title="Genomes" />
-        <Filter />
+        <DocumentTitle title="Genomes"/>
+        <Filter/>
         <div className="wgsa-filter-content">
-          <Header prefilter={this.props.prefilter} />
+          <Header prefilter={this.props.prefilter}/>
           {this.renderContent()}
         </div>
         <Overlay visible={this.props.status === statuses.LOADING}>

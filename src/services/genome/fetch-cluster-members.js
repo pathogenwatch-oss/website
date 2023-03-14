@@ -1,10 +1,13 @@
 const { request } = require('services');
 const { ServiceRequestError } = require('utils/errors');
+const { maxContextInputSize } = require('../../../defaults');
+const { messageToken } = require("../../../universal/constants");
 
 module.exports = async ({ user, query }) => {
   const { id, threshold } = query;
   if (!id) throw new ServiceRequestError('Missing Id');
-
+  const idCount = [].concat(id).length;
+  if (idCount > maxContextInputSize) throw new ServiceRequestError(`${messageToken} Too many genomes requested for context searching: ${idCount} (max ${maxContextInputSize})`);
   const projection = {
     'analysis.cgmlst.scheme': 1,
   };
@@ -15,8 +18,8 @@ module.exports = async ({ user, query }) => {
   delete filters.threshold;
 
   if (genome && genome.analysis && genome.analysis.cgmlst) {
-    const { scheme, version } = genome.analysis.cgmlst;
-    return request('clustering', 'fetch-linked-genomes', { user, scheme, version, id, threshold, filters });
+    const { scheme } = genome.analysis.cgmlst;
+    return request('clustering', 'fetch-linked-genomes', { user, scheme, id, threshold, filters });
   }
   return null;
 };
