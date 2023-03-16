@@ -10,6 +10,11 @@
   "maxDownloadSize": 5000,
   "maxContextInputSize": 500,
   "maxContextOutputSize": 2000,
+  "maxClusteringThreshold": {
+    "default": 50,
+    "klebsiella_1": 30,
+    "campylobacter_1": 30
+  },
   "mongodb": {
     "host": "localhost",
     "port": 27017,

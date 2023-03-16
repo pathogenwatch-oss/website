@@ -17,6 +17,7 @@ const docker = require('services/docker');
 const { getImageName } = require('manifest.js');
 const { request } = require('services');
 
+const config = require('configuration');
 const LOGGER = require('utils/logging').createLogger('runner');
 
 const DEFAULT_THRESHOLD = 50;
@@ -40,6 +41,11 @@ async function extractCgstSet(metadata) {
   return cgSTs;
 }
 
+function determineMaxThreshold(scheme) {
+  if (!('maxClusteringThreshold' in config)) return DEFAULT_THRESHOLD;
+  const maxClusteringThreshold = config.maxClusteringThreshold;
+  return scheme in maxClusteringThreshold ? maxClusteringThreshold[scheme] : maxClusteringThreshold.default;
+}
 
 function attachInputStream(container, spec, metadata) {
   const { userId = 'public', scheme } = metadata;
@@ -50,9 +56,10 @@ function attachInputStream(container, spec, metadata) {
     // fairly memory efficient. The reduction to a single profile per ST is not essential but for Klebsiella it does
     // remove a lot of redundancy.
     const cgSTs = await extractCgstSet(metadata);
+    const maxThreshold = determineMaxThreshold(scheme);
     yield bson.serialize({
       STs: Object.keys(cgSTs),
-      maxThreshold: DEFAULT_THRESHOLD,
+      maxThreshold,
     });
 
     const clustering = await request('clustering', 'cluster-details', { scheme, version, userId });

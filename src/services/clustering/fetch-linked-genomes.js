@@ -1,8 +1,8 @@
 const { request } = require('services');
 const Genome = require('models/genome');
 const { getClusteringTask } = require("manifest");
+const { maxContextOutputSize } = require("configuration");
 const { ServiceRequestError, NotFoundError } = require("../../../services/errors");
-const { maxContextOutputSize } = require("../../../defaults");
 const { messageToken } = require("../../../universal/constants");
 
 function buildClusters({ pi, lambda }, threshold) {

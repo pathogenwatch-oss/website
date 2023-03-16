@@ -1,6 +1,6 @@
 const { request } = require('services');
 const { ServiceRequestError } = require('utils/errors');
-const { maxContextInputSize } = require('../../../defaults');
+const { maxContextInputSize } = require('configuration');
 const { messageToken } = require("../../../universal/constants");
 
 module.exports = async ({ user, query }) => {

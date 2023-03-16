@@ -1,11 +1,12 @@
 import { createSelector } from 'reselect';
 
 import { cluster } from './util';
-import { MAX_CLUSTER_SIZE, MAX_THRESHOLD } from './constants';
+import { MAX_CLUSTER_SIZE } from './constants';
 import { isClusterView } from '~/collection-viewer/selectors';
 import { getGenomeStyles } from '~/collection-viewer/selectors/styles';
 import { DEFAULT } from '~/app/constants';
 import { nonResistantColour } from '~/collection-viewer/amr-utils';
+import config from '../app/config';
 
 const NODE_COLORS = {
   0: '#673c90',
@@ -100,6 +101,12 @@ export const getScheme = (state) => getClusterState(state).scheme;
 export const getVersion = (state) => getClusterState(state).version;
 export const getNodeData = (state) => getClusterState(state).nodes;
 
+export const getMaxThreshold = createSelector(
+  getScheme,
+  scheme => {
+    return scheme in config.maxClusteringThreshold ? config.maxClusteringThreshold[scheme] : config.maxClusteringThreshold.default;
+  }
+);
 export const getEdgesCount = createSelector(
   getEdgeMatrix,
   (edgeMatrix) => (edgeMatrix || []).filter((_) => _ === 1).length
@@ -249,8 +256,10 @@ export const getEdgeColors = createSelector(
     (!degrees ? undefined : degrees.map((d) => EDGE_COLORS[d] || EDGE_COLORS[-1]))
 );
 
-const chartThresholds = [ ...Array(MAX_THRESHOLD + 1) ].map((__, i) => i);
-export const getChartThresholds = () => chartThresholds;
+export const getChartThresholds = createSelector(
+  getMaxThreshold,
+  (maxThreshold) => [ ...Array(maxThreshold + 1) ].map((__, i) => i)
+);
 
 const getNodeGenomeIds = createSelector(
   getAllSts,

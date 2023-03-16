@@ -20,6 +20,7 @@ function getFrontEndSettings(req) {
   const limits = {
     maxCollectionSize: { default: config.maxCollectionSize },
     maxDownloadSize: config.maxDownloadSize,
+    maxClusteringThreshold: config.maxClusteringThreshold,
   };
 
   organismConfigs
@@ -45,6 +46,7 @@ function getFrontEndSettings(req) {
     mapboxKey: config.mapboxKey,
     maxCollectionSize: limits.maxCollectionSize,
     maxDownloadSize: limits.maxDownloadSize,
+    maxClusteringThreshold: limits.maxClusteringThreshold,
     maxGenomeFileSize: config.maxGenomeFileSize,
     maxReadsFileSize: config.maxReadsFileSize,
     pagination: config.pagination,
