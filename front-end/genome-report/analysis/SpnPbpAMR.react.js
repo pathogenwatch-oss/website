@@ -30,6 +30,9 @@ const antimicrobials = {
 };
 
 function formatPhenotype(phenotype) {
+  if (!phenotype) {
+    return '';
+  }
   return phenotype
     .replace(/R/g, 'Resistant')
     .replace(/I/g, 'Intermediate')
@@ -40,7 +43,7 @@ export default ({ result }) => (
   <React.Fragment>
     <p className="pw-genome-report-section-header">
       <a href="https://www.ncbi.nlm.nih.gov/pubmed/27302760" target="_blank"
-        rel="noopener" className="pw-genome-report-secondary-link"
+         rel="noopener" className="pw-genome-report-secondary-link"
       >
         <strong>PBP Analysis</strong> - Li et al, 2016
       </a>
@@ -48,35 +51,35 @@ export default ({ result }) => (
     <table cellSpacing="0" className="wgsa-genome-report-amr wide bordered">
       <caption>Predicted resistance profile</caption>
       <thead>
-        <tr>
-          <th>Agent</th>
-          <th>Predicted MIC</th>
-          <th>Inferred phenotype (non/meningitis)</th>
-        </tr>
+      <tr>
+        <th>Agent</th>
+        <th>Predicted MIC</th>
+        <th>Inferred phenotype (non/meningitis)</th>
+      </tr>
       </thead>
       <tbody>
-        {Object.keys(antimicrobials).map((agentKey) => (
-          <tr
-            key={antimicrobials[agentKey].name}
-            className={classnames({
-              'pw-genome-report-amr-present': true,
-              'pw-genome-report-amr-resistant': result[agentKey] === 'R'
-                || result[`${agentKey}Meningitis`] === 'R'
-                || result[`${agentKey}NonMeningitis`] === 'R',
-            })}
-          >
-            <td>{antimicrobials[agentKey].name}</td>
-            <td className="wgsa-genome-report-amr-state">
-              {result[`${agentKey}Mic`]}
-            </td>
-            <td className="wgsa-genome-report-amr-state">
-              {formatPhenotype(result.hasOwnProperty(agentKey) ?
-                result[agentKey] :
-                `${result[`${agentKey}NonMeningitis`]} / ${result[`${agentKey}Meningitis`]}`)
-              }
-            </td>
-          </tr>
-        ))}
+      {Object.keys(antimicrobials).map((agentKey) => (
+        <tr
+          key={antimicrobials[agentKey].name}
+          className={classnames({
+            'pw-genome-report-amr-present': true,
+            'pw-genome-report-amr-resistant': result[agentKey] === 'R'
+              || result[`${agentKey}Meningitis`] === 'R'
+              || result[`${agentKey}NonMeningitis`] === 'R',
+          })}
+        >
+          <td>{antimicrobials[agentKey].name}</td>
+          <td className="wgsa-genome-report-amr-state">
+            {result[`${agentKey}Mic`]}
+          </td>
+          <td className="wgsa-genome-report-amr-state">
+            {formatPhenotype(result.hasOwnProperty(agentKey) ?
+              result[agentKey] :
+              `${result[`${agentKey}NonMeningitis`]} / ${result[`${agentKey}Meningitis`]}`)
+            }
+          </td>
+        </tr>
+      ))}
       </tbody>
     </table>
   </React.Fragment>
