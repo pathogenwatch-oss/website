@@ -70,7 +70,7 @@ function buildColumnGroup(field, genomes) {
           </i>
         ) : null;
       },
-      valueGetter: ( { analysis }) => {
+      valueGetter: ({ analysis }) => {
         const value = findCluster(record.name, analysis.vista[field]);
         return !!value ? selectColour(value.status) : amr.nonResistantColour;
       },
