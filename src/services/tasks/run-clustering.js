@@ -59,7 +59,7 @@ function attachInputStream(container, spec, metadata) {
     const maxThreshold = determineMaxThreshold(scheme);
     yield JSON.stringify({
       STs: Object.keys(cgSTs),
-      maxThreshold,
+      Threshold: maxThreshold,
     });
 
     const clustering = await request('clustering', 'cluster-details', { scheme, version, userId });
