@@ -57,24 +57,37 @@ function attachInputStream(container, spec, metadata) {
     // remove a lot of redundancy.
     const cgSTs = await extractCgstSet(metadata);
     const maxThreshold = determineMaxThreshold(scheme);
-    yield bson.serialize({
+    yield JSON.stringify({
       STs: Object.keys(cgSTs),
       maxThreshold,
     });
 
     const clustering = await request('clustering', 'cluster-details', { scheme, version, userId });
     if (clustering !== undefined && clustering !== null) {
-      const { edges, ...otherFields } = clustering;
-      yield bson.serialize(otherFields);
-      for (const threshold of Object.keys(edges)) {
-        yield bson.serialize({ edges: { [threshold]: edges[threshold] } });
-      }
+      yield JSON.stringify(clustering);
+      // const { edges, ...otherFields } = clustering;
+      // yield bson.serialize(otherFields);
+      // for (const threshold of Object.keys(edges)) {
+      //   yield bson.serialize({ edges: { [threshold]: edges[threshold] } });
+      // }
+    } else {
+      yield JSON.stringify({
+        edges: {},
+        threshold: maxThreshold,
+        pi: [],
+        lambda: [],
+        STs: [],
+      });
     }
 
     const query = { fileId: { $in: Object.values(cgSTs) } };
 
-    for await (const { fileId, st, matches, schemeSize } of CgmlstProfile.find(query, { _id: 0 }).lean().cursor()) {
-      yield bson.serialize({ fileId, results: { st, matches, schemeSize } });
+    for await (const { st, matches, schemeSize } of CgmlstProfile.find(query, { _id: 0, fileId: 0 }).lean().cursor()) {
+      const cleanedMatches = matches.reduce((acc, cur) => {
+        acc[cur.gene] = cur.id;
+        return acc;
+      }, {});
+      yield JSON.stringify({ ST: st, Matches: cleanedMatches, schemeSize });
     }
   }
 
