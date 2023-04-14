@@ -33,7 +33,7 @@ module.exports = async function ({ taskId, user, genomeId, projection = {} }) {
   }
 
   queueQuery.state = { $in: [state.PENDING, state.RUNNING] };
-  queueQuery.$or = [{ nextReceivableTime: { $gt: now() + 10 } }, { nextReceivableTime: null }];
+  // queueQuery.$or = [{ nextReceivableTime: { $gt: now() + 10 } }, { nextReceivableTime: null }];
 
   const doc = await Queue.findOne(queueQuery, projection).lean();
   const status = getJobStatus(doc);
