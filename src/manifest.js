@@ -64,7 +64,7 @@ function addTaskDefaults(task) {
 
   switch (task.task) {
     case 'assembly':
-      resources.memory = resources.memory || 3 * GB;
+      resources.memory = resources.memory || 3.5 * GB;
       resources.cpu = resources.cpu || 2;
       resources.slow = resources.slow || 1;
       break;

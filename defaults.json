@@ -6,7 +6,7 @@
   "mapboxKey": "",
   "maxCollectionSize": 2000,
   "maxGenomeFileSize": 20,
-  "maxReadsFileSize": 500,
+  "maxReadsFileSize": 900,
   "maxDownloadSize": 5000,
   "maxContextInputSize": 500,
   "maxContextOutputSize": 2000,
