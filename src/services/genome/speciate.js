@@ -4,7 +4,7 @@ const User = require('models/user');
 const store = require('utils/object-store');
 
 const { request } = require('services');
-const { getSpeciatorTask, getTasksByOrganism } = require('manifest');
+const { getTasksByOrganism } = require('manifest');
 const notify = require('services/genome/notify');
 const { summariseAnalysis } = require('utils/analysis');
 

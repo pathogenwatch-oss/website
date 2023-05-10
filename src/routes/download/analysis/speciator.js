@@ -2,7 +2,7 @@ const sanitize = require('sanitize-filename');
 const csv = require('csv');
 const Genome = require('models/genome');
 
-const { transformer } = require('../utils/speciator');
+const { transformer } = require('routes/download/utils/speciator');
 
 module.exports = (req, res) => {
   const { user } = req;

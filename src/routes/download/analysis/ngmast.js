@@ -2,16 +2,7 @@ const sanitize = require('sanitize-filename');
 const csv = require('csv');
 const Genome = require('models/genome');
 
-const transformer = function (doc) {
-  return {
-    'Genome ID': doc._id.toString(),
-    'Genome Name': doc.name,
-    Version: doc.analysis.ngmast.__v,
-    'NG-Mast': doc.analysis.ngmast.ngmast,
-    POR: doc.analysis.ngmast.por,
-    TBPB: doc.analysis.ngmast.tbpb,
-  };
-};
+const { transformer } = require('routes/download/utils/ngmast');
 
 module.exports = (req, res) => {
   const { user } = req;

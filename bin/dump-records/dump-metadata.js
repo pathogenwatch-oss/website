@@ -17,6 +17,8 @@ const projection = {
   }, new Map())),
 };
 
+
+
 function printTable(header, rows) {
   const stream = fs.createWriteStream(`metadata.csv`);
   stream.write(`${header.join(separator)}\n`);

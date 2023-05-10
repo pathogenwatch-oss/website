@@ -4,7 +4,7 @@ const Genome = require('models/genome');
 
 const { request } = require('services');
 
-const { transformer } = require('../utils/speciator');
+const { transformer } = require('routes/download/utils/speciator');
 
 module.exports = (req, res, next) => {
   const { user } = req;

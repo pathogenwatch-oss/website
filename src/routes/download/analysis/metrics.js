@@ -2,21 +2,7 @@ const sanitize = require('sanitize-filename');
 const csv = require('csv');
 const Genome = require('models/genome');
 
-const transformer = function (doc) {
-  return {
-    'Genome ID': doc._id.toString(),
-    'Genome Name': doc.name,
-    Version: doc.analysis.metrics.__v,
-    'Genome Length': doc.analysis.metrics.length,
-    'No. Contigs': doc.analysis.metrics.contigs,
-    'Smallest Contig': doc.analysis.metrics.smallestContig,
-    'Largest Contig': doc.analysis.metrics.largestContig,
-    'Average Contig Length': doc.analysis.metrics.averageContig,
-    N50: doc.analysis.metrics.N50,
-    'non-ATCG': doc.analysis.metrics.nonATCG,
-    'GC Content': doc.analysis.metrics.gcContent,
-  };
-};
+const { transformer } = require('routes/download/utils/metrics');
 
 module.exports = (req, res) => {
   const { user } = req;

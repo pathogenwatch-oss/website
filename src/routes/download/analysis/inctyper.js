@@ -2,24 +2,7 @@ const sanitize = require('sanitize-filename');
 const csv = require('csv');
 const Genome = require('models/genome');
 
-const transformer = (doc, callback) => {
-  const records = [];
-
-  for (const match of doc.analysis.inctyper['Inc Matches']) {
-    const record = {
-      'Genome ID': doc._id.toString(),
-      'Genome Name': doc.name,
-    };
-
-    /* eslint-disable no-return-assign */
-    Object.keys(match)
-      .forEach((prop) =>
-        record[prop.replace('__v', 'Version').replace(/_/g, ' ')] = match[prop]
-      );
-    records.push(record);
-  }
-  callback(null, ...records);
-};
+const { transformer } = require('routes/download/utils/inctyper');
 
 module.exports = (req, res) => {
   const { user } = req;

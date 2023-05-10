@@ -127,7 +127,7 @@ router.post('/genome/:id/clusters', asyncWrapper(async (req, res, next) => {
 
 router.post('/genome/:id/clusters/edges', asyncWrapper(async (req, res, next) => {
   const { user, body } = req;
-  const { threshold, sts, version, scheme } = body;
+  const { threshold, sts, version, scheme, organismId } = body;
   const { id } = req.params;
 
   LOGGER.info('Received request for cluster edges', id);
@@ -139,6 +139,7 @@ router.post('/genome/:id/clusters/edges', asyncWrapper(async (req, res, next) =>
       threshold,
       sts,
       version,
+      organismId,
       scheme,
     });
     res.json(response);

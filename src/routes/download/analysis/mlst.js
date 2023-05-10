@@ -2,20 +2,7 @@ const sanitize = require('sanitize-filename');
 const csv = require('csv');
 const Genome = require('models/genome');
 
-const transformer = (key) => (doc) => {
-  const result = {
-    'Genome ID': doc._id.toString(),
-    'Genome Name': doc.name,
-    Version: doc.analysis[key].__v,
-    ST: doc.analysis[key].st,
-  };
-
-  for (const { gene, hits } of doc.analysis[key].alleles) {
-    result[gene] = hits.join(',');
-  }
-
-  return result;
-};
+const { transformer } = require('routes/download/utils/mlst');
 
 module.exports = (key) => (req, res) => {
   const { user } = req;

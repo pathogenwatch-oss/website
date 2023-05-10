@@ -15,11 +15,11 @@ function buildClusters({ pi, lambda }, threshold) {
   return clusters;
 }
 
-async function fetchClusters(user, scheme) {
+async function fetchClusters(user, scheme, organismId) {
   const { version } = getClusteringTask(scheme);
   if (version === undefined) throw new NotFoundError('No matching clustering result');
 
-  const message = { scheme, version };
+  const message = { organismId, scheme, version };
   if (!!user) message.userId = user._id;
 
   const clusters = await request('clustering', 'cluster-details', message);
@@ -29,11 +29,11 @@ async function fetchClusters(user, scheme) {
   return clusters;
 }
 
-module.exports = async ({ user, scheme, id, threshold = 0, filters = {} }) => {
+module.exports = async ({ user, scheme, organismId, id, threshold = 0, filters = {} }) => {
   if (!id) throw new ServiceRequestError('Missing Id');
 
   // Get the cluster document.
-  const clustering = await fetchClusters(user, scheme);
+  const clustering = await fetchClusters(user, scheme, organismId);
   if (threshold > clustering.threshold) throw new ServiceRequestError(`${messageToken}Threshold of ${threshold} is greater than the maximum allowed (${clustering.threshold})`);
   const genomes = Genome.find({
     'analysis.cgmlst.st': { $in: clustering.STs },

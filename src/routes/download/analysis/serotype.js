@@ -1,26 +1,7 @@
 const sanitize = require('sanitize-filename');
 const csv = require('csv');
 const Genome = require('models/genome');
-
-const subspeciesKey = 'subspecies';
-const transformer = function (doc, label) {
-  const row = {
-    'Genome ID': doc._id.toString(),
-    'Genome Name': doc.name,
-    Version: doc.analysis.serotype.__v,
-  };
-  if (subspeciesKey in doc.analysis.serotype) {
-    row.Subspecies = doc.analysis.serotype[subspeciesKey];
-  }
-  row[label] = doc.analysis.serotype.value;
-  return row;
-};
-
-const labels = {
-  28901: 'Serovar', // Salmonella enterica
-  54736: 'Serovar', // Salmonella bongori
-  general: 'Serotype',
-};
+const { labels, transformer } = require('../utils/serotype');
 
 module.exports = (req, res) => {
   const { user } = req;
@@ -41,11 +22,9 @@ module.exports = (req, res) => {
     'analysis.serotype': 1,
   };
 
-  const transform = (doc) => transformer(doc, labels[speciesId] || labels.general);
-
   return Genome.find(query, projection)
     .cursor()
-    .pipe(csv.transform(transform))
+    .pipe(csv.transform(transformer(labels[speciesId] || labels.general)))
     .pipe(csv.stringify({ header: true, quotedString: true }))
     .pipe(res);
 };

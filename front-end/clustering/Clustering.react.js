@@ -47,7 +47,7 @@ const Clustering = React.createClass({
     const { status } = this.props;
     switch (status) {
       case 'INITIAL_STATUS':
-        return <TrySomeClustering />;
+        return <TrySomeClustering/>;
       case 'FETCHING_CLUSTERS':
         return (
           <div className="pw-cluster-content">
@@ -58,7 +58,7 @@ const Clustering = React.createClass({
         );
       case 'BUILDING_CLUSTERS':
       case 'BUILT_CLUSTERS':
-        return <Progress />;
+        return <Progress/>;
       case 'FETCHED_CLUSTERS':
       case 'FETCHING_EDGES':
       case 'FETCHED_EDGES':
@@ -68,12 +68,12 @@ const Clustering = React.createClass({
         return this.props.children;
       case 'FAILED_FETCHING_CLUSTERS':
         return this.props.triedBuilding ?
-          <SomethingWentWrong /> :
-          <TrySomeClustering />;
+          <SomethingWentWrong/> :
+          <TrySomeClustering/>;
       case 'FAILED_BUILDING_CLUSTERS':
       case 'FAILED_FETCHING_EDGES':
       default:
-        return <SomethingWentWrong />;
+        return <SomethingWentWrong/>;
     }
   },
 
@@ -90,6 +90,7 @@ function mapStateToProps(state) {
     triedBuilding: selectors.getTriedBuilding(state),
     scheme: selectors.getScheme(state),
     version: selectors.getVersion(state),
+    organismId: selectors.getOrganismId(state),
   };
 }
 
@@ -97,8 +98,8 @@ function mapDispatchToProps(dispatch) {
   return {
     build: (selectedGenomeId) => dispatch(actions.build(selectedGenomeId)),
     fetch: (selectedGenomeId) => dispatch(actions.fetch(selectedGenomeId)),
-    fetchEdgeMatrix: ({ selectedGenomeId, scheme, version, threshold, clusterSts }) =>
-      dispatch(actions.fetchEdgeMatrix(selectedGenomeId, scheme, version, threshold, clusterSts)),
+    fetchEdgeMatrix: ({ selectedGenomeId, scheme, version, organismId, threshold, clusterSts }) =>
+      dispatch(actions.fetchEdgeMatrix(selectedGenomeId, scheme, version, organismId, threshold, clusterSts)),
     skipLayout: (network) => dispatch(actions.skipLayout(network)),
   };
 }

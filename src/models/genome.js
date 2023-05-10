@@ -563,6 +563,21 @@ schema.statics.lookupCgMlstScheme = async function (genomeId, user) {
   return genome ? genome.analysis.cgmlst.scheme : undefined;
 };
 
+schema.statics.lookupOrganism = async function (genomeId, user) {
+  const query = {
+    _id: genomeId,
+    'analysis.speciator': { $exists: true },
+    ...this.getPrefilterCondition({ user }),
+  };
+  const projection = { 'analysis.speciator.organismId': 1, 'analysis.speciator.organismName': 1 };
+  const genome = await this.findOne(query, projection);
+  if (user && genome === undefined) return this.lookupOrganism(genomeId, undefined);
+  return genome ? {
+    organismId: genome.analysis.speciator.organismId,
+    organismName: genome.analysis.speciator.organismName
+  } : undefined;
+};
+
 schema.statics.checkAuthorisedForSts = async function (user, sts) {
   // A user says they want info about a list of cgmlst sts
   // Do they have access to at least one genome with those sts?

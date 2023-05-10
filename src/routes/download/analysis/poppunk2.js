@@ -2,14 +2,7 @@ const sanitize = require('sanitize-filename');
 const csv = require('csv');
 const Genome = require('models/genome');
 
-const transformer = function (doc) {
-  return {
-    'Genome ID': doc._id.toString(),
-    'Genome Name': doc.name,
-    Version: doc.analysis.poppunk2.__v,
-    Strain: doc.analysis.poppunk2.strain,
-  };
-};
+const { transformer } = require('../utils/poppunk2');
 
 module.exports = (req, res) => {
   const { user } = req;

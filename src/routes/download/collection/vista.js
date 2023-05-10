@@ -4,7 +4,7 @@ const Genome = require('models/genome');
 
 const { request } = require('services');
 
-const { transformer } = require('../utils/vista');
+const { transformer } = require('routes/download/utils/vista-simple');
 
 module.exports = (req, res, next) => {
   const { user } = req;

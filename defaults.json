@@ -11,9 +11,7 @@
   "maxContextInputSize": 500,
   "maxContextOutputSize": 2000,
   "maxClusteringThreshold": {
-    "default": 50,
-    "klebsiella_1": 10,
-    "campylobacter_1": 10
+    "default": 50
   },
   "mongodb": {
     "host": "localhost",

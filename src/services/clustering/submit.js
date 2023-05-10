@@ -3,7 +3,7 @@ const { enqueue } = require('models/queue');
 const rand = require('rand-token');
 
 module.exports = async function ({ user, genomeId, clientId }) {
-  const { doc, status, scheme, spec } =
+  const { doc, status, scheme, organismId, spec } =
     await request('clustering', 'fetch-queue-message', { user, genomeId });
 
   if (status === 'QUEUED') {
@@ -11,7 +11,7 @@ module.exports = async function ({ user, genomeId, clientId }) {
   }
 
   const taskId = rand.generate(16);
-  const metadata = { scheme, clientId, taskId };
+  const metadata = { scheme, organismId, clientId, taskId };
   if (user) {
     metadata.userId = user._id;
   } else {

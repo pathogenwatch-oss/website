@@ -2,7 +2,7 @@ const sanitize = require('sanitize-filename');
 const csv = require('csv');
 const Genome = require('models/genome');
 
-const { transformer } = require('../utils/pangolin');
+const { transformer } = require('routes/download/utils/pangolin');
 
 module.exports = (req, res) => {
   const { user } = req;

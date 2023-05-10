@@ -6,7 +6,7 @@ const mongoConnection = require('utils/mongoConnection');
 
 const Genome = require('models/genome');
 const csv = require('csv');
-const { transformer } = require('../../src/routes/download/utils/kleborate');
+const { transformer } = require('routes/download/utils/kleborate');
 
 async function main() {
   // const { query } = argv.opts;

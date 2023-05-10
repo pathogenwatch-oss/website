@@ -99,6 +99,7 @@ export const getNodeCoordinates = (state) => getClusterState(state).nodeCoordina
 export const getTaskId = (state) => getClusterState(state).taskId;
 export const getScheme = (state) => getClusterState(state).scheme;
 export const getVersion = (state) => getClusterState(state).version;
+export const getOrganismId = (state) => getClusterState(state).organismId;
 export const getNodeData = (state) => getClusterState(state).nodes;
 
 export const getMaxThreshold = createSelector(

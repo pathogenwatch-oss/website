@@ -6,12 +6,14 @@ module.exports = async ({ user, id }) => {
 
   const projection = {
     'analysis.cgmlst.scheme': 1,
+    'analysis.speciator.organismId': 1,
   };
   const genome = await request('genome', 'authorise', { user, id, projection });
 
-  if (genome && genome.analysis && genome.analysis.cgmlst) {
+  if (genome && genome.analysis && genome.analysis.cgmlst && genome.analysis.speciator) {
     const { scheme } = genome.analysis.cgmlst;
-    return request('clustering', 'fetch', { user, scheme, id });
+    const { organismId } = genome.analysis.speciator;
+    return request('clustering', 'fetch', { user, scheme, organismId, id });
   }
   return null;
 };

@@ -32,6 +32,7 @@ const initialState = {
   indexOfSelectedInAll: null,
   nodeCoordinates: null,
   nodes: null,
+  organismId: null,
   progress: null,
   scheme: null,
   selectedGenomeId: null,
@@ -128,7 +129,7 @@ export default function (state = initialState, { type, payload }) {
         state.status !== 'FETCHING_CLUSTERS'
       ) return state;
       const { result = {} } = payload;
-      const { nodes, sts, genomeIdx, scheme, version } = result;
+      const { nodes, sts, genomeIdx, scheme, version, organismId } = result;
       const { pi, lambda } = result.clusterIndex;
       return {
         ...state,
@@ -142,6 +143,7 @@ export default function (state = initialState, { type, payload }) {
         indexOfSelectedInAll: genomeIdx,
         scheme,
         version,
+        organismId,
         threshold: state.threshold || calculateDefaultThreshold(pi, lambda, genomeIdx),
       };
     }

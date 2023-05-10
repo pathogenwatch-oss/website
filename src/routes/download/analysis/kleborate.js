@@ -2,7 +2,7 @@ const sanitize = require('sanitize-filename');
 const csv = require('csv');
 const Genome = require('models/genome');
 
-const { transformer } = require('../utils/kleborate');
+const { transformer } = require('routes/download/utils/kleborate');
 
 module.exports = (req, res) => {
   const { user } = req;

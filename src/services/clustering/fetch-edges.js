@@ -1,12 +1,10 @@
 const Genome = require('models/genome');
 const { NotFoundError } = require('utils/errors');
 const { request } = require('services');
-const { getClusteringTask } = require('manifest');
 
-async function getEdges({ userId, scheme, sts, threshold }) {
-  const { version } = getClusteringTask(scheme);
+async function getEdges({ userId, scheme, version, organismId, sts, threshold }) {
   if (version === undefined) throw new NotFoundError(`No clustering for scheme '${scheme}'`);
-  const clusteringDoc = await request('clustering', 'cluster-details', { scheme, version, userId });
+  const clusteringDoc = await request('clustering', 'cluster-details', { scheme, version, organismId, userId });
   if (clusteringDoc === undefined) throw new NotFoundError(`No cluster edges at threshold ${threshold}`);
 
   if (clusteringDoc.threshold < threshold) throw new NotFoundError(`No cluster edges at threshold ${threshold}`);
@@ -51,7 +49,7 @@ async function getEdges({ userId, scheme, sts, threshold }) {
   return edges;
 }
 
-module.exports = async function ({ user, genomeId, scheme, version, sts, threshold }) {
+module.exports = async function ({ user, genomeId, scheme, version, organismId, sts, threshold }) {
   // We need to check that the user is allowed to get the edges for these STs
   const hasAccess = await Genome.checkAuthorisedForSts(user, sts);
   // We return a 404 so that we don't leak whether an ST exists for another user
@@ -62,7 +60,7 @@ module.exports = async function ({ user, genomeId, scheme, version, sts, thresho
   // If the STs are [A, B, C, D] the edges should be  ordered [AB, AC, BC, AD, BD, CD].
 
   // We create a function to lookup the distance between any pair of STs
-  const edges = await getEdges({ userId: user ? user._id : undefined, scheme, version, sts, threshold });
+  const edges = await getEdges({ userId: user ? user._id : undefined, scheme, organismId, version, sts, threshold });
 
   if (edges.length <= 0) {
     throw new NotFoundError(`No cluster edges found for ${genomeId} at threshold ${threshold}`);

@@ -10,16 +10,14 @@ const schema = new Schema({
 });
 
 schema.statics.upsertProfile = function (fileId, { results }) {
-  const { st, schemeSize, matches } = results;
+  const { st, schemeSize, code } = results;
   return this.findOneAndUpdate(
     { fileId },
     {
       fileId,
       st,
       schemeSize,
-      matches: matches.map(match => {
-        return { gene: match.gene, id: match.id };
-      }),
+      matches: code.split('_'),
     },
     { upsert: true });
 };

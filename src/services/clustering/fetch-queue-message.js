@@ -14,6 +14,7 @@ function getJobStatus(doc) {
 module.exports = async function ({ taskId, user, genomeId, projection = {} }) {
   let scheme;
   let spec;
+  let organismId;
   const queueQuery = {
     'message.spec.taskType': taskTypes.clustering,
   };
@@ -21,9 +22,12 @@ module.exports = async function ({ taskId, user, genomeId, projection = {} }) {
     queueQuery['message.metadata.taskId'] = taskId;
   } else {
     scheme = await Genome.lookupCgMlstScheme(genomeId, user);
+    const organism = await Genome.lookupOrganism(genomeId, user);
+    organismId = organism.organismId;
     spec = getClusteringTask(scheme);
     queueQuery['message.spec.task'] = spec.task;
     queueQuery['message.metadata.scheme'] = scheme;
+    queueQuery['message.metadata.organismId'] = organismId;
   }
 
   if (user) {
@@ -38,5 +42,5 @@ module.exports = async function ({ taskId, user, genomeId, projection = {} }) {
   const doc = await Queue.findOne(queueQuery, projection).lean();
   const status = getJobStatus(doc);
 
-  return { doc, status, scheme, spec };
+  return { doc, status, scheme, organismId, spec };
 };

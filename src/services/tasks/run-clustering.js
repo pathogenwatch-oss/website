@@ -2,11 +2,8 @@
 /* eslint max-params: 0 */
 
 const slug = require('slug');
-const BSON = require('bson');
 const { Readable, Writable } = require('stream');
 const readline = require('readline');
-
-const bson = new BSON();
 
 const store = require('utils/object-store');
 const Genome = require('models/genome');
@@ -22,10 +19,11 @@ const LOGGER = require('utils/logging').createLogger('runner');
 
 const DEFAULT_THRESHOLD = 50;
 
-function buildQuery({ userId, scheme }) {
+function buildQuery({ userId, scheme, organismId }) {
   return {
     ...Genome.getPrefilterCondition({ user: userId ? { _id: userId } : null }),
     'analysis.cgmlst.scheme': scheme,
+    'analysis.speciator.organismId': organismId,
   };
 }
 
@@ -48,7 +46,7 @@ function determineMaxThreshold(scheme) {
 }
 
 function attachInputStream(container, spec, metadata) {
-  const { userId = 'public', scheme } = metadata;
+  const { userId = 'public', scheme, organismId } = metadata;
   const { version } = spec;
 
   async function* generateInput() {
@@ -62,14 +60,10 @@ function attachInputStream(container, spec, metadata) {
       Threshold: maxThreshold,
     });
 
-    const clustering = await request('clustering', 'cluster-details', { scheme, version, userId });
+    const clustering = await request('clustering', 'cluster-details', { scheme, version, userId, organismId });
     if (clustering !== undefined && clustering !== null) {
       yield JSON.stringify(clustering);
-      // const { edges, ...otherFields } = clustering;
-      // yield bson.serialize(otherFields);
-      // for (const threshold of Object.keys(edges)) {
-      //   yield bson.serialize({ edges: { [threshold]: edges[threshold] } });
-      // }
+
     } else {
       yield JSON.stringify({
         edges: {},
@@ -83,11 +77,7 @@ function attachInputStream(container, spec, metadata) {
     const query = { fileId: { $in: Object.values(cgSTs) } };
 
     for await (const { st, matches, schemeSize } of CgmlstProfile.find(query, { _id: 0, fileId: 0 }).lean().cursor()) {
-      const cleanedMatches = matches.reduce((acc, cur) => {
-        acc[cur.gene] = cur.id;
-        return acc;
-      }, {});
-      yield JSON.stringify({ ST: st, Matches: cleanedMatches, schemeSize });
+      yield JSON.stringify({ ST: st, Matches: matches, schemeSize });
     }
   }
 
@@ -154,9 +144,9 @@ async function handleContainerOutput(container, spec, metadata) {
 
 async function uploadResults(results, spec, metadata) {
   const { version } = spec;
-  const { userId, scheme } = metadata;
+  const { userId, scheme, organismId } = metadata;
   const fullVersion = `${version}-${slug(scheme, { lower: true })}`;
-  await store.putAnalysis('cgmlst-clustering', fullVersion, userId ? userId.toString() : 'public', undefined, results);
+  await store.putAnalysis('cgmlst-clustering', fullVersion, userId ? userId.toString() : 'public', organismId, results);
 }
 
 async function handleContainerExit(container, spec, metadata, inputStream) {

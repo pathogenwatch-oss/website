@@ -2,15 +2,7 @@ const sanitize = require('sanitize-filename');
 const csv = require('csv');
 const Genome = require('models/genome');
 
-const transformer = function (doc) {
-  return {
-    'Genome ID': doc._id.toString(),
-    'Genome Name': doc.name,
-    Version: doc.analysis.genotyphi.__v,
-    Genotype: doc.analysis.genotyphi.genotype,
-    'SNPs Called': doc.analysis.genotyphi.foundLoci,
-  };
-};
+const { transformer } = require('routes/download/utils/genotyphi');
 
 module.exports = (req, res) => {
   const { user } = req;
