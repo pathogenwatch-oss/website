@@ -15,8 +15,8 @@
     "timeout": "45m",
     "version": "v2.5.4",
     "resources": {
-      "cpu": 5,
-      "memory": 102122547200
+      "cpu": 6,
+      "memory": 58122547200
     },
     "retries": 2
   },

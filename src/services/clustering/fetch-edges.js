@@ -55,12 +55,13 @@ module.exports = async function ({ user, genomeId, scheme, version, organismId, 
   // We return a 404 so that we don't leak whether an ST exists for another user
   if (!hasAccess) throw new NotFoundError('Problem getting edges, maybe they binned a genome');
 
+  const genome = await Genome.findOne({ _id: genomeId }, { 'analysis.speciator.organismId': 1 }).lean();
   // We have the distances between pairs of CGMLST STs and want to return an array showing
   // which pairs are withing `threshold` of each other.
   // If the STs are [A, B, C, D] the edges should be  ordered [AB, AC, BC, AD, BD, CD].
 
   // We create a function to lookup the distance between any pair of STs
-  const edges = await getEdges({ userId: user ? user._id : undefined, scheme, organismId, version, sts, threshold });
+  const edges = await getEdges({ userId: user ? user._id : undefined, scheme, organismId: genome.analysis.speciator.organismId, version, sts, threshold });
 
   if (edges.length <= 0) {
     throw new NotFoundError(`No cluster edges found for ${genomeId} at threshold ${threshold}`);
