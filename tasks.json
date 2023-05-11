@@ -12,10 +12,10 @@
   },
   "clustering": {
     "task": "clustering",
-    "timeout": "45m",
+    "timeout": "180m",
     "version": "v2.5.4",
     "resources": {
-      "cpu": 6,
+      "cpu": 5,
       "memory": 58122547200
     },
     "retries": 2
