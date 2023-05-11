@@ -158,9 +158,6 @@ async function subscribeToQueue(queueName, taskType) {
 
   // eslint-disable-next-line no-constant-condition
   while (true) {
-    // We could make a small change so that we exclude jobs for users
-    // who recently had a task run.  That would be a small step towards
-    // the queue being fairer.
     const time = new Date();
     fs.utimesSync(heartbeatFile, time, time);
 
