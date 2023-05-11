@@ -31,10 +31,15 @@ async function extractCgstSet(metadata) {
   const cgSTs = {};
   for await (const doc of Genome.find(buildQuery(metadata), {
     'analysis.cgmlst.st': 1,
-    fileId: 1,
+    'analysis.cgmlst.code': 1,
   }).lean().cursor()) {
     // Pick a random unique document for each ST to emulate what the code did previously.
-    cgSTs[doc.analysis.cgmlst.st] = doc.fileId;
+    const matches = doc.analysis.cgmlst.code.split('_');
+    cgSTs[doc.analysis.cgmlst.st] = {
+      st: doc.analysis.cgmlst.st,
+      matches,
+      schemeSize: matches.length,
+    };
   }
   return cgSTs;
 }
@@ -74,9 +79,8 @@ function attachInputStream(container, spec, metadata) {
       });
     }
 
-    const query = { fileId: { $in: Object.values(cgSTs) } };
-
-    for await (const { st, matches, schemeSize } of CgmlstProfile.find(query, { _id: 0, fileId: 0 }).lean().cursor()) {
+    // const query = { fileId: { $in: Object.values(cgSTs) } };
+    for (const { st, matches, schemeSize } of Object.values(cgSTs)) {
       yield JSON.stringify({ ST: st, Matches: matches, schemeSize });
     }
   }
