@@ -15,7 +15,7 @@
     "timeout": "180m",
     "version": "v2.5.4",
     "resources": {
-      "cpu": 5,
+      "cpu": 4,
       "memory": 58122547200
     },
     "retries": 2
@@ -30,7 +30,7 @@
           }
         ],
         "task": "tree",
-        "timeout": "15m",
+        "timeout": "30m",
         "version": "v1.0.12-1280",
         "workers": 16
       }
@@ -44,7 +44,7 @@
           }
         ],
         "task": "tree",
-        "timeout": "15m",
+        "timeout": "30m",
         "version": "v1.0.12-1336",
         "workers": 16
       }
@@ -58,7 +58,7 @@
           }
         ],
         "task": "tree",
-        "timeout": "15m",
+        "timeout": "30m",
         "version": "v1.0.12-1463165",
         "workers": 16
       }
@@ -72,7 +72,7 @@
           }
         ],
         "task": "tree",
-        "timeout": "15m",
+        "timeout": "30m",
         "version": "v1.0.12-1646",
         "workers": 16
       },
@@ -84,7 +84,7 @@
           }
         ],
         "task": "subtree",
-        "timeout": "15m",
+        "timeout": "30m",
         "version": "v1.0.12-1646",
         "workers": 16
       }
@@ -98,7 +98,7 @@
           }
         ],
         "task": "tree",
-        "timeout": "15m",
+        "timeout": "30m",
         "version": "v1.0.12-244366",
         "workers": 16
       }
@@ -112,7 +112,7 @@
           }
         ],
         "task": "tree",
-        "timeout": "15m",
+        "timeout": "30m",
         "version": "v1.0.12-485",
         "workers": 16
       }
@@ -126,7 +126,7 @@
           }
         ],
         "task": "tree",
-        "timeout": "15m",
+        "timeout": "30m",
         "version": "v1.0.13-498019",
         "workers": 16
       },
@@ -138,7 +138,7 @@
           }
         ],
         "task": "subtree",
-        "timeout": "15m",
+        "timeout": "30m",
         "version": "v1.0.13-498019",
         "workers": 16
       }
@@ -152,7 +152,7 @@
           }
         ],
         "task": "tree",
-        "timeout": "15m",
+        "timeout": "30m",
         "version": "v1.0.12-573",
         "workers": 16
       }
@@ -166,7 +166,7 @@
           }
         ],
         "task": "tree",
-        "timeout": "15m",
+        "timeout": "30m",
         "version": "v1.0.12-64320",
         "workers": 16
       }
@@ -180,7 +180,7 @@
           }
         ],
         "task": "tree",
-        "timeout": "15m",
+        "timeout": "30m",
         "version": "v1.0.12-666",
         "workers": 16
       },
@@ -192,7 +192,7 @@
           }
         ],
         "task": "subtree",
-        "timeout": "15m",
+        "timeout": "30m",
         "version": "v1.0.12-666",
         "workers": 16
       }
@@ -206,7 +206,7 @@
           }
         ],
         "task": "tree",
-        "timeout": "15m",
+        "timeout": "30m",
         "version": "v1.0.12-90370",
         "workers": 16
       }
@@ -220,7 +220,7 @@
           }
         ],
         "task": "tree",
-        "timeout": "15m",
+        "timeout": "30m",
         "version": "alignment-3"
       }
     ]
