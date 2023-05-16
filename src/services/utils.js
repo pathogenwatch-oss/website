@@ -15,10 +15,11 @@ const ASSEMBLY_FILE_EXTENSIONS = [
 
 module.exports.createFastaFileName = function (genomeName = 'file') {
   const ext = path.extname(genomeName);
+  const cleanName = genomeName.replace('/', '|');
   if (ASSEMBLY_FILE_EXTENSIONS.includes(ext)) {
-    return `${path.basename(genomeName, ext)}.fasta`;
+    return `${path.basename(cleanName, ext)}.fasta`;
   }
-  return `${genomeName}.fasta`;
+  return `${cleanName}.fasta`;
 };
 
 module.exports.getNotificationResult = function ({ task, results }) {
