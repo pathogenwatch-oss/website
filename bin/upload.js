@@ -23,10 +23,9 @@ storageConnection.connect().
         console.log('inserting', key);
         return mainStorage.store(key, contents);
       }),
-      Promise.resolve()
+    Promise.resolve()
     );
-  }).
-  then(() => process.exit(0)).
+  }).then(() => process.exit(0)).
   catch(error => {
     console.error(error);
     return process.exit(1);
