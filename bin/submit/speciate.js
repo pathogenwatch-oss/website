@@ -57,7 +57,7 @@ async function main() {
   const version = !!argv.opts.version ? argv.opts.version : null;
   const priority = !!argv.opts.priority ? argv.opts.priority : defaultPriority;
   if (!version || !argv.opts.query) {
-    console.log(`--version=[speciator version] --query='{...}' --priority=[number: default=${defaultPriority}]`);
+    console.log(`--version=[speciator version] --query='{...}' --priority=[number: default=${defaultPriority}] --clean=[boolean: default=false]`);
     process.exit(0);
   }
   const query = parseQuery();

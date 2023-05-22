@@ -5,11 +5,12 @@ const Queue = require('models/queue');
 
 const rand = require("rand-token");
 const fetchQueueMessage = require('services/clustering/fetch-queue-message');
+const argv = require("named-argv");
 
 const overridePriority = 6;
 const clientId = "adminScript";
 
-async function extractOrganisms() {
+async function extractOrganisms(filterArr = []) {
   const query = { public: true, 'analysis.cgmlst': { $exists: true } };
   const organismIds = await Genome.distinct('analysis.speciator.organismId', query);
   const projection = {
@@ -19,6 +20,8 @@ async function extractOrganisms() {
   };
   const organisms = [];
   for (const organismId of organismIds) {
+    if (filterArr.length > 0 && !filterArr.includes(organismId)) continue;
+
     const organismQuery = { ...query, 'analysis.speciator.organismId': organismId };
     const organism = await Genome.findOne(organismQuery, projection).lean();
     organisms.push({
@@ -29,8 +32,11 @@ async function extractOrganisms() {
 }
 
 async function main() {
+  const { filter = "" } = argv.opts;
+  const filterArr = filter !== "" ? filter.split(',') : [];
+
   await mongoConnection.connect();
-  const organisms = await extractOrganisms();
+  const organisms = await extractOrganisms(filterArr);
   for (const organism of organisms) {
     const { scheme, organismId, spec } = await fetchQueueMessage({
       genomeId: organism.genomeId,
