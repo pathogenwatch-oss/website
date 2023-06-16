@@ -2,7 +2,7 @@ import config from '~/app/config';
 
 export default function pairReadsFiles(files, filenameRegex) {
   const pairs = {};
-  const { maxSizeMB = 500 } = config.maxReadsFileSize;
+  const { maxSizeMB = 900 } = config.maxReadsFileSize;
   const maxSize = maxSizeMB * 1048576;
   for (const file of files) {
     if (file.size > maxSize) {
