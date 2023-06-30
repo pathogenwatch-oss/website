@@ -13,8 +13,10 @@ const aws = require("aws-sdk");
 const http = require("http");
 const https = require("https");
 const { PassThrough } = require("stream");
+const fs = require("fs");
 
 const transformers = {
+  'cgmlst': require('routes/download/utils/cgmlst').transformer,
   'core-summary': require('routes/download/utils/core-summary').transformer,
   genotyphi: require('routes/download/utils//genotyphi').transformer,
   inctyper: require('routes/download/utils//inctyper').transformer,
@@ -58,22 +60,19 @@ function selectTransformer(task, { speciesId }) {
   return transformers[task.task];
 }
 
-async function writeDataFiles({ organismId, speciesId, genusId, superkingdomId, organismName }) {
-  const filenameBase = organismName.replace('/', '|');
-  const genomes = await Genome.find({
-    public: true,
-    'analysis.speciator.organismId': organismId,
-  }, { analysis: 1, name: 1, fileId: 1 }).lean();
-  console.log(`Retrieved ${genomes.length} genomes.`);
+function getWriteStream(local = true, filename) {
+  if (local) {
+    const writeStream = fs.createWriteStream(filename, { flags: 'w' });
 
-  const taxQuery = { organismId, speciesId, genusId, superkingdomId };
-  const tasks = getTasksByOrganism(taxQuery);
-
-  for (const task of Object.values(tasks)) {
-    console.log(`Processing task ${task.task}.`);
-    if (!(task.task in transformers)) continue;
-    const transformer = selectTransformer(task, taxQuery);
-
+    const writeFile = new Promise((resolve, reject) => {
+      writeStream.on('error', (error) => {
+        console.log(`An error occurred while writing to the file. Error: ${error.message}`);
+        process.exit(1);
+      });
+      writeStream.on('finish', resolve);
+    });
+    return { writeStream, promise: writeFile };
+  } else {
     const uploadStream = ({ Bucket, Key }) => {
       const pass = new PassThrough();
       return {
@@ -83,30 +82,45 @@ async function writeDataFiles({ organismId, speciesId, genusId, superkingdomId, 
     };
     const { writeStream, promise } = uploadStream({
       Bucket: 'pathogenwatch-public',
-      Key: `${filenameBase}__${task.task}.csv.gz`,
+      Key: filename,
     });
-    // const writableStream = fs.createWriteStream(`${filenameBase}__${task.task}.csv.gz`, { flags: 'w' });
-    const gzipStream = zlib.createGzip();
+    return { writeStream, promise };
+  }
+}
 
-    // const writeFile = new Promise((resolve, reject) => {
-    //   writableStream.on('error', (error) => {
-    //     console.log(`An error occurred while writing to the file. Error: ${error.message}`);
-    //     process.exit(1);
-    //   });
-    //   writableStream.on('finish', resolve);
+async function writeDataFiles({
+                                organismId,
+                                speciesId,
+                                genusId,
+                                superkingdomId,
+                                organismName,
+                              }, query = {}, local = true) {
+  const filenameBase = organismName.replace('/', '|');
+  query['analysis.speciator.organismId'] = organismId;
+  const genomes = await Genome.find(query, { analysis: 1, name: 1, fileId: 1 }).lean();
+  console.log(`Retrieved ${genomes.length} genomes.`);
+
+  const taxQuery = { organismId, speciesId, genusId, superkingdomId };
+  const tasks = getTasksByOrganism(taxQuery);
+
+  for (const task of Object.values(tasks)) {
+    console.log(`Processing task ${task.task}.`);
+    if (!(task.task in transformers)) continue;
+    const transformer = selectTransformer(task, taxQuery);
+    const gzipStream = zlib.createGzip();
+    const filename = `${filenameBase}__${task.task}.csv.gz`;
+    const { writeStream, promise } = getWriteStream(local, filename);
     Readable.from(genomes)
       .pipe(csv.transform(transformer))
       .pipe(csv.stringify({ header: true, quotedString: true }))
       .pipe(gzipStream)
       .pipe(writeStream);
-
     await promise;
     writeStream.end();
-    // await writeFile;
-    // writableStream.end();
   }
+
   // Finally, write the metadata file.
-  const query = {
+  const metadataQuery = {
     _id: { $in: genomes.map((genome) => genome._id) },
   };
 
@@ -125,7 +139,7 @@ async function writeDataFiles({ organismId, speciesId, genusId, superkingdomId, 
 
   // retrieve all user-defined columns
   const result = await Genome.aggregate([
-    { $match: query },
+    { $match: metadataQuery },
     { $project: { userDefined: { $objectToArray: '$userDefined' } } },
     { $unwind: { path: '$userDefined', preserveNullAndEmptyArrays: true } },
     { $group: { _id: null, columns: { $addToSet: '$userDefined.k' } } },
@@ -133,18 +147,7 @@ async function writeDataFiles({ organismId, speciesId, genusId, superkingdomId, 
 
   const columns = [ ...standardColumns, ...result[0].columns ];
 
-  const uploadStream = ({ Bucket, Key }) => {
-    const pass = new PassThrough();
-    return {
-      writeStream: pass,
-      promise: s3.upload({ Bucket, Key, Body: pass, ACL: 'public-read' }).promise(),
-    };
-  };
-  const { writeStream, promise } = uploadStream({
-    Bucket: 'pathogenwatch-public',
-    Key: `${filenameBase}__metadata.csv.gz`,
-  });
-
+  const { writeStream, promise } = getWriteStream(local, `${filenameBase}__metadata.csv.gz`);
   const gzipStream = zlib.createGzip();
   Genome.find(query, projection, { sort: { name: 1 } })
     .cursor()
@@ -157,8 +160,7 @@ async function writeDataFiles({ organismId, speciesId, genusId, superkingdomId, 
   writeStream.end();
 }
 
-async function extractOrganisms() {
-  const query = { public: true };
+async function extractOrganisms(query, filter) {
   const organismIds = await Genome.distinct('analysis.speciator.organismId', query);
   const projection = {
     _id: 0,
@@ -170,30 +172,39 @@ async function extractOrganisms() {
   };
   const organisms = [];
   for (const organismId of organismIds) {
-    const organismQuery = { ...query, 'analysis.speciator.organismId': organismId };
-    const organism = await Genome.findOne(organismQuery, projection).lean();
-    organisms.push({
-      organismId: organism.analysis.speciator.organismId,
-      speciesId: organism.analysis.speciator.speciesId,
-      genusId: organism.analysis.speciator.genusId,
-      superkingdomId: organism.analysis.speciator.superkingdomId,
-      organismName: organism.analysis.speciator.organismName,
-    });
+    if (filter.length === 0 || filter.includes(organismId)) {
+      const organismQuery = { ...query, 'analysis.speciator.organismId': organismId };
+      const organism = await Genome.findOne(organismQuery, projection).lean();
+      organisms.push({
+        organismId: organism.analysis.speciator.organismId,
+        speciesId: organism.analysis.speciator.speciesId,
+        genusId: organism.analysis.speciator.genusId,
+        superkingdomId: organism.analysis.speciator.superkingdomId,
+        organismName: organism.analysis.speciator.organismName,
+      });
+    }
   }
   return organisms;
 }
 
 async function main() {
-  const { force = false, filter = "" } = argv.opts;
+  const {
+    queryStr,
+    filter = "",
+    local = true,
+  } = argv.opts;
+
   const filterArr = filter !== "" ? filter.split(',') : [];
+  const query = !!queryStr ? JSON.parse(queryStr) : { public: true };
 
   await mongoConnection.connect();
   console.log(`Connected to the database.`);
-  const organisms = await extractOrganisms(force);
+
+  const organisms = await extractOrganisms(query, filterArr);
   for (const organism of organisms) {
     if (filterArr.length === 0 || filterArr.includes(organism.organismId) || filterArr.includes(organism.speciesId) || filterArr.includes(organism.genusId)) {
       console.log(`Writing data for ${organism.organismId}`);
-      await writeDataFiles(organism);
+      await writeDataFiles(organism, query, local);
     }
   }
 }
