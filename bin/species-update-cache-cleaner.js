@@ -5,12 +5,12 @@ const mapLimit = require('promise-map-limit');
 const User = require('models/user');
 const { getTasksByOrganism, getTaskListByOrganism } = require('manifest');
 const Genome = require('models/genome');
-const Analysis = require('models/analysis')
+const Analysis = require('models/analysis');
 
 const { doIt = false } = argv.opts;
 const limit = 1000;
 
-var count = 0;
+let count = 0;
 // Script compares an old and new version of speciator for a set of assemblies and deletes all tasks for those that have
 // changed species from the cache.
 // It shouldn't matter if the genome record has already been updated to the latest speciator version, it will use the
@@ -37,7 +37,7 @@ async function cleanGenomeCache(genome, newAnalysis, oldAnalysis) {
   }
   // If not in records, speciesId has changed, or it's a non-species level organism full update anyway
   if (!oldAnalysis || (oldAnalysis && (newAnalysis.speciesId !== oldAnalysis.speciesId || (speciator.organismId !== speciator.speciesId && newAnalysis.taxId !== speciator.organismId)))) {
-    count = count + 1;
+    count += 1;
     console.log(`${count} ${genome.fileId}`);
     // console.log(`Cleaning ${genome.fileId} from ${!!oldAnalysis ? oldAnalysis.speciesId : 'Very old'} to ${newAnalysis.speciesId}`)
     console.log(`Cleaning ${genome.fileId} from ${!!oldAnalysis ? oldAnalysis.speciesId : 'Very old'} to ${newAnalysis.speciesId}`);

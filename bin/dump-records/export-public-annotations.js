@@ -14,6 +14,9 @@ const http = require("http");
 const https = require("https");
 const { PassThrough } = require("stream");
 const fs = require("fs");
+const User = require("models/user");
+const { defaultUser } = require("manifest");
+const { ObjectId } = require("mongoose/lib/types");
 
 const transformers = {
   'cgmlst': require('routes/download/utils/cgmlst').transformer,
@@ -88,20 +91,33 @@ function getWriteStream(local = true, filename) {
   }
 }
 
+async function fetchUser(userId) {
+  if (userId) {
+    const user = await User.findOne({ _id: userId }, { flags: 1 });
+    return user;
+  } else {
+    return defaultUser;
+  }
+}
+
 async function writeDataFiles({
                                 organismId,
                                 speciesId,
                                 genusId,
                                 superkingdomId,
                                 organismName,
-                              }, query = {}, local = true) {
+                              }, query = {},
+                              local = true,
+                              user
+) {
+
   const filenameBase = organismName.replace('/', '|');
   query['analysis.speciator.organismId'] = organismId;
   const genomes = await Genome.find(query, { analysis: 1, name: 1, fileId: 1 }).lean();
   console.log(`Retrieved ${genomes.length} genomes.`);
 
   const taxQuery = { organismId, speciesId, genusId, superkingdomId };
-  const tasks = getTasksByOrganism(taxQuery);
+  const tasks = getTasksByOrganism(taxQuery, user);
 
   for (const task of Object.values(tasks)) {
     console.log(`Processing task ${task.task}.`);
@@ -190,6 +206,7 @@ async function extractOrganisms(query, filter) {
 async function main() {
   const {
     queryStr,
+    userId,
     filter = "",
     local = true,
   } = argv.opts;
@@ -201,10 +218,12 @@ async function main() {
   console.log(`Connected to the database.`);
 
   const organisms = await extractOrganisms(query, filterArr);
+  const user = await fetchUser(userId);
+  console.log(`User: ${user}.`);
   for (const organism of organisms) {
     if (filterArr.length === 0 || filterArr.includes(organism.organismId) || filterArr.includes(organism.speciesId) || filterArr.includes(organism.genusId)) {
       console.log(`Writing data for ${organism.organismId}`);
-      await writeDataFiles(organism, query, local);
+      await writeDataFiles(organism, query, local, user);
     }
   }
 }
