@@ -63,8 +63,8 @@ function selectTransformer(task, { speciesId }) {
   return transformers[task.task];
 }
 
-function getWriteStream(local = true, filename) {
-  if (local) {
+function getWriteStream(upload, filename) {
+  if (!upload) {
     const writeStream = fs.createWriteStream(filename, { flags: 'w' });
 
     const writeFile = new Promise((resolve, reject) => {
@@ -107,7 +107,7 @@ async function writeDataFiles({
                                 superkingdomId,
                                 organismName,
                               }, query = {},
-                              local = true,
+                              upload,
                               user
 ) {
 
@@ -125,7 +125,7 @@ async function writeDataFiles({
     const transformer = selectTransformer(task, taxQuery);
     const gzipStream = zlib.createGzip();
     const filename = `${filenameBase}__${task.task}.csv.gz`;
-    const { writeStream, promise } = getWriteStream(local, filename);
+    const { writeStream, promise } = getWriteStream(upload, filename);
     Readable.from(genomes)
       .pipe(csv.transform(transformer))
       .pipe(csv.stringify({ header: true, quotedString: true }))
@@ -163,7 +163,7 @@ async function writeDataFiles({
 
   const columns = [ ...standardColumns, ...result[0].columns ];
 
-  const { writeStream, promise } = getWriteStream(local, `${filenameBase}__metadata.csv.gz`);
+  const { writeStream, promise } = getWriteStream(upload, `${filenameBase}__metadata.csv.gz`);
   const gzipStream = zlib.createGzip();
   Genome.find(query, projection, { sort: { name: 1 } })
     .cursor()
@@ -208,8 +208,14 @@ async function main() {
     queryStr,
     userId,
     filter = "",
-    local = true,
+    upload,
   } = argv.opts;
+
+  if (upload) {
+    console.log(`Writing data to S3.`);
+  } else {
+    console.log(`Writing data to local files.`);
+  }
 
   const filterArr = filter !== "" ? filter.split(',') : [];
   const query = !!queryStr ? JSON.parse(queryStr) : { public: true };
@@ -223,7 +229,7 @@ async function main() {
   for (const organism of organisms) {
     if (filterArr.length === 0 || filterArr.includes(organism.organismId) || filterArr.includes(organism.speciesId) || filterArr.includes(organism.genusId)) {
       console.log(`Writing data for ${organism.organismId}`);
-      await writeDataFiles(organism, query, local, user);
+      await writeDataFiles(organism, query, upload, user);
     }
   }
 }
