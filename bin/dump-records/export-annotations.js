@@ -100,15 +100,17 @@ async function fetchUser(userId) {
   }
 }
 
-async function writeDataFiles({
-                                organismId,
-                                speciesId,
-                                genusId,
-                                superkingdomId,
-                                organismName,
-                              }, query = {},
-                              upload,
-                              user
+async function writeDataFiles(
+  {
+    organismId,
+    speciesId,
+    genusId,
+    superkingdomId,
+    organismName,
+  },
+  query = {},
+  upload,
+  user
 ) {
 
   const filenameBase = organismName.replace('/', '|');
