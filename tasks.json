@@ -421,10 +421,6 @@
         "version": "202214121127-v3.2.1"
       },
       {
-        "flags": {
-          "E_FAECIUM_EXPERIMENT_USER": true,
-          "GHRU_USER": true
-        },
         "task": "paarsnp",
         "version": "v3.1.0"
       }
