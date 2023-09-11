@@ -103,6 +103,23 @@
         "workers": 16
       }
     ],
+    "28901": [
+      {
+        "requires": [
+          {
+            "task": "core",
+            "version": "v2.0.4-28901"
+          }
+        ],
+        "task": "tree",
+        "timeout": "30m",
+        "version": "v2.0.4-28901",
+        "workers": 16,
+        "flags": {
+          "S_ENTERICA_TEST_USER": true
+        }
+      }
+    ],
     "485": [
       {
         "requires": [
@@ -131,7 +148,7 @@
         "workers": 16
       },
       {
-       "requires": [
+        "requires": [
           {
             "task": "core",
             "version": "v2.0.3-498019"
@@ -894,7 +911,7 @@
       },
       {
         "task": "pangolin",
-        "version": "v20.2.0"
+        "version": "v20.3.1"
       }
     ],
     "2751": [
@@ -987,6 +1004,13 @@
         },
         "task": "paarsnp",
         "version": "v3.0.1"
+      },
+      {
+        "task": "core",
+        "version": "v2.0.4-28901",
+        "flags": {
+          "S_ENTERICA_TEST_USER": true
+        }
       }
     ],
     "28903": [
@@ -1154,7 +1178,7 @@
       },
       {
         "task": "ngstar",
-        "version": "202214121127-v3.2.1"
+        "version": "202309071500-ngstar-v3.2.1"
       },
       {
         "task": "core",
