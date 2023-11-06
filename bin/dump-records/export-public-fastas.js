@@ -41,7 +41,7 @@ async function fetchFileIds(organismId) {
 }
 
 async function exportSpeciesFASTA({ organismId, organismName }, outdir, force, dryrun) {
-  const filename = `${outdir}/${organismName}__fastas.zip`;
+  const filename = `${outdir}/${organismName.replace("/", "|")}__fastas.zip`;
 
   if (!force) {
     // Check if the FASTA file exists
@@ -70,7 +70,7 @@ async function exportSpeciesFASTA({ organismId, organismName }, outdir, force, d
   const writeFile = new Promise((resolve, reject) => {
     writeStream.on('error', (error) => {
       console.log(`An error occurred while writing to the file. Error: ${error.message}`);
-      process.exit(1);
+      // process.exit(1);
     });
     writeStream.on('finish', resolve);
   });

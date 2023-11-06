@@ -9,9 +9,9 @@ import { toggleDropdown } from '../actions';
 const Collection = ({ goBack }) => (
   <div className="wgsa-genome-collection">
     <header className="wgsa-dropdown-header">Create Collection</header>
-    <TaxonLimiter type={'maxCollectionSize'}>
       <CreateCollection />
-    </TaxonLimiter>
+    {/*<TaxonLimiter type={'maxCollectionSize'}>*/}
+    {/*</TaxonLimiter>*/}
     <footer className="wgsa-dropdown-footer">
       <button className="mdl-button" onClick={goBack}>
         Go back
