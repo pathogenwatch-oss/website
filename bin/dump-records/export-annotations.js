@@ -126,7 +126,7 @@ async function writeDataFiles(
     if (!(task.task in transformers)) continue;
     const transformer = selectTransformer(task, taxQuery);
     const gzipStream = zlib.createGzip();
-    const filename = `${filenameBase}__${task.task}.csv.gz`;
+    const filename = `${filenameBase}__${task.task !== "paarsnp" ? task.task : "amrsearch"}.csv.gz`;
     const { writeStream, promise } = getWriteStream(upload, filename);
     Readable.from(genomes)
       .pipe(csv.transform(transformer))

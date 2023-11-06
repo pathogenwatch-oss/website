@@ -40,8 +40,8 @@ async function fetchFileIds(organismId) {
   return fileIds;
 }
 
-async function exportSpeciesFASTA({ organismId, organismName }, force, dryrun) {
-  const filename = `${organismName}__fastas.zip`;
+async function exportSpeciesFASTA({ organismId, organismName }, outdir, force, dryrun) {
+  const filename = `${outdir}/${organismName}__fastas.zip`;
 
   if (!force) {
     // Check if the FASTA file exists
@@ -80,10 +80,10 @@ async function exportSpeciesFASTA({ organismId, organismName }, force, dryrun) {
   const pipeline = archiveStream.pipe(writeStream);
 
   pipeline.on('close', () => {
-    console.log('upload successful');
+    console.log('download successful');
   });
   pipeline.on('error', (err) => {
-    console.log('upload failed', err.message);
+    console.log('download failed', err.message);
   });
   await writeFile;
   writeStream.end();
@@ -91,7 +91,10 @@ async function exportSpeciesFASTA({ organismId, organismName }, force, dryrun) {
 
 async function main() {
   await mongoConnection.connect();
-  const { force = false, filter = "", cpu = 3, dryrun = false } = argv.opts;
+  const { force = false, filter = "", cpu = 3, dryrun = false, outdir = "." } = argv.opts;
+  if (!fs.existsSync(outdir)) {
+    fs.mkdirSync(outdir);
+  }
   const filterArr = filter !== "" ? filter.split(',') : [];
   const organisms = await extractOrganisms();
   await mapLimit(organisms, cpu, async (organism) => {
@@ -101,14 +104,14 @@ async function main() {
       filterArr.includes(organism.genusId) ||
       filterArr.includes(organism.superkingdomId)) {
       console.log(organism.organismName);
-      await exportSpeciesFASTA(organism, force, dryrun);
+      await exportSpeciesFASTA(organism, outdir, force, dryrun);
     }
   });
 }
 
 main()
   .then(() => {
-    console.log('Run `s3cmd sync --delete-removed --acl-public . s3://pathogenwatch-public/` to upload the resulting files to S3');
+    console.log('Run `s3cmd sync --acl-public . s3://pathogenwatch-public/` to upload the resulting files to S3');
     process.exit(0);
   })
   .catch((err) => {
