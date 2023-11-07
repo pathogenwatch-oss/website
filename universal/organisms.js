@@ -8,7 +8,7 @@ module.exports = [
   { id: '573', speciesId: '573', genusId: '570', nickname: 'klepn' },
   { id: '244366', speciesId: '244366', genusId: '570', nickname: 'kleva' },
   { id: '1463165', speciesId: '1463165', genusId: '570', nickname: 'kleqp' },
-  { id: '498019', speciesId: '498019', genusId: '36910', nickname: 'cauris', maxCollectionSize: 1000 },
+  { id: '498019', speciesId: '498019', genusId: '36910', nickname: 'cauris', maxCollectionSize: 1500 },
   { id: '64320', speciesId: '64320', genusId: '11051', nickname: 'zikv', simple: true },
   { id: '90370', speciesId: '28901', genusId: '590', nickname: 'styphi' },
   { id: '2697049', speciesId: '694009', genusId: '694002', nickname: 'sarscov2', maxCollectionSize: 1000 },
