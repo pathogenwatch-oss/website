@@ -220,7 +220,7 @@ async function main() {
   }
 
   const filterArr = filter !== "" ? filter.split(',') : [];
-  const query = !!queryStr ? JSON.parse(queryStr) : { public: true };
+  const query = !!queryStr ? JSON.parse(queryStr) : { public: true, binned: false };
 
   await mongoConnection.connect();
   console.log(`Connected to the database.`);
