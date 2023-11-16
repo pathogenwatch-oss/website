@@ -7,7 +7,7 @@ const mapLimit = require('promise-map-limit');
 const fs = require("fs");
 
 async function extractOrganisms() {
-  const query = { public: true };
+  const query = { public: true, binned: false };
   const organismIds = await Genome.distinct('analysis.speciator.organismId', query);
   const projection = {
     _id: 0,
@@ -34,7 +34,7 @@ async function extractOrganisms() {
 
 async function fetchFileIds(organismId) {
   const fileIds = await Genome.find(
-    { public: true, 'analysis.speciator.organismId': organismId },
+    { public: true, binned: false, 'analysis.speciator.organismId': organismId },
     { _id: 0, fileId: 1, name: 1 }
   ).lean();
   return fileIds;
