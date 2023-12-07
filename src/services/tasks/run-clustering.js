@@ -7,7 +7,6 @@ const readline = require('readline');
 
 const store = require('utils/object-store');
 const Genome = require('models/genome');
-const CgmlstProfile = require('models/cgmlstprofile');
 const TaskLog = require('models/taskLog');
 const docker = require('services/docker');
 

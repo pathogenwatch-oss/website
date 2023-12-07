@@ -3,7 +3,6 @@ const { Writable } = require("stream");
 const fastaStorage = require('utils/fasta-store');
 
 const TaskLog = require('models/taskLog');
-const CgmlstProfile = require('models/cgmlstprofile');
 const Genome = require('models/genome');
 const Queue = require('models/queue');
 const store = require('utils/object-store');
@@ -141,9 +140,6 @@ module.exports = async function ({ spec, metadata, precache = false, priority })
   }
 
   if (!precache) {
-    if (task === 'cgmlst') {
-      await CgmlstProfile.upsertProfile(fileId, doc);
-    }
     await Genome.addAnalysisResults(genomeId, doc);
     notify({
       speciator: { organismId, speciesId, genusId },

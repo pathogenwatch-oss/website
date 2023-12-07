@@ -1,4 +1,3 @@
-const CgmlstProfile = require('models/cgmlstprofile');
 const Genome = require('models/genome');
 const User = require('models/user');
 const store = require('utils/object-store');
@@ -67,9 +66,7 @@ async function submitTasks({ genomeId, fileId, uploadedAt, clientId, userId }, d
   const cachedResults = await getCachedResults(tasks, fileId, organismId);
 
   await Genome.addAnalysisResults(genomeId, doc, ...Object.values(cachedResults));
-  if ('cgmlst' in cachedResults) {
-    await CgmlstProfile.upsertProfile(fileId, cachedResults.cgmlst);
-  }
+
   const existingTasks = [ doc, ...Object.values(cachedResults) ];
   const existingTaskNames = new Set(Object.keys(cachedResults));
 
