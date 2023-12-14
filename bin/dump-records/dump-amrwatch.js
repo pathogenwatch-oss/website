@@ -187,7 +187,7 @@ async function main() {
       }
     }
     if (!!poppunk2) {
-      metadata.poppunk2 = { GSPC: poppunk2.strain };
+      metadata.poppunk2 = { [poppunk2.label]: poppunk2.strain };
       if (!('poppunk2' in foundTasks)) {
         foundTasks.poppunk2 = Object.keys(metadata.poppunk2);
       }

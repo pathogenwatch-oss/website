@@ -1458,6 +1458,14 @@
         "task": "cgmlst",
         "timeout": 480,
         "version": "202214121127-v3.2.1"
+      },
+      {
+        "task": "poppunk2",
+        "timeout": 480,
+        "version": "v2.0.0-2-666",
+        "flags": {
+          "VW_USER": true
+        }
       }
     ],
     "670": [

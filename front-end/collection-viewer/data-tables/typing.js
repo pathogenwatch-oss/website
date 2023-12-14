@@ -124,6 +124,12 @@ const kleborateGroup = {
   columns: [ '__K_locus', '__K_type', '__O_locus', '__O_type', '__Virulence_Score', '__Aerobactin', '__Colibactin', '__Salmochelin', '__Yersiniabactin', '__RmpADC', '__rmpA2' ],
 };
 
+const poppunk2Group = {
+  group: true,
+  columnKey: 'poppunk2',
+  columns: [ '__poppunk2_strain' ],
+};
+
 const serotypeGroup = {
   group: true,
   columnKey: 'serotype',
@@ -156,6 +162,7 @@ function getTypingColumnGroups(uiOptions, hasAltMLST, {
   "ngono-markers": ngonoMarkers,
   ngstar,
   pangolin,
+  poppunk2,
   serotype,
   vista,
 }) {
@@ -172,8 +179,10 @@ function getTypingColumnGroups(uiOptions, hasAltMLST, {
     inctyper ? inctyperGroup : null,
     kaptive ? kaptiveGroup : null,
     kleborate ? kleborateGroup : null,
-    vista ? vistaGroup : null,
     pangolin ? pangolinGroup : null,
+    poppunk2 ? poppunk2Group : null,
+    vista? vistaGroup : null,
+    vista ? vistaGroup : null,
   ]
     .filter(_ => _) // removes the nulls
     .map(fillColumnDefs);
@@ -190,10 +199,11 @@ export function hasTyping({ hasPopulation }, {
   ngmast,
   ngstar,
   pangolin,
+  poppunk2,
   serotype,
   vista,
 }) {
-  return !(!hasPopulation && !mlst && !genotyphi && !inctyper && !kaptive && !kleborate && !klebsiellaLincodes && !ngmast && !!ngonoMarkers && !ngstar && !pangolin && !serotype && !vista);
+  return !(!hasPopulation && !mlst && !genotyphi && !inctyper && !kaptive && !kleborate && !klebsiellaLincodes && !ngmast && !!ngonoMarkers && !ngstar && !pangolin && !poppunk2 && !serotype && !vista);
 }
 
 function updateTypingSettings({ genomes }) {
@@ -223,7 +233,7 @@ function checkAnalysesPresent({ exclude = [] }, { genomes }, analyses) {
 export default function (state = initialState, { type, payload }) {
   switch (type) {
     case FETCH_COLLECTION.SUCCESS: {
-      const foundAnalyses = checkAnalysesPresent(Organisms.uiOptions, payload.result, [ 'klebsiella-lincodes', 'genotyphi', 'inctyper', 'kaptive', 'kleborate', 'mlst', 'ngmast', 'ngono-markers', 'ngstar', 'pangolin', 'serotype', 'vista' ]);
+      const foundAnalyses = checkAnalysesPresent(Organisms.uiOptions, payload.result, [ 'klebsiella-lincodes', 'genotyphi', 'inctyper', 'kaptive', 'kleborate', 'mlst', 'ngmast', 'ngono-markers', 'ngstar', 'pangolin', 'poppunk2', 'serotype', 'vista' ]);
       const active = hasTyping(Organisms.uiOptions, foundAnalyses);
 
       if (!active) {

@@ -410,6 +410,14 @@ export const systemDataColumns = {
     },
     numeric: true,
   },
+  __poppunk2_strain: {
+    columnKey: '__poppunk2_strain',
+    label: 'STRAIN',
+    valueGetter({ analysis }) {
+      if (!analysis.poppunk2) return null;
+      return analysis.poppunk2.strain;
+    },
+  },
   __serotype: {
     columnKey: '__serotype',
     label: 'SEROTYPE',

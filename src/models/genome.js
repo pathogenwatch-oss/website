@@ -596,6 +596,7 @@ schema.statics.getForCollection = function (query, user = {}) {
     'analysis.paarsnp.variants': 1,
     'analysis.paarsnp.library': 1,
     'analysis.pangolin': 1,
+    'analysis.poppunk2.strain': 1,
     'analysis.sarscov2-variants': 1,
     'analysis.serotype': 1,
     'analysis.speciator.organismId': 1,
