@@ -40,7 +40,7 @@ async function getGenomes(task, metadata) {
 }
 
 function createInputStream(genomes, versions, organismId) {
-  const fileIds = genomes.map((_) => _.fileId);
+  const fileIds = [...new Set(genomes.map((_) => _.fileId))];
   fileIds.sort();
 
   const analysisKeys = fileIds.map((fileId) => store.analysisKey('alignment', versions.alignment, fileId, organismId));

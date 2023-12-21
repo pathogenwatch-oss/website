@@ -15,8 +15,6 @@ async function extractOrganisms(filterArr = []) {
   const organismIds = await Genome.distinct('analysis.speciator.organismId', query);
   const projection = {
     'analysis.speciator.organismId': 1,
-    // 'analysis.cgmlst.scheme': 1,
-    // '__v': 1,
   };
   const organisms = [];
   for (const organismId of organismIds) {
