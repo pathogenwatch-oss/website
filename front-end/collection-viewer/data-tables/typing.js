@@ -181,7 +181,6 @@ function getTypingColumnGroups(uiOptions, hasAltMLST, {
     kleborate ? kleborateGroup : null,
     pangolin ? pangolinGroup : null,
     poppunk2 ? poppunk2Group : null,
-    vista? vistaGroup : null,
     vista ? vistaGroup : null,
   ]
     .filter(_ => _) // removes the nulls
