@@ -240,10 +240,12 @@ export default ({ deployedOrganisms }) => (
               </td>
               <td>
                 <small>Kleborate</small>
+                <br/>
+                <small>LIN codes</small>
               </td>
             </tr>
             <tr>
-              <td>
+            <td>
                 <FormattedName organismId="485" />
               </td>
               <td>
