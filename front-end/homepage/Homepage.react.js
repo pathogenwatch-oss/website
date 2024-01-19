@@ -369,6 +369,7 @@ export default ({ deployedOrganisms }) => (
                 </td>
                 <td>
                   <small>Vista Genotypes</small>
+                  <small>PopPUNK 2</small>
                 </td>
               </tr>
             )}
