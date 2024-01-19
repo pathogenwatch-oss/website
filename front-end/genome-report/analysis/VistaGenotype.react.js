@@ -8,12 +8,10 @@ export default ({ genome }) => {
         <h2>Genotypes</h2>
       </header>
       <dl className="flex">{
-        [ 'Biotype', 'Serogroup' ].map(key => (
-          <div className="pw-genome-report-metadata">
-            <dt>{key}</dt>
-            <dd>{vista[key.toLowerCase()]}</dd>
-          </div>
-        ))
+        <div>
+          <dt>Serogroup</dt>
+          <dd>{vista.serogroup}</dd>
+        </div>
       }
       </dl>
     </React.Fragment>

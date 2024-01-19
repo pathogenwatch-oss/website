@@ -42,10 +42,9 @@ export function getLeadingSystemColumnProps(columnNames) {
 
 export function getTrailingSystemColumnProps(columnNames) {
   return (
-    Array.from(columnNames).map(name => systemDataColumns[name]).
-      concat([
-        table.rightSpacerColumn,
-      ])
+    Array.from(columnNames).map(name => systemDataColumns[name]).concat([
+      table.rightSpacerColumn,
+    ])
   );
 }
 

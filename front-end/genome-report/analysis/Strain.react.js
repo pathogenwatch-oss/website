@@ -2,9 +2,8 @@ import React from 'react';
 
 import ExternalLink from '../ExternalLink.react';
 
-const mailto = 'mailto:gps@pneumogen.net?subject=Novel strain assignment&body=(Please attach your assembly to this email)';
-
 function check(poppunk2) {
+
   if (!('email' in poppunk2)) {
     poppunk2.email = "gps@pneumogen.net";
     poppunk2.url = "https://www.pneumogen.net/gps/";
@@ -19,10 +18,11 @@ export default ({ genome }) => {
 
   // backwards compatibility shim
   check(poppunk2);
+  const mailto = `mailto:${poppunk2.email}?subject=Novel {poppunk2.label === 'GPSC' ? 'strain' : 'lineage'} assignment&body=(Please attach your assembly to this email)`;
   return (
     <React.Fragment>
       <header className="pw-genome-report-section-header">
-        <h2>Strain</h2>
+        <h2>{poppunk2.label === 'GPSC' ? 'Strain' : 'Lineage'}</h2>
         <p>
           <a href={poppunk2.url}>
             {poppunk2.source}
@@ -42,7 +42,8 @@ export default ({ genome }) => {
           </dd>
         </div>
       </dl>
-      <ExternalLink to={`/genomes/all?genusId=${speciator.genusId}&speciesId=${speciator.speciesId}&strain=${poppunk2.strain}`}>
+      <ExternalLink
+        to={`/genomes/all?genusId=${speciator.genusId}&speciesId=${speciator.speciesId}&strain=${poppunk2.strain}`}>
         View all {poppunk2.label} {poppunk2.strain}
       </ExternalLink>
     </React.Fragment>

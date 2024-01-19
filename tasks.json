@@ -1462,10 +1462,7 @@
       {
         "task": "poppunk2",
         "timeout": 480,
-        "version": "v2.0.0-2-666",
-        "flags": {
-          "VW_USER": true
-        }
+        "version": "v2-666"
       }
     ],
     "670": [

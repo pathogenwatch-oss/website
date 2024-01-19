@@ -6,6 +6,7 @@ import Profile from '~/mlst/Profile.react';
 import { createCode, isNovel } from '~/mlst/utils';
 import { getFormattedDateString } from '../table/utils';
 import { sources } from './utils';
+
 import LiteratureLink from '~/components/LiteratureLink.react';
 
 export const systemDataColumns = {
@@ -90,7 +91,7 @@ export const systemDataColumns = {
     },
     display({ analysis }) {
       if (!analysis.mlst) return null;
-      return <ST id={analysis.mlst.st} />;
+      return <ST id={analysis.mlst.st}/>;
     },
   },
   __mlst_profile: {
@@ -108,7 +109,7 @@ export const systemDataColumns = {
     },
     display({ analysis }) {
       if (!analysis.mlst) return null;
-      return <Profile alleles={analysis.mlst.alleles} />;
+      return <Profile alleles={analysis.mlst.alleles}/>;
     },
   },
   __pangolin: {
@@ -137,7 +138,7 @@ export const systemDataColumns = {
     },
     display({ analysis }) {
       if (!analysis.mlst2) return null;
-      return <ST id={analysis.mlst2.st} />;
+      return <ST id={analysis.mlst2.st}/>;
     },
   },
   __mlst2_profile: {
@@ -155,7 +156,7 @@ export const systemDataColumns = {
     },
     display({ analysis }) {
       if (!analysis.mlst2) return null;
-      return <Profile alleles={analysis.mlst2.alleles} />;
+      return <Profile alleles={analysis.mlst2.alleles}/>;
     },
   },
   __ngstar: {
@@ -172,7 +173,7 @@ export const systemDataColumns = {
     },
     display({ analysis }) {
       if (!analysis.ngstar) return null;
-      return <ST id={analysis.ngstar.st} />;
+      return <ST id={analysis.ngstar.st}/>;
     },
   },
   __ngstar_profile: {
@@ -187,7 +188,7 @@ export const systemDataColumns = {
     },
     display({ analysis }) {
       if (!analysis.ngstar) return null;
-      return <Profile alleles={analysis.ngstar.alleles} />;
+      return <Profile alleles={analysis.ngstar.alleles}/>;
     },
   },
   __porA: {
@@ -412,7 +413,13 @@ export const systemDataColumns = {
   },
   __poppunk2_strain: {
     columnKey: '__poppunk2_strain',
-    label: 'STRAIN',
+    // label: "test",
+    get label() {
+      if (sources.poppunk2) {
+        return sources.poppunk2.label;
+      }
+      return "STRAIN";
+    },
     valueGetter({ analysis }) {
       if (!analysis.poppunk2) return null;
       return analysis.poppunk2.strain;

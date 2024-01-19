@@ -23,6 +23,13 @@ function getSerotypeHeading(genusId) {
   return 'Serotype';
 }
 
+function getStrainHeading(speciesId) {
+  if (speciesId === '666') {
+    return 'Lineage (VC)';
+  }
+  return 'Strain (GPSC)';
+}
+
 const speciesDependants = [
   'organismCollection',
   'subspecies',
@@ -42,17 +49,17 @@ const genusDependants = speciesDependants.concat([ 'speciesId', 'klocus', 'olocu
 const collectionDependents = speciesDependants.concat([ 'klocus', 'olocus' ]);
 
 const Filter = ({
-  applyFilter,
-  clearFilter,
-  filterSummary,
-  filterState,
-  isActive,
-  prefilter,
-  textValue,
-  updateFilter,
-  updateFilterValue,
-  clearDependants,
-}) => (
+                  applyFilter,
+                  clearFilter,
+                  filterSummary,
+                  filterState,
+                  isActive,
+                  prefilter,
+                  textValue,
+                  updateFilter,
+                  updateFilterValue,
+                  clearDependants,
+                }) => (
   <FilterAside
     active={isActive}
     clear={clearFilter}
@@ -135,7 +142,7 @@ const Filter = ({
     />
     <FilterableSection
       filterKey="strain"
-      heading="Strain"
+      heading={getStrainHeading(filterState.speciesId)}
       icon="scatter_plot"
     />
     <FilterableSection
@@ -144,7 +151,7 @@ const Filter = ({
       icon="label"
       renderLabel={({ active, value }) => (
         <React.Fragment>
-          {active && (filterSummary.mlst2.length ? `${filterSummary.sources.mlst}:` : 'MLST:')} ST <ST id={value} />
+          {active && (filterSummary.mlst2.length ? `${filterSummary.sources.mlst}:` : 'MLST:')} ST <ST id={value}/>
         </React.Fragment>
       )}
     />
@@ -154,7 +161,7 @@ const Filter = ({
       icon="label"
       renderLabel={({ active, value }) => (
         <React.Fragment>
-          {active && (filterSummary.mlst.length ? `${filterSummary.sources.mlst2}:` : 'MLST:')} ST <ST id={value} />
+          {active && (filterSummary.mlst.length ? `${filterSummary.sources.mlst2}:` : 'MLST:')} ST <ST id={value}/>
         </React.Fragment>
       )}
     />
@@ -164,7 +171,7 @@ const Filter = ({
       icon="label"
       renderLabel={({ active, value }) => (
         <React.Fragment>
-          {active ? 'NG-STAR: ST' : 'ST'} <ST id={value} />
+          {active ? 'NG-STAR: ST' : 'ST'} <ST id={value}/>
         </React.Fragment>
       )}
     />
@@ -174,7 +181,7 @@ const Filter = ({
       icon="label"
       renderLabel={({ active, value }) => (
         <React.Fragment>
-          {active ? 'NG-MAST: ST' : 'ST'} <ST id={value} />
+          {active ? 'NG-MAST: ST' : 'ST'} <ST id={value}/>
         </React.Fragment>
       )}
     />
@@ -229,7 +236,7 @@ const Filter = ({
       heading="Country"
       icon="language"
     />
-    <DateSection summary={filterSummary.date} />
+    <DateSection summary={filterSummary.date}/>
     <Section
       filterKey="access"
       headerComponent={({ heading }) => <span>{heading}</span>}
@@ -242,7 +249,7 @@ const Filter = ({
       heading="Uploaded at"
       icon="cloud_upload"
     />
-    <LocationListener update={updateFilter} />
+    <LocationListener update={updateFilter}/>
   </FilterAside>
 );
 

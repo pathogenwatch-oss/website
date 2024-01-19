@@ -9,10 +9,6 @@ module.exports.transformer = function (doc) {
     'Genome ID': doc._id.toString(),
     'Genome Name': doc.name,
     Version: doc.analysis.vista.__v,
-    Biotype: doc.analysis.vista.biotype,
-    'Biotype match': doc.analysis.vista.biotypeMarkers
-      .filter((marker) => marker.matches.length !== 0)
-      .map((marker) => `${marker.name}: ${marker.gene} ${formatMatches(marker.matches)}`).join("/ "),
     Serogroup: doc.analysis.vista.serogroup,
     'Serogroup match': doc.analysis.vista.serogroupMarkers
       .filter((marker) => marker.matches.length !== 0)

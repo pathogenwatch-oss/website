@@ -3,6 +3,6 @@ module.exports.transformer = function (doc) {
     'Genome ID': doc._id.toString(),
     'Genome Name': doc.name,
     Version: doc.analysis.poppunk2.__v,
-    Strain: doc.analysis.poppunk2.strain,
+    Lineage: doc.analysis.poppunk2.strain,
   };
 };

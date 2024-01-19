@@ -7,7 +7,7 @@ import * as constants from '../table/constants';
 import { tableKeys } from '../constants';
 
 import Organisms from '~/organisms';
-import { resetSources, sources } from './utils';
+import { resetSources, resetLineageName, sources, lineageName } from './utils';
 
 const initialState = {
   name: tableKeys.typing,
@@ -128,6 +128,9 @@ const poppunk2Group = {
   group: true,
   columnKey: 'poppunk2',
   columns: [ '__poppunk2_strain' ],
+  get label() {
+    return sources.poppunk2.name;
+  },
 };
 
 const serotypeGroup = {
@@ -139,7 +142,7 @@ const serotypeGroup = {
 const vistaGroup = {
   group: true,
   columnKey: 'vista',
-  columns: [ '__vista_biotype', '__vista_serogroup' ],
+  columns: ['__vista_serogroup' ],
 };
 
 function fillColumnDefs({ columns, ...group }) {
@@ -216,6 +219,19 @@ function updateTypingSettings({ genomes }) {
       }
     }
     // genome assumed to have mlst(1), which means sources are complete
+    if ("poppunk2" in analysis) {
+      if ("label" in analysis.poppunk2 && analysis.poppunk2.label !== "GPSC") {
+        sources.poppunk2 = {
+          name: "LINEAGE",
+          label: analysis.poppunk2.label,
+        };
+      } else {
+        sources.poppunk2 = {
+          name: "STRAIN",
+          label: "GPSC",
+        };
+      }
+    }
     if (analysis.mlst2) return true;
   }
   return false;
