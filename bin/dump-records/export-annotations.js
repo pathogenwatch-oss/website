@@ -110,7 +110,8 @@ async function writeDataFiles(
   },
   query = {},
   upload,
-  user
+  user,
+  tasksArr
 ) {
 
   const filenameBase = organismName.replace('/', '|');
@@ -122,6 +123,7 @@ async function writeDataFiles(
   const tasks = getTasksByOrganism(taxQuery, user);
 
   for (const task of Object.values(tasks)) {
+    if (tasksArr.length > 0 && !tasksArr.includes(task.task)) continue;
     console.log(`Processing task ${task.task}.`);
     if (!(task.task in transformers)) continue;
     const transformer = selectTransformer(task, taxQuery);
@@ -211,6 +213,7 @@ async function main() {
     userId,
     filter = "",
     upload,
+    tasks,
   } = argv.opts;
 
   if (upload) {
@@ -220,6 +223,8 @@ async function main() {
   }
 
   const filterArr = filter !== "" ? filter.split(',') : [];
+  const tasksArr = tasks !== "" ? tasks.split(',') : [];
+
   // const query = !!queryStr ? JSON.parse(queryStr) : { public: true, binned: false };
   const query = !!queryStr ? JSON.parse(queryStr) : { "_user": "623b3dac8f2efe62c2e69fa8", "binned": false };
 
@@ -232,7 +237,7 @@ async function main() {
   for (const organism of organisms) {
     if (filterArr.length === 0 || filterArr.includes(organism.organismId) || filterArr.includes(organism.speciesId) || filterArr.includes(organism.genusId)) {
       console.log(`Writing data for ${organism.organismId}`);
-      await writeDataFiles(organism, query, upload, user);
+      await writeDataFiles(organism, query, upload, user, tasksArr);
     }
   }
 }
