@@ -224,6 +224,21 @@ schema.index({
   createdAt: -1,
 }, { partialFilterExpression: { public: true, binned: false } });
 
+schema.index({
+  public: 1,
+  binned: 1,
+  'analysis.speciator.speciesId': 1,
+  'analysis.speciator.genusId': 1,
+  'analysis.kleborate.typing.K_locus': 1,
+}, { partialFilterExpression: { public: true, binned: false } });
+
+schema.index({
+  _user: 1,
+  binned: 1,
+  'analysis.speciator.speciesId': 1,
+  'analysis.speciator.genusId': 1,
+  'analysis.kleborate.typing.K_locus': 1
+}, { partialFilterExpression: { binned: false } });
 schema.statics.uploadTypes = uploadTypes;
 
 schema.statics.taxonomy = (genome) => {
