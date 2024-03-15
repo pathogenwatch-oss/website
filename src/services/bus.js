@@ -2,11 +2,13 @@ const seneca = require('seneca')({
   strict: {
     result: false,
   },
-  timeout: 55555,
+  timeout: 99999,
 });
 
 exports.DEFAULT_TIMEOUT = seneca.options().timeout;
+
 const LOGGER = require('utils/logging').createLogger('bus');
+
 exports.request = function (role, cmd, message) {
   LOGGER.info('Request', `${seneca.options().timeout}`);
   return new Promise((resolve, reject) => {

@@ -27,7 +27,7 @@ async function mapStsToGenomeNames({ genomeId, sts, user }) {
 
   const foundSts = new Set(Object.keys(nodes));
   for (const st of sts) {
-    if (!foundSts.has(st)) throw new NotFoundError(`User nolonger has a genome with st ${st}`);
+    if (!foundSts.has(st)) throw new NotFoundError(`User no longer has a genome with st ${st}`);
   }
 
   const genome = genomes.find((_) => _._id.toString() === genomeId);
