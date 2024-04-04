@@ -213,7 +213,7 @@ async function main() {
     userId,
     filter = "",
     upload,
-    tasks,
+    tasks = "",
   } = argv.opts;
 
   if (upload) {
@@ -225,8 +225,8 @@ async function main() {
   const filterArr = filter !== "" ? filter.split(',') : [];
   const tasksArr = tasks !== "" ? tasks.split(',') : [];
 
-  // const query = !!queryStr ? JSON.parse(queryStr) : { public: true, binned: false };
-  const query = !!queryStr ? JSON.parse(queryStr) : { "_user": "623b3dac8f2efe62c2e69fa8", "binned": false };
+  const query = !!queryStr ? JSON.parse(queryStr) : { public: true, binned: false };
+  // const query = !!queryStr ? JSON.parse(queryStr) : { "_user": "623b3dac8f2efe62c2e69fa8", "binned": false };
 
   await mongoConnection.connect();
   console.log(`Connected to the database.`);
