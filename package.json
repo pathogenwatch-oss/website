@@ -171,7 +171,7 @@
   "startcmd": "NODE_PATH=$npm_package_nodepath nodemon $npm_package_nodeopts",
   "testcmd": "NODE_PATH=$npm_package_nodepath NODE_ENV='testing' mocha -t 60000 --reporter spec",
   "scripts": {
-    "dev": "NODE_PATH=./src node --trace-uncaught --max-http-header-size=40000 dev/dev-server.js --seneca.log.quiet | bunyan -o short",
+    "dev": "NODE_PATH=./src node --trace-uncaught --max-old-space-size=6000 --max-http-header-size=40000 dev/dev-server.js --seneca.log.quiet | bunyan -o short",
     "start": "NODE_PATH=./src NODE_ENV=production node --max-http-header-size=40000 start.js --seneca.log.quiet",
     "build": "NODE_ENV=production webpack",
     "release": "npm run build && git add . && git commit -m Build && npm version major && git push && git push --tags",
