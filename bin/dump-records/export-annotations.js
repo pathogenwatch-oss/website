@@ -16,17 +16,16 @@ const { PassThrough } = require("stream");
 const fs = require("fs");
 const User = require("models/user");
 const { defaultUser } = require("manifest");
-const { ObjectId } = require("mongoose/lib/types");
 
 const transformers = {
   'cgmlst': require('routes/download/utils/cgmlst').transformer,
-  'core-summary': require('routes/download/utils/core-summary').transformer,
-  genotyphi: require('routes/download/utils//genotyphi').transformer,
-  inctyper: require('routes/download/utils//inctyper').transformer,
-  kaptive: require('routes/download/utils//kaptive').transformer,
-  kleborate: require('routes/download/utils//kleborate').transformer,
-  'klebsiella-lincodes': require('routes/download/utils//klebsiella-lincodes').transformer,
-  metrics: require('routes/download/utils//metrics').transformer,
+  'core': require('routes/download/utils/core-summary').transformer,
+  genotyphi: require('routes/download/utils/genotyphi').transformer,
+  inctyper: require('routes/download/utils/inctyper').transformer,
+  kaptive: require('routes/download/utils/kaptive').transformer,
+  kleborate: require('routes/download/utils/kleborate').transformer,
+  'klebsiella-lincodes': require('routes/download/utils/klebsiella-lincodes').transformer,
+  metrics: require('routes/download/utils/metrics').transformer,
   mlst: require('routes/download/utils/mlst').transformer,
   ngmast: require('routes/download/utils/ngmast').transformer,
   paarsnp: require('routes/download/utils/paarsnp').transformer,
@@ -67,7 +66,7 @@ function getWriteStream(upload, filename) {
   if (!upload) {
     const writeStream = fs.createWriteStream(filename, { flags: 'w' });
 
-    const writeFile = new Promise((resolve, reject) => {
+    const writeFile = new Promise((resolve) => {
       writeStream.on('error', (error) => {
         console.log(`An error occurred while writing to the file. Error: ${error.message}`);
         process.exit(1);
@@ -93,8 +92,7 @@ function getWriteStream(upload, filename) {
 
 async function fetchUser(userId) {
   if (userId) {
-    const user = await User.findOne({ _id: userId }, { flags: 1 });
-    return user;
+    return await User.findOne({_id: userId}, {flags: 1});
   } else {
     return defaultUser;
   }

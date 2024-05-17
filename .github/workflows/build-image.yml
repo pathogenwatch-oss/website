@@ -26,7 +26,7 @@ jobs:
         run: |
           echo Starting push of ${GITHUB_REF_NAME} to GitLab.
           echo test, and deploy your project.
-          git config user.name "cgps.admin"
-          git config user.email "cgps.dev@gmail.com"
+          git config user.name "dr.yeats"
+          git config user.email "corin.yeats@cgps.group"
           git remote set-url origin "https://oauth2:${token}@gitlab.com/cgps/pathogenwatch/website.git"
           git push origin --follow-tags ${GITHUB_REF_NAME}
