@@ -1,10 +1,10 @@
-image: docker:19.03.1
+image: docker:24.0.5
 
 build:
   only:
     - tags
   services:
-    - docker:19.03.1-dind
+    - docker:24.0.5-dind
   script:
     - apk add --update docker
     - docker login
