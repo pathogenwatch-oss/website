@@ -118,9 +118,18 @@ async function writeDataFiles(
   console.log(`Retrieved ${genomes.length} genomes.`);
 
   const taxQuery = { organismId, speciesId, genusId, superkingdomId };
-  const tasks = getTasksByOrganism(taxQuery, user);
+  const tasks = Object.values(getTasksByOrganism(taxQuery, user));
 
-  for (const task of Object.values(tasks)) {
+  const extraTasks = tasks.reduce((extra, task) => {
+    if ('andThen' in task && task.andThen) {
+      for (const extraTask of task.andThen) {
+        extra.push(extraTask);
+      }
+    }
+    return extra;
+  }, []);
+
+  for (const task of [...tasks, ...extraTasks ]) {
     if (tasksArr.length > 0 && !tasksArr.includes(task.task)) continue;
     console.log(`Processing task ${task.task}.`);
     if (!(task.task in transformers)) continue;

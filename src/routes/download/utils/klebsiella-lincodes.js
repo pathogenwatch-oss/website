@@ -1,4 +1,19 @@
 module.exports.transformer = function (doc) {
+
+  if (!('klebsiella-lincodes' in doc.analysis)) {
+    doc.analysis['klebsiella-lincodes'] = {
+      __v: "",
+      cgST: "",
+      'Closest cgST': "",
+      LINcode: [],
+      Sublineage: "",
+      'Clonal Group': "",
+      identity: "",
+      identical: "",
+      comparedLoci: 0,
+      matches: [],
+    };
+  }
   return {
     'Genome ID': doc._id.toString(),
     'Genome Name': doc.name,
