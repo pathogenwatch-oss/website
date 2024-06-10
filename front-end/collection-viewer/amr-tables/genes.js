@@ -73,7 +73,7 @@ function createColumn(key, gene, effect, bufferSize) {
 // export function buildColumns({ paar = {}, antibiotics }, profiles) {
 export function buildColumns(results) {
   // First extract all the acquired genes in the dataset
-  const acquired = extractFoundDeterminants(results)
+  const acquired = extractFoundDeterminants(results);
 
   return results[0]
     .resistanceProfile
