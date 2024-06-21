@@ -311,7 +311,7 @@ const getStrainSummary = createSelector(
       .filter(filterFn)
       .map(value => ({
         value,
-        label: `GPSC ${value}`,
+        label: `${value}`,
         count: strain[value].count,
         active: filterValue === value,
       })),

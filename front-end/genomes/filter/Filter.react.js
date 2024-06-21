@@ -23,8 +23,9 @@ function getSerotypeHeading(genusId) {
   return 'Serotype';
 }
 
-function getStrainHeading(speciesId) {
-  if (speciesId === '666') {
+function getStrainHeading(taxonId
+) {
+  if (taxonId === '666' || taxonId === '662') {
     return 'Lineage (VC)';
   }
   return 'Strain (GPSC)';
@@ -142,7 +143,7 @@ const Filter = ({
     />
     <FilterableSection
       filterKey="strain"
-      heading={getStrainHeading(filterState.speciesId)}
+      heading={getStrainHeading(filterState.speciesId || filterState.organismId || filterState.organismCgmlst || filterState.genusId)}
       icon="scatter_plot"
     />
     <FilterableSection
