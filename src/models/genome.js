@@ -237,9 +237,14 @@ schema.index({
   binned: 1,
   'analysis.speciator.speciesId': 1,
   'analysis.speciator.genusId': 1,
-  'analysis.kleborate.typing.K_locus': 1
+  'analysis.kleborate.typing.K_locus': 1,
 }, { partialFilterExpression: { binned: false } });
 schema.statics.uploadTypes = uploadTypes;
+
+schema.index({
+  binned: 1,
+  binnedDate: 1,
+});
 
 schema.statics.taxonomy = (genome) => {
   const speciator = (genome.analysis || {}).speciator || {};
