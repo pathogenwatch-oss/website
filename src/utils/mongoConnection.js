@@ -36,7 +36,7 @@ function connect(callback) {
   }
 
   LOGGER.info(`Connecting to mongodb: ${dbUrl}`);
-  return mongoose.connect(dbUrl, { useMongoClient: true });
+  return mongoose.connect(dbUrl, { useNewUrlParser: true });
 }
 
 mongoose.set('debug', (collection, ...args) => {
