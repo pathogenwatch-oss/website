@@ -239,6 +239,19 @@ schema.index({
   'analysis.speciator.genusId': 1,
   'analysis.kleborate.typing.K_locus': 1,
 }, { partialFilterExpression: { binned: false } });
+
+schema.index({
+  public: 1,
+  binned: 1,
+  'uploadedAt': 1,
+}, { partialFilterExpression: { public: true, binned: false } });
+
+schema.index({
+  _user: 1,
+  binned: 1,
+  'uploadedAt': 1,
+}, { partialFilterExpression: { binned: false } });
+
 schema.statics.uploadTypes = uploadTypes;
 
 schema.index({
