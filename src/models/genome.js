@@ -275,7 +275,7 @@ schema.statics.taxonomy = (genome) => {
 };
 
 function toObject(genome, user = {}) {
-  const { id } = user;
+  const id = 'id' in user ? user.id : ('_id' in user ? user._id.toString() : null);
   const { _user } = genome;
   genome.owner = _user && id && _user.toString() === id ? 'me' : 'other';
   delete genome._user;
