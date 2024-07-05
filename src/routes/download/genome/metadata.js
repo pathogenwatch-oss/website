@@ -18,10 +18,7 @@ module.exports = asyncWrapper(async (req, res, next) => {
   res.setHeader('Content-Disposition', `attachment; filename=${filename}`);
   res.setHeader('Content-Type', 'text/csv');
 
-  const query = {
-    _id: { $in: ids.split(',').map((id) => new ObjectId(id)) },
-    ...Genome.getPrefilterCondition({ user }),
-  };
+  const query = Genome.getPrefilterCondition({ user }, { _id: { $in: ids.split(',').map((id) => new ObjectId(id)) } });
   const projection = {
     country: 1,
     day: 1,

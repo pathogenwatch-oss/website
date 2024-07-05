@@ -29,11 +29,11 @@ module.exports = function ({ user, ids }) {
   return Promise.all([
     Genome.aggregate([
       {
-        $match: {
-          _id: { $in },
-          'analysis.speciator.speciesId': { $exists: true },
-          ...Genome.getPrefilterCondition({ user }),
-        },
+        $match: Genome.getPrefilterCondition({ user },
+          {
+            _id: { $in },
+            'analysis.speciator.speciesId': { $exists: true },
+          }),
       },
       {
         $group: {
@@ -55,11 +55,11 @@ module.exports = function ({ user, ids }) {
     ]),
     Genome.aggregate([
       {
-        $match: {
-          _id: { $in },
-          'analysis.speciator.speciesId': { $exists: true },
-          ...Genome.getPrefilterCondition({ user }),
-        },
+        $match: Genome.getPrefilterCondition({ user },
+          {
+            _id: { $in },
+            'analysis.speciator.speciesId': { $exists: true },
+          }),
       },
       {
         $facet: taskNames.reduce((memo, task) => {

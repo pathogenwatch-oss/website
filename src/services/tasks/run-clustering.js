@@ -19,11 +19,12 @@ const LOGGER = require('utils/logging').createLogger('runner');
 const DEFAULT_THRESHOLD = 50;
 
 function buildQuery({ userId, scheme, organismId }) {
-  return {
-    ...Genome.getPrefilterCondition({ user: userId ? { _id: userId } : null }),
-    'analysis.cgmlst.scheme': scheme,
-    'analysis.speciator.organismId': organismId,
-  };
+  return Genome.getPrefilterCondition(
+    { user: userId ? { _id: userId } : null },
+    {
+      'analysis.cgmlst.scheme': scheme,
+      'analysis.speciator.organismId': organismId,
+    });
 }
 
 async function extractCgstSet(metadata) {

@@ -22,10 +22,7 @@ module.exports = async ({ user, genomeId, threshold }) => {
   const clusters = buildClusters(threshold, clusterIndex);
   const sts = allSts.filter((_, i) => clusters[i] === clusters[genomeIdx]);
 
-  const query = {
-    'analysis.cgmlst.st': { $in: sts },
-    ...Genome.getPrefilterCondition({ user }),
-  };
+  const query = Genome.getPrefilterCondition({ user }, { 'analysis.cgmlst.st': { $in: sts } });
   const genomes = await Genome.getForCollection(query, user);
 
   const now = new Date().toISOString();

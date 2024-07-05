@@ -3,9 +3,7 @@ const Genome = require('models/genome');
 const { ServiceRequestError, NotFoundError } = require('utils/errors');
 
 function getFiles(credentials, ids, projection) {
-  const query = {
-    ...Genome.getPrefilterCondition(credentials), _id: { $in: ids },
-  };
+  const query = Genome.getPrefilterCondition(credentials, { _id: { $in: ids } });
   return (
     Genome.find(query, projection).lean()
   );

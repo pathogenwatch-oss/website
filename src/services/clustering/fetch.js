@@ -4,10 +4,8 @@ const { request } = require('services');
 const { getClusteringTask } = require('manifest');
 
 async function mapStsToGenomeNames({ genomeId, sts, user }) {
-  const namesQuery = {
-    'analysis.cgmlst.st': { $in: sts },
-    ...Genome.getPrefilterCondition({ user }),
-  };
+
+  const namesQuery = Genome.getPrefilterCondition({ user }, { 'analysis.cgmlst.st': { $in: sts } });
   const projection = {
     'analysis.cgmlst.st': 1,
     name: 1,

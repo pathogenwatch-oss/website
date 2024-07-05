@@ -35,11 +35,11 @@ module.exports = async ({ user, scheme, organismId, id, threshold = 0, filters =
   // Get the cluster document.
   const clustering = await fetchClusters(user, scheme, organismId);
   if (threshold > clustering.threshold) throw new ServiceRequestError(`${messageToken}Threshold of ${threshold} is greater than the maximum allowed (${clustering.threshold})`);
-  const genomes = Genome.find({
-    'analysis.cgmlst.st': { $in: clustering.STs },
-    ...Genome.getPrefilterCondition({ user }),
-  },
-  { 'analysis.cgmlst.st': 1 });
+  const genomes = Genome.find(
+    Genome.getPrefilterCondition(
+      { user },
+      { 'analysis.cgmlst.st': { $in: clustering.STs } }), { 'analysis.cgmlst.st': 1 }
+  );
   const querySTs = {};
   const queryIds = [].concat(id);
 
