@@ -125,7 +125,7 @@ async function attachInputStream(container, versions, genomes, organismId, fileI
       }
     }
     LOGGER.info(`Tree needs ${uncachedFileIds.size} of ${new Set(fileIds).size} genomes`);
-x``
+
     for await (const doc of createGenomesStream(genomes, uncachedFileIds, versions, organismId)) {
       yield bson.serialize(doc);
     }
