@@ -110,7 +110,7 @@ async function attachInputStream(container, versions, genomes, organismId, fileI
 
       seen.add(doc.fileId);
       for (const fileId of fileIds) {
-        if (fileId >= doc.fileId) break;
+        if (fileId >= doc.fileId) break; // Relies on the fileIds being in sorted order.
         if (doc.scores[fileId] === undefined) {
           uncachedFileIds.add(doc.fileId);
           uncachedFileIds.add(fileId);
@@ -125,7 +125,7 @@ async function attachInputStream(container, versions, genomes, organismId, fileI
       }
     }
     LOGGER.info(`Tree needs ${uncachedFileIds.size} of ${new Set(fileIds).size} genomes`);
-
+x``
     for await (const doc of createGenomesStream(genomes, uncachedFileIds, versions, organismId)) {
       yield bson.serialize(doc);
     }

@@ -61,7 +61,7 @@ const schema = new Schema({
 
 setToObjectOptions(schema, (doc, collection, { user }) => {
   const { _user } = collection;
-  const { id } = user || {};
+  const id = 'id' in user ? user.id : ('_id' in user ? user._id.toString() : {});
   if (_user && _user.toString() === id) {
     collection.owner = 'me';
   } else {
