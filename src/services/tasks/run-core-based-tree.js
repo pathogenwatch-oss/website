@@ -106,6 +106,7 @@ async function attachInputStream(container, versions, genomes, organismId, fileI
 
     let uncachedFileIds = new Set();
     for await (const doc of stream) {
+      doc.scores[doc.fileId] = 0; // Ensures this value exists, which is required if there is a duplicate fileId
       yield bson.serialize(doc);
 
       seen.add(doc.fileId);
