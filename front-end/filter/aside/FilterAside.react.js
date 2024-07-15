@@ -36,7 +36,7 @@ class FilterAside extends React.Component {
             <i className="material-icons">search</i>
             <input
               type="text"
-              placeholder="Search"
+              placeholder="Search name"
               value={textValue}
               onChange={e => this.onChange(e.target.value)}
             />
