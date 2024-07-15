@@ -64,7 +64,7 @@ const schema = new Schema({
 
 schema.index({ name: 1 });
 schema.index({ name: 'text' });
-schema.index({ reference: 1 });
+// schema.index({ reference: 1 });
 schema.index({ uploadedAt: 1 });
 schema.index({
   'analysis.mlst.st': 1,
@@ -130,24 +130,29 @@ schema.index({
 // Need these for the sorts
 schema.index({ public: 1, binned: 1, createdAt: -1 }, { partialFilterExpression: { public: true, binned: false } });
 schema.index({ _user: 1, binned: 1, createdAt: -1 });
+
 schema.index({
   public: 1,
   binned: 1,
   'analysis.speciator.organismId': 1,
   createdAt: -1,
 }, { partialFilterExpression: { public: true, binned: false } });
+
 schema.index({
   _user: 1,
   binned: 1,
   'analysis.speciator.organismId': 1,
   createdAt: -1,
 }, { partialFilterExpression: { binned: false } });
-schema.index({ public: 1, _user: 1, binned: 1, createdAt: -1 }, {
-  partialFilterExpression: {
-    public: false,
-    binned: false,
-  },
-});
+
+// Not needed.
+// schema.index({ public: 1, _user: 1, binned: 1, createdAt: -1 }, {
+//   partialFilterExpression: {
+//     public: false,
+//     binned: false,
+//   },
+// });
+
 schema.index({
   _user: 1,
   binned: 1,
@@ -193,6 +198,22 @@ schema.index({
   binned: 1,
   'analysis.speciator.speciesId': 1,
   'analysis.speciator.genusId': 1,
+  country: 1,
+}, { partialFilterExpression: { binned: false } });
+
+schema.index({
+  public: 1,
+  binned: 1,
+  'analysis.speciator.speciesId': 1,
+  'analysis.speciator.genusId': 1,
+  country: 1,
+}, { partialFilterExpression: { public: true, binned: false } });
+
+schema.index({
+  _user: 1,
+  binned: 1,
+  'analysis.speciator.speciesId': 1,
+  'analysis.speciator.genusId': 1,
   'analysis.kleborate.typing.O_locus': 1,
   date: -1,
 }, { partialFilterExpression: { binned: false } });
@@ -250,6 +271,30 @@ schema.index({
   _user: 1,
   binned: 1,
   'uploadedAt': 1,
+}, { partialFilterExpression: { binned: false } });
+
+schema.index({
+  public: 1,
+  binned: 1,
+  name: 1,
+}, { partialFilterExpression: { public: true, binned: false } });
+
+schema.index({
+  _user: 1,
+  binned: 1,
+  name: 1,
+}, { partialFilterExpression: { binned: false } });
+
+schema.index({
+  public: 1,
+  binned: 1,
+  country: 1,
+}, { partialFilterExpression: { public: true, binned: false } });
+
+schema.index({
+  _user: 1,
+  binned: 1,
+  country: 1,
 }, { partialFilterExpression: { binned: false } });
 
 schema.statics.uploadTypes = uploadTypes;
