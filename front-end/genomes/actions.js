@@ -9,7 +9,7 @@ export const FETCH_GENOME_SUMMARY = createAsyncConstants('FETCH_GENOME_SUMMARY')
 
 const listLimiter = new Bottleneck({
   maxConcurrent: 1,
-  minTime: 50,
+  minTime: 100,
 });
 
 const summaryLimiter = new Bottleneck({
