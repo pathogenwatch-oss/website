@@ -7,11 +7,11 @@ require('services');
 const Genome = require('models/genome');
 const User = require('models/user');
 const manifest = require('manifest.js');
-const { enqueue } = require('models/queue');
+const {enqueue} = require('models/queue');
 
 const limit = 1;
 
-const { task, priority: _priority = -10000, precache: _precache = 'true' } = argv.opts;
+const {task, priority: _priority = -10000, precache: _precache = 'true'} = argv.opts;
 
 const overridePriority = Number(_priority);
 const precache = _precache !== 'false';
@@ -22,27 +22,39 @@ if (!task) {
 const uploadedAt = new Date();
 
 function parseQuery() {
-  const { query = '{}' } = argv.opts;
+  const {query = '{}'} = argv.opts;
   console.log(`Query=${query}`);
   return JSON.parse(query);
 }
 
 function fetchGenomes(query) {
-  return Genome.find(query, { fileId: 1, _user: 1, 'analysis.speciator': 1 }).lean();
+  return Genome.find(query, {
+    fileId: 1,
+    _user: 1,
+    'analysis.speciator.organismId': 1,
+    'analysis.speciator.speciesId': 1,
+    'analysis.speciator.genusId': 1,
+    'analysis.speciator.superkingdomId': 1,
+  }).lean();
   // .limit(1);
 }
 
 function submitTasks(genomes) {
-  return mapLimit(genomes, limit, async ({ _id: genomeId, _user, fileId, analysis = {} }) => {
-    const { speciator = {} } = analysis;
-    const user = await User.findById(_user, { flags: 1 });
-    if (!user) return;
-    const tasks = Object.values(manifest.getTasksByOrganism(speciator, user));
+  const userCache = {};
+
+  return mapLimit(genomes, limit, async ({_id: genomeId, _user, fileId, analysis = {}}) => {
+    const {speciator = {}} = analysis;
+    if (!(_user in userCache)) {
+      const user = await User.findById(_user, {flags: 1});
+      if (!user) return;
+      userCache[_user] = user;
+    }
+    const tasks = Object.values(manifest.getTasksByOrganism(speciator, userCache[_user]));
 
     const requestedTask = tasks.find(_ => _.task === task);
     console.log(task, requestedTask);
 
-    const { organismId, speciesId, genusId, superkingdomId } = speciator;
+    const {organismId, speciesId, genusId, superkingdomId} = speciator;
     if (requestedTask) {
       const metadata = {
         genomeId,
@@ -53,7 +65,7 @@ function submitTasks(genomes) {
         superkingdomId,
         uploadedAt: new Date(uploadedAt),
       };
-      await enqueue({ spec: requestedTask, metadata, precache, overridePriority });
+      await enqueue({spec: requestedTask, metadata, precache, overridePriority});
     }
   });
 }
