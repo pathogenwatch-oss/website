@@ -28,6 +28,7 @@ const transformers = {
   metrics: require('routes/download/utils/metrics').transformer,
   mlst: require('routes/download/utils/mlst').transformer,
   ngmast: require('routes/download/utils/ngmast').transformer,
+  ngstar: require('routes/download/utils/mlst').transformer,
   paarsnp: require('routes/download/utils/paarsnp').transformer,
   'paarsnp-snps-genes': require('routes/download/utils/paarsnp-snps-genes').transformer,
   pangolin: require('routes/download/utils/pangolin').transformer,
