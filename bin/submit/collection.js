@@ -31,9 +31,9 @@ async function run() {
       const newSubtrees = await Promise.all(
         Array.from(refs).map(async (name) => {
           const count = await Genome.count({
-            $or: [ { population: true }, { _id: { $in: collection.genomes } } ],
-            'analysis.core.fp.reference': name,
-            'analysis.speciator.organismId': collection.organismId,
+            $or: [
+              { population: true, 'analysis.core.fp.reference': name, 'analysis.speciator.organismId': collection.organismId },
+              { _id: { $in: collection.genomes }, 'analysis.core.fp.reference': name, 'analysis.speciator.organismId': collection.organismId } ],
           });
           if (count > 1) {
             return {

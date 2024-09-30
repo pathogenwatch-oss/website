@@ -15,16 +15,16 @@ export default ({ hasScrollbar = true }) => (
     <div className="wgsa-genome-list-item wgsa-genome-list-header">
       <span className="wgsa-genome-list-cell" >
         <SelectAll />
-        <SortBy stateKey={stateKey} update={updateFilter} sortKey="name">
+        <SortBy className="wgsa-genome-list-cell" stateKey={stateKey} update={updateFilter} sortKey="name">
           Name
         </SortBy>
       </span>
-      <Sort sortKey="organism">Organism</Sort>
-      <Sort sortKey="mlst">Type</Sort>
-      <Sort sortKey="source">Typing Schema</Sort>
-      <Sort sortKey="country">Country</Sort>
+      <div className="wgsa-genome-list-cell">Organism</div>
+      <div className="wgsa-genome-list-cell">Type</div>
+      <div className="wgsa-genome-list-cell">Typing Schema</div>
+      <div className="wgsa-genome-list-cell">Country</div>
       <Sort sortKey="date">Date</Sort>
-      <Sort sortKey="access">Access</Sort>
+      <div className="wgsa-genome-list-cell">Access</div>
     </div>
     { hasScrollbar &&
       <div style={{ overflowY: 'scroll', visibility: 'hidden', height: 0 }} /> }

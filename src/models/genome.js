@@ -32,12 +32,12 @@ const schema = new Schema({
   },
   binned: { type: Boolean, default: false },
   binnedDate: Date,
-  country: { type: String, index: true },
-  createdAt: { type: Date, index: true },
-  date: { type: Date, index: true },
+  country: { type: String },
+  createdAt: { type: Date },
+  date: { type: Date },
   day: Number,
   errored: { type: Array, default: null },
-  fileId: { type: String, index: true },
+  fileId: { type: String },
   lastAccessedAt: Date,
   lastUpdatedAt: Date,
   latitude: Number,
@@ -49,7 +49,7 @@ const schema = new Schema({
     value: { type: String, maxLength: 256, trim: true },
     type: { type: String, maxLength: 8, trim: true },
   },
-  population: { type: Boolean, default: false, index: true },
+  population: { type: Boolean, default: false },
   public: { type: Boolean, default: false },
   upload: {
     type: { type: String, enum: Object.values(uploadTypes) },
@@ -62,247 +62,444 @@ const schema = new Schema({
   year: Number,
 });
 
-schema.index({ name: 1 });
-schema.index({ name: 'text' });
-// schema.index({ reference: 1 });
-schema.index({ uploadedAt: 1 });
+schema.index({ fileId: 1 });
+
+// For the upload page (previous uploads)
+schema.index({
+  _user: 1,
+  uploadedAt: 1,
+  upload: 1,
+  fileId: 1,
+});
+
+// Name search box
+schema.index({
+  name: 'text',
+  public: 1,
+  binned: 1,
+}, { partialFilterExpression: { public: true, binned: false } });
+schema.index({
+  name: 'text',
+  _user: 1,
+  binned: 1,
+}, { partialFilterExpression: { binned: false } });
+
+schema.index({
+  _user: 1,
+  binned: 1,
+  date: 1, // sort/partition
+}, { partialFilterExpression: { binned: false } });
+schema.index({
+  public: 1,
+  binned: 1,
+  date: 1,
+}, { partialFilterExpression: { public: true, binned: false } });
+
+schema.index({
+  public: 1,
+  binned: 1,
+  createdAt: -1, // sort
+  date: 1, // partition
+}, { partialFilterExpression: { public: true, binned: false } });
+schema.index({
+  _user: 1,
+  binned: 1,
+  createdAt: -1,
+  date: 1,
+}, { partialFilterExpression: { binned: false } });
+
+schema.index({
+  country: 1,
+  public: 1,
+  binned: 1,
+  date: 1, // sort/paritition
+}, { partialFilterExpression: { public: true, binned: false } });
+schema.index({
+  _user: 1,
+  country: 1,
+  binned: 1,
+  date: 1,
+}, { partialFilterExpression: { binned: false } });
+
+schema.index({
+  public: 1,
+  binned: 1,
+  name: 1, // sort
+  date: 1, // partition
+}, { partialFilterExpression: { public: true, binned: false } });
+schema.index({
+  _user: 1,
+  binned: 1,
+  name: 1,
+  date: 1,
+}, { partialFilterExpression: { binned: false } });
+
+schema.index({
+  country: 1,
+  public: 1,
+  binned: 1,
+  name: 1, // sort
+  date: 1, // partition
+}, { partialFilterExpression: { public: true, binned: false } });
+schema.index({
+  _user: 1,
+  country: 1,
+  binned: 1,
+  name: 1,
+  date: 1,
+}, { partialFilterExpression: { binned: false } });
+
+schema.index({
+  reference: 1,
+  public: 1,
+  binned: 1,
+  createdAt: 1, // sort
+  date: 1, // partition
+}, { partialFilterExpression: { public: true, binned: false } });
+schema.index({
+  _user: 1,
+  reference: 1,
+  binned: 1,
+  public: 1,
+  createdAt: 1,
+  date: 1,
+}, { partialFilterExpression: { binned: false, reference: true } });
+
+schema.index({
+  'analysis.speciator.organismId': 1,
+  public: 1,
+  binned: 1,
+  date: 1, // sort/partition
+}, { partialFilterExpression: { public: true, binned: false, 'analysis.speciator.organismId': { $exists: true } } });
+schema.index({
+  _user: 1,
+  'analysis.speciator.organismId': 1,
+  binned: 1,
+  date: 1, // sort/partition
+}, { partialFilterExpression: { binned: false, 'analysis.speciator.organismId': { $exists: true } } });
+
+schema.index({
+  'analysis.speciator.organismId': 1,
+  public: 1,
+  binned: 1,
+  name: 1, // sort
+  date: 1, // partition
+}, { partialFilterExpression: { public: true, binned: false, 'analysis.speciator.organismId': { $exists: true } } });
+schema.index({
+  _user: 1,
+  'analysis.speciator.organismId': 1,
+  binned: 1,
+  name: 1,
+  date: 1,
+}, { partialFilterExpression: { binned: false, 'analysis.speciator.organismId': { $exists: true } } });
+
+schema.index({
+  'analysis.speciator.genusId': 1,
+  public: 1,
+  binned: 1,
+  name: 1, // sort
+  date: 1, // partition
+}, { partialFilterExpression: { public: true, binned: false, 'analysis.speciator.genusId': { $exists: true } } });
+schema.index({
+  _user: 1,
+  'analysis.speciator.genusId': 1,
+  binned: 1,
+  name: 1,
+  date: 1,
+}, { partialFilterExpression: { binned: false, 'analysis.speciator.genusId': { $exists: true } } });
+
+schema.index({
+  'analysis.speciator.genusId': 1,
+  public: 1,
+  binned: 1,
+  createdAt: -1,
+}, { partialFilterExpression: { public: true, binned: false, 'analysis.speciator.genusId': { $exists: true } } });
+schema.index({
+  _user: 1,
+  'analysis.speciator.genusId': 1,
+  binned: 1,
+  createdAt: -1,
+}, { partialFilterExpression: { binned: false,  'analysis.speciator.genusId': { $exists: true } } });
+
+schema.index({
+  'analysis.speciator.speciesId': 1,
+  'analysis.speciator.genusId': 1,
+  public: 1,
+  binned: 1,
+  date: 1, // sort/partition
+}, { partialFilterExpression: { public: true, binned: false, 'analysis.speciator.speciesId': { $exists: true } } });
+schema.index({
+  'analysis.speciator.speciesId': 1,
+  'analysis.speciator.genusId': 1,
+  _user: 1,
+  binned: 1,
+  date: 1,
+}, { partialFilterExpression: { binned: false, 'analysis.speciesId': { $exists: true } } });
+
+schema.index({
+  'analysis.speciator.speciesId': 1,
+  'analysis.speciator.genusId': 1,
+  public: 1,
+  binned: 1,
+  name: 1, // sort
+  date: 1, // partition
+}, { partialFilterExpression: { public: true, binned: false, 'analysis.speciator.speciesId': { $exists: true } } });
+schema.index({
+  _user: 1,
+  'analysis.speciator.speciesId': 1,
+  'analysis.speciator.genusId': 1,
+  binned: 1,
+  name: 1,
+  date: 1,
+}, { partialFilterExpression: { binned: false, 'analysis.speciator.speciesId': { $exists: true } } });
+
+schema.index({
+  'analysis.speciator.speciesId': 1,
+  'analysis.speciator.genusId': 1,
+  public: 1,
+  binned: 1,
+  country: 1, // sort
+  date: 1, // partition
+}, { partialFilterExpression: { public: true, binned: false, 'analysis.speciator.speciesId': { $exists: true } } });
+schema.index({
+  _user: 1,
+  'analysis.speciator.genusId': 1,
+  'analysis.speciator.speciesId': 1,
+  binned: 1,
+  country: 1,
+  date: 1,
+}, { partialFilterExpression: { binned: false, 'analysis.speciator.speciesId': { $exists: true } } });
+
+schema.index({
+  'analysis.kleborate.typing.O_locus': 1,
+  public: 1,
+  binned: 1,
+  'analysis.speciator.genusId': 1,
+  'analysis.speciator.speciesId': 1,
+  createdAt: -1, // sort
+}, { partialFilterExpression: { public: true, binned: false, 'analysis.kleborate.typing.O_locus': { $exists: true } } });
+schema.index({
+  'analysis.kleborate.typing.O_locus': 1,
+  _user: 1,
+  binned: 1,
+  'analysis.speciator.genusId': 1,
+  'analysis.speciator.speciesId': 1,
+  createdAt: -1,
+}, { partialFilterExpression: { binned: false, 'analysis.kleborate.typing.O_lcus': { $exists: true } } });
+
+schema.index({
+  'analysis.kleborate.typing.O_locus': 1,
+  'analysis.speciator.speciesId': 1,
+  'analysis.speciator.genusId': 1,
+  public: 1,
+  binned: 1,
+  date: 1, // sort/partition
+}, { partialFilterExpression: { public: true, binned: false, 'analysis.kleborate.typing.O_locus': { $exists: true } } });
+schema.index({
+  _user: 1,
+  'analysis.kleborate.typing.O_locus': 1,
+  'analysis.speciator.speciesId': 1,
+  'analysis.speciator.genusId': 1,
+  binned: 1,
+  date: 1, // sort/partition
+}, { partialFilterExpression: { binned: false, 'analysis.kleborate.typing.O_locus': { $exists: true } } });
+
+schema.index({
+  'analysis.kleborate.typing.K_locus': 1,
+  public: 1,
+  binned: 1,
+  'analysis.speciator.genusId': 1,
+  'analysis.speciator.speciesId': 1,
+  createdAt: -1, // sort
+}, { partialFilterExpression: { public: true, binned: false, 'analysis.kleborate.typing.K_locus': { $exists: true } } });
+schema.index({
+  'analysis.kleborate.typing.K_locus': 1,
+  _user: 1,
+  binned: 1,
+  'analysis.speciator.genusId': 1,
+  'analysis.speciator.speciesId': 1,
+  createdAt: -1,
+}, { partialFilterExpression: { binned: false, 'analysis.kleborate.typing.K_locus': { $exists: true } } });
+
+schema.index({
+  'analysis.kleborate.typing.K_locus': 1,
+  public: 1,
+  binned: 1,
+  'analysis.speciator.genusId': 1,
+  'analysis.speciator.speciesId': 1,
+  date: 1,
+}, { partialFilterExpression: { public: true, binned: false, 'analysis.kleborate.typing.K_locus': { $exists: true } } });
+schema.index({
+  'analysis.kleborate.typing.K_locus': 1,
+  _user: 1,
+  binned: 1,
+  'analysis.speciator.genusId': 1,
+  'analysis.speciator.speciesId': 1,
+  date: 1, // sort/partition
+}, { partialFilterExpression: { binned: false, 'analysis.kleborate.typing.K_locus': { $exists: true } } });
+
+schema.index({
+  'analysis.speciator.speciesId': 1,
+  'analysis.speciator.genusId': 1,
+  'analysis.paarsnp.resistanceProfile.agent.name': 1,
+  'analysis.paarsnp.resistanceProfile.agent.state': 1,
+  public: 1,
+  binned: 1,
+  createdAt: -1,
+  date: 1,
+}, { partialFilterExpression: { public: true, binned: false, 'analysis.paarsnp.resistanceProfile.agent.name': { $exists: true } } });
+schema.index({
+  _user: 1,
+  'analysis.speciator.speciesId': 1,
+  'analysis.speciator.genusId': 1,
+  'analysis.paarsnp.resistanceProfile.agent.name': 1,
+  'analysis.paarsnp.resistanceProfile.agent.state': 1,
+  binned: 1,
+  createdAt: -1,
+  date: 1,
+}, { partialFilterExpression: { binned: false, 'analysis.paarsnp.resistanceProfile.agent.name': { $exists: true } } });
+
 schema.index({
   'analysis.mlst.st': 1,
-  'analysis.mlst2.st': 1,
-}, { partialFilterExpression: { 'analysis.mlst': { $exists: true } } });
-schema.index({ 'analysis.mlst2.st': 1 }, { partialFilterExpression: { 'analysis.mlst2': { $exists: true } } });
-schema.index({ 'analysis.cgmlst.st': 1 }, { partialFilterExpression: { 'analysis.cgmlst': { $exists: true } } });
+  'analysis.speciator.speciesId': 1,
+  'analysis.speciator.genusId': 1,
+  public: 1,
+  binned: 1,
+  createdAt: -1, // sort
+  date: 1, // partition
+}, { partialFilterExpression: { public: true, binned: false, 'analysis.mlst.st': { $exists: true } } });
 schema.index({
-  'analysis.paarsnp.antibiotics.fullName': 1,
-  'analysis.paarsnp.antibiotics.state': 1,
-}, { partialFilterExpression: { 'analysis.paarsnp': { $exists: true } } });
-schema.index({ 'analysis.paarsnp.antibiotics.state': 1 }, { partialFilterExpression: { 'analysis.paarsnp': { $exists: true } } });
-schema.index({ 'analysis.speciator.organismName': 1 }, { partialFilterExpression: { 'analysis.speciator': { $exists: true } } });
-schema.index({ 'analysis.speciator.speciesId': 1 }, { partialFilterExpression: { 'analysis.speciator': { $exists: true } } });
-schema.index({ 'analysis.speciator.genusId': 1 }, { partialFilterExpression: { 'analysis.speciator': { $exists: true } } });
-schema.index({ 'analysis.serotype.subspecies': 1 }, { partialFilterExpression: { 'analysis.serotype': { $exists: true } } });
-schema.index({ 'analysis.serotype.value': 1 }, { partialFilterExpression: { 'analysis.serotype': { $exists: true } } });
-schema.index({ 'analysis.speciator.speciesName': 1, 'analysis.serotype.subspecies': 1, 'analysis.serotype.value': 1 });
-schema.index({ 'upload.type': 1, 'upload.completed': 1 });
-schema.index({ 'analysis.poppunk2.strain': 1 }, { partialFilterExpression: { 'analysis.poppunk2': { $exists: true } } });
-schema.index({ 'analysis.ngstar.st': 1 }, { partialFilterExpression: { 'analysis.ngstar': { $exists: true } } });
-schema.index({ 'analysis.ngmast.ngmast': 1 }, { partialFilterExpression: { 'analysis.ngmast': { $exists: true } } });
-schema.index({ 'analysis.genotyphi.genotype': 1 }, { partialFilterExpression: { 'analysis.genotyphi': { $exists: true } } });
-schema.index({ 'analysis.core.fp.reference': 1 }, { partialFilterExpression: { 'analysis.core': { $exists: true } } });
-schema.index({ 'analysis.kaptive.kLocus.Best locus match': 1 }, { partialFilterExpression: { 'analysis.kaptive': { $exists: true } } });
-schema.index({ 'analysis.kaptive.oLocus.Best locus match': 1 }, { partialFilterExpression: { 'analysis.kaptive': { $exists: true } } });
-schema.index({ 'analysis.kleborate.typing.K_locus': 1 }, { partialFilterExpression: { 'analysis.kleborate': { $exists: true } } });
-schema.index({ 'analysis.kleborate.typing.O_locus': 1 }, { partialFilterExpression: { 'analysis.kleborate': { $exists: true } } });
-schema.index({ 'analysis.klebsiella-lincodes.cgST': 1 }, { partialFilterExpression: { 'analysis.klebsiella-lincodes': { $exists: true } } });
-schema.index({ 'analysis.pangolin.lineage': 1 }, { partialFilterExpression: { 'analysis.pangolin': { $exists: true } } });
-schema.index({ 'analysis.sarscov2-variants.variants.state': 1 }, { partialFilterExpression: { 'analysis.sarscov2-variants': { $exists: true } } });
-schema.index({ 'analysis.sarscov2-variants.variants.name': 1 }, { partialFilterExpression: { 'analysis.sarscov2-variants': { $exists: true } } });
+  'analysis.mlst.st': 1,
+  _user: 1,
+  'analysis.speciator.speciesId': 1,
+  'analysis.speciator.genusId': 1,
+  binned: 1,
+  createdAt: -1,
+  date: 1,
+}, { partialFilterExpression: { binned: false, 'analysis.mlst.st': { $exists: true } } });
+
+schema.index({
+  'analysis.speciator.speciesId': 1,
+  'analysis.speciator.genusId': 1,
+  'analysis.mlst.st': 1,
+  public: 1,
+  binned: 1,
+  date: 1,
+}, { partialFilterExpression: { public: true, binned: false, 'analysis.mlst.st': { $exists: true } } });
+schema.index({
+  _user: 1,
+  'analysis.speciator.speciesId': 1,
+  'analysis.speciator.genusId': 1,
+  'analysis.mlst.st': 1,
+  binned: 1,
+  date: 1, // sort/partition
+}, { partialFilterExpression: { binned: false, 'analysis.mlst.st': { $exists: true } } });
+
+schema.index({
+  uploadedAt: 1,
+  public: 1,
+  binned: 1,
+  createdAt: -1,
+}, { partialFilterExpression: { public: true, binned: false } });
+schema.index({
+  uploadedAt: 1,
+  _user: 1,
+  binned: 1,
+  createdAt: -1,
+}, { partialFilterExpression: { binned: false } });
+
+schema.index({
+  uploadedAt: 1,
+  public: 1,
+  binned: 1,
+  'analysis.speciator.genusId': 1,
+  'analysis.speciator.speciesId': 1,
+}, { partialFilterExpression: { public: true, binned: false, 'analysis.speciator.speciesId': { $exists: true } } });
+schema.index({
+  uploadedAt: 1,
+  _user: 1,
+  binned: 1,
+  'analysis.speciator.genusId': 1,
+  'analysis.speciator.speciesId': 1,
+}, { partialFilterExpression: { binned: false, 'analysis.speciator.speciesId': { $exists: true } } });
 
 schema.index({
   public: 1,
   binned: 1,
-  reference: 1,
+  'analysis.speciator.organismId': 1,
+  createdAt: -1, // sort
+  date: 1, // partition
+}, { partialFilterExpression: { public: true, binned: false, 'analysis.speciator.organismId': { $exists: true } } });
+schema.index({
   _user: 1,
-});
+  binned: 1,
+  'analysis.speciator.organismId': 1,
+  createdAt: -1,
+  date: 1,
+}, { partialFilterExpression: { binned: false, 'analysis.speciator.organismId': { $exists: true } } });
 
 schema.index({
   public: 1,
+  binned: 1,
+  'analysis.speciator.organismId': 1,
+  date: 1, // partition
+}, { partialFilterExpression: { public: true, binned: false, 'analysis.speciator.organismId': { $exists: true } } });
+schema.index({
+  _user: 1,
+  binned: 1,
+  'analysis.speciator.organismId': 1,
+  date: 1,
+}, { partialFilterExpression: { binned: false, 'analysis.speciator.organismId': { $exists: true } } });
+
+schema.index({
+  public: 1,
+  binned: 1,
+  'analysis.speciator.organismId': 1,
+  name: 1,
+  date: 1, // partition
+}, { partialFilterExpression: { public: true, binned: false, 'analysis.speciator.organismId': { $exists: true } } });
+schema.index({
+  _user: 1,
+  binned: 1,
+  'analysis.speciator.organismId': 1,
+  name: 1,
+  date: 1,
+}, { partialFilterExpression: { binned: false, 'analysis.speciator.organismId': { $exists: true } } });
+
+// Cluster fetching
+schema.index({
+  public: 1,
+  binned: 1,
+  'analysis.cgmlst.st': 1,
+  name: 1,
+}, { partialFilterExpression: { public: true, binned: false, 'analysis.cgmlst.st': { $exists: true } } });
+schema.index({
+  _user: 1,
+  binned: 1,
+  'analysis.cgmlst.st': 1,
+  name: 1,
+}, { partialFilterExpression: { binned: false, 'analysis.cgmlst.st': { $exists: true } } });
+
+// Bonus indexes, probably not needed
+schema.index({
+  public: 1,
+  binned: 1,
+  'analysis.speciator.organismId': 1,
+  'analysis.speciator.organismName': 1, // For covered query
+}, { partialFilterExpression: { public: true, binned: false, 'analysis.speciator.organismId': { $exists: true } } });
+schema.index({
+  _user: 1,
   binned: 1,
   'analysis.speciator.organismId': 1,
   'analysis.speciator.organismName': 1,
-}, { partialFilterExpression: { public: true, binned: false } });
-schema.index({
-  _user: 1,
-  binned: 1,
-  'analysis.speciator.organismId': 1,
-  'analysis.speciator.organismName': 1,
-}, { partialFilterExpression: { binned: false } });
-schema.index({
-  public: 1,
-  binned: 1,
-  'analysis.cgmlst.scheme': 1,
-}, { partialFilterExpression: { public: true, binned: false } });
-schema.index({
-  _user: 1,
-  binned: 1,
-  'analysis.cgmlst.scheme': 1,
-});
-// Need these for the sorts
-schema.index({ public: 1, binned: 1, createdAt: -1 }, { partialFilterExpression: { public: true, binned: false } });
-schema.index({ _user: 1, binned: 1, createdAt: -1 });
-
-schema.index({
-  public: 1,
-  binned: 1,
-  'analysis.speciator.organismId': 1,
-  createdAt: -1,
-}, { partialFilterExpression: { public: true, binned: false } });
-
-schema.index({
-  _user: 1,
-  binned: 1,
-  'analysis.speciator.organismId': 1,
-  createdAt: -1,
-}, { partialFilterExpression: { binned: false } });
-
-// Not needed.
-// schema.index({ public: 1, _user: 1, binned: 1, createdAt: -1 }, {
-//   partialFilterExpression: {
-//     public: false,
-//     binned: false,
-//   },
-// });
-
-schema.index({
-  _user: 1,
-  binned: 1,
-  "analysis.speciator.organismId": 1,
-  "analysis.mlst.st": 1,
-  "analysis.mlst2.st": 1,
-});
-
-schema.index({
-  _user: 1,
-  binned: 1,
-  'analysis.speciator.speciesId': 1,
-  'analysis.speciator.genusId': 1,
-  createdAt: -1,
-}, { partialFilterExpression: { binned: false } });
-
-schema.index({
-  public: 1,
-  binned: 1,
-  'analysis.speciator.speciesId': 1,
-  'analysis.speciator.genusId': 1,
-  createdAt: -1,
-}, { partialFilterExpression: { public: true, binned: false } });
-
-schema.index({
-  _user: 1,
-  binned: 1,
-  'analysis.speciator.speciesId': 1,
-  'analysis.speciator.genusId': 1,
-  date: -1,
-}, { partialFilterExpression: { binned: false } });
-
-schema.index({
-  public: 1,
-  binned: 1,
-  'analysis.speciator.speciesId': 1,
-  'analysis.speciator.genusId': 1,
-  date: -1,
-}, { partialFilterExpression: { public: true, binned: false } });
-
-schema.index({
-  _user: 1,
-  binned: 1,
-  'analysis.speciator.speciesId': 1,
-  'analysis.speciator.genusId': 1,
-  country: 1,
-}, { partialFilterExpression: { binned: false } });
-
-schema.index({
-  public: 1,
-  binned: 1,
-  'analysis.speciator.speciesId': 1,
-  'analysis.speciator.genusId': 1,
-  country: 1,
-}, { partialFilterExpression: { public: true, binned: false } });
-
-schema.index({
-  _user: 1,
-  binned: 1,
-  'analysis.speciator.speciesId': 1,
-  'analysis.speciator.genusId': 1,
-  'analysis.kleborate.typing.O_locus': 1,
-  date: -1,
-}, { partialFilterExpression: { binned: false } });
-
-schema.index({
-  public: 1,
-  binned: 1,
-  'analysis.speciator.speciesId': 1,
-  'analysis.speciator.genusId': 1,
-  'analysis.kleborate.typing.O_locus': 1,
-  date: -1,
-}, { partialFilterExpression: { public: true, binned: false } });
-
-schema.index({
-  _user: 1,
-  binned: 1,
-  'analysis.speciator.speciesId': 1,
-  'analysis.speciator.genusId': 1,
-  'analysis.kleborate.typing.O_locus': 1,
-  createdAt: -1,
-}, { partialFilterExpression: { binned: false } });
-
-schema.index({
-  public: 1,
-  binned: 1,
-  'analysis.speciator.speciesId': 1,
-  'analysis.speciator.genusId': 1,
-  'analysis.kleborate.typing.O_locus': 1,
-  createdAt: -1,
-}, { partialFilterExpression: { public: true, binned: false } });
-
-schema.index({
-  public: 1,
-  binned: 1,
-  'analysis.speciator.speciesId': 1,
-  'analysis.speciator.genusId': 1,
-  'analysis.kleborate.typing.K_locus': 1,
-}, { partialFilterExpression: { public: true, binned: false } });
-
-schema.index({
-  _user: 1,
-  binned: 1,
-  'analysis.speciator.speciesId': 1,
-  'analysis.speciator.genusId': 1,
-  'analysis.kleborate.typing.K_locus': 1,
-}, { partialFilterExpression: { binned: false } });
-
-schema.index({
-  public: 1,
-  binned: 1,
-  'uploadedAt': 1,
-}, { partialFilterExpression: { public: true, binned: false } });
-
-schema.index({
-  _user: 1,
-  binned: 1,
-  'uploadedAt': 1,
-}, { partialFilterExpression: { binned: false } });
-
-schema.index({
-  public: 1,
-  binned: 1,
-  name: 1,
-}, { partialFilterExpression: { public: true, binned: false } });
-
-schema.index({
-  _user: 1,
-  binned: 1,
-  name: 1,
-}, { partialFilterExpression: { binned: false } });
-
-schema.index({
-  public: 1,
-  binned: 1,
-  country: 1,
-}, { partialFilterExpression: { public: true, binned: false } });
-
-schema.index({
-  _user: 1,
-  binned: 1,
-  country: 1,
-}, { partialFilterExpression: { binned: false } });
-
-schema.statics.uploadTypes = uploadTypes;
+}, { partialFilterExpression: { binned: false, 'analysis.speciator.organismId': { $exists: true } } });
 
 schema.index({
   binned: 1,
   binnedDate: 1,
 });
+
+schema.statics.uploadTypes = uploadTypes;
 
 schema.statics.taxonomy = (genome) => {
   const speciator = (genome.analysis || {}).speciator || {};
@@ -359,7 +556,7 @@ schema.statics.addAnalysisResults = function (_id, ...analyses) {
 
   for (const analysis of analyses) {
     const { task } = analysis;
-    update.$set[`analysis.${task.toLowerCase()}`] = summariseAnalysis(analysis);
+    update.$set[`analysis.${ task.toLowerCase() }`] = summariseAnalysis(analysis);
     update.$pullAll.pending.push(task);
   }
 
@@ -434,7 +631,7 @@ schema.statics.getPrefilterCondition = function ({ user, query = {} }, currentFi
     return { binned: true, _user: user._id, binnedDate: { $gt: getBinExpiryDate() }, ...currentFilters };
   }
 
-  throw new Error(`Invalid genome prefilter: '${prefilter}'`);
+  throw new Error(`Invalid genome prefilter: '${ prefilter }'`);
 };
 
 schema.statics.getFilterQuery = async function (props, findQuery = {}) {
@@ -621,7 +818,7 @@ schema.statics.getSummary = function (fields, props) {
 const sortKeys = new Set([ 'createdAt', 'name', 'organism', 'country', 'date', 'type', 'mlst' ]);
 schema.statics.getSort = function (sort = 'createdAt-') {
   const sortOrder = sort.slice(-1) === '-' ? -1 : 1;
-  const sortKey = sortOrder === 1 ? sort : sort.substr(0, sort.length - 1);
+  const sortKey = sortOrder === 1 ? sort : sort.substring(0, sort.length - 1);
 
   if (!sortKeys.has(sortKey)) return null;
 
@@ -729,10 +926,8 @@ schema.statics.lookupOrganism = async function (genomeId, user) {
 schema.statics.checkAuthorisedForSts = async function (user, sts) {
   // A user says they want info about a list of cgmlst sts
   // Do they have access to at least one genome with those sts?
-  const query = {
-    'analysis.cgmlst.st': { $in: sts },
-    ...this.getPrefilterCondition({ user }),
-  };
+  const query = this.getPrefilterCondition({ user }, { 'analysis.cgmlst.st': { $in: sts } });
+
   const userSts = await this.distinct('analysis.cgmlst.st', query);
   return userSts.length === new Set(sts).size;
 };

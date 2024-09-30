@@ -14,6 +14,8 @@ const SortBy = ({ className, onClick, children, active, sortOrder }) => (
       <i className="material-icons">
         {sortOrder ? 'arrow_drop_up' : 'arrow_drop_down'}
       </i>}
+    {!active &&
+      <i className="material-icons">sort</i> }
   </button>
 );
 

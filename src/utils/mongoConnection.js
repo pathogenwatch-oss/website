@@ -42,9 +42,9 @@ function connect(callback) {
 mongoose.set('debug', (collection, ...args) => {
   if (process.env.MONGO_QUIET) LOGGER.debug([ collection, args[0] ]);
   else if (collection === 'clustering' && args[0] === 'update') {
-    LOGGER.debug([ collection, ...args.slice(0, 2), 'TOO_LONG', ...args.slice(3) ]);
-  } else if (args[0] === 'ensureIndex');
-  else LOGGER.debug([ collection, ...args ]);
+    LOGGER.debug([ collection, JSON.stringify(args.slice(0, 2)), 'TOO_LONG', JSON.stringify(args.slice(3)) ]);
+  }
+  else LOGGER.debug([ collection, JSON.stringify(args) ]);
 });
 
 module.exports.connect = connect;
