@@ -55,7 +55,7 @@ const s3 = new aws.S3({
 });
 
 function selectTransformer(task, { speciesId }) {
-  if ([ 'mlst', 'mlst2' ].includes(task.task)) {
+  if ([ 'mlst', 'mlst2', 'ngstar' ].includes(task.task)) {
     return transformers.mlst(task.task);
   } else if (task.task === 'serotype') {
     return transformers.serotype(labels[speciesId] || labels.general);
