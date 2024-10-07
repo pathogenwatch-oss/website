@@ -37,7 +37,7 @@ export default ({ result }) => (
       <dl className="pw-genome-report-unsized">
         <div>
           <dt>Virulence score</dt>
-          <dd>{result.virulence_score} &ndash; {scores[result.virulence_score]}</dd>
+          <dd>{result.virulence.virulence_score} &ndash; {scores[result.virulence.virulence_score]}</dd>
         </div>
       </dl>
     </div>
@@ -45,7 +45,7 @@ export default ({ result }) => (
       <dl className="pw-genome-report-unsized">
         <div>
           <dt>Hypermucoidy (<em>RmpADC</em> / <em>rmpA2</em>)</dt>
-          <dd>{result.virulence.RmpADC} / {result.virulence.rmpA2}</dd>
+          <dd>{result.virulence.profile.RmpADC} / {result.virulence.profile.rmpA2}</dd>
         </div>
       </dl>
     </div>
@@ -61,7 +61,7 @@ export default ({ result }) => (
         <tbody>
           <tr>
             {virulenceFields.map((field) => (
-              <Value>{result.virulence[field]}</Value>
+              <Value>{result.virulence.profile[field]}</Value>
             ))}
           </tr>
         </tbody>

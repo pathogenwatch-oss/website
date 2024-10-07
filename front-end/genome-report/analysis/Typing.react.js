@@ -7,7 +7,6 @@ import NgMast from './NgMast.react';
 import Serotype from './Serotype.react';
 import Strain from './Strain.react';
 import Kaptive from './Kaptive.react';
-import Kleborate from './Kleborate.react';
 import NgonoVariants from './NgonoVariants.react';
 import Pangolin from './Pangolin.react';
 import SpnPbpType from './SpnPbpType.react';
@@ -21,7 +20,6 @@ function getSecondaryTyping(genome) {
     serotype,
     poppunk2,
     kaptive,
-    kleborate,
     "ngono-markers": ngonoMarkers,
     pangolin,
     spn_pbp_amr: spnPbpAmr,
@@ -60,10 +58,6 @@ function getSecondaryTyping(genome) {
       {!!kaptive &&
         <div>
           <Kaptive genome={genome} />
-        </div>}
-      {!!kleborate &&
-        <div>
-          <Kleborate genome={genome} />
         </div>}
       {!!spnPbpAmr &&
         <div>

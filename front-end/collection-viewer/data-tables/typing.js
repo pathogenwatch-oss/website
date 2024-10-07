@@ -115,13 +115,13 @@ const inctyperGroup = {
 const kaptiveGroup = {
   group: true,
   columnKey: 'kaptive',
-  columns: [ '__K_locus_kaptive', '__K_type_kaptive', '__O_locus_kaptive' ],
+  columns: [ '__K_locus_kaptive', '__K_type_kaptive', '__O_locus_kaptive', '__O_type_kaptive' ],
 };
 
 const kleborateGroup = {
   group: true,
   columnKey: 'kleborate',
-  columns: [ '__K_locus', '__K_type', '__O_locus', '__O_type', '__Virulence_Score', '__Aerobactin', '__Colibactin', '__Salmochelin', '__Yersiniabactin', '__RmpADC', '__rmpA2' ],
+  columns: [ '__Virulence_Score', '__Aerobactin', '__Colibactin', '__Salmochelin', '__Yersiniabactin', '__RmpADC', '__rmpA2' ],
 };
 
 const poppunk2Group = {
@@ -231,6 +231,12 @@ function updateTypingSettings({ genomes }) {
           label: "GPSC",
         };
       }
+    }
+    if ("kaptive" in analysis) {
+      sources.kaptiveOLocus = {
+        name: analysis.kaptive.oLocus.name,
+        label: analysis.kaptive.oLocus.name,
+      };
     }
     if (analysis.mlst2) return true;
   }

@@ -2,15 +2,17 @@ import React from 'react';
 
 import { VersionSwitcher } from '../components';
 
-import Clustering from './Clustering.react';
-import Core from './Core.react';
-import Inctyper from './Inctyper.react';
-import Metrics from './Metrics.react';
 import AMR from './AMR.react';
+import Core from './Core.react';
+import Clustering from './Clustering.react';
+import Inctyper from './Inctyper.react';
+import KleborateSpecies from './KleborateSpecies.react';
+import Metrics from './Metrics.react';
+import CovidVariants from './Sarscov2Variants.react';
 import Speciator from './Speciator.react';
 import Typing from './Typing.react';
 import Virulence from './Virulence.react';
-import CovidVariants from './Sarscov2Variants.react';
+
 import { taxIdMap } from '~/organisms';
 
 // import renderGenericResults from './Generic.react';
@@ -25,7 +27,6 @@ function hasSpeciesTypingResult(analysis) {
     analysis.pangolin ||
     analysis.poppunk2 ||
     analysis.kaptive ||
-    analysis.kleborate ||
     analysis.ngstar ||
     analysis.vista
   );
@@ -49,6 +50,13 @@ export default genome => {
   } = analysis;
 
   const sections = [];
+
+  if (!!kleborate && !speciator.speciesName.replace('Raoultella', 'Klebsiella').startsWith(kleborate.species)) {
+    sections.push({
+      key: 'Kleborate species',
+      component: <KleborateSpecies genome={genome} />,
+    });
+  }
 
   if (hasSpeciesTypingResult(analysis)) {
     sections.push({

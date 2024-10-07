@@ -12,7 +12,7 @@ import {
   formatAMRName,
   ignoreFields,
   multiClassFields,
-  sortKleborateProfile
+  sortKleborateProfile,
 } from '~/task-utils/kleborate';
 
 export const name = tableKeys.kleborateAMRGenotypes;
