@@ -21,7 +21,7 @@ export default ({ genome }) => {
           <dt>{ kaptive.kLocus.name }</dt>
           <dd>{ kaptive.kLocus['Best match locus'] }</dd>
           <ExternalLink
-            to={ `/genomes/all?organismId=${ speciator.organismId }&klocusKaptive=${ kaptive.kLocus['Best match locus'] }` }
+            to={ `/genomes/all?organismId=${speciator.organismId}&klocusKaptive=${kaptive.kLocus['Best match locus']}` }
           >
             View all { kaptive.kLocus['Best match locus'] }
           </ExternalLink>
@@ -46,7 +46,7 @@ export default ({ genome }) => {
           <dt>{ kaptive.oLocus.name }</dt>
           <dd>{ kaptive.oLocus['Best match locus'] }</dd>
           <ExternalLink
-            to={ `/genomes/all?organismId=${ speciator.organismId }&olocusKaptive=${ kaptive.oLocus['Best match locus'] }` }
+            to={ `/genomes/all?organismId=${speciator.organismId}&olocusKaptive=${kaptive.oLocus['Best match locus']}` }
           >
             View all { kaptive.oLocus['Best match locus'] }
           </ExternalLink>
