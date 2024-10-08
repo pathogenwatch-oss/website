@@ -52,7 +52,7 @@ export default ({ genome }) => {
           </ExternalLink>
         </div>
         <div className="pw-genome-report-metadata">
-          <dt>Predicted capsule type</dt>
+          <dt>Predicted { kaptive.oLocus.name } type</dt>
           <dd>{ kaptive.oLocus['Best match type'] }</dd>
         </div>
         <div className="pw-genome-report-metadata">
