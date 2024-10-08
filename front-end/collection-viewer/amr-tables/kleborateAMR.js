@@ -71,7 +71,7 @@ export function createReducer() {
     switch (type) {
       case FETCH_COLLECTION.SUCCESS: {
         const { genomes, status } = payload.result;
-        if (status !== statuses.READY ||!genomes[0].analysis.kleborate.amr) return state;
+        if (status !== statuses.READY || !genomes[0].analysis.kleborate.amr) return state;
         return {
           ...state,
           columns: [
