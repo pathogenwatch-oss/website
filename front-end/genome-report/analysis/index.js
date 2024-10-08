@@ -71,7 +71,7 @@ export default genome => {
       component: <CovidVariants genome={genome} />,
     });
   }
-  if (paarsnp || kleborate) {
+  if (paarsnp || kleborate.amr) {
     sections.push({
       key: 'AMR',
       component: <AMR genome={genome} />,

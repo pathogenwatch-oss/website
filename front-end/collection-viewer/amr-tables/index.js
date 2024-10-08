@@ -3,7 +3,7 @@ import { createReducer } from './utils';
 import * as antibioticsProps from './antibiotics';
 import * as snpsProps from './snps';
 import * as genesProps from './genes';
-import * as kleborateProps from './kleborate';
+import * as kleborateProps from './kleborateAMR';
 import * as kleborateAMRGenotypesProps from './kleborateAMRGenotypes';
 import * as sarscov2VariantsProps from './sarscov2Variants';
 import * as vistaProps from './vista';

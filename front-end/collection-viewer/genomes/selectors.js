@@ -57,8 +57,8 @@ export const getGenomeDatatypes = createSelector(
   (genomes, { isClusterView }) => {
     let hasMetadata = false;
     let hasAMR = false;
+    let hasKleborate = false;
     let hasKleborateAMR = false;
-    let hasKleborateAMRGenotypes = false;
     let hasMLST = false;
     let hasSarscov2Variants = false;
     let hasVista = false;
@@ -86,9 +86,12 @@ export const getGenomeDatatypes = createSelector(
         hasPangolin = true;
       }
 
-      if (!hasKleborateAMRGenotypes && !hasKleborateAMR && genome.analysis.kleborate) {
-        hasKleborateAMR = true;
-        hasKleborateAMRGenotypes = true;
+      if (!hasKleborate && genome.analysis.kleborate) {
+        hasKleborate = true;
+        // Assumes that all genomes have the same Kleborate profile.
+        if (!hasKleborateAMR && genome.analysis.kleborate.amr) {
+          hasKleborateAMR = true;
+        }
       }
 
       if (!hasSarscov2Variants && genome.analysis['sarscov2-variants']) {
@@ -103,7 +106,7 @@ export const getGenomeDatatypes = createSelector(
         hasAMR = true;
       }
 
-      if (hasMetadata && hasKleborateAMR && hasKleborateAMRGenotypes && hasVista && hasSarscov2Variants && hasAMR) {
+      if (hasMetadata && hasKleborate && hasVista && hasSarscov2Variants && hasAMR) {
         break;
       }
     }
@@ -113,8 +116,8 @@ export const getGenomeDatatypes = createSelector(
       hasAMR,
       hasCore,
       hasPangolin,
+      hasKleborate,
       hasKleborateAMR,
-      hasKleborateAMRGenotypes,
       hasMLST,
       hasSarscov2Variants,
       hasVista,
@@ -142,14 +145,14 @@ export const hasPangolin = createSelector(
   datatypes => datatypes.hasPangolin
 );
 
+export const hasKleborate = createSelector(
+  getGenomeDatatypes,
+  datatypes => datatypes.hasKleborate
+);
+
 export const hasKleborateAMR = createSelector(
   getGenomeDatatypes,
   datatypes => datatypes.hasKleborateAMR
-);
-
-export const hasKleborateAMRGenotypes = createSelector(
-  getGenomeDatatypes,
-  datatypes => datatypes.hasKleborateAMRGenotypes
 );
 
 export const hasMLST = createSelector(

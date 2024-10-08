@@ -99,4 +99,3 @@ export function calculateHeaderWidth(label, numChildren) {
     { fixedWidth: childWidth, bufferSize: 0 } :
     { fixedWidth: minWidth, bufferSize: (minWidth - childWidth) / numChildren };
 }
-
