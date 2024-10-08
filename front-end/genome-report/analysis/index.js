@@ -71,7 +71,7 @@ export default genome => {
       component: <CovidVariants genome={genome} />,
     });
   }
-  if (paarsnp || kleborate.amr) {
+  if (paarsnp || (kleborate && kleborate.amr)) {
     sections.push({
       key: 'AMR',
       component: <AMR genome={genome} />,
@@ -83,7 +83,7 @@ export default genome => {
       component: <Inctyper analysis={analysis} />,
     });
   }
-  if (kleborate || vista) {
+  if ((kleborate && kleborate.virulence) || vista) {
     sections.push({
       key: 'Virulence',
       component: <Virulence genome={genome} />,

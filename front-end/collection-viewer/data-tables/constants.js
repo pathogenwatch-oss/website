@@ -232,8 +232,8 @@ export const systemDataColumns = {
     displayName: 'Virulence Score',
     label: 'VIRULENCE SCORE',
     valueGetter({ analysis }) {
-      if (!analysis.kleborate) return null;
-      return `${analysis.kleborate.virulence.virulence_score}`;
+      if (!analysis.kleborate || !analysis.kleborate.virulence || !analysis.kleborate.virulence.virulence_score) return null;
+      return analysis.kleborate.virulence.virulence_score;
     },
   },
   __K_locus_kaptive: {
@@ -285,7 +285,7 @@ export const systemDataColumns = {
     displayName: 'AEROBACTIN (AbST)',
     label: 'AEROBACTIN (AbST)',
     valueGetter({ analysis }) {
-      if (!analysis.kleborate) return null;
+      if (!analysis.kleborate || !analysis.kleborate.virulence || !analysis.kleborate.virulence.profile) return null;
       return `${analysis.kleborate.virulence.profile.Aerobactin} (${analysis.kleborate.virulence.profile.AbST})`;
     },
   },
@@ -294,7 +294,7 @@ export const systemDataColumns = {
     displayName: 'COLIBACTIN (CbST)',
     label: 'COLIBACTIN (CbST)',
     valueGetter({ analysis }) {
-      if (!analysis.kleborate) return null;
+      if (!analysis.kleborate || !analysis.kleborate.virulence || !analysis.kleborate.virulence.profile.virulence) return null;
       return `${analysis.kleborate.virulence.profile.Colibactin} (${analysis.kleborate.virulence.profile.CbST})`;
     },
   },
@@ -303,7 +303,7 @@ export const systemDataColumns = {
     displayName: 'SALMOCHELIN (SmST)',
     label: 'SALMOCHELIN (SmST)',
     valueGetter({ analysis }) {
-      if (!analysis.kleborate) return null;
+      if (!analysis.kleborate || !analysis.kleborate.virulence || !analysis.kleborate.virulence.profile) return null;
       return `${analysis.kleborate.virulence.profile.Salmochelin} (${analysis.kleborate.virulence.profile.SmST})`;
     },
   },
@@ -312,7 +312,7 @@ export const systemDataColumns = {
     displayName: 'YERSINIABACTIN (YbST)',
     label: 'YERSINIABACTIN (YbST)',
     valueGetter({ analysis }) {
-      if (!analysis.kleborate) return null;
+      if (!analysis.kleborate || !analysis.kleborate.virulence || !analysis.kleborate.virulence.profile) return null;
       return `${analysis.kleborate.virulence.profile.Yersiniabactin} (${analysis.kleborate.virulence.profile.YbST})`;
     },
   },
@@ -321,7 +321,7 @@ export const systemDataColumns = {
     displayName: 'RmpADC',
     label: 'RmpADC',
     valueGetter({ analysis }) {
-      if (!analysis.kleborate) return null;
+      if (!analysis.kleborate || !analysis.kleborate.virulence || !analysis.kleborate.virulence.profile) return null;
       return analysis.kleborate.virulence.profile.RmpADC;
     },
   },
@@ -330,7 +330,7 @@ export const systemDataColumns = {
     displayName: 'rmpA2',
     label: 'rmpA2',
     valueGetter({ analysis }) {
-      if (!analysis.kleborate) return null;
+      if (!analysis.kleborate || !analysis.kleborate.virulence || !analysis.kleborate.virulence.profile) return null;
       return analysis.kleborate.virulence.profile.rmpA2;
     },
   },

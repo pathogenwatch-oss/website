@@ -7,7 +7,7 @@ import * as constants from '../table/constants';
 import { tableKeys } from '../constants';
 
 import Organisms from '~/organisms';
-import { resetSources, resetLineageName, sources, lineageName } from './utils';
+import { resetSources, sources } from './utils';
 
 const initialState = {
   name: tableKeys.typing,
@@ -63,7 +63,7 @@ const mlstGroup = {
   columnKey: 'mlst',
   columns: [ '__mlst', '__mlst_profile' ],
   get label() {
-    return `MLST - ${sources.mlst}`;
+    return `MLST - ${ sources.mlst }`;
   },
 };
 
@@ -72,7 +72,7 @@ const mlst2Group = {
   columnKey: 'mlst2',
   columns: [ '__mlst2', '__mlst2_profile' ],
   get label() {
-    return `MLST - ${sources.mlst2}`;
+    return `MLST - ${ sources.mlst2 }`;
   },
 };
 
@@ -142,7 +142,7 @@ const serotypeGroup = {
 const vistaGroup = {
   group: true,
   columnKey: 'vista',
-  columns: ['__vista_serogroup' ],
+  columns: [ '__vista_serogroup' ],
 };
 
 function fillColumnDefs({ columns, ...group }) {
@@ -158,7 +158,7 @@ function getTypingColumnGroups(uiOptions, hasAltMLST, {
   genotyphi,
   inctyper,
   kaptive,
-  kleborate,
+  'kleborate__virulence': kleborate,
   'klebsiella-lincodes': klebsiellaLincodes,
   mlst,
   ngmast,
@@ -205,9 +205,15 @@ export function hasTyping({ hasPopulation }, {
   serotype,
   vista,
 }) {
-  return !(!hasPopulation && !mlst && !genotyphi && !inctyper && !kaptive && !kleborate && !klebsiellaLincodes && !ngmast && !!ngonoMarkers && !ngstar && !pangolin && !poppunk2 && !serotype && !vista);
+  return !(!hasPopulation && !mlst && !genotyphi && !inctyper && !kaptive && !(kleborate && kleborate.virulence) && !klebsiellaLincodes && !ngmast && !!ngonoMarkers && !ngstar && !pangolin && !poppunk2 && !serotype && !vista);
 }
 
+/**
+ * This function is doing something abit confused. It fixes the task sources for various inputs and then returns true
+ * `mlst2` is present.
+ * @param genomes
+ * @returns {boolean}
+ */
 function updateTypingSettings({ genomes }) {
   resetSources();
   const sourceTasks = new Set([ 'mlst', 'mlst2' ]);
@@ -243,18 +249,31 @@ function updateTypingSettings({ genomes }) {
   return false;
 }
 
-function checkAnalysesPresent({ exclude = [] }, { genomes }, analyses) {
-  return analyses.filter(analysis => !exclude.includes(analysis)).reduce((memo, analysis) => {
+function checkNested(obj, level,  ...rest) {
+  if (obj === undefined) return false
+  if (rest.length === 0 && obj.hasOwnProperty(level)) return true
+  return checkNested(obj[level], ...rest)
+}
+
+function checkAnalysesPresent({ exclude = [] }, { genomes }, analyses, nestedAnalyses) {
+  const found = analyses.filter(analysis => !exclude.includes(analysis)).reduce((memo, analysis) => {
     // eslint-disable-next-line no-param-reassign
     memo[analysis] = !!genomes[0].analysis[analysis];
     return memo;
   }, {});
+
+  const extra = nestedAnalyses.filter(analysis => !exclude.includes(analysis[0])).reduce((memo, analysis) => {
+    memo[analysis.join("__")] = checkNested(genomes[0].analysis[analysis[0]], ...analysis.slice(1));
+    return memo;
+  }, {});
+
+  return {...found, ...extra};
 }
 
 export default function (state = initialState, { type, payload }) {
   switch (type) {
     case FETCH_COLLECTION.SUCCESS: {
-      const foundAnalyses = checkAnalysesPresent(Organisms.uiOptions, payload.result, [ 'klebsiella-lincodes', 'genotyphi', 'inctyper', 'kaptive', 'kleborate', 'mlst', 'ngmast', 'ngono-markers', 'ngstar', 'pangolin', 'poppunk2', 'serotype', 'vista' ]);
+      const foundAnalyses = checkAnalysesPresent(Organisms.uiOptions, payload.result, [ 'klebsiella-lincodes', 'genotyphi', 'inctyper', 'kaptive', 'mlst', 'ngmast', 'ngono-markers', 'ngstar', 'pangolin', 'poppunk2', 'serotype', 'vista' ], [["kleborate", "virulence"]]);
       const active = hasTyping(Organisms.uiOptions, foundAnalyses);
 
       if (!active) {
