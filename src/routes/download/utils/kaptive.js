@@ -5,13 +5,13 @@ module.exports.transformer = (doc) => {
     Version: doc.analysis.kaptive.__v,
     'Kaptive Version': doc.analysis.kaptive.kaptiveVersion,
   };
-  for (const column of doc.analysis.kaptive.columns) {
-    const kName = `K Locus: ${column}`;
-    record[kName] = doc.analysis.kaptive.kLocus[column];
+  for (const column of Object.keys(doc.analysis.kaptive.kLocus)) {
+    // const kName = `K Locus: ${column}`;
+    record[column] = doc.analysis.kaptive.kLocus[column];
   }
-  for (const column of doc.analysis.kaptive.columns) {
-    const oName = `O Locus: ${column}`;
-    record[oName] = doc.analysis.kaptive.oLocus[column];
+  for (const column of Object.keys(doc.analysis.kaptive.oLocus)) {
+    // const oName = `O Locus: ${column}`;
+    record[column] = doc.analysis.kaptive.oLocus[column];
   }
   return record;
 };
