@@ -18,7 +18,7 @@ export default ({ genome }) => {
       </header>
       <dl className="grid">
         <div className="pw-genome-report-metadata">
-          <dt>{ kaptive.kLocus.name }</dt>
+          <dt>{ kaptive.kLocus.name } locus</dt>
           <dd>{ kaptive.kLocus['Best match locus'] }</dd>
           <ExternalLink
             to={ `/genomes/all?organismId=${speciator.organismId}&klocusKaptive=${kaptive.kLocus['Best match locus']}` }
@@ -43,7 +43,7 @@ export default ({ genome }) => {
       </dl>
       <dl className="grid">
         <div className="pw-genome-report-metadata">
-          <dt>{ kaptive.oLocus.name }</dt>
+          <dt>{ kaptive.oLocus.name } locus</dt>
           <dd>{ kaptive.oLocus['Best match locus'] }</dd>
           <ExternalLink
             to={ `/genomes/all?organismId=${speciator.organismId}&olocusKaptive=${kaptive.oLocus['Best match locus']}` }

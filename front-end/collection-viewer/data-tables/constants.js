@@ -257,10 +257,10 @@ export const systemDataColumns = {
   __O_locus_kaptive: {
     columnKey: '__O_locus_kaptive',
     get label() {
-      return sources.kaptiveOLocus.name.toUpperCase();
+      return `${sources.kaptiveOLocus.name.toUpperCase()} LOCUS`;
     },
     get displayName() {
-      return `${sources.kaptiveOLocus.name}`;
+      return `${sources.kaptiveOLocus.name} locus`;
     },
     valueGetter({ analysis }) {
       if (!analysis.kaptive || !('oLocus' in analysis.kaptive)) return null;
