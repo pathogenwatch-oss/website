@@ -258,7 +258,7 @@ module.exports.transformer = function (doc) {
     ]
   );
 
-  doc.analysis.kleborate.modules.forEach((module) => {
+  "kleborate" in doc.analysis && "modules" in doc.analysis.kleborate && doc.analysis.kleborate.modules.forEach((module) => {
     moduleMapping[module].forEach((field) => {
       if (virulenceFields.has(field)) {
         record[field] = doc.analysis.kleborate.virulence[field];
