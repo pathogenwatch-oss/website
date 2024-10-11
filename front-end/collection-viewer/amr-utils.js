@@ -12,7 +12,7 @@ const effectColours = {
   CONTRIBUTES: DEFAULT.WARNING_COLOUR,
   INDUCED: '#E68D44',
   REDUCES: '#008080',
-}
+};
 
 export const nonResistantColour = '#fff';
 const stateColourMap = Object.keys(stateColours).reduce(

@@ -6,13 +6,13 @@ import DropdownMenu from '@cgps/libmicroreact/dropdown-menu';
 import Multi from './Multi.react';
 
 import { hasTyping } from './selectors';
-import { hasMetadata, hasAMR, hasKleborateAMR, hasSarscov2Variants, hasVista } from '../genomes/selectors';
+import { hasAMR, hasKleborate, hasKleborateAMR, hasMetadata, hasSarscov2Variants, hasVista } from '../genomes/selectors';
 import { hasTimeline } from '../timeline/selectors';
 
 import { setTable } from './actions';
 import { showTimeline } from '../timeline/actions';
 
-import { tableKeys, tableDisplayNames } from '../constants';
+import { tableDisplayNames, tableKeys } from '../constants';
 import { getVisibleSouthView } from '../layout/selectors';
 
 const icons = {
@@ -31,11 +31,10 @@ const icons = {
 
 const TableMenu = connect(
   state => {
-    const hasKleborate = hasKleborateAMR(state);
     return {
       amr: hasAMR(state) && !hasKleborate,
-      kleborate: hasKleborate,
-      kleborateAMRGenotypes: hasKleborate,
+      kleborate: hasKleborate(state),
+      kleborateAMR: hasKleborateAMR(state),
       sarscov2Variants: hasSarscov2Variants(state),
       vista: hasVista(state),
       metadata: hasMetadata(state),
@@ -49,7 +48,7 @@ const TableMenu = connect(
     _showTimeline: visible => dispatch(showTimeline(visible)),
   })
 )(
-  ({ visibleView, showTable, _showTimeline, metadata, timeline, typing, kleborate, vista, amr, sarscov2Variants }) => (
+  ({ visibleView, showTable, _showTimeline, metadata, timeline, typing, kleborateAMR, vista, amr, sarscov2Variants }) => (
     <DropdownMenu
       direction="up"
       button={
@@ -64,7 +63,7 @@ const TableMenu = connect(
       {metadata && <button onClick={() => showTable(tableKeys.metadata)}>Metadata</button>}
       {typing && <button onClick={() => showTable(tableKeys.typing)}>Typing</button>}
       <button onClick={() => showTable(tableKeys.stats)}>Stats</button>
-      {(amr || kleborate) && <hr />}
+      {(amr || kleborateAMR) && <hr />}
       {amr &&
       <>
         <button onClick={() => showTable(tableKeys.antibiotics)}>Antibiotics</button>
@@ -72,7 +71,7 @@ const TableMenu = connect(
         <button onClick={() => showTable(tableKeys.snps)}>Variants</button>
       </>
       }
-      {kleborate && <>
+      {kleborateAMR && <>
         <button onClick={() => showTable(tableKeys.kleborateAMR)}>{tableDisplayNames[tableKeys.kleborateAMR]}</button>
         <button onClick={() => showTable(tableKeys.kleborateAMRGenotypes)}>{tableDisplayNames[tableKeys.kleborateAMRGenotypes]}</button>
       </>
