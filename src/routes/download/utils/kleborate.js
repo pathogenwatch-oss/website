@@ -1,10 +1,18 @@
 module.exports.transformer = function (doc) {
+
   const record = {
     'Genome ID': doc._id.toString(),
     'Genome Name': doc.name,
-    'Kleborate version': doc.analysis.kleborate.versions.kleborate,
-    'Wrapper version': doc.analysis.kleborate.versions.wrapper,
   };
+
+  if (!('kleborate' in doc.analysis)) {
+    return record;
+  }
+
+  if ('versions' in doc.analysis.kleborate) {
+    record['Kleborate version'] = doc.analysis.kleborate.versions.kleborate;
+    record['Wrapper version'] = doc.analysis.kleborate.versions.wrapper;
+  }
 
   const moduleMapping = {
     "enterobacterales__species": [

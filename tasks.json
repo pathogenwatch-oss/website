@@ -268,7 +268,7 @@
       },
       {
         "task": "kleborate",
-        "version": "kosc-v3.1.0-2"
+        "version": "kosc-v3.1.0-4"
       }
     ],
     "119602": [
@@ -491,12 +491,12 @@
       },
       {
         "task": "kaptive",
-        "version": "kpsc-v3.0.0b5-2"
+        "version": "kpsc-v3.0.0b5-3"
       },
       {
         "kleborate": {
           "task": "kleborate",
-          "version": "kpsc-v3.1.0-2"
+          "version": "kpsc-v3.1.0-4"
         }
       }
     ],
@@ -554,7 +554,7 @@
           "memory": 653741824
         },
         "timeout": "15m",
-        "version": "other-v3.1.0-2"
+        "version": "other-v3.1.0-4"
       }
     ],
     "1624": [
@@ -738,12 +738,12 @@
       },
       {
         "task": "kaptive",
-        "version": "kpsc-v3.0.0b5-2"
+        "version": "kpsc-v3.0.0b5-3"
       },
       {
         "kleborate": {
           "task": "kleborate",
-          "version": "kpsc-v3.1.0-2"
+          "version": "kpsc-v3.1.0-4"
         }
       }
     ],
@@ -754,7 +754,7 @@
       },
       {
         "task": "kleborate",
-        "version": "kosc-v3.1.0-2"
+        "version": "kosc-v3.1.0-4"
       }
     ],
     "206": [
@@ -894,12 +894,12 @@
       },
       {
         "task": "kaptive",
-        "version": "kpsc-v3.0.0b5-2"
+        "version": "kpsc-v3.0.0b5-3"
       },
       {
         "kleborate": {
           "task": "kleborate",
-          "version": "kpsc-v3.1.0-2"
+          "version": "kpsc-v3.1.0-4"
         }
       }
     ],
@@ -920,12 +920,12 @@
       },
       {
         "task": "kaptive",
-        "version": "kpsc-v3.0.0b5-2"
+        "version": "kpsc-v3.0.0b5-3"
       },
       {
         "kleborate": {
           "task": "kleborate",
-          "version": "kpsc-v3.1.0-2"
+          "version": "kpsc-v3.1.0-4"
         }
       }
     ],
@@ -944,13 +944,13 @@
     "2153354": [
       {
         "task": "kleborate",
-        "version": "kosc-v3.1.0-2"
+        "version": "kosc-v3.1.0-4"
       }
     ],
     "2587528": [
       {
         "task": "kleborate",
-        "version": "kosc-v3.1.0-2"
+        "version": "kosc-v3.1.0-4"
       }
     ],
     "2587529": [
@@ -960,7 +960,7 @@
       },
       {
         "task": "kleborate",
-        "version": "kosc-v3.1.0-2"
+        "version": "kosc-v3.1.0-4"
       }
     ],
     "260714": [
@@ -1218,7 +1218,7 @@
           "memory": 653741824,
           "cpu": 2
         },
-        "version": "ab-v3.0.0b5-2"
+        "version": "ab-v3.0.0b5-3"
       }
     ],
     "480": [
@@ -1390,7 +1390,7 @@
       {
         "task": "kleborate",
         "timeout": "15m",
-        "version": "other-v3.1.0-2",
+        "version": "other-v3.1.0-4",
         "resources": {
           "memory": 653741824
         }
@@ -1410,7 +1410,7 @@
       },
       {
         "task": "kleborate",
-        "version": "kosc-v3.1.0-2"
+        "version": "kosc-v3.1.0-4"
       }
     ],
     "5722": [
@@ -1440,11 +1440,11 @@
       },
       {
         "task": "kaptive",
-        "version": "kpsc-v3.0.0b5-2"
+        "version": "kpsc-v3.0.0b5-3"
       },
       {
         "task": "kleborate",
-        "version": "kpsc-v3.1.0-2"
+        "version": "kpsc-v3.1.0-4"
       }
     ],
     "590": [
