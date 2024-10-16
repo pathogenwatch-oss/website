@@ -491,7 +491,7 @@
       },
       {
         "task": "kaptive",
-        "version": "kpsc-v3.0.0b5-4"
+        "version": "kpsc-v3.0.0b5-5"
       },
       {
         "kleborate": {
@@ -738,7 +738,7 @@
       },
       {
         "task": "kaptive",
-        "version": "kpsc-v3.0.0b5-4"
+        "version": "kpsc-v3.0.0b5-5"
       },
       {
         "kleborate": {
@@ -894,7 +894,7 @@
       },
       {
         "task": "kaptive",
-        "version": "kpsc-v3.0.0b5-4"
+        "version": "kpsc-v3.0.0b5-5"
       },
       {
         "kleborate": {
@@ -920,7 +920,7 @@
       },
       {
         "task": "kaptive",
-        "version": "kpsc-v3.0.0b5-4"
+        "version": "kpsc-v3.0.0b5-5"
       },
       {
         "kleborate": {
@@ -1218,7 +1218,7 @@
           "memory": 653741824,
           "cpu": 2
         },
-        "version": "ab-v3.0.0b5-4"
+        "version": "ab-v3.0.0b5-5"
       }
     ],
     "480": [
@@ -1440,7 +1440,7 @@
       },
       {
         "task": "kaptive",
-        "version": "kpsc-v3.0.0b5-4"
+        "version": "kpsc-v3.0.0b5-5"
       },
       {
         "task": "kleborate",
