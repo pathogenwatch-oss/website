@@ -32,7 +32,7 @@ const icons = {
 const TableMenu = connect(
   state => {
     return {
-      amr: hasAMR(state) && !hasKleborate,
+      amr: hasAMR(state) && !hasKleborate(state),
       kleborate: hasKleborate(state),
       kleborateAMR: hasKleborateAMR(state),
       sarscov2Variants: hasSarscov2Variants(state),
