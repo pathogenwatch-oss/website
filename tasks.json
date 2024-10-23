@@ -246,25 +246,25 @@
     "101203": [
       {
         "task": "mlst",
-        "version": "231123-v5.2.0"
+        "version": "2024-09-03-sparasitica"
       }
     ],
     "104267": [
       {
         "task": "mlst",
-        "version": "231123-v5.3.0"
+        "version": "2024-09-03-tenacibaculum"
       }
     ],
     "104628": [
       {
         "task": "mlst",
-        "version": "231123-v5.2.0"
+        "version": "2024-09-03-hsuis"
       }
     ],
     "1134687": [
       {
         "task": "mlst",
-        "version": "231123-v5.2.0"
+        "version": "2024-09-03-koxytoca"
       },
       {
         "task": "kleborate",
@@ -274,30 +274,30 @@
     "119602": [
       {
         "task": "mlst",
-        "version": "231123-v5.2.0"
+        "version": "2024-09-03-sdysgalactiae"
       }
     ],
     "1238": [
       {
         "task": "mlst",
-        "version": "231123-v5.2.0"
+        "version": "2024-09-03-psalmonis"
       }
     ],
     "1255": [
       {
         "task": "mlst",
-        "version": "231123-v5.2.0"
+        "version": "2024-09-03-ppentosaceus"
       }
     ],
     "1280": [
       {
         "task": "mlst",
-        "version": "231123-v5.2.0"
+        "version": "2024-09-03-saureus"
       },
       {
         "task": "cgmlst",
         "timeout": 480,
-        "version": "2023-12-08-v5.4.0"
+        "version": "2024-09-03-saureus_1"
       },
       {
         "task": "paarsnp",
@@ -311,59 +311,59 @@
     "1282": [
       {
         "task": "mlst",
-        "version": "231123-v5.2.0"
+        "version": "2024-09-03-sepidermidis"
       }
     ],
     "1283": [
       {
         "task": "mlst",
-        "version": "231123-v5.2.0"
+        "version": "2024-09-03-shaemolyticus"
       }
     ],
     "1287055": [
       {
         "task": "mlst",
-        "version": "231123-v5.2.0"
+        "version": "2024-09-03-bhampsonii"
       }
     ],
     "1290": [
       {
         "task": "mlst",
-        "version": "231123-v5.2.0"
+        "version": "2024-09-03-shominis"
       }
     ],
     "1303": [
       {
         "task": "mlst",
-        "version": "231123-v5.2.0"
+        "version": "2024-09-03-soralis"
       }
     ],
     "1307": [
       {
         "task": "mlst",
-        "version": "231123-v5.2.0"
+        "version": "2024-09-03-ssuis"
       }
     ],
     "1308": [
       {
         "task": "mlst",
-        "version": "231123-v5.2.0"
+        "version": "2024-09-03-sthermophilus"
       },
       {
         "task": "mlst2",
-        "version": "231208-v5.3.0"
+        "version": "2024-09-03-sthermophilus_2"
       }
     ],
     "1311": [
       {
         "task": "mlst",
-        "version": "231123-v5.2.0"
+        "version": "2024-09-03-sagalactiae"
       }
     ],
     "1313": [
       {
         "task": "mlst",
-        "version": "231123-v5.2.0"
+        "version": "2024-09-03-spneumoniae"
       },
       {
         "task": "paarsnp",
@@ -383,31 +383,31 @@
       },
       {
         "task": "cgmlst",
-        "version": "2023-12-08-v5.4.0"
+        "version": "2024-09-03-spneumoniae_1"
       }
     ],
     "1314": [
       {
         "task": "mlst",
-        "version": "231123-v5.2.0"
+        "version": "2024-09-03-spyogenes"
       }
     ],
     "1329": [
       {
         "task": "mlst",
-        "version": "231123-v5.2.0"
+        "version": "2024-09-03-scanis"
       }
     ],
     "1335": [
       {
         "task": "mlst",
-        "version": "231123-v5.2.0"
+        "version": "2024-09-03-sbsec"
       }
     ],
     "1336": [
       {
         "task": "mlst",
-        "version": "231123-v5.2.0"
+        "version": "2024-09-03-szooepidemicus"
       },
       {
         "task": "core",
@@ -417,29 +417,33 @@
     "1349": [
       {
         "task": "mlst",
-        "version": "231123-v5.2.0"
+        "version": "2024-09-03-suberis"
+      },
+      {
+        "task": "cgmlst",
+        "version": "2024-09-03-suberis_1"
       }
     ],
     "1351": [
       {
         "task": "mlst",
-        "version": "231123-v5.2.0"
+        "version": "2024-09-03-efaecalis"
       },
       {
         "task": "cgmlst",
         "timeout": 480,
-        "version": "2023-12-08-v5.4.0"
+        "version": "2024-09-03-efaecalis_1"
       }
     ],
     "1352": [
       {
         "task": "mlst",
-        "version": "231123-v5.2.0"
+        "version": "2024-09-03-efaecium"
       },
       {
         "task": "cgmlst",
         "timeout": 480,
-        "version": "2023-12-08-v5.4.0"
+        "version": "2024-09-03-efaecium_1"
       },
       {
         "task": "paarsnp",
@@ -449,31 +453,35 @@
     "138": [
       {
         "task": "mlst",
-        "version": "231123-v5.3.0"
+        "version": "2024-09-03-borrelia"
       }
     ],
     "1396": [
       {
         "task": "mlst",
-        "version": "231123-v5.2.0"
+        "version": "2024-09-03-bcereus"
+      },
+      {
+        "task": "cgmlst",
+        "version": "2024-09-03-bcereus_1"
       }
     ],
     "1402": [
       {
         "task": "mlst",
-        "version": "231123-v5.2.0"
+        "version": "2024-09-03-blicheniformis"
       }
     ],
     "1423": [
       {
         "task": "mlst",
-        "version": "231123-v5.2.0"
+        "version": "2024-09-03-bsubtilis"
       }
     ],
     "1463165": [
       {
         "task": "cgmlst",
-        "version": "2023-12-08-v5.4.0",
+        "version": "2024-09-03-klebsiella_1",
         "andThen": [
           {
             "task": "klebsiella-lincodes",
@@ -487,8 +495,8 @@
       },
       {
         "task": "mlst",
-        "version": "231123-v5.2.0"
-      },
+        "version": "2024-09-03-kpneumoniae"
+            },
       {
         "task": "kaptive",
         "version": "kpsc-v3.0.0b5-5"
@@ -503,48 +511,48 @@
     "1464": [
       {
         "task": "mlst",
-        "version": "231123-v5.2.0"
+        "version": "2024-09-03-plarvae"
       }
     ],
     "1491": [
       {
         "task": "mlst",
-        "version": "231123-v5.2.0"
+        "version": "2024-09-03-cbotulinum"
       }
     ],
     "1496": [
       {
         "task": "mlst",
-        "version": "231123-v5.2.0"
+        "version": "2024-09-03-cdifficile"
       },
       {
         "task": "cgmlst",
         "timeout": 480,
-        "version": "2023-12-08-v5.4.0"
+        "version": "2024-09-03-clostridoides_1"
       }
     ],
     "1504": [
       {
         "task": "mlst",
-        "version": "231123-v5.2.0"
+        "version": "2024-09-03-csepticum"
       }
     ],
     "158836": [
       {
         "task": "mlst",
-        "version": "231123-v5.2.0"
+        "version": "2024-09-03-ecloacae"
       }
     ],
     "159": [
       {
         "task": "mlst",
-        "version": "231123-v5.2.0"
+        "version": "2024-09-03-bhyodysenteriae"
       }
     ],
     "160": [
       {
         "task": "mlst",
-        "version": "231123-v5.2.0"
+        "version": "2024-09-03-tpallidum"
       }
     ],
     "160674": [
@@ -560,20 +568,20 @@
     "1624": [
       {
         "task": "mlst",
-        "version": "231123-v5.2.0"
+        "version": "2024-09-03-lsalivarius"
       }
     ],
     "1637": [
       {
         "task": "cgmlst",
         "timeout": 480,
-        "version": "2023-12-08-v5.4.0"
+        "version": "2024-09-03-listeria_1"
       }
     ],
     "1639": [
       {
         "task": "mlst",
-        "version": "231123-v5.2.0"
+        "version": "2024-09-03-lmonocytogenes"
       }
     ],
     "1646": [
@@ -585,39 +593,39 @@
     "171": [
       {
         "task": "mlst",
-        "version": "231123-v5.3.0"
+        "version": "2024-09-03-leptospira"
       }
     ],
     "1717": [
       {
         "task": "mlst",
-        "version": "231123-v5.2.0"
+        "version": "2024-09-03-cdiphtheriae"
       }
     ],
     "1747": [
       {
         "task": "mlst",
-        "version": "231123-v5.2.0"
+        "version": "2024-09-03-pacnes"
       }
     ],
     "1763": [
       {
         "task": "mlst",
-        "version": "231123-v5.3.0"
+        "version": "2024-09-03-mycobacteria"
       }
     ],
     "1765": [
       {
         "task": "cgmlst",
         "timeout": 480,
-        "version": "2023-12-08-v5.4.0"
+        "version": "2024-09-03-mycobacterium_1"
       }
     ],
     "1773": [
       {
         "task": "cgmlst",
         "timeout": 480,
-        "version": "2023-12-08-v5.4.0"
+        "version": "2024-09-03-mycobacterium_1"
       },
       {
         "flags": {
@@ -630,25 +638,25 @@
     "1812935": [
       {
         "task": "mlst",
-        "version": "231123-v5.2.0"
+        "version": "2024-09-03-ecloacae"
       }
     ],
     "1827": [
       {
         "task": "mlst",
-        "version": "231123-v5.3.0"
+        "version": "2024-09-03-rhodococcus"
       }
     ],
     "1855823": [
       {
         "task": "mlst",
-        "version": "231123-v5.2.0"
+        "version": "2024-09-03-mcanis"
       }
     ],
     "1883": [
       {
         "task": "mlst",
-        "version": "231123-v5.3.0"
+        "version": "2024-09-03-streptomyces"
       }
     ],
     "194": [
@@ -661,46 +669,46 @@
       {
         "task": "cgmlst",
         "timeout": 480,
-        "version": "2023-12-08-v5.4.0"
+        "version": "2024-09-03-campylobacter_1"
       },
       {
         "task": "mlst",
-        "version": "231123-v5.2.0"
+        "version": "2024-09-03-campylobacter"
       }
     ],
     "196": [
       {
         "task": "mlst",
-        "version": "231123-v5.2.0"
+        "version": "2024-09-03-cfetus"
       }
     ],
     "1962118": [
       {
         "task": "mlst",
-        "version": "231123-v5.2.0"
+        "version": "2024-09-03-mmassiliense"
       }
     ],
     "197": [
       {
         "task": "mlst",
-        "version": "231123-v5.2.0"
+        "version": "2024-09-03-campylobacter"
       },
       {
         "task": "cgmlst",
         "timeout": 480,
-        "version": "2023-12-08-v5.4.0"
+        "version": "2024-09-03-campylobacter_1"
       }
     ],
     "198": [
       {
         "task": "mlst",
-        "version": "231123-v5.2.0"
+        "version": "2024-09-03-chyointestinalis"
       }
     ],
     "199": [
       {
         "task": "mlst",
-        "version": "231123-v5.2.0"
+        "version": "2024-09-03-cconcisus"
       }
     ],
     "2": [
@@ -712,23 +720,23 @@
     "200": [
       {
         "task": "mlst",
-        "version": "231123-v5.2.0"
+        "version": "2024-09-03-cconcisus"
       }
     ],
     "201": [
       {
         "task": "mlst",
-        "version": "231123-v5.2.0"
+        "version": "2024-09-03-clari"
       }
     ],
     "2026240": [
       {
         "task": "mlst",
-        "version": "231123-v5.2.0"
+        "version": "2024-09-03-kpneumoniae"
       },
       {
         "task": "cgmlst",
-        "version": "2023-12-08-v5.4.0",
+        "version": "2024-09-03-klebsiella_1",
         "andThen": [
           {
             "task": "klebsiella-lincodes",
@@ -750,7 +758,7 @@
     "2058152": [
       {
         "task": "mlst",
-        "version": "231123-v5.2.0"
+        "version": "2024-09-03-koxytoca"
       },
       {
         "task": "kleborate",
@@ -760,31 +768,31 @@
     "206": [
       {
         "task": "mlst",
-        "version": "231123-v5.2.0"
+        "version": "2024-09-03-csputorum"
       }
     ],
     "2071710": [
       {
         "task": "mlst",
-        "version": "231123-v5.2.0"
+        "version": "2024-09-03-ecloacae"
       }
     ],
     "208224": [
       {
         "task": "mlst",
-        "version": "231123-v5.2.0"
+        "version": "2024-09-03-ecloacae"
       }
     ],
     "2099": [
       {
         "task": "mlst",
-        "version": "231123-v5.2.0"
+        "version": "2024-09-03-mhyopneumoniae"
       }
     ],
     "210": [
       {
         "task": "mlst",
-        "version": "231123-v5.2.0"
+        "version": "2024-09-03-hpylori"
       },
       {
         "flags": {
@@ -797,79 +805,83 @@
     "2100": [
       {
         "task": "mlst",
-        "version": "231123-v5.2.0"
+        "version": "2024-09-03-mhyorhinis"
       }
     ],
     "2104": [
       {
         "task": "mlst",
-        "version": "231123-v5.2.0"
+        "version": "2024-09-03-mpneumoniae"
       }
     ],
     "2109": [
       {
         "task": "mlst",
-        "version": "231123-v5.2.0"
+        "version": "2024-09-03-msynoviae"
       }
     ],
     "2110": [
       {
         "task": "mlst",
-        "version": "231123-v5.2.0"
+        "version": "2024-09-03-magalactiae"
       }
     ],
     "2116": [
       {
         "task": "mlst",
-        "version": "231123-v5.2.0"
+        "version": "2024-09-03-miowae"
       }
     ],
     "2129": [
       {
         "task": "mlst",
-        "version": "231123-v5.3.0"
+        "version": "2024-09-03-ureaplasma"
       }
     ],
     "213": [
       {
         "task": "mlst",
-        "version": "231123-v5.2.0"
+        "version": "2024-09-03-hcinaedi"
       }
     ],
     "222": [
       {
         "task": "mlst",
-        "version": "231123-v5.3.0"
+        "version": "2024-09-03-achromobacter"
       }
     ],
     "234": [
       {
         "task": "mlst",
-        "version": "231123-v5.3.0"
+        "version": "2024-09-03-brucella"
+      },
+      {
+        "task": "cgmlst",
+        "version": "2024-09-03-brucella_1"
       }
     ],
     "2364150": [
       {
         "task": "mlst",
-        "version": "231123-v5.2.0"
+        "version": "2024-09-03-ecloacae"
       }
     ],
     "2364151": [
       {
         "task": "mlst",
-        "version": "231123-v5.2.0"
+        "version": "2024-09-03-ecloacae"
       }
     ],
     "2371": [
       {
         "task": "mlst",
-        "version": "231123-v5.2.0"
+        "version": "2024-09-03-xfastidiosa"
       }
     ],
     "244366": [
       {
         "task": "cgmlst",
-        "version": "2023-12-08-v5.4.0",
+        "version": "2024-09-03-klebsiella_1",
         "andThen": [
           {
             "task": "klebsiella-lincodes",
@@ -890,7 +902,7 @@
       },
       {
         "task": "mlst",
-        "version": "231123-v5.2.0"
+        "version": "2024-09-03-kpneumoniae"
       },
       {
         "task": "kaptive",
@@ -906,11 +918,11 @@
     "2489010": [
       {
         "task": "mlst",
-        "version": "231123-v5.2.0"
+        "version": "2024-09-03-kpneumoniae"
       },
       {
         "task": "cgmlst",
-        "version": "2023-12-08-v5.4.0",
+        "version": "2024-09-03-klebsiella_1",
         "andThen": [
           {
             "task": "klebsiella-lincodes",
@@ -932,13 +944,13 @@
     "2494701": [
       {
         "task": "mlst",
-        "version": "231123-v5.3.1-ecloacae"
+        "version": "2024-09-03-ecloacae"
       }
     ],
     "2497875": [
       {
         "task": "mlst",
-        "version": "231123-v5.3.1-ecloacae"
+        "version": "2024-09-03-ecloacae"
       }
     ],
     "2153354": [
@@ -956,7 +968,7 @@
     "2587529": [
       {
         "task": "mlst",
-        "version": "231123-v5.2.0"
+        "version": "2024-09-03-koxytoca"
       },
       {
         "task": "kleborate",
@@ -966,7 +978,7 @@
     "260714": [
       {
         "task": "mlst",
-        "version": "231123-v5.2.0"
+        "version": "2024-09-03-cinsulaenigrae"
       }
     ],
     "2697049": [
@@ -986,63 +998,63 @@
     "2751": [
       {
         "task": "mlst",
-        "version": "231123-v5.2.0"
+        "version": "2024-09-03-cmaltaromaticum"
       }
     ],
     "28035": [
       {
         "task": "mlst",
-        "version": "231123-v5.2.0"
+        "version": "2024-09-03-slugdunensis"
       }
     ],
     "28080": [
       {
         "task": "mlst",
-        "version": "231123-v5.2.0"
+        "version": "2024-09-03-cupsaliensis"
       }
     ],
     "28105": [
       {
         "task": "mlst",
-        "version": "231123-v5.3.0"
+        "version": "2024-09-03-sinorhizobium"
       }
     ],
     "28196": [
       {
         "task": "mlst",
-        "version": "231123-v5.3.0"
+        "version": "2024-09-03-arcobacter"
       }
     ],
     "28251": [
       {
         "task": "mlst",
-        "version": "231123-v5.2.0"
+        "version": "2024-09-03-orhinotracheale"
       }
     ],
     "283734": [
       {
         "task": "mlst",
-        "version": "231123-v5.2.0"
+        "version": "2024-09-03-spseudintermedius"
       }
     ],
     "28450": [
       {
         "task": "mlst",
-        "version": "231123-v5.2.0"
+        "version": "2024-09-03-bpseudomallei"
       },
       {
         "task": "cgmlst",
-        "version": "2023-12-08-v5.4.0"
+        "version": "2024-09-03-burkholderia_1"
       }
     ],
     "287": [
       {
         "task": "mlst",
-        "version": "231123-v5.2.0"
+        "version": "2024-09-03-paeruginosa"
       },
       {
         "task": "cgmlst",
-        "version": "2023-12-08-v5.4.0"
+        "version": "2024-09-03-p_aeruginosa_1"
       },
       {
         "flags": {
@@ -1055,17 +1067,17 @@
     "28898": [
       {
         "task": "mlst",
-        "version": "231123-v5.2.0"
+        "version": "2024-09-03-chelveticus"
       }
     ],
     "28901": [
       {
         "task": "mlst",
-        "version": "231123-v5.3.0"
+        "version": "2024-09-03-senterica"
       },
       {
         "task": "cgmlst",
-        "version": "2023-12-08-v5.4.0"
+        "version": "2024-09-03-senterica_1"
       },
       {
         "flags": {
@@ -1085,125 +1097,129 @@
     "28903": [
       {
         "task": "mlst",
-        "version": "231123-v5.2.0"
+        "version": "2024-09-03-mbovis"
       }
     ],
     "294": [
       {
         "task": "mlst",
-        "version": "231123-v5.2.0"
+        "version": "2024-09-03-pfluorescens"
       }
     ],
     "29486": [
       {
-        "task": "mlst",
-        "version": "231123-v5.2.0"
+        "task": "mlst2",
+        "version": "2024-09-03-yruckeri"
       }
     ],
     "29521": [
       {
         "task": "mlst",
-        "version": "231123-v5.3.0"
+        "version": "2024-09-03-brachyspira"
       }
     ],
     "29574": [
       {
         "task": "mlst",
-        "version": "231123-v5.3.0"
+        "version": "2024-09-03-taylorella"
       }
     ],
     "299767": [
       {
         "task": "mlst",
-        "version": "231123-v5.2.0"
+        "version": "2024-09-03-ecloacae"
       }
     ],
     "3029761": [
       {
         "task": "mlst",
-        "version": "231123-v5.3.1-ecloacae"
+        "version": "2024-09-03-ecloacae"
       }
     ],
     "303": [
       {
         "task": "mlst",
-        "version": "231123-v5.2.0"
+        "version": "2024-09-03-pputida"
       }
     ],
     "315405": [
       {
         "task": "mlst",
-        "version": "231123-v5.2.0"
+        "version": "2024-09-03-sgallolyticus"
       }
     ],
     "33894": [
       {
         "task": "cgmlst",
         "timeout": 480,
-        "version": "2023-12-08-v5.4.0"
+        "version": "2024-09-03-mycobacterium_1"
       }
     ],
     "33970": [
       {
         "task": "mlst",
-        "version": "231123-v5.2.0"
+        "version": "2024-09-03-mplutonius"
       }
     ],
     "34085": [
       {
         "task": "mlst",
-        "version": "231123-v5.2.0"
+        "version": "2024-09-03-ranatipestifer"
       }
     ],
     "36809": [
       {
         "task": "mlst",
-        "version": "231123-v5.2.0"
+        "version": "2024-09-03-mabscessus"
+      },
+      {
+        "task": "cgmlst",
+        "version": "2024-09-03-mabscessus_1"
       }
     ],
     "38293": [
       {
         "task": "mlst",
-        "version": "231123-v5.2.0"
+        "version": "2024-09-03-pdamselae"
       }
     ],
     "38323": [
       {
         "task": "mlst",
-        "version": "231123-v5.2.0"
+        "version": "2024-09-03-bhenselae"
       }
     ],
     "40041": [
       {
         "task": "mlst",
-        "version": "231123-v5.2.0"
+        "version": "2024-09-03-szooepidemicus"
       }
     ],
     "40324": [
       {
         "task": "mlst",
-        "version": "231123-v5.2.0"
+        "version": "2024-09-03-smaltophilia"
       }
     ],
     "413496": [
       {
         "task": "mlst",
-        "version": "231123-v5.3.0"
+        "version": "2024-09-03-cronobacter"
       }
     ],
     "470": [
       {
         "task": "mlst",
-        "version": "231123-v5.2.0"
+        "version": "2024-09-03-abaumannii"
       },
       {
         "task": "mlst2",
-        "version": "231208-v5.3.0"
+        "version": "2024-09-03-abaumannii_2"
       },
       {
         "task": "cgmlst",
         "timeout": 480,
-        "version": "2023-12-08-v5.4.0"
+        "version": "2024-09-03-abaumannii_1"
       },
       {
         "flags": {
@@ -1224,20 +1240,20 @@
     "480": [
       {
         "task": "mlst",
-        "version": "231123-v5.2.0"
+        "version": "2024-09-03-mcatarrhalis"
       }
     ],
     "482": [
       {
         "task": "mlst",
-        "version": "231123-v5.3.0"
+        "version": "2024-09-03-neisseria"
       }
     ],
     "485": [
       {
         "task": "cgmlst",
         "timeout": 480,
-        "version": "2023-12-08-v5.4.0"
+        "version": "2024-09-03-ngonorrhoeae_1"
       },
       {
         "task": "paarsnp",
@@ -1253,7 +1269,7 @@
       },
       {
         "task": "ngstar",
-        "version": "231208-v5.3.0"
+        "version": "2024-09-03"
       },
       {
         "task": "core",
@@ -1264,13 +1280,13 @@
       {
         "task": "cgmlst",
         "timeout": 480,
-        "version": "2023-12-08-v5.4.0"
+        "version": "2024-09-03-nmeningitidis_1"
       }
     ],
     "4909": [
       {
         "task": "mlst",
-        "version": "231123-v5.2.0"
+        "version": "2024-09-03-ckrusei"
       }
     ],
     "498019": [
@@ -1286,79 +1302,79 @@
     "504": [
       {
         "task": "mlst",
-        "version": "231123-v5.2.0"
+        "version": "2024-09-03-kkingae"
       }
     ],
     "51291": [
       {
         "task": "mlst",
-        "version": "231123-v5.3.0"
+        "version": "2024-09-03-chlamydiales"
       }
     ],
     "517": [
       {
         "task": "mlst",
-        "version": "231123-v5.3.0"
+        "version": "2024-09-03-bordetella"
       }
     ],
     "52443": [
       {
         "task": "mlst",
-        "version": "231123-v5.2.0"
+        "version": "2024-09-03-vtapetis"
       }
     ],
     "52584": [
       {
         "task": "mlst",
-        "version": "231123-v5.2.0"
+        "version": "2024-09-03-bpilosicoli"
       }
     ],
     "546": [
       {
         "task": "mlst",
-        "version": "231123-v5.2.0"
+        "version": "2024-09-03-cfreundii"
       }
     ],
     "5476": [
       {
         "task": "mlst",
-        "version": "231123-v5.2.0"
+        "version": "2024-09-03-calbicans"
       }
     ],
     "5478": [
       {
         "task": "mlst",
-        "version": "231123-v5.2.0"
+        "version": "2024-09-03-cglabrata"
       }
     ],
     "548": [
       {
         "task": "mlst",
-        "version": "231123-v5.2.0"
+        "version": "2024-09-03-kaerogenes"
       }
     ],
     "5482": [
       {
         "task": "mlst",
-        "version": "231123-v5.2.0"
+        "version": "2024-09-03-ctropicalis"
       }
     ],
     "550": [
       {
         "task": "mlst",
-        "version": "231123-v5.2.0"
+        "version": "2024-09-03-ecloacae"
       }
     ],
     "556287": [
       {
         "task": "mlst",
-        "version": "231123-v5.2.0"
+        "version": "2024-09-03-liberibacter"
       }
     ],
     "561": [
       {
         "task": "cgmlst",
-        "version": "2023-12-08-v5.4.0"
+        "version": "2024-09-03-ecoli_1"
       },
       {
         "flags": {
@@ -1371,11 +1387,11 @@
     "562": [
       {
         "task": "mlst",
-        "version": "231123-v5.2.0"
+        "version": "2024-09-03-ecoli"
       },
       {
         "task": "mlst2",
-        "version": "231208-v5.3.0"
+        "version": "2024-09-03-ecoli_2"
       },
       {
         "flags": {
@@ -1406,7 +1422,7 @@
     "571": [
       {
         "task": "mlst",
-        "version": "231123-v5.2.0"
+        "version": "2024-09-03-koxytoca"
       },
       {
         "task": "kleborate",
@@ -1416,17 +1432,17 @@
     "5722": [
       {
         "task": "mlst",
-        "version": "231123-v5.2.0"
+        "version": "2024-09-03-tvaginalis"
       }
     ],
     "573": [
       {
         "task": "mlst",
-        "version": "231123-v5.2.0"
+        "version": "2024-09-03-kpneumoniae"
       },
       {
         "task": "cgmlst",
-        "version": "2023-12-08-v5.4.0",
+        "version": "2024-09-03-klebsiella_1",
         "andThen": [
           {
             "task": "klebsiella-lincodes",
@@ -1464,45 +1480,53 @@
     "61645": [
       {
         "task": "mlst",
-        "version": "231123-v5.2.0"
+        "version": "2024-09-03-ecloacae"
       }
     ],
     "620": [
       {
         "task": "cgmlst",
-        "version": "2023-12-08-v5.4.0"
+        "version": "2024-09-03-ecoli_1"
       },
       {
         "task": "mlst",
-        "version": "231123-v5.3.0"
+        "version": "2024-09-03-ecoli"
       },
       {
         "task": "mlst2",
-        "version": "231208-v5.3.0"
+        "version": "2024-09-03-ecoli_2"
       }
     ],
     "629": [
       {
         "task": "mlst",
-        "version": "231123-v5.3.0"
+        "version": "2024-09-03-yersinia"
+      },
+      {
+        "task": "cgmlst",
+        "version": "2024-09-03-yersinia_1"
+      },
+      {
+        "task": "mlst2",
+        "version": "2024-09-03-yersinia_2"
       }
     ],
     "633": [
       {
-        "task": "mlst",
-        "version": "231123-v5.2.0"
+        "task": "cgmlst",
+        "version": "2024-09-03-ypseudotuberculosis_1"
       }
     ],
     "635": [
       {
         "task": "mlst",
-        "version": "231123-v5.3.0"
+        "version": "2024-09-03-edwardsiella"
       }
     ],
     "642": [
       {
         "task": "mlst",
-        "version": "231123-v5.3.0"
+        "version": "2024-09-03-aeromonas"
       }
     ],
     "64320": [
@@ -1514,7 +1538,7 @@
     "662": [
       {
         "task": "mlst",
-        "version": "231123-v5.3.0"
+        "version": "2024-09-03-vibrio"
       }
     ],
     "666": [
@@ -1532,53 +1556,57 @@
       },
       {
         "task": "mlst",
-        "version": "231123-v5.2.0"
+        "version": "2024-09-03-vcholerae"
       },
       {
         "task": "cgmlst",
         "timeout": 480,
-        "version": "2023-12-08-v5.4.0"
+        "version": "2024-09-03-vcholerae_1"
       },
       {
         "task": "poppunk2",
         "timeout": 480,
         "version": "v2-666"
+      },
+      {
+        "task": "mlst2",
+        "version": "2024-09-03-vcholerae2"
       }
     ],
     "670": [
       {
         "task": "mlst",
-        "version": "231123-v5.2.0"
+        "version": "2024-09-03-vparahaemolyticus"
       }
     ],
     "672": [
       {
         "task": "mlst",
-        "version": "231123-v5.2.0"
+        "version": "2024-09-03-vvulnificus"
       }
     ],
     "69218": [
       {
         "task": "mlst",
-        "version": "231123-v5.2.0"
+        "version": "2024-09-03-ecloacae"
       }
     ],
     "69220": [
       {
         "task": "mlst",
-        "version": "231123-v5.2.0"
+        "version": "2024-09-03-ecloacae"
       }
     ],
     "69966": [
       {
         "task": "mlst",
-        "version": "231123-v5.2.0"
+        "version": "2024-09-03-mcaseolyticus"
       }
     ],
     "727": [
       {
         "task": "mlst",
-        "version": "231123-v5.2.0"
+        "version": "2024-09-03-hinfluenzae"
       },
       {
         "flags": {
@@ -1586,101 +1614,105 @@
         },
         "task": "paarsnp",
         "version": "v3.0.1"
+      },
+      {
+        "task": "cgmlst",
+        "version": "2024-09-03-hinfluenzae_1"
       }
     ],
     "738": [
       {
         "task": "mlst",
-        "version": "231123-v5.2.0"
+        "version": "2024-09-03-hparasuis"
       }
     ],
     "746128": [
       {
         "task": "mlst",
-        "version": "231123-v5.2.0"
+        "version": "2024-09-03-afumigatus"
       }
     ],
     "747": [
       {
         "task": "mlst",
-        "version": "231123-v5.2.0"
+        "version": "2024-09-03-pmultocida_multihost"
       },
       {
         "task": "mlst2",
-        "version": "231208-v5.3.0"
+        "version": "2024-09-03-pmultocida_rirdc"
       }
     ],
     "750": [
       {
         "task": "mlst",
-        "version": "231123-v5.2.0"
+        "version": "2024-09-03-ganatis"
       }
     ],
     "751907": [
       {
         "task": "mlst",
-        "version": "231123-v5.2.0"
+        "version": "2024-09-03-kseptempunctata"
       }
     ],
     "75658": [
       {
         "task": "mlst",
-        "version": "231123-v5.2.0"
+        "version": "2024-09-03-clanienae"
       }
     ],
     "75985": [
       {
         "task": "mlst",
-        "version": "231123-v5.2.0"
+        "version": "2024-09-03-mhaemolytica"
       }
     ],
     "774": [
       {
         "task": "mlst",
-        "version": "231123-v5.2.0"
+        "version": "2024-09-03-bbacilliformis"
       }
     ],
     "78331": [
       {
         "task": "cgmlst",
         "timeout": 480,
-        "version": "2023-12-08-v5.4.0"
+        "version": "2024-09-03-mycobacterium_1"
       }
     ],
     "784": [
       {
         "task": "mlst",
-        "version": "231123-v5.2.0"
+        "version": "2024-09-03-otsutsugamushi"
       }
     ],
     "79923": [
       {
         "task": "mlst",
-        "version": "231123-v5.2.0"
+        "version": "2024-09-03-csinensis"
       }
     ],
     "837": [
       {
         "task": "mlst",
-        "version": "231123-v5.2.0"
+        "version": "2024-09-03-pgingivalis"
       }
     ],
     "84377": [
       {
         "task": "mlst",
-        "version": "231123-v5.2.0"
+        "version": "2024-09-03-bintermedia"
       }
     ],
     "870": [
       {
         "task": "mlst",
-        "version": "231123-v5.2.0"
+        "version": "2024-09-03-dnodosus"
       }
     ],
     "87882": [
       {
         "task": "mlst",
-        "version": "231123-v5.2.0"
+        "version": "2024-09-03-bcc"
       }
     ],
     "90370": [
@@ -1700,25 +1732,71 @@
     "948": [
       {
         "task": "mlst",
-        "version": "231123-v5.2.0"
+        "version": "2024-09-03-aphagocytophilum"
       }
     ],
     "953": [
       {
         "task": "mlst",
-        "version": "231123-v5.3.0"
+        "version": "2024-09-03-wolbachia"
       }
     ],
     "96345": [
       {
         "task": "mlst",
-        "version": "231123-v5.2.0"
+        "version": "2024-09-03-fpsychrophilum"
       }
     ],
     "all": [
       {
         "task": "metrics",
         "version": "v3"
+      }
+    ],
+    "630": [
+      {
+        "task": "cgmlst",
+        "version": "2024-09-03-yenterolitica_1"
+      }
+    ],
+    "1392": [
+      {
+        "task": "cgmlst",
+        "version": "2024-09-03-banthracis_1"
+      }
+    ],
+    "13373": [
+      {
+        "task": "cgmlst",
+        "version": "2024-09-03-bmallei_1"
+      }
+    ],
+    "813": [
+      {
+        "task": "cgmlst",
+        "version": "2024-09-03-ctrachamotis_1"
+      }
+    ],
+    "46867": [
+      {
+        "task": "cgmlst",
+        "version": "2024-09-03-cchauvoei_1"
+      }
+    ],
+    "1502": [
+      {
+        "task": "cgmlst",
+        "version": "2024-09-03-cperfringens_1"
+      },
+      {
+        "task": "mlst",
+        "version": "2024-09-03-cperfringens"
+      }
+    ],
+    "354276": [
+      {
+        "task": "mlst",
+        "version": "2024-09-03-ecloacae"
       }
     ]
   }

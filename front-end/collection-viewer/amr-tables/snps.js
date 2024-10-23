@@ -74,10 +74,10 @@ function extractFoundDeterminants(results) {
             if (!(gene in extracted[agent.key])) {
               extracted[agent.key][gene] = {};
             }
-            extracted[agent.key][gene][variant] = resistanceEffect
+            extracted[agent.key][gene][variant] = resistanceEffect;
           });
       }
-    })
+    });
   });
   return extracted;
 }
@@ -88,49 +88,49 @@ export function buildColumns(results) {
 
   return results[0].resistanceProfile
     .reduce((groups, { agent }) => {
-      const { key, name } = agent;
+      const { key, name: agentName } = agent;
 
       groups.push({
         group: true,
         columnKey: `snp_${key}`,
-        label: name,
+        label: agentName,
         headerClasses: 'wgsa-table-header--expanded',
         headerTitle: `${modifierKey} + click to select multiple`,
         onHeaderClick,
         columns: Object.keys(variants[key])
           .reduce((columns, gene) => {
             return columns.concat({
-                cellClasses: 'wgsa-table-cell--resistance',
-                columnKey: gene,
-                fixedWidth: measureHeadingText(gene) + 16,
-                flexGrow: 0,
-                getCellContents() {
-                },
-                getLabel: () => `${gene}_`,
-                addState({ genomes }) {
-                  if (!genomes.length) return this;
-                  this.hidden =
-                    Object.keys(variants[key][gene]).every((variant) =>
-                      genomes.every(({ analysis }) =>
-                        analysis.paarsnp &&
-                        'variants' in analysis.paarsnp &&
-                        analysis.paarsnp.variants.indexOf(`${gene}_${variant}`) === -1
-                      )
-                    );
-                  return this;
-                },
-                headerClasses: 'wgsa-table-header--unstyled wgsa-table-header--expanded',
+              cellClasses: 'wgsa-table-cell--resistance',
+              columnKey: gene,
+              fixedWidth: measureHeadingText(gene) + 16,
+              flexGrow: 0,
+              getCellContents() {
               },
-              Object.keys(variants[key][gene]).map(variant => {
-                return createColumn(
-                  key,
-                  gene,
-                  variant,
-                  variants[key][gene][variant]
-                );
-              })
+              getLabel: () => `${gene}_`,
+              addState({ genomes }) {
+                if (!genomes.length) return this;
+                this.hidden =
+                  Object.keys(variants[key][gene]).every((variant) =>
+                    genomes.every(({ analysis }) =>
+                      analysis.paarsnp &&
+                      'variants' in analysis.paarsnp &&
+                      analysis.paarsnp.variants.indexOf(`${gene}_${variant}`) === -1
+                    )
+                  );
+                return this;
+              },
+              headerClasses: 'wgsa-table-header--unstyled wgsa-table-header--expanded',
+            },
+            Object.keys(variants[key][gene]).map(variant => {
+              return createColumn(
+                key,
+                gene,
+                variant,
+                variants[key][gene][variant]
+              );
+            })
             );
-          }, [])
+          }, []),
       });
       return groups;
     }, []);

@@ -1,5 +1,6 @@
 import React from 'react';
 
+import { formatMlstSource, getSourceUrl, formatSchemeName } from '~/utils/mlst';
 import ExternalLink from '../ExternalLink.react';
 import { Metadata } from '../components';
 import { ST, Hit } from '../../mlst';
@@ -9,7 +10,7 @@ export default ({ result, speciator, filterKey = 'mlst', heading = 'MLST – Mul
     const split = _.gene.split('_');
     return {
       gene: split[1] || split[0],
-      hits: _.hits,
+      hit: _.hit,
     };
   });
   return (
@@ -17,8 +18,10 @@ export default ({ result, speciator, filterKey = 'mlst', heading = 'MLST – Mul
       <header className="pw-genome-report-section-header">
         <h2>{heading}</h2>
         <p>
-          <a href={result.url} target="_blank" rel="noopener">
-            {result.url}
+            <a
+              href={getSourceUrl(result.source)}
+              target="_blank" rel="noopener">
+              Source: {`${formatSchemeName(result.schemeName)} - ${formatMlstSource(result.source)}`}
           </a>
         </p>
       </header>
@@ -48,13 +51,11 @@ export default ({ result, speciator, filterKey = 'mlst', heading = 'MLST – Mul
           </thead>
           <tbody>
             <tr>
-              {alleles.map(({ gene, hits }) => (
+              {alleles.map(({ gene, hit }) => (
                 <td key={gene}>
-                  {hits.length ? (
-                    hits.map(id => <Hit key={id} id={id} />)
-                  ) : (
-                    <span title="Not found">?</span>
-                  )}
+                  { !!hit && hit !== "" ?
+                   <Hit key={hit} id={hit} showNovelHash /> :
+                   <span title="Not found">?</span> }
                 </td>
               ))}
             </tr>

@@ -112,7 +112,7 @@ schema.index({
   country: 1,
   public: 1,
   binned: 1,
-  date: 1, // sort/paritition
+  date: 1, // sort
 }, { partialFilterExpression: { public: true, binned: false } });
 schema.index({
   _user: 1,
@@ -855,9 +855,11 @@ schema.statics.getForCollection = function (query, user = {}) {
     'analysis.kleborate': 1,
     'analysis.metrics': 1,
     'analysis.mlst.alleles': 1,
+    'analysis.mlst.schemeName': 1,
     'analysis.mlst.source': 1,
     'analysis.mlst.st': 1,
     'analysis.mlst2.alleles': 1,
+    'analysis.mlst2.schemeName': 1,
     'analysis.mlst2.source': 1,
     'analysis.mlst2.st': 1,
     'analysis.ngmast': 1,

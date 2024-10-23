@@ -8,6 +8,7 @@ import { tableKeys } from '../constants';
 
 import Organisms from '~/organisms';
 import { resetSources, sources } from './utils';
+import { formatMlstSource, formatSchemeName } from "~/utils/mlst";
 
 const initialState = {
   name: tableKeys.typing,
@@ -44,7 +45,7 @@ export const trailingSystemGroup = {
 const referenceGroup = {
   columnKey: 'reference',
   group: true,
-  columns: [ '__reference' ],
+  columns: ['__reference'],
   getHeaderContent: () => {
   },
 };
@@ -52,82 +53,90 @@ const referenceGroup = {
 const cgmlstClassificationGroup = {
   columnKey: 'cgst',
   group: true,
-  columns: [ '__cgmlst', '__cgmlst_lincode', '__cgmlst_sublineage', '__cgmlst_clonalgroup' ],
+  columns: ['__cgmlst', '__cgmlst_lincode', '__cgmlst_sublineage', '__cgmlst_clonalgroup'],
   get label() {
     return 'CGMLST CLASSIFICATION';
   },
 };
 
+const mlstHeaderLength = 19;
 const mlstGroup = {
   group: true,
   columnKey: 'mlst',
-  columns: [ '__mlst', '__mlst_profile' ],
+  columns: ['__mlst', '__mlst_profile'],
+  get headerTitle() {
+    return sources.mlst;
+  },
   get label() {
-    return `MLST - ${ sources.mlst }`;
+    return `MLST - ${sources.mlst.length > mlstHeaderLength ? sources.mlst.substring(0, mlstHeaderLength - 3) : sources.mlst}${sources.mlst.length > mlstHeaderLength ? '...' : ''}`;
   },
 };
 
 const mlst2Group = {
   group: true,
   columnKey: 'mlst2',
-  columns: [ '__mlst2', '__mlst2_profile' ],
+  columns: ['__mlst2', '__mlst2_profile'],
+  get headerTitle() {
+    return sources.mlst2;
+  },
+  title: sources.mlst2,
   get label() {
-    return `MLST - ${ sources.mlst2 }`;
+    return `MLST - ${sources.mlst2.length > mlstHeaderLength ? sources.mlst2.substring(0, mlstHeaderLength - 3) : sources.mlst2}${sources.mlst2.length > mlstHeaderLength ? '...' : ''}`;
   },
 };
 
 const ngMastGroup = {
   group: true,
   columnKey: 'ng-Mast',
-  columns: [ '__ng-mast', '__por', '__tbpb' ],
+  columns: ['__ng-mast', '__por', '__tbpb'],
 };
 
 const ngonoMarkersGroup = {
   group: true,
   columnKey: 'other',
-  columns: [ '__porA' ],
+  columns: ['__porA'],
 };
 
 const ngStarGroup = {
   group: true,
   columnKey: 'ng-star',
-  columns: [ '__ngstar', '__ngstar_profile' ],
+  columns: ['__ngstar', '__ngstar_profile'],
 };
 
 const pangolinGroup = {
   group: true,
   columnKey: 'pangolin',
-  columns: [ '__pangolin' ],
+  columns: ['__pangolin'],
 };
 
 const genotyphiGroup = {
   group: true,
   columnKey: 'genotyphi',
-  columns: [ '__genotyphi_type', '__genotyphi_snps_called' ],
+  columns: ['__genotyphi_type', '__genotyphi_snps_called'],
 };
 
 const inctyperGroup = {
   group: true,
   columnKey: 'inctyper',
-  columns: [ '__inc_types' ],
+  columns: ['__inc_types'],
 };
 
 const kaptiveGroup = {
   group: true,
   columnKey: 'kaptive',
-  columns: [ '__K_locus_kaptive', '__K_type_kaptive', '__O_locus_kaptive', '__O_type_kaptive' ],
+  columns: ['__K_locus_kaptive', '__K_type_kaptive', '__O_locus_kaptive'],
 };
 
 const kleborateGroup = {
   group: true,
   columnKey: 'kleborate',
-  columns: [ '__Virulence_Score', '__Aerobactin', '__Colibactin', '__Salmochelin', '__Yersiniabactin', '__RmpADC', '__rmpA2' ],
+  columns: ['__K_locus', '__K_type', '__O_locus', '__O_type', '__Virulence_Score', '__Aerobactin', '__Colibactin', '__Salmochelin', '__Yersiniabactin', '__RmpADC', '__rmpA2'],
 };
 
 const poppunk2Group = {
   group: true,
   columnKey: 'poppunk2',
-  columns: [ '__poppunk2_strain' ],
+  columns: ['__poppunk2_strain'],
   get label() {
     return sources.poppunk2.name;
   },
@@ -136,7 +145,7 @@ const poppunk2Group = {
 const serotypeGroup = {
   group: true,
   columnKey: 'serotype',
-  columns: [ '__serotype' ],
+  columns: ['__serotype'],
 };
 
 const vistaGroup = {
@@ -145,7 +154,7 @@ const vistaGroup = {
   columns: [ '__vista_serogroup' ],
 };
 
-function fillColumnDefs({ columns, ...group }) {
+function fillColumnDefs({columns, ...group}) {
   return {
     ...group,
     noAction: true,
@@ -190,7 +199,7 @@ function getTypingColumnGroups(uiOptions, hasAltMLST, {
     .map(fillColumnDefs);
 }
 
-export function hasTyping({ hasPopulation }, {
+export function hasTyping({hasPopulation}, {
   genotyphi,
   inctyper,
   kaptive,
@@ -216,11 +225,11 @@ export function hasTyping({ hasPopulation }, {
  */
 function updateTypingSettings({ genomes }) {
   resetSources();
-  const sourceTasks = new Set([ 'mlst', 'mlst2' ]);
-  for (const { analysis } of genomes) {
+  const sourceTasks = new Set(['mlst', 'mlst2']);
+  for (const {analysis} of genomes) {
     for (const task of sourceTasks) {
       if (task in analysis) {
-        sources[task] = analysis[task].source;
+        sources[task] = `${formatSchemeName(analysis[task].schemeName)} (${formatMlstSource(analysis[task].source)})`;
         sourceTasks.delete(task);
       }
     }
@@ -270,7 +279,7 @@ function checkAnalysesPresent({ exclude = [] }, { genomes }, analyses, nestedAna
   return {...found, ...extra};
 }
 
-export default function (state = initialState, { type, payload }) {
+export default function (state = initialState, {type, payload}) {
   switch (type) {
     case FETCH_COLLECTION.SUCCESS: {
       const foundAnalyses = checkAnalysesPresent(Organisms.uiOptions, payload.result, [ 'klebsiella-lincodes', 'genotyphi', 'inctyper', 'kaptive', 'mlst', 'ngmast', 'ngono-markers', 'ngstar', 'pangolin', 'poppunk2', 'serotype', 'vista' ], [["kleborate", "virulence"]]);

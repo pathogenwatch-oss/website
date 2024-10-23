@@ -5,6 +5,7 @@ import { getAssemblyChartData } from '../assembly/selectors';
 import { hasReads } from '../genomes/selectors';
 
 import { getColourGenerator, getLightColour } from '~/utils/colours';
+import { formatMlstSource } from '~/utils/mlst';
 import { getOrganismName } from '~/organisms';
 
 import { DEFAULT, analysisLabels } from '~/app/constants';
@@ -41,8 +42,8 @@ function getAnalysisBreakdown(analysis) {
         const { lineage } = analyses.pangolin;
         lineages[lineage] = (lineages[lineage] || 0) + 1;
       }
-      if (analyses[key] && analyses[key].source) {
-        breakdown[key].source = analyses[key].source;
+      if (analyses[key] && analyses[key].schemeName) {
+        breakdown[key].source = `${analyses[key].schemeName} - ${formatMlstSource(analyses[key].source)}`;
       }
     }
   }

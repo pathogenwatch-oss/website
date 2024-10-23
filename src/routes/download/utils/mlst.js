@@ -6,8 +6,8 @@ module.exports.transformer = (key) => (doc) => {
     ST: doc.analysis[key].st,
   };
 
-  for (const { gene, hits } of doc.analysis[key].alleles) {
-    result[gene] = hits.join(',');
+  for (const { gene, hit } of doc.analysis[key].alleles) {
+    result[gene] = hit;
   }
 
   return result;

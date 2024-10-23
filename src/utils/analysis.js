@@ -29,8 +29,8 @@ function summariseAnalysis(analysis) {
   }
 
   if (task === 'cgmlst') {
-    const { st, code, scheme, source } = results;
-    return { __v: version, st, code, scheme, source };
+    const { st, code, scheme, schemeName, source } = results;
+    return { __v: version, st, code, scheme, schemeName, source };
   }
 
   return { __v: version, ...results };

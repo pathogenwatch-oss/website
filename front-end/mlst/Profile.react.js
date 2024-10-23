@@ -4,10 +4,10 @@ import Hit from './Hit.react';
 
 export default ({ alleles = [] }) => (
   <span className="wgsa-mlst-profile">
-    { alleles.map(({ gene, hits }) => (
+    { alleles.map(({ gene, hit }) => (
       <span key={gene} className="wgsa-mlst-profile-section">
-        { hits.length ?
-          hits.map(id => <Hit key={id} id={id} showNovelHash />) :
+        { !!hit && hit !== "" ?
+          <Hit key={hit} id={hit} showNovelHash /> :
           <span title="Not found">?</span> }
       </span>
     ))}
