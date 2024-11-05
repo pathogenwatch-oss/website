@@ -9,7 +9,7 @@ export default ({ result }) => {
     <React.Fragment>
       <p className="pw-genome-report-section-header">
         <a
-          href="https://github.com/katholt/Kleborate/wiki/Antimicrobial-resistance"
+          href="https://kleborate.readthedocs.io/en/latest/index.html"
           target="_blank"
           rel="noopener" className="pw-genome-report-secondary-link"
         >
