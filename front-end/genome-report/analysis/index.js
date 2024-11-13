@@ -51,55 +51,55 @@ export default genome => {
 
   const sections = [];
 
-  if (!!kleborate && !speciator.speciesName.replace('Raoultella', 'Klebsiella').startsWith(kleborate.species)) {
+  if (!!kleborate && (!speciator.speciesName.replace('Raoultella', 'Klebsiella').startsWith(kleborate.species) && !kleborate.species.startsWith(speciator.speciesName.replace('Raoultella', 'Klebsiella')))) {
     sections.push({
       key: 'Kleborate species',
-      component: <KleborateSpecies genome={genome} />,
+      component: <KleborateSpecies genome={ genome }/>,
     });
   }
 
   if (hasSpeciesTypingResult(analysis)) {
     sections.push({
       key: 'Typing',
-      component: <Typing genome={genome} />,
+      component: <Typing genome={ genome }/>,
     });
   }
 
   if (analysis["sarscov2-variants"]) {
     sections.push({
       key: 'Variants',
-      component: <CovidVariants genome={genome} />,
+      component: <CovidVariants genome={ genome }/>,
     });
   }
   if (paarsnp || (kleborate && kleborate.amr)) {
     sections.push({
       key: 'AMR',
-      component: <AMR genome={genome} />,
+      component: <AMR genome={ genome }/>,
     });
   }
   if (inctyper && Object.keys(inctyper).includes('Inc Matches')) {
     sections.push({
       key: 'Inc Typing',
-      component: <Inctyper analysis={analysis} />,
+      component: <Inctyper analysis={ analysis }/>,
     });
   }
   if ((kleborate && kleborate.virulence) || vista) {
     sections.push({
       key: 'Virulence',
-      component: <Virulence genome={genome} />,
+      component: <Virulence genome={ genome }/>,
     });
   }
   if (cgmlst && (owner !== 'other' || genome.public || genome.reference)) {
     sections.push({
       key: 'Clustering',
-      component: <Clustering result={cgmlst} />,
+      component: <Clustering result={ cgmlst }/>,
     });
   }
   if (core) {
     sections.push({
       key: 'Core',
       component: (
-        <VersionSwitcher taskName="core" component={Core} genome={genome} />
+        <VersionSwitcher taskName="core" component={ Core } genome={ genome }/>
       ),
     });
   }
@@ -109,8 +109,8 @@ export default genome => {
       component: (
         <VersionSwitcher
           taskName="metrics"
-          component={Metrics}
-          genome={genome}
+          component={ Metrics }
+          genome={ genome }
         />
       ),
     });
@@ -121,8 +121,8 @@ export default genome => {
       component: (
         <VersionSwitcher
           taskName="speciator"
-          component={Speciator}
-          genome={genome}
+          component={ Speciator }
+          genome={ genome }
         />
       ),
     });
