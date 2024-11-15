@@ -6,7 +6,7 @@ const mongoConnection = require("utils/mongoConnection");
 const Readable = require("event-stream");
 const { transformer: metadataTransformer, standardColumns } = require("routes/download/utils/metadata");
 const zlib = require('zlib');
-const { labels: seroLabels, labels } = require("routes/download/utils/serotype");
+const { labels } = require("routes/download/utils/serotype");
 const argv = require("named-argv");
 const { objectStore: config } = require("configuration");
 const aws = require("aws-sdk");
@@ -93,7 +93,7 @@ function getWriteStream(upload, filename) {
 
 async function fetchUser(userId) {
   if (userId) {
-    return await User.findOne({_id: userId}, {flags: 1});
+    return User.findOne({ _id: userId }, { flags: 1 });
   } else {
     return defaultUser;
   }

@@ -785,13 +785,6 @@
       {
         "task": "mlst",
         "version": "2024-09-03-hpylori"
-      },
-      {
-        "flags": {
-          "H_PYLORI_EXPERIMENT_USER": true
-        },
-        "task": "paarsnp",
-        "version": "v3.0.1"
       }
     ],
     "2100": [
@@ -1036,13 +1029,6 @@
       {
         "task": "cgmlst",
         "version": "2024-09-03-p_aeruginosa_1"
-      },
-      {
-        "flags": {
-          "GHRU_USER": true
-        },
-        "task": "paarsnp",
-        "version": "v3.0.1"
       }
     ],
     "28898": [
@@ -1059,13 +1045,6 @@
       {
         "task": "cgmlst",
         "version": "2024-09-03-senterica_1"
-      },
-      {
-        "flags": {
-          "ESBL_CPE_EXPERIMENT_USER": true
-        },
-        "task": "paarsnp",
-        "version": "v3.0.1"
       },
       {
         "task": "core",
@@ -1201,13 +1180,6 @@
         "task": "cgmlst",
         "timeout": 480,
         "version": "2024-09-03-abaumannii_1"
-      },
-      {
-        "flags": {
-          "GHRU_USER": true
-        },
-        "task": "paarsnp",
-        "version": "v3.0.1"
       },
       {
         "task": "kaptive",
@@ -1373,24 +1345,12 @@
       {
         "task": "mlst2",
         "version": "2024-09-03-ecoli_2"
-      },
-      {
-        "flags": {
-          "ESBL_CPE_EXPERIMENT_USER": true,
-          "GHRU_USER": true
-        },
-        "task": "paarsnp",
-        "version": "v3.0.1"
       }
     ],
     "570": [
       {
         "task": "kleborate",
         "version": "other-v3.1.0-5"
-      },
-      {
-        "task": "paarsnp",
-        "version": "v3.0.1"
       }
     ],
     "571": [
