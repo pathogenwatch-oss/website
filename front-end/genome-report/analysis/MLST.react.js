@@ -13,15 +13,16 @@ export default ({ result, speciator, filterKey = 'mlst', heading = 'MLST – Mul
       hit: _.hit,
     };
   });
+  const source = "source" in result ? result.source : result.schemeName;
   return (
     <React.Fragment>
       <header className="pw-genome-report-section-header">
         <h2>{heading}</h2>
         <p>
             <a
-              href={getSourceUrl(result.source)}
+              href={getSourceUrl(source)}
               target="_blank" rel="noopener">
-              Source: {`${formatSchemeName(result.schemeName)} - ${formatMlstSource(result.source)}`}
+              Source: {result.schemeName !== source ? `${formatSchemeName(result.schemeName)} - ${formatMlstSource(source)}` : `${formatSchemeName(result.schemeName)}`}
           </a>
         </p>
       </header>
