@@ -98,8 +98,9 @@ export function kleborateCleanElement(element) {
 
 export function kleborateHasElement({ amr: { profile } }, antibiotic, element) {
   if (element === '-' || !profile) return false;
+  const queryName = element.startsWith('OmpK') ? 'OmpK35/OmpK36' : antibiotic;
   for (const key of Object.keys(profile)) {
-    if (!('name' in profile[key]) || profile[key].name !== antibiotic) {
+    if (!('name' in profile[key]) || profile[key].name !== queryName) {
       continue;
     }
     if (profile[key].matches === '-') return false;
