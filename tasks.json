@@ -268,7 +268,7 @@
       },
       {
         "task": "kleborate",
-        "version": "kosc-v3.1.0-5"
+        "version": "kosc-v3.1.3-5"
       }
     ],
     "119602": [
@@ -503,7 +503,7 @@
       },
       {
         "task": "kleborate",
-        "version": "kpsc-v3.1.0-5"
+        "version": "kpsc-v3.1.3-5"
       }
     ],
     "1464": [
@@ -556,7 +556,7 @@
     "160674": [
       {
         "task": "kleborate",
-        "version": "other-v3.1.0-5"
+        "version": "other-v3.1.3-5"
       }
     ],
     "1624": [
@@ -744,7 +744,7 @@
       },
       {
         "task": "kleborate",
-        "version": "kpsc-v3.1.0-5"
+        "version": "kpsc-v3.1.3-5"
       }
     ],
     "2058152": [
@@ -754,7 +754,7 @@
       },
       {
         "task": "kleborate",
-        "version": "kosc-v3.1.0-5"
+        "version": "kosc-v3.1.3-5"
       }
     ],
     "206": [
@@ -888,7 +888,7 @@
       },
       {
         "task": "kleborate",
-        "version": "kpsc-v3.1.0-5"
+        "version": "kpsc-v3.1.3-5"
       }
     ],
     "2489010": [
@@ -912,7 +912,7 @@
       },
       {
         "task": "kleborate",
-        "version": "kpsc-v3.1.0-5"
+        "version": "kpsc-v3.1.3-5"
       }
     ],
     "2494701": [
@@ -930,13 +930,13 @@
     "2153354": [
       {
         "task": "kleborate",
-        "version": "kosc-v3.1.0-5"
+        "version": "kosc-v3.1.3-5"
       }
     ],
     "2587528": [
       {
         "task": "kleborate",
-        "version": "kosc-v3.1.0-5"
+        "version": "kosc-v3.1.3-5"
       }
     ],
     "2587529": [
@@ -946,7 +946,7 @@
       },
       {
         "task": "kleborate",
-        "version": "kosc-v3.1.0-5"
+        "version": "kosc-v3.1.3-5"
       }
     ],
     "260714": [
@@ -1350,7 +1350,7 @@
     "570": [
       {
         "task": "kleborate",
-        "version": "other-v3.1.0-5"
+        "version": "other-v3.1.3-5"
       }
     ],
     "571": [
@@ -1360,7 +1360,7 @@
       },
       {
         "task": "kleborate",
-        "version": "kosc-v3.1.0-5"
+        "version": "kosc-v3.1.3-5"
       }
     ],
     "5722": [
@@ -1394,7 +1394,7 @@
       },
       {
         "task": "kleborate",
-        "version": "kpsc-v3.1.0-5"
+        "version": "kpsc-v3.1.3-5"
       }
     ],
     "590": [
