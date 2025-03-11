@@ -130,13 +130,26 @@ async function writeDataFiles(
     return extra;
   }, []);
 
-  for (const task of [...tasks, ...extraTasks ]) {
+  const extraOutputs = tasks.reduce((extra, task) => {
+    if (task.task === "paarsnp") {
+      console.log("Adding additional task paarsnp-snps-genes.");
+      const newTask = { ...task };
+      newTask.task = "paarsnp-snps-genes";
+      console.log(JSON.stringify(newTask));
+      extra.push(newTask);
+    }
+    return extra;
+  }, []);
+
+  console.log(`Processing ${tasks.length + extraTasks.length + extraOutputs.length} tasks.`);
+
+  for (const task of [...tasks, ...extraTasks, ...extraOutputs ]) {
     if (tasksArr.length > 0 && !tasksArr.includes(task.task)) continue;
     console.log(`Processing task ${task.task}.`);
     if (!(task.task in transformers)) continue;
     const transformer = selectTransformer(task, taxQuery);
     const gzipStream = zlib.createGzip();
-    const filename = `${filenameBase}__${task.task !== "paarsnp" ? task.task : "amrsearch"}.csv.gz`;
+    const filename = `${filenameBase}__${task.task.replace("paarsnp", "amrsearch")}.csv.gz`;
     const { writeStream, promise } = getWriteStream(upload, filename);
     Readable.from(genomes)
       .pipe(csv.transform(transformer))
