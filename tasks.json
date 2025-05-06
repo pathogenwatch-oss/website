@@ -481,11 +481,11 @@
     "1463165": [
       {
         "task": "cgmlst",
-        "version": "2024-09-03-klebsiella_1",
+        "version": "2025-04-24-klebsiella_1",
         "andThen": [
           {
             "task": "klebsiella-lincodes",
-            "version": "v5.0.0"
+            "version": "6.0.0-20250424"
           }
         ]
       },
@@ -730,11 +730,11 @@
       },
       {
         "task": "cgmlst",
-        "version": "2024-09-03-klebsiella_1",
+        "version": "2025-04-24-klebsiella_1",
         "andThen": [
           {
             "task": "klebsiella-lincodes",
-            "version": "v5.0.0"
+            "version": "6.0.0-20250424"
           }
         ]
       },
@@ -866,11 +866,11 @@
     "244366": [
       {
         "task": "cgmlst",
-        "version": "2024-09-03-klebsiella_1",
+        "version": "2025-04-24-klebsiella_1",
         "andThen": [
           {
             "task": "klebsiella-lincodes",
-            "version": "v5.0.0"
+            "version": "6.0.0-20250424"
           }
         ]
       },
@@ -898,11 +898,11 @@
       },
       {
         "task": "cgmlst",
-        "version": "2024-09-03-klebsiella_1",
+        "version": "2025-04-24-klebsiella_1",
         "andThen": [
           {
             "task": "klebsiella-lincodes",
-            "version": "v5.0.0"
+            "version": "6.0.0-20250424"
           }
         ]
       },
@@ -1376,11 +1376,11 @@
       },
       {
         "task": "cgmlst",
-        "version": "2024-09-03-klebsiella_1",
+        "version": "2025-04-24-klebsiella_1",
         "andThen": [
           {
             "task": "klebsiella-lincodes",
-            "version": "v5.0.0"
+            "version": "6.0.0-20250424"
           }
         ]
       },
