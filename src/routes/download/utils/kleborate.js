@@ -144,6 +144,12 @@ module.exports.transformer = function (doc) {
     "klebsiella_pneumo_complex__resistance_score": [ "resistance_score" ],
     "klebsiella_pneumo_complex__resistance_class_count": [ "resistance_class_count" ],
     "klebsiella_pneumo_complex__resistance_gene_count": [ "resistance_gene_count" ],
+    "klebsiella_pneumo_complex__cipro_prediction": [
+      "Ciprofloxacin_prediction",
+      "Ciprofloxacin_profile_support",
+      "Ciprofloxacin_profile",
+      "Ciprofloxacin_MIC_prediction",
+    ],
     "klebsiella_pneumo_complex__wzi": [ "wzi" ],
     "klebsiella_pneumo_complex__kaptive": [
       "K_locus",
@@ -159,7 +165,6 @@ module.exports.transformer = function (doc) {
       "O_locus_identity",
       "O_Missing_expected_genes",
     ],
-
   };
 
   const virulenceFields = new Set(
