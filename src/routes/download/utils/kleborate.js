@@ -139,11 +139,10 @@ module.exports.transformer = function (doc) {
       "Flq_mutations",
       "truncated_resistance_hits",
       "spurious_resistance_hits",
-
     ],
     "klebsiella_pneumo_complex__resistance_score": [ "resistance_score" ],
-    "klebsiella_pneumo_complex__resistance_class_count": [ "resistance_class_count" ],
-    "klebsiella_pneumo_complex__resistance_gene_count": [ "resistance_gene_count" ],
+    "klebsiella_pneumo_complex__resistance_class_count": [ "num_resistance_classes" ],
+    "klebsiella_pneumo_complex__resistance_gene_count": [ "num_resistance_genes" ],
     "klebsiella_pneumo_complex__cipro_prediction": [
       "Ciprofloxacin_prediction",
       "Ciprofloxacin_profile_support",
@@ -239,9 +238,8 @@ module.exports.transformer = function (doc) {
       "truncated_resistance_hits",
       "spurious_resistance_hits",
       "resistance_score",
-      "resistance_classes_count",
-      "resistance_gene_count",
-
+      "num_resistance_classes",
+      "num_resistance_genes",
     ]
   );
   const amrClassesFields = new Set(
