@@ -28,7 +28,7 @@ async function main() {
   await Genome.find(query, projection)
     .cursor()
     .pipe(csv.transform(transformer))
-    .pipe(csv.stringify({ header: true, quotedString: true }))
+    .pipe(csv.stringify({ bom: true, header: true, quotedString: true }))
     .pipe(writable);
 
   writable.on('finish', () => {

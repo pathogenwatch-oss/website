@@ -153,7 +153,7 @@ async function writeDataFiles(
     const { writeStream, promise } = getWriteStream(upload, filename);
     Readable.from(genomes)
       .pipe(csv.transform(transformer))
-      .pipe(csv.stringify({ header: true, quotedString: true }))
+      .pipe(csv.stringify({ bom: true, header: true, quotedString: true }))
       .pipe(gzipStream)
       .pipe(writeStream);
     await promise;
@@ -193,7 +193,7 @@ async function writeDataFiles(
   Genome.find(query, projection, { sort: { name: 1 } })
     .cursor()
     .pipe(csv.transform(metadataTransformer))
-    .pipe(csv.stringify({ header: true, quotedString: true, columns }))
+    .pipe(csv.stringify({ bom: true, header: true, quotedString: true, columns }))
     .pipe(gzipStream)
     .pipe(writeStream);
 

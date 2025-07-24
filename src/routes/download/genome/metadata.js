@@ -49,6 +49,6 @@ module.exports = asyncWrapper(async (req, res, next) => {
   return Genome.find(query, projection, { sort: { name: 1 } })
     .cursor()
     .pipe(csv.transform(transformer))
-    .pipe(csv.stringify({ header: true, quotedString: true, columns }))
+    .pipe(csv.stringify({ bom: true, header: true, quotedString: true, columns }))
     .pipe(res);
 });
