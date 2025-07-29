@@ -5,7 +5,6 @@ const Organism = require("models/organism");
 const Collection = require("models/collection");
 const User = require("models/user");
 const GenomeCollection = require("models/genomecollection");
-const { request } = require("services/bus");
 const { getCollectionTask } = require("manifest");
 const { enqueue } = require("models/queue");
 const { ObjectId } = require('mongoose').Types;
