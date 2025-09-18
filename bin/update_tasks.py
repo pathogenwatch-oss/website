@@ -1,3 +1,10 @@
+# /// script
+# requires-python = ">=3.12"
+# dependencies = [
+#     "typer",
+# ]
+# ///
+
 import json
 import sys
 from typing import Annotated
