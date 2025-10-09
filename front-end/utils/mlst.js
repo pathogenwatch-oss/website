@@ -5,10 +5,10 @@ export const isNovel = id => id.length === checksumLength;
 const sourceUrlMap = {
   "pubmlst": "https://pubmlst.org/",
   "enterobase": "https://enterobase.warwick.ac.uk/",
-  "pasteur": "https://bigsdb.pasteur.fr/klebsiella/",
+  "pasteur": "https://bigsdb.pasteur.fr/",
   "ridom": "https://ridom.com/",
   "ng-star 2.0": "https://ngstar.canada.ca/pages/welcome",
-  "other": "https://github.com/pathogenwatch-oss/typing-databases/blob/90c13106968f7d2c2b2e499f6d2a31e309004898/schemes.json",
+  "other": "https://github.com/pathogenwatch-oss/typing-databases/blob/main/config/schemes.json",
 };
 
 const sources = {
