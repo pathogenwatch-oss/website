@@ -1,12 +1,12 @@
 import React from 'react';
 
 const scores = {
-  0: 'no virulence loci',
+  0: 'negative for all of yersiniabactin (ybt), colibactin (clb), aerobactin (iuc)',
   1: 'yersiniabactin only',
   2: 'yersiniabactin and colibactin, or colibactin only',
-  3: 'aerobactin and/or salmochelin only (without yersiniabactin or colibactin)',
-  4: 'aerobactin and/or salmochelin with yersiniabactin (without colibactin)',
-  5: 'yersiniabactin, colibactin and aerobactin and/or salmochelin',
+  3: 'aerobactin (without yersiniabactin or colibactin)',
+  4: 'aerobactin with yersiniabactin (without colibactin)',
+  5: 'yersiniabactin, colibactin and aerobactin',
 };
 
 const virulenceFields = [
