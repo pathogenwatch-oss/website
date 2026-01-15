@@ -32,12 +32,12 @@ export default ({ offline = isOffline() }) => {
         title="Major release scheduled for February 2026. See more at next.pathogen.watch."
       >
         <a
-          href="Release Plan" // Change to the real documentation link.
+          href="https://cgps.gitbook.io/pathogenwatch/announcements#a-major-update-coming-in-february" // Change to the real documentation link.
           target="_blank"
           rel="noopener"
           style={ { color: '#673c90', textDecoration: 'underline' } }
         >
-          Major release</a> scheduled for February 2026. See more at{ ' ' }
+          Major release</a> scheduled for February 2026. Preview it at{ ' ' }
         <a
           href="https://next.pathogen.watch"
           target="_blank"
