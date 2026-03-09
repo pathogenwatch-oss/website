@@ -29,22 +29,16 @@ export default ({ offline = isOffline() }) => {
           minWidth: 0, // This allows the span to shrink below its content size
           paddingRight: '16px',
         } }
-        title="Major release scheduled for February 2026. See more at next.pathogen.watch."
+        title="A new release of Pathogenwatch is coming soon. See the announcements page in the documentation for more details."
       >
+          A new version of Pathogenwatch is coming soon.{ ' ' }
         <a
-          href="https://cgps.gitbook.io/pathogenwatch/announcements#a-major-update-coming-in-february" // Change to the real documentation link.
+          href="https://cgps.gitbook.io/pathogenwatch/announcements"
           target="_blank"
           rel="noopener"
           style={ { color: '#673c90', textDecoration: 'underline' } }
         >
-          Major release</a> scheduled for February 2026. Preview it at{ ' ' }
-        <a
-          href="https://next.pathogen.watch"
-          target="_blank"
-          rel="noopener"
-          style={ { color: '#673c90', textDecoration: 'underline' } }
-        >
-          next.pathogen.watch
+          Find out more from our announcement.
         </a>
       </span>
       <NavLink to="/genomes">Genomes</NavLink>
@@ -77,7 +71,7 @@ export default ({ offline = isOffline() }) => {
       </a>
       <a
         className="mdl-button mdl-button--icon"
-        href={ `mailto:pathogenwatch@cgps.group?body=${ encodeURIComponent('Please add a descriptive subject line and also edit the section below as appropriate.\n------\nTopic - Website / Data / Documentation / Other\nType - Feature Request / Error Report / Explanation Request\nAffected URL - the URL of the query page if relevant.\nBug Report - Browser / Operating system / Time & Date\n-----\n') }` }
+        href={ `mailto:pathogenwatch@cgps.group?body=${encodeURIComponent('Please add a descriptive subject line and also edit the section below as appropriate.\n------\nTopic - Website / Data / Documentation / Other\nType - Feature Request / Error Report / Explanation Request\nAffected URL - the URL of the query page if relevant.\nBug Report - Browser / Operating system / Time & Date\n-----\n')}` }
         rel="noopener"
         target="_blank"
         title="Contact us"
